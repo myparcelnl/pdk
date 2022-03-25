@@ -1,0 +1,7 @@
+{
+  "name": "@myparcel/php-pdk",
+  "private": true,
+  "devDependencies": {
+    "@myparcel/semantic-release-config": "^2.0.0"
+  }
+}

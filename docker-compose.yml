@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  php:
+    image: myparcelnl/pdk
+    build: ./
+    init: true
+    #    build: ./
+    volumes:
+      - ./:/app
