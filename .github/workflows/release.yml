@@ -55,8 +55,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: myparcelnl/actions/yarn-install@v1
-
-      - name: 'Run semantic release'
-        run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
+      - uses: myparcelnl/actions/semantic-release@v1
+        with:
+          token: ${{ secrets.GH_REPO_TOKEN }}
