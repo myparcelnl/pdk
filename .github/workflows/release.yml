@@ -29,6 +29,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       - uses: myparcelnl/actions/build-docker-image@v1
         id: docker
@@ -54,6 +56,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - uses: myparcelnl/actions/yarn-install@v1
       - uses: myparcelnl/actions/semantic-release@v1
         with:
