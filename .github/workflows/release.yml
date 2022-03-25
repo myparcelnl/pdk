@@ -22,6 +22,8 @@ on:
       - src/**/*
       - test/**/*
 
+  repository_dispatch: ~
+
 jobs:
   test:
     runs-on: ubuntu-20.04
