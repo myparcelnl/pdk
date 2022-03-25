@@ -34,7 +34,7 @@ jobs:
         id: docker
         with:
           image: myparcel/pdk
-          key: php-pdk
+          key: myparcel-php-pdk
           docker_args: --target test
 
       - name: 'Run tests'
