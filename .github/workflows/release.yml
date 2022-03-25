@@ -22,7 +22,7 @@ on:
       - src/**/*
       - test/**/*
 
-  repository_dispatch: ~
+  workflow_dispatch: ~
 
 jobs:
   test:
