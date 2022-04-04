@@ -32,10 +32,10 @@ class WeightService
                 $weight = $floatWeight * 1000;
                 break;
             case self::UNIT_POUNDS:
-                $weight = $floatWeight / 0.45359237;
+                $weight = $floatWeight * 453.59237;
                 break;
             case self::UNIT_OUNCES:
-                $weight = $floatWeight / 0.0283495231;
+                $weight = $floatWeight * 28.34952;
                 break;
             default:
                 throw new InvalidArgumentException('Unknown weight unit passed: ' . $unit);
