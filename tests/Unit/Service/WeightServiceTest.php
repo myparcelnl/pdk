@@ -9,7 +9,7 @@ it("converts units correctly", function ($unit, $input, $expectation) {
 })->with([
     [WeightService::UNIT_GRAMS, 50, 50],
     [WeightService::UNIT_KILOGRAMS, 50, 50000],
-    [WeightService::UNIT_POUNDS, 50, 22679.6185],
-    [WeightService::UNIT_OUNCES, 50, 1417.476],
+    [WeightService::UNIT_POUNDS, 50, 22680],
+    [WeightService::UNIT_OUNCES, 50, 1418],
 ]);
 
