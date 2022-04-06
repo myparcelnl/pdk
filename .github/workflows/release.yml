@@ -60,5 +60,5 @@ jobs:
           persist-credentials: false
       - uses: myparcelnl/actions/yarn-install@v1
       - uses: myparcelnl/actions/semantic-release@v1
-        with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_REPO_TOKEN }}
