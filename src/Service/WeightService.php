@@ -54,19 +54,16 @@ class WeightService
     public static function convertToDigitalStamp(int $weight, array $ranges = self::DIGITAL_STAMP_RANGES): int
     {
         if ($weight > Arr::last($ranges)['max']) {
-            throw new ValidationException(sprintf(
-                'Supplied weight to convert of %sg exceeds maximum digital stamp weight of %sg',
+            throw new ValidationException(sprintf('Supplied weight to convert of %sg exceeds maximum digital stamp weight of %sg',
                 $weight,
                 Arr::last($ranges)['max']
-            ));
+            )
+            );
         }
 
-        $results = Arr::where(
-            $ranges,
-            static function ($range) use ($weight) {
-                return $weight > $range['min'];
-            }
-        );
+        $results = Arr::where($ranges, static function ($range) use ($weight) {
+            return $weight > $range['min'];
+        });
 
         if (empty($results)) {
             $digitalStampRangeWeight = Arr::first($ranges)['average'];
@@ -80,8 +77,8 @@ class WeightService
     /**
      * Returns the weight in grams.
      *
-     * @param  int|float $weight
-     * @param  string    $unit
+     * @param int|float $weight
+     * @param string    $unit
      *
      * @return int
      */

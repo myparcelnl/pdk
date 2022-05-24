@@ -4,10 +4,11 @@
   "description": "MyParcel Plugin Development Kit",
   "type": "library",
   "homepage": "https://www.myparcel.nl",
-  "minimum-stability": "dev",
   "require": {
+    "myparcelnl/sdk": "^7.1",
     "php": ">=7.1.0",
-    "myparcelnl/sdk": "^7.1"
+    "php-di/php-di": "~6.0.0",
+    "guzzlehttp/guzzle": "^7.4"
   },
   "require-dev": {
     "pestphp/pest": "^1.21",
@@ -20,14 +21,16 @@
       "MyParcelNL\\Pdk\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "MyParcelNL\\Pdk\\": "tests/Unit",
+      "MyParcelNL\\Pdk\\Tests\\Bootstrap\\": "tests/Bootstrap"
+    }
+  },
   "authors": [
     {
       "name": "Edie Lemoine",
-      "email": "support@myparcel.nl"
-    },
-    {
-      "name": "Joeri van Veen",
-      "email": "support@myparcel.nl"
+      "email": "edie@myparcel.nl"
     }
   ],
   "config": {
