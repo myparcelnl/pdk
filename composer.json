@@ -19,6 +19,15 @@
   "autoload": {
     "psr-4": {
       "MyParcelNL\\Pdk\\": "src/"
+    },
+    "classmap": [
+      "src"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MyParcelNL\\Pdk\\": "tests/Unit",
+      "MyParcelNL\\Pdk\\Tests\\Bootstrap\\": "tests/Bootstrap"
     }
   },
   "autoload-dev": {
