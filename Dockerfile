@@ -38,7 +38,7 @@ COPY src         ./src
 COPY tests       ./tests
 COPY phpunit.xml ./
 
-ENTRYPOINT ["vendor/bin/pest", "--coverage-clover", "coverage.xml"]
+CMD ["vendor/bin/pest", "--coverage-clover", "coverage.xml"]
 
 
 ###
@@ -46,4 +46,4 @@ ENTRYPOINT ["vendor/bin/pest", "--coverage-clover", "coverage.xml"]
 ###
 FROM base AS dev
 
-ENTRYPOINT ["sleep", "infinity"]
+CMD ["sleep", "infinity"]
