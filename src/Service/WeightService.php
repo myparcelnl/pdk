@@ -84,6 +84,8 @@ class WeightService
      * @param  string    $unit
      *
      * @return int
+     *
+     * @throws \InvalidArgumentException
      */
     public static function convertToGrams($weight, string $unit): int
     {

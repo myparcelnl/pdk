@@ -3,19 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Service\WeightService;
-
-const CUSTOM_RANGES = [
-    [
-        'min'     => 0,
-        'max'     => 600,
-        'average' => 300,
-    ],
-    [
-        'min'     => 600,
-        'max'     => 6000,
-        'average' => 3300,
-    ],
-];
+use MyParcelNL\Sdk\src\Exception\ValidationException;
 
 it('converts units correctly', function ($unit, $input, $expectation) {
     expect(WeightService::convertToGrams($input, $unit))->toEqual($expectation);
@@ -26,7 +14,12 @@ it('converts units correctly', function ($unit, $input, $expectation) {
     [WeightService::UNIT_OUNCES, 50, 1418],
 ]);
 
-it('converts to digital stamp correctly', function($input, $expectation) {
+it("throws error when unknown unit is passed", function () {
+    expect(function () { WeightService::convertToGrams(100, "boo"); })
+        ->toThrow(InvalidArgumentException::class);
+});
+
+it('converts to digital stamp correctly', function ($input, $expectation) {
     expect(WeightService::convertToDigitalStamp($input))->toEqual($expectation);
 })->with([
     [-1, 15],
@@ -42,14 +35,24 @@ it('converts to digital stamp correctly', function($input, $expectation) {
     [1000, 1175],
 ]);
 
-it('throws error when weight is higher than max for digital stamp', function($input, $errorClassName) {
-    $this->expectException($errorClassName);
-    WeightService::convertToDigitalStamp($input);
-})->with([
-    [3000, \MyParcelNL\Sdk\src\Exception\ValidationException::class],
-]);
+it('throws error when weight is higher than max for digital stamp', function () {
+    expect(function () { WeightService::convertToDigitalStamp(3000); })->toThrow(ValidationException::class);
+});
 
-it('converts to digital stamp using custom range correctly', function($ranges, $input, $expectation) {
+const CUSTOM_RANGES = [
+    [
+        'min'     => 0,
+        'max'     => 600,
+        'average' => 300,
+    ],
+    [
+        'min'     => 600,
+        'max'     => 6000,
+        'average' => 3300,
+    ],
+];
+
+it('converts to digital stamp using custom range correctly', function ($ranges, $input, $expectation) {
     expect(WeightService::convertToDigitalStamp($input, $ranges))->toEqual($expectation);
 })->with([
     [CUSTOM_RANGES, CUSTOM_RANGES[0]['min'], CUSTOM_RANGES[0]['average']],
