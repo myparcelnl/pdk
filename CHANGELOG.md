@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/myparcelnl/pdk/compare/v1.0.1...v1.1.0) (2022-05-31)
+
+
+### :sparkles: New Features
+
+* add convert to digital stamp weight ([#2](https://github.com/myparcelnl/pdk/issues/2)) ([18eb250](https://github.com/myparcelnl/pdk/commit/18eb2503c9b51425a5b7c8f196d365a953b1beaa))
+
 ### [1.0.1](https://github.com/myparcelnl/pdk/compare/v1.0.0...v1.0.1) (2022-04-06)
 
 
