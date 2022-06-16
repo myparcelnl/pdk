@@ -21,4 +21,5 @@ jobs:
 
   release:
     uses: myparcelnl/actions/.github/workflows/--semantic-release.yml@v2
+    needs: test
     secrets: inherit
