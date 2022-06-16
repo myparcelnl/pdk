@@ -15,12 +15,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v3
+        if: github.actor != 'dependabot[bot]'
         with:
           persist-credentials: false
 
       - uses: myparcelnl/actions/build-docker-image-reg@v2
+        if: github.actor != 'dependabot[bot]'
         id: docker
         with:
           image: myparcelnl/php-pdk
@@ -29,10 +34,13 @@ jobs:
           registry-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Run tests'
+        if: github.actor != 'dependabot[bot]'
         run: docker run ${{ steps.docker.outputs.tagged-image }}
 
       - name: 'Get coverage file from container'
+        if: github.actor != 'dependabot[bot]'
         run: docker cp $(docker ps -alq):/app/coverage.xml .
 
-      - name: Update code coverage
+      - name: 'Update code coverage'
+        if: github.actor != 'dependabot[bot]'
         uses: codecov/codecov-action@v3

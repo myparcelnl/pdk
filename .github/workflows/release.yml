@@ -16,7 +16,7 @@ on:
 
 jobs:
   test:
-    uses: myparcelnl/sdk/.github/workflows/test.yml@main
+    uses: myparcelnl/pdk/.github/workflows/test.yml@main
     secrets: inherit
 
   release:
