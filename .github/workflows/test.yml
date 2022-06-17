@@ -35,7 +35,7 @@ jobs:
 
       - name: 'Run tests'
         if: github.actor != 'dependabot[bot]'
-        run: docker run ${{ steps.docker.outputs.tagged-image }}
+        run: docker run -v $(pwd):/app ${{ steps.docker.outputs.tagged-image }}
 
       - name: 'Get coverage file from container'
         if: github.actor != 'dependabot[bot]'

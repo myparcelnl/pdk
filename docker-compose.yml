@@ -5,6 +5,5 @@ services:
     image: myparcelnl/pdk
     build: ./
     init: true
-    #    build: ./
     volumes:
       - ./:/app
