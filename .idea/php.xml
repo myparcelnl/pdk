@@ -208,6 +208,7 @@
       <extension name="redis" enabled="false" />
       <extension name="rrd" enabled="false" />
       <extension name="shmop" enabled="false" />
+      <extension name="snappy" enabled="false" />
       <extension name="snmp" enabled="false" />
       <extension name="soap" enabled="false" />
       <extension name="sockets" enabled="false" />
