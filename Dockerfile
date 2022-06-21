@@ -5,9 +5,11 @@ ARG PHP_VERSION=7.4
 ###
 FROM ghcr.io/myparcelnl/php-xd:${PHP_VERSION} AS test
 
-COPY composer.json ./
+COPY composer.json phpunit.xml ./
+COPY tests/        ./tests/
+COPY src/          ./src/
 
-RUN composer install
+RUN composer install --dev
 
 CMD ["vendor/bin/pest", "--coverage-clover", "coverage.xml"]
 
