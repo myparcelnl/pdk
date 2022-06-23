@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Repository;
 
 use MyParcelNL\Pdk\Account\Request\GetAccountsRequest;
+use MyParcelNL\Pdk\Account\Response\GetAccountsResponseWithBody;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 

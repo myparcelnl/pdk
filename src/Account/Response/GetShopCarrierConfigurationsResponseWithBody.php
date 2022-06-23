@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Account\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
 use MyParcelNL\Sdk\src\Factory\Account\CarrierConfigurationFactory;
+use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 class GetShopCarrierConfigurationsResponseWithBody extends AbstractApiResponseWithBody

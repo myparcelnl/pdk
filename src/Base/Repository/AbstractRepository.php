@@ -53,7 +53,7 @@ abstract class AbstractRepository
             }
 
             $this->storage->set($key, $data);
-            $this->storageHashMap['key'] = $this->generateDataHash($data);
+            $this->storageHashMap[$key] = $this->generateDataHash($data);
         }
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Account\Request\GetShopRequest;
 use MyParcelNL\Pdk\Account\Request\GetShopsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
 use MyParcelNL\Pdk\Base\Pdk;
@@ -32,7 +33,7 @@ class MockRepository extends AbstractRepository
 
         $this->values = new Collection([
             'account' => $this->getAccount(),
-            'shop'    => $this->getShopWithParameters(),
+            'shop'    => $this->getShopWithParameters(3),
         ]);
     }
 
@@ -53,20 +54,18 @@ class MockRepository extends AbstractRepository
     {
         return $this->retrieve('account', function () {
             return new Account([
-                [
-                    'id'          => 4,
-                    'platform_id' => Platform::MYPARCEL_ID,
-                    'shops'       => (new Collection([
-                        [
-                            'id'   => 1,
-                            'name' => 'Potlodenshop',
-                        ],
-                        [
-                            'id'   => 2,
-                            'name' => 'MijnBoekenShop',
-                        ],
-                    ]))->mapInto(Shop::class),
-                ],
+                'id'          => 4,
+                'platform_id' => Platform::MYPARCEL_ID,
+                'shops'       => (new Collection([
+                    [
+                        'id'   => 1,
+                        'name' => 'Potlodenshop',
+                    ],
+                    [
+                        'id'   => 2,
+                        'name' => 'MijnBoekenShop',
+                    ],
+                ])),
             ]);
         });
     }
@@ -74,11 +73,11 @@ class MockRepository extends AbstractRepository
     /**
      * @return \MyParcelNL\Sdk\src\Model\Account\Shop
      */
-    public function getShopWithParameters(): Shop
+    public function getShopWithParameters(int $shopId): Shop
     {
-        return $this->retrieve('shop', function () {
+        return $this->retrieve('shop', function () use ($shopId) {
             /** @var \MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody $response */
-            $response = $this->api->doRequest(new GetShopsRequest(), GetShopsResponseWithBody::class);
+            $response = $this->api->doRequest(new GetShopRequest($shopId), GetShopsResponseWithBody::class);
 
             return $response->getShop();
         });

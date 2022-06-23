@@ -2,103 +2,79 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Tests\Api\Response\AccountResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\CarrierOptionsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ShopResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
+use MyParcelNL\Sdk\src\Model\Account\Account;
+use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
+use MyParcelNL\Sdk\src\Support\Collection;
 
-it('gets repositories', function ($response, $repositoryClass, $method, $args = []) {
+it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
     $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
-    $api->mock->append(
-        new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['data' => $response])
-        )
-    );
+    $api->mock->append(new $response());
 
     /** @var \MyParcelNL\Pdk\Base\Repository\AbstractRepository $repository */
     $repository = $pdk->get($repositoryClass);
 
-    expect($repository->{$method}(...array_values($args)))->not->toThrow(Throwable::class);
+    expect($repository->{$method}(...array_values($args)))->toBeInstanceOf($expected);
 })->with([
     [
-        ['accounts' => [['platform_id' => 3, 'id' => 3, 'shops' => [['id' => 3, 'name' => 'bloemkool']]]]],
+        AccountResponse::class,
         AccountRepository::class,
+        Account::class,
         'getAccount',
     ],
     [
-        ['shops' => [['id' => 3, 'name' => 'creme fraiche']]],
+        ShopResponse::class,
         ShopRepository::class,
+        Shop::class,
         'getShop',
     ],
     [
         CarrierConfigurationResponse::class,
         ShopCarrierConfigurationRepository::class,
+        Collection::class,
         'getCarrierConfigurations',
         ['shopId' => 3],
     ],
     [
-        ['carrier_options' => [['id' => 7, 'carrier' => ['id' => 5], 'enabled' => true, 'optional' => true]]],
+        CarrierConfigurationResponse::class,
+        ShopCarrierConfigurationRepository::class,
+        CarrierConfiguration::class,
+        'getCarrierConfiguration',
+        ['shopId' => 3, 'carrier' => 'postnl'],
+    ],
+    [
+        CarrierOptionsResponse::class,
         CarrierOptionsRepository::class,
+        Collection::class,
         'getCarrierOptions',
         ['shopId' => 3],
     ],
 ]);
 
-it('can use methods of repository', function () {
+it('uses all methods of repository', function () {
     $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
-
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
-    $api->mock->append(
-        new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['data' => ['shops' => [['id' => 3, 'name' => 'bloemkool']]]])
-        )
-    );
+    $api->mock->append(new ShopResponse());
 
-    /** @var \MyParcelNL\Pdk\Account\Repository\ShopRepository $repository */
-    $repository = $pdk->get(ShopRepository::class);
-    expect($repository->getShop())->not->toThrow(Throwable::class)
-        ->and($repository->save())->not->toThrow(Throwable::class);
-});
+    $repository = new MockRepository($pdk);
+    $repository->save();
+    $repository->save();
 
-it('will not save unchanged object', function () {
-    $storage = new MockStorage();
-    $storage->set('shop', new Shop(['id' => 3, 'name' => 'bloemkool']));
-    $config = array_merge([
-        'storage' => [
-            'default' => new MockStorage(),
-        ],
-    ], Config::provideDefaultPdkConfig());
-
-    $pdk        = PdkFactory::createPdk($config);
-    $repository = $pdk->get(ShopRepository::class);
-
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get('api');
-
-    $api->mock->append(
-        new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            json_encode(['data' => ['shops' => [['id' => 3, 'name' => 'creme fraiche']]]])
-        )
-    );
-
-    expect($repository->getShop())->not->toThrow(Throwable::class)
-        ->and($repository->save())->not->toThrow(Throwable::class)
-        /* next line is for coverage: saving an unchanged object should not trigger storage->set */
-        ->and($repository->save())->not->toThrow(Throwable::class);
+    expect($repository->getShopWithParameters(3))
+        ->toBeInstanceOf(Shop::class);
 });

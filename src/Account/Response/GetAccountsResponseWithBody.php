@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Account\Repository;
+namespace MyParcelNL\Pdk\Account\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
 use MyParcelNL\Sdk\src\Model\Account\Account;
