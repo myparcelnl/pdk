@@ -3,17 +3,19 @@
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         executionOrder="depends,defects"
 >
     <testsuites>
-        <testsuite name=" Test Suite">
-            <directory>./tests</directory>
+        <testsuite name="Test Suite">
+            <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
+
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./app</directory>
             <directory suffix=".php">./src</directory>
         </include>
+        <exclude>
+            <file>./src/Api/MyParcelApiService.php</file>
+        </exclude>
     </coverage>
 </phpunit>

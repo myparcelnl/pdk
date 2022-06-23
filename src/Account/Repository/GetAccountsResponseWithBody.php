@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Repository;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponse;
+use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 
-class GetAccountsResponse extends AbstractApiResponse
+class GetAccountsResponseWithBody extends AbstractApiResponseWithBody
 {
     /**
      * @var mixed

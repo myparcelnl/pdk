@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Repository;
 
 use MyParcelNL\Pdk\Account\Request\GetShopsRequest;
-use MyParcelNL\Pdk\Account\Response\GetShopsResponse;
-use MyParcelNL\Pdk\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
+use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
 class ShopRepository extends AbstractRepository
@@ -18,8 +18,8 @@ class ShopRepository extends AbstractRepository
     public function getShop(): Shop
     {
         return $this->retrieve('shop', function () {
-            /** @var \MyParcelNL\Pdk\Account\Response\GetShopsResponse $response */
-            $response = $this->api->doRequest(new GetShopsRequest(), GetShopsResponse::class);
+            /** @var \MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody $response */
+            $response = $this->api->doRequest(new GetShopsRequest(), GetShopsResponseWithBody::class);
 
             return $response->getShop();
         });

@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Shipment\Response;
+namespace MyParcelNL\Pdk\Account\Response;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponse;
-use MyParcelNL\Sdk\src\Factory\Account\CarrierConfigurationFactory;
+use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
 use MyParcelNL\Sdk\src\Model\Account\CarrierOptions;
 use MyParcelNL\Sdk\src\Support\Collection;
 
-class GetCarrierOptionsResponse extends AbstractApiResponse
+class GetCarrierOptionsResponseWithBody extends AbstractApiResponseWithBody
 {
     /**
      * @var mixed

@@ -29,9 +29,4 @@ class MockApiService extends AbstractApiService
     {
         return 'MOCK_API';
     }
-
-    protected function getRequestHeaders(): array
-    {
-        return [];
-    }
 }

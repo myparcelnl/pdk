@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
+use MyParcelNL\Pdk\Account\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Shipment\Repository\CarrierOptionsRepository;
+use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
-use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
-it('gets account related repositories', function ($response, $repositoryClass, $method, $args = []) {
+it('gets repositories', function ($response, $repositoryClass, $method, $args = []) {
     $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
@@ -26,7 +26,7 @@ it('gets account related repositories', function ($response, $repositoryClass, $
         )
     );
 
-    /** @var \MyParcelNL\Pdk\Repository\AbstractRepository $repository */
+    /** @var \MyParcelNL\Pdk\Base\Repository\AbstractRepository $repository */
     $repository = $pdk->get($repositoryClass);
 
     expect($repository->{$method}(...array_values($args)))->not->toThrow(Throwable::class);
@@ -42,35 +42,7 @@ it('gets account related repositories', function ($response, $repositoryClass, $
         'getShop',
     ],
     [
-        [
-            'carrier_configurations' => [
-                [
-                    'carrier'                           => 5,
-                    'default_drop_off_point_identifier' => 'abcdefghijklmnopqrstuvwxyz',
-                ],
-            ],
-        ],
-        ShopCarrierConfigurationRepository::class,
-        'getCarrierConfigurations',
-        ['shopId' => 3],
-    ],
-    [
-        [
-            'carrier_configurations' => [
-                [
-                    'carrier'                => 5,
-                    'default_drop_off_point' => [
-                        'name'          => 'broccoli',
-                        'city'          => '',
-                        'location_code' => '',
-                        'location_name' => '',
-                        'number'        => '',
-                        'postal_code'   => '',
-                        'street'        => '',
-                    ],
-                ],
-            ],
-        ],
+        CarrierConfigurationResponse::class,
         ShopCarrierConfigurationRepository::class,
         'getCarrierConfigurations',
         ['shopId' => 3],
@@ -96,7 +68,7 @@ it('can use methods of repository', function () {
         )
     );
 
-    /** @var \MyParcelNL\Pdk\Repository\AbstractRepository $repository */
+    /** @var \MyParcelNL\Pdk\Account\Repository\ShopRepository $repository */
     $repository = $pdk->get(ShopRepository::class);
     expect($repository->getShop())->not->toThrow(Throwable::class)
         ->and($repository->save())->not->toThrow(Throwable::class);
@@ -129,25 +101,4 @@ it('will not save unchanged object', function () {
         ->and($repository->save())->not->toThrow(Throwable::class)
         /* next line is for coverage: saving an unchanged object should not trigger storage->set */
         ->and($repository->save())->not->toThrow(Throwable::class);
-});
-
-it('can handle api errors', function () {
-    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
-
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get('api');
-    $api->mock->append(
-        new Response(
-            422,
-            ['Content-Type' => 'application/json'],
-            json_encode([])
-        )
-    );
-
-    /** @var \MyParcelNL\Pdk\Account\Repository\ShopRepository $repository */
-    $repository = $pdk->get(ShopRepository::class);
-
-    expect(function () use ($repository) {
-        $repository->getShop();
-    })->toThrow(ApiException::class);
 });

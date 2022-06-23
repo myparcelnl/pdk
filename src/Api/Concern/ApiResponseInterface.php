@@ -42,9 +42,4 @@ interface ApiResponseInterface
      * @return bool
      */
     public function isUnprocessableEntity(): bool;
-
-    /**
-     * @return bool
-     */
-    public function resourceNotFound(): bool;
 }

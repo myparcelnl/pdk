@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Repository;
+namespace MyParcelNL\Pdk\Base\Repository;
 
 use MyParcelNL\Pdk\Base\Pdk;
 

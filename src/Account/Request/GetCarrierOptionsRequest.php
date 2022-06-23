@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Shipment\Request;
-
-use MyParcelNL\Pdk\Account\Request\AbstractRequest;
+namespace MyParcelNL\Pdk\Account\Request;
 
 class GetCarrierOptionsRequest extends AbstractRequest
 {

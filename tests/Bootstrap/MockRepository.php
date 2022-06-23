@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Account\Request\GetShopsRequest;
+use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
 use MyParcelNL\Pdk\Base\Pdk;
-use MyParcelNL\Pdk\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 use MyParcelNL\Sdk\src\Support\Collection;
@@ -30,7 +32,7 @@ class MockRepository extends AbstractRepository
 
         $this->values = new Collection([
             'account' => $this->getAccount(),
-            'shop'    => $this->getShop(),
+            'shop'    => $this->getShopWithParameters(),
         ]);
     }
 
@@ -49,7 +51,7 @@ class MockRepository extends AbstractRepository
      */
     public function getAccount(): Account
     {
-        return $this->retrieve('shop', function () {
+        return $this->retrieve('account', function () {
             return new Account([
                 [
                     'id'          => 4,
@@ -72,15 +74,13 @@ class MockRepository extends AbstractRepository
     /**
      * @return \MyParcelNL\Sdk\src\Model\Account\Shop
      */
-    public function getShop(): Shop
+    public function getShopWithParameters(): Shop
     {
         return $this->retrieve('shop', function () {
-            return new Shop([
-                [
-                    'id'   => 4,
-                    'name' => 'bloemkool',
-                ],
-            ]);
+            /** @var \MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody $response */
+            $response = $this->api->doRequest(new GetShopsRequest(), GetShopsResponseWithBody::class);
+
+            return $response->getShop();
         });
     }
 

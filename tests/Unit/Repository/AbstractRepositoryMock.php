@@ -31,7 +31,7 @@ it('handles repository', function () use ($pdk) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockRepository $repository */
     $repository = $pdk->get(MockRepository::class);
 
-    expect($repository->getShop())->toBeInstanceOf(Shop::class);
+    expect($repository->getShopWithParameters())->toBeInstanceOf(Shop::class);
 });
 
 it('apis the api', function () use ($pdk) {

@@ -8,7 +8,6 @@ use GuzzleHttp\RequestOptions;
 use MyParcelNL\Pdk\Account\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
 use MyParcelNL\Sdk\src\Exception\ApiException;
-use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractApiService implements ApiServiceInterface
 {
@@ -56,7 +55,11 @@ abstract class AbstractApiService implements ApiServiceInterface
         $responseObject = new $responseClass($response);
 
         if ($responseObject->isErrorResponse()) {
-            throw new ApiException('External request failed.');
+            throw new ApiException(
+                'External request failed. Status code ' . $responseObject->getStatusCode() . " " . implode(
+                    $responseObject->getErrors()
+                )
+            );
         }
 
         return $responseObject;

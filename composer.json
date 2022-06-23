@@ -24,13 +24,7 @@
   "autoload-dev": {
     "psr-4": {
       "MyParcelNL\\Pdk\\": "tests/Unit",
-      "MyParcelNL\\Pdk\\Tests\\Bootstrap\\": "tests/Bootstrap"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "MyParcelNL\\Pdk\\": "tests/Unit",
-      "MyParcelNL\\Pdk\\Tests\\Bootstrap\\": "tests/Bootstrap"
+      "MyParcelNL\\Pdk\\Tests\\": "tests"
     }
   },
   "authors": [
