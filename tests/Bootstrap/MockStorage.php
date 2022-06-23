@@ -9,11 +9,11 @@ use MyParcelNL\Sdk\src\Support\Arr;
 
 class MockStorage extends AbstractStorage
 {
-    private static $data = [];
+    private $data = [];
 
     public function delete(string $storageKey): void
     {
-        Arr::forget(self::$data, $storageKey);
+        Arr::forget($this->data, $storageKey);
     }
 
     /**
@@ -24,7 +24,7 @@ class MockStorage extends AbstractStorage
      */
     public function get(string $storageKey, bool $skipCache = false)
     {
-        return Arr::get(self::$data, $storageKey);
+        return Arr::get($this->data, $storageKey);
     }
 
     /**
@@ -35,6 +35,6 @@ class MockStorage extends AbstractStorage
      */
     public function set(string $storageKey, $item): void
     {
-        Arr::set(self::$data, $storageKey, $item);
+        Arr::set($this->data, $storageKey, $item);
     }
 }

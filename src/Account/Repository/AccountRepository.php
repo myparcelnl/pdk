@@ -11,7 +11,9 @@ use MyParcelNL\Sdk\src\Model\Account\Account;
 class AccountRepository extends AbstractRepository
 {
     /**
+     * @return \MyParcelNL\Sdk\src\Model\Account\Account
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function getAccount(): Account
     {

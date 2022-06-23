@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Factory;
 
+use DI\ContainerBuilder;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
-use MyParcelNL\Pdk\Base\Container;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -23,12 +23,11 @@ final class PdkFactory
      */
     public $container;
 
+    protected static $index =0;
     /**
      * @param  array $config
      *
      * @return \MyParcelNL\Pdk\Base\Pdk
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
      * @throws \Exception
      */
     public static function createPdk(array $config): Pdk
@@ -36,13 +35,14 @@ final class PdkFactory
         $items = Arr::dot($config);
         self::validate($items);
 
-        $container = Container::getInstance();
+        $builder   = new ContainerBuilder();
+        $container = $builder->build();
 
         foreach ($items as $key => $item) {
             $container->set($key, $item);
         }
 
-        return $container->get(Pdk::class);
+        return new Pdk($container);
     }
 
     /**

@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Shipment\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
+use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
 it('gets account related repositories', function ($response, $repositoryClass, $method, $args = []) {
@@ -27,6 +28,7 @@ it('gets account related repositories', function ($response, $repositoryClass, $
 
     /** @var \MyParcelNL\Pdk\Repository\AbstractRepository $repository */
     $repository = $pdk->get($repositoryClass);
+
     expect($repository->{$method}(...array_values($args)))->not->toThrow(Throwable::class);
 })->with([
     [
@@ -35,7 +37,7 @@ it('gets account related repositories', function ($response, $repositoryClass, $
         'getAccount',
     ],
     [
-        ['shops' => [['id' => 3, 'name' => 'bloemkool']]],
+        ['shops' => [['id' => 3, 'name' => 'creme fraiche']]],
         ShopRepository::class,
         'getShop',
     ],
@@ -57,7 +59,15 @@ it('gets account related repositories', function ($response, $repositoryClass, $
             'carrier_configurations' => [
                 [
                     'carrier'                => 5,
-                    'default_drop_off_point' => ['name' => 'broccoli'],
+                    'default_drop_off_point' => [
+                        'name'          => 'broccoli',
+                        'city'          => '',
+                        'location_code' => '',
+                        'location_name' => '',
+                        'number'        => '',
+                        'postal_code'   => '',
+                        'street'        => '',
+                    ],
                 ],
             ],
         ],
@@ -103,9 +113,41 @@ it('will not save unchanged object', function () {
 
     $pdk        = PdkFactory::createPdk($config);
     $repository = $pdk->get(ShopRepository::class);
-    $butt       = $repository->getShop();
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = $pdk->get('api');
+
+    $api->mock->append(
+        new Response(
+            200,
+            ['Content-Type' => 'application/json'],
+            json_encode(['data' => ['shops' => [['id' => 3, 'name' => 'creme fraiche']]]])
+        )
+    );
+
     expect($repository->getShop())->not->toThrow(Throwable::class)
         ->and($repository->save())->not->toThrow(Throwable::class)
         /* next line is for coverage: saving an unchanged object should not trigger storage->set */
         ->and($repository->save())->not->toThrow(Throwable::class);
+});
+
+it('can handle api errors', function () {
+    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = $pdk->get('api');
+    $api->mock->append(
+        new Response(
+            422,
+            ['Content-Type' => 'application/json'],
+            json_encode([])
+        )
+    );
+
+    /** @var \MyParcelNL\Pdk\Account\Repository\ShopRepository $repository */
+    $repository = $pdk->get(ShopRepository::class);
+
+    expect(function () use ($repository) {
+        $repository->getShop();
+    })->toThrow(ApiException::class);
 });

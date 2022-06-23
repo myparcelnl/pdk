@@ -13,6 +13,7 @@ class ShopRepository extends AbstractRepository
 {
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function getShop(): Shop
     {

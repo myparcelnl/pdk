@@ -13,8 +13,6 @@ abstract class AbstractRepository
      */
     protected $api;
 
-    protected $item;
-
     /**
      * @var \MyParcelNL\Pdk\Storage\StorageInterface
      */

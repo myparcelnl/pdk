@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Api\Service;
 use GuzzleHttp\RequestOptions;
 use MyParcelNL\Pdk\Account\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
+use MyParcelNL\Sdk\src\Exception\ApiException;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractApiService implements ApiServiceInterface
@@ -32,6 +33,7 @@ abstract class AbstractApiService implements ApiServiceInterface
      *
      * @return \MyParcelNL\Pdk\Api\Concern\ApiResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function doRequest(
         RequestInterface $request,
@@ -50,8 +52,12 @@ abstract class AbstractApiService implements ApiServiceInterface
             $requestOptions
         );
 
-        /** @var ResponseInterface $responseObject */
+        /** @var \MyParcelNL\Pdk\Api\Concern\ApiResponseInterface $responseObject */
         $responseObject = new $responseClass($response);
+
+        if ($responseObject->isErrorResponse()) {
+            throw new ApiException('External request failed.');
+        }
 
         return $responseObject;
     }

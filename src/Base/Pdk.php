@@ -14,9 +14,9 @@ class Pdk
     /**
      * @throws \Exception
      */
-    public function __construct()
+    public function __construct(\DI\Container $container)
     {
-        $this->container = Container::getInstance();
+        $this->container = $container;
     }
 
     /**
