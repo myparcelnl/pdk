@@ -14,14 +14,14 @@ class GetShopRequest extends AbstractRequest
     /**
      * @var int
      */
-    private $id;
+    private $shopId;
 
     /**
-     * @param  int $id
+     * @param  int $shopId
      */
-    public function __construct(int $id)
+    public function __construct(int $shopId)
     {
-        $this->id = $id;
+        $this->shopId = $shopId;
     }
 
     public function getHttpMethod(): string
@@ -32,7 +32,7 @@ class GetShopRequest extends AbstractRequest
     protected function getQueryParameters(): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->shopId,
         ];
     }
 }

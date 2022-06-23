@@ -18,11 +18,10 @@ class MockStorage extends AbstractStorage
 
     /**
      * @param  string $storageKey
-     * @param  bool   $skipCache
      *
      * @return mixed
      */
-    public function get(string $storageKey, bool $skipCache = false)
+    public function get(string $storageKey)
     {
         return Arr::get($this->data, $storageKey);
     }

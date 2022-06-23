@@ -8,7 +8,7 @@ interface StorageInterface
 {
     public function delete(string $storageKey): void;
 
-    public function get(string $storageKey, bool $skipCache = false);
+    public function get(string $storageKey);
 
     public function has(string $storageKey): bool;
 
