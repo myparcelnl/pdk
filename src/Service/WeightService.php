@@ -10,10 +10,6 @@ use MyParcelNL\Sdk\src\Support\Arr;
 
 class WeightService
 {
-    public const UNIT_GRAMS           = 'g';
-    public const UNIT_KILOGRAMS       = 'kg';
-    public const UNIT_OUNCES          = 'oz';
-    public const UNIT_POUNDS          = 'lbs';
     public const DIGITAL_STAMP_RANGES = [
         [
             'min'     => 0,
@@ -41,12 +37,16 @@ class WeightService
             'average' => 1175,
         ],
     ];
+    public const UNIT_GRAMS = 'g';
+    public const UNIT_KILOGRAMS = 'kg';
+    public const UNIT_OUNCES = 'oz';
+    public const UNIT_POUNDS = 'lbs';
 
     /**
      * Converts a weight in grams to a digital stamp category weight, by default the PostNL categories are used.
      *
-     * @param int   $weight in grams.
-     * @param array $ranges optional your own categories, must be formatted like self::DIGITAL_STAMP_RANGES.
+     * @param  int   $weight in grams.
+     * @param  array $ranges optional your own categories, must be formatted like self::DIGITAL_STAMP_RANGES.
      *
      * @return int
      * @throws \MyParcelNL\Sdk\src\Exception\ValidationException when supplied weight is larger than max weight.
@@ -54,10 +54,12 @@ class WeightService
     public static function convertToDigitalStamp(int $weight, array $ranges = self::DIGITAL_STAMP_RANGES): int
     {
         if ($weight > Arr::last($ranges)['max']) {
-            throw new ValidationException(sprintf('Supplied weight to convert of %sg exceeds maximum digital stamp weight of %sg',
-                $weight,
-                Arr::last($ranges)['max']
-            )
+            throw new ValidationException(
+                sprintf(
+                    'Supplied weight to convert of %sg exceeds maximum digital stamp weight of %sg',
+                    $weight,
+                    Arr::last($ranges)['max']
+                )
             );
         }
 
@@ -77,8 +79,8 @@ class WeightService
     /**
      * Returns the weight in grams.
      *
-     * @param int|float $weight
-     * @param string    $unit
+     * @param  int|float $weight
+     * @param  string    $unit
      *
      * @return int
      */

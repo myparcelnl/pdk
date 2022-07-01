@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use GuzzleHttp\Psr7\Utils;

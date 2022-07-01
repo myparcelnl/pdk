@@ -41,7 +41,7 @@ abstract class AbstractRepository
      */
     public function __construct(Pdk $pdk)
     {
-        $this->storage = $pdk->get("storage.{$this->storageDriver}");
+        $this->storage = $pdk->get("storage.$this->storageDriver");
         $this->api     = $pdk->get('api');
     }
 

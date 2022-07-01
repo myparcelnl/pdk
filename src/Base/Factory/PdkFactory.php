@@ -21,9 +21,10 @@ final class PdkFactory
     /**
      * @var \DI\Container
      */
-    public $container;
+    public           $container;
 
-    protected static $index =0;
+    protected static $index = 0;
+
     /**
      * @param  array $config
      *

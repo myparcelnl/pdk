@@ -1,11 +1,11 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\MyParcelApiErrorResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\NotFoundResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ShipmentsResponse;

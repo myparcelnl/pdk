@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base;
 
 use DI\ContainerBuilder;
-use RuntimeException;
 
 class Container
 {
