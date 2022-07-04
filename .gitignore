@@ -2,6 +2,7 @@
 .phpunit.result.cache
 .yarn-*.log
 composer.lock
+coverage.xml
 
 /coverage/
 /node_modules/
@@ -28,4 +29,3 @@ composer.lock
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
-
