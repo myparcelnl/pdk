@@ -1,5 +1,4 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -9,7 +8,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
 
 it('gets storage', function () {
-    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
 
     expect($pdk->get('storage.default'))->toBeInstanceOf(StorageInterface::class);
 });

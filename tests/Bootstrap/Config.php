@@ -9,9 +9,9 @@ class Config
     public static function provideDefaultPdkConfig(): array
     {
         return [
-            'api'     => new MockApiService(),
+            'api'     => MockApiService::class,
             'storage' => [
-                'default' => new MockStorage(),
+                'default' => MockStorage::class,
             ],
         ];
     }

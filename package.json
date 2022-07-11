@@ -1,7 +1,10 @@
 {
   "name": "@myparcel/php-pdk",
   "private": true,
+  "scripts": {
+    "preinstall": "npx -q only-allow yarn"
+  },
   "devDependencies": {
-    "@myparcel/semantic-release-config": "^3.1.0"
+    "@myparcel/semantic-release-config": "^4.0.0"
   }
 }

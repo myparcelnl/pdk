@@ -1,7 +1,4 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection */
-
-/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -15,7 +12,6 @@ use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\CarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ShopResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockJsonResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
@@ -23,7 +19,7 @@ use MyParcelNL\Sdk\src\Model\Account\Shop;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
-    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
@@ -69,19 +65,16 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
     ],
 ]);
 
-it('saves only when changed', function () {
-    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
+it('uses all methods of repository', function () {
+    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
-    $api->mock->append(new MockJsonResponse());
+    $api->mock->append(new ShopResponse());
 
     $repository = new MockRepository($pdk);
-    expect($repository->getStorageSetCount('shop'))->toBe(0);
     $repository->save();
-    expect($repository->getStorageSetCount('shop'))->toBe(1);
     $repository->save();
-    expect($repository->getStorageSetCount('shop'))
-        ->toBe(1)
-        ->and($repository->getShopWithParameters(4))
+
+    expect($repository->getShopWithParameters(3))
         ->toBeInstanceOf(Shop::class);
 });

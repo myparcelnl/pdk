@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
-use MyParcelNL\Pdk\Base\HttpResponses;
+use MyParcelNL\Pdk\Base\Http\ResponseCodes;
 use Psr\Http\Message\StreamInterface;
 
 class JsonResponse extends Response
@@ -25,6 +25,6 @@ class JsonResponse extends Response
 
     public function getStatusCode(): int
     {
-        return HttpResponses::HTTP_OK;
+        return ResponseCodes::HTTP_OK;
     }
 }

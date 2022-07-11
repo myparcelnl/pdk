@@ -9,11 +9,6 @@ use MyParcelNL\Pdk\Base\Pdk;
 abstract class AbstractRepository
 {
     /**
-     * @var array{string, string}
-     */
-    public $storageSetCount = [];
-
-    /**
      * @var \MyParcelNL\Pdk\Api\MyParcelApiService
      */
     protected $api;
@@ -46,16 +41,6 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param  string $key
-     *
-     * @return int
-     */
-    public function getStorageSetCount(string $key): int
-    {
-        return $this->storageSetCount[$key] ?? 0;
-    }
-
-    /**
      * @return void
      */
     public function save(): void
@@ -68,8 +53,7 @@ abstract class AbstractRepository
             }
 
             $this->storage->set($key, $data);
-            $this->storageSetCount[$key] = ($this->storageSetCount[$key] ?? 0) + 1;
-            $this->storageHashMap[$key]  = $this->generateDataHash($data);
+            $this->storageHashMap[$key] = $this->generateDataHash($data);
         }
     }
 

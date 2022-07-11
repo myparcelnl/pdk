@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Response;
 
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
-use MyParcelNL\Pdk\Base\HttpResponses;
+use MyParcelNL\Pdk\Base\Http\ResponseCodes;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -50,7 +50,7 @@ abstract class AbstractApiResponse implements ApiResponseInterface
      */
     public function isErrorResponse(): bool
     {
-        return $this->getStatusCode() < HttpResponses::HTTP_OK || $this->getStatusCode() >= 299;
+        return $this->getStatusCode() < ResponseCodes::HTTP_OK || $this->getStatusCode() >= 299;
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractApiResponse implements ApiResponseInterface
      */
     public function isUnprocessableEntity(): bool
     {
-        return HttpResponses::HTTP_UNPROCESSABLE_ENTITY === $this->getStatusCode();
+        return ResponseCodes::HTTP_UNPROCESSABLE_ENTITY === $this->getStatusCode();
     }
 
     /**

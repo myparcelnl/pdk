@@ -3,6 +3,7 @@
 .yarn-*.log
 composer.lock
 coverage.xml
+pdk_ide_helper.php
 
 /coverage/
 /node_modules/

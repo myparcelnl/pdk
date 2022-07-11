@@ -1,5 +1,4 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -16,7 +15,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 it('handles various error responses', function (string $response) {
-    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
@@ -35,7 +34,7 @@ it('handles various error responses', function (string $response) {
 ]);
 
 it('handles a request with a query string', function () {
-    $pdk = PdkFactory::createPdk(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');

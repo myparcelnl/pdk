@@ -37,10 +37,10 @@ class WeightService
             'average' => 1175,
         ],
     ];
-    public const UNIT_GRAMS = 'g';
-    public const UNIT_KILOGRAMS = 'kg';
-    public const UNIT_OUNCES = 'oz';
-    public const UNIT_POUNDS = 'lbs';
+    public const UNIT_GRAMS           = 'g';
+    public const UNIT_KILOGRAMS       = 'kg';
+    public const UNIT_OUNCES          = 'oz';
+    public const UNIT_POUNDS          = 'lbs';
 
     /**
      * Converts a weight in grams to a digital stamp category weight, by default the PostNL categories are used.

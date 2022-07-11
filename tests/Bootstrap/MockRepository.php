@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Account\Request\GetShopRequest;
+use MyParcelNL\Pdk\Account\Request\GetShopsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
@@ -25,6 +26,8 @@ class MockRepository extends AbstractRepository
      *
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function __construct(Pdk $pdk)
     {

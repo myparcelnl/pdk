@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
-$pdk = PdkFactory::createPdk([
+$pdk = PdkFactory::create([
     'storage' => [
         'default' => new MockStorage(),
     ],
@@ -31,7 +31,7 @@ it('handles repository', function () use ($pdk) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockRepository $repository */
     $repository = $pdk->get(MockRepository::class);
 
-    expect($repository->getShopWithParameters(3))->toBeInstanceOf(Shop::class);
+    expect($repository->getShopWithParameters(1))->toBeInstanceOf(Shop::class);
 });
 
 it('apis the api', function () use ($pdk) {
