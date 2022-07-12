@@ -55,4 +55,30 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
         return $traits;
     }
+
+    /**
+     * @param  array $previous
+     * @param  array $current
+     *
+     * @return array
+     */
+    public static function mergeValuesByKeys(array $previous, array $current): array
+    {
+        $keys = array_keys($current);
+
+        foreach ($keys as $key) {
+
+            if (is_array($current[$key])) {
+                $current[$key] = self::mergeValuesByKeys($previous[$key] ?? [], $current[$key]);
+            }
+
+            if (null !== $current[$key]) {
+                continue;
+            }
+
+            $current[$key] = $previous[$key] ?? null;
+        }
+
+        return $current + $previous;
+    }
 }

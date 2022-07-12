@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Service;
 
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\ShipmentOptionsV3Adapter;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\PickupLocationV3Adapter;
-use MyParcelNL\Sdk\src\Adapter\DeliveryOptions\DeliveryOptionsV3Adapter;
-use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
+use MyParcelNL\Pdk\Base\Utils;
+use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Support\Collection;
 
 class DeliveryOptionsMerger
 {
@@ -18,28 +17,28 @@ class DeliveryOptionsMerger
     ];
 
     /**
-     * @param  \MyParcelNL\Sdk\src\Adapter\DeliveryOptions\AbstractDeliveryOptionsAdapter|array ...$options
+     * @param ...$options
      *
+     * @return \MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions
      * @throws \Exception
      */
-    public static function create(...$options): AbstractDeliveryOptionsAdapter
+    public static function create(...$options): DeliveryOptions
     {
-        $arr = [];
-        foreach ($options as $option) {
-            if (is_array($option)) {
-                $arr[] = $option;
-                continue;
-            }
+        $previous = self::DEFAULT_VALUES;
 
-            if (is_a($option, AbstractDeliveryOptionsAdapter::class)) {
-                $arr[] = $option->toArray();
-                continue;
-            }
+        $adapters = (new Collection($options))
+            ->filter()
+            ->map(static function ($adapter) use (&$previous) {
 
-            // todo show what $option is
-            throw new \RuntimeException(var_export($option, true));
-        }
+                $prev = $previous;
+                $current = $adapter->toArray();
 
-        return DeliveryOptionsAdapterFactory::create(array_merge(self::DEFAULT_VALUES, ...$arr));
+                $previous = Utils::mergeValuesByKeys($previous, $adapter->toArray());
+
+                return (new Collection($previous))->toArrayWithoutNull();
+            })
+            ->toArrayWithoutNull();
+
+        return new DeliveryOptions(end($adapters));
     }
 }
