@@ -4,56 +4,45 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Collection;
 
-use MyParcelNL\Pdk\Base\Collection;
-use MyParcelNL\Pdk\Shipment\Factory\ShipmentValidatorFactory;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Validator\AbstractValidator;
-use RuntimeException;
 
 /**
  * @property \MyParcelNL\Pdk\Shipment\Model\Shipment[] $items
+ * @property \MyParcelNL\Pdk\Shipment\Model\Label      $label
+ * @method Shipment first(callable $callback = null, $default = null)
+ * @method Shipment last(callable $callback = null, $default = null)
+ * @method Shipment pop()
+ * @method Shipment shift()
+ * @method Shipment[] all()
  */
 class ShipmentCollection extends Collection
 {
     use HasApiKey;
 
     /**
-     * @return void
-     * @throws \Exception
+     * @var \MyParcelNL\Pdk\Shipment\Model\Label
      */
-    public function export(): void
-    {
-        $this->validateShipments();
-        // Todo: export to myparcel
-    }
+    public $label;
 
     /**
-     * @return void
-     * @throws \Exception
+     * @var class-string
      */
-    private function validateShipments(): void
+    protected $cast = Shipment::class;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
+     *
+     * @return $this
+     */
+    public function addIds(Collection $ids): self
     {
-        if (! $this->count()) {
-            throw new RuntimeException('Add shipments to the collection before exporting.');
-        }
+        return (new static($this->items))->map(function (Shipment $shipment) use ($ids) {
+            $match        = $ids->firstWhere('referenceIdentifier', $shipment->referenceIdentifier);
+            $shipment->id = $match['id'] ?? null;
 
-        $validators = new Collection();
-
-        foreach ($this->items as $shipment) {
-            $validator = $validators->firstWhere('carrier', $shipment->carrier);
-
-            if (! $validator) {
-                $validator = ShipmentValidatorFactory::create($shipment->carrier);
-
-                $validators->push($validator);
-            }
-
-            $validator->validateAll($shipment);
-        }
-
-        $validators
-            ->each(function (AbstractValidator $validator) {
-                $validator->report();
-            });
+            return $shipment;
+        });
     }
 }

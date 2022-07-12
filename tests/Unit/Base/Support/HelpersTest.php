@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Helpers;
-use MyParcelNL\Pdk\Base\Collection;
 
 $data = [
     'value' => [

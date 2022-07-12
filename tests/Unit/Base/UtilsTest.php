@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Utils;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Tests\Mocks\AClass;
 use MyParcelNL\Pdk\Tests\Mocks\BeConcerned;
 

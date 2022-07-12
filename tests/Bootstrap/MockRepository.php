@@ -6,18 +6,17 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Account\Request\GetShopRequest;
-use MyParcelNL\Pdk\Account\Request\GetShopsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
-use MyParcelNL\Pdk\Base\Collection;
 
 class MockRepository extends AbstractRepository
 {
     /**
-     * @var \MyParcelNL\Pdk\Base\Collection
+     * @var \MyParcelNL\Pdk\Base\Support\Collection
      */
     private $values;
 
@@ -42,7 +41,7 @@ class MockRepository extends AbstractRepository
     /**
      * @param  string $key
      *
-     * @return \MyParcelNL\Pdk\Base\Collection
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
      */
     public function get(string $key): Collection
     {

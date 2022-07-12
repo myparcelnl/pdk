@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Api\Service\AbstractApiService;
  */
 class MyParcelApiService extends AbstractApiService
 {
-    private const DEFAULT_BASE_URL = 'https://api.myparcel.nl';
+    public const  DEFAULT_BASE_URL = 'https://api.myparcel.nl';
     private const DEFAULT_CONFIG   = [
         'baseUrl' => self::DEFAULT_BASE_URL,
         'client'  => Client::class,
@@ -46,7 +46,7 @@ class MyParcelApiService extends AbstractApiService
     /**
      * @return array
      */
-    protected function getRequestHeaders(): array
+    protected function getHeaders(): array
     {
         return [
             'authorization' => sprintf('appelboom %s', base64_encode($this->apiKey)),

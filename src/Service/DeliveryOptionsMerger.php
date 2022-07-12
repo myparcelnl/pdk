@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Service;
 
-use MyParcelNL\Pdk\Base\Collection;
-use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 class DeliveryOptionsMerger
 {
     /**
-     * @param  (array|\MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions|null)[] $options
+     * @param  (array|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions|null)[] $options
      *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions
+     * @return \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions
      * @throws \Exception
      */
     public static function create(array $options): DeliveryOptions

@@ -9,7 +9,7 @@
       <PestRunner method="" scope="ConfigurationFile" options="--coverage-html coverage" />
     </option>
     <option name="runnerSettings">
-      <PhpTestRunnerSettings method="" scope="ConfigurationFile" />
+      <PhpTestRunnerSettings method="" scope="ConfigurationFile" options="--coverage-html coverage" />
     </option>
     <method v="2" />
   </configuration>

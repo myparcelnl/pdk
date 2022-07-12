@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Collection;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Sdk\src\Support\Str;
 use Nette\Loaders\RobotLoader;
 

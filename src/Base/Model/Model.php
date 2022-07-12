@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Concern\HidesAttributes;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
-use MyParcelNL\Pdk\Base\Utils;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 use ReturnTypeWillChange;
 

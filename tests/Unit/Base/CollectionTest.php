@@ -3,7 +3,6 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingCollection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 
@@ -28,14 +27,3 @@ it('casts items to class on push', function () {
         expect($item)->toBeInstanceOf(MockCastModel::class);
     });
 });
-
-it('throws error when using invalid cast class', function () {
-    class InvalidCastingCollection extends Collection
-    {
-        protected $cast = 'not_a_class';
-    }
-
-    new InvalidCastingCollection([
-        ['property' => 'value'],
-    ]);
-})->throws(Error::class);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use Exception;
+use Throwable;
 
 class InvalidCastException extends Exception
 {
@@ -13,13 +14,14 @@ class InvalidCastException extends Exception
      * @param  mixed  $castType
      * @param  mixed  $arguments
      */
-    public function __construct(string $key, $castType, $arguments = null)
+    public function __construct(string $key, $castType, $arguments = null, Throwable $exception = null)
     {
         $this->message = sprintf(
-            'Failed to cast "%s" to "%s"%s',
+            'Failed to cast "%s" to "%s"%s.%s',
             $key,
             $castType,
-            $arguments ? sprintf(' with the following arguments: %s', json_encode($arguments)) : ''
+            $arguments ? sprintf(' with the following arguments: %s', json_encode($arguments)) : '',
+            $exception ? sprintf(' Reason: %s', $exception->getMessage()) : ''
         );
 
         parent::__construct();

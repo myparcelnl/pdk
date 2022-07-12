@@ -16,14 +16,14 @@ class GetShipmentsRequest extends AbstractRequest
     /**
      * @var null|string
      */
-    private $referenceIdentifier;
+    private $parameters;
 
     /**
-     * @param  null|string $referenceIdentifier
+     * @param  array $parameters
      */
-    public function __construct(string $referenceIdentifier = null)
+    public function __construct(array $parameters = [])
     {
-        $this->referenceIdentifier = $referenceIdentifier;
+        $this->parameters = $parameters;
     }
 
     public function getHttpMethod(): string
@@ -33,10 +33,6 @@ class GetShipmentsRequest extends AbstractRequest
 
     protected function getQueryParameters(): array
     {
-        return array_filter(
-            [
-                'reference_identifier' => $this->referenceIdentifier,
-            ]
-        );
+        return array_filter($this->parameters);
     }
 }

@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Logger;
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
-use MyParcelNL\Pdk\Tests\Bootstrap\Config;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('logs logs', function (string $level, string $message, array $context = []) {
-    PdkFactory::create(Config::provideDefaultPdkConfig());
+    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
 
     DefaultLogger::{$level}($message, $context);
 

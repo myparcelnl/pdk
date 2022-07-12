@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Base\Concern;
 
 use DateTime;
 use DateTimeInterface;
-use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
-use MyParcelNL\Pdk\Base\Utils;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
@@ -712,7 +712,7 @@ trait HasAttributes
         try {
             return new $class($arguments);
         } catch (Throwable $e) {
-            throw new InvalidCastException($key, $class, $arguments);
+            throw new InvalidCastException($key, $class, $arguments, $e);
         }
     }
 }

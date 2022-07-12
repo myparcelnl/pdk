@@ -12,6 +12,11 @@ interface RequestInterface
     public function getBody(): ?string;
 
     /**
+     * @return array
+     */
+    public function getHeaders(): array;
+
+    /**
      * @return string
      */
     public function getHttpMethod(): string;
