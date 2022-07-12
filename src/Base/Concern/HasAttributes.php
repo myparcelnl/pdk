@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Concern;
 
-use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Collection;
+use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Sdk\src\Support\Str;
 
 trait HasAttributes
@@ -47,7 +47,7 @@ trait HasAttributes
     {
         static::$mutatorCache[$class] = (new Collection(static::getMutatorMethods($class)))
             ->map(function ($match) {
-                return lcfirst(Str::camel($match));
+                return Str::camel($match);
             })
             ->all();
     }
@@ -89,13 +89,15 @@ trait HasAttributes
      */
     public function attributesToArray(): array
     {
+        $attributes = $this->getSnakeCaseAttributes();
+
         $attributes = $this->addMutatedAttributesToArray(
-            $this->attributes,
-            array_keys($this->attributes)
+            $attributes,
+            array_keys($attributes)
         );
 
         foreach ($this->getArrayableAttributes() as $key => $value) {
-            $attributes[$key] = $this->mutateAttributeForArray($key, $value);
+            $attributes[Str::snake($key)] = $this->mutateAttributeForArray($key, $value);
         }
 
         $attributes = $this->addMutatedAttributesToArray(
@@ -104,7 +106,7 @@ trait HasAttributes
         );
 
         foreach ($this->getArrayableAppends() as $key) {
-            $attributes[$key] = $this->mutateAttributeForArray($key, null);
+            $attributes[Str::snake($key)] = $this->mutateAttributeForArray($key, null);
         }
 
         return $attributes;
@@ -166,6 +168,20 @@ trait HasAttributes
         }
 
         return static::$mutatorCache[$class];
+    }
+
+    /**
+     * @return array
+     */
+    public function getSnakeCaseAttributes(): array
+    {
+        $attributes = [];
+
+        foreach ($this->attributes as $key => $value) {
+            $attributes[Str::snake($key)] = $value;
+        }
+
+        return $attributes;
     }
 
     /**
@@ -267,6 +283,7 @@ trait HasAttributes
                 continue;
             }
 
+            $key              = Str::snake($key);
             $attributes[$key] = $this->mutateAttributeForArray($key, $attributes[$key]);
         }
 

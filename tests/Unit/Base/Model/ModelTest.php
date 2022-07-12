@@ -74,5 +74,5 @@ it('can use unset on array offset', function () {
 });
 
 it('can use toArray', function () {
-    expect((new MyModel())->toArray())->toEqual(['myProperty' => 1]);
+    expect((new MyModel())->toArray())->toEqual(['my_property' => 1]);
 });
