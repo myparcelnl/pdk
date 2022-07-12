@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Support\Helpers;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Pdk\Base\Collection;
 
 $data = [
     'value' => [

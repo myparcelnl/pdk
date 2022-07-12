@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Concern;
 
 use MyParcelNL\Pdk\Base\Support\Arrayable;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Sdk\src\Support\Str;
 
 trait HasAttributes

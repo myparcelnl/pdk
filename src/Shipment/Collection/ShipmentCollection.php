@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Collection;
 
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Shipment\Factory\ShipmentValidatorFactory;
 use MyParcelNL\Sdk\src\Concerns\HasApiKey;
-use MyParcelNL\Sdk\src\Support\Collection;
 use MyParcelNL\Sdk\src\Validator\AbstractValidator;
 use RuntimeException;
 

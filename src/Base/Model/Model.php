@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Concern\HidesAttributes;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
+use ReturnTypeWillChange;
 
 class Model implements Arrayable, ArrayAccess
 {
@@ -163,7 +164,7 @@ class Model implements Arrayable, ArrayAccess
      *
      * @return mixed
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->getAttribute($offset);
@@ -177,7 +178,7 @@ class Model implements Arrayable, ArrayAccess
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         $this->setAttribute($offset, $value);

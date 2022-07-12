@@ -6,6 +6,7 @@ use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Tests\Api\Response\AccountResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
@@ -16,7 +17,6 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
     $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());

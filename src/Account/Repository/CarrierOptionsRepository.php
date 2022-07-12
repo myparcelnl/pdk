@@ -6,15 +6,15 @@ namespace MyParcelNL\Pdk\Account\Repository;
 
 use MyParcelNL\Pdk\Account\Request\GetCarrierOptionsRequest;
 use MyParcelNL\Pdk\Account\Response\GetCarrierOptionsResponseWithBody;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class CarrierOptionsRepository extends AbstractRepository
 {
     /**
      * @param  int $carrierId
      *
-     * @return \MyParcelNL\Sdk\src\Support\Collection
+     * @return \MyParcelNL\Pdk\Base\Collection
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */

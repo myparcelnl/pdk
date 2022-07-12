@@ -12,12 +12,12 @@ use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Pdk\Base\Collection;
 
 class MockRepository extends AbstractRepository
 {
     /**
-     * @var \MyParcelNL\Sdk\src\Support\Collection
+     * @var \MyParcelNL\Pdk\Base\Collection
      */
     private $values;
 
@@ -42,7 +42,7 @@ class MockRepository extends AbstractRepository
     /**
      * @param  string $key
      *
-     * @return \MyParcelNL\Sdk\src\Support\Collection
+     * @return \MyParcelNL\Pdk\Base\Collection
      */
     public function get(string $key): Collection
     {

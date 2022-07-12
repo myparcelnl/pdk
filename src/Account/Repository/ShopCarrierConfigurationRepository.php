@@ -7,9 +7,9 @@ namespace MyParcelNL\Pdk\Account\Repository;
 use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationRequest;
 use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponseWithBody;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class ShopCarrierConfigurationRepository extends AbstractRepository
 {
@@ -39,7 +39,7 @@ class ShopCarrierConfigurationRepository extends AbstractRepository
     /**
      * @param  int $shopId
      *
-     * @return \MyParcelNL\Sdk\src\Support\Collection
+     * @return \MyParcelNL\Pdk\Base\Collection
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */

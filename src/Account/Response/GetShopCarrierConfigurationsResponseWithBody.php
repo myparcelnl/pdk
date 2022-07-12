@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Sdk\src\Factory\Account\CarrierConfigurationFactory;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class GetShopCarrierConfigurationsResponseWithBody extends AbstractApiResponseWithBody
 {

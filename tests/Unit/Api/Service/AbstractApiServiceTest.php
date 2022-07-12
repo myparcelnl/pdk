@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Tests\Api\Response\UnprocessableEntityResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Pdk\Base\Collection;
 
 it('handles various error responses', function (string $response) {
     $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());

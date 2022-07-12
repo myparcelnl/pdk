@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Pdk\Shipment\Request\GetShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class ShipmentRepository extends AbstractRepository
 {
