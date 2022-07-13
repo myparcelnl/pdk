@@ -85,28 +85,34 @@ trait HasAttributes
     /**
      * Convert the model's attributes to an array.
      *
+     * @param  null|string $case - camel, snake, studly etc.
+     *
      * @return array
      */
-    public function attributesToArray(): array
+    public function attributesToArray(string $case = null): array
     {
-        $attributes = $this->getSnakeCaseAttributes();
+        $attributes = $case ? $this->getChangedCaseAttributes($case) : $this->attributes;
 
         $attributes = $this->addMutatedAttributesToArray(
             $attributes,
-            array_keys($attributes)
+            array_keys($attributes),
+            $case
         );
 
         foreach ($this->getArrayableAttributes() as $key => $value) {
-            $attributes[Str::snake($key)] = $this->mutateAttributeForArray($key, $value);
+            $key              = $this->convertAttributeCase($key, $case);
+            $attributes[$key] = $this->mutateAttributeForArray($key, $value);
         }
 
         $attributes = $this->addMutatedAttributesToArray(
             $attributes,
-            $this->getMutatedAttributes()
+            $this->getMutatedAttributes(),
+            $case
         );
 
         foreach ($this->getArrayableAppends() as $key) {
-            $attributes[Str::snake($key)] = $this->mutateAttributeForArray($key, null);
+            $key              = $this->convertAttributeCase($key, $case);
+            $attributes[$key] = $this->mutateAttributeForArray($key, null);
         }
 
         return $attributes;
@@ -125,23 +131,13 @@ trait HasAttributes
             return null;
         }
 
+        $key = $this->convertAttributeCase($key);
+
         if (array_key_exists($key, $this->attributes) || $this->hasGetMutator($key)) {
             return $this->getAttributeValue($key);
         }
 
         return null;
-    }
-
-    /**
-     * Get a plain attribute (not a relationship).
-     *
-     * @param  string $key
-     *
-     * @return mixed
-     */
-    public function getAttributeValue(string $key)
-    {
-        return $this->transformModelValue($key, $this->getAttributeFromArray($key));
     }
 
     /**
@@ -155,30 +151,16 @@ trait HasAttributes
     }
 
     /**
-     * Get the mutated attributes for a given instance.
+     * @param  null|string $case - camel, snake, studly, etc.
      *
      * @return array
      */
-    public function getMutatedAttributes(): array
-    {
-        $class = static::class;
-
-        if (! isset(static::$mutatorCache[$class])) {
-            static::cacheMutatedAttributes($class);
-        }
-
-        return static::$mutatorCache[$class];
-    }
-
-    /**
-     * @return array
-     */
-    public function getSnakeCaseAttributes(): array
+    public function getChangedCaseAttributes(string $case = null): array
     {
         $attributes = [];
 
         foreach ($this->attributes as $key => $value) {
-            $attributes[Str::snake($key)] = $value;
+            $attributes[Str::{$case ?? 'camel'}($key)] = $value;
         }
 
         return $attributes;
@@ -262,6 +244,8 @@ trait HasAttributes
      */
     public function setAttribute(string $key, $value): self
     {
+        $key = $this->convertAttributeCase($key);
+
         if ($this->hasSetMutator($key)) {
             return $this->setMutatedAttributeValue($key, $value);
         }
@@ -271,23 +255,38 @@ trait HasAttributes
     }
 
     /**
-     * @param  array $attributes
-     * @param  array $mutatedAttributes
+     * @param  array       $attributes
+     * @param  array       $mutatedAttributes
+     * @param  null|string $case
      *
      * @return array
      */
-    protected function addMutatedAttributesToArray(array $attributes, array $mutatedAttributes): array
-    {
+    protected function addMutatedAttributesToArray(
+        array   $attributes,
+        array   $mutatedAttributes,
+        ?string $case = null
+    ): array {
         foreach ($mutatedAttributes as $key) {
             if (! array_key_exists($key, $attributes)) {
                 continue;
             }
 
-            $key              = Str::snake($key);
+            $key              = $this->convertAttributeCase($key, $case);
             $attributes[$key] = $this->mutateAttributeForArray($key, $attributes[$key]);
         }
 
         return $attributes;
+    }
+
+    /**
+     * @param  string      $key
+     * @param  null|string $case
+     *
+     * @return string
+     */
+    protected function convertAttributeCase(string $key, ?string $case = null): string
+    {
+        return Str::{$case ?? 'camel'}($key);
     }
 
     /**
@@ -346,6 +345,34 @@ trait HasAttributes
     protected function getAttributeFromArray(string $key)
     {
         return $this->getAttributes()[$key] ?? null;
+    }
+
+    /**
+     * Get a plain attribute (not a relationship).
+     *
+     * @param  string $key
+     *
+     * @return mixed
+     */
+    protected function getAttributeValue(string $key)
+    {
+        return $this->transformModelValue($key, $this->getAttributeFromArray($key));
+    }
+
+    /**
+     * Get the mutated attributes for a given instance.
+     *
+     * @return array
+     */
+    protected function getMutatedAttributes(): array
+    {
+        $class = static::class;
+
+        if (! isset(static::$mutatorCache[$class])) {
+            static::cacheMutatedAttributes($class);
+        }
+
+        return static::$mutatorCache[$class];
     }
 
     /**
