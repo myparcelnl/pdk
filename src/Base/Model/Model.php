@@ -135,6 +135,8 @@ class Model implements Arrayable, ArrayAccess
                 $value = new $value();
             }
 
+            $key = $this->convertAttributeCase($key);
+
             if ($this->attributes[$key] && is_null($value)) {
                 continue;
             }
@@ -193,7 +195,7 @@ class Model implements Arrayable, ArrayAccess
      */
     public function offsetUnset($offset): void
     {
-        unset($this->attributes[$offset]);
+        unset($this->attributes[$this->convertAttributeCase($offset)]);
     }
 
     /**
@@ -204,6 +206,14 @@ class Model implements Arrayable, ArrayAccess
     public function toArray(): array
     {
         return $this->attributesToArray();
+    }
+
+    /**
+     * @return array
+     */
+    public function toSnakeCaseArray(): array
+    {
+        return $this->attributesToArray('snake');
     }
 
     /**
