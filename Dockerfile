@@ -8,6 +8,7 @@ FROM ghcr.io/myparcelnl/php-xd:${PHP_VERSION} AS test
 COPY composer.json phpunit.xml ./
 COPY tests/        ./tests/
 COPY src/          ./src/
+COPY private/      ./private/
 
 RUN composer install --dev
 
