@@ -6,13 +6,12 @@ namespace MyParcelNL\Pdk\Service;
 
 use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 class DeliveryOptionsMerger
 {
     private const DEFAULT_VALUES = [
-        'deliveryType' => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+        'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
     ];
 
     /**

@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Shipment\Model\Options\PickupLocation;
 use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 const DEFAULT_LOCATION_CODE = '98125';
 const DEFAULT_DATE          = '11-07-2022';
@@ -27,14 +26,14 @@ $dataset = [
             new DeliveryOptions([
                 'carrier'      => CarrierPostNL::NAME,
                 'date'         => DEFAULT_DATE,
-                'deliveryType' => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             ]),
         ],
         'expectation'     => [
             'carrier'         => CarrierPostNL::NAME,
             'date'            => DEFAULT_DATE,
-            'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             'shipmentOptions' => [
             ],
@@ -47,7 +46,7 @@ $dataset = [
             new DeliveryOptions([
                 'carrier'         => CarrierPostNL::NAME,
                 'date'            => DEFAULT_DATE,
-                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 'shipmentOptions' => new ShipmentOptions([
                     'signature' => false,
@@ -72,7 +71,7 @@ $dataset = [
         'expectation'     => [
             'carrier'         => CarrierPostNL::NAME,
             'date'            => DEFAULT_DATE,
-            'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             'shipmentOptions' => [
                 'signature' => true,
@@ -87,7 +86,7 @@ $dataset = [
         'deliveryOptions' => [
             new DeliveryOptions([
                 'carrier'         => CarrierInstabox::NAME,
-                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'shipmentOptions' => new ShipmentOptions([
                     'signature' => null,
                     'insurance' => null,
@@ -119,7 +118,7 @@ $dataset = [
         'expectation'     => [
             'carrier'         => CarrierInstabox::NAME,
             'date'            => null,
-            'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
             'shipmentOptions' => [
                 'signature' => false,
