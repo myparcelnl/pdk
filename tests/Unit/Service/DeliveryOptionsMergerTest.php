@@ -133,7 +133,32 @@ it('is a instance of DeliveryOptions', function () {
     )->toBeInstanceOf(DeliveryOptions::class);
 });
 
+it('checks if result has correct values', function ($input) {
+
+    expect($input->carrier)
+        ->toBeString()
+        ->and($input->shipmentOptions->insurance)
+        ->toBeInt();
+
+})->with(
+    [
+        '0' =>
+            [
+                'input' => new DeliveryOptions([
+                    'carrier' => 'postnl',
+                    'shipmentOptions' => new ShipmentOptions([
+                        'insurance' => 500,
+                    ]),
+                ]),
+            ],
+    ]
+);
+
 it('checks if it merges correctly', function ($deliveryOptions, $expectation) {
     $result = DeliveryOptionsMerger::create(...$deliveryOptions);
+
     expect($result->toArray())->toEqual($expectation);
 })->with($dataset);
+
+
+
