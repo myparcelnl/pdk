@@ -147,9 +147,12 @@ it('is a instance of DeliveryOptions', function () {
     )->toBeInstanceOf(DeliveryOptions::class);
 });
 
-it('checks if result has correct values', function ($input) {
-    expect($input->carrier)
+it('checks if object has correct values', function ($input) {
+    expect($input)
+        ->toBeObject()
+        ->and($input->carrier)
         ->toBeString()
+        ->not->toBeNull()
         ->and($input->shipmentOptions->insurance)
         ->toBeInt()
         ->toBeNumeric()
@@ -179,7 +182,6 @@ it('checks if result has correct values', function ($input) {
 
 it('checks if it merges correctly', function ($deliveryOptions, $expectation) {
     $result = DeliveryOptionsMerger::create(...$deliveryOptions);
-
     expect($result->toArray())->toEqual($expectation);
 })->with($dataset);
 
