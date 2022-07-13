@@ -138,7 +138,16 @@ it('checks if result has correct values', function ($input) {
     expect($input->carrier)
         ->toBeString()
         ->and($input->shipmentOptions->insurance)
-        ->toBeInt();
+        ->toBeInt()
+        ->toBeNumeric()
+        ->and($input->shipmentOptions->ageCheck)
+        ->toBeBool()
+        ->and($input->shipmentOptions->signature)
+        ->toBeBool()
+        ->and($input->pickupLocation)
+        ->toBeNull()
+        ->and($input->shipmentOptions)
+        ->toBeObject();
 
 })->with(
     [
@@ -148,6 +157,8 @@ it('checks if result has correct values', function ($input) {
                     'carrier' => 'postnl',
                     'shipmentOptions' => new ShipmentOptions([
                         'insurance' => 500,
+                        'ageCheck'  => true,
+                        'signature' => false,
                     ]),
                 ]),
             ],
