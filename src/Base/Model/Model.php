@@ -28,13 +28,13 @@ class Model implements Arrayable, ArrayAccess
     protected static $traitInitializers = [];
 
     /**
-     * @param  array $data
+     * @param  null|array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(?array $data = null)
     {
         $this->bootIfNotBooted();
         $this->initializeTraits();
-        $this->fill($data + $this->attributes);
+        $this->fill(Utils::changeKeyCase($data ?? [] + $this->attributes));
     }
 
     /**

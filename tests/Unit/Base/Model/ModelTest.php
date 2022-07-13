@@ -19,7 +19,20 @@ class MyModel extends Model
 
     protected $attributes = [
         'myProperty' => null,
+        'mutateMe'   => null,
+        'mutated'    => null,
     ];
+
+    public function getMutatedAttribute(): string
+    {
+        return 'mutated';
+    }
+
+    public function setMutateMeAttribute($value): self
+    {
+        $this->attributes['mutateMe'] = "mutated_$value";
+        return $this;
+    }
 }
 
 it('initializes traits', function () {
@@ -74,11 +87,19 @@ it('can use unset on array offset', function () {
 });
 
 it('can use toArray', function () {
-    expect((new MyModel())->toArray())->toEqual(['myProperty' => 1]);
+    expect((new MyModel())->toArray())->toEqual([
+        'myProperty' => 1,
+        'mutateMe'   => 'mutated_',
+        'mutated'    => 'mutated',
+    ]);
 });
 
 it('can use toSnakeCaseArray', function () {
-    expect((new MyModel())->toSnakeCaseArray())->toEqual(['my_property' => 1]);
+    expect((new MyModel())->toSnakeCaseArray())->toEqual([
+        'my_property' => 1,
+        'mutate_me'   => 'mutated_',
+        'mutated'     => 'mutated',
+    ]);
 });
 
 it('can initialize and get properties with any case', function () {
@@ -100,4 +121,14 @@ it('can initialize and get properties with any case', function () {
         ->toEqual('StudlyCase')
         ->and($model->CamelCase)
         ->toEqual('camelCase');
+});
+
+it('supports get mutators', function () {
+    $model = new MyModel(['mutated' => 'random']);
+    expect($model->mutated)->toEqual('mutated');
+});
+
+it('supports set mutators', function () {
+    $model = new MyModel(['mutateMe' => 'random']);
+    expect($model->mutateMe)->toEqual('mutated_random');
 });

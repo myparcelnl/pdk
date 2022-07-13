@@ -4,8 +4,27 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base;
 
+use MyParcelNL\Sdk\src\Support\Str;
+
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 {
+    /**
+     * @param              $array
+     * @param  string|null $case
+     *
+     * @return array
+     */
+    public static function changeKeyCase($array, string $case = null): array
+    {
+        $newArray = [];
+
+        foreach ($array as $key => $value) {
+            $newArray[Str::{$case ?? 'camel'}($key)] = $value;
+        }
+
+        return $newArray;
+    }
+
     /**
      * Get the class "basename" of the given object / class.
      *
