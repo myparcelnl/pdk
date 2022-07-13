@@ -10,7 +10,7 @@ use MyParcelNL\Sdk\src\Model\Carrier\CarrierDPD;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 
-it('aa', function ($carrierClass) {
+it('validates shipments', function ($carrierClass) {
     /** @var \MyParcelNL\Pdk\Shipment\Validator\AbstractShipmentValidator $instance */
     $shipment = new Shipment(['carrier' => $carrierClass]);
 
