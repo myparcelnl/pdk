@@ -1,26 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Pdk\Service;
 
+use MyParcelNL\Pdk\Base\Data\CountryCodes;
 use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Options\PickupLocation;
 use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+
+const DEFAULT_LOCATION_CODE = '98125';
+const DEFAULT_DATE          = '11-07-2022';
+const DEFAULT_NAME          = 'MyParcel';
+const DEFAULT_CITY          = 'Hoofddorp';
+const DEFAULT_NUMBER        = '31';
+const DEFAULT_POSTAL        = '2132 JE';
+const DEFAULT_STREET        = 'Antareslaan';
+const DEFAULT_NETWORK_ID    = '1';
 
 $dataset = [
     '0' => [
         'deliveryOptions' => [
             new DeliveryOptions([
-                'carrier'      => 'bloemkool',
-                'date'         => '11-07-2022',
-                'deliveryType' => 'standard',
-                'packageType'  => 'mailbox',
+                'carrier'      => CarrierPostNL::NAME,
+                'date'         => DEFAULT_DATE,
+                'deliveryType' => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             ]),
         ],
         'expectation'     => [
-            'carrier'         => 'bloemkool',
-            'date'            => '11-07-2022',
-            'deliveryType'    => 'standard',
-            'packageType'     => 'mailbox',
+            'carrier'         => CarrierPostNL::NAME,
+            'date'            => DEFAULT_DATE,
+            'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             'shipmentOptions' => [
             ],
             'pickupLocation'  => null,
@@ -30,10 +45,10 @@ $dataset = [
     '1' => [
         'deliveryOptions' => [
             new DeliveryOptions([
-                'carrier'         => 'postnl',
-                'date'            => '11-07-2022',
-                'deliveryType'    => 'standard',
-                'packageType'     => 'package',
+                'carrier'         => CarrierPostNL::NAME,
+                'date'            => DEFAULT_DATE,
+                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 'shipmentOptions' => new ShipmentOptions([
                     'signature' => false,
                     'insurance' => 500,
@@ -42,10 +57,10 @@ $dataset = [
                 'pickupLocation'  => null,
             ]),
             new DeliveryOptions([
-                'carrier'         => 'postnl',
+                'carrier'         => CarrierPostNL::NAME,
                 'date'            => null,
                 'deliveryType'    => null,
-                'packageType'     => 'mailbox',
+                'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                 'shipmentOptions' => new ShipmentOptions([
                     'signature' => true,
                     'insurance' => 0,
@@ -55,10 +70,10 @@ $dataset = [
             ]),
         ],
         'expectation'     => [
-            'carrier'         => 'postnl',
-            'date'            => '11-07-2022',
-            'deliveryType'    => 'standard',
-            'packageType'     => 'mailbox',
+            'carrier'         => CarrierPostNL::NAME,
+            'date'            => DEFAULT_DATE,
+            'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             'shipmentOptions' => [
                 'signature' => true,
                 'insurance' => 0,
@@ -71,29 +86,29 @@ $dataset = [
     '2' => [
         'deliveryOptions' => [
             new DeliveryOptions([
-                'carrier'         => 'instabox',
-                'deliveryType'    => 'standard',
+                'carrier'         => CarrierInstabox::NAME,
+                'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
                 'shipmentOptions' => new ShipmentOptions([
                     'signature' => null,
                     'insurance' => null,
                     'ageCheck'  => null,
                 ]),
                 'pickupLocation'  => new PickupLocation([
-                    'cc'              => 'NL',
-                    'city'            => 'Hoofddorp',
-                    'locationCode'    => '123456',
-                    'locationName'    => 'MyParcel',
-                    'number'          => '31',
-                    'postalCode'      => '2132 JE',
-                    'retailNetworkId' => '1',
-                    'street'          => 'Antareslaan',
+                    'cc'              => CountryCodes::CC_NL,
+                    'city'            => DEFAULT_CITY,
+                    'locationCode'    => DEFAULT_LOCATION_CODE,
+                    'locationName'    => DEFAULT_NAME,
+                    'number'          => DEFAULT_NUMBER,
+                    'postalCode'      => DEFAULT_POSTAL,
+                    'retailNetworkId' => DEFAULT_NETWORK_ID,
+                    'street'          => DEFAULT_STREET,
                 ]),
             ]),
             new DeliveryOptions([
-                'carrier'         => 'instabox',
+                'carrier'         => CarrierInstabox::NAME,
                 'date'            => null,
                 'deliveryType'    => null,
-                'packageType'     => 'letter',
+                'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                 'shipmentOptions' => new ShipmentOptions([
                     'signature' => false,
                     'insurance' => 500,
@@ -102,24 +117,24 @@ $dataset = [
             ]),
         ],
         'expectation'     => [
-            'carrier'         => 'instabox',
+            'carrier'         => CarrierInstabox::NAME,
             'date'            => null,
-            'deliveryType'    => 'standard',
-            'packageType'     => 'letter',
+            'deliveryType'    => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
             'shipmentOptions' => [
                 'signature' => false,
                 'insurance' => 500,
                 'ageCheck'  => true,
             ],
             'pickupLocation'  => [
-                'cc'              => 'NL',
-                'city'            => 'Hoofddorp',
-                'locationCode'    => '123456',
-                'locationName'    => 'MyParcel',
-                'number'          => '31',
-                'postalCode'      => '2132 JE',
-                'retailNetworkId' => '1',
-                'street'          => 'Antareslaan',
+                'cc'              => CountryCodes::CC_NL,
+                'city'            => DEFAULT_CITY,
+                'locationCode'    => DEFAULT_LOCATION_CODE,
+                'locationName'    => DEFAULT_NAME,
+                'number'          => DEFAULT_NUMBER,
+                'postalCode'      => DEFAULT_POSTAL,
+                'retailNetworkId' => DEFAULT_NETWORK_ID,
+                'street'          => DEFAULT_STREET,
             ],
         ],
     ],
@@ -134,7 +149,6 @@ it('is a instance of DeliveryOptions', function () {
 });
 
 it('checks if result has correct values', function ($input) {
-
     expect($input->carrier)
         ->toBeString()
         ->and($input->shipmentOptions->insurance)
@@ -148,13 +162,12 @@ it('checks if result has correct values', function ($input) {
         ->toBeNull()
         ->and($input->shipmentOptions)
         ->toBeObject();
-
 })->with(
     [
         '0' =>
             [
                 'input' => new DeliveryOptions([
-                    'carrier' => 'postnl',
+                    'carrier'         => 'postnl',
                     'shipmentOptions' => new ShipmentOptions([
                         'insurance' => 500,
                         'ageCheck'  => true,
