@@ -74,30 +74,5 @@ it('can use unset on array offset', function () {
 });
 
 it('can use toArray', function () {
-    expect((new MyModel())->toArray())->toEqual(['myProperty' => 1]);
-});
-
-it('can use toSnakeCaseArray', function () {
-    expect((new MyModel())->toSnakeCaseArray())->toEqual(['my_property' => 1]);
-});
-
-it('can initialize and get properties with any case', function () {
-    $model = new Model();
-
-    $model->snake_case = 'snake_case';
-    $model->camelCase  = 'camelCase';
-    $model->StudlyCase = 'StudlyCase';
-
-    expect($model->getAttributes())
-        ->toEqual([
-            'snakeCase'  => 'snake_case',
-            'camelCase'  => 'camelCase',
-            'studlyCase' => 'StudlyCase',
-        ])
-        ->and($model->snakeCase)
-        ->toEqual('snake_case')
-        ->and($model->studly_case)
-        ->toEqual('StudlyCase')
-        ->and($model->CamelCase)
-        ->toEqual('camelCase');
+    expect((new MyModel())->toArray())->toEqual(['my_property' => 1]);
 });
