@@ -69,7 +69,7 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         foreach ($keys as $key) {
 
             if (is_array($current[$key])) {
-                $current[$key] = self::mergeValuesByKeys($previous[$key] ?? [], $current[$key]);
+                $current[$key] = self::mergeValuesByKeys( $previous[$key] ?? [], $current[$key]);
             }
 
             if (null !== $current[$key]) {

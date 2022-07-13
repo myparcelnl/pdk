@@ -7,32 +7,23 @@ use MyParcelNL\Pdk\Shipment\Model\Options\PickupLocation;
 use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
 
 $dataset = [
-
     '0' => [
         'deliveryOptions' => [
             new DeliveryOptions([
                 'carrier'      => 'bloemkool',
                 'date'         => '11-07-2022',
                 'deliveryType' => 'standard',
-                'packageType'  => 'package',
+                'packageType'  => 'mailbox',
             ]),
         ],
         'expectation'     => [
-            'carrier'          => 'bloemkool',
-            'date'             => '11-07-2022',
-            'delivery_type'    => 'standard',
-            'package_type'     => 'package',
-            'shipment_options' => [
-                'age_check'         => null,
-                'insurance'         => null,
-                'label_description' => null,
-                'large_format'      => null,
-                'only_recipient'    => null,
-                'return'            => null,
-                'same_day_delivery' => null,
-                'signature'         => null,
+            'carrier'         => 'bloemkool',
+            'date'            => '11-07-2022',
+            'deliveryType'    => 'standard',
+            'packageType'     => 'mailbox',
+            'shipmentOptions' => [
             ],
-            'pickup_location'  => null,
+            'pickupLocation'  => null,
         ],
     ],
 
@@ -64,22 +55,21 @@ $dataset = [
             ]),
         ],
         'expectation'     => [
-            'carrier'          => 'postnl',
-            'date'             => '11-07-2022',
-            'delivery_type'    => 'standard',
-            'package_type'     => 'mailbox',
-            'shipment_options' => [
+            'carrier'         => 'postnl',
+            'date'            => '11-07-2022',
+            'deliveryType'    => 'standard',
+            'packageType'     => 'mailbox',
+            'shipmentOptions' => [
                 'signature' => true,
                 'insurance' => 0,
-                'age_check' => false,
+                'ageCheck'  => false,
             ],
-            'pickup_location'  => null,
+            'pickupLocation'  => null,
         ],
     ],
 
     '2' => [
         'deliveryOptions' => [
-
             new DeliveryOptions([
                 'carrier'         => 'instabox',
                 'deliveryType'    => 'standard',
@@ -112,33 +102,35 @@ $dataset = [
             ]),
         ],
         'expectation'     => [
-            'carrier'          => 'instabox',
-            'date'             => null,
-            'delivery_type'    => 'standard',
-            'package_type'     => 'letter',
-            'shipment_options' => [
+            'carrier'         => 'instabox',
+            'date'            => null,
+            'deliveryType'    => 'standard',
+            'packageType'     => 'letter',
+            'shipmentOptions' => [
                 'signature' => false,
                 'insurance' => 500,
-                'age_check' => true,
+                'ageCheck'  => true,
             ],
-            'pickup_location'  => [
-                'cc'                => 'NL',
-                'city'              => 'Hoofddorp',
-                'location_code'     => '123456',
-                'location_name'     => 'MyParcel',
-                'number'            => '31',
-                'postal_code'       => '2132 JE',
-                'retail_network_id' => '1',
-                'street'            => 'Antareslaan',
+            'pickupLocation'  => [
+                'cc'              => 'NL',
+                'city'            => 'Hoofddorp',
+                'locationCode'    => '123456',
+                'locationName'    => 'MyParcel',
+                'number'          => '31',
+                'postalCode'      => '2132 JE',
+                'retailNetworkId' => '1',
+                'street'          => 'Antareslaan',
             ],
         ],
     ],
 ];
 
 it('is a instance of DeliveryOptions', function () {
-    expect(DeliveryOptionsMerger::create(
-        new DeliveryOptions([])
-    ))->toBeInstanceOf(DeliveryOptions::class);
+    expect(
+        DeliveryOptionsMerger::create(
+            new DeliveryOptions([])
+        )
+    )->toBeInstanceOf(DeliveryOptions::class);
 });
 
 it('checks if it merges correctly', function ($deliveryOptions, $expectation) {
