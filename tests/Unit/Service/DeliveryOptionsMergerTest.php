@@ -167,7 +167,7 @@ it('checks if result has correct values', function ($input) {
         '0' =>
             [
                 'input' => new DeliveryOptions([
-                    'carrier'         => 'postnl',
+                    'carrier'         => CarrierPostNL::NAME,
                     'shipmentOptions' => new ShipmentOptions([
                         'insurance' => 500,
                         'ageCheck'  => true,
