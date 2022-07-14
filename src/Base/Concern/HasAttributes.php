@@ -534,14 +534,7 @@ trait HasAttributes
             return $this->classCastCache[$key];
         }
 
-        $class     = $this->getCasts()[$key];
-        $arguments = $value instanceof Arrayable ? $value->toArray() : $value;
-
-        if (! is_array($arguments)) {
-            throw new InvalidCastException($key, $class, $arguments);
-        }
-
-        $value = new $class($arguments);
+        $value = $this->getCastModel($key, $value);
 
         if (! is_object($value)) {
             unset($this->classCastCache[$key]);
@@ -718,5 +711,28 @@ trait HasAttributes
     private function createMutatorName(string $type, string $key): string
     {
         return sprintf('%s%sAttribute', $type, Str::studly($key));
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     */
+    private function getCastModel(string $key, $value)
+    {
+        $class     = $this->getCasts()[$key];
+        $arguments = $value instanceof Arrayable ? $value->toArray() : $value;
+
+        if (is_a($arguments, $class)) {
+            return $arguments;
+        }
+
+        if (! is_array($arguments)) {
+            throw new InvalidCastException($key, $class, $arguments);
+        }
+
+        return new $class($arguments);
     }
 }
