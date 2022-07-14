@@ -139,7 +139,7 @@ class Model implements Arrayable, ArrayAccess
 
             $key = $this->convertAttributeCase($key);
 
-            if ($this->attributes[$key] && is_null($value)) {
+            if ($this->attributes[$key] && null === $value) {
                 continue;
             }
 

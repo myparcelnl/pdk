@@ -395,30 +395,37 @@ trait HasAttributes
     {
         $castType = $this->getCastType($key);
 
-        if (is_null($value)) {
+        if (null === $value) {
             return null;
         }
 
         switch ($castType) {
             case 'int':
-                return (int) $value;
+                $value = (int) $value;
+                break;
             case 'float':
-                return $this->fromFloat($value);
+                $value = $this->fromFloat($value);
+                break;
             case 'string':
-                return (string) $value;
+                $value = (string) $value;
+                break;
             case 'bool':
-                return (bool) $value;
+                $value = (bool) $value;
+                break;
             case 'date':
-                return $this->asDate($value);
+                $value = $this->asDate($value);
+                break;
             case 'datetime':
             case DateTime::class:
-                return $this->asDateTime($value);
+                $value = $this->asDateTime($value);
+                break;
             case 'timestamp':
-                return $this->asTimestamp($value);
+                $value = $this->asTimestamp($value);
+                break;
         }
 
         if ($this->isClassCastable($key)) {
-            return $this->getClassCastableAttributeValue($key, $value);
+            $value = $this->getClassCastableAttributeValue($key, $value);
         }
 
         return $value;
