@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Base\Concern;
 use DateTime;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Collection;
+use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -226,6 +227,7 @@ trait HasAttributes
      * @param  array|mixed $attributes
      *
      * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function only($attributes): array
     {
@@ -265,6 +267,7 @@ trait HasAttributes
      * @param  array $mutatedAttributes
      *
      * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes): array
     {
@@ -386,6 +389,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function castAttribute(string $key, $value)
     {
@@ -467,7 +471,6 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function getAttributeFromArray(string $key)
     {
@@ -516,6 +519,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function getClassCastableAttributeValue(string $key, $value)
     {
@@ -523,10 +527,14 @@ trait HasAttributes
             return $this->classCastCache[$key];
         }
 
-        $class = $this->getCasts()[$key];
-
+        $class     = $this->getCasts()[$key];
         $arguments = $value instanceof Arrayable ? $value->toArray() : $value;
-        $value     = new $class($arguments);
+
+        if (! is_array($arguments)) {
+            throw new InvalidCastException($key, $class, $arguments);
+        }
+
+        $value = new $class($arguments);
 
         if (! is_object($value)) {
             unset($this->classCastCache[$key]);
@@ -679,6 +687,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function transformModelValue(string $key, $value)
     {

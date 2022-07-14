@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Collection;
+use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 class CastModel extends Model { }
@@ -99,3 +100,18 @@ it('casts everything properly to array', function () {
         'null'         => null,
     ]);
 });
+
+it('throws error on invalid cast', function () {
+    class InvalidCastingModel extends Model
+    {
+        protected $casts = [
+            'value' => CastModel::class,
+        ];
+    }
+
+    $model = new InvalidCastingModel([
+        'value' => new DateTime(),
+    ]);
+
+    $model->toArray();
+})->throws(InvalidCastException::class);
