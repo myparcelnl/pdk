@@ -11,7 +11,7 @@ class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
 {
     public function data_get($target, $key, $default = null)
     {
-        if (is_null($key)) {
+        if (null === $key) {
             return $target;
         }
 
@@ -20,7 +20,7 @@ class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
         foreach ($key as $i => $segment) {
             unset($key[$i]);
 
-            if (is_null($segment)) {
+            if (null === $segment) {
                 return $target;
             }
 
@@ -37,7 +37,7 @@ class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
                     $result[] = $this->data_get($item, $key);
                 }
 
-                return in_array('*', $key) ? Arr::collapse($result) : $result;
+                return in_array('*', $key, true) ? Arr::collapse($result) : $result;
             }
 
             if (Arr::accessible($target) && Arr::exists($target, $segment)) {

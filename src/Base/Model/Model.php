@@ -28,13 +28,13 @@ class Model implements Arrayable, ArrayAccess
     protected static $traitInitializers = [];
 
     /**
-     * @param  array $data
+     * @param  null|array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(?array $data = null)
     {
         $this->bootIfNotBooted();
         $this->initializeTraits();
-        $this->fill($data + $this->attributes);
+        $this->fill(Utils::changeArrayKeysCase(($data ?? []) + $this->attributes));
     }
 
     /**
@@ -92,6 +92,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  string $key
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function __get(string $key)
     {
@@ -104,6 +105,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  string $key
      *
      * @return bool
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function __isset(string $key)
     {
@@ -137,7 +139,7 @@ class Model implements Arrayable, ArrayAccess
 
             $key = $this->convertAttributeCase($key);
 
-            if ($this->attributes[$key] && is_null($value)) {
+            if ($this->attributes[$key] && null === $value) {
                 continue;
             }
 
@@ -153,6 +155,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  mixed $offset
      *
      * @return bool
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function offsetExists($offset): bool
     {
@@ -165,6 +168,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  mixed $offset
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -202,6 +206,7 @@ class Model implements Arrayable, ArrayAccess
      * Convert the model instance to an array.
      *
      * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function toArray(): array
     {
@@ -210,6 +215,7 @@ class Model implements Arrayable, ArrayAccess
 
     /**
      * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function toSnakeCaseArray(): array
     {

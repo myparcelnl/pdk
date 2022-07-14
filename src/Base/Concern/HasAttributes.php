@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Concern;
 
+use DateTime;
+use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Collection;
+use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 
 trait HasAttributes
@@ -18,11 +22,18 @@ trait HasAttributes
     protected static $mutatorCache = [];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
+     * @var string[]
      */
-    protected $appends = [];
+    protected static $primitiveCastTypes = [
+        'array',
+        'bool',
+        'date',
+        'datetime',
+        'float',
+        'int',
+        'string',
+        'timestamp',
+    ];
 
     /**
      * The model's attributes.
@@ -34,7 +45,19 @@ trait HasAttributes
     /**
      * @var array
      */
-    protected $types = [];
+    protected $casts = [];
+
+    /**
+     * @var string
+     */
+    protected $dateFormats = ['Y-m-d H:i:s', 'Y-m-d', DateTime::ATOM];
+
+    /**
+     * The attributes that have been cast using custom classes.
+     *
+     * @var array
+     */
+    private $classCastCache = [];
 
     /**
      * Extract and cache all the mutated attributes of a class.
@@ -67,31 +90,16 @@ trait HasAttributes
     }
 
     /**
-     * Append attributes to query when building a query.
-     *
-     * @param  array|string $attributes
-     *
-     * @return self
-     */
-    public function append($attributes): self
-    {
-        $this->appends = array_unique(
-            array_merge($this->appends, is_string($attributes) ? func_get_args() : $attributes)
-        );
-
-        return $this;
-    }
-
-    /**
      * Convert the model's attributes to an array.
      *
      * @param  null|string $case - camel, snake, studly etc.
      *
      * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function attributesToArray(string $case = null): array
     {
-        $attributes = $case ? $this->getChangedCaseAttributes($case) : $this->attributes;
+        $attributes = $this->getAttributes($case);
 
         $attributes = $this->addMutatedAttributesToArray(
             $attributes,
@@ -104,18 +112,52 @@ trait HasAttributes
             $attributes[$key] = $this->mutateAttributeForArray($key, $value);
         }
 
+        $mutatedAttributes = $this->getMutatedAttributes();
+
         $attributes = $this->addMutatedAttributesToArray(
             $attributes,
-            $this->getMutatedAttributes(),
+            $mutatedAttributes,
             $case
         );
 
-        foreach ($this->getArrayableAppends() as $key) {
-            $key              = $this->convertAttributeCase($key, $case);
-            $attributes[$key] = $this->mutateAttributeForArray($key, null);
-        }
+        return $this->addCastAttributesToArray(
+            $attributes,
+            $mutatedAttributes
+        );
+    }
 
-        return $attributes;
+    /**
+     * Decode the given float.
+     *
+     * @param  mixed $value
+     *
+     * @return float
+     */
+    public function fromFloat($value): float
+    {
+        switch ((string) $value) {
+            case 'Infinity':
+                return INF;
+            case '-Infinity':
+                return -INF;
+            case 'NaN':
+                return NAN;
+            default:
+                return (float) $value;
+        }
+    }
+
+    /**
+     * Decode the given JSON back into an array or object.
+     *
+     * @param  string $value
+     * @param  bool   $asObject
+     *
+     * @return mixed
+     */
+    public function fromJson(string $value, bool $asObject = false)
+    {
+        return json_decode($value, ! $asObject);
     }
 
     /**
@@ -124,6 +166,7 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function getAttribute(string $key)
     {
@@ -133,7 +176,7 @@ trait HasAttributes
 
         $key = $this->convertAttributeCase($key);
 
-        if (array_key_exists($key, $this->attributes) || $this->hasGetMutator($key)) {
+        if (array_key_exists($key, $this->getAttributes()) || $this->hasGetMutator($key)) {
             return $this->getAttributeValue($key);
         }
 
@@ -143,39 +186,15 @@ trait HasAttributes
     /**
      * Get all the current attributes on the model.
      *
-     * @return array
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param  null|string $case - camel, snake, studly, etc.
+     * @param  null|string $case
      *
      * @return array
      */
-    public function getChangedCaseAttributes(string $case = null): array
+    public function getAttributes(string $case = null): array
     {
-        $attributes = [];
+        $this->mergeAttributesFromClassCasts();
 
-        foreach ($this->attributes as $key => $value) {
-            $attributes[Str::{$case ?? 'camel'}($key)] = $value;
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * Return whether the accessor attribute has been appended.
-     *
-     * @param  string $attribute
-     *
-     * @return bool
-     */
-    public function hasAppended(string $attribute): bool
-    {
-        return in_array($attribute, $this->appends, true);
+        return Utils::changeArrayKeysCase($this->attributes, $case);
     }
 
     /**
@@ -208,6 +227,7 @@ trait HasAttributes
      * @param  array|mixed $attributes
      *
      * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function only($attributes): array
     {
@@ -218,20 +238,6 @@ trait HasAttributes
         }
 
         return $results;
-    }
-
-    /**
-     * Set the accessors to append to model arrays.
-     *
-     * @param  array $appends
-     *
-     * @return self
-     */
-    public function setAppends(array $appends): self
-    {
-        $this->appends = $appends;
-
-        return $this;
     }
 
     /**
@@ -255,6 +261,49 @@ trait HasAttributes
     }
 
     /**
+     * Add the cast attributes to the attributes array.
+     *
+     * @param  array $attributes
+     * @param  array $mutatedAttributes
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     */
+    protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes): array
+    {
+        foreach ($this->getCasts() as $key => $value) {
+            $key = $this->convertAttributeCase($key);
+
+            if (! array_key_exists($key, $attributes) || in_array($key, $mutatedAttributes, true)) {
+                continue;
+            }
+
+            // Here we will cast the attribute. Then, if the cast is a date or datetime cast
+            // then we will serialize the date for the array. This will convert the dates
+            // to strings based on the date format specified for these Eloquent models.
+            $attributes[$key] = $this->castAttribute($key, $attributes[$key]);
+
+            // If the attribute cast was a date or a datetime, we will serialize the date as
+            // a string. This allows the developers to customize how dates are serialized
+            // into an array without affecting how they are persisted into the storage.
+            if ($attributes[$key] && in_array($value, ['date', 'datetime'])) {
+                $attributes[$key] = $this->serializeDate($attributes[$key]);
+            }
+
+            if ($attributes[$key] instanceof DateTimeInterface
+                && $this->isClassCastable($key)) {
+                $attributes[$key] = $this->serializeDate($attributes[$key]);
+            }
+
+            if ($attributes[$key] instanceof Arrayable) {
+                $attributes[$key] = $attributes[$key]->toArray();
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * @param  array       $attributes
      * @param  array       $mutatedAttributes
      * @param  null|string $case
@@ -267,15 +316,119 @@ trait HasAttributes
         ?string $case = null
     ): array {
         foreach ($mutatedAttributes as $key) {
+            $key = $this->convertAttributeCase($key, $case);
+
             if (! array_key_exists($key, $attributes)) {
                 continue;
             }
 
-            $key              = $this->convertAttributeCase($key, $case);
             $attributes[$key] = $this->mutateAttributeForArray($key, $attributes[$key]);
         }
 
         return $attributes;
+    }
+
+    /**
+     * Return a timestamp as DateTime object with time set to 00:00:00.
+     *
+     * @param  mixed $value
+     *
+     * @return \DateTime
+     */
+    protected function asDate($value): DateTime
+    {
+        return $this->asDateTime($value)
+            ->setTime(0, 0);
+    }
+
+    /**
+     * Return a timestamp as DateTime object.
+     *
+     * @param  mixed $value
+     *
+     * @return \DateTime
+     */
+    protected function asDateTime($value): DateTime
+    {
+        if ($value instanceof DateTime) {
+            return $value;
+        }
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format($this->dateFormats[0]);
+        }
+
+        foreach ($this->dateFormats as $dateFormat) {
+            $date = DateTime::createFromFormat($dateFormat, $value);
+
+            if ($date) {
+                return $date;
+            }
+        }
+
+        return new DateTime();
+    }
+
+    /**
+     * Return a timestamp as unix timestamp.
+     *
+     * @param  mixed $value
+     *
+     * @return int
+     */
+    protected function asTimestamp($value): int
+    {
+        return $this->asDateTime($value)
+            ->getTimestamp();
+    }
+
+    /**
+     * Cast an attribute to a native PHP type.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     */
+    protected function castAttribute(string $key, $value)
+    {
+        $castType = $this->getCastType($key);
+
+        if (null === $value) {
+            return null;
+        }
+
+        switch ($castType) {
+            case 'int':
+                $value = (int) $value;
+                break;
+            case 'float':
+                $value = $this->fromFloat($value);
+                break;
+            case 'string':
+                $value = (string) $value;
+                break;
+            case 'bool':
+                $value = (bool) $value;
+                break;
+            case 'date':
+                $value = $this->asDate($value);
+                break;
+            case 'datetime':
+            case DateTime::class:
+                $value = $this->asDateTime($value);
+                break;
+            case 'timestamp':
+                $value = $this->asTimestamp($value);
+                break;
+        }
+
+        if ($this->isClassCastable($key)) {
+            $value = $this->getClassCastableAttributeValue($key, $value);
+        }
+
+        return $value;
     }
 
     /**
@@ -287,22 +440,6 @@ trait HasAttributes
     protected function convertAttributeCase(string $key, ?string $case = null): string
     {
         return Str::{$case ?? 'camel'}($key);
-    }
-
-    /**
-     * Get all the appendable values that are arrayable.
-     *
-     * @return array
-     */
-    protected function getArrayableAppends(): array
-    {
-        if (! count($this->appends)) {
-            return [];
-        }
-
-        return $this->getArrayableItems(
-            array_combine($this->appends, $this->appends)
-        );
     }
 
     /**
@@ -353,10 +490,59 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function getAttributeValue(string $key)
     {
         return $this->transformModelValue($key, $this->getAttributeFromArray($key));
+    }
+
+    /**
+     * Get the type of cast for a model attribute.
+     *
+     * @param  string $key
+     *
+     * @return string
+     */
+    protected function getCastType(string $key): string
+    {
+        return $this->getCasts()[$this->convertAttributeCase($key)];
+    }
+
+    /**
+     * Get the casts array.
+     *
+     * @return array
+     */
+    protected function getCasts(): array
+    {
+        return Utils::changeArrayKeysCase($this->casts);
+    }
+
+    /**
+     * Cast the given attribute using a custom cast class.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     */
+    protected function getClassCastableAttributeValue(string $key, $value)
+    {
+        if (isset($this->classCastCache[$key])) {
+            return $this->classCastCache[$key];
+        }
+
+        $value = $this->getCastModel($key, $value);
+
+        if (! is_object($value)) {
+            unset($this->classCastCache[$key]);
+        } else {
+            $this->classCastCache[$key] = $value;
+        }
+
+        return $value;
     }
 
     /**
@@ -373,6 +559,60 @@ trait HasAttributes
         }
 
         return static::$mutatorCache[$class];
+    }
+
+    /**
+     * Determine whether an attribute should be cast to a native type.
+     *
+     * @param  string            $key
+     * @param  array|string|null $types
+     *
+     * @return bool
+     */
+    protected function hasCast(string $key, $types = null): bool
+    {
+        if (array_key_exists($key, $this->getCasts())) {
+            return ! $types || in_array($this->getCastType($key), (array) $types, true);
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if the given key is cast using a custom class.
+     *
+     * @param  string $key
+     *
+     * @return bool
+     */
+    protected function isClassCastable(string $key): bool
+    {
+        $castType = $this->parseCasterClass($this->getCasts()[$key]);
+
+        if (in_array($castType, self::$primitiveCastTypes)) {
+            return false;
+        }
+
+        if (class_exists($castType)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return void
+     */
+    protected function mergeAttributesFromClassCasts(): void
+    {
+        $attributes = [];
+
+        foreach ($this->classCastCache as $key => $value) {
+            $key          = $this->convertAttributeCase($key);
+            $attributes[] = [$key => $value];
+        }
+
+        $this->attributes = array_merge($this->attributes, $attributes);
     }
 
     /**
@@ -404,6 +644,32 @@ trait HasAttributes
     }
 
     /**
+     * Parse the given caster class, removing any arguments.
+     *
+     * @param  string $class
+     *
+     * @return string
+     */
+    protected function parseCasterClass(string $class): string
+    {
+        return ! Str::contains($class, ':')
+            ? $class
+            : explode(':', $class, 2)[0];
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface $date
+     *
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format($this->dateFormats[0]);
+    }
+
+    /**
      * Set the value of an attribute using its mutator.
      *
      * @param  string $key
@@ -421,11 +687,16 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function transformModelValue(string $key, $value)
     {
         if ($this->hasGetMutator($key)) {
             return $this->mutateAttribute($key, $value);
+        }
+
+        if ($this->hasCast($key)) {
+            return $this->castAttribute($key, $value);
         }
 
         return $value;
@@ -440,5 +711,28 @@ trait HasAttributes
     private function createMutatorName(string $type, string $key): string
     {
         return sprintf('%s%sAttribute', $type, Str::studly($key));
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     */
+    private function getCastModel(string $key, $value)
+    {
+        $class     = $this->getCasts()[$key];
+        $arguments = $value instanceof Arrayable ? $value->toArray() : $value;
+
+        if (is_a($arguments, $class)) {
+            return $arguments;
+        }
+
+        if (! is_array($arguments)) {
+            throw new InvalidCastException($key, $class, $arguments);
+        }
+
+        return new $class($arguments);
     }
 }

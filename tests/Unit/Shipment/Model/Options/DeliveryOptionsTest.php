@@ -37,6 +37,7 @@ it('instantiates default delivery options', function () {
 it('instantiates delivery options with pickup location', function () {
     $deliveryOptions = new DeliveryOptions(
         [
+            'date'           => '2022-02-20 16:00:00',
             'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
             'pickupLocation' => new PickupLocation(['cc' => CountryCodes::CC_NL]),
         ]
@@ -44,6 +45,8 @@ it('instantiates delivery options with pickup location', function () {
 
     expect($deliveryOptions->pickupLocation)
         ->toBeInstanceOf(PickupLocation::class)
+        ->and($deliveryOptions->date)
+        ->toBeInstanceOf(DateTime::class)
         ->and($deliveryOptions->pickupLocation->cc)
         ->toBe(CountryCodes::CC_NL)
         ->and($deliveryOptions->isPickup())

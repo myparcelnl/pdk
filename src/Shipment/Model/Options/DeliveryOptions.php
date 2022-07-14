@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model\Options;
 
+use DateTime;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
@@ -89,6 +90,12 @@ class DeliveryOptions extends Model
         'packageType'     => null,
         'shipmentOptions' => ShipmentOptions::class,
         'pickupLocation'  => null,
+    ];
+
+    protected $casts      = [
+        'date'            => DateTime::class,
+        'shipmentOptions' => ShipmentOptions::class,
+        'pickupLocation'  => PickupLocation::class,
     ];
 
     /**
