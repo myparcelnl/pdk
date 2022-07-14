@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.0](https://github.com/myparcelnl/pdk/compare/v1.3.0...v1.4.0) (2022-07-14)
+
+
+### :sparkles: New Features
+
+* add delivery options merger ([#16](https://github.com/myparcelnl/pdk/issues/16)) ([92d531b](https://github.com/myparcelnl/pdk/commit/92d531bca5ff056ac002dcb96bc906241a60fa22))
+
 ## [1.3.0](https://github.com/myparcelnl/pdk/compare/v1.2.0...v1.3.0) (2022-07-14)
 
 
