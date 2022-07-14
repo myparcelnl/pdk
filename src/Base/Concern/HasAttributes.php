@@ -608,8 +608,8 @@ trait HasAttributes
         $attributes = [];
 
         foreach ($this->classCastCache as $key => $value) {
-            $key          = $this->convertAttributeCase($key);
-            $attributes[] = [$key => $value];
+            $key              = $this->convertAttributeCase($key);
+            $attributes[$key] = $value;
         }
 
         $this->attributes = array_merge($this->attributes, $attributes);
