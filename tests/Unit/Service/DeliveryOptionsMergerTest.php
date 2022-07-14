@@ -1,4 +1,5 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection, PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
@@ -12,7 +13,7 @@ use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 
 const DEFAULT_LOCATION_CODE = '98125';
-const DEFAULT_DATE          = '11-07-2022';
+const DEFAULT_DATE          = '2022-07-22 06:00:00';
 const DEFAULT_NAME          = 'MyParcel';
 const DEFAULT_CITY          = 'Hoofddorp';
 const DEFAULT_NUMBER        = '31';
@@ -20,28 +21,36 @@ const DEFAULT_POSTAL        = '2132 JE';
 const DEFAULT_STREET        = 'Antareslaan';
 const DEFAULT_NETWORK_ID    = '1';
 
-$dataset = [
-    '0' => [
+$emptyShipmentOptions = (new ShipmentOptions())->toArray();
+
+it('is an instance of DeliveryOptions', function () {
+    expect(DeliveryOptionsMerger::create([new DeliveryOptions()]))->toBeInstanceOf(DeliveryOptions::class);
+});
+
+it('merges delivery options', function ($deliveryOptions, $expectation) {
+    $result = DeliveryOptionsMerger::create($deliveryOptions);
+    expect($result->toArray())->toEqual($expectation);
+})->with([
+    'a single item' => [
         'deliveryOptions' => [
-            new DeliveryOptions([
+            [
                 'carrier'      => CarrierPostNL::NAME,
                 'date'         => DEFAULT_DATE,
                 'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-            ]),
+            ],
         ],
         'expectation'     => [
             'carrier'         => CarrierPostNL::NAME,
             'date'            => DEFAULT_DATE,
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-            'shipmentOptions' => [
-            ],
+            'shipmentOptions' => $emptyShipmentOptions,
             'pickupLocation'  => null,
         ],
     ],
 
-    '1' => [
+    'with two items' => [
         'deliveryOptions' => [
             new DeliveryOptions([
                 'carrier'         => CarrierPostNL::NAME,
@@ -74,15 +83,15 @@ $dataset = [
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             'shipmentOptions' => [
-                'signature' => true,
-                'insurance' => 0,
-                'ageCheck'  => false,
-            ],
+                    'signature' => true,
+                    'insurance' => 0,
+                    'ageCheck'  => false,
+                ] + $emptyShipmentOptions,
             'pickupLocation'  => null,
         ],
     ],
 
-    '2' => [
+    'with two items with pickup' => [
         'deliveryOptions' => [
             new DeliveryOptions([
                 'carrier'         => CarrierInstabox::NAME,
@@ -121,10 +130,10 @@ $dataset = [
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
             'shipmentOptions' => [
-                'signature' => false,
-                'insurance' => 500,
-                'ageCheck'  => true,
-            ],
+                    'ageCheck'  => true,
+                    'insurance' => 500,
+                    'signature' => false,
+                ] + $emptyShipmentOptions,
             'pickupLocation'  => [
                 'cc'              => CountryCodes::CC_NL,
                 'city'            => DEFAULT_CITY,
@@ -137,53 +146,4 @@ $dataset = [
             ],
         ],
     ],
-];
-
-it('is a instance of DeliveryOptions', function () {
-    expect(
-        DeliveryOptionsMerger::create(
-            new DeliveryOptions([])
-        )
-    )->toBeInstanceOf(DeliveryOptions::class);
-});
-
-it('checks if object has correct values', function ($input) {
-    expect($input)
-        ->toBeObject()
-        ->and($input->carrier)
-        ->toBeString()
-        ->not->toBeNull()
-        ->and($input->shipmentOptions->insurance)
-        ->toBeInt()
-        ->toBeNumeric()
-        ->and($input->shipmentOptions->ageCheck)
-        ->toBeBool()
-        ->and($input->shipmentOptions->signature)
-        ->toBeBool()
-        ->and($input->pickupLocation)
-        ->toBeNull()
-        ->and($input->shipmentOptions)
-        ->toBeObject();
-})->with(
-    [
-        '0' =>
-            [
-                'input' => new DeliveryOptions([
-                    'carrier'         => CarrierPostNL::NAME,
-                    'shipmentOptions' => new ShipmentOptions([
-                        'insurance' => 500,
-                        'ageCheck'  => true,
-                        'signature' => false,
-                    ]),
-                ]),
-            ],
-    ]
-);
-
-it('checks if it merges correctly', function ($deliveryOptions, $expectation) {
-    $result = DeliveryOptionsMerger::create(...$deliveryOptions);
-    expect($result->toArray())->toEqual($expectation);
-})->with($dataset);
-
-
-
+]);

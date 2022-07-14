@@ -4,35 +4,54 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Service;
 
-use MyParcelNL\Pdk\Base\Utils;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class DeliveryOptionsMerger
 {
-    private const DEFAULT_VALUES = [
-        'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-    ];
-
     /**
-     * @param ...$options
+     * @param  (array|\MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions|null)[] $options
      *
      * @return \MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions
      * @throws \Exception
      */
-    public static function create(...$options): DeliveryOptions
+    public static function create(array $options): DeliveryOptions
     {
-        $previous = self::DEFAULT_VALUES;
-
-        $adapters = (new Collection($options))
+        $data = (new Collection($options))
             ->filter()
-            ->map(static function ($adapter) use (&$previous) {
-                $previous = Utils::mergeValuesByKeys($previous, $adapter->toArray());
+            ->reduce(static function (array $acc, $current) {
+                if ($current instanceof DeliveryOptions) {
+                    $current = $current->toArray();
+                }
 
-                return (new Collection($previous))->toArrayWithoutNull();
-            })
-            ->toArrayWithoutNull();
+                return self::mergeArraysIgnoringNull($acc, $current);
+            }, []);
 
-        return new DeliveryOptions(end($adapters));
+        return new DeliveryOptions($data);
+    }
+
+    /**
+     * @param  array $previous
+     * @param  array $current
+     *
+     * @return array
+     */
+    private static function mergeArraysIgnoringNull(array $previous, array $current): array
+    {
+        $keys = array_keys($current);
+
+        foreach ($keys as $key) {
+            if (is_array($current[$key])) {
+                $current[$key] = self::mergeArraysIgnoringNull($previous[$key] ?? [], $current[$key]);
+            }
+
+            if (null !== $current[$key]) {
+                continue;
+            }
+
+            $current[$key] = $previous[$key] ?? null;
+        }
+
+        return $current + $previous;
     }
 }
