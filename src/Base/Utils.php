@@ -9,12 +9,12 @@ use MyParcelNL\Sdk\src\Support\Str;
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 {
     /**
-     * @param              $array
+     * @param  array       $array
      * @param  string|null $case
      *
      * @return array
      */
-    public static function changeKeyCase($array, string $case = null): array
+    public static function changeArrayKeysCase(array $array, string $case = null): array
     {
         $newArray = [];
 

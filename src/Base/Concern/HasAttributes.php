@@ -7,11 +7,9 @@ namespace MyParcelNL\Pdk\Base\Concern;
 use DateTime;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Collection;
-use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
-use Throwable;
 
 trait HasAttributes
 {
@@ -28,13 +26,10 @@ trait HasAttributes
     protected static $primitiveCastTypes = [
         'array',
         'bool',
-        'collection',
         'date',
         'datetime',
         'float',
         'int',
-        'json',
-        'object',
         'string',
         'timestamp',
     ];
@@ -52,21 +47,16 @@ trait HasAttributes
     protected $casts = [];
 
     /**
-     * The attributes that have been cast using custom classes.
-     *
-     * @var array
-     */
-    protected $classCastCache = [];
-
-    /**
      * @var string
      */
     protected $dateFormats = ['Y-m-d H:i:s', 'Y-m-d', DateTime::ATOM];
 
     /**
+     * The attributes that have been cast using custom classes.
+     *
      * @var array
      */
-    protected $types = [];
+    private $classCastCache = [];
 
     /**
      * Extract and cache all the mutated attributes of a class.
@@ -198,13 +188,12 @@ trait HasAttributes
      * @param  null|string $case
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function getAttributes(string $case = null): array
     {
-        $this->mergeAttributesFromCachedCasts();
+        $this->mergeAttributesFromClassCasts();
 
-        return Utils::changeKeyCase($this->attributes, $case);
+        return Utils::changeArrayKeysCase($this->attributes, $case);
     }
 
     /**
@@ -341,9 +330,9 @@ trait HasAttributes
      *
      * @param  mixed $value
      *
-     * @return \DateTimeInterface
+     * @return \DateTime
      */
-    protected function asDate($value): DateTimeInterface
+    protected function asDate($value): DateTime
     {
         return $this->asDateTime($value)
             ->setTime(0, 0);
@@ -443,34 +432,9 @@ trait HasAttributes
     }
 
     /**
-     * Resolve the custom caster class for a given key.
-     *
-     * @param  string $key
-     * @param         $arguments
-     *
-     * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
-     */
-    protected function createCastedClass(string $key, $arguments)
-    {
-        $castType = $this->getCasts()[$key];
-
-        if ($arguments instanceof $castType) {
-            return $arguments;
-        }
-
-        try {
-            return new $castType($arguments);
-        } catch (Throwable $e) {
-            throw new InvalidCastException($key, $castType, $arguments);
-        }
-    }
-
-    /**
      * Get an attribute array of all arrayable attributes.
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function getArrayableAttributes(): array
     {
@@ -516,6 +480,7 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     protected function getAttributeValue(string $key)
     {
@@ -531,7 +496,7 @@ trait HasAttributes
      */
     protected function getCastType(string $key): string
     {
-        return strtolower(trim($this->getCasts()[$this->convertAttributeCase($key)]));
+        return $this->getCasts()[$this->convertAttributeCase($key)];
     }
 
     /**
@@ -541,7 +506,7 @@ trait HasAttributes
      */
     protected function getCasts(): array
     {
-        return Utils::changeKeyCase($this->casts);
+        return Utils::changeArrayKeysCase($this->casts);
     }
 
     /**
@@ -628,16 +593,8 @@ trait HasAttributes
     }
 
     /**
-     * Merge the cast class and attribute cast attributes back into the model.
-     *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
-    protected function mergeAttributesFromCachedCasts(): void
-    {
-        $this->mergeAttributesFromClassCasts();
-    }
-
     protected function mergeAttributesFromClassCasts(): void
     {
         $attributes = [];
@@ -685,7 +642,7 @@ trait HasAttributes
      *
      * @return string
      */
-    protected function parseCasterClass($class): string
+    protected function parseCasterClass(string $class): string
     {
         return ! Str::contains($class, ':')
             ? $class

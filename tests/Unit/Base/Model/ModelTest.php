@@ -19,18 +19,18 @@ class MyModel extends Model
 
     protected $attributes = [
         'myProperty' => null,
-        'mutateMe'   => null,
-        'mutated'    => null,
+        'perenboom'  => null,
+        'bloemkool'  => null,
     ];
 
-    public function getMutatedAttribute(): string
+    public function getBloemkoolAttribute(): string
     {
-        return 'mutated';
+        return 'bloemkool';
     }
 
-    public function setMutateMeAttribute($value): self
+    public function setPerenboomAttribute($value): self
     {
-        $this->attributes['mutateMe'] = "mutated_$value";
+        $this->attributes['perenboom'] = "mutated_$value";
         return $this;
     }
 }
@@ -89,16 +89,16 @@ it('can use unset on array offset', function () {
 it('can use toArray', function () {
     expect((new MyModel())->toArray())->toEqual([
         'myProperty' => 1,
-        'mutateMe'   => 'mutated_',
-        'mutated'    => 'mutated',
+        'perenboom'  => 'mutated_',
+        'bloemkool'  => 'bloemkool',
     ]);
 });
 
 it('can use toSnakeCaseArray', function () {
     expect((new MyModel())->toSnakeCaseArray())->toEqual([
         'my_property' => 1,
-        'mutate_me'   => 'mutated_',
-        'mutated'     => 'mutated',
+        'perenboom'   => 'mutated_',
+        'bloemkool'   => 'bloemkool',
     ]);
 });
 
@@ -124,11 +124,11 @@ it('can initialize and get properties with any case', function () {
 });
 
 it('supports get mutators', function () {
-    $model = new MyModel(['mutated' => 'random']);
-    expect($model->mutated)->toEqual('mutated');
+    $model = new MyModel(['bloemkool' => 'random']);
+    expect($model->bloemkool)->toEqual('bloemkool');
 });
 
 it('supports set mutators', function () {
-    $model = new MyModel(['mutateMe' => 'random']);
-    expect($model->mutateMe)->toEqual('mutated_random');
+    $model = new MyModel(['perenboom' => 'random']);
+    expect($model->perenboom)->toEqual('mutated_random');
 });

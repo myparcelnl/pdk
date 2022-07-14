@@ -11,12 +11,12 @@ class InvalidCastException extends Exception
     /**
      * @param  string $key
      * @param  mixed  $castType
-     * @param         $arguments
+     * @param  mixed  $arguments
      */
     public function __construct(string $key, $castType, $arguments = null)
     {
         $this->message = sprintf(
-            "Failed to cast '%s' to '%s'%s",
+            'Failed to cast "%s" to "%s"%s',
             $key,
             $castType,
             $arguments ? sprintf(' with the following arguments: %s', json_encode($arguments)) : ''

@@ -16,8 +16,8 @@ it('gets parents of class recursively', function () {
         ->toEqual([BeConcerned::class => BeConcerned::class]);
 });
 
-it('changes case of array keys to camelCase', function ($case, $expectation) {
-    expect(Utils::changeKeyCase(['snake_case' => 1, 'camelCase' => 2, 'StudlyCase' => 3], $case))
+it('changes case of array keys', function ($case, $expectation) {
+    expect(Utils::changeArrayKeysCase(['snake_case' => 1, 'camelCase' => 2, 'StudlyCase' => 3], $case))
         ->toEqual($expectation);
 })->with([
     'to snake_case' => ['snake', ['snake_case' => 1, 'camel_case' => 2, 'studly_case' => 3]],

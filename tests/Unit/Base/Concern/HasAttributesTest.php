@@ -1,7 +1,5 @@
 <?php
-/** @noinspection PhpIllegalPsrClassPathInspection */
-
-/** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+/** @noinspection StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection,PhpMultipleClassesDeclarationsInOneFile,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
