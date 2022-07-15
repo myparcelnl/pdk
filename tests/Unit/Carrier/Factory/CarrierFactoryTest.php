@@ -2,32 +2,27 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
-use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Validator\BpostShipmentValidator;
-use MyParcelNL\Pdk\Shipment\Validator\DPDShipmentValidator;
-use MyParcelNL\Pdk\Shipment\Validator\InstaboxShipmentValidator;
-use MyParcelNL\Pdk\Shipment\Validator\PostNLShipmentValidator;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDPD;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Pdk\Base\Config;
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Carrier\Factory\CarrierFactory;
+use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 
-// Correct version after meeting with API
-$correctVersion = [
+PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+
+const MOCK_CONFIG = [
     'carriers' => [
         [
-            'id'                => 1,
-            'name'              => 'postnl',
-            'primary'           => 1,
-            'type'              => 'main',
+            'id'               => 1,
+            'name'             => 'postnl',
+            'primary'          => 1,
+            'type'             => 'main',
             'recipientOptions' => [
                 'packageTypes' => [
                     [
                         'id'            => 1,
                         'name'          => 'package',
-                        'deliveryType' => [
+                        'deliveryTypes' => [
                             [
                                 'id'   => 1,
                                 'name' => 'morning',
@@ -46,8 +41,8 @@ $correctVersion = [
                             ],
                         ],
                         'options'       => [
-                            'signature'         => ['type' => 'boolean'],
-                            'insurance'         => [
+                            'signature'        => ['type' => 'boolean'],
+                            'insurance'        => [
                                 'type' => 'integer',
                                 'enum' => [
                                     0,
@@ -67,8 +62,8 @@ $correctVersion = [
                             ],
                             'ageCheck'         => ['type' => 'boolean'],
                             'onlyRecipient'    => ['type' => 'boolean'],
-                            'return'            => ['type' => 'boolean'],
-                            'sameDayDelivery' => ['type' => 'boolean'],
+                            'return'           => ['type' => 'boolean'],
+                            'sameDayDelivery'  => ['type' => 'boolean'],
                             'largeFormat'      => ['type' => 'boolean'],
                             'labelDescription' => [
                                 'type'          => 'string',
@@ -134,17 +129,17 @@ $correctVersion = [
                 [
                     'packageTypes' => [
                         [
-                            'id'             => 1,
-                            'name'           => 'package',
+                            'id'            => 1,
+                            'name'          => 'package',
                             'deliveryTypes' => [
                                 [
                                     'id'   => 2,
                                     'name' => 'standard',
                                 ],
                             ],
-                            'options'        => [
-                                'signature'         => ['type' => 'boolean'],
-                                'insurance'         => [
+                            'options'       => [
+                                'signature'        => ['type' => 'boolean'],
+                                'insurance'        => [
                                     'type' => 'integer',
                                     'enum' => [
                                         0,
@@ -162,10 +157,10 @@ $correctVersion = [
                                         5000,
                                     ],
                                 ],
-                                'return'            => ['type' => 'boolean'],
+                                'return'           => ['type' => 'boolean'],
                                 'ageCheck'         => ['type' => 'boolean'],
                                 'onlyRecipient'    => ['type' => 'boolean'],
-                                'sameDayDelivery' => ['type' => 'boolean'],
+                                'sameDayDelivery'  => ['type' => 'boolean'],
                                 'largeFormat'      => ['type' => 'boolean'],
                                 'labelDescription' => [
                                     'type'          => 'string',
@@ -190,27 +185,27 @@ $correctVersion = [
             ],
         ],
         [
-            'id'                => 5,
-            'name'              => 'instabox',
-            'primary'           => 1,
-            'type'              => 'main',
+            'id'               => 5,
+            'name'             => 'instabox',
+            'primary'          => 1,
+            'type'             => 'main',
             'recipientOptions' => [
                 'packageTypes' => [
                     [
-                        'id'             => 1,
-                        'name'           => 'package',
+                        'id'            => 1,
+                        'name'          => 'package',
                         'deliveryTypes' => [
                             [
                                 'id'   => 2,
                                 'name' => 'standard',
                             ],
                         ],
-                        'options'        => [
-                            'signature'         => ['type' => 'boolean'],
+                        'options'       => [
+                            'signature'        => ['type' => 'boolean'],
                             'ageCheck'         => ['type' => 'boolean'],
                             'onlyRecipient'    => ['type' => 'boolean'],
-                            'return'            => ['type' => 'boolean'],
-                            'sameDayDelivery' => ['type' => 'boolean'],
+                            'return'           => ['type' => 'boolean'],
+                            'sameDayDelivery'  => ['type' => 'boolean'],
                             'largeFormat'      => ['type' => 'boolean'],
                             'labelDescription' => [
                                 'type'          => 'string',
@@ -218,7 +213,7 @@ $correctVersion = [
                                 'maximumLength' => 45,
                             ],
                         ],
-                        'requirements'   => [
+                        'requirements'  => [
                             'weight' => [
                                 'type'    => 'integer',
                                 'minimum' => 1,
@@ -230,8 +225,8 @@ $correctVersion = [
                         'id'           => 2,
                         'name'         => 'mailbox',
                         'options'      => [
-                            'signature'         => ['type' => 'boolean'],
-                            'sameDayDelivery' => ['type' => 'boolean'],
+                            'signature'        => ['type' => 'boolean'],
+                            'sameDayDelivery'  => ['type' => 'boolean'],
                             'labelDescription' => [
                                 'type'          => 'string',
                                 'minimumLength' => 0,
@@ -251,41 +246,41 @@ $correctVersion = [
             'returnOptions'    => [],
         ],
         [
-            'id'                => 2,
-            'name'              => 'bpost',
+            'id'               => 2,
+            'name'             => 'bpost',
             'contractId'       => 10921,
-            'primary'           => 0,
-            'type'              => 'custom',
+            'primary'          => 0,
+            'type'             => 'custom',
             'recipientOptions' => [
                 'packageTypes' => [
                     [
-                        'id'             => 1,
-                        'name'           => 'package',
+                        'id'            => 1,
+                        'name'          => 'package',
                         'deliveryTypes' => [
                             [
                                 'id'   => 2,
                                 'name' => 'standard',
                             ],
                         ],
-                        'options'        => [
-                            'insurance'                => [
+                        'options'       => [
+                            'insurance'            => [
                                 'type' => 'integer',
                                 'enum' => [
                                     0,
                                     500,
                                 ],
                             ],
-                            'signature'                => ['type' => 'boolean'],
-                            'saturdayDelivery'        => ['type' => 'boolean'],
+                            'signature'            => ['type' => 'boolean'],
+                            'saturdayDelivery'     => ['type' => 'boolean'],
                             'dropOffAtPostalPoint' => ['type' => 'boolean'],
-                            'return'                   => ['type' => 'boolean'],
-                            'labelDescription'        => [
+                            'return'               => ['type' => 'boolean'],
+                            'labelDescription'     => [
                                 'type'          => 'string',
                                 'minimumLength' => 0,
                                 'maximumLength' => 45,
                             ],
                         ],
-                        'requirements'   => [
+                        'requirements'  => [
                             'weight' => [
                                 'type'    => 'integer',
                                 'minimum' => 1,
@@ -299,17 +294,17 @@ $correctVersion = [
                 [
                     'packageTypes' => [
                         [
-                            'id'             => 1,
-                            'name'           => 'package',
+                            'id'            => 1,
+                            'name'          => 'package',
                             'deliveryTypes' => [
                                 [
                                     'id'   => 2,
                                     'name' => 'standard',
                                 ],
                             ],
-                            'options'        => [
-                                'signature'         => ['type' => 'boolean'],
-                                'insurance'         => [
+                            'options'       => [
+                                'signature'        => ['type' => 'boolean'],
+                                'insurance'        => [
                                     'type' => 'integer',
                                     'enum' => [
                                         0,
@@ -351,24 +346,24 @@ $correctVersion = [
             ],
         ],
         [
-            'id'                => 4,
-            'name'              => 'dpd',
+            'id'               => 4,
+            'name'             => 'dpd',
             'contractId'       => 10932621,
-            'primary'           => 0,
-            'type'              => 'custom',
+            'primary'          => 0,
+            'type'             => 'custom',
             'recipientOptions' => [
                 'packageTypes' => [
                     [
-                        'id'             => 1,
-                        'name'           => 'package',
+                        'id'            => 1,
+                        'name'          => 'package',
                         'deliveryTypes' => [
                             [
                                 'id'   => 2,
                                 'name' => 'standard',
                             ],
                         ],
-                        'options'        => [
-                            'insurance'         => [
+                        'options'       => [
+                            'insurance'        => [
                                 'type' => 'integer',
                                 'enum' => [
                                     520,
@@ -380,48 +375,7 @@ $correctVersion = [
                                 'maximumLength' => 45,
                             ],
                         ],
-                        'requirements'   => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 31500,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'returnOptions'    => [],
-        ],
-        [
-            'id'                => 6,
-            'name'              => 'bpost',
-            'primary'           => 1,
-            'type'              => 'main',
-            'recipientOptions' => [
-                'packageTypes' => [
-                    [
-                        'id'             => 1,
-                        'name'           => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
-                            ],
-                        ],
-                        'options'        => [
-                            'insurance'         => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    520,
-                                ],
-                            ],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
-                        ],
-                        'requirements'   => [
+                        'requirements'  => [
                             'weight' => [
                                 'type'    => 'integer',
                                 'minimum' => 1,
@@ -436,43 +390,44 @@ $correctVersion = [
     ],
 ];
 
-return $correctVersion;
+it('throws empty carrier and exception', function () {
+    $carrier = CarrierFactory::create('thisisnocarrier', MOCK_CONFIG);
+    expect($carrier->getName())
+        ->toBe(null)
+        ->and($carrier->getType())
+        ->toBe(null)->and(DefaultLogger::getLogs())
+        ->toBe([
+            [
+                'level'   => 'warning',
+                'message' => "[PDK]: Could not find any carrier inside config",
+                'context' => [
+                    'carrier' => 'thisisnocarrier',
+                    'config'  => MOCK_CONFIG,
+                ],
+            ],
+        ]);
+});
 
-return [
+it('creates main carrier by name', function () {
+    $carrier = CarrierFactory::create('postnl', MOCK_CONFIG);
+    expect($carrier->getName())
+        ->toBe('postnl')
+        ->and($carrier->getType())
+        ->toBe('main');
+});
 
-    CarrierPostNL::NAME => [
-        'class'          => CarrierPostNL::class,
-        'validator'      => PostNLShipmentValidator::class,
-        'home_countries' => [CountryCodes::CC_NL],
-        'delivery_types' => DeliveryOptions::DELIVERY_TYPES_NAMES,
-    ],
+it('creates main carrier by carrierId', function () {
+    $carrier = CarrierFactory::create(5, MOCK_CONFIG);
+    expect($carrier->getName())
+        ->toBe('instabox')
+        ->and($carrier->getType())
+        ->toBe('main');
+});
 
-    CarrierDPD::NAME => [
-        'class'          => CarrierDPD::class,
-        'validator'      => DPDShipmentValidator::class,
-        'home_countries' => [CountryCodes::CC_NL],
-        'delivery_types' => [
-            DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-            DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-        ],
-    ],
-
-    CarrierInstabox::NAME => [
-        'class'          => CarrierInstabox::class,
-        'validator'      => InstaboxShipmentValidator::class,
-        'home_countries' => [AbstractConsignment::CC_NL],
-        'delivery_types' => [
-            DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-        ],
-    ],
-
-    CarrierBpost::NAME => [
-        'class'          => CarrierBpost::class,
-        'validator'      => BpostShipmentValidator::class,
-        'home_countries' => [AbstractConsignment::CC_NL],
-        'delivery_types' => [
-            DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-            DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-        ],
-    ],
-];
+it('creates custom carrier by contractId', function () {
+    $carrier = CarrierFactory::create(10932621, MOCK_CONFIG);
+    expect($carrier->getName())
+        ->toBe('dpd')
+        ->and($carrier->getType())
+        ->toBe('custom');
+});
