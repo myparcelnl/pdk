@@ -20,24 +20,24 @@ class Pdk
     }
 
     /**
-     * @param  string $responseClass
+     * @param  string $key
      *
      * @return mixed
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
-    public function get(string $responseClass)
+    public function get(string $key)
     {
-        return $this->container->get($responseClass);
+        return $this->container->get($key);
     }
 
     /**
-     * @param  string $responseClass
+     * @param  string $key
      *
      * @return bool
      */
-    public function has(string $responseClass): bool
+    public function has(string $key): bool
     {
-        return $this->container->has($responseClass);
+        return $this->container->has($key);
     }
 }
