@@ -132,3 +132,8 @@ it('supports set mutators', function () {
     $model = new MyModel(['perenboom' => 'random']);
     expect($model->perenboom)->toEqual('mutated_random');
 });
+
+it('throws error when unknown attributes are passed', function () {
+    new MyModel(['whaaaaat' => 'fiets']);
+})->throws(InvalidArgumentException::class);
+
