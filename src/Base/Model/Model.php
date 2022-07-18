@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use ArrayAccess;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Concern\HidesAttributes;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
@@ -34,6 +35,7 @@ class Model implements Arrayable, ArrayAccess
     {
         $this->bootIfNotBooted();
         $this->initializeTraits();
+        $this->validateAttributes($data);
         $this->fill(Utils::changeArrayKeysCase(($data ?? []) + $this->attributes));
     }
 
@@ -247,5 +249,30 @@ class Model implements Arrayable, ArrayAccess
         foreach (static::$traitInitializers[static::class] as $method) {
             $this->{$method}();
         }
+    }
+
+    /**
+     * @param  null|array $data
+     *
+     * @return void
+     */
+    private function validateAttributes(?array $data): void
+    {
+        if (! $data) {
+            return;
+        }
+
+        $unknownAttributes = array_diff_key($data, $this->attributes);
+
+        if (empty($unknownAttributes)) {
+            return;
+        }
+
+        throw new InvalidArgumentException(
+            sprintf(
+                'Unknown attribute(s) passed: "%s". Attributes must be defined in $model->attributes.',
+                implode('", "', array_keys($unknownAttributes))
+            )
+        );
     }
 }

@@ -7,7 +7,10 @@ use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
 
-class CastModel extends Model { }
+class CastModel extends Model
+{
+    protected $attributes = ['property' => null];
+}
 
 class CastingModel extends Model
 {
@@ -104,9 +107,9 @@ it('casts everything properly to array', function () {
 it('throws error on invalid cast', function () {
     class InvalidCastingModel extends Model
     {
-        protected $casts = [
-            'value' => CastModel::class,
-        ];
+        protected $attributes = ['value' => null];
+
+        protected $casts      = ['value' => CastModel::class];
     }
 
     $model = new InvalidCastingModel([
