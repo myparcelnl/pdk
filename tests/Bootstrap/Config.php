@@ -13,6 +13,9 @@ class Config
             'storage' => [
                 'default' => MockStorage::class,
             ],
+            'logger'  => [
+                'default' => MockLogger::class,
+            ],
         ];
     }
 }
