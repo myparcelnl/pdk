@@ -41,6 +41,10 @@ jobs:
         if: github.actor != 'dependabot[bot]'
         run: docker cp $(docker ps -alq):/app/coverage.xml .
 
-      - name: 'Update code coverage'
+      - uses: codecov/codecov-action@v3
         if: github.actor != 'dependabot[bot]'
-        uses: codecov/codecov-action@v3
+
+      - uses: codacy/codacy-coverage-reporter-action@v1
+        if: github.actor != 'dependabot[bot]'
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
