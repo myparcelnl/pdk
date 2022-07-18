@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Factory;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\MyParcelApiService;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -38,23 +40,12 @@ class PdkFactory
      */
     public static function create(array $config): Pdk
     {
-        $items = Arr::dot(array_replace_recursive(self::getDefaultConfig(), $config));
-        self::validate($items);
+        $container = self::setupContainer($config);
+        $pdk       = new Pdk($container);
 
-        $builder   = new ContainerBuilder();
-        $container = $builder->build();
+        Facade::setPdkInstance($pdk);
 
-        foreach ($items as $key => $item) {
-            if (is_string($item) && class_exists($item)) {
-                $instance = new $item();
-            } else {
-                $instance = $item;
-            }
-
-            $container->set($key, $instance);
-        }
-
-        return new Pdk($container);
+        return $pdk;
     }
 
     /**
@@ -83,6 +74,32 @@ class PdkFactory
         }
 
         return null;
+    }
+
+    /**
+     * @param  array $config
+     *
+     * @return \DI\Container
+     * @throws \Exception
+     */
+    private static function setupContainer(array $config): Container
+    {
+        $items = Arr::dot(array_replace_recursive(self::getDefaultConfig(), $config));
+        self::validate($items);
+
+        $builder   = new ContainerBuilder();
+        $container = $builder->build();
+
+        foreach ($items as $key => $item) {
+            if (is_string($item) && class_exists($item)) {
+                $instance = new $item();
+            } else {
+                $instance = $item;
+            }
+
+            $container->set($key, $instance);
+        }
+        return $container;
     }
 
     /**
