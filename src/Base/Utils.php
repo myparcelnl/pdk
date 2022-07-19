@@ -34,9 +34,10 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
      */
     public static function classBasename($class): string
     {
-        $class = is_object($class) ? get_class($class) : $class;
+        $class    = is_object($class) ? get_class($class) : $class;
+        $lastPart = strrchr('\\' . ltrim($class, '\\'), '\\');
 
-        return basename(str_replace('\\', '/', $class));
+        return substr($lastPart, 1);
     }
 
     /**
