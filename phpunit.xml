@@ -12,7 +12,6 @@
 
     <coverage processUncoveredFiles="true">
         <report>
-            <html outputDirectory="coverage" />
             <clover outputFile="clover.xml" />
         </report>
         <include>
