@@ -2,7 +2,7 @@
 .phpunit.result.cache
 .yarn-*.log
 composer.lock
-coverage.xml
+clover.xml
 pdk_ide_helper.php
 
 /coverage/

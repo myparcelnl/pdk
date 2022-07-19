@@ -13,7 +13,7 @@
     <coverage processUncoveredFiles="true">
         <report>
             <html outputDirectory="coverage" />
-            <clover outputFile="coverage.xml" />
+            <clover outputFile="clover.xml" />
         </report>
         <include>
             <directory suffix=".php">./src</directory>

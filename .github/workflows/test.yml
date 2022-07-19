@@ -39,7 +39,7 @@ jobs:
 
       - name: 'Get coverage file from container'
         if: github.actor != 'dependabot[bot]'
-        run: docker cp $(docker ps -alq):/app/coverage.xml .
+        run: docker cp $(docker ps -alq):/app/clover.xml .
 
       - uses: codecov/codecov-action@v3
         if: github.actor != 'dependabot[bot]'
@@ -48,4 +48,3 @@ jobs:
         if: github.actor != 'dependabot[bot]'
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
-          coverage-reports: coverage.xml
