@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.0](https://github.com/myparcelnl/pdk/compare/v1.5.0...v1.6.0) (2022-07-19)
+
+
+### :sparkles: New Features
+
+* add facades ([#18](https://github.com/myparcelnl/pdk/issues/18)) ([1039f3e](https://github.com/myparcelnl/pdk/commit/1039f3e1fe570ae79d69400d065791477157e2bc))
+
 ## [1.5.0](https://github.com/myparcelnl/pdk/compare/v1.4.1...v1.5.0) (2022-07-18)
 
 
