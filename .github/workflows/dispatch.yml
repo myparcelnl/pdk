@@ -1,0 +1,21 @@
+name: 'Dispatch command'
+
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-20.04
+    if: github.event.issue.pull_request
+    steps:
+      - uses: peter-evans/slash-command-dispatch@v3
+        with:
+          token: ${{ secrets.GH_REPO_TOKEN }}
+          commands: |
+            rebase
+            test
+          permission: write
+          issue-type: pull-request
+          static-args: |
+            comment-id=${{ github.event.comment.id }}
