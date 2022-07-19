@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
+use Throwable;
 
 trait HasAttributes
 {
@@ -723,16 +724,20 @@ trait HasAttributes
     private function getCastModel(string $key, $value)
     {
         $class     = $this->getCasts()[$key];
-        $arguments = $value instanceof Arrayable ? $value->toArray() : $value;
+        $arguments = null;
+
+        if ($class !== $value) {
+            $arguments = $value instanceof Arrayable ? $value->toArray() : $value;
+        }
 
         if (is_a($arguments, $class)) {
             return $arguments;
         }
 
-        if (! is_array($arguments)) {
+        try {
+            return new $class($arguments);
+        } catch (Throwable $e) {
             throw new InvalidCastException($key, $class, $arguments);
         }
-
-        return new $class($arguments);
     }
 }
