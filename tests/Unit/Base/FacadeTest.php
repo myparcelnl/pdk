@@ -10,11 +10,6 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Storage;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
 
-// Reset the facade after each test.
-afterEach(function () {
-    Facade::setPdkInstance(null);
-});
-
 it('can call instance behind facade', function () {
     PdkFactory::create(Config::provideDefaultPdkConfig());
 
