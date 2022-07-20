@@ -20,12 +20,17 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
-        if: github.actor != 'dependabot[bot]'
         with:
           persist-credentials: false
 
+      - uses: actions/cache@v3
+        id: cache-coverage
+        with:
+          path: ./clover.xml
+          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './Dockerfile', './src/**', './tests/**') }}
+
       - uses: myparcelnl/actions/build-docker-image-reg@v2
-        if: github.actor != 'dependabot[bot]'
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
           image: myparcelnl/php-pdk
@@ -34,17 +39,15 @@ jobs:
           registry-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Run tests'
-        if: github.actor != 'dependabot[bot]'
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
         run: docker run ${{ steps.docker.outputs.tagged-image }}
 
       - name: 'Get coverage file from container'
-        if: github.actor != 'dependabot[bot]'
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
         run: docker cp $(docker ps -alq):/app/clover.xml .
 
       - uses: codecov/codecov-action@v3
-        if: github.actor != 'dependabot[bot]'
 
       - uses: codacy/codacy-coverage-reporter-action@v1
-        if: github.actor != 'dependabot[bot]'
         with:
           api-token: ${{ secrets.CODACY_API_TOKEN }}
