@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\Config;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
 
 it('can create a pdk instance', function (array $config) {
@@ -17,7 +18,16 @@ it('can create a pdk instance', function (array $config) {
         ->toBeTrue();
 })->with([
     'default config'                  => [Config::provideDefaultPdkConfig()],
-    'classes instead of class string' => [['storage' => ['default' => new MockStorage()]]],
+    'classes instead of class string' => [
+        [
+            'storage' => [
+                'default' => new MockStorage(),
+            ],
+            'logger'  => [
+                'default' => new MockLogger(),
+            ],
+        ],
+    ],
 ]);
 
 it('throws errors', function ($configuration) {

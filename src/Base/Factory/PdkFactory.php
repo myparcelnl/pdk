@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Api\MyParcelApiService;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Pdk;
+use MyParcelNL\Pdk\Logger\AbstractLogger;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -19,9 +20,11 @@ class PdkFactory
 {
     private const PROPERTY_INTERFACES = [
         'api'       => ApiServiceInterface::class,
+        'logger.*'  => AbstractLogger::class,
         'storage.*' => StorageInterface::class,
     ];
     private const REQUIRED_PROPERTIES = [
+        'logger.default',
         'storage.default',
     ];
 
