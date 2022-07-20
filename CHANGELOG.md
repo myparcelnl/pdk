@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.0](https://github.com/myparcelnl/pdk/compare/v1.6.0...v1.7.0) (2022-07-20)
+
+
+### :sparkles: New Features
+
+* add logger ([#19](https://github.com/myparcelnl/pdk/issues/19)) ([16c5f1c](https://github.com/myparcelnl/pdk/commit/16c5f1cb722667e956e848c2c2de765083f9310b))
+
 ## [1.6.0](https://github.com/myparcelnl/pdk/compare/v1.5.0...v1.6.0) (2022-07-19)
 
 
