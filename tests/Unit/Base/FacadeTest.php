@@ -1,5 +1,5 @@
 <?php
-/** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection,PhpMultipleClassesDeclarationsInOneFile */
+/** @noinspection AutoloadingIssuesInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection,PhpMultipleClassesDeclarationsInOneFile */
 
 declare(strict_types=1);
 
@@ -8,10 +8,10 @@ use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Storage;
-use MyParcelNL\Pdk\Tests\Bootstrap\Config;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 
 it('can call instance behind facade', function () {
-    PdkFactory::create(Config::provideDefaultPdkConfig());
+    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
 
     expect(Storage::has('key'))->toEqual(false);
 });
@@ -25,7 +25,7 @@ it('throws error if facade points to nonexistent container item', function () {
         }
     }
 
-    PdkFactory::create(Config::provideDefaultPdkConfig());
+    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
 
     InvalidMock::method();
 })->throws(NotFoundException::class);

@@ -1,21 +1,22 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
+use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\MyParcelApiErrorResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\NotFoundResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\UnprocessableEntityResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\Config;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
-use MyParcelNL\Pdk\Base\Collection;
 
 it('handles various error responses', function (string $response) {
-    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
@@ -34,7 +35,7 @@ it('handles various error responses', function (string $response) {
 ]);
 
 it('handles a request with a query string', function () {
-    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');

@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -12,14 +13,14 @@ use MyParcelNL\Pdk\Tests\Api\Response\AccountResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\CarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ShopResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\Config;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
 it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
-    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
@@ -66,7 +67,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 ]);
 
 it('uses all methods of repository', function () {
-    $pdk = PdkFactory::create(Config::provideDefaultPdkConfig());
+    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
     $api->mock->append(new ShopResponse());
