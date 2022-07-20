@@ -4,6 +4,9 @@
   "scripts": {
     "preinstall": "npx -q only-allow yarn"
   },
+  "release": {
+    "extends": "@myparcel/semantic-release-config/github-composer"
+  },
   "devDependencies": {
     "@myparcel/semantic-release-config": "^4.0.0"
   }
