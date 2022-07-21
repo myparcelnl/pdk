@@ -9,6 +9,21 @@ use MyParcelNL\Sdk\src\Support\Str;
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 {
     /**
+     * @param  string $class
+     * @param  mixed  ...$args
+     *
+     * @return mixed
+     */
+    public static function cast(string $class, ...$args)
+    {
+        if (is_a($args[0], $class)) {
+            return $args[0];
+        }
+
+        return new $class(...$args);
+    }
+
+    /**
      * @param  array       $array
      * @param  string|null $case
      *
