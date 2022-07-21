@@ -7,8 +7,6 @@ use MyParcelNL\Pdk\Carrier\Factory\CarrierFactory;
 use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 
-PdkFactory::create(MockConfig::DEFAULT_CONFIG);
-
 const MOCK_CONFIG = [
     'carriers' => [
         [
@@ -325,7 +323,10 @@ const MOCK_CONFIG = [
 ];
 
 it('creates empty carrier and log', function () {
+    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+
     $carrier = CarrierFactory::create('thisisnocarrier', MOCK_CONFIG);
+
     expect($carrier->getName())
         ->toBe(null)
         ->and($carrier->getType())
