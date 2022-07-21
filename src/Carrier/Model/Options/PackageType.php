@@ -11,16 +11,16 @@ use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
 class PackageType extends Model
 {
     protected $attributes = [
-        'packageTypeId'      => null,
-        'packageTypeName'    => null,
-        'deliveryTypes'      => DeliveryTypeCollection::class,
-        'packageTypeOptions' => ShipmentOptions::class,
+        'packageTypeId'   => null,
+        'packageTypeName' => null,
+        'deliveryTypes'   => DeliveryTypeCollection::class,
+        'shipmentOptions' => ShipmentOptions::class,
     ];
 
     protected $casts      = [
-        'packageTypeId'      => 'int',
-        'packageTypeName'    => 'string',
-        'deliveryTypes'      => DeliveryTypeCollection::class,
-        'packageTypeOptions' => ShipmentOptions::class,
+        'packageTypeId'   => 'int',
+        'packageTypeName' => 'string',
+        'deliveryTypes'   => DeliveryTypeCollection::class,
+        'shipmentOptions' => ShipmentOptions::class,
     ];
 }
