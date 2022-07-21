@@ -6,11 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
-
-class CastModel extends Model
-{
-    protected $attributes = ['property' => null];
-}
+use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 
 class CastingModel extends Model
 {
@@ -38,7 +34,7 @@ class CastingModel extends Model
 
     protected $casts      = [
         'collection'   => Collection::class,
-        'object'       => CastModel::class,
+        'object'       => MockCastModel::class,
         'date'         => 'date',
         'datetime'     => 'datetime',
         'timestamp'    => 'timestamp',
@@ -57,7 +53,7 @@ it('casts attributes to classes', function () {
     expect($model->collection)
         ->toBeInstanceOf(Collection::class)
         ->and($model->object)
-        ->toBeInstanceOf(CastModel::class)
+        ->toBeInstanceOf(MockCastModel::class)
         ->and($model->date)
         ->toBeInstanceOf(DateTime::class)
         ->and($model->datetime)
@@ -109,7 +105,7 @@ it('throws error on invalid cast', function () {
     {
         protected $attributes = ['value' => null];
 
-        protected $casts      = ['value' => CastModel::class];
+        protected $casts      = ['value' => MockCastModel::class];
     }
 
     $model = new InvalidCastingModel([
