@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.2](https://github.com/myparcelnl/pdk/compare/v1.7.1...v1.7.2) (2022-07-21)
+
+
+### :bug: Bug Fixes
+
+* **model:** fix validation error on passing wrongly cased property in constructor ([#22](https://github.com/myparcelnl/pdk/issues/22)) ([785e654](https://github.com/myparcelnl/pdk/commit/785e654a3aa9ef28cb09edd6414d0d99c4bc025a))
+
 ## [1.7.1](https://github.com/myparcelnl/pdk/compare/v1.7.0...v1.7.1) (2022-07-21)
 
 
