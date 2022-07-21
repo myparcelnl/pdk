@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1](https://github.com/myparcelnl/pdk/compare/v1.7.0...v1.7.1) (2022-07-21)
+
+
+### :bug: Bug Fixes
+
+* **model:** improve model casting ([#20](https://github.com/myparcelnl/pdk/issues/20)) ([4a58098](https://github.com/myparcelnl/pdk/commit/4a58098fa51cc537943c68550b9dc0c464a1c049))
+
 ## [1.7.0](https://github.com/myparcelnl/pdk/compare/v1.6.0...v1.7.0) (2022-07-20)
 
 
