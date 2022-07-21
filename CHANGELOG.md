@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.0](https://github.com/myparcelnl/pdk/compare/v1.7.2...v1.8.0) (2022-07-21)
+
+
+### :sparkles: New Features
+
+* **collection:** add cast property for collection items ([#23](https://github.com/myparcelnl/pdk/issues/23)) ([4b821af](https://github.com/myparcelnl/pdk/commit/4b821af0d58d1f2ffedf5bce3f60c5fea03a01fe))
+
 ## [1.7.2](https://github.com/myparcelnl/pdk/compare/v1.7.1...v1.7.2) (2022-07-21)
 
 
