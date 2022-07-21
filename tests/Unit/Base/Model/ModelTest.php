@@ -39,6 +39,20 @@ it('initializes traits', function () {
     expect((new MyModel())->myProperty)->toBe(1);
 });
 
+it('can use constructor arguments', function () {
+    $model = new MyModel([
+        'my_property' => 14,
+        'perenboom'   => 'zeker',
+    ]);
+
+    expect($model->getAttributes())
+        ->toEqual([
+            'myProperty' => 14,
+            'perenboom'  => 'mutated_zeker',
+            'bloemkool'  => null,
+        ]);
+});
+
 it('can use property accessors', function () {
     $model             = new MyModel();
     $model->myProperty = 2;
@@ -103,11 +117,21 @@ it('can use toSnakeCaseArray', function () {
 });
 
 it('can initialize and get properties with any case', function () {
-    $model = new Model();
+    class CaseModel extends Model
+    {
+        protected $attributes = [
+            'snakeCase'  => null,
+            'camelCase'  => null,
+            'studlyCase' => null,
+        ];
+    }
 
-    $model->snake_case = 'snake_case';
-    $model->camelCase  = 'camelCase';
-    $model->StudlyCase = 'StudlyCase';
+    $model = new CaseModel([
+        'snake_case' => 'snake_case',
+    ]);
+
+    $model->camelCase    = 'camelCase';
+    $model['StudlyCase'] = 'StudlyCase';
 
     expect($model->getAttributes())
         ->toEqual([
@@ -136,4 +160,3 @@ it('supports set mutators', function () {
 it('throws error when unknown attributes are passed', function () {
     new MyModel(['whaaaaat' => 'fiets']);
 })->throws(InvalidArgumentException::class);
-
