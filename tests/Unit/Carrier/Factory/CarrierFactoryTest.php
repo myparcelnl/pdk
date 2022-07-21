@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 use MyParcelNL\Pdk\Carrier\Factory\CarrierFactory;
 use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
@@ -40,7 +38,7 @@ const MOCK_CONFIG = [
                             'name' => 'pickup',
                         ],
                     ],
-                    'options'         => [
+                    'shipmentOptions' => [
                         'signature'        => ['type' => 'boolean'],
                         'insurance'        => [
                             'type' => 'integer',
@@ -71,55 +69,34 @@ const MOCK_CONFIG = [
                             'maximumLength' => 45,
                         ],
                     ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 30000,
-                        ],
-                    ],
                 ],
                 [
                     'packageTypeId'   => 2,
                     'packageTypeName' => 'mailbox',
-                    'options'         => [
+                    'shipmentOptions' => [
                         'labelDescription' => [
                             'type'          => 'string',
                             'minimumLength' => 0,
                             'maximumLength' => 45,
                         ],
                     ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 2000,
-                        ],
-                    ],
                 ],
                 [
                     'packageTypeid'   => 3,
                     'packageTypeName' => 'letter',
-                    'options'         => [],
+                    'shipmentOptions' => [],
                     'requirements'    => [],
                 ],
                 [
                     'packageTypeId'   => 4,
                     'packageTypeName' => 'digital_stamp',
-                    'options'         => [
+                    'shipmentOptions' => [
                         'weightClasses' => [
                             [0, 20],
                             [20, 50],
                             [50, 100],
                             [100, 350],
                             [350, 2000],
-                        ],
-                    ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 2000,
                         ],
                     ],
                 ],
@@ -134,7 +111,7 @@ const MOCK_CONFIG = [
                             'name' => 'standard',
                         ],
                     ],
-                    'options'         => [
+                    'shipmentOptions' => [
                         'signature'        => ['type' => 'boolean'],
                         'insurance'        => [
                             'type' => 'integer',
@@ -169,7 +146,7 @@ const MOCK_CONFIG = [
                 [
                     'packageTypeId'   => 2,
                     'packageTypeName' => 'mailbox',
-                    'options'         => [
+                    'shipmentOptions' => [
                         'labelDescription' => [
                             'type'          => 'string',
                             'minimumLength' => 0,
@@ -194,7 +171,7 @@ const MOCK_CONFIG = [
                             'name' => 'standard',
                         ],
                     ],
-                    'options'         => [
+                    'shipmentOptions' => [
                         'signature'        => ['type' => 'boolean'],
                         'ageCheck'         => ['type' => 'boolean'],
                         'onlyRecipient'    => ['type' => 'boolean'],
@@ -207,31 +184,17 @@ const MOCK_CONFIG = [
                             'maximumLength' => 45,
                         ],
                     ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 30000,
-                        ],
-                    ],
                 ],
                 [
                     'packageTypeId'   => 2,
                     'packageTypeName' => 'mailbox',
-                    'options'         => [
+                    'shipmentOptions' => [
                         'signature'        => ['type' => 'boolean'],
                         'sameDayDelivery'  => ['type' => 'boolean'],
                         'labelDescription' => [
                             'type'          => 'string',
                             'minimumLength' => 0,
                             'maximumLength' => 45,
-                        ],
-                    ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 2000,
                         ],
                     ],
                 ],
@@ -254,7 +217,7 @@ const MOCK_CONFIG = [
                             'name' => 'standard',
                         ],
                     ],
-                    'options'         => [
+                    'shipmentOptions' => [
                         'insurance'            => [
                             'type' => 'integer',
                             'enum' => [
@@ -272,13 +235,6 @@ const MOCK_CONFIG = [
                             'maximumLength' => 45,
                         ],
                     ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 30000,
-                        ],
-                    ],
                 ],
             ],
             'returnOptions'    => [
@@ -291,7 +247,7 @@ const MOCK_CONFIG = [
                             'name' => 'standard',
                         ],
                     ],
-                    'options'         => [
+                    'shipmentOptions' => [
                         'signature'        => ['type' => 'boolean'],
                         'insurance'        => [
                             'type' => 'integer',
@@ -322,7 +278,7 @@ const MOCK_CONFIG = [
                 [
                     'packageTypeId'   => 2,
                     'packageTypeName' => 'mailbox',
-                    'options'         => [
+                    'shipmentOptions' => [
                         'labelDescription' => [
                             'type'          => 'string',
                             'minimumLength' => 0,
@@ -348,7 +304,7 @@ const MOCK_CONFIG = [
                             'name' => 'standard',
                         ],
                     ],
-                    'options'         => [
+                    'shipmentOptions' => [
                         'insurance'        => [
                             'type' => 'integer',
                             'enum' => [
@@ -361,13 +317,6 @@ const MOCK_CONFIG = [
                             'maximumLength' => 45,
                         ],
                     ],
-                    'requirements'    => [
-                        'weight' => [
-                            'type'    => 'integer',
-                            'minimum' => 1,
-                            'maximum' => 31500,
-                        ],
-                    ],
                 ],
             ],
             'returnOptions'    => [],
@@ -375,7 +324,7 @@ const MOCK_CONFIG = [
     ],
 ];
 
-it('create empty carrier and log', function () {
+it('creates empty carrier and log', function () {
     $carrier = CarrierFactory::create('thisisnocarrier', MOCK_CONFIG);
     expect($carrier->getName())
         ->toBe(null)
@@ -396,6 +345,7 @@ it('create empty carrier and log', function () {
 
 it('creates main carrier by name', function () {
     $carrier = CarrierFactory::create('postnl', MOCK_CONFIG);
+
     expect($carrier->getName())
         ->toBe('postnl')
         ->and($carrier->getType())
