@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 use MyParcelNL\Pdk\Carrier\Factory\CarrierFactory;
 use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
@@ -18,167 +19,161 @@ const MOCK_CONFIG = [
             'primary'          => 1,
             'type'             => 'main',
             'recipientOptions' => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 1,
-                                'name' => 'morning',
-                            ],
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
-                            ],
-                            [
-                                'id'   => 3,
-                                'name' => 'evening',
-                            ],
-                            [
-                                'id'   => 4,
-                                'name' => 'pickup',
-                            ],
+                [
+                    'packageTypeId'   => 1,
+                    'packageTypeName' => 'package',
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 1,
+                            'name' => 'morning',
                         ],
-                        'options'       => [
-                            'signature'        => ['type' => 'boolean'],
-                            'insurance'        => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    0,
-                                    100,
-                                    250,
-                                    500,
-                                    1000,
-                                    1500,
-                                    2000,
-                                    2500,
-                                    3000,
-                                    3500,
-                                    4000,
-                                    4500,
-                                    5000,
-                                ],
-                            ],
-                            'ageCheck'         => ['type' => 'boolean'],
-                            'onlyRecipient'    => ['type' => 'boolean'],
-                            'return'           => ['type' => 'boolean'],
-                            'sameDayDelivery'  => ['type' => 'boolean'],
-                            'largeFormat'      => ['type' => 'boolean'],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
                         ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 30000,
-                            ],
+                        [
+                            'id'   => 3,
+                            'name' => 'evening',
+                        ],
+                        [
+                            'id'   => 4,
+                            'name' => 'pickup',
                         ],
                     ],
-                    [
-                        'id'           => 2,
-                        'name'         => 'mailbox',
-                        'options'      => [
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
+                    'options'         => [
+                        'signature'        => ['type' => 'boolean'],
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                100,
+                                250,
+                                500,
+                                1000,
+                                1500,
+                                2000,
+                                2500,
+                                3000,
+                                3500,
+                                4000,
+                                4500,
+                                5000,
                             ],
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 2000,
-                            ],
+                        'ageCheck'         => ['type' => 'boolean'],
+                        'onlyRecipient'    => ['type' => 'boolean'],
+                        'return'           => ['type' => 'boolean'],
+                        'sameDayDelivery'  => ['type' => 'boolean'],
+                        'largeFormat'      => ['type' => 'boolean'],
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
                         ],
                     ],
-                    [
-                        'id'           => 3,
-                        'name'         => 'letter',
-                        'options'      => [],
-                        'requirements' => [],
-                    ],
-                    [
-                        'id'           => 4,
-                        'name'         => 'digital_stamp',
-                        'options'      => [
-                            'weightClasses' => [
-                                [0, 20],
-                                [20, 50],
-                                [50, 100],
-                                [100, 350],
-                                [350, 2000],
-                            ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 30000,
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 2000,
-                            ],
+                    ],
+                ],
+                [
+                    'packageTypeId'   => 2,
+                    'packageTypeName' => 'mailbox',
+                    'options'         => [
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
+                        ],
+                    ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 2000,
+                        ],
+                    ],
+                ],
+                [
+                    'packageTypeid'   => 3,
+                    'packageTypeName' => 'letter',
+                    'options'         => [],
+                    'requirements'    => [],
+                ],
+                [
+                    'packageTypeId'   => 4,
+                    'packageTypeName' => 'digital_stamp',
+                    'options'         => [
+                        'weightClasses' => [
+                            [0, 20],
+                            [20, 50],
+                            [50, 100],
+                            [100, 350],
+                            [350, 2000],
+                        ],
+                    ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 2000,
                         ],
                     ],
                 ],
             ],
             'returnOptions'    => [
                 [
-                    'packageTypes' => [
+                    'packageTypeId'   => 1,
+                    'packageTypeName' => 'package',
+                    'deliveryTypes'   => [
                         [
-                            'id'            => 1,
-                            'name'          => 'package',
-                            'deliveryTypes' => [
-                                [
-                                    'id'   => 2,
-                                    'name' => 'standard',
-                                ],
-                            ],
-                            'options'       => [
-                                'signature'        => ['type' => 'boolean'],
-                                'insurance'        => [
-                                    'type' => 'integer',
-                                    'enum' => [
-                                        0,
-                                        100,
-                                        250,
-                                        500,
-                                        1000,
-                                        1500,
-                                        2000,
-                                        2500,
-                                        3000,
-                                        3500,
-                                        4000,
-                                        4500,
-                                        5000,
-                                    ],
-                                ],
-                                'return'           => ['type' => 'boolean'],
-                                'ageCheck'         => ['type' => 'boolean'],
-                                'onlyRecipient'    => ['type' => 'boolean'],
-                                'sameDayDelivery'  => ['type' => 'boolean'],
-                                'largeFormat'      => ['type' => 'boolean'],
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'options'         => [
+                        'signature'        => ['type' => 'boolean'],
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                100,
+                                250,
+                                500,
+                                1000,
+                                1500,
+                                2000,
+                                2500,
+                                3000,
+                                3500,
+                                4000,
+                                4500,
+                                5000,
                             ],
                         ],
-                        [
-                            'id'      => 2,
-                            'name'    => 'mailbox',
-                            'options' => [
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
-                            ],
+                        'return'           => ['type' => 'boolean'],
+                        'ageCheck'         => ['type' => 'boolean'],
+                        'onlyRecipient'    => ['type' => 'boolean'],
+                        'sameDayDelivery'  => ['type' => 'boolean'],
+                        'largeFormat'      => ['type' => 'boolean'],
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
+                        ],
+                    ],
+                ],
+                [
+                    'packageTypeId'   => 2,
+                    'packageTypeName' => 'mailbox',
+                    'options'         => [
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
                         ],
                     ],
                 ],
@@ -190,55 +185,53 @@ const MOCK_CONFIG = [
             'primary'          => 1,
             'type'             => 'main',
             'recipientOptions' => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
-                            ],
-                        ],
-                        'options'       => [
-                            'signature'        => ['type' => 'boolean'],
-                            'ageCheck'         => ['type' => 'boolean'],
-                            'onlyRecipient'    => ['type' => 'boolean'],
-                            'return'           => ['type' => 'boolean'],
-                            'sameDayDelivery'  => ['type' => 'boolean'],
-                            'largeFormat'      => ['type' => 'boolean'],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
-                        ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 30000,
-                            ],
+                [
+                    'packageTypeId'   => 1,
+                    'packageTypeName' => 'package',
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
                         ],
                     ],
-                    [
-                        'id'           => 2,
-                        'name'         => 'mailbox',
-                        'options'      => [
-                            'signature'        => ['type' => 'boolean'],
-                            'sameDayDelivery'  => ['type' => 'boolean'],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
+                    'options'         => [
+                        'signature'        => ['type' => 'boolean'],
+                        'ageCheck'         => ['type' => 'boolean'],
+                        'onlyRecipient'    => ['type' => 'boolean'],
+                        'return'           => ['type' => 'boolean'],
+                        'sameDayDelivery'  => ['type' => 'boolean'],
+                        'largeFormat'      => ['type' => 'boolean'],
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 2000,
-                            ],
+                    ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 30000,
+                        ],
+                    ],
+                ],
+                [
+                    'packageTypeId'   => 2,
+                    'packageTypeName' => 'mailbox',
+                    'options'         => [
+                        'signature'        => ['type' => 'boolean'],
+                        'sameDayDelivery'  => ['type' => 'boolean'],
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
+                        ],
+                    ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 2000,
                         ],
                     ],
                 ],
@@ -252,94 +245,88 @@ const MOCK_CONFIG = [
             'primary'          => 0,
             'type'             => 'custom',
             'recipientOptions' => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
+                [
+                    'packageTypeId'   => 1,
+                    'packageTypeName' => 'package',
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'options'         => [
+                        'insurance'            => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                500,
                             ],
                         ],
-                        'options'       => [
-                            'insurance'            => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    0,
-                                    500,
-                                ],
-                            ],
-                            'signature'            => ['type' => 'boolean'],
-                            'saturdayDelivery'     => ['type' => 'boolean'],
-                            'dropOffAtPostalPoint' => ['type' => 'boolean'],
-                            'return'               => ['type' => 'boolean'],
-                            'labelDescription'     => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
+                        'signature'            => ['type' => 'boolean'],
+                        'saturdayDelivery'     => ['type' => 'boolean'],
+                        'dropOffAtPostalPoint' => ['type' => 'boolean'],
+                        'return'               => ['type' => 'boolean'],
+                        'labelDescription'     => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
                         ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 30000,
-                            ],
+                    ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 30000,
                         ],
                     ],
                 ],
             ],
             'returnOptions'    => [
                 [
-                    'packageTypes' => [
+                    'packageTypeId'   => 1,
+                    'packageTypeName' => 'package',
+                    'deliveryTypes'   => [
                         [
-                            'id'            => 1,
-                            'name'          => 'package',
-                            'deliveryTypes' => [
-                                [
-                                    'id'   => 2,
-                                    'name' => 'standard',
-                                ],
-                            ],
-                            'options'       => [
-                                'signature'        => ['type' => 'boolean'],
-                                'insurance'        => [
-                                    'type' => 'integer',
-                                    'enum' => [
-                                        0,
-                                        100,
-                                        250,
-                                        500,
-                                        1000,
-                                        1500,
-                                        2000,
-                                        2500,
-                                        3000,
-                                        3500,
-                                        4000,
-                                        4500,
-                                        5000,
-                                    ],
-                                ],
-                                'largeFormat'      => ['type' => 'boolean'],
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'options'         => [
+                        'signature'        => ['type' => 'boolean'],
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                100,
+                                250,
+                                500,
+                                1000,
+                                1500,
+                                2000,
+                                2500,
+                                3000,
+                                3500,
+                                4000,
+                                4500,
+                                5000,
                             ],
                         ],
-                        [
-                            'id'      => 2,
-                            'name'    => 'mailbox',
-                            'options' => [
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
-                            ],
+                        'largeFormat'      => ['type' => 'boolean'],
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
+                        ],
+                    ],
+                ],
+                [
+                    'packageTypeId'   => 2,
+                    'packageTypeName' => 'mailbox',
+                    'options'         => [
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
                         ],
                     ],
                 ],
@@ -352,35 +339,33 @@ const MOCK_CONFIG = [
             'primary'          => 0,
             'type'             => 'custom',
             'recipientOptions' => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
+                [
+                    'packageTypeId'   => 1,
+                    'packageTypeName' => 'package',
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'options'         => [
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                520,
                             ],
                         ],
-                        'options'       => [
-                            'insurance'        => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    520,
-                                ],
-                            ],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
+                        'labelDescription' => [
+                            'type'          => 'string',
+                            'minimumLength' => 0,
+                            'maximumLength' => 45,
                         ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 31500,
-                            ],
+                    ],
+                    'requirements'    => [
+                        'weight' => [
+                            'type'    => 'integer',
+                            'minimum' => 1,
+                            'maximum' => 31500,
                         ],
                     ],
                 ],
@@ -390,12 +375,13 @@ const MOCK_CONFIG = [
     ],
 ];
 
-it('throws empty carrier and exception', function () {
+it('create empty carrier and log', function () {
     $carrier = CarrierFactory::create('thisisnocarrier', MOCK_CONFIG);
     expect($carrier->getName())
         ->toBe(null)
         ->and($carrier->getType())
-        ->toBe(null)->and(DefaultLogger::getLogs())
+        ->toBe(null)
+        ->and(DefaultLogger::getLogs())
         ->toBe([
             [
                 'level'   => 'warning',
