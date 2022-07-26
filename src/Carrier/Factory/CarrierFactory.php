@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Carrier\Factory;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
+use MyParcelNL\Sdk\src\Support\Arr;
 
 class CarrierFactory
 {
@@ -20,7 +21,7 @@ class CarrierFactory
 
     /**
      * @param  int|string|Carrier $carrier
-     * @param  array|null $alternateConfig
+     * @param  array|null         $alternateConfig
      *
      * @return \MyParcelNL\Pdk\Carrier\Model\Carrier
      * @throws \Exception
@@ -58,11 +59,9 @@ class CarrierFactory
      */
     private static function findCarrier(string $key, $value, string $type): Carrier
     {
-        $carrier = array_values(
-            array_filter(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
-                return ($value === $row[$key] && $type === $row[Carrier::TYPE_NAME]);
-            }, ARRAY_FILTER_USE_BOTH)
-        );
+        $carrier = Arr::first(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
+            return ($value === $row[$key] && $type === $row[Carrier::TYPE_NAME]);
+        }, ARRAY_FILTER_USE_BOTH);
 
         return new Carrier($carrier[0] ?? []);
     }
