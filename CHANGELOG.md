@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.0](https://github.com/myparcelnl/pdk/compare/v1.8.0...v1.9.0) (2022-07-26)
+
+
+### :sparkles: New Features
+
+* carrier object ([#21](https://github.com/myparcelnl/pdk/issues/21)) ([50a6778](https://github.com/myparcelnl/pdk/commit/50a67786a32d876cac334ecf2637b65906e42554))
+
 ## [1.8.0](https://github.com/myparcelnl/pdk/compare/v1.7.2...v1.8.0) (2022-07-21)
 
 
