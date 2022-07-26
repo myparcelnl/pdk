@@ -6,6 +6,10 @@ namespace MyParcelNL\Pdk\Carrier\Model\Options;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 
+/**
+ * @property null|int    $id
+ * @property null|string $name
+ */
 class DeliveryType extends Model
 {
     protected $attributes = [

@@ -10,22 +10,16 @@ use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
 
 class CarrierFactory
 {
-    public const  KEY_CARRIER_ID         = 'id';
-    public const  KEY_CARRIER_NAME       = 'name';
-    public const  KEY_CONTRACT_ID        = 'subscriptionId';
-    public const  TYPE_NAME              = 'type';
-    public const  TYPE_VALUE_CUSTOM      = 'custom';
-    public const  TYPE_VALUE_MAIN        = 'main';
     private const ORDERED_CARRIER_GETTER = [
-        self::KEY_CARRIER_ID   => self::TYPE_VALUE_MAIN,
-        self::KEY_CONTRACT_ID  => self::TYPE_VALUE_CUSTOM,
-        self::KEY_CARRIER_NAME => self::TYPE_VALUE_MAIN,
+        Carrier::KEY_CARRIER_ID      => Carrier::TYPE_VALUE_MAIN,
+        Carrier::KEY_SUBSCRIPTION_ID => Carrier::TYPE_VALUE_CUSTOM,
+        Carrier::KEY_CARRIER_NAME    => Carrier::TYPE_VALUE_MAIN,
     ];
 
     private static $config = [];
 
     /**
-     * @param  int|string $carrier
+     * @param  int|string|Carrier $carrier
      * @param  array|null $alternateConfig
      *
      * @return \MyParcelNL\Pdk\Carrier\Model\Carrier
@@ -62,11 +56,11 @@ class CarrierFactory
      *
      * @return Carrier
      */
-    public static function findCarrier(string $key, $value, string $type): Carrier
+    private static function findCarrier(string $key, $value, string $type): Carrier
     {
         $carrier = array_values(
             array_filter(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
-                return ($value === $row[$key] && $type === $row[self::TYPE_NAME]);
+                return ($value === $row[$key] && $type === $row[Carrier::TYPE_NAME]);
             }, ARRAY_FILTER_USE_BOTH)
         );
 

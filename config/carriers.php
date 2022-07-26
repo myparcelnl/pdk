@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Data\CountryCodes;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Validator\BpostShipmentValidator;
 use MyParcelNL\Pdk\Shipment\Validator\DPDShipmentValidator;
@@ -18,232 +19,205 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 $correctVersion = [
     'carriers' => [
         [
-            'id'            => 1,
-            'name'          => 'postnl',
+            'id'            => Carrier::CARRIER_POSTNL_ID,
+            'name'          => Carrier::CARRIER_POSTNL_NAME,
             'primary'       => 1,
-            'type'          => 'main',
+            'type'          => Carrier::TYPE_VALUE_MAIN,
             'options'       => [
-                'packageTypes' => [
-                    [
-                        'id'           => 1,
-                        'name'         => 'package',
-                        'deliveryType' => [
-                            [
-                                'id'   => 1,
-                                'name' => 'morning',
-                            ],
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
-                            ],
-                            [
-                                'id'   => 3,
-                                'name' => 'evening',
-                            ],
-                            [
-                                'id'   => 4,
-                                'name' => 'pickup',
-                            ],
+                [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 1,
+                            'name' => 'morning',
                         ],
-                        'options'      => [
-                            'signature'        => ['type' => 'boolean'],
-                            'insurance'        => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    0,
-                                    100,
-                                    250,
-                                    500,
-                                    1000,
-                                    1500,
-                                    2000,
-                                    2500,
-                                    3000,
-                                    3500,
-                                    4000,
-                                    4500,
-                                    5000,
-                                ],
-                            ],
-                            'ageCheck'         => ['type' => 'boolean'],
-                            'onlyRecipient'    => ['type' => 'boolean'],
-                            'return'           => ['type' => 'boolean'],
-                            'sameDayDelivery'  => ['type' => 'boolean'],
-                            'largeFormat'      => ['type' => 'boolean'],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 30000,
-                            ],
+                        [
+                            'id'   => 3,
+                            'name' => 'evening',
+                        ],
+                        [
+                            'id'   => 4,
+                            'name' => 'pickup',
                         ],
                     ],
-                    [
-                        'id'           => 2,
-                        'name'         => 'mailbox',
-                        'options'      => [
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
+                    'shipmentOptions' => [
+                        'signature'        => true,
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                100,
+                                250,
+                                500,
+                                1000,
+                                1500,
+                                2000,
+                                2500,
+                                3000,
+                                3500,
+                                4000,
+                                4500,
+                                5000,
                             ],
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 2000,
-                            ],
+                        'ageCheck'         => true,
+                        'onlyRecipient'    => true,
+                        'return'           => true,
+                        'sameDayDelivery'  => true,
+                        'largeFormat'      => true,
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
-                    [
-                        'id'           => 3,
-                        'name'         => 'letter',
-                        'options'      => [],
-                        'requirements' => [],
+                ],
+                [
+                    'packageType'     => [
+                        'id'   => 2,
+                        'name' => 'mailbox',
                     ],
-                    [
-                        'id'           => 4,
-                        'name'         => 'digital_stamp',
-                        'options'      => [
-                            'weightClasses' => [
-                                [0, 20],
-                                [20, 50],
-                                [50, 100],
-                                [100, 350],
-                                [350, 2000],
-                            ],
+                    'shipmentOptions' => [
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 2000,
-                            ],
+                    ],
+                ],
+                [
+                    'packageType'     => [
+                        'id'   => 3,
+                        'name' => 'letter',
+                    ],
+                    'shipmentOptions' => [],
+                    'requirements'    => [],
+                ],
+                [
+                    'packageType'     => [
+                        'id'   => 4,
+                        'name' => 'digital_stamp',
+                    ],
+                    'shipmentOptions' => [
+                        'weightClasses' => [
+                            [0, 20],
+                            [20, 50],
+                            [50, 100],
+                            [100, 350],
+                            [350, 2000],
                         ],
                     ],
                 ],
             ],
             'returnOptions' => [
                 [
-                    'packageTypes' => [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
                         [
-                            'id'            => 1,
-                            'name'          => 'package',
-                            'deliveryTypes' => [
-                                [
-                                    'id'   => 2,
-                                    'name' => 'standard',
-                                ],
-                            ],
-                            'options'       => [
-                                'signature'        => ['type' => 'boolean'],
-                                'insurance'        => [
-                                    'type' => 'integer',
-                                    'enum' => [
-                                        0,
-                                        100,
-                                        250,
-                                        500,
-                                        1000,
-                                        1500,
-                                        2000,
-                                        2500,
-                                        3000,
-                                        3500,
-                                        4000,
-                                        4500,
-                                        5000,
-                                    ],
-                                ],
-                                'return'           => ['type' => 'boolean'],
-                                'ageCheck'         => ['type' => 'boolean'],
-                                'onlyRecipient'    => ['type' => 'boolean'],
-                                'sameDayDelivery'  => ['type' => 'boolean'],
-                                'largeFormat'      => ['type' => 'boolean'],
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'shipmentOptions' => [
+                        'signature'        => ['type' => 'boolean'],
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                100,
+                                250,
+                                500,
+                                1000,
+                                1500,
+                                2000,
+                                2500,
+                                3000,
+                                3500,
+                                4000,
+                                4500,
+                                5000,
                             ],
                         ],
-                        [
-                            'id'      => 2,
-                            'name'    => 'mailbox',
-                            'options' => [
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
-                            ],
+                        'return'           => ['type' => 'boolean'],
+                        'ageCheck'         => ['type' => 'boolean'],
+                        'onlyRecipient'    => ['type' => 'boolean'],
+                        'sameDayDelivery'  => ['type' => 'boolean'],
+                        'largeFormat'      => ['type' => 'boolean'],
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
+                        ],
+                    ],
+                ],
+                [
+                    'packageType'     => [
+                        'id'   => 2,
+                        'name' => 'mailbox',
+                    ],
+                    'shipmentOptions' => [
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
                 ],
             ],
         ],
         [
-            'id'            => 5,
-            'name'          => 'instabox',
+            'id'            => Carrier::CARRIER_INSTABOX_ID,
+            'name'          => Carrier::CARRIER_INSTABOX_NAME,
             'primary'       => 1,
-            'type'          => 'main',
+            'type'          => Carrier::TYPE_VALUE_MAIN,
             'options'       => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
-                            ],
-                        ],
-                        'options'       => [
-                            'signature'        => ['type' => 'boolean'],
-                            'ageCheck'         => ['type' => 'boolean'],
-                            'onlyRecipient'    => ['type' => 'boolean'],
-                            'return'           => ['type' => 'boolean'],
-                            'sameDayDelivery'  => ['type' => 'boolean'],
-                            'largeFormat'      => ['type' => 'boolean'],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
-                        ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 30000,
-                            ],
+                [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
                         ],
                     ],
-                    [
-                        'id'           => 2,
-                        'name'         => 'mailbox',
-                        'options'      => [
-                            'signature'        => ['type' => 'boolean'],
-                            'sameDayDelivery'  => ['type' => 'boolean'],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
+                    'shipmentOptions' => [
+                        'signature'        => true,
+                        'ageCheck'         => true,
+                        'onlyRecipient'    => true,
+                        'return'           => true,
+                        'sameDayDelivery'  => true,
+                        'largeFormat'      => true,
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
-                        'requirements' => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 2000,
-                            ],
+                    ],
+                ],
+                [
+                    'packageType'     => [
+                        'id'   => 2,
+                        'name' => 'mailbox',
+                    ],
+                    'shipmentOptions' => [
+                        'signature'        => true,
+                        'sameDayDelivery'  => true,
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
                 ],
@@ -251,141 +225,114 @@ $correctVersion = [
             'returnOptions' => [],
         ],
         [
-            'id'             => 2,
-            'name'           => 'bpost',
+            'id'             => Carrier::CARRIER_BPOST_ID,
+            'name'           => Carrier::CARRIER_BPOST_NAME,
             'subscriptionId' => 10921,
             'primary'        => 0,
-            'type'           => 'custom',
+            'type'           => Carrier::TYPE_VALUE_CUSTOM,
             'options'        => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
+                [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'shipmentOptions' => [
+                        'insurance'            => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                500,
                             ],
                         ],
-                        'options'       => [
-                            'insurance'            => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    0,
-                                    500,
-                                ],
-                            ],
-                            'signature'            => ['type' => 'boolean'],
-                            'saturdayDelivery'     => ['type' => 'boolean'],
-                            'dropOffAtPostalPoint' => ['type' => 'boolean'],
-                            'return'               => ['type' => 'boolean'],
-                            'labelDescription'     => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
-                        ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 30000,
-                            ],
+                        'signature'            => true,
+                        'saturdayDelivery'     => true,
+                        'dropOffAtPostalPoint' => true,
+                        'return'               => true,
+                        'labelDescription'     => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
                 ],
             ],
             'returnOptions'  => [
                 [
-                    'packageTypes' => [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
                         [
-                            'id'            => 1,
-                            'name'          => 'package',
-                            'deliveryTypes' => [
-                                [
-                                    'id'   => 2,
-                                    'name' => 'standard',
-                                ],
-                            ],
-                            'options'       => [
-                                'signature'        => ['type' => 'boolean'],
-                                'insurance'        => [
-                                    'type' => 'integer',
-                                    'enum' => [
-                                        0,
-                                        100,
-                                        250,
-                                        500,
-                                        1000,
-                                        1500,
-                                        2000,
-                                        2500,
-                                        3000,
-                                        3500,
-                                        4000,
-                                        4500,
-                                        5000,
-                                    ],
-                                ],
-                                'largeFormat'      => ['type' => 'boolean'],
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'shipmentOptions' => [
+                        'signature'        => true,
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                100,
+                                250,
+                                500,
+                                1000,
+                                1500,
+                                2000,
+                                2500,
+                                3000,
+                                3500,
+                                4000,
+                                4500,
+                                5000,
                             ],
                         ],
-                        [
-                            'id'      => 2,
-                            'name'    => 'mailbox',
-                            'options' => [
-                                'labelDescription' => [
-                                    'type'          => 'string',
-                                    'minimumLength' => 0,
-                                    'maximumLength' => 45,
-                                ],
-                            ],
+                        'largeFormat'      => true,
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
                 ],
             ],
         ],
         [
-            'id'             => 4,
-            'name'           => 'dpd',
+            'id'             => Carrier::CARRIER_DPD_ID,
+            'name'           => Carrier::CARRIER_DPD_NAME,
             'subscriptionId' => 10932621,
             'primary'        => 0,
-            'type'           => 'custom',
+            'type'           => Carrier::TYPE_VALUE_CUSTOM,
             'options'        => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
+                [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'shipmentOptions' => [
+                        'insurance'        => [
+                            'type' => 'integer',
+                            'enum' => [
+                                520,
                             ],
                         ],
-                        'options'       => [
-                            'insurance'        => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    520,
-                                ],
-                            ],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
-                        ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 31500,
-                            ],
+                        'labelDescription' => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
                 ],
@@ -393,45 +340,43 @@ $correctVersion = [
             'returnOptions'  => [],
         ],
         [
-            'id'            => 6,
-            'name'          => 'bpost',
+            'id'            => Carrier::CARRIER_BPOST_ID,
+            'name'          => Carrier::CARRIER_BPOST_NAME,
             'primary'       => 1,
-            'type'          => 'main',
-            'options'       => [
-                'packageTypes' => [
-                    [
-                        'id'            => 1,
-                        'name'          => 'package',
-                        'deliveryTypes' => [
-                            [
-                                'id'   => 2,
-                                'name' => 'standard',
+            'type'          => Carrier::TYPE_VALUE_MAIN,
+            'options'        => [
+                [
+                    'packageType'     => [
+                        'id'   => 1,
+                        'name' => 'package',
+                    ],
+                    'deliveryTypes'   => [
+                        [
+                            'id'   => 2,
+                            'name' => 'standard',
+                        ],
+                    ],
+                    'shipmentOptions' => [
+                        'insurance'            => [
+                            'type' => 'integer',
+                            'enum' => [
+                                0,
+                                500,
                             ],
                         ],
-                        'options'       => [
-                            'insurance'        => [
-                                'type' => 'integer',
-                                'enum' => [
-                                    520,
-                                ],
-                            ],
-                            'labelDescription' => [
-                                'type'          => 'string',
-                                'minimumLength' => 0,
-                                'maximumLength' => 45,
-                            ],
-                        ],
-                        'requirements'  => [
-                            'weight' => [
-                                'type'    => 'integer',
-                                'minimum' => 1,
-                                'maximum' => 31500,
-                            ],
+                        'signature'            => true,
+                        'saturdayDelivery'     => true,
+                        'dropOffAtPostalPoint' => true,
+                        'return'               => true,
+                        'labelDescription'     => [
+                            'type'      => 'string',
+                            'minLength' => 0,
+                            'maxLength' => 45,
                         ],
                     ],
                 ],
             ],
-            'returnOptions' => [],
+            'returnOptions'  => [],
         ],
     ],
 ];

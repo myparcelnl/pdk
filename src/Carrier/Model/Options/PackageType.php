@@ -5,22 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model\Options;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Carrier\Collection\DeliveryTypeCollection;
-use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
 
+/**
+ * @property null|int    $id
+ * @property null|string $name
+ */
 class PackageType extends Model
 {
     protected $attributes = [
-        'packageTypeId'   => null,
-        'packageTypeName' => null,
-        'deliveryTypes'   => DeliveryTypeCollection::class,
-        'shipmentOptions' => ShipmentOptions::class,
+        'id'   => null,
+        'name' => null,
     ];
 
     protected $casts      = [
-        'packageTypeId'   => 'int',
-        'packageTypeName' => 'string',
-        'deliveryTypes'   => DeliveryTypeCollection::class,
-        'shipmentOptions' => ShipmentOptions::class,
+        'id'   => 'int',
+        'name' => 'string',
     ];
 }
