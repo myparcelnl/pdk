@@ -336,6 +336,10 @@ const MOCK_CONFIG = [
     ],
 ];
 
+beforeEach(function () {
+    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+});
+
 it('creates main carrier by name', function () {
     $carrier = CarrierFactory::create(Carrier::CARRIER_POSTNL_NAME, MOCK_CONFIG);
 
@@ -364,7 +368,7 @@ it('creates custom carrier by subscriptionId', function () {
 });
 
 it('returns same carrier object', function () {
-    $carrier = CarrierFactory::create(10932621, MOCK_CONFIG);
+    $carrier           = CarrierFactory::create(10932621, MOCK_CONFIG);
     $testCarrierObject = CarrierFactory::create($carrier, MOCK_CONFIG);
 
     expect($testCarrierObject)
@@ -421,7 +425,6 @@ it('returns complete carrier object', function () {
 });
 
 it('creates empty carrier and log', function () {
-    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
     $carrier = CarrierFactory::create('thisisnocarrier', MOCK_CONFIG);
 
     expect($carrier->getName())

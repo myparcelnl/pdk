@@ -37,8 +37,8 @@ class CarrierFactory
         foreach (self::ORDERED_CARRIER_GETTER as $key => $typeValue) {
             $createdCarrier = self::findCarrier($key, $carrier, $typeValue);
 
-            if (null !== $createdCarrier->getName()) {
-                return $createdCarrier;
+            if ($createdCarrier) {
+                return new Carrier($createdCarrier);
             }
         }
 
@@ -51,18 +51,16 @@ class CarrierFactory
     }
 
     /**
-     * @param  string       $key
-     * @param  int | string $value
-     * @param  string       $type
+     * @param  string     $key
+     * @param  int|string $value
+     * @param  string     $type
      *
-     * @return Carrier
+     * @return null|array
      */
-    private static function findCarrier(string $key, $value, string $type): Carrier
+    private static function findCarrier(string $key, $value, string $type): ?array
     {
-        $carrier = Arr::first(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
+        return Arr::first(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
             return ($value === $row[$key] && $type === $row[Carrier::TYPE_NAME]);
-        }, ARRAY_FILTER_USE_BOTH);
-
-        return new Carrier($carrier[0] ?? []);
+        });
     }
 }
