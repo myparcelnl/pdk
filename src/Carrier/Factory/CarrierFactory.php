@@ -12,7 +12,7 @@ class CarrierFactory
 {
     public const  KEY_CARRIER_ID         = 'id';
     public const  KEY_CARRIER_NAME       = 'name';
-    public const  KEY_CONTRACT_ID        = 'contractId';
+    public const  KEY_CONTRACT_ID        = 'subscriptionId';
     public const  TYPE_NAME              = 'type';
     public const  TYPE_VALUE_CUSTOM      = 'custom';
     public const  TYPE_VALUE_MAIN        = 'main';

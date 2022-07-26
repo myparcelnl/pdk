@@ -10,11 +10,11 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 const MOCK_CONFIG = [
     'carriers' => [
         [
-            'id'               => 1,
-            'name'             => 'postnl',
-            'primary'          => 1,
-            'type'             => 'main',
-            'recipientOptions' => [
+            'id'            => 1,
+            'name'          => 'postnl',
+            'primary'       => 1,
+            'type'          => 'main',
+            'options'       => [
                 [
                     'packageTypeId'   => 1,
                     'packageTypeName' => 'package',
@@ -80,7 +80,7 @@ const MOCK_CONFIG = [
                     ],
                 ],
                 [
-                    'packageTypeid'   => 3,
+                    'packageTypeId'   => 3,
                     'packageTypeName' => 'letter',
                     'shipmentOptions' => [],
                     'requirements'    => [],
@@ -99,7 +99,7 @@ const MOCK_CONFIG = [
                     ],
                 ],
             ],
-            'returnOptions'    => [
+            'returnOptions' => [
                 [
                     'packageTypeId'   => 1,
                     'packageTypeName' => 'package',
@@ -155,11 +155,11 @@ const MOCK_CONFIG = [
             ],
         ],
         [
-            'id'               => 5,
-            'name'             => 'instabox',
-            'primary'          => 1,
-            'type'             => 'main',
-            'recipientOptions' => [
+            'id'            => 5,
+            'name'          => 'instabox',
+            'primary'       => 1,
+            'type'          => 'main',
+            'options'       => [
                 [
                     'packageTypeId'   => 1,
                     'packageTypeName' => 'package',
@@ -197,15 +197,15 @@ const MOCK_CONFIG = [
                     ],
                 ],
             ],
-            'returnOptions'    => [],
+            'returnOptions' => [],
         ],
         [
-            'id'               => 2,
-            'name'             => 'bpost',
-            'contractId'       => 10921,
-            'primary'          => 0,
-            'type'             => 'custom',
-            'recipientOptions' => [
+            'id'             => 2,
+            'name'           => 'bpost',
+            'subscriptionId' => 10921,
+            'primary'        => 0,
+            'type'           => 'custom',
+            'options'        => [
                 [
                     'packageTypeId'   => 1,
                     'packageTypeName' => 'package',
@@ -235,7 +235,7 @@ const MOCK_CONFIG = [
                     ],
                 ],
             ],
-            'returnOptions'    => [
+            'returnOptions'  => [
                 [
                     'packageTypeId'   => 1,
                     'packageTypeName' => 'package',
@@ -287,12 +287,12 @@ const MOCK_CONFIG = [
             ],
         ],
         [
-            'id'               => 4,
-            'name'             => 'dpd',
-            'contractId'       => 10932621,
-            'primary'          => 0,
-            'type'             => 'custom',
-            'recipientOptions' => [
+            'id'             => 4,
+            'name'           => 'dpd',
+            'subscriptionId' => 10932621,
+            'primary'        => 0,
+            'type'           => 'custom',
+            'options'        => [
                 [
                     'packageTypeId'   => 1,
                     'packageTypeName' => 'package',
@@ -317,7 +317,7 @@ const MOCK_CONFIG = [
                     ],
                 ],
             ],
-            'returnOptions'    => [],
+            'returnOptions'  => [],
         ],
     ],
 ];
@@ -364,7 +364,7 @@ it('creates main carrier by carrierId', function () {
         ->toBe('main');
 });
 
-it('creates custom carrier by contractId', function () {
+it('creates custom carrier by subscriptionId', function () {
     PdkFactory::create(MockConfig::DEFAULT_CONFIG);
 
     $carrier = CarrierFactory::create(10932621, MOCK_CONFIG);

@@ -18,11 +18,11 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 $correctVersion = [
     'carriers' => [
         [
-            'id'               => 1,
-            'name'             => 'postnl',
-            'primary'          => 1,
-            'type'             => 'main',
-            'recipientOptions' => [
+            'id'            => 1,
+            'name'          => 'postnl',
+            'primary'       => 1,
+            'type'          => 'main',
+            'options'       => [
                 'packageTypes' => [
                     [
                         'id'           => 1,
@@ -130,7 +130,7 @@ $correctVersion = [
                     ],
                 ],
             ],
-            'returnOptions'    => [
+            'returnOptions' => [
                 [
                     'packageTypes' => [
                         [
@@ -190,11 +190,11 @@ $correctVersion = [
             ],
         ],
         [
-            'id'               => 5,
-            'name'             => 'instabox',
-            'primary'          => 1,
-            'type'             => 'main',
-            'recipientOptions' => [
+            'id'            => 5,
+            'name'          => 'instabox',
+            'primary'       => 1,
+            'type'          => 'main',
+            'options'       => [
                 'packageTypes' => [
                     [
                         'id'            => 1,
@@ -248,15 +248,15 @@ $correctVersion = [
                     ],
                 ],
             ],
-            'returnOptions'    => [],
+            'returnOptions' => [],
         ],
         [
-            'id'               => 2,
-            'name'             => 'bpost',
-            'contractId'       => 10921,
-            'primary'          => 0,
-            'type'             => 'custom',
-            'recipientOptions' => [
+            'id'             => 2,
+            'name'           => 'bpost',
+            'subscriptionId' => 10921,
+            'primary'        => 0,
+            'type'           => 'custom',
+            'options'        => [
                 'packageTypes' => [
                     [
                         'id'            => 1,
@@ -295,7 +295,7 @@ $correctVersion = [
                     ],
                 ],
             ],
-            'returnOptions'    => [
+            'returnOptions'  => [
                 [
                     'packageTypes' => [
                         [
@@ -351,12 +351,12 @@ $correctVersion = [
             ],
         ],
         [
-            'id'               => 4,
-            'name'             => 'dpd',
-            'contractId'       => 10932621,
-            'primary'          => 0,
-            'type'             => 'custom',
-            'recipientOptions' => [
+            'id'             => 4,
+            'name'           => 'dpd',
+            'subscriptionId' => 10932621,
+            'primary'        => 0,
+            'type'           => 'custom',
+            'options'        => [
                 'packageTypes' => [
                     [
                         'id'            => 1,
@@ -390,14 +390,14 @@ $correctVersion = [
                     ],
                 ],
             ],
-            'returnOptions'    => [],
+            'returnOptions'  => [],
         ],
         [
-            'id'               => 6,
-            'name'             => 'bpost',
-            'primary'          => 1,
-            'type'             => 'main',
-            'recipientOptions' => [
+            'id'            => 6,
+            'name'          => 'bpost',
+            'primary'       => 1,
+            'type'          => 'main',
+            'options'       => [
                 'packageTypes' => [
                     [
                         'id'            => 1,
@@ -431,7 +431,7 @@ $correctVersion = [
                     ],
                 ],
             ],
-            'returnOptions'    => [],
+            'returnOptions' => [],
         ],
     ],
 ];
