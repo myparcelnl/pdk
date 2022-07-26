@@ -355,6 +355,7 @@ it('creates main carrier by name', function () {
 
 it('creates main carrier by carrierId', function () {
     $carrier = CarrierFactory::create(5, MOCK_CONFIG);
+
     expect($carrier->getName())
         ->toBe('instabox')
         ->and($carrier->getType())
@@ -363,6 +364,7 @@ it('creates main carrier by carrierId', function () {
 
 it('creates custom carrier by contractId', function () {
     $carrier = CarrierFactory::create(10932621, MOCK_CONFIG);
+
     expect($carrier->getName())
         ->toBe('dpd')
         ->and($carrier->getType())

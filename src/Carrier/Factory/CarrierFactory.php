@@ -5,19 +5,22 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Factory;
 
 use MyParcelNL\Pdk\Base\Config;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 
 class CarrierFactory
 {
-    public const KEY_CARRIER_ID    = 'id';
-    public const KEY_CARRIER_NAME  = 'name';
-    public const KEY_CONTRACT_ID   = 'contractId';
-    public const TYPE_NAME         = 'type';
-    public const TYPE_VALUE_CUSTOM = 'custom';
-    public const TYPE_VALUE_MAIN   = 'main';
+    public const  KEY_CARRIER_ID         = 'id';
+    public const  KEY_CARRIER_NAME       = 'name';
+    public const  KEY_CONTRACT_ID        = 'contractId';
+    public const  TYPE_NAME              = 'type';
+    public const  TYPE_VALUE_CUSTOM      = 'custom';
+    public const  TYPE_VALUE_MAIN        = 'main';
+    private const ORDERED_CARRIER_GETTER = [
+        self::KEY_CARRIER_ID   => self::TYPE_VALUE_MAIN,
+        self::KEY_CONTRACT_ID  => self::TYPE_VALUE_CUSTOM,
+        self::KEY_CARRIER_NAME => self::TYPE_VALUE_MAIN,
+    ];
 
     private static $config = [];
 
@@ -30,30 +33,26 @@ class CarrierFactory
      */
     public static function create($carrier, array $alternateConfig = null): Carrier
     {
+        if (is_a($carrier, Carrier::class)) {
+            return $carrier;
+        }
+
         self::$config = $alternateConfig ?? Config::get('carriers');
 
-        $followOrdered = [
-            self::KEY_CARRIER_ID => self::TYPE_VALUE_MAIN,
-            self::KEY_CONTRACT_ID => self::TYPE_VALUE_CUSTOM,
-            self::KEY_CARRIER_NAME => self::TYPE_VALUE_MAIN,
-        ];
-
-        $list = [];
-        foreach($followOrdered as $key => $typeValue) {
+        foreach (self::ORDERED_CARRIER_GETTER as $key => $typeValue) {
             $createdCarrier = self::createFrom($key, $carrier, $typeValue);
+
             if ($createdCarrier) {
-                $list[] = array_shift($createdCarrier);
+                return new Carrier($createdCarrier);
             }
         }
 
-        if (empty($list)) {
-            DefaultLogger::warning('Could not find any carrier inside config', [
-                'carrier' => $carrier,
-                'config'  => self::$config,
-            ]);
-        }
+        DefaultLogger::warning('Could not find any carrier inside config', [
+            'carrier' => $carrier,
+            'config'  => self::$config,
+        ]);
 
-        return new Carrier(array_shift($list));
+        return new Carrier([]);
     }
 
     /**
@@ -65,8 +64,10 @@ class CarrierFactory
      */
     public static function createFrom(string $key, $value, string $type): array
     {
-        return array_filter(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
+        $carrier = array_filter(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
             return ($value === $row[$key] && $type === $row[self::TYPE_NAME]);
         }, ARRAY_FILTER_USE_BOTH);
+
+        return $carrier[0] ?? [];
     }
 }
