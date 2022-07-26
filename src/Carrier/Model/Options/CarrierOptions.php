@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions;
  * @property null|\MyParcelNL\Pdk\Carrier\Collection\DeliveryTypeCollection $deliveryTypes
  * @property null|\MyParcelNL\Pdk\Shipment\Model\Options\ShipmentOptions    $shipmentOptions
  */
-class PackageTypeOptions extends Model
+class CarrierOptions extends Model
 {
     protected $attributes = [
         'packageType'     => PackageType::class,

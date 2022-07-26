@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Collection;
 
 use MyParcelNL\Pdk\Base\Collection;
-use MyParcelNL\Pdk\Carrier\Model\Options\PackageTypeOptions;
+use MyParcelNL\Pdk\Carrier\Model\Options\CarrierOptions;
 
 /**
- * @property \MyParcelNL\Pdk\Carrier\Model\Options\PackageTypeOptions[] $items
+ * @property \MyParcelNL\Pdk\Carrier\Model\Options\CarrierOptions[] $items
  */
 class CarrierOptionsCollection extends Collection
 {
-    protected $cast = PackageTypeOptions::class;
+    protected $cast = CarrierOptions::class;
 }
