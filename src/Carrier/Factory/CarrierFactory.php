@@ -40,10 +40,10 @@ class CarrierFactory
         self::$config = $alternateConfig ?? Config::get('carriers');
 
         foreach (self::ORDERED_CARRIER_GETTER as $key => $typeValue) {
-            $createdCarrier = self::createFrom($key, $carrier, $typeValue);
+            $createdCarrier = self::findCarrier($key, $carrier, $typeValue);
 
-            if ($createdCarrier) {
-                return new Carrier($createdCarrier);
+            if (null !== $createdCarrier->getName()) {
+                return $createdCarrier;
             }
         }
 
@@ -56,18 +56,20 @@ class CarrierFactory
     }
 
     /**
-     * @param  string $key
-     * @param         $value
-     * @param  string $type
+     * @param  string       $key
+     * @param  int | string $value
+     * @param  string       $type
      *
-     * @return array
+     * @return Carrier
      */
-    public static function createFrom(string $key, $value, string $type): array
+    public static function findCarrier(string $key, $value, string $type): Carrier
     {
-        $carrier = array_filter(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
-            return ($value === $row[$key] && $type === $row[self::TYPE_NAME]);
-        }, ARRAY_FILTER_USE_BOTH);
+        $carrier = array_values(
+            array_filter(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
+                return ($value === $row[$key] && $type === $row[self::TYPE_NAME]);
+            }, ARRAY_FILTER_USE_BOTH)
+        );
 
-        return $carrier[0] ?? [];
+        return new Carrier($carrier[0] ?? []);
     }
 }

@@ -354,6 +354,8 @@ it('creates main carrier by name', function () {
 });
 
 it('creates main carrier by carrierId', function () {
+    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+
     $carrier = CarrierFactory::create(5, MOCK_CONFIG);
 
     expect($carrier->getName())
@@ -363,6 +365,8 @@ it('creates main carrier by carrierId', function () {
 });
 
 it('creates custom carrier by contractId', function () {
+    PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+
     $carrier = CarrierFactory::create(10932621, MOCK_CONFIG);
 
     expect($carrier->getName())
