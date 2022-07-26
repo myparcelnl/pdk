@@ -60,7 +60,7 @@ class CarrierFactory
     private static function findCarrier(string $key, $value, string $type): ?array
     {
         return Arr::first(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
-            return ($value===$row[$key] && $type===$row[Carrier::TYPE_NAME]);
+            return ($value === $row[$key] && $type === $row[Carrier::TYPE_NAME]);
         });
     }
 }
