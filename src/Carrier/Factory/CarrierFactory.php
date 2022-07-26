@@ -12,9 +12,9 @@ use MyParcelNL\Sdk\src\Support\Arr;
 class CarrierFactory
 {
     private const ORDERED_CARRIER_GETTER = [
-        Carrier::KEY_CARRIER_ID      => Carrier::TYPE_VALUE_MAIN,
-        Carrier::KEY_SUBSCRIPTION_ID => Carrier::TYPE_VALUE_CUSTOM,
-        Carrier::KEY_CARRIER_NAME    => Carrier::TYPE_VALUE_MAIN,
+        'id'             => Carrier::TYPE_VALUE_MAIN,
+        'subscriptionId' => Carrier::TYPE_VALUE_CUSTOM,
+        'name'           => Carrier::TYPE_VALUE_MAIN,
     ];
 
     private static $config = [];
@@ -60,7 +60,7 @@ class CarrierFactory
     private static function findCarrier(string $key, $value, string $type): ?array
     {
         return Arr::first(self::$config['carriers'], static function ($row) use ($key, $value, $type) {
-            return ($value === $row[$key] && $type === $row[Carrier::TYPE_NAME]);
+            return ($value===$row[$key] && $type===$row[Carrier::TYPE_NAME]);
         });
     }
 }

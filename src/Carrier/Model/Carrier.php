@@ -30,9 +30,6 @@ class Carrier extends Model
     public const         CARRIER_BPOST_NAME    = 'bpost';
     public const         CARRIER_DPD_NAME      = 'dpd';
     public const         CARRIER_INSTABOX_NAME = 'instabox';
-    public const         KEY_CARRIER_ID        = 'id';
-    public const         KEY_CARRIER_NAME      = 'name';
-    public const         KEY_SUBSCRIPTION_ID   = 'subscriptionId';
     public const         TYPE_NAME             = 'type';
     public const         TYPE_VALUE_CUSTOM     = 'custom';
     public const         TYPE_VALUE_MAIN       = 'main';
