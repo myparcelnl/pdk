@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.1](https://github.com/myparcelnl/pdk/compare/v1.9.0...v1.9.1) (2022-07-27)
+
+
+### :zap: Performance Improvements
+
+* improve model toArray performance ([bc5c048](https://github.com/myparcelnl/pdk/commit/bc5c048167ff0eba0d3fa2b91da6c07391749888))
+
 ## [1.9.0](https://github.com/myparcelnl/pdk/compare/v1.8.0...v1.9.0) (2022-07-26)
 
 
