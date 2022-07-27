@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.2](https://github.com/myparcelnl/pdk/compare/v1.9.1...v1.9.2) (2022-07-27)
+
+
+### :zap: Performance Improvements
+
+* improve model attributes performance ([a84e1c7](https://github.com/myparcelnl/pdk/commit/a84e1c79cb767c6e156d2ad34972334eeda00292))
+
 ## [1.9.1](https://github.com/myparcelnl/pdk/compare/v1.9.0...v1.9.1) (2022-07-27)
 
 
