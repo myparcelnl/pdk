@@ -181,9 +181,11 @@ trait HasAttributes
      */
     public function getAttributes(string $case = null): array
     {
-        $this->mergeAttributesFromClassCasts();
+        if ($case) {
+            return Utils::changeArrayKeysCase($this->attributes, $case);
+        }
 
-        return Utils::changeArrayKeysCase($this->attributes, $case);
+        return $this->attributes;
     }
 
     /**
@@ -587,21 +589,6 @@ trait HasAttributes
         }
 
         return false;
-    }
-
-    /**
-     * @return void
-     */
-    protected function mergeAttributesFromClassCasts(): void
-    {
-        $attributes = [];
-
-        foreach ($this->classCastCache as $key => $value) {
-            $key              = $this->convertAttributeCase($key);
-            $attributes[$key] = $value;
-        }
-
-        $this->attributes = array_merge($this->attributes, $attributes);
     }
 
     /**
