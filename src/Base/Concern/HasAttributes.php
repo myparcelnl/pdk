@@ -100,19 +100,7 @@ trait HasAttributes
      */
     public function attributesToArray(string $case = null): array
     {
-        $attributes = $this->getAttributes($case);
-
-        $attributes = $this->addMutatedAttributesToArray(
-            $attributes,
-            array_keys($attributes),
-            $case
-        );
-
-        foreach ($this->getArrayableAttributes() as $key => $value) {
-            $key              = $this->convertAttributeCase($key, $case);
-            $attributes[$key] = $this->mutateAttributeForArray($key, $value);
-        }
-
+        $attributes        = $this->getAttributes($case);
         $mutatedAttributes = $this->getMutatedAttributes();
 
         $attributes = $this->addMutatedAttributesToArray(
