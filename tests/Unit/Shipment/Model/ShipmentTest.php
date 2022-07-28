@@ -71,5 +71,5 @@ it('passes carrier to delivery options', function () {
     expect(
         $shipment->getDeliveryOptions()
             ->getCarrier()
-    )->toEqual('postnl');
+    )->toEqual(CarrierOptions::CARRIER_POSTNL_NAME);
 });

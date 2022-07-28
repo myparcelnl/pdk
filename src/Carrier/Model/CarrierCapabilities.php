@@ -9,9 +9,9 @@ use MyParcelNL\Pdk\Shipment\Collection\DeliveryTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 /**
- * @property null|\MyParcelNL\Pdk\Shipment\Model\PackageType                 $packageType
- * @property null|\MyParcelNL\Pdk\Shipment\Collection\DeliveryTypeCollection $deliveryTypes
- * @property null|\MyParcelNL\Pdk\Shipment\Model\ShipmentOptions             $shipmentOptions
+ * @property \MyParcelNL\Pdk\Shipment\Model\PackageType                 $packageType
+ * @property \MyParcelNL\Pdk\Shipment\Collection\DeliveryTypeCollection $deliveryTypes
+ * @property \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions             $shipmentOptions
  */
 class CarrierCapabilities extends Model
 {

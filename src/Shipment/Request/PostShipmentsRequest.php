@@ -47,15 +47,12 @@ class PostShipmentsRequest extends AbstractRequest
      */
     public function getBody(): string
     {
-        $group = $this->groupByMultiCollo();
-        $map   = $group
-            ->flatMap(function (Collection $groupedShipments) {
-                return [$this->encodeShipment($groupedShipments)];
-            });
-
         return json_encode([
             'data' => [
-                'shipments' => $map
+                'shipments' => $this->groupByMultiCollo()
+                    ->flatMap(function (Collection $groupedShipments) {
+                        return [$this->encodeShipment($groupedShipments)];
+                    })
                     ->toArrayWithoutNull(),
             ],
         ]);
@@ -161,7 +158,7 @@ class PostShipmentsRequest extends AbstractRequest
             'status'               => $mainShipment->status,
             'options'              => $this->encodeOptions($mainShipment),
             'physical_properties'  => $mainShipment->physicalProperties
-                ? ['weight' => $mainShipment->physicalProperties->weight]
+                ? ['weight' => $this->getWeight($mainShipment)]
                 : null,
             'pickup'               => $mainShipment->deliveryOptions->pickupLocation
                 ? ['location_code' => $mainShipment->deliveryOptions->pickupLocation->locationCode]
@@ -197,6 +194,16 @@ class PostShipmentsRequest extends AbstractRequest
         return $shipment->deliveryOptions && $shipment->deliveryOptions->packageType
             ? DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->packageType]
             : null;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $mainShipment
+     *
+     * @return null|int
+     */
+    private function getWeight(Shipment $mainShipment): ?int
+    {
+        return $mainShipment->customsDeclaration->weight ?? $mainShipment->physicalProperties->weight;
     }
 
     /**

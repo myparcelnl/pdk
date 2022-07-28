@@ -74,6 +74,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  array  $parameters
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function __call(string $method, array $parameters)
     {
@@ -81,7 +82,7 @@ class Model implements Arrayable, ArrayAccess
         $attribute = Str::camel($trimmed);
 
         if (Str::contains($method, 'get')) {
-            return $this->attributes[$attribute];
+            return $this->getAttribute($attribute);
         }
 
         if (Str::contains($method, 'set')) {

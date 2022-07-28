@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Shipment\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Sdk\src\Concerns\HasApiKey;
 
 /**
  * @property \MyParcelNL\Pdk\Shipment\Model\Shipment[] $items
@@ -19,8 +18,6 @@ use MyParcelNL\Sdk\src\Concerns\HasApiKey;
  */
 class ShipmentCollection extends Collection
 {
-    use HasApiKey;
-
     /**
      * @var \MyParcelNL\Pdk\Shipment\Model\Label
      */

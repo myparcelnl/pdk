@@ -37,10 +37,10 @@ class GetShipmentsResponse extends JsonResponse
                                 ],
                                 'sender'                       => [
                                     'cc'                     => 'NL',
-                                    'postal_code'            => '2132 WT',
+                                    'postal_code'            => '2132 JE',
                                     'city'                   => 'Hoofddorp',
-                                    'street'                 => 'Siriusdreef',
-                                    'number'                 => '666',
+                                    'street'                 => 'Antareslaan',
+                                    'number'                 => '31',
                                     'number_suffix'          => '',
                                     'person'                 => 'Denzel Crocker',
                                     'company'                => 'Geheime Dingen',

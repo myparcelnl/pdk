@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Api\Service\AbstractApiService;
  */
 class MyParcelApiService extends AbstractApiService
 {
-    public const  DEFAULT_BASE_URL = 'https://api.myparcel.nl';
+    private const DEFAULT_BASE_URL = 'https://api.myparcel.nl';
     private const DEFAULT_CONFIG   = [
         'baseUrl' => self::DEFAULT_BASE_URL,
         'client'  => Client::class,

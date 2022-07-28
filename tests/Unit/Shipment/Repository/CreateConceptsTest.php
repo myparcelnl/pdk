@@ -73,7 +73,7 @@ it('creates a valid request from a shipment collection', function (array $input,
         )
         ->toEqual($output);
 })->with([
-    'bare minimum'               => [
+    'bare minimum'                                => [
         'input'  => [
             [
                 'carrier'   => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
@@ -87,7 +87,7 @@ it('creates a valid request from a shipment collection', function (array $input,
             ]),
         ],
     ],
-    'simple domestic shipment'   => [
+    'simple domestic shipment'                    => [
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
@@ -131,7 +131,7 @@ it('creates a valid request from a shipment collection', function (array $input,
             ),
         ],
     ],
-    'domestic with pickup'       => [
+    'domestic with pickup'                        => [
         'input'  => [
             [
                 'carrier'         => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
@@ -156,7 +156,7 @@ it('creates a valid request from a shipment collection', function (array $input,
             ),
         ],
     ],
-    'instabox same day delivery' => [
+    'instabox same day delivery'                  => [
         'input'  => [
             [
                 'carrier'         => ['name' => CarrierOptions::CARRIER_INSTABOX_NAME],
@@ -188,7 +188,7 @@ it('creates a valid request from a shipment collection', function (array $input,
             ),
         ],
     ],
-    'eu shipment'                => [
+    'eu shipment'                                 => [
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
@@ -242,7 +242,73 @@ it('creates a valid request from a shipment collection', function (array $input,
             ]),
         ],
     ],
-    'eu shipment with pickup'    => [
+    'shipment with weight in customs declaration' => [
+        'input'  => [
+            [
+                'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
+                'recipient'          => ['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT,
+                'deliveryOptions'    => [
+                    'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                    'pickupLocation' => [
+                        'locationCode' => 34653,
+                    ],
+                ],
+                'physicalProperties' => [
+                    'weight' => 0,
+                ],
+                'customsDeclaration' => [
+                    'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
+                    'invoice'  => '14',
+                    'items'    => [
+                        [
+                            'amount'         => 1,
+                            'classification' => 9609,
+                            'country'        => CountryCodes::CC_BE,
+                            'description'    => 'stofzuiger',
+                            'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
+                            'weight'         => 200,
+                        ],
+                        [
+                            'amount'         => 2,
+                            'classification' => 420690,
+                            'country'        => CountryCodes::CC_NL,
+                            'description'    => 'ruler',
+                            'itemValue'      => ['amount' => 900, 'currency' => 'EUR'],
+                            'weight'         => 120,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'output' => [
+            array_merge(DEFAULT_OUTPUT_RECIPIENT, [
+                'carrier'                                        => CarrierOptions::CARRIER_BPOST_ID,
+                'recipient.cc'                                   => CountryCodes::CC_DE,
+                'pickup.location_code'                           => '34653',
+                'options.delivery_type'                          => 4,
+                'options.package_type'                           => 1,
+                'customs_declaration.contents'                   => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
+                'customs_declaration.invoice'                    => '14',
+                'customs_declaration.items.0.amount'             => 1,
+                'customs_declaration.items.0.classification'     => '9609',
+                'customs_declaration.items.0.country'            => 'BE',
+                'customs_declaration.items.0.description'        => 'stofzuiger',
+                'customs_declaration.items.0.itemValue.amount'   => 5000,
+                'customs_declaration.items.0.itemValue.currency' => 'EUR',
+                'customs_declaration.items.0.weight'             => 200,
+                'customs_declaration.items.1.amount'             => 2,
+                'customs_declaration.items.1.classification'     => '420690',
+                'customs_declaration.items.1.country'            => 'NL',
+                'customs_declaration.items.1.description'        => 'ruler',
+                'customs_declaration.items.1.itemValue.amount'   => 900,
+                'customs_declaration.items.1.itemValue.currency' => 'EUR',
+                'customs_declaration.items.1.weight'             => 120,
+                'customs_declaration.weight'                     => 440,
+                'physical_properties.weight'                     => 440,
+            ]),
+        ],
+    ],
+    'eu shipment with pickup'                     => [
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
@@ -304,7 +370,7 @@ it('creates a valid request from a shipment collection', function (array $input,
             ]),
         ],
     ],
-    'multicollo'                 => [
+    'multicollo'                                  => [
         'input'  => [
             [
                 'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
@@ -328,7 +394,7 @@ it('creates a valid request from a shipment collection', function (array $input,
             ]),
         ],
     ],
-    'multiple shipments'         => [
+    'multiple shipments'                          => [
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],

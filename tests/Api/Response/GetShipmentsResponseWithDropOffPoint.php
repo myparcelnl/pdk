@@ -115,16 +115,14 @@ class GetShipmentsResponseWithDropOffPoint extends JsonResponse
                                 'platform_id'                  => 1,
                                 'origin'                       => 'backoffice_shipment_form',
                                 'user_agent'                   => 'ShipmentForm/',
-                                'secondary_shipments'          => [
-                                ],
+                                'secondary_shipments'          => [],
                                 'collection_contact'           => null,
                                 'multi_collo_main_shipment_id' => null,
                                 'external_identifier'          => null,
                                 'delayed'                      => false,
                                 'delivered'                    => false,
                                 'link_consumer_portal'         => null,
-                                'partner_tracktraces'          => [
-                                ],
+                                'partner_tracktraces'          => [],
                             ],
                         ],
                     ],

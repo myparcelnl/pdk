@@ -32,6 +32,11 @@ class ContactDetails extends Address
         $this->attributes['person']  = null;
         $this->attributes['company'] = null;
 
+        $this->casts['email']   = 'string';
+        $this->casts['phone']   = 'string';
+        $this->casts['person']  = 'string';
+        $this->casts['company'] = 'string';
+
         parent::__construct($data);
     }
 }

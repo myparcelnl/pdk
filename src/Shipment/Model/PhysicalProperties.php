@@ -20,4 +20,11 @@ class PhysicalProperties extends Model
         'weight' => null,
         'width'  => null,
     ];
+
+    protected $casts      = [
+        'height' => 'int',
+        'length' => 'int',
+        'weight' => 'int',
+        'width'  => 'int',
+    ];
 }

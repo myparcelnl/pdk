@@ -61,42 +61,6 @@ class ShipmentRepository extends AbstractRepository
 
         return $collection;
     }
-    //
-    //    /**
-    //     * Download PDF labels directly to the client
-    //     *
-    //     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-    //     *
-    //     * @return void
-    //     */
-    //    public function getLabelLink(ShipmentCollection $collection): void
-    //    {
-    //        echo $collection->label->link;
-    //    }
-    //
-    //    /**
-    //     * Open a new tab containing a PDF file of the Shipment labels
-    //     *
-    //     * @throws \MyParcelNL\Sdk\src\Exception\MissingFieldException
-    //     */
-    //    public function getLabelPdf(ShipmentCollection $collection): void
-    //    {
-    //        if (! $collection->label->pdf) {
-    //            throw new MissingFieldException(
-    //                'First set pdf key with createLabels() before running downloadLabels()'
-    //            );
-    //        }
-    //
-    //        header('Content-Type: application/pdf');
-    //        header('Content-Length: ' . strlen($collection->label->pdf));
-    //        header('Content-disposition: inline; filename="myparcel-label-' . gmdate('Y-M-d H-i-s') . '.pdf"');
-    //        header('Cache-Control: public, must-revalidate, max-age=0');
-    //        header('Pragma: public');
-    //        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-    //
-    //        echo $collection->label->pdf;
-    //        exit;
-    //    }
 
     /**
      * Fetch label pdf from api and fill the label->pdf property of the collection
@@ -161,8 +125,6 @@ class ShipmentRepository extends AbstractRepository
      * @param  null|int                                               $size
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function update(ShipmentCollection $collection, ?int $size = null): ShipmentCollection
     {

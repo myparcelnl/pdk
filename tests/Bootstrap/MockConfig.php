@@ -263,7 +263,7 @@ class MockConfig implements ConfigInterface
             [
                 'id'                 => CarrierOptions::CARRIER_BPOST_ID,
                 'name'               => CarrierOptions::CARRIER_BPOST_NAME,
-                'subscriptionId'     => 10921,
+                'subscriptionId'     => self::ID_CUSTOM_SUBSCRIPTION_BPOST,
                 'primary'            => 0,
                 'type'               => CarrierOptions::TYPE_CUSTOM,
                 'capabilities'       => [
@@ -353,7 +353,7 @@ class MockConfig implements ConfigInterface
             [
                 'id'                 => CarrierOptions::CARRIER_DPD_ID,
                 'name'               => CarrierOptions::CARRIER_DPD_NAME,
-                'subscriptionId'     => 10932621,
+                'subscriptionId'     => self::ID_CUSTOM_SUBSCRIPTION_DPD,
                 'primary'            => 0,
                 'type'               => CarrierOptions::TYPE_CUSTOM,
                 'capabilities'       => [

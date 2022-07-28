@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Collection;
 
 /**
- * @property int                                                                                   $contents
- * @property \MyParcelNL\Pdk\Base\Collection|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem $items
- * @property null|string                                                                           $invoice
- * @property int                                                                                   $weight - Readonly
+ * @property int                                                             $contents
+ * @property \MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItemCollection $items
+ * @property null|string                                                     $invoice
+ * @property int                                                             $weight
  */
 class CustomsDeclaration extends Model
 {
@@ -24,32 +23,16 @@ class CustomsDeclaration extends Model
     protected $attributes = [
         'contents' => self::CONTENTS_COMMERCIAL_GOODS,
         'invoice'  => null,
-        'items'    => Collection::class,
+        'items'    => CustomsDeclarationItemCollection::class,
         'weight'   => null,
     ];
 
     protected $casts      = [
         'contents' => 'int',
         'invoice'  => 'string',
-        'items'    => 'collection:' . CustomsDeclarationItem::class,
+        'items'    => CustomsDeclarationItemCollection::class,
         'weight'   => 'int',
     ];
-
-    /**
-     * @param  \MyParcelNL\Sdk\src\Support\Collection|array[] $items
-     *
-     * @return self
-     */
-    public function setItemsAttribute($items): self
-    {
-        if (! $items instanceof Collection) {
-            $items = new Collection($items);
-        }
-
-        $this->attributes['items'] = $items->mapInto(CustomsDeclarationItem::class);
-
-        return $this;
-    }
 
     /**
      * Calculate weight automatically if it's not present.
