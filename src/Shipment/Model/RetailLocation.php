@@ -22,12 +22,6 @@ use MyParcelNL\Pdk\Base\Model\Address;
  */
 class RetailLocation extends Address
 {
-    protected $casts = [
-        'locationCode'    => 'string',
-        'locationName'    => 'string',
-        'retailNetworkId' => 'string',
-    ];
-
     /**
      * @param  array $data
      */

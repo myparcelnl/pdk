@@ -48,7 +48,7 @@ abstract class AbstractRequest implements RequestInterface
      */
     public function getUniqueKey(): string
     {
-        return "{$this->getPath()}?{$this->getQueryString()}";
+        return sprintf('%s?%s:%s', $this->getPath(), $this->getQueryString(), http_build_query($this->getHeaders()));
     }
 
     /**
