@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 
 const DEFAULT_LOCATION_CODE = '98125';
 const DEFAULT_DATE          = '2022-07-22 06:00:00';
@@ -95,7 +94,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
     'with two items with pickup' => [
         'deliveryOptions' => [
             [
-                'carrier'         => CarrierInstabox::NAME,
+                'carrier'         => CarrierOptions::CARRIER_INSTABOX_NAME,
                 'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'shipmentOptions' => [
                     'signature' => null,
@@ -114,7 +113,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                 ]),
             ],
             [
-                'carrier'         => CarrierInstabox::NAME,
+                'carrier'         => CarrierOptions::CARRIER_INSTABOX_NAME,
                 'date'            => null,
                 'deliveryType'    => null,
                 'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
