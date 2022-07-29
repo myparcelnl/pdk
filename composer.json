@@ -1,44 +1,44 @@
 {
-  "name": "myparcelnl/pdk",
-  "version": "1.9.2",
-  "description": "MyParcel Plugin Development Kit",
-  "type": "library",
-  "homepage": "https://myparcel.nl",
-  "license": "MIT",
-  "require": {
-    "myparcelnl/sdk": ">= 7",
-    "php": ">=7.1.0",
-    "php-di/php-di": ">= 6",
-    "guzzlehttp/guzzle": ">= 7"
-  },
-  "scripts": {
-    "post-autoload-dump": "php private/generate_helper.php"
-  },
-  "require-dev": {
-    "myparcelnl/devtools": ">= 1",
-    "nette/robot-loader": ">= 3",
-    "pestphp/pest": ">= 1"
-  },
-  "autoload": {
-    "psr-4": {
-      "MyParcelNL\\Pdk\\": "src/"
+    "name": "myparcelnl/pdk",
+    "version": "1.10.0",
+    "description": "MyParcel Plugin Development Kit",
+    "type": "library",
+    "homepage": "https://myparcel.nl",
+    "license": "MIT",
+    "require": {
+        "myparcelnl/sdk": ">= 7",
+        "php": ">=7.1.0",
+        "php-di/php-di": ">= 6",
+        "guzzlehttp/guzzle": ">= 7"
+    },
+    "scripts": {
+        "post-autoload-dump": "php private/generate_helper.php"
+    },
+    "require-dev": {
+        "myparcelnl/devtools": ">= 1",
+        "nette/robot-loader": ">= 3",
+        "pestphp/pest": ">= 1"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyParcelNL\\Pdk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MyParcelNL\\Pdk\\": "tests/Unit",
+            "MyParcelNL\\Pdk\\Tests\\": "tests"
+        }
+    },
+    "authors": [
+        {
+            "name": "Edie Lemoine",
+            "email": "edie@myparcel.nl"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "MyParcelNL\\Pdk\\": "tests/Unit",
-      "MyParcelNL\\Pdk\\Tests\\": "tests"
-    }
-  },
-  "authors": [
-    {
-      "name": "Edie Lemoine",
-      "email": "edie@myparcel.nl"
-    }
-  ],
-  "config": {
-    "allow-plugins": {
-      "pestphp/pest-plugin": true
-    }
-  }
 }
