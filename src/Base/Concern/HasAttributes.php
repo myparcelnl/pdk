@@ -13,6 +13,9 @@ use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
+/**
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ */
 trait HasAttributes
 {
     /**

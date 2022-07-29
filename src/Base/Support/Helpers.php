@@ -9,6 +9,17 @@ use MyParcelNL\Sdk\src\Support\Arr;
 
 class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
 {
+    /**
+     * @param  mixed $target
+     * @param  mixed $key
+     * @param  mixed $default
+     *
+     * @return array|mixed
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function data_get($target, $key, $default = null)
     {
         if (null === $key) {

@@ -13,6 +13,9 @@ use MyParcelNL\Pdk\Base\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 use ReturnTypeWillChange;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class Model implements Arrayable, ArrayAccess
 {
     use HasAttributes;
