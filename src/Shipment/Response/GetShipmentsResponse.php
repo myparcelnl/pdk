@@ -28,7 +28,7 @@ class GetShipmentsResponse extends AbstractApiResponseWithBody
         $parsedBody      = json_decode($body, true);
         $shipments       = $parsedBody['data']['shipments'] ?? [];
         $this->shipments = (new Collection($shipments))->map(
-            function (array $data) {
+            function () {
                 // TODO: make actual shipment class
                 return new PostNLConsignment();
             }

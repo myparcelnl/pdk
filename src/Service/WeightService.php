@@ -68,12 +68,12 @@ class WeightService
         });
 
         if (empty($results)) {
-            $digitalStampRangeWeight = Arr::first($ranges)['average'];
+            $rangeWeight = Arr::first($ranges)['average'];
         } else {
-            $digitalStampRangeWeight = Arr::last($results)['average'];
+            $rangeWeight = Arr::last($results)['average'];
         }
 
-        return $digitalStampRangeWeight;
+        return $rangeWeight;
     }
 
     /**
