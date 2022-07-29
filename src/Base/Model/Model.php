@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Concern\HidesAttributes;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
-use MyParcelNL\Pdk\Base\Utils;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 use ReturnTypeWillChange;
 
@@ -77,6 +77,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  array  $parameters
      *
      * @return mixed
+     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
      */
     public function __call(string $method, array $parameters)
     {
@@ -84,7 +85,7 @@ class Model implements Arrayable, ArrayAccess
         $attribute = Str::camel($trimmed);
 
         if (Str::contains($method, 'get')) {
-            return $this->attributes[$attribute];
+            return $this->getAttribute($attribute);
         }
 
         if (Str::contains($method, 'set')) {

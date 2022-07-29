@@ -9,6 +9,8 @@ use DI\ContainerBuilder;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\MyParcelApiService;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Config;
+use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Logger\AbstractLogger;
@@ -20,6 +22,7 @@ class PdkFactory
 {
     private const PROPERTY_INTERFACES = [
         'api'       => ApiServiceInterface::class,
+        'config'    => ConfigInterface::class,
         'logger.*'  => AbstractLogger::class,
         'storage.*' => StorageInterface::class,
     ];
@@ -57,7 +60,8 @@ class PdkFactory
     private static function getDefaultConfig(): array
     {
         return [
-            'api' => MyParcelApiService::class,
+            'api'    => MyParcelApiService::class,
+            'config' => Config::class,
         ];
     }
 

@@ -46,7 +46,7 @@ class MyParcelApiService extends AbstractApiService
     /**
      * @return array
      */
-    protected function getRequestHeaders(): array
+    protected function getHeaders(): array
     {
         return [
             'authorization' => sprintf('appelboom %s', base64_encode($this->apiKey)),

@@ -14,7 +14,7 @@ class MockApiService extends AbstractApiService
     /**
      * @var \GuzzleHttp\Handler\MockHandler
      */
-    public $mock;
+    private $mock;
 
     public function __construct()
     {
@@ -25,8 +25,19 @@ class MockApiService extends AbstractApiService
         $this->mock       = $mock;
     }
 
+    /**
+     * @return string
+     */
     public function getBaseUrl(): string
     {
-        return 'MOCK_API';
+        return 'API';
+    }
+
+    /**
+     * @return \GuzzleHttp\Handler\MockHandler
+     */
+    public function getMock(): MockHandler
+    {
+        return $this->mock;
     }
 }

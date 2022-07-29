@@ -4,23 +4,24 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
-use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\MyParcelApiErrorResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\NotFoundResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\UnprocessableEntityResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Exception\ApiException;
-use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 
 it('handles various error responses', function (string $response) {
-    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
-    $api->mock->append(new $response());
+    $api->getMock()
+        ->append(new $response());
 
     /** @var \MyParcelNL\Pdk\Account\Repository\ShopRepository $repository */
     $repository = $pdk->get(ShopRepository::class);
@@ -35,18 +36,20 @@ it('handles various error responses', function (string $response) {
 ]);
 
 it('handles a request with a query string', function () {
-    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get('api');
-    $api->mock->append(new ShipmentsResponse());
+    $api->getMock()
+        ->append(new ShipmentsResponse());
 
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
     $repository = $pdk->get(ShipmentRepository::class);
 
-    $shipments = $repository->getShipments('my_ref_id');
+    $shipments = $repository->getByReferenceIdentifiers(['my_ref_id']);
+
     expect($shipments)
         ->toBeInstanceOf(Collection::class)
         ->and($shipments->first())
-        ->toBeInstanceOf(AbstractConsignment::class);
+        ->toBeInstanceOf(Shipment::class);
 });

@@ -3,52 +3,14 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Collection;
 use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 
-class CastingModel extends Model
-{
-    protected $attributes = [
-        'collection'     => [
-            [
-                'value' => 1,
-            ],
-            [
-                'value' => 2,
-            ],
-        ],
-        'object'         => ['property' => 'hello'],
-        'date'           => '2022-01-10',
-        'datetime'       => '2022-01-10 14:03:00',
-        'timestamp'      => '2022-01-10 14:03:00',
-        'string_int'     => '4',
-        'string_bool'    => 'true',
-        'int_string'     => 1234,
-        'int_float'      => 2,
-        'string_float'   => '2',
-        'without_a_cast' => 'whatever',
-        'null'           => null,
-    ];
-
-    protected $casts      = [
-        'collection'   => Collection::class,
-        'object'       => MockCastModel::class,
-        'date'         => 'date',
-        'datetime'     => 'datetime',
-        'timestamp'    => 'timestamp',
-        'string_int'   => 'int',
-        'string_bool'  => 'bool',
-        'int_string'   => 'string',
-        'int_float'    => 'float',
-        'string_float' => 'float',
-        'null'         => 'string',
-    ];
-}
-
 it('casts attributes to classes', function () {
-    $model = new CastingModel();
+    $model = new MockCastingModel();
 
     expect($model->collection)
         ->toBeInstanceOf(Collection::class)
@@ -61,7 +23,7 @@ it('casts attributes to classes', function () {
 });
 
 it('casts attributes to primitives', function ($property, $assertion) {
-    $model = new CastingModel();
+    $model = new MockCastingModel();
 
     expect($model[$property])->{$assertion}();
 })->with([
@@ -73,7 +35,7 @@ it('casts attributes to primitives', function ($property, $assertion) {
 ]);
 
 it('casts everything properly to array', function () {
-    $model = new CastingModel();
+    $model = new MockCastingModel();
 
     expect($model->attributesToArray())->toBe([
         'collection'   => [
@@ -98,6 +60,19 @@ it('casts everything properly to array', function () {
         'withoutACast' => 'whatever',
         'null'         => null,
     ]);
+});
+
+it('can use casted properties', function () {
+    $model = new MockCastingModel();
+
+    $model->object->property = 'pen';
+
+    expect($model->object)
+        ->toBeInstanceOf(MockCastModel::class)
+        ->and($model['object'])
+        ->toBeInstanceOf(MockCastModel::class)
+        ->and($model->getObject())
+        ->toBeInstanceOf(MockCastModel::class);
 });
 
 it('throws error on invalid cast', function () {

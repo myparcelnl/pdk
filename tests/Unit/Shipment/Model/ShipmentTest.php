@@ -1,40 +1,54 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Model\Address;
-use MyParcelNL\Pdk\Shipment\Model\Options\DeliveryOptions;
+use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierDPD;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
-it('warns carrier must be set', function () {
-    new Shipment();
-})->throws(InvalidArgumentException::class);
-
-it('sets carrier correctly', function () {
-    expect((new Shipment(['carrier' => 1]))->carrier)
-        ->toBeInstanceOf(CarrierPostNL::class)
-        ->and((new Shipment(['carrier' => 'bpost']))->carrier)
-        ->toBeInstanceOf(CarrierBpost::class)
-        ->and((new Shipment(['carrier' => new CarrierInstabox()]))->carrier)
-        ->toBeInstanceOf(CarrierInstabox::class)
-        ->and((new Shipment(['carrier' => CarrierDPD::class]))->carrier)
-        ->toBeInstanceOf(CarrierDPD::class);
+beforeEach(function () {
+    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
 });
+
+it('sets carrier correctly', function ($carrier, string $expectedName) {
+    $carrier = is_callable($carrier) ? $carrier() : $carrier;
+
+    expect((new Shipment(['carrier' => $carrier]))->carrier->name)
+        ->toBe($expectedName);
+})->with([
+    'carrier id'      => [
+        'carrier'      => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+        'expectedName' => CarrierOptions::CARRIER_POSTNL_NAME,
+    ],
+    'carrier name'    => [
+        'carrier'      => ['name' => CarrierOptions::CARRIER_INSTABOX_NAME],
+        'expectedName' => CarrierOptions::CARRIER_INSTABOX_NAME,
+    ],
+    'subscription id' => [
+        'carrier'      => ['subscriptionId' => MockConfig::ID_CUSTOM_SUBSCRIPTION_DPD],
+        'expectedName' => CarrierOptions::CARRIER_DPD_NAME,
+    ],
+    'carrier class'   => [
+        'carrier'      => function () { return new CarrierOptions(['name' => CarrierOptions::CARRIER_INSTABOX_NAME]); },
+        'expectedName' => CarrierOptions::CARRIER_INSTABOX_NAME,
+    ],
+]);
 
 it('can hold and expose data', function () {
     $shipment = new Shipment([
-        'carrier'         => new CarrierPostNL(),
+        'carrier'         => new CarrierOptions(['name' => CarrierOptions::CARRIER_POSTNL_NAME]),
         'sender'          => new Address(),
         'recipient'       => new Address(),
         'deliveryOptions' => new DeliveryOptions(),
     ]);
 
     expect($shipment->getCarrier())
-        ->toBeInstanceOf(CarrierPostNL::class)
+        ->toBeInstanceOf(CarrierOptions::class)
         ->and($shipment->getRecipient())
         ->toBeInstanceOf(Address::class)
         ->and($shipment->getSender())
@@ -45,7 +59,7 @@ it('can hold and expose data', function () {
 
 it('passes carrier to delivery options', function () {
     $shipment = new Shipment([
-        'carrier'         => new CarrierPostNL(),
+        'carrier'         => new CarrierOptions(['name' => CarrierOptions::CARRIER_POSTNL_NAME]),
         'deliveryOptions' => new DeliveryOptions([
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
             'shipmentOptions' => [
@@ -55,9 +69,7 @@ it('passes carrier to delivery options', function () {
     ]);
 
     expect(
-        $shipment
-            ->getDeliveryOptions()
+        $shipment->getDeliveryOptions()
             ->getCarrier()
-    )
-        ->toBeInstanceOf(CarrierPostNL::class);
+    )->toEqual(CarrierOptions::CARRIER_POSTNL_NAME);
 });

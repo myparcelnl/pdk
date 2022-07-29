@@ -8,27 +8,27 @@ use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Str;
 
-class Config
+class Config implements ConfigInterface
 {
     private static $cache = [];
 
     /**
-     * @param  string $name
+     * @param  string $key
      *
      * @return mixed
      */
-    public static function get(string $name)
+    public function get(string $key)
     {
         $pathParts = [];
 
-        if (Str::contains($name, '.')) {
-            $pathParts = explode('.', $name);
+        if (Str::contains($key, '.')) {
+            $pathParts = explode('.', $key);
             $filename  = $pathParts[0];
         } else {
-            $filename = $name;
+            $filename = $key;
         }
 
-        $data = self::getConfigFile($filename);
+        $data = $this->getConfigFile($filename);
 
         if (count($pathParts)) {
             array_shift($pathParts);
@@ -43,7 +43,7 @@ class Config
      *
      * @return mixed
      */
-    private static function getConfigFile(string $filename)
+    private function getConfigFile(string $filename)
     {
         if (! isset(self::$cache[$filename])) {
             $path = sprintf('%s/../../config/%s.php', __DIR__, $filename);

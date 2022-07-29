@@ -22,11 +22,6 @@ abstract class AbstractApiService implements ApiServiceInterface
     protected $httpClient;
 
     /**
-     * @return string
-     */
-    abstract public function getBaseUrl(): string;
-
-    /**
      * @param  \MyParcelNL\Pdk\Account\Request\RequestInterface $request
      * @param  string                                           $responseClass
      *
@@ -39,7 +34,7 @@ abstract class AbstractApiService implements ApiServiceInterface
         string           $responseClass
     ): ApiResponseInterface {
         $requestOptions = array_filter([
-            RequestOptions::HEADERS => $this->getRequestHeaders(),
+            RequestOptions::HEADERS => $request->getHeaders() + $this->getHeaders(),
             RequestOptions::BODY    => $request->getBody(),
         ]);
 
@@ -56,8 +51,12 @@ abstract class AbstractApiService implements ApiServiceInterface
 
         if ($responseObject->isErrorResponse()) {
             throw new ApiException(
-                'External request failed. Status code ' . $responseObject->getStatusCode() . " " . implode(
-                    $responseObject->getErrors()
+                sprintf(
+                    'External request failed. Status code %s %s',
+                    $responseObject->getStatusCode(),
+                    implode(
+                        $responseObject->getErrors()
+                    )
                 )
             );
         }
@@ -87,7 +86,7 @@ abstract class AbstractApiService implements ApiServiceInterface
     /**
      * @return array
      */
-    protected function getRequestHeaders(): array
+    protected function getHeaders(): array
     {
         return [];
     }

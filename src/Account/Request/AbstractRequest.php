@@ -7,16 +7,6 @@ namespace MyParcelNL\Pdk\Account\Request;
 abstract class AbstractRequest implements RequestInterface
 {
     /**
-     * @var string|null
-     */
-    protected $body;
-
-    /**
-     * @var string
-     */
-    protected $path;
-
-    /**
      * @return string
      */
     abstract public function getHttpMethod(): string;
@@ -26,7 +16,15 @@ abstract class AbstractRequest implements RequestInterface
      */
     public function getBody(): ?string
     {
-        return $this->body;
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return [];
     }
 
     /**
@@ -34,7 +32,7 @@ abstract class AbstractRequest implements RequestInterface
      */
     public function getPath(): string
     {
-        return $this->path;
+        return '';
     }
 
     /**
@@ -43,6 +41,14 @@ abstract class AbstractRequest implements RequestInterface
     public function getQueryString(): string
     {
         return http_build_query($this->getQueryParameters());
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniqueKey(): string
+    {
+        return sprintf('%s?%s:%s', $this->getPath(), $this->getQueryString(), http_build_query($this->getHeaders()));
     }
 
     /**

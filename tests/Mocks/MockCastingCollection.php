@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Mocks;
 
-use MyParcelNL\Pdk\Base\Collection;
+use MyParcelNL\Pdk\Base\Support\Collection;
 
 class MockCastingCollection extends Collection
 {

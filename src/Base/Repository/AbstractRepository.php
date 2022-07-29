@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Base\Pdk;
 abstract class AbstractRepository
 {
     /**
-     * @var \MyParcelNL\Pdk\Api\MyParcelApiService
+     * @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface
      */
     protected $api;
 
