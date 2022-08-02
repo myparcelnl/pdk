@@ -45,10 +45,10 @@ class DeliveryDateService
 
     public static function getDeliveryDays(DateTime $today): DropOffDayCollection
     {
-        $dropOffDayPossibilities = new DropOffDayPossibilities(Settings::get('settings'));
+        $dropOffPossibilities = new DropOffDayPossibilities(Settings::get('settings'));
         /** @var \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection $dropOffDays */
-        $dropOffDays        = $dropOffDayPossibilities->getDropOffDays();
-        $exceptionDays      = self::getExceptionDays($dropOffDayPossibilities, $today);
+        $dropOffDays        = $dropOffPossibilities->getDropOffDays();
+        $exceptionDays      = self::getExceptionDays($dropOffPossibilities, $today);
         $updatedDropOffDays = $dropOffDays->map(function (DropOffDay $dropOffDay) use ($exceptionDays) {
             $exceptionDateCollection = $exceptionDays->where('date', '==', $dropOffDay->date);
 
@@ -59,8 +59,8 @@ class DeliveryDateService
             return self::mergeDropOffDayPossibilities($dropOffDay, $exceptionDateCollection->first());
         });
 
-        $dropOffDelay       = $dropOffDayPossibilities->getDropOffDelay();
-        $deliveryDaysWindow = $dropOffDayPossibilities->getDeliveryDaysWindow();
+        $dropOffDelay       = $dropOffPossibilities->getDropOffDelay();
+        $deliveryDaysWindow = $dropOffPossibilities->getDeliveryDaysWindow();
 
         return $updatedDropOffDays->where('dispatch', '!=', false)
             ->slice($dropOffDelay, $deliveryDaysWindow);
@@ -79,15 +79,15 @@ class DeliveryDateService
     }
 
     private static function getExceptionDays(
-        DropOffDayPossibilities $dropOffDayPossibilities,
+        DropOffDayPossibilities $dropOffPossibilities,
         DateTime                $today
     ): DropOffDayCollection {
-        $dropOffDelay       = $dropOffDayPossibilities->getDropOffDelay();
-        $deliveryDaysWindow = $dropOffDayPossibilities->getDeliveryDaysWindow();
+        $dropOffDelay       = $dropOffPossibilities->getDropOffDelay();
+        $deliveryDaysWindow = $dropOffPossibilities->getDeliveryDaysWindow();
         $today              = $today->setTime(0, 0);
         $minDate            = clone $today->modify("+$dropOffDelay day");
         $maxDate            = clone $today->modify("+$deliveryDaysWindow day");
-        $exceptionsCalendar = $dropOffDayPossibilities->getDropOffDaysException();
+        $exceptionsCalendar = $dropOffPossibilities->getDropOffDaysException();
 
         return $exceptionsCalendar
             ->where('date', '<=', $maxDate)
