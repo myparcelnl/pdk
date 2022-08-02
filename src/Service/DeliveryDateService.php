@@ -68,12 +68,12 @@ class DeliveryDateService
 
     private static function mergeDropOffDayPossibilities(DropOffDay $dropOffDay, DropOffDay $exceptionDay): DropOffDay
     {
-        $dropOffDayArray              = $dropOffDay->toArray();
-        $exceptionDayArray            = $exceptionDay->toArray();
-        $exceptionDayArrayWithoutNull = array_filter($exceptionDayArray, static function ($value) {
+        $dropOffDayArray    = $dropOffDay->toArray();
+        $exceptionDayArray  = $exceptionDay->toArray();
+        $filteredExceptions = array_filter($exceptionDayArray, static function ($value) {
             return null !== $value;
         });
-        $mergedDropOffDays            = array_replace($dropOffDayArray, $exceptionDayArrayWithoutNull);
+        $mergedDropOffDays  = array_replace($dropOffDayArray, $filteredExceptions);
 
         return new DropOffDay($mergedDropOffDays);
     }
