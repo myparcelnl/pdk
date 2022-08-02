@@ -9,6 +9,7 @@ class MockPdkConfig
     public const DEFAULT_CONFIG = [
         'api'     => MockApiService::class,
         'config'  => MockConfig::class,
+        'settings'=> MockSettings::class,
         'storage' => [
             'default' => MockStorage::class,
         ],
