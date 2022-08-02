@@ -37,6 +37,7 @@ class Model implements Arrayable, ArrayAccess
     public function __construct(?array $data = null)
     {
         $this->attributes = Utils::changeArrayKeysCase($this->attributes);
+        $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $data             = Utils::changeArrayKeysCase($data ?? []);
 
         $this->bootIfNotBooted();
@@ -142,6 +143,11 @@ class Model implements Arrayable, ArrayAccess
     public function fill(array $attributes): self
     {
         foreach ($attributes as $key => $value) {
+            if ($this->isGuarded($key)) {
+                unset($this->attributes[$key]);
+                continue;
+            }
+
             if (is_string($value) && class_exists($value) && Str::contains($value, '\\')) {
                 $value = new $value();
             }

@@ -58,6 +58,11 @@ trait HasAttributes
     protected $dateFormats = ['Y-m-d H:i:s', 'Y-m-d', DateTime::ATOM];
 
     /**
+     * @var array
+     */
+    protected $guarded = [];
+
+    /**
      * The attributes that have been cast using custom classes.
      *
      * @var array
@@ -591,6 +596,20 @@ trait HasAttributes
         }
 
         if (class_exists($castType)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  string $key
+     *
+     * @return bool
+     */
+    protected function isGuarded(string $key): bool
+    {
+        if (array_key_exists($key, $this->guarded)) {
             return true;
         }
 

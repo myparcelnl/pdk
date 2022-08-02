@@ -6,11 +6,14 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Tests\Mocks\ClassWithGuardedAttributes;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
 
 uses()->group('model');
+
+// todo of test guarded hier
 
 it('casts attributes to classes', function () {
     $model = new MockCastingModel();
@@ -103,4 +106,15 @@ it('gets only requested fields with string', function () {
     $model = new MockMutateModel();
 
     expect($model->only('myProperty'))->toHaveKeys(['myProperty']);
+});
+
+it('checks if guarded properties cannot be modified', function () {
+    $model = new ClassWithGuardedAttributes(['field' => 1]);
+
+    $model->field   = 2;
+    $model['field'] = 3;
+    $model->setField(4);
+    $model->fill(['field' => 5]);
+
+    expect($model->field)->toEqual('test');
 });
