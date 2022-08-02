@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Service\DeliveryDateService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
-it('returns today when fed nonsense', function() {
+it('returns today when fed nonsense', function () {
     expect(DeliveryDateService::fixPastDeliveryDate('quiche lorraine'))
         ->toEqual(date('Y-m-d', strtotime('+1 days')) . ' 00:00:00');
 });
@@ -41,12 +41,12 @@ it('returns correct delivery days', function () {
         array_filter(Arr::dot(array_values($deliveryDays->toArray())), function ($item) { return $item !== null; })
     )->toEqual(
         [
-            '0.date'              => '2022-01-01 00:00:00',
-            '0.cutoffTime'        => '15:30',
-            '0.sameDayCutoffTime' => '10:00',
+            '0.date'              => '2022-01-03 00:00:00',
+            '0.cutoffTime'        => '17:00',
             '0.dispatch'          => true,
-            '1.date'              => '2022-01-03 00:00:00',
-            '1.cutoffTime'        => '17:00',
+            '1.date'              => '2022-01-04 00:00:00',
+            '1.cutoffTime'        => '20:00',
+            '1.sameDayCutoffTime' => '09:30',
             '1.dispatch'          => true,
             '2.date'              => '2022-01-06 00:00:00',
             '2.cutoffTime'        => '17:00',
@@ -54,7 +54,7 @@ it('returns correct delivery days', function () {
             '2.dispatch'          => true,
             '3.date'              => '2022-01-07 00:00:00',
             '3.cutoffTime'        => '17:00',
-            '3.sameDayCutoffTime' => '10:00',
+            '3.sameDayCutoffTime' => '8:00',
             '3.dispatch'          => true,
             '4.date'              => '2022-01-08 00:00:00',
             '4.cutoffTime'        => '15:30',

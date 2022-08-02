@@ -81,8 +81,12 @@ class MockSettings implements ConfigInterface
                     'date'     => '2022-01-05 00:00:00',
                     'dispatch' => false,
                 ],
+                [
+                    'date'              => '2022-01-07 00:00:00',
+                    'sameDayCutoffTime' => '8:00',
+                ],
             ],
-            'dropOffDelay'                   => 0,
+            'dropOffDelay'                   => 1,
             'deliveryDaysWindow'             => 7,
         ],
     ];

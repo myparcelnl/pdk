@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property null|boolean                                               $dispatch
  * @property null|string                                                $sameDayCutoffTime
  */
-class DeliveryDay extends Model
+class DropOffDay extends Model
 {
     protected $attributes = [
         'date'              => null,
