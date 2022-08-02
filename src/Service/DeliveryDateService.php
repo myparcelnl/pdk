@@ -48,11 +48,7 @@ class DeliveryDateService
         $dropOffDayPossibilities = new DropOffDayPossibilities(Settings::get('settings'));
         /** @var \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection $dropOffDays */
         $dropOffDays        = $dropOffDayPossibilities->getDropOffDays();
-        $dropOffDelay       = $dropOffDayPossibilities->getDropOffDelay();
-        $deliveryDaysWindow = $dropOffDayPossibilities->getDeliveryDaysWindow();
-
-        $exceptionDays = self::getExceptionDays($dropOffDayPossibilities, $today);
-
+        $exceptionDays      = self::getExceptionDays($dropOffDayPossibilities, $today);
         $updatedDropOffDays = $dropOffDays->map(function (DropOffDay $dropOffDay) use ($exceptionDays) {
             $exceptionDateCollection = $exceptionDays->where('date', '==', $dropOffDay->date);
 
@@ -62,6 +58,9 @@ class DeliveryDateService
 
             return self::mergeDropOffDayPossibilities($dropOffDay, $exceptionDateCollection->first());
         });
+
+        $dropOffDelay       = $dropOffDayPossibilities->getDropOffDelay();
+        $deliveryDaysWindow = $dropOffDayPossibilities->getDeliveryDaysWindow();
 
         return $updatedDropOffDays->where('dispatch', '!=', false)
             ->slice($dropOffDelay, $deliveryDaysWindow);
