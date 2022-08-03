@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Form\Model\Input\RadioButtonInput;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\TextInput;
+use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 
 /**
  * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput        $labelDescription
@@ -18,19 +19,55 @@ use MyParcelNL\Pdk\Form\Model\Input\TextInput;
  */
 class LabelSettingsView extends Model
 {
-    protected $attributes = [
-        'labelDescription'  => TextInput::class,
-        'labelFormat'       => RadioButtonInput::class,
-        'defaultPosition'   => null,
-        'labelOpenDownload' => SelectInput::class,
-        'promptPosition'    => SelectInput::class,
-    ];
+    public function __construct(array $data = null)
+    {
+        $this->attributes['labelDescription']  = [
+            'name'  => 'labelDescription',
+            'type'  => 'text',
+            'label' => 'Label description',
+            'desc'  => 'The maximum length is 45 characters. You can add the following variables to the description',
+        ];
+        $this->attributes['labelSize']         = [
+            'name'    => 'labelSize',
+            'type'    => 'select',
+            'label'   => 'Default label size',
+            'options' => [
+                'a4' => 'A4',
+                'a6' => 'A6',
+            ],
+        ];
+        $this->attributes['defaultPosition']   = [
+            'name'    => 'defaultPosition',
+            'type'    => 'select',
+            'label'   => 'Default label position',
+            'options' => [
+                1 => 'Top left',
+                2 => 'Top right',
+                3 => 'Bottom left',
+                4 => 'Bottom right',
+            ],
+        ];
+        $this->attributes['labelOpenDownload'] = [
+            'name'    => 'labelOpenDownload',
+            'type'    => 'select',
+            'label'   => 'Open or download label',
+            'options' => [
+                true  => 'Open',
+                false => 'Download',
+            ],
+        ];
+        $this->attributes['promptPosition']    = [
+            'name'  => 'promptPosition',
+            'type'  => 'toggle',
+            'label' => 'Prompt for label position',
+        ];
 
-    protected $casts      = [
-        'labelDescription'  => TextInput::class,
-        'labelFormat'       => RadioButtonInput::class,
-        'defaultPosition'   => null,
-        'labelOpenDownload' => SelectInput::class,
-        'promptPosition'    => SelectInput::class,
-    ];
+        $this->casts['labelDescription']  = TextInput::class;
+        $this->casts['labelSize']         = SelectInput::class;
+        $this->casts['defaultPosition']   = SelectInput::class;
+        $this->casts['labelOpenDownload'] = SelectInput::class;
+        $this->casts['promptPosition']    = ToggleInput::class;
+
+        parent::__construct($data);
+    }
 }

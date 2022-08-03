@@ -17,7 +17,7 @@ class LabelSettings extends Model
 {
     protected $attributes = [
         'labelDescription'  => null,
-        'labelFormat'       => null,
+        'labelSize'         => null,
         'defaultPosition'   => null,
         'labelOpenDownload' => null,
         'promptPosition'    => false,
@@ -25,7 +25,7 @@ class LabelSettings extends Model
 
     protected $casts      = [
         'labelDescription'  => 'string',
-        'labelFormat'       => 'string',
+        'labelSize'         => 'string',
         'defaultPosition'   => 'string',
         'labelOpenDownload' => 'string',
         'promptPosition'    => 'bool',
