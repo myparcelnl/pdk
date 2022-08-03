@@ -266,4 +266,10 @@ class CountryCodes
     public const CC_ZA = 'ZA';
     public const CC_ZM = 'ZM';
     public const CC_ZW = 'ZW';
+
+    public const CC_LIST = [
+        'nl' => 'Netherlands',
+        'be' => 'Belgium',
+        'de' => 'Germany',
+    ];
 }

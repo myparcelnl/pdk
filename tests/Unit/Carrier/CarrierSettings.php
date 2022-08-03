@@ -4,16 +4,14 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Form\Inputs\Model\CheckboxInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\DropOffDaySelector;
-use MyParcelNL\Pdk\Form\Inputs\Model\HiddenInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\TextInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Form\Model\Input\Select\DropOffDaySelect;
+use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
+use MyParcelNL\Pdk\Form\Model\Input\TextInput;
+use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
-use MyParcelNL\Pdk\Form\Inputs\Model\SelectInput;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 beforeEach(function () {
     PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
@@ -87,7 +85,7 @@ it('creates a dropoffday selector field', function() {
    $input = CarrierSettingsView::createInput($data);
 
    expect($input)
-       ->toBeInstanceOf(DropOffDaySelector::class);
+       ->toBeInstanceOf(DropOffDaySelect::class);
 });
 
 it('creates all the carriers', function() {

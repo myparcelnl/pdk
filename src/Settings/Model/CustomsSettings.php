@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Form\Model\Input\Select\CountrySelect;
 
 /**
  * @property string $from
@@ -14,14 +15,14 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class CustomsSettings extends Model
 {
     protected $attributes = [
-        'from'   => null,
-        'code'   => null,
-        'origin' => null,
+        'defaultForm'          => null,
+        'defaultCustomsCode'   => null,
+        'defaultCountryOrigin' => CountrySelect::class,
     ];
 
     protected $casts      = [
-        'from'   => 'string',
-        'code'   => 'string',
-        'origin' => 'string',
+        'defaultForm'          => 'string',
+        'defaultCustomsCode'   => 'string',
+        'defaultCountryOrigin' => CountrySelect::class,
     ];
 }

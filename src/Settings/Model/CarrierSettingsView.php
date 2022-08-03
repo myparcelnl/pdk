@@ -5,36 +5,34 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Form\Inputs\Model\CheckboxInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\DropOffDaySelector;
-use MyParcelNL\Pdk\Form\Inputs\Model\HiddenInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\SelectInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput;
-use MyParcelNL\Pdk\Form\Inputs\Model\TextInput;
+use MyParcelNL\Pdk\Form\Model\Input\Select\DropOffDaySelect;
+use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
+use MyParcelNL\Pdk\Form\Model\Input\TextInput;
+use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 
 /**
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowDeliveryOptions
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowEveningDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowMondayDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowMorningDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowOnlyRecipient
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowPickupLocations
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowSameDayDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowSaturdayDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $allowSignature
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowDeliveryOptions
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowEveningDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowMondayDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowMorningDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowOnlyRecipient
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowPickupLocations
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowSameDayDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowSaturdayDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $allowSignature
  * @property                                               $cutoffTime
  * @property                                               $cutoffTimeSameDay
  * @property                                               $dropOffDays
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\ToggleInput $featureShowDeliveryDate
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $priceEveningDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $priceMorningDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $priceOnlyRecipient
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $pricePackageTypeDigitalStamp
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $pricePackageTypeMailbox
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $pricePickup
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $priceSameDayDelivery
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $priceSignature
- * @property \MyParcelNL\Pdk\Form\Inputs\Model\TextInput   $priceStandardDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput  $featureShowDeliveryDate
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $priceEveningDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $priceMorningDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $priceOnlyRecipient
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $pricePackageTypeDigitalStamp
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $pricePackageTypeMailbox
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $pricePickup
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $priceSameDayDelivery
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $priceSignature
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput    $priceStandardDelivery
  */
 class CarrierSettingsView extends Model
 {
@@ -57,7 +55,7 @@ class CarrierSettingsView extends Model
         'allowSignature'               => ToggleInput::class,
         'cutoffTime'                   => null,
         'cutoffTimeSameDay'            => null,
-        'dropOffDays'                  => DropOffDaySelector::class,
+        'dropOffDays'                  => DropOffDaySelect::class,
         'featureShowDeliveryDate'      => SelectInput::class,
         'priceEveningDelivery'         => TextInput::class,
         'priceMorningDelivery'         => TextInput::class,
@@ -82,7 +80,7 @@ class CarrierSettingsView extends Model
         'allowSignature'               => ToggleInput::class,
         'cutoffTime'                   => 'string',
         'cutoffTimeSameDay'            => 'string',
-        'dropOffDays'                  => DropOffDaySelector::class,
+        'dropOffDays'                  => DropOffDaySelect::class,
         'featureShowDeliveryDate'      => SelectInput::class,
         'priceEveningDelivery'         => TextInput::class,
         'priceMorningDelivery'         => TextInput::class,

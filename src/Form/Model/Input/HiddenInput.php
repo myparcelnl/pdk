@@ -2,24 +2,22 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Form\Inputs\Model;
+namespace MyParcelNL\Pdk\Form\Model\Input;
 
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
 
 /**
  * @property string $type
- * @property string $label
- * @property string $desc
  * @property string $name
  */
-class TextInput extends AbstractInput
+class HiddenInput extends AbstractInput
 {
     /**
      * @param  array $data
      */
     public function __construct(array $data = [])
     {
-        $this->attributes['type'] = CarrierSettingsView::INPUT_TEXT;
+        $this->attributes['type'] = CarrierSettingsView::INPUT_HIDDEN;
 
         $this->casts['type'] = 'string';
 

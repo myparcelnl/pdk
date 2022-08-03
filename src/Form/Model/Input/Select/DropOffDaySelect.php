@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Form\Inputs\Model;
+namespace MyParcelNL\Pdk\Form\Model\Input\Select;
 
+use MyParcelNL\Pdk\Form\Model\Input\AbstractInput;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
 
 /**
@@ -12,7 +13,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
  * @property string $label
  * @property string $desc
  */
-class DropOffDaySelector extends AbstractInput
+class DropOffDaySelect extends AbstractInput
 {
     /**
      * @param  array $data

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Form\Inputs\Model;
+namespace MyParcelNL\Pdk\Form\Model\Input;
 
 use MyParcelNL\Pdk\Form\Collection\SelectOptionsCollection;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
