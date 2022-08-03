@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection;
 use MyParcelNL\Pdk\Facade\Config;
-use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 /**

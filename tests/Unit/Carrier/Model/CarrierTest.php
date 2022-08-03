@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 

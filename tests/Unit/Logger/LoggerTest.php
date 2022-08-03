@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Logger;
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('logs logs', function (string $level, string $message, array $context = []) {

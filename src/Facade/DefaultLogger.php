@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Shipment\Collection;
+namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
 
