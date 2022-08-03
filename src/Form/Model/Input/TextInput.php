@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Form\Model\Input;
 
-use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
+use MyParcelNL\Pdk\Settings\Model\View\CarrierSettingsView;
 
 /**
  * @property string $type

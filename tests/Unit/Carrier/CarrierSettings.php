@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Form\Model\Input\Select\DropOffDaySelect;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\TextInput;
 use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
+use MyParcelNL\Pdk\Settings\Model\View\CarrierSettingsView;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 beforeEach(function () {

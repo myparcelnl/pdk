@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Form\Model\Input\Select;
 
 use MyParcelNL\Pdk\Form\Model\Input\AbstractInput;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettingsView;
+use MyParcelNL\Pdk\Settings\Model\View\CarrierSettingsView;
 
 /**
  * @property string $type

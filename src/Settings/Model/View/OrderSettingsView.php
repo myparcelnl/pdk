@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Settings\Model;
+namespace MyParcelNL\Pdk\Settings\Model\View;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 
