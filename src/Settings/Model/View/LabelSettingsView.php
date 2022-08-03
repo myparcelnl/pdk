@@ -11,11 +11,11 @@ use MyParcelNL\Pdk\Form\Model\Input\TextInput;
 use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 
 /**
- * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput        $labelDescription
- * @property \MyParcelNL\Pdk\Form\Model\Input\RadioButtonInput $labelFormat
- * @property \MyParcelNL\Pdk\Form\Model\Input\                 $defaultPosition
- * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput      $labelOpenDownload
- * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput      $promptPosition
+ * @property \MyParcelNL\Pdk\Form\Model\Input\TextInput   $labelDescription
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput labelSize
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $defaultPosition
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $labelOpenDownload
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $promptPosition
  */
 class LabelSettingsView extends Model
 {
