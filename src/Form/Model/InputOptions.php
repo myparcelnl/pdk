@@ -21,7 +21,7 @@ class InputOptions extends Model
 
     protected $casts      = [
         'query' => 'array',
-        'id'    => 'int',
+        'id'    => 'string',
         'name'  => 'string',
     ];
 }
