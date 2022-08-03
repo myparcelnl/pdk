@@ -10,6 +10,9 @@ use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 class OrderSettingsView extends Model
 {
     // todo: import statuslist from plugin platform inside the options
+    // - ignore order statuses
+    // - order status mail
+    // - send notification after
 
     public function __construct(array $data = null)
     {
