@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1](https://github.com/myparcelnl/pdk/compare/v1.10.0...v1.10.1) (2022-08-03)
+
+
+### :bug: Bug Fixes
+
+* **logger:** move facade to correct namespace ([99799b8](https://github.com/myparcelnl/pdk/commit/99799b8d4c8b7b63373fb56d2bb7d7081758fecc))
+
 ## [1.10.0](https://github.com/myparcelnl/pdk/compare/v1.9.2...v1.10.0) (2022-07-29)
 
 
