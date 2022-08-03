@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
  * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput labelSize
  * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $defaultPosition
  * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $labelOpenDownload
- * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $promptPosition
+ * @property \MyParcelNL\Pdk\Form\Model\Input\ToggleInput $promptPosition
  */
 class LabelSettingsView extends Model
 {
