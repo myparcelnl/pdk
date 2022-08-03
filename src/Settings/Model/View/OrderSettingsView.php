@@ -7,6 +7,11 @@ namespace MyParcelNL\Pdk\Settings\Model\View;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 
+/**
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $statusOnLabelCreate
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $statusWhenLabelScanned
+ * @property \MyParcelNL\Pdk\Form\Model\Input\SelectInput $statusWhenDelivered
+ */
 class OrderSettingsView extends Model
 {
     // todo: import statuslist from plugin platform inside the options
