@@ -1,0 +1,36 @@
+{
+    "properties": {
+        "deliveryOptions": {
+            "properties": {
+                "pickupLocation": {
+                    "properties": {
+                        "locationCode": {
+                            "minLength": 5,
+                            "maxLength": 50
+                        }
+                    }
+                },
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "enum": [
+                                0,
+                                50000
+                            ]
+                        },
+                        "signature": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

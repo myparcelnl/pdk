@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Label;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
@@ -34,6 +35,7 @@ class PdkOrder extends Model
         'customsDeclaration'    => CustomsDeclaration::class,
         'deliveryOptions'       => DeliveryOptions::class,
         'lines'                 => PdkOrderLineCollection::class,
+        'physicalProperties'    => PhysicalProperties::class,
         'recipient'             => null,
         'sender'                => null,
         'shipmentPrice'         => null,
@@ -55,6 +57,7 @@ class PdkOrder extends Model
         'customsDeclaration'    => CustomsDeclaration::class,
         'deliveryOptions'       => DeliveryOptions::class,
         'lines'                 => PdkOrderLineCollection::class,
+        'physicalProperties'    => PhysicalProperties::class,
         'recipient'             => ContactDetails::class,
         'sender'                => ContactDetails::class,
         'shipmentPrice'         => 'int',

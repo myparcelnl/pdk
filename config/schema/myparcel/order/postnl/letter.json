@@ -1,0 +1,48 @@
+{
+    "description": "myparcel/order/postnl/letter",
+    "properties": {
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "type": [
+                                "null",
+                                "integer"
+                            ],
+                            "enum": [
+                                0,
+                                null
+                            ]
+                        },
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "signature": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "return": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

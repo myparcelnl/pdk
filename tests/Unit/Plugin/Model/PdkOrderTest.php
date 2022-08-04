@@ -3,9 +3,15 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+
+beforeEach(function () {
+    $this->pdk = PdkFactory::create(MockPdkConfig::create());
+});
 
 it('instantiates shipments', function (array $input) {
     $order = new PdkOrder($input);

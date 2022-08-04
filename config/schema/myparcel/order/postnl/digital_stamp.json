@@ -1,0 +1,55 @@
+{
+    "description": "myparcel/order/postnl/digital_stamp",
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "maximum": 2000
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "type": [
+                                "null",
+                                "integer"
+                            ],
+                            "enum": [
+                                0,
+                                null
+                            ]
+                        },
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "signature": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "return": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

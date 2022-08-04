@@ -1,0 +1,30 @@
+{
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "minimum": 1,
+                    "maximum": 20000
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "enum": [
+                                20000
+                            ]
+                        },
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

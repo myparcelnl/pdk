@@ -1,0 +1,62 @@
+{
+    "description": "myparcel/order/postnl/mailbox",
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "maximum": 2000
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        "pickup",
+                        null
+                    ]
+                },
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "type": [
+                                "null",
+                                "integer"
+                            ],
+                            "enum": [
+                                0,
+                                null
+                            ]
+                        },
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "signature": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "return": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

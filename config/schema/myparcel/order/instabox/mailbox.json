@@ -1,0 +1,40 @@
+{
+    "description": "myparcel/order/instabox/mailbox",
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "maximum": 2000
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "return": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

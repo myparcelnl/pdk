@@ -1,0 +1,113 @@
+{
+    "description": "belgie/order/dpd/base",
+    "type": "array",
+    "allOf": [
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "deliveryType",
+                                "pickupLocation"
+                            ],
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "pickup"
+                                    ]
+                                },
+                                "pickupLocation": {
+                                    "properties": {
+                                        "locationCode": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "onlyRecipient": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "standard",
+                                        null
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "minimum": 1,
+                    "maximum": 31500
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "labelDescription": {
+                            "maxLength": 45
+                        },
+                        "sameDayDelivery": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "return": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "signature": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
