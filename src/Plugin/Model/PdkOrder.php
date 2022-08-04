@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property null|string                                                 $platform
  */
 class PdkOrder extends Model
 {
@@ -26,6 +27,7 @@ class PdkOrder extends Model
         'recipient'          => null,
         'sender'             => null,
         'shipments'          => ShipmentCollection::class,
+        'platform'           => null,
     ];
 
     protected $casts      = [
@@ -34,6 +36,7 @@ class PdkOrder extends Model
         'recipient'          => ContactDetails::class,
         'sender'             => ContactDetails::class,
         'shipments'          => ShipmentCollection::class,
+        'platform'           => 'string',
     ];
 
     /**
