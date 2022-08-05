@@ -90,4 +90,19 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
         return $traits;
     }
+
+    /**
+     * @param  array $arrayA
+     * @param  array $arrayB
+     *
+     * @return array
+     */
+    public static function mergeArraysWithoutNull(array $arrayA, array $arrayB): array
+    {
+        $filtered = array_filter($arrayB, static function ($value) {
+            return null !== $value;
+        });
+
+        return array_replace($arrayA, $filtered);
+    }
 }

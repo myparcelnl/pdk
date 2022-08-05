@@ -17,9 +17,9 @@ it('casts attributes to classes', function () {
         ->and($model->object)
         ->toBeInstanceOf(MockCastModel::class)
         ->and($model->date)
-        ->toBeInstanceOf(DateTime::class)
+        ->toBeInstanceOf(DateTimeImmutable::class)
         ->and($model->datetime)
-        ->toBeInstanceOf(DateTime::class);
+        ->toBeInstanceOf(DateTimeImmutable::class);
 });
 
 it('casts attributes to primitives', function ($property, $assertion) {
