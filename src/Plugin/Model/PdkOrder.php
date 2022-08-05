@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
@@ -16,6 +17,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  * @property null|string                                                 $platform
  */
 class PdkOrder extends Model
@@ -27,6 +29,7 @@ class PdkOrder extends Model
         'recipient'          => null,
         'sender'             => null,
         'shipments'          => ShipmentCollection::class,
+        'physicalProperties' => PhysicalProperties::class,
         'platform'           => null,
     ];
 
@@ -36,6 +39,7 @@ class PdkOrder extends Model
         'recipient'          => ContactDetails::class,
         'sender'             => ContactDetails::class,
         'shipments'          => ShipmentCollection::class,
+        'physicalProperties' => PhysicalProperties::class,
         'platform'           => 'string',
     ];
 

@@ -284,7 +284,13 @@ class ValidationSchema implements ConfigInterface
                                                 4500,
                                                 5000,
                                             ],
-                                            'ageCheck'         => [0, 1],
+                                            'ageCheck'         => [
+                                                'requirements' => [
+                                                    'signature'     => 1,
+                                                    'onlyRecipient' => 1,
+                                                ],
+                                                'values'       => [0, 1],
+                                            ],
                                             'signature'        => [1],
                                             'onlyRecipient'    => [0],
                                             'return'           => [0],
@@ -702,7 +708,7 @@ class ValidationSchema implements ConfigInterface
             ],
         ],
     ];
-    public const EU_COUNTRIES       = [
+    public const EU_COUNTRIES      = [
         'NL',
         'BE',
         'AT',

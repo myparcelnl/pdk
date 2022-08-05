@@ -41,7 +41,9 @@ class Validator
     {
         $arrayToValidate = $this->findValidationArray();
 
-        $this->checkForInvalidOptions($arrayToValidate);
+        $this->checkForInvalidOptions($arrayToValidate['validationScheme']);
+
+        $this->validateRequirements($arrayToValidate['requirements']);
     }
 
     /**
@@ -83,6 +85,22 @@ class Validator
 
         if ($validationResult['invalidOrder']) {
             $this->throwValidationError($validationResult);
+        }
+    }
+
+    /**
+     * @param $requirements
+     *
+     * @return void
+     */
+    private function validateRequirements($requirements): void
+    {
+        if ($requirements['weight']) {
+            $this->validateWeight($requirements['weight']);
+        }
+
+        if ($requirements['labelDescription']) {
+            $this->validateLabelDescription($requirements['labelDescription']);
         }
     }
 
@@ -137,9 +155,15 @@ class Validator
             true
         );
 
-        return $packageType['deliveryTypes'][$deliveryTypeIndex];
+        return [
+            'validationScheme' => $packageType['deliveryTypes'][$deliveryTypeIndex],
+            'requirements'     => $packageType['requirements'],
+        ];
     }
 
+    /**
+     * @return string
+     */
     private function getShippingZone(): string
     {
         $cc = $this->order->recipient->cc;
@@ -159,6 +183,11 @@ class Validator
         return CountryCodes::ZONE_ROW;
     }
 
+    /**
+     * @param  array $validationResult
+     *
+     * @return void
+     */
     private function throwValidationError(array $validationResult): void
     {
         $options = [];
@@ -170,10 +199,62 @@ class Validator
         }
         throw new RuntimeException(
             sprintf(
-                'Order can\'t have option(s) \'%s\' with value(s) \'%s\'',
+                'Order can\'t have option(s) \'%s\' with value(s) \'%s\'.',
                 implode(', ', $options),
                 implode(', ', $values)
             )
         );
+    }
+
+    /**
+     * @param $labelDescriptionRequirements
+     *
+     * @return void
+     */
+    private function validateLabelDescription($labelDescriptionRequirements): void
+    {
+        $labelDescription = $this->order->deliveryOptions->shipmentOptions->labelDescription;
+        $maximumLength    = $labelDescriptionRequirements['maxLength'];
+
+        if (strlen((string) $labelDescription) > $maximumLength) {
+            throw new RuntimeException(
+                sprintf(
+                    'Label description exceeds maximum amount of characters of %s.',
+                    $maximumLength
+                )
+            );
+        }
+    }
+
+    /**
+     * @param $weightRequirements
+     *
+     * @return void
+     */
+    private function validateWeight($weightRequirements): void
+    {
+        $weight        = $this->order->physicalProperties->weight;
+        $minimumWeight = $weightRequirements['minimum'];
+        $maximumWeight = $weightRequirements['maximum'];
+
+        if ($weight < $minimumWeight) {
+            throw new RuntimeException(
+                sprintf(
+                    'Weight of %s doesn\'t meet requirements for the minimum weight of %s.',
+                    $weight,
+                    $minimumWeight
+                )
+            );
+        }
+
+        if ($weight > $maximumWeight) {
+            throw new RuntimeException(
+                sprintf(
+                    'Weight of %s exceeds the maximum weight of %s',
+                    $weight,
+                    $maximumWeight
+                )
+            );
+        }
     }
 }
