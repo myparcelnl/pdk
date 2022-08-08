@@ -168,537 +168,370 @@ class ValidationSchema implements ConfigInterface
     //        ],
     //    ];
     public const VALIDATION_SCHEMA = [
-        'carriers' => [
-            [
-                'id'           => 1,
-                'name'         => 'postnl',
-                'base_cc'      => CountryCodes::CC_NL,
-                'shippingZone' => [
-                    [
-                        'cc'           => CountryCodes::CC_NL,
-                        'packageTypes' => [
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                0,
-                                                100,
-                                                250,
-                                                500,
-                                                1000,
-                                                1500,
-                                                2000,
-                                                2500,
-                                                3000,
-                                                3500,
-                                                4000,
-                                                4500,
-                                                5000,
-                                            ],
-                                            'ageCheck'         => [0, 1],
-                                            'signature'        => [0, 1],
-                                            'onlyRecipient'    => [0, 1],
-                                            'return'           => [0, 1],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
+        'platform' => [
+            'name'     => 'myparcel',
+            'human'    => 'MyParcel',
+            'base_cc'  => CountryCodes::CC_NL,
+            'carriers' => [
+                [
+                    'id'            => 1,
+                    'name'          => 'postnl',
+                    'human'         => 'PostNL',
+                    'options'       => [
+                        'labelDescription' => [
+                            'values'       => [0, 1],
+                            'requirements' => [
+                                'minLength' => 0,
+                                'maxLength' => 45,
+                            ],
+                        ],
+                    ],
+                    'shippingZones' => [
+                        [
+                            'cc'           => CountryCodes::CC_NL,
+                            'packageTypes' => [
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                    'options'       => [
+                                        'insurance'       => [
+                                            0,
+                                            100,
+                                            250,
+                                            500,
+                                            1000,
+                                            1500,
+                                            2000,
+                                            2500,
+                                            3000,
+                                            3500,
+                                            4000,
+                                            4500,
+                                            5000,
                                         ],
-                                    ],
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_MORNING_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                0,
-                                                100,
-                                                250,
-                                                500,
-                                                1000,
-                                                1500,
-                                                2000,
-                                                2500,
-                                                3000,
-                                                3500,
-                                                4000,
-                                                4500,
-                                                5000,
+                                        'ageCheck'        => [
+                                            'requirements' => [
+                                                'signature'     => [1],
+                                                'onlyRecipient' => [1],
                                             ],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0, 1],
-                                            'onlyRecipient'    => [1],
-                                            'return'           => [0, 1],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
+                                            'values'       => [0, 1],
                                         ],
-                                    ],
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_EVENING_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                0,
-                                                100,
-                                                250,
-                                                500,
-                                                1000,
-                                                1500,
-                                                2000,
-                                                2500,
-                                                3000,
-                                                3500,
-                                                4000,
-                                                4500,
-                                                5000,
-                                            ],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0, 1],
-                                            'onlyRecipient'    => [1],
-                                            'return'           => [0, 1],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
-                                        ],
-                                    ],
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                0,
-                                                100,
-                                                250,
-                                                500,
-                                                1000,
-                                                1500,
-                                                2000,
-                                                2500,
-                                                3000,
-                                                3500,
-                                                4000,
-                                                4500,
-                                                5000,
-                                            ],
-                                            'ageCheck'         => [
-                                                'requirements' => [
-                                                    'signature'     => 1,
-                                                    'onlyRecipient' => 1,
+                                        'signature'       => [0, 1],
+                                        'onlyRecipient'   => [0, 1],
+                                        'return'          => [0, 1],
+                                        'sameDayDelivery' => [0],
+                                        'largeFormat'     => [
+                                            'values'       => [0, 1],
+                                            'requirements' => [
+                                                'weight' => [
+                                                    'minimum' => 0,
+                                                    'maximum' => 30000,
                                                 ],
-                                                'values'       => [0, 1],
                                             ],
-                                            'signature'        => [1],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
+                                        ],
+                                    ],
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 23000,
+                                        ],
+                                    ],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                        ],
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_MORNING_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+                                            'options' => [
+                                                'ageCheck'      => [0],
+                                                'onlyRecipient' => [1],
+                                            ],
+                                        ],
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_EVENING_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+                                            'options' => [
+                                                'ageCheck'      => [0],
+                                                'onlyRecipient' => [1],
+                                            ],
+                                        ],
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                                            'options' => [
+                                                'signature'     => [1],
+                                                'onlyRecipient' => [0],
+                                                'return'        => [0],
+                                            ],
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 23000,
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 2000,
+                                        ],
                                     ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 2000,
+                                        ],
                                     ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 2000,
                                         ],
                                     ],
-                                ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
-                    ],
-                    [
-                        'cc'           => CountryCodes::CC_BE,
-                        'packageTypes' => [
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                500,
+                        [
+                            'cc'           => CountryCodes::CC_BE,
+                            'packageTypes' => [
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                    'options'       => [
+                                        'largeFormat' => [
+                                            'values'       => [0, 1],
+                                            'requirements' => [
+                                                'weight' => [
+                                                    'minimum' => 0,
+                                                    'maximum' => 30000,
+                                                ],
                                             ],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [1],
-                                            'onlyRecipient'    => [1],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
                                         ],
                                     ],
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 1,
+                                            'maximum' => 23000,
                                         ],
                                     ],
-                                ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 23000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                            'options' => [
+                                                'insurance'     => [
+                                                    0,
+                                                    500,
+                                                ],
+                                                'signature'     => [1],
+                                                'onlyRecipient' => [1],
+                                            ],
+                                        ],
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 2000,
+                                        ],
                                     ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
-                    ],
-                    [
-                        'cc'           => 'EU',
-                        'packageTypes' => [
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                500,
+                        [
+                            'cc'           => 'EU',
+                            'packageTypes' => [
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                    'options'       => [
+                                        'insurance'   => [
+                                            500,
+                                        ],
+                                        'largeFormat' => [
+                                            'values'       => [0, 1,],
+                                            'requirements' => [
+                                                'weight' => [
+                                                    'minimum' => 1,
+                                                    'maximum' => 30000,
+                                                ],
                                             ],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
                                         ],
                                     ],
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0, 1],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 1,
+                                            'maximum' => 23000,
+                                        ],
+                                    ],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 23000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                                         ],
-                                    ],
-                                ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
                                     ],
                                 ],
                             ],
                         ],
-                    ],
-                    [
-                        'cc'           => 'ROW',
-                        'packageTypes' => [
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [
-                                                200,
+                        [
+                            'cc'           => 'ROW',
+                            'packageTypes' => [
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 1,
+                                            'maximum' => 20000,
+                                        ],
+                                    ],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                            'options' => [
+                                                'insurance' => [
+                                                    200,
+                                                ],
                                             ],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 23000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
-                            ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 2000,
                                         ],
                                     ],
-                                ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
                     ],
                 ],
-            ],
-            [
-                'id'           => 5,
-                'name'         => 'instabox',
-                'base_cc'      => CountryCodes::CC_NL,
-                'shippingZone' => [
-                    [
-                        'cc'           => CountryCodes::CC_NL,
-                        'packageTypes' => [
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0, 1],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0, 1],
-                                            'return'           => [0, 1],
-                                            'sameDayDelivery'  => [0, 1],
-                                            'largeFormat'      => [0, 1],
-                                            'labelDescription' => [0, 1],
-                                        ],
-                                    ],
-                                ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 23000,
-                                    ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
-                                    ],
-                                ],
+                [
+                    'id'            => 5,
+                    'name'          => 'instabox',
+                    'human'         => 'Instabox',
+                    'options'       => [
+                        'labelDescription' => [
+                            'values'       => [0, 1,],
+                            'requirements' => [
+                                'minLength' => 0,
+                                'maxLength' => 45,
                             ],
-                            [
-                                'id'            => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
-                                'name'          => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                                'deliveryTypes' => [
-                                    [
-                                        'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                        'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                        'options' => [
-                                            'insurance'        => [0],
-                                            'ageCheck'         => [0],
-                                            'signature'        => [0],
-                                            'onlyRecipient'    => [0],
-                                            'return'           => [0],
-                                            'sameDayDelivery'  => [0, 1],
-                                            'largeFormat'      => [0],
-                                            'labelDescription' => [0, 1],
+                        ],
+
+                    ],
+                    'shippingZones' => [
+                        [
+                            'cc'           => CountryCodes::CC_NL,
+                            'options' => [
+                                'sameDayDelivery'  => [0, 1],
+                            ],
+                            'packageTypes' => [
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 0,
+                                            'maximum' => 20000,
+                                        ],
+                                    ],
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                            'options' => [
+                                                'ageCheck'         => [0, 1],
+                                                'onlyRecipient'    => [0, 1],
+                                                'return'           => [0, 1],
+                                                'largeFormat'      => [
+                                                    'values'       => [0, 1],
+                                                    'requirements' => [
+                                                        'weight' => [
+                                                            'minimum' => 1,
+                                                            'maximum' => 30000,
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
                                         ],
                                     ],
                                 ],
-                                'requirements'  => [
-                                    'weight'           => [
-                                        'minimum' => 0,
-                                        'maximum' => 2000,
+                                [
+                                    'id'            => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                                    'name'          => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                                    'requirements'  => [
+                                        'weight' => [
+                                            'minimum' => 1,
+                                            'maximum' => 2000,
+                                        ],
                                     ],
-                                    'labelDescription' => [
-                                        'minLength' => 0,
-                                        'maxLength' => 45,
+                                    'deliveryTypes' => [
+                                        [
+                                            'id'      => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
+                                            'name'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                                        ],
                                     ],
                                 ],
                             ],
