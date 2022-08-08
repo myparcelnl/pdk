@@ -77,6 +77,14 @@ class PostShipmentsRequest extends AbstractRequest
     }
 
     /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return null|array

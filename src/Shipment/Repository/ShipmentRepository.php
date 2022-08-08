@@ -7,9 +7,11 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Label;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsAsPdfRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetShipmentsRequest;
+use MyParcelNL\Pdk\Shipment\Request\PostReturnShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\PostShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\UpdateShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Response\GetLabelsPdfResponse;
@@ -20,6 +22,8 @@ use MyParcelNL\Pdk\Shipment\Response\PostShipmentsResponse;
 class ShipmentRepository extends AbstractRepository
 {
     /**
+     * @noinspection PhpUnused
+     *
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
@@ -34,7 +38,43 @@ class ShipmentRepository extends AbstractRepository
     }
 
     /**
+     * @noinspection PhpUnused
+     *
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \Exception
+     */
+    public function createReturnShipments(ShipmentCollection $collection): ShipmentCollection
+    {
+        /** @var \MyParcelNL\Pdk\Shipment\Response\PostShipmentsResponse $response */
+        $response = $this->api->doRequest(
+        // TODO: Make send_return_mail depend on plugin settings
+            new PostReturnShipmentsRequest($collection, ['send_return_mail' => 1]),
+            PostShipmentsResponse::class
+        );
+
+        $returnShipments = [];
+
+        foreach ($collection->toArray() as $shipment) {
+            $returnShipments[] = new Shipment($shipment);
+        }
+
+        $returnCollection = new ShipmentCollection($returnShipments);
+        $returnCollection->addIds($response->getIds());
+
+        $returnCollection->each(static function (Shipment $shipment) use ($collection) {
+            $shipment->isReturn = true;
+            $collection->push($shipment);
+        });
+
+        return $collection;
+    }
+
+    /**
      * Fetch label link from api and fill the label->link property of the collection
+     *
+     * @noinspection PhpUnused
      *
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
      * @param  null|string                                            $format
@@ -66,6 +106,8 @@ class ShipmentRepository extends AbstractRepository
 
     /**
      * Fetch label pdf from api and fill the label->pdf property of the collection
+     *
+     * @noinspection PhpUnused
      *
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
      * @param  null|string                                            $format

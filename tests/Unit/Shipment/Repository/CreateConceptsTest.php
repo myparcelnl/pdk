@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\PostShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Facade\MockApi;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -467,5 +468,63 @@ it('creates a valid request from a shipment collection', function (array $input,
                 'physical_properties.weight' => 2000,
             ]),
         ],
+    ],
+]);
+
+it('creates shipment', function ($input, $path, $query, $contentType) {
+    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    MockApi::getMock()
+        ->append(new ShipmentsResponse());
+
+    $response = ShipmentRepository::createConcepts(new ShipmentCollection($input));
+    $request  = MockApi::getMock()
+        ->getLastRequest();
+
+    if (! $request) {
+        throw new RuntimeException('Request is not set');
+    }
+
+    $uri               = $request->getUri();
+    $contentTypeHeader = Arr::first($request->getHeaders()['Content-Type']);
+
+    expect($uri->getQuery())
+        ->toBe($query)
+        ->and($uri->getPath())
+        ->toBe($path)
+        ->and($contentTypeHeader)
+        ->toBe($contentType)
+        ->and($response)
+        ->toBeInstanceOf(ShipmentCollection::class);
+})->with([
+    'single shipment' => [
+        'input'       => [
+            [
+                'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'deliveryOptions'    => [
+                    'date'            => '2022-07-10 16:00:00',
+                    'shipmentOptions' => [
+                        'ageCheck'         => true,
+                        'insurance'        => 500,
+                        'labelDescription' => 'order 204829',
+                        'largeFormat'      => false,
+                        'onlyRecipient'    => true,
+                        'return'           => false,
+                        'sameDayDelivery'  => false,
+                        'signature'        => false,
+                    ],
+                ],
+                'physicalProperties' => [
+                    'height' => 100,
+                    'width'  => 120,
+                    'length' => 80,
+                    'weight' => 2000,
+                ],
+                'recipient'          => DEFAULT_INPUT_RECIPIENT,
+                'sender'             => DEFAULT_INPUT_SENDER,
+            ],
+        ],
+        'path'        => 'API/shipments',
+        'query'       => '',
+        'contentType' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
     ],
 ]);
