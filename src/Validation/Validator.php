@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Validation;
 
 use MyParcelNL\Pdk\Base\Data\CountryCodes;
+use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use RuntimeException;
 
@@ -24,6 +25,30 @@ class Validator
     {
         $this->order            = $order;
         $this->validationSchema = ValidationSchema::VALIDATION_SCHEMA;
+    }
+
+    public function getOptions()
+    {
+        $arr = ValidationSchema::VALIDATION_SCHEMA_TWO;
+        // hierarchy = country -> packagetype -> carrier -> options -> deliverytype (morning, standard, evening, pickup)
+        // get the already defined options from the order
+        $cc              = $this->order->recipient->getCountry();
+        $deliveryOptions = $this->order->deliveryOptions;
+        $packageType     = $deliveryOptions->packageType;
+        $deliveryType    = $deliveryOptions->deliveryType;
+        $carrier         = $deliveryOptions->carrier; // string myparcel carrier name for now
+        $options         = $deliveryOptions->shipmentOptions;
+        $weight          = $this->order->physicalProperties->weight;
+        $hierarchyLevel  = 'cc';
+        // pay attention to weight requirements...
+        // use capabilities for total possible options
+
+        // find the option arrays, and flatten these to include all options
+        if ($carrier) {
+            $capabilities   = (new CarrierOptions(['name' => $carrier]))->toArray();
+            $hierarchyLevel = 'carrier';
+        }
+        // all higher hierarchies than hierarchyLevel return all options
     }
 
     /**
