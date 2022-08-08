@@ -11,15 +11,12 @@ use Exception;
 
 class DeliveryDateService
 {
-    public const DATE_FORMAT = 'Y-m-d H:i:s';
-
     /**
      * @param  string|\DateTimeInterface $deliveryDate
      *
-     * @return string
-     * @throws \Exception
+     * @return \DateTimeInterface
      */
-    public static function fixPastDeliveryDate($deliveryDate): string
+    public static function fixPastDeliveryDate($deliveryDate): DateTimeInterface
     {
         $tomorrow        = new DateTimeImmutable('tomorrow');
         $newDeliveryDate = $tomorrow;
@@ -39,7 +36,7 @@ class DeliveryDateService
             // Occurs when nonsense is fed to new DateTimeImmutable().
         }
 
-        return $newDeliveryDate->format(self::DATE_FORMAT);
+        return $newDeliveryDate;
     }
 }
 
