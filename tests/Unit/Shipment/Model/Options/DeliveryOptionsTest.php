@@ -73,7 +73,7 @@ it('instantiates delivery options with pickup location', function () {
     expect($deliveryOptions->pickupLocation)
         ->toBeInstanceOf(RetailLocation::class)
         ->and($deliveryOptions->date)
-        ->toBeInstanceOf(DateTime::class)
+        ->toBeInstanceOf(DateTimeImmutable::class)
         ->and($deliveryOptions->pickupLocation->cc)
         ->toBe(CountryCodes::CC_NL)
         ->and($deliveryOptions->isPickup())

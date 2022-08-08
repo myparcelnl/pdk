@@ -7,12 +7,13 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 class MockPdkConfig
 {
     public const DEFAULT_CONFIG = [
-        'api'     => MockApiService::class,
-        'config'  => MockConfig::class,
-        'storage' => [
+        'api'      => MockApiService::class,
+        'config'   => MockConfig::class,
+        'settings' => MockPluginSettings::class,
+        'storage'  => [
             'default' => MockStorage::class,
         ],
-        'logger'  => [
+        'logger'   => [
             'default' => MockLogger::class,
         ],
     ];

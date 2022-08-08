@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Concern;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
@@ -327,9 +328,9 @@ trait HasAttributes
      *
      * @param  mixed $value
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
-    protected function asDate($value): DateTime
+    protected function asDate($value): DateTimeImmutable
     {
         return $this->asDateTime($value)
             ->setTime(0, 0);
@@ -340,11 +341,11 @@ trait HasAttributes
      *
      * @param  mixed $value
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
-    protected function asDateTime($value): DateTime
+    protected function asDateTime($value): DateTimeImmutable
     {
-        if ($value instanceof DateTime) {
+        if ($value instanceof DateTimeImmutable) {
             return $value;
         }
 
@@ -353,14 +354,14 @@ trait HasAttributes
         }
 
         foreach ($this->dateFormats as $dateFormat) {
-            $date = DateTime::createFromFormat($dateFormat, $value);
+            $date = DateTimeImmutable::createFromFormat($dateFormat, $value);
 
             if ($date) {
                 return $date;
             }
         }
 
-        return new DateTime();
+        return new DateTimeImmutable();
     }
 
     /**
@@ -411,16 +412,19 @@ trait HasAttributes
                 break;
             case 'datetime':
             case DateTime::class:
+            case DateTimeImmutable::class:
                 $value = $this->asDateTime($value);
                 break;
             case 'timestamp':
                 $value = $this->asTimestamp($value);
                 break;
+            default:
+                if ($this->isClassCastable($key)) {
+                    $value = $this->getClassCastableAttributeValue($key, $value);
+                }
+                break;
         }
 
-        if ($this->isClassCastable($key)) {
-            $value = $this->getClassCastableAttributeValue($key, $value);
-        }
 
         return $value;
     }
