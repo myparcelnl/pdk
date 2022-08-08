@@ -51,11 +51,11 @@ class DropOffDayPossibilities extends Model
         $deviatedDays = $this->getRelevantDeviatedDropOffDays($fromDate);
 
         $newDropOffDays = [];
-        $i              = 0;
+        $day            = 0;
         $items          = 0;
 
         do {
-            $dropOffDate = $fromDate->modify("+$i day");
+            $dropOffDate = $fromDate->modify("+$day day");
             $weekday     = (int) $dropOffDate->format('w');
 
             /** @var DropOffDay $matchingDay */
@@ -72,7 +72,7 @@ class DropOffDayPossibilities extends Model
                 $items++;
             }
 
-            $i++;
+            $day++;
         } while ($items < $this->deliveryDaysWindow);
 
         return new DropOffDayCollection($newDropOffDays);

@@ -73,7 +73,6 @@ class Collection extends \MyParcelNL\Sdk\src\Support\Collection implements Array
             try {
                 $this->items[$key] = Utils::cast($this->cast, $item);
             } catch (Throwable $e) {
-                echo $e->getMessage();
                 // Silently fail to allow methods like pluck() to work.
             }
         }
