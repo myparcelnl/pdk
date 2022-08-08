@@ -10,23 +10,23 @@ it('calculates the correct delivery date', function ($input, $output) {
 })->with([
     'delivery date 1 day the future'  => [
         'input'  => date('Y-m-d', strtotime('+1 day')),
-        'output' => date('Y-m-d', strtotime('+1 day')) . ' 00:00:00',
+        'output' => new DateTimeImmutable(date('Y-m-d', strtotime('+1 day')) . ' 00:00:00'),
     ],
     'delivery date 1 week the future' => [
         'input'  => date('Y-m-d', strtotime('+1 week')),
-        'output' => date('Y-m-d', strtotime('+1 week')) . ' 00:00:00',
+        'output' => new DateTimeImmutable(date('Y-m-d', strtotime('+1 week')) . ' 00:00:00'),
     ],
     'delivery date in the past'       => [
         'input'  => '2022-07-08T00:00:00.000Z',
-        'output' => date('Y-m-d', strtotime('+1 days')) . ' 00:00:00',
+        'output' => new DateTimeImmutable(date('Y-m-d', strtotime('+1 days')) . ' 00:00:00'),
     ],
     'delivery date as object'         => [
         'input'  => new DateTime('-1 week'),
-        'output' => date('Y-m-d', strtotime('+1 days')) . ' 00:00:00',
+        'output' => new DateTimeImmutable(date('Y-m-d', strtotime('+1 days')) . ' 00:00:00'),
     ],
 ]);
 
 it('returns today when fed nonsense', function () {
     expect(DeliveryDateService::fixPastDeliveryDate('quiche lorraine'))
-        ->toEqual(date('Y-m-d', strtotime('+1 days')) . ' 00:00:00');
+        ->toEqual(new DateTimeImmutable(date('Y-m-d', strtotime('+1 days')) . ' 00:00:00'));
 });
