@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.1](https://github.com/myparcelnl/pdk/compare/v1.11.0...v1.11.1) (2022-08-08)
+
+
+### :bug: Bug Fixes
+
+* fix null exception on creating carrier options ([33f26b2](https://github.com/myparcelnl/pdk/commit/33f26b2de688e6e61bc6efe2eec3e691538d56a2))
+
 ## [1.11.0](https://github.com/myparcelnl/pdk/compare/v1.10.1...v1.11.0) (2022-08-08)
 
 
