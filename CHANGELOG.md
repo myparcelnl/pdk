@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.0](https://github.com/myparcelnl/pdk/compare/v1.10.1...v1.11.0) (2022-08-08)
+
+
+### :sparkles: New Features
+
+* add delivery date service ([#25](https://github.com/myparcelnl/pdk/issues/25)) ([68b6750](https://github.com/myparcelnl/pdk/commit/68b67501c899bf781b78034df8b99ff9373e4d85))
+
 ## [1.10.1](https://github.com/myparcelnl/pdk/compare/v1.10.0...v1.10.1) (2022-08-03)
 
 
