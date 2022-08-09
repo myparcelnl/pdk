@@ -18,7 +18,6 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
- * @property null|string                                                 $platform
  */
 class PdkOrder extends Model
 {
@@ -30,7 +29,6 @@ class PdkOrder extends Model
         'sender'             => null,
         'shipments'          => ShipmentCollection::class,
         'physicalProperties' => PhysicalProperties::class,
-        'platform'           => null,
     ];
 
     protected $casts      = [
@@ -40,7 +38,6 @@ class PdkOrder extends Model
         'sender'             => ContactDetails::class,
         'shipments'          => ShipmentCollection::class,
         'physicalProperties' => PhysicalProperties::class,
-        'platform'           => 'string',
     ];
 
     /**

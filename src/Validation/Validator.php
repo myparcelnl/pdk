@@ -4,282 +4,330 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation;
 
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Base\Model\InvalidCastException;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use RuntimeException;
+use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Validation\Helpers\ValidationHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.ShortClassName)
+ */
 class Validator
 {
+    public const  DEFAULT_CARRIER          = 'postnl';
+    public const  DEFAULT_PLATFORM         = 'myparcel';
+    public const  DO_NOT_DELETE_BUT_REMOVE = [
+        ValidationHelper::CARRIER,
+        ValidationHelper::CC,
+        ValidationHelper::NAME,
+        ValidationHelper::SHIPPING_ZONE,
+        ValidationHelper::WEIGHT,
+    ];
+    public const  SAVE_TO_ARRAY            = [
+        ValidationHelper::CC,
+        ValidationHelper::ID,
+        ValidationHelper::LOCATION_CODE,
+        ValidationHelper::NAME,
+        ValidationHelper::OPTIONS,
+        ValidationHelper::REQUIREMENTS,
+    ];
+
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Model\PdkOrder
+     * @var
+     */
+    private $mappedArray;
+
+    /**
+     * @var PdkOrder
      */
     private $order;
 
     /**
-     * @var \MyParcelNL\Pdk\Validation\ValidationSchema
+     * @var string
+     */
+    private $platform;
+
+    /**
+     * @var
+     */
+    private $platformSchema;
+
+    /**
+     * @var ShipmentOptions
+     */
+    private $shipmentOptions;
+
+    /**
+     * @var array
+     */
+    private $tempArray = [];
+
+    /**
+     * @var ValidationHelper
+     */
+    private $validationHelper;
+
+    /**
+     * @var array
      */
     private $validationSchema;
 
+    /**
+     * @var array
+     */
+    private $validationSchemaCopy;
+
+    /**
+     * @param PdkOrder $order
+     */
     public function __construct(PdkOrder $order)
     {
-        $this->order            = $order;
+        $this->order           = $order;
+        $this->shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
+
+        // TODO: get correct platform from PDK instance
+        $this->platform         = self::DEFAULT_PLATFORM;
+        $this->validationHelper = new ValidationHelper();
         $this->validationSchema = ValidationSchema::VALIDATION_SCHEMA;
     }
 
-    public function getOptions()
+    /**
+     * @return array
+     */
+    public function getValidationRules(): array
     {
-        $arr = ValidationSchema::VALIDATION_SCHEMA_TWO;
-        // hierarchy = country -> packagetype -> carrier -> options -> deliverytype (morning, standard, evening, pickup)
-        // get the already defined options from the order
-        $cc              = $this->order->recipient->getCountry();
-        $deliveryOptions = $this->order->deliveryOptions;
-        $packageType     = $deliveryOptions->packageType;
-        $deliveryType    = $deliveryOptions->deliveryType;
-        $carrier         = $deliveryOptions->carrier; // string myparcel carrier name for now
-        $options         = $deliveryOptions->shipmentOptions;
-        $weight          = $this->order->physicalProperties->weight;
-        $hierarchyLevel  = 'cc';
-        // pay attention to weight requirements...
-        // use capabilities for total possible options
+        $this->platformSchema       = $this->validationHelper->getIndexByValue(
+            $this->platform,
+            ValidationHelper::NAME,
+            $this->validationSchema['platform']
+        );
+        $this->validationSchemaCopy = $this->platformSchema;
+        $orderAttributes            = $this->getOrderAttributes();
 
-        // find the option arrays, and flatten these to include all options
-        if ($carrier) {
-            $capabilities   = (new CarrierOptions(['name' => $carrier]))->toArray();
-            $hierarchyLevel = 'carrier';
+        if (! $orderAttributes['carrier']['value']) {
+            // todo: carrier kiezen zodra er dus geen carrier is dit zal komen uit:
+            $orderAttributes['carrier'] = [
+                'column' => ValidationHelper::NAME,
+                'value'  => self::DEFAULT_CARRIER,
+            ];
         }
-        // all higher hierarchies than hierarchyLevel return all options
+
+        foreach ($orderAttributes as $key => $item) {
+            $this->getFromSchema($key, $item['column'], $item['value'] ?? '');
+        }
+
+        return $this->validationHelper->mergeOptions($this->mappedArray, $this->tempArray);
+    }
+
+    /**
+     * @return bool
+     * @throws InvalidCastException
+     */
+    public function validate(): bool
+    {
+        $validationRules     = $this->getValidationRules();
+        $invalidOptions      = $this->validateOptions($validationRules[ValidationHelper::OPTIONS]);
+        $invalidRequirements = $this->validateRequirements($validationRules[ValidationHelper::REQUIREMENTS]);
+
+        return $invalidOptions && $invalidRequirements;
+    }
+
+    /**
+     * @param  string $key
+     * @param  string $column
+     * @param  string $value
+     *
+     * @return void
+     */
+    private function getFromSchema(string $key, string $column, string $value): void
+    {
+        if (is_array($this->platformSchema[$key]) || $key===ValidationHelper::SHIPPING_ZONE) {
+            $this->platformSchema = $this->validationHelper->getIndexByValue(
+                $value,
+                $column,
+                $this->platformSchema[$key]
+            );
+
+            if ($key!=='packageType') {
+                $this->validationSchemaCopy = $this->platformSchema;
+            }
+
+            if ($key===ValidationHelper::CARRIER) {
+                $this->mappedArray['carrier'] = $value;
+            }
+        }
+
+        $this->recursiveSearch($key, $value);
     }
 
     /**
      * @return array
      */
-    public function getAllowedOptions(): array
+    private function getOrderAttributes(): array
     {
-        return $this->findValidationArray();
+        $deliveryOptions = $this->order->deliveryOptions;
+
+        return array_filter([
+            'carrier'      => [
+                'column' => ValidationHelper::NAME,
+                'value'  => $deliveryOptions->getCarrier(),
+            ],
+            'shippingZone' => [
+                'column' => ValidationHelper::CC,
+                'value'  => $this->validationHelper->getShippingZone($this->order),
+            ],
+            'deliveryType' => [
+                'column' => ValidationHelper::NAME,
+                'value'  => $deliveryOptions->getDeliveryType(),
+            ],
+            'packageType'  => [
+                'column' => ValidationHelper::NAME,
+                'value'  => $deliveryOptions->getPackageType(),
+            ],
+        ]);
     }
 
     /**
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @param string $key
+     * @param string $value
+     *
+     * @return void
      */
-    public function validate(): void
+    private function recursiveSearch(string $key, string $value): void
     {
-        $arrayToValidate = $this->findValidationArray();
+        $path = $this->validationHelper->getArrayPath($value, $this->validationSchemaCopy);
 
-        $this->checkForInvalidOptions($arrayToValidate['validationScheme']);
+        if ($path) {
+            $correctPath = $this->validationSchemaCopy;
 
-        $this->validateRequirements($arrayToValidate['requirements']);
+            $count = count($path) - 1;
+            for ($i = 0; $i < $count; $i++) {
+                $correctPath = $correctPath[$path[$i]];
+            }
+
+            if (! in_array($this->tempArray, $correctPath, true)) {
+                $temp = [];
+                foreach ($correctPath as $pathKey => $pathItem) {
+                    if (in_array($pathKey, self::SAVE_TO_ARRAY, true)) {
+                        $temp[$pathKey] = $pathItem;
+                    }
+                }
+
+                $this->tempArray[$key][] = [
+                    'path'                 => $path,
+                    ValidationHelper::DATA => $temp,
+                ];
+            }
+
+            if (! in_array($key, self::DO_NOT_DELETE_BUT_REMOVE, true)) {
+                $this->validationSchemaCopy = $this->validationHelper->removeFromCopySchema(
+                    $this->validationSchemaCopy,
+                    $path
+                );
+                $this->recursiveSearch($key, $value);
+            }
+        }
     }
 
     /**
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @param array $options
+     *
+     * @return array
+     * @throws InvalidCastException
      */
-    private function checkForInvalidOptions(array $arrayToValidate): void
+    private function validateOptions(array $options): array
     {
-        $shipmentOptions = $arrayToValidate['options'];
+        $optionsToValidate = $this->shipmentOptions->toArray();
 
-        $validationResult = [
-            'invalidOrder' => false,
-            'options'      => [],
+        if (array_key_exists('labelDescription', $optionsToValidate)) {
+            unset($optionsToValidate['labelDescription']);
+        }
+
+        $invalidOptions = [];
+
+        foreach ($optionsToValidate as $key => $value) {
+            if (! array_key_exists($key, $options)
+                || ! in_array(
+                    $value,
+                    $options[$key][ValidationHelper::ENUM],
+                    true
+                )) {
+                $invalidOptions[] = $key;
+            }
+        }
+
+        if (count($invalidOptions) > 0) {
+            DefaultLogger::warning(
+                sprintf('The following options have invalid values: %s', implode(', ', $invalidOptions))
+            );
+        }
+
+        return $invalidOptions;
+    }
+
+    /**
+     * @param  array $requirements
+     *
+     * @return array
+     */
+    private function validateRequirements(array $requirements): array
+    {
+        $invalidRequirements = [];
+
+        $checkForBoundaries = [
+            ValidationHelper::WEIGHT            => $this->order->physicalProperties->weight,
+            ValidationHelper::LABEL_DESCRIPTION => strlen($this->shipmentOptions->labelDescription),
         ];
 
-        foreach ($shipmentOptions as $shipmentOption => $values) {
-            if ($shipmentOption === 'labelDescription') {
+        $activateOtherOptions = [
+            ValidationHelper::AGE_CHECK,
+        ];
+
+        foreach ($requirements as $key => $properties) {
+            if (array_key_exists($key, $checkForBoundaries)
+                && ! $this->validationHelper->isValueWithinBoundaries(
+                    $checkForBoundaries[$key],
+                    $properties
+                )) {
+                $invalidRequirements[] = $key;
                 continue;
             }
 
-            $shipmentOptionsFromOrder = $this->order->deliveryOptions->shipmentOptions->toArray();
-
-            if (is_bool($shipmentOptionsFromOrder[$shipmentOption])) {
-                $shipmentOptionsFromOrder[$shipmentOption] = (int) $shipmentOptionsFromOrder[$shipmentOption];
+            if ($key === ValidationHelper::LOCATION_CODE && ! $this->order->deliveryOptions->pickupLocation->locationCode) {
+                $invalidRequirements[] = $key;
+                continue;
             }
 
-            if (array_key_exists($shipmentOption, $shipmentOptionsFromOrder)
-                && ! in_array(
-                    $shipmentOptionsFromOrder[$shipmentOption],
-                    $values,
+            if (($key === ValidationHelper::LARGE_FORMAT)
+                && $this->validationHelper->isValueWithinBoundaries(
+                    $checkForBoundaries[ValidationHelper::WEIGHT],
+                    $properties
+                )) {
+                $invalidRequirements[] = $key;
+                continue;
+            }
+
+            if (in_array($key, $activateOtherOptions, true)
+                && in_array(
+                    $this->shipmentOptions[$key],
+                    $properties[ValidationHelper::ENUM],
                     true
                 )) {
-                $validationResult['invalidOrder'] = true;
-                $validationResult['options'][]    = [
-                    'name'  => $shipmentOption,
-                    'value' => $shipmentOptionsFromOrder[$shipmentOption],
-                ];
+                foreach ($properties[ValidationHelper::OPTIONS] as $option => $value) {
+                    if (! in_array($this->shipmentOptions[$option], $value, true)) {
+                        $invalidRequirements[] = $option;
+                    }
+                }
             }
         }
 
-        if ($validationResult['invalidOrder']) {
-            $this->throwValidationError($validationResult);
-        }
-    }
-
-    /**
-     * @param $requirements
-     *
-     * @return void
-     */
-    private function validateRequirements($requirements): void
-    {
-        if ($requirements['weight']) {
-            $this->validateWeight($requirements['weight']);
-        }
-
-        if ($requirements['labelDescription']) {
-            $this->validateLabelDescription($requirements['labelDescription']);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    private function findValidationArray(): array
-    {
-        $orderAttributes = [
-            'platform'     => $this->order->platform,
-            'shippingZone' => $this->getShippingZone(),
-            'carrier'      => $this->order->deliveryOptions->carrier,
-            'packageType'  => $this->order->deliveryOptions->packageType,
-            'deliveryType' => $this->order->deliveryOptions->deliveryType,
-        ];
-
-        foreach ($orderAttributes as $orderAttribute) {
-            if (null === $orderAttribute) {
-                throw new RuntimeException(
-                    sprintf('Order validation failed. %s can\'t be empty.', $orderAttribute)
-                );
-            }
-        }
-
-        $carrierIndex = array_search(
-            $orderAttributes['carrier'],
-            array_column($this->validationSchema['carriers'], 'name'),
-            true
-        );
-
-        $carrier = $this->validationSchema['carriers'][$carrierIndex];
-
-        $countryIndex = array_search(
-            $orderAttributes['shippingZone'],
-            array_column($carrier['shippingZone'], 'cc'),
-            true
-        );
-
-        $country = $carrier['shippingZone'][$countryIndex];
-
-        $packageTypeIndex = array_search(
-            $orderAttributes['packageType'],
-            array_column($country['packageTypes'], 'name'),
-            true
-        );
-
-        $packageType = $country['packageTypes'][$packageTypeIndex];
-
-        $deliveryTypeIndex = array_search(
-            $orderAttributes['deliveryType'],
-            array_column($packageType['deliveryTypes'], 'name'),
-            true
-        );
-
-        return [
-            'validationScheme' => $packageType['deliveryTypes'][$deliveryTypeIndex],
-            'requirements'     => $packageType['requirements'],
-        ];
-    }
-
-    /**
-     * @return string
-     */
-    private function getShippingZone(): string
-    {
-        $cc = $this->order->recipient->cc;
-
-        if ($cc === CountryCodes::CC_NL) {
-            return CountryCodes::CC_NL;
-        }
-
-        if ($cc === CountryCodes::CC_BE) {
-            return CountryCodes::CC_BE;
-        }
-
-        if (in_array($cc, ValidationSchema::EU_COUNTRIES, true)) {
-            return CountryCodes::ZONE_EU;
-        }
-
-        return CountryCodes::ZONE_ROW;
-    }
-
-    /**
-     * @param  array $validationResult
-     *
-     * @return void
-     */
-    private function throwValidationError(array $validationResult): void
-    {
-        $options = [];
-        $values  = [];
-
-        foreach ($validationResult['options'] as $option) {
-            $options[] = $option['name'];
-            $values[]  = $option['value'];
-        }
-        throw new RuntimeException(
-            sprintf(
-                'Order can\'t have option(s) \'%s\' with value(s) \'%s\'.',
-                implode(', ', $options),
-                implode(', ', $values)
-            )
-        );
-    }
-
-    /**
-     * @param $labelDescriptionRequirements
-     *
-     * @return void
-     */
-    private function validateLabelDescription($labelDescriptionRequirements): void
-    {
-        $labelDescription = $this->order->deliveryOptions->shipmentOptions->labelDescription;
-        $maximumLength    = $labelDescriptionRequirements['maxLength'];
-
-        if (strlen((string) $labelDescription) > $maximumLength) {
-            throw new RuntimeException(
-                sprintf(
-                    'Label description exceeds maximum amount of characters of %s.',
-                    $maximumLength
-                )
-            );
-        }
-    }
-
-    /**
-     * @param $weightRequirements
-     *
-     * @return void
-     */
-    private function validateWeight($weightRequirements): void
-    {
-        $weight        = $this->order->physicalProperties->weight;
-        $minimumWeight = $weightRequirements['minimum'];
-        $maximumWeight = $weightRequirements['maximum'];
-
-        if ($weight < $minimumWeight) {
-            throw new RuntimeException(
-                sprintf(
-                    'Weight of %s doesn\'t meet requirements for the minimum weight of %s.',
-                    $weight,
-                    $minimumWeight
-                )
+        if (count($invalidRequirements) > 0) {
+            DefaultLogger::warning(
+                sprintf('The following requirements haven\'t been met: %s', implode(', ', $invalidRequirements))
             );
         }
 
-        if ($weight > $maximumWeight) {
-            throw new RuntimeException(
-                sprintf(
-                    'Weight of %s exceeds the maximum weight of %s',
-                    $weight,
-                    $maximumWeight
-                )
-            );
-        }
+        return $invalidRequirements;
     }
 }

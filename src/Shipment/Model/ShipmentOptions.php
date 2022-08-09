@@ -7,14 +7,14 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property bool|null $ageCheck
- * @property int|null  $insurance
- * @property bool|null $labelDescription
- * @property bool|null $largeFormat
- * @property bool|null $onlyRecipient
- * @property bool|null $return
- * @property bool|null $sameDayDelivery
- * @property bool|null $signature
+ * @property bool|null   $ageCheck
+ * @property int|null    $insurance
+ * @property string|null $labelDescription
+ * @property bool|null   $largeFormat
+ * @property bool|null   $onlyRecipient
+ * @property bool|null   $return
+ * @property bool|null   $sameDayDelivery
+ * @property bool|null   $signature
  */
 class ShipmentOptions extends Model
 {

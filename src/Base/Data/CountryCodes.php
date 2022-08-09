@@ -269,4 +269,33 @@ class CountryCodes
     public const CC_ZW    = 'ZW';
     public const ZONE_EU  = 'EU';
     public const ZONE_ROW = 'ROW';
+
+    public const EU_COUNTRIES = [
+        'NL',
+        'BE',
+        'AT',
+        'BG',
+        'CZ',
+        'CY',
+        'DK',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'GR',
+        'HU',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'PL',
+        'PT',
+        'RO',
+        'SK',
+        'SI',
+        'ES',
+        'SE',
+        'XK',
+    ];
 }
