@@ -1,5 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="true" type="PestRunConfigurationType">
+    <CommandLine>
+      <PhpTestInterpreterSettings>
+        <option name="interpreterName" value="php" />
+      </PhpTestInterpreterSettings>
+    </CommandLine>
     <option name="pestRunnerSettings">
       <PestRunner method="" options="--coverage-html coverage" />
     </option>
