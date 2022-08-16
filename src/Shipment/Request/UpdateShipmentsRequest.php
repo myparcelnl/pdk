@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Account\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\AbstractRequest;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 
 class UpdateShipmentsRequest extends AbstractRequest

@@ -1,9 +1,9 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection */
+/** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Service\WeightService;
+use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Sdk\src\Exception\ValidationException;
 
 const CUSTOM_RANGES = [

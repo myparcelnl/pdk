@@ -3,9 +3,8 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Storage;
-
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('gets storage', function () {

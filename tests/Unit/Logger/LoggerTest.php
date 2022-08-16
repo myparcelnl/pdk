@@ -1,8 +1,7 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection,PhpUndefinedMethodInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
-
-namespace MyParcelNL\Pdk\Logger;
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\DefaultLogger;

@@ -3,37 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Model\Model;
-
-trait InitTrait
-{
-    public function initializeInitTrait()
-    {
-        $this->myProperty = 1;
-    }
-}
-
-class MyModel extends Model
-{
-    use InitTrait;
-
-    protected $attributes = [
-        'myProperty' => null,
-        'perenboom'  => null,
-        'bloemkool'  => null,
-    ];
-
-    public function getBloemkoolAttribute(): string
-    {
-        return 'bloemkool';
-    }
-
-    public function setPerenboomAttribute($value): self
-    {
-        $this->attributes['perenboom'] = "mutated_$value";
-        return $this;
-    }
-}
+namespace MyParcelNL\Pdk\Tests\Mocks;
 
 it('initializes traits', function () {
     expect((new MyModel())->myProperty)->toBe(1);
