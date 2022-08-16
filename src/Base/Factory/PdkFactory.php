@@ -98,7 +98,7 @@ class PdkFactory
         $container = $builder->build();
 
         foreach ($items as $key => $item) {
-            $instance = is_string($item) && class_exists($item) ? new $item() : $item;
+            $instance = is_string($item) && class_exists($item) ? $container->get($item) : $item;
             $container->set($key, $instance);
         }
 
