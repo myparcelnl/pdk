@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Data\CountryCodes;
+use MyParcelNL\Pdk\Base\Model\Address;
 
 it('initializes be address', function () {
     $address = new Address([
