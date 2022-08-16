@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.0](https://github.com/myparcelnl/pdk/compare/v1.11.1...v1.12.0) (2022-08-16)
+
+
+### :sparkles: New Features
+
+* allow using dependency injection with constructors of manually set container items ([9e60e6d](https://github.com/myparcelnl/pdk/commit/9e60e6d7fb18f71c86ef2d9c9404e264fac2463e))
+
 ## [1.11.1](https://github.com/myparcelnl/pdk/compare/v1.11.0...v1.11.1) (2022-08-08)
 
 
