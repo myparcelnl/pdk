@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 use MyParcelNL\Pdk\Language\Service\AbstractLanguageService;
 use RuntimeException;
+use function file_exists;
 
 class MockAbstractLanguageService extends AbstractLanguageService
 {
@@ -20,14 +21,16 @@ class MockAbstractLanguageService extends AbstractLanguageService
      */
     public function __construct(LanguageRepository $repository)
     {
-        $dir = basename($this->getFilePath());
+        $dir                = basename($this->getFilePath());
+        $translationsPathNl = $this->getFilePath('nl');
+        $translationsPathEn = $this->getFilePath('en');
 
         if (! is_dir($dir) && ! mkdir($dir) && ! is_dir($dir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
 
         file_put_contents(
-            $this->getFilePath('nl'),
+            $translationsPathNl,
             json_encode([
                 'send_help'               => 'Stuur hulp',
                 'i_am_trapped'            => 'Ik zit vast',
@@ -36,7 +39,7 @@ class MockAbstractLanguageService extends AbstractLanguageService
         );
 
         file_put_contents(
-            $this->getFilePath('en'),
+            $translationsPathEn,
             json_encode([
                 'send_help'               => 'Send help',
                 'i_am_trapped'            => 'I am stuck',
@@ -47,9 +50,14 @@ class MockAbstractLanguageService extends AbstractLanguageService
         parent::__construct($repository);
 
         // Delete temporary files after test is done.
-        register_shutdown_function(function () {
-            unlink($this->getFilePath('nl'));
-            unlink($this->getFilePath('en'));
+        register_shutdown_function(static function () use ($translationsPathEn, $translationsPathNl) {
+            if (file_exists($translationsPathNl)) {
+                unlink($translationsPathNl);
+            }
+
+            if (file_exists($translationsPathEn)) {
+                unlink($translationsPathEn);
+            }
         });
     }
 
