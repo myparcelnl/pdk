@@ -1,9 +1,10 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection,PhpMultipleClassesDeclarationsInOneFile,PhpIllegalPsrClassPathInspection */
+/** @noinspection PhpUndefinedFieldInspection,PhpUndefinedMethodInspection,StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection,PhpMultipleClassesDeclarationsInOneFile,PhpIllegalPsrClassPathInspection */
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Mocks;
+use MyParcelNL\Pdk\Tests\Mocks\DifferentAttributeCasingModel;
+use MyParcelNL\Pdk\Tests\Mocks\MyModel;
 
 it('initializes traits', function () {
     expect((new MyModel())->myProperty)->toBe(1);
@@ -87,16 +88,7 @@ it('can use toSnakeCaseArray', function () {
 });
 
 it('can initialize and get properties with any case', function () {
-    class CaseModel extends Model
-    {
-        protected $attributes = [
-            'snakeCase'  => null,
-            'camelCase'  => null,
-            'studlyCase' => null,
-        ];
-    }
-
-    $model = new CaseModel([
+    $model = new DifferentAttributeCasingModel([
         'snake_case' => 'snake_case',
     ]);
 

@@ -18,7 +18,7 @@
             <directory suffix=".php">./src</directory>
         </include>
         <exclude>
-            <file>./src/Api/MyParcelApiService.php</file>
+            <file>./src/Api/Service/MyParcelApiService.php</file>
             <file>./src/Base/Concern/HasAttributes.php</file>
             <file>./src/Base/Concern/HidesAttributes.php</file>
         </exclude>

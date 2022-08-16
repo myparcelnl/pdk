@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Base\Model;
+namespace MyParcelNL\Pdk\Base\Exception;
 
 use Exception;
 use Throwable;
@@ -10,9 +10,10 @@ use Throwable;
 class InvalidCastException extends Exception
 {
     /**
-     * @param  string $key
-     * @param  mixed  $castType
-     * @param  mixed  $arguments
+     * @param  string          $key
+     * @param  mixed           $castType
+     * @param  mixed           $arguments
+     * @param  null|\Throwable $exception
      */
     public function __construct(string $key, $castType, $arguments = null, Throwable $exception = null)
     {
