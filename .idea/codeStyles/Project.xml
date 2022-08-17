@@ -1553,20 +1553,6 @@
           <section>
             <rule>
               <match>
-                <TRAIT>true</TRAIT>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <INTERFACE>true</INTERFACE>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
                 <AND>
                   <FIELD>true</FIELD>
                   <STATIC>true</STATIC>
@@ -1581,29 +1567,8 @@
               <match>
                 <AND>
                   <FIELD>true</FIELD>
-                  <PUBLIC>true</PUBLIC>
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <FIELD>true</FIELD>
-                  <PROTECTED>true</PROTECTED>
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <FIELD>true</FIELD>
-                  <PRIVATE>true</PRIVATE>
+                  <STATIC>false</STATIC>
+                  <visibility />
                 </AND>
               </match>
               <order>BY_NAME</order>
@@ -1620,6 +1585,18 @@
             <rule>
               <match>
                 <AND>
+                  <ABSTRACT>true</ABSTRACT>
+                  <METHOD>true</METHOD>
+                  <static />
+                </AND>
+              </match>
+              <order>BY_NAME</order>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <AND>
                   <METHOD>true</METHOD>
                   <STATIC>true</STATIC>
                   <visibility />
@@ -1632,51 +1609,12 @@
             <rule>
               <match>
                 <AND>
-                  <ABSTRACT>true</ABSTRACT>
                   <METHOD>true</METHOD>
+                  <STATIC>false</STATIC>
+                  <visibility />
                 </AND>
               </match>
               <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <METHOD>true</METHOD>
-                  <PUBLIC>true</PUBLIC>
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <METHOD>true</METHOD>
-                  <PROTECTED>true</PROTECTED>
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <METHOD>true</METHOD>
-                  <PRIVATE>true</PRIVATE>
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <CLASS>true</CLASS>
-              </match>
             </rule>
           </section>
         </rules>
