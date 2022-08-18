@@ -9,21 +9,21 @@ use MyParcelNL\Pdk\Shipment\Collection\DeliveryTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 /**
- * @property \MyParcelNL\Pdk\Shipment\Model\PackageType                 $packageType
  * @property \MyParcelNL\Pdk\Shipment\Collection\DeliveryTypeCollection $deliveryTypes
+ * @property \MyParcelNL\Pdk\Shipment\Model\PackageType                 $packageType
  * @property \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions             $shipmentOptions
  */
 class CarrierCapabilities extends Model
 {
     protected $attributes = [
-        'packageType'     => PackageType::class,
         'deliveryTypes'   => DeliveryTypeCollection::class,
+        'packageType'     => PackageType::class,
         'shipmentOptions' => ShipmentOptionsCapabilities::class,
     ];
 
     protected $casts      = [
-        'packageType'     => PackageType::class,
         'deliveryTypes'   => DeliveryTypeCollection::class,
+        'packageType'     => PackageType::class,
         'shipmentOptions' => ShipmentOptionsCapabilities::class,
     ];
 }

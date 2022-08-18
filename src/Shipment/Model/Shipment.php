@@ -10,6 +10,9 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 
 /**
+ * @property null|int                                               $id
+ * @property null|string                                            $referenceIdentifier
+ * @property null|string                                            $externalIdentifier
  * @property null|string                                            $apiKey
  * @property null|string                                            $barcode
  * @property null|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions      $carrier
@@ -19,20 +22,17 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property null|bool                                              $delayed
  * @property null|bool                                              $delivered
- * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions    $deliveryOptions
+ * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions         $deliveryOptions
  * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
- * @property null|string                                            $externalIdentifier
- * @property null|int                                               $id
  * @property null|bool                                              $isReturn
  * @property null|string                                            $linkConsumerPortal
  * @property null|\DateTime                                         $modified
  * @property null|string                                            $modifiedBy
- * @property null|bool                                              $multiCollo
+ * @property bool                                                   $multiCollo
  * @property null|string                                            $multiColloMainShipmentId
  * @property null|array                                             $partnerTrackTraces
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties $physicalProperties
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
- * @property null|string                                            $referenceIdentifier
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $sender
  * @property null|int                                               $shopId
  * @property null|int                                               $status
@@ -54,6 +54,9 @@ class Shipment extends Model
     ];
 
     protected $attributes = [
+        'id'                       => null,
+        'referenceIdentifier'      => null,
+        'externalIdentifier'       => null,
         'apiKey'                   => null,
         'barcode'                  => null,
         'carrier'                  => null,
@@ -65,8 +68,6 @@ class Shipment extends Model
         'delivered'                => false,
         'deliveryOptions'          => DeliveryOptions::class,
         'dropOffPoint'             => null,
-        'externalIdentifier'       => null,
-        'id'                       => null,
         'isReturn'                 => false,
         'linkConsumerPortal'       => null,
         'modified'                 => null,
@@ -76,7 +77,6 @@ class Shipment extends Model
         'partnerTrackTraces'       => null,
         'physicalProperties'       => null,
         'recipient'                => null,
-        'referenceIdentifier'      => null,
         'sender'                   => null,
         'shopId'                   => null,
         'status'                   => null,
@@ -84,6 +84,9 @@ class Shipment extends Model
     ];
 
     protected $casts      = [
+        'id'                       => 'int',
+        'referenceIdentifier'      => 'string',
+        'externalIdentifier'       => 'string',
         'apiKey'                   => 'string',
         'barcode'                  => 'string',
         'carrier'                  => CarrierOptions::class,
@@ -95,8 +98,6 @@ class Shipment extends Model
         'delivered'                => 'bool',
         'deliveryOptions'          => DeliveryOptions::class,
         'dropOffPoint'             => RetailLocation::class,
-        'externalIdentifier'       => 'string',
-        'id'                       => 'int',
         'isReturn'                 => 'bool',
         'linkConsumerPortal'       => 'string',
         'modified'                 => DateTime::class,
@@ -106,7 +107,6 @@ class Shipment extends Model
         'partnerTrackTraces'       => 'array',
         'physicalProperties'       => PhysicalProperties::class,
         'recipient'                => ContactDetails::class,
-        'referenceIdentifier'      => 'string',
         'sender'                   => ContactDetails::class,
         'shopId'                   => 'int',
         'status'                   => 'int',

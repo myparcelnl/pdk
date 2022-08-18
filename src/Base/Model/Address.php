@@ -55,6 +55,7 @@ class Address extends Model
      *
      * @return self
      * @throws \Exception
+     * @noinspection PhpUnused
      */
     public function setFullStreetAttribute(?string $fullStreet): self
     {

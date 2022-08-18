@@ -38,6 +38,7 @@ class CustomsDeclaration extends Model
      * Calculate weight automatically if it's not present.
      *
      * @return int
+     * @noinspection PhpUnused
      */
     protected function getWeightAttribute(): int
     {

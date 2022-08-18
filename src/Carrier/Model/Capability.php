@@ -6,6 +6,14 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 
+/**
+ * @property string $type
+ * @property array  $enum
+ * @property int    $minimum
+ * @property int    $maximum
+ * @property int    $minLength
+ * @property int    $maxLength
+ */
 class Capability extends Model
 {
     protected $attributes = [

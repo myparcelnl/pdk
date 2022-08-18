@@ -13,12 +13,12 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class Label extends Model
 {
     protected $attributes = [
-        'link'          => null,
-        'pdf'           => null,
+        'link' => null,
+        'pdf'  => null,
     ];
 
     protected $casts      = [
-        'link'          => 'string',
-        'pdf'           => 'string',
+        'link' => 'string',
+        'pdf'  => 'string',
     ];
 }

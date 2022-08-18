@@ -9,9 +9,9 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property \DateTimeImmutable $date
  * @property null|string        $cutoffTime
- * @property null|boolean       $dispatch
+ * @property \DateTimeImmutable $date
+ * @property null|bool          $dispatch
  * @property null|string        $sameDayCutoffTime
  * @property int                $weekday
  */

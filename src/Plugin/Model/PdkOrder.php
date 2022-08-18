@@ -12,9 +12,9 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
  * @property null|string                                                 $externalIdentifier
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions         $deliveryOptions
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
- * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions         $deliveryOptions
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  */
 class PdkOrder extends Model
@@ -22,17 +22,17 @@ class PdkOrder extends Model
     protected $attributes = [
         /** Plugin order id */
         'externalIdentifier' => null,
+        'deliveryOptions'    => DeliveryOptions::class,
         'recipient'          => null,
         'sender'             => null,
-        'deliveryOptions'    => DeliveryOptions::class,
         'shipments'          => ShipmentCollection::class,
     ];
 
     protected $casts      = [
         'externalIdentifier' => 'string',
+        'deliveryOptions'    => DeliveryOptions::class,
         'recipient'          => ContactDetails::class,
         'sender'             => ContactDetails::class,
-        'deliveryOptions'    => DeliveryOptions::class,
         'shipments'          => ShipmentCollection::class,
     ];
 
@@ -49,6 +49,7 @@ class PdkOrder extends Model
      * @param $shipments
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\PdkOrder
+     * @noinspection PhpUnused
      */
     protected function setShipmentsAttribute($shipments): self
     {
