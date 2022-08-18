@@ -29,7 +29,7 @@ class MyParcelApiService extends AbstractApiService
     {
         $config += self::DEFAULT_CONFIG;
 
-        $this->httpClient = new $config['client'];
+        $this->httpClient = new $config['client']();
         $this->baseUrl    = $config['baseUrl'];
         $this->apiKey     = $config['apiKey'];
     }

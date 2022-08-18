@@ -18,8 +18,7 @@ class ShopCarrierConfigurationRepository extends AbstractRepository
      * @param  string $carrier
      *
      * @return \MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @noinspection PhpUnused
      */
     public function getCarrierConfiguration(int $shopId, string $carrier): CarrierConfiguration
     {
@@ -40,8 +39,7 @@ class ShopCarrierConfigurationRepository extends AbstractRepository
      * @param  int $shopId
      *
      * @return \MyParcelNL\Pdk\Base\Support\Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @noinspection PhpUnused
      */
     public function getCarrierConfigurations(int $shopId): Collection
     {

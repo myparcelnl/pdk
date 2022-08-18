@@ -25,8 +25,6 @@ class MockRepository extends AbstractRepository
      *
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function __construct(Pdk $pdk)
     {
@@ -75,8 +73,6 @@ class MockRepository extends AbstractRepository
      * @param  int $shopId
      *
      * @return \MyParcelNL\Sdk\src\Model\Account\Shop
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
      */
     public function getShopWithParameters(int $shopId): Shop
     {

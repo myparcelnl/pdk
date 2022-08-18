@@ -23,7 +23,7 @@ class DefaultLogger extends Facade
     /**
      * @return string
      */
-    public static function getFacadeAccessor(): string
+    protected static function getFacadeAccessor(): string
     {
         return 'logger.default';
     }

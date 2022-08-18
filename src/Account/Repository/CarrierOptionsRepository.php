@@ -15,8 +15,7 @@ class CarrierOptionsRepository extends AbstractRepository
      * @param  int $carrierId
      *
      * @return \MyParcelNL\Pdk\Base\Support\Collection
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @noinspection PhpUnused
      */
     public function getCarrierOptions(int $carrierId): Collection
     {

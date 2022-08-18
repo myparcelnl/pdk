@@ -12,8 +12,7 @@ use MyParcelNL\Sdk\src\Model\Account\Shop;
 class ShopRepository extends AbstractRepository
 {
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @return \MyParcelNL\Sdk\src\Model\Account\Shop
      */
     public function getShop(): Shop
     {

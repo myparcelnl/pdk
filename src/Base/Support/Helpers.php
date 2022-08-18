@@ -34,7 +34,7 @@ class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
                 return $target;
             }
 
-            if ($segment === '*') {
+            if ('*' === $segment) {
                 if ($target instanceof Collection) {
                     $target = $target->all();
                 } elseif (! is_array($target)) {

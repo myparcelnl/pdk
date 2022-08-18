@@ -11,7 +11,7 @@ class ShopResponse extends JsonResponse
 {
     public function getBody(): StreamInterface
     {
-        return Utils::StreamFor(
+        return Utils::streamFor(
             json_encode(['data' => ['shops' => [['id' => 3, 'name' => 'creme fraiche']]],])
         );
     }

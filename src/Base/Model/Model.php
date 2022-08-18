@@ -77,7 +77,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  array  $parameters
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __call(string $method, array $parameters)
     {
@@ -101,7 +101,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __get(string $key)
     {
@@ -114,7 +114,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  string $key
      *
      * @return bool
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __isset(string $key)
     {
@@ -164,7 +164,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  mixed $offset
      *
      * @return bool
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function offsetExists($offset): bool
     {
@@ -177,7 +177,7 @@ class Model implements Arrayable, ArrayAccess
      * @param  mixed $offset
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -215,7 +215,7 @@ class Model implements Arrayable, ArrayAccess
      * Convert the model instance to an array.
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toArray(): array
     {
@@ -224,7 +224,7 @@ class Model implements Arrayable, ArrayAccess
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toSnakeCaseArray(): array
     {

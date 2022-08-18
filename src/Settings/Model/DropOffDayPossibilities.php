@@ -43,7 +43,7 @@ class DropOffDayPossibilities extends Model
      * @param  null|\DateTimeImmutable $date
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getPossibleDropOffDays(DateTimeImmutable $date = null): DropOffDayCollection
     {

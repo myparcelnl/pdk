@@ -23,6 +23,7 @@ class ShipmentRepository extends AbstractRepository
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @noinspection PhpUnused
      */
     public function createConcepts(ShipmentCollection $collection): ShipmentCollection
     {
@@ -40,6 +41,7 @@ class ShipmentRepository extends AbstractRepository
      * @param  null|array                                             $position
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @noinspection PhpUnused
      */
     public function fetchLabelLink(
         ShipmentCollection $collection,
@@ -70,6 +72,7 @@ class ShipmentRepository extends AbstractRepository
      * @param  null|array                                             $position
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @noinspection PhpUnused
      */
     public function fetchLabelPdf(
         ShipmentCollection $collection,
@@ -97,6 +100,7 @@ class ShipmentRepository extends AbstractRepository
      * @param  null|int $size
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @noinspection PhpUnused
      */
     public function getByReferenceIdentifiers(array $referenceIdentifiers, ?int $size = null): ShipmentCollection
     {
@@ -107,6 +111,7 @@ class ShipmentRepository extends AbstractRepository
      * @param  array $parameters
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @noinspection PhpUnused
      */
     public function query(array $parameters): ShipmentCollection
     {
@@ -125,6 +130,7 @@ class ShipmentRepository extends AbstractRepository
      * @param  null|int                                               $size
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @noinspection PhpUnused
      */
     public function update(ShipmentCollection $collection, ?int $size = null): ShipmentCollection
     {

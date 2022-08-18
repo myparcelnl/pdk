@@ -13,7 +13,7 @@ class GetShipmentsFromContractResponse extends JsonResponse
 {
     public function getBody(): StreamInterface
     {
-        return Utils::StreamFor(
+        return Utils::streamFor(
             json_encode(
                 [
                     'data' => [

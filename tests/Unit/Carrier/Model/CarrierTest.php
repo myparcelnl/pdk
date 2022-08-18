@@ -45,7 +45,7 @@ it('creates custom carrier by subscriptionId', function () {
 it('returns complete carrier object', function () {
     $carrier = new CarrierOptions(['id' => CarrierOptions::CARRIER_INSTABOX_ID]);
 
-    expect(array_filter(Arr::dot($carrier->toArray()), function ($item) { return $item !== null; }))
+    expect(array_filter(Arr::dot($carrier->toArray()), function ($item) { return null !== $item; }))
         ->toEqual(
             [
                 'id'                                                         => CarrierOptions::CARRIER_INSTABOX_ID,

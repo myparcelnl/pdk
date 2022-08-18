@@ -80,7 +80,7 @@ class PostShipmentsRequest extends AbstractRequest
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeDropOffPoint(Shipment $shipment): ?array
     {
@@ -95,7 +95,7 @@ class PostShipmentsRequest extends AbstractRequest
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeOptions(Shipment $shipment): ?array
     {
@@ -146,7 +146,7 @@ class PostShipmentsRequest extends AbstractRequest
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeShipment(Collection $groupedShipments): array
     {
