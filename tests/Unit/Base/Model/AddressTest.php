@@ -1,12 +1,10 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection */
+/** @noinspection StaticClosureCanBeUsedInspection,PhpUndefinedFieldInspection */
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Base\Model;
-
-use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Data\CountryCodes;
+use MyParcelNL\Pdk\Base\Model\Address;
 
 it('initializes be address', function () {
     $address = new Address([

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Service;
+namespace MyParcelNL\Pdk\Shipment\Service;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;

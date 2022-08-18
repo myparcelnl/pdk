@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 
 /**
- * @property int                                                             $contents
- * @property \MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItemCollection $items
- * @property null|string                                                     $invoice
- * @property int                                                             $weight
+ * @property int                                                                  $contents
+ * @property \MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection $items
+ * @property null|string                                                          $invoice
+ * @property int                                                                  $weight
  */
 class CustomsDeclaration extends Model
 {

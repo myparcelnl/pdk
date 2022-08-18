@@ -1,39 +1,10 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection,PhpMultipleClassesDeclarationsInOneFile,PhpIllegalPsrClassPathInspection */
+/** @noinspection PhpUndefinedFieldInspection,PhpUndefinedMethodInspection,StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection,PhpMultipleClassesDeclarationsInOneFile,PhpIllegalPsrClassPathInspection */
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Model\Model;
-
-trait InitTrait
-{
-    public function initializeInitTrait()
-    {
-        $this->myProperty = 1;
-    }
-}
-
-class MyModel extends Model
-{
-    use InitTrait;
-
-    protected $attributes = [
-        'myProperty' => null,
-        'perenboom'  => null,
-        'bloemkool'  => null,
-    ];
-
-    public function getBloemkoolAttribute(): string
-    {
-        return 'bloemkool';
-    }
-
-    public function setPerenboomAttribute($value): self
-    {
-        $this->attributes['perenboom'] = "mutated_$value";
-        return $this;
-    }
-}
+use MyParcelNL\Pdk\Tests\Mocks\DifferentAttributeCasingModel;
+use MyParcelNL\Pdk\Tests\Mocks\MyModel;
 
 it('initializes traits', function () {
     expect((new MyModel())->myProperty)->toBe(1);
@@ -117,16 +88,7 @@ it('can use toSnakeCaseArray', function () {
 });
 
 it('can initialize and get properties with any case', function () {
-    class CaseModel extends Model
-    {
-        protected $attributes = [
-            'snakeCase'  => null,
-            'camelCase'  => null,
-            'studlyCase' => null,
-        ];
-    }
-
-    $model = new CaseModel([
+    $model = new DifferentAttributeCasingModel([
         'snake_case' => 'snake_case',
     ]);
 

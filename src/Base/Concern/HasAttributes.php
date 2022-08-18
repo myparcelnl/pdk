@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Base\Concern;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use MyParcelNL\Pdk\Base\Model\InvalidCastException;
+use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
@@ -100,7 +100,7 @@ trait HasAttributes
      * @param  null|string $case - camel, snake, studly etc.
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function attributesToArray(string $case = null): array
     {
@@ -159,7 +159,7 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getAttribute(string $key)
     {
@@ -222,7 +222,7 @@ trait HasAttributes
      * @param  array|mixed $attributes
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function only($attributes): array
     {
@@ -262,7 +262,7 @@ trait HasAttributes
      * @param  array $mutatedAttributes
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes): array
     {
@@ -384,7 +384,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function castAttribute(string $key, $value)
     {
@@ -424,7 +424,6 @@ trait HasAttributes
                 }
                 break;
         }
-
 
         return $value;
     }
@@ -488,7 +487,7 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getAttributeValue(string $key)
     {
@@ -524,7 +523,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getClassCastableAttributeValue(string $key, $value)
     {
@@ -670,7 +669,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function transformModelValue(string $key, $value)
     {
@@ -701,7 +700,7 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Model\InvalidCastException
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getCastModel(string $key, $value)
     {

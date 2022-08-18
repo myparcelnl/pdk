@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Service;
+namespace MyParcelNL\Pdk\Shipment\Service;
 
 use DateTimeImmutable;
 use DateTimeInterface;

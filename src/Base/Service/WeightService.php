@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Service;
+namespace MyParcelNL\Pdk\Base\Service;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\ValidationException;

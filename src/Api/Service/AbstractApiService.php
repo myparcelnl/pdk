@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Service;
 
 use GuzzleHttp\RequestOptions;
-use MyParcelNL\Pdk\Account\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
+use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 
 abstract class AbstractApiService implements ApiServiceInterface
@@ -22,8 +22,8 @@ abstract class AbstractApiService implements ApiServiceInterface
     protected $httpClient;
 
     /**
-     * @param  \MyParcelNL\Pdk\Account\Request\RequestInterface $request
-     * @param  string                                           $responseClass
+     * @param  \MyParcelNL\Pdk\Base\Request\RequestInterface $request
+     * @param  string                                        $responseClass
      *
      * @return \MyParcelNL\Pdk\Api\Concern\ApiResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -65,7 +65,7 @@ abstract class AbstractApiService implements ApiServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Account\Request\RequestInterface $request
+     * @param  \MyParcelNL\Pdk\Base\Request\RequestInterface $request
      *
      * @return string
      */

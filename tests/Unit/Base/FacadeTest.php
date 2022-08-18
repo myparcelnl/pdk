@@ -1,5 +1,5 @@
 <?php
-/** @noinspection AutoloadingIssuesInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection,PhpMultipleClassesDeclarationsInOneFile */
+/** @noinspection PhpUndefinedMethodInspection,AutoloadingIssuesInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection,PhpMultipleClassesDeclarationsInOneFile */
 
 declare(strict_types=1);
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Facade;
 
-use MyParcelNL\Pdk\Account\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Facade;
+use MyParcelNL\Pdk\Base\Request\RequestInterface;
 
 /**
  * @method static ApiResponseInterface  doRequest(RequestInterface $request, string $responseClass)

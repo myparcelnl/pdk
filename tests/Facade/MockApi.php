@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Facade;
 
 use GuzzleHttp\Handler\MockHandler;
-use MyParcelNL\Pdk\Account\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
+use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Pdk\Facade\Api;
 
 /**

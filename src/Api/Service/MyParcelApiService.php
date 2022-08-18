@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Api;
+namespace MyParcelNL\Pdk\Api\Service;
 
 use GuzzleHttp\Client;
-use MyParcelNL\Pdk\Api\Service\AbstractApiService;
 
 /**
  * This will replace the SDK one day...

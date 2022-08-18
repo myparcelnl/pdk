@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Service\DeliveryDateService;
+use MyParcelNL\Pdk\Shipment\Service\DeliveryDateService;
 
 it('calculates the correct delivery date', function ($input, $output) {
     expect(DeliveryDateService::fixPastDeliveryDate($input))->toEqual($output);

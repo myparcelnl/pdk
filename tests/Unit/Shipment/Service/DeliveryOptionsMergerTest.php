@@ -3,13 +3,12 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Service;
-
 use MyParcelNL\Pdk\Base\Data\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger;
 
 const DEFAULT_LOCATION_CODE = '98125';
 const DEFAULT_DATE          = '2022-07-22 06:00:00';

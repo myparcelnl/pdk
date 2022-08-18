@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Account\Request;
+namespace MyParcelNL\Pdk\Base\Request;
 
 abstract class AbstractRequest implements RequestInterface
 {
