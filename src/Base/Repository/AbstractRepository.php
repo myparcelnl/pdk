@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Repository;
 
-use MyParcelNL\Pdk\Base\Pdk;
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Storage\StorageInterface;
 
 abstract class AbstractRepository
 {
@@ -19,25 +20,18 @@ abstract class AbstractRepository
     protected $storage;
 
     /**
-     * @var string
-     */
-    protected $storageDriver = 'default';
-
-    /**
      * @var array{string, string}
      */
     protected $storageHashMap = [];
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Pdk $pdk
-     *
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @param  \MyParcelNL\Pdk\Storage\StorageInterface        $storage
+     * @param  \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api
      */
-    public function __construct(Pdk $pdk)
+    public function __construct(StorageInterface $storage, ApiServiceInterface $api)
     {
-        $this->storage = $pdk->get("storage.$this->storageDriver");
-        $this->api     = $pdk->get('api');
+        $this->storage = $storage;
+        $this->api     = $api;
     }
 
     /**

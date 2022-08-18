@@ -3,30 +3,33 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\ShipmentRepository;
+use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsFromContractResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsResponseWithDropOffPoint;
 use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsResponseWithPickup;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Facade\MockApi;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 /**
  * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::query
  */
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
-});
+it('creates shipment collection from queried data', function (string $responseClass, array $output) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
-it('creates shipment collection from queried data', function ($response, $output) {
-    MockApi::getMock()
-        ->append(new $response());
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = $pdk->get(ApiServiceInterface::class);
+    $api->getMock()
+        ->append(new $responseClass());
 
-    $response = ShipmentRepository::query([]);
+    /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+    $repository = $pdk->get(ShipmentRepository::class);
+
+    $response = $repository->query([]);
     $shipment = $response->first();
     $array    = $shipment->toArray();
 

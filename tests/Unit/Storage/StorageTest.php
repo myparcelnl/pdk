@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('gets storage', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
-    expect($pdk->get('storage.default'))->toBeInstanceOf(StorageInterface::class);
+    expect($pdk->get(StorageInterface::class))->toBeInstanceOf(StorageInterface::class);
 });

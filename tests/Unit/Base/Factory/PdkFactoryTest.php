@@ -5,36 +5,11 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Storage\StorageInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
 
-it('can create a pdk instance', function (array $config) {
-    $pdk = PdkFactory::create($config);
+it('can create a pdk instance', function () {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
-    expect($pdk->get('storage.default'))
-        ->toBeInstanceOf(StorageInterface::class)
-        ->and($pdk->has('storage.default'))
-        ->toBeTrue();
-})->with([
-    'default config'                  => [MockPdkConfig::DEFAULT_CONFIG],
-    'classes instead of class string' => [
-        [
-            'storage' => [
-                'default' => new MockStorage(),
-            ],
-            'logger'  => [
-                'default' => new MockLogger(),
-            ],
-        ],
-    ],
-]);
-
-it('throws errors', function ($configuration) {
-    PdkFactory::create($configuration);
-})
-    ->throws(InvalidArgumentException::class)
-    ->with([
-        'empty configuration '  => [[]],
-        'invalid configuration' => [['api' => MockStorage::class]],
-    ]);
+    expect($pdk->get(StorageInterface::class))
+        ->toBeInstanceOf(StorageInterface::class);
+});

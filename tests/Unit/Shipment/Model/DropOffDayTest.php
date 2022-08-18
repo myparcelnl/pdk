@@ -13,7 +13,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
 it(
     'returns correct delivery days using a specific date',
     function (string $date, array $settingsOverrides, array $expectation) {
-        $pdkConfig = ['settings' => new MockPluginSettings($settingsOverrides)] + MockPdkConfig::DEFAULT_CONFIG;
+        $pdkConfig = MockPdkConfig::create(['settings' => new MockPluginSettings($settingsOverrides)]);
         PdkFactory::create($pdkConfig);
 
         $deliveryDays = (new DropOffDayPossibilities())->getPossibleDropOffDays(new DateTimeImmutable($date));
@@ -143,7 +143,7 @@ for ($i = 1; $i < 14; $i++) {
 dataset('deliveryDaysAmountDataset', $dataset);
 
 it('returns correct amount of delivery days', function (array $settingsOverrides, int $amountOfItems) {
-    $pdkConfig = ['settings' => new MockPluginSettings($settingsOverrides)] + MockPdkConfig::DEFAULT_CONFIG;
+    $pdkConfig = MockPdkConfig::create(['settings' => new MockPluginSettings($settingsOverrides)]);
     PdkFactory::create($pdkConfig);
 
     $deliveryDays = (new DropOffDayPossibilities())->getPossibleDropOffDays();

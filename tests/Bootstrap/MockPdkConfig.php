@@ -4,25 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\ConfigInterface;
+use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
+use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Sdk\src\Support\Arr;
+use Psr\Log\LoggerInterface;
+use function DI\autowire;
 
 class MockPdkConfig
 {
-    public const DEFAULT_CONFIG = [
-        'api'      => MockApiService::class,
-        'config'   => MockConfig::class,
-        'settings' => MockPluginSettings::class,
-        'storage'  => [
-            'default' => MockStorage::class,
-        ],
-        'logger'   => [
-            'default' => MockLogger::class,
-        ],
-        'service'  => [
-            'language' => MockLanguageService::class,
-        ],
-    ];
-
     /**
      * @param  array $config
      *
@@ -30,12 +21,22 @@ class MockPdkConfig
      */
     public static function create(array $config = []): array
     {
-        $newConfig = self::DEFAULT_CONFIG;
+        return array_replace_recursive(self::getDefaultConfig(), Arr::dot($config));
+    }
 
-        foreach (Arr::dot($config) as $item => $value) {
-            Arr::set($newConfig, $item, $value);
-        }
+    /**
+     * @return array
+     */
+    private static function getDefaultConfig(): array
+    {
+        return Arr::dot([
+            ApiServiceInterface::class      => autowire(MockApiService::class),
+            ConfigInterface::class          => autowire(MockConfig::class),
+            LanguageServiceInterface::class => autowire(MockLanguageService::class),
+            LoggerInterface::class          => autowire(MockLogger::class),
+            StorageInterface::class         => autowire(MockStorage::class),
 
-        return $newConfig;
+            'settings' => autowire(MockPluginSettings::class),
+        ]);
     }
 }

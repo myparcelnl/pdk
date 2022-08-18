@@ -3,14 +3,14 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Facade\ShipmentRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
+use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ShipmentLabelsPdfResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Facade\MockApi;
 
 $array              = array_fill(0, 30, 'appelboom');
 $bulkShipmentsArray = array_map(function ($item, $index) {
@@ -85,17 +85,26 @@ dataset('collections', [
 it(
     'downloads labels as link',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
-        $responseClass = count($collection) > 25
-            ? new ShipmentLabelsLinkV2Response()
-            : new ShipmentLabelsLinkResponse();
+        $pdk = PdkFactory::create(MockPdkConfig::create());
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+        $api  = $pdk->get(ApiServiceInterface::class);
+        $mock = $api->getMock();
 
-        MockApi::getMock()
-            ->append($responseClass);
+        $mock->append(
+            count($collection) > 25
+                ? new ShipmentLabelsLinkV2Response()
+                : new ShipmentLabelsLinkResponse()
+        );
 
-        $response = ShipmentRepository::fetchLabelLink(new ShipmentCollection($collection), $format, $position);
-        $request  = MockApi::getMock()
-            ->getLastRequest();
+        /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+        $repository = $pdk->get(ShipmentRepository::class);
+
+        $response = $repository->fetchLabelLink(new ShipmentCollection($collection), $format, $position);
+        $request  = $mock->getLastRequest();
+
+        if (! $request) {
+            throw new RuntimeException('Request not found.');
+        }
 
         $uri = $request->getUri();
 
@@ -113,13 +122,21 @@ it(
 it(
     'downloads labels as pdf',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
-        MockApi::getMock()
-            ->append(new ShipmentLabelsPdfResponse());
+        $pdk = PdkFactory::create(MockPdkConfig::create());
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+        $api  = $pdk->get(ApiServiceInterface::class);
+        $mock = $api->getMock();
+        $mock->append(new ShipmentLabelsPdfResponse());
 
-        $response = ShipmentRepository::fetchLabelPdf(new ShipmentCollection($collection), $format, $position);
-        $request  = MockApi::getMock()
-            ->getLastRequest();
+        /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+        $repository = $pdk->get(ShipmentRepository::class);
+
+        $response = $repository->fetchLabelPdf(new ShipmentCollection($collection), $format, $position);
+        $request  = $mock->getLastRequest();
+
+        if (! $request) {
+            throw new RuntimeException('Request not found.');
+        }
 
         $uri = $request->getUri();
 

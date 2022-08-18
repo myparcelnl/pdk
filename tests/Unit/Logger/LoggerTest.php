@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('logs logs', function (string $level, string $message, array $context = []) {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    PdkFactory::create(MockPdkConfig::create());
 
     DefaultLogger::{$level}($message, $context);
 

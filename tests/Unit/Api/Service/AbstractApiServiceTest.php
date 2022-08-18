@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -16,10 +17,10 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 
 it('handles various error responses', function (string $response) {
-    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get('api');
+    $api = $pdk->get(ApiServiceInterface::class);
     $api->getMock()
         ->append(new $response());
 
@@ -36,10 +37,10 @@ it('handles various error responses', function (string $response) {
 ]);
 
 it('handles a request with a query string', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get('api');
+    $api = $pdk->get(ApiServiceInterface::class);
     $api->getMock()
         ->append(new ShipmentsResponse());
 

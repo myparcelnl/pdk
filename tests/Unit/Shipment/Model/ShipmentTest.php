@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    PdkFactory::create(MockPdkConfig::create());
 });
 
 it('sets carrier correctly', function ($carrier, string $expectedName) {
@@ -68,8 +68,6 @@ it('passes carrier to delivery options', function () {
         ]),
     ]);
 
-    expect(
-        $shipment->getDeliveryOptions()
-            ->getCarrier()
-    )->toEqual(CarrierOptions::CARRIER_POSTNL_NAME);
+    $deliveryOptions = $shipment->getDeliveryOptions();
+    expect($deliveryOptions ? $deliveryOptions->getCarrier() : null)->toEqual(CarrierOptions::CARRIER_POSTNL_NAME);
 });

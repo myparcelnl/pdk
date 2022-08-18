@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Account\Request\GetShopRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
-use MyParcelNL\Pdk\Base\Pdk;
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Sdk\src\Model\Account\Account;
@@ -21,14 +21,12 @@ class MockRepository extends AbstractRepository
     private $values;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Pdk $pdk
-     *
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @param  \MyParcelNL\Pdk\Tests\Bootstrap\MockStorage     $storage
+     * @param  \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api
      */
-    public function __construct(Pdk $pdk)
+    public function __construct(MockStorage $storage, ApiServiceInterface $api)
     {
-        parent::__construct($pdk);
+        parent::__construct($storage, $api);
 
         $this->values = new Collection([
             'account' => $this->getAccount(),

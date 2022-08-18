@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
-use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApiService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
@@ -20,7 +19,7 @@ $pdk = PdkFactory::create([
 ]);
 
 it('sets up api', function () use ($pdk) {
-    /** @var MyParcelApiService $api */
+    /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
     $api = $pdk->get('api');
 
     expect($api)->toBeInstanceOf(AbstractApiService::class);

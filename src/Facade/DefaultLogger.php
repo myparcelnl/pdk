@@ -1,10 +1,12 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
+use Psr\Log\LoggerInterface;
 
 /**
  * @method static void log($level, $message, array $context = [])
@@ -16,7 +18,7 @@ use MyParcelNL\Pdk\Base\Facade;
  * @method static void info($message, array $context = [])
  * @method static void notice($message, array $context = [])
  * @method static void warning($message, array $context = [])
- * @implements \MyParcelNL\Pdk\Logger\AbstractLogger
+ * @implements \Psr\Log\LoggerInterface
  */
 class DefaultLogger extends Facade
 {
@@ -25,6 +27,6 @@ class DefaultLogger extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'logger.default';
+        return LoggerInterface::class;
     }
 }

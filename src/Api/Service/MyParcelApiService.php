@@ -25,7 +25,7 @@ class MyParcelApiService extends AbstractApiService
     /**
      * @param  array $config
      */
-    public function __construct(array $config = self::DEFAULT_CONFIG)
+    public function __construct(array $config = [])
     {
         $config += self::DEFAULT_CONFIG;
 
