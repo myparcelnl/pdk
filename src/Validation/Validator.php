@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation;
 
-use MyParcelNL\Pdk\Base\Model\InvalidCastException;
+use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Shipment\Collection\DefaultLogger;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Helpers\ValidationHelper;
 
@@ -231,10 +231,10 @@ class Validator
     }
 
     /**
-     * @param array $options
+     * @param  array $options
      *
      * @return array
-     * @throws InvalidCastException
+     * @throws InvalidCastException|\MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function validateOptions(array $options): array
     {
