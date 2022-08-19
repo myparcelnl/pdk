@@ -6,11 +6,14 @@ namespace MyParcelNL\Pdk\Api\Service;
 
 use GuzzleHttp\RequestOptions;
 use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
+use MyParcelNL\Pdk\Base\Concern\HasUserAgent;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 
 abstract class AbstractApiService implements ApiServiceInterface
 {
+    use HasUserAgent;
+
     /**
      * @var string
      */
@@ -88,6 +91,8 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     protected function getHeaders(): array
     {
-        return [];
+        return [
+            'User-Agent' => $this->getUserAgentHeader(),
+        ];
     }
 }
