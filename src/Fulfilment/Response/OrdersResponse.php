@@ -2,27 +2,28 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Shipment\Response;
+namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
-use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\src\Support\Arr;
 
-class GetShipmentsResponse extends AbstractApiResponseWithBody
+class OrdersResponse extends AbstractApiResponseWithBody
 {
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
-    private $shipments;
+    private $orders;
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
-    public function getShipments(): ShipmentCollection
+    public function getOrders(): OrderCollection
     {
-        return $this->shipments;
+        return $this->orders;
     }
 
     /**
@@ -34,42 +35,34 @@ class GetShipmentsResponse extends AbstractApiResponseWithBody
     protected function parseResponseBody(string $body): void
     {
         $parsedBody = json_decode($body, true);
-        $shipments  = $parsedBody['data']['shipments'] ?? [];
+        $orders     = $parsedBody['data']['orders'] ?? [];
 
-        $shipmentData = [];
+        $orderData = [];
 
-        foreach ($shipments as $shipment) {
-            $shipmentData[] = $this->createShipmentFromApiData($shipment);
+        foreach ($orders as $order) {
+            $orderData[] = $this->createOrderFromApiData($order);
         }
 
-        $this->shipments = (new ShipmentCollection($shipmentData));
+        $this->orders = (new OrderCollection($orderData));
     }
 
     /**
      * @param  array $data
      *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
-     * @throws \Exception
+     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
      */
-    private function createShipmentFromApiData(array $data): Shipment
+    private function createOrderFromApiData(array $data): Order
     {
-        $isReturn = in_array((int) $data['shipment_type'], Shipment::RETURN_SHIPMENT_TYPES, true);
-
         $options            = $data['options'] ?? [];
         $physicalProperties = $data['physical_properties'] ?? [];
 
-        return new Shipment([
-            'id'                       => $data['id'],
+        return new Order([
+            'uuid'                     => $data['uuid'],
             'shopId'                   => $data['shop_id'],
-            'carrier'                  => [
-                'subscriptionId' => $data['contract_id'],
-                'id'             => $data['carrier_id'],
-            ],
             'status'                   => $data['status'],
-            'barcode'                  => $data['barcode'],
-            'isReturn'                 => $isReturn,
+            'externalIdentifier'       => $data['external_identifier'],
             'recipient'                => $this->filter($data['recipient']),
-            'sender'                   => $this->filter($data['sender']),
+            'orderLines'               => $this->createOrderLines($data['order_lines']),
             'deliveryOptions'          => [
                 'deliveryType'    => $options['delivery_type'],
                 'packageType'     => $options['package_type'],
@@ -84,7 +77,6 @@ class GetShipmentsResponse extends AbstractApiResponseWithBody
             'collectionContact'        => $data['collection_contact'],
             'delayed'                  => $data['delayed'],
             'delivered'                => $data['delivered'],
-            'externalIdentifier'       => $data['external_identifier'],
             'linkConsumerPortal'       => $data['link_consumer_portal'],
             'multiColloMainShipmentId' => $data['multi_collo_main_shipment_id'],
             'partnerTrackTraces'       => $data['partner_tracktraces'],
@@ -96,6 +88,10 @@ class GetShipmentsResponse extends AbstractApiResponseWithBody
             'modifiedBy'               => $data['modified_by'],
             'multiCollo'               => $data['multi_collo_main_shipment_id'] && $data['secondary_shipments'],
         ]);
+    }
+
+    private function createOrderLines($order_lines): Collection
+    {
     }
 
     /**
