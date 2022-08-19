@@ -111,10 +111,10 @@ it('gets only requested fields with string', function () {
 it('checks if guarded properties cannot be modified', function () {
     $model = new ClassWithGuardedAttributes(['field' => 1]);
 
-    $model->field   = 2;
-    $model['field'] = 3;
-    $model->setField(4);
-    $model->fill(['field' => 5]);
+    $model['field'] = 2;
+    $model->setField(3);
+    $model->fill(['field' => 4]);
+    $model->field = 'test';
 
     expect($model->field)->toEqual('test');
 });

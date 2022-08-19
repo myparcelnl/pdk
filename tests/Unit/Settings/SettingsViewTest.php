@@ -379,13 +379,3 @@ it('throws error when type is invalid', function () {
 
     (new InvalidTypeView())->toArray();
 })->throws(InvalidArgumentException::class);
-
-it('gets fields from cache', function () {
-    $labelSettings = new LabelSettingsView([]);
-
-    $labelSettings->toArray();
-    $labelSettings->toArray();
-
-    expect($labelSettings->getCache())
-        ->toBeArray();
-});

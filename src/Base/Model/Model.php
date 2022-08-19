@@ -143,7 +143,7 @@ class Model implements Arrayable, ArrayAccess
     public function fill(array $attributes): self
     {
         foreach ($attributes as $key => $value) {
-            if ($this->isGuarded($key)) {
+            if ($this->guarded[$key] !== $this->attributes[$key] && $this->isGuarded($key)) {
                 unset($this->attributes[$key]);
                 continue;
             }
