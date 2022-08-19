@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  *
  * @property null|string $uuid
  * @property null|int    $accountId
+ * @property null|string $createdAt
  * @property null|int    $shopId
  * @property null|string $expectedDeliveryDate
  * @property null|string $expectedDeliveryTimeframe
@@ -25,14 +26,14 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property null|array  $shipment
  * @property null|string $status
  * @property null|string $type
+ * @property null|string $updatedAt
  * @property null|int    $vat
  */
 class Order extends Model
 {
     protected $attributes = [
-        'uuid'                        => null,
         'accountId'                   => null,
-        'shopId'                      => null,
+        'createdAt'                   => null,
         'expectedDeliveryDate'        => null,
         'expectedDeliveryTimeframe'   => null,
         'externalIdentifier'          => null,
@@ -44,15 +45,17 @@ class Order extends Model
         'price'                       => null,
         'priceAfterVat'               => null,
         'shipment'                    => null,
+        'shopId'                      => null,
         'status'                      => null,
         'type'                        => null,
+        'updatedAt'                   => null,
+        'uuid'                        => null,
         'vat'                         => null,
     ];
 
     protected $casts      = [
-        'uuid'                        => 'string',
         'accountId'                   => 'int',
-        'shopId'                      => 'int',
+        'createdAt'                   => 'string',
         'expectedDeliveryDate'        => 'string',
         'expectedDeliveryTimeframe'   => 'string',
         'externalIdentifier'          => 'string',
@@ -64,8 +67,11 @@ class Order extends Model
         'price'                       => 'int',
         'priceAfterVat'               => 'int',
         'shipment'                    => 'array',
+        'shopId'                      => 'int',
         'status'                      => 'string',
         'type'                        => 'string',
+        'updatedAt'                   => 'string',
+        'uuid'                        => 'string',
         'vat'                         => 'int',
     ];
 }

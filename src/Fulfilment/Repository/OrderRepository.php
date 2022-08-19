@@ -46,10 +46,10 @@ class OrderRepository extends AbstractRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     * @param  null|int                                               $size
+     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $collection
+     * @param  null|int                                              $size
      *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      * @noinspection PhpUnused
      */
     public function update(OrderCollection $collection, ?int $size = null): OrderCollection
