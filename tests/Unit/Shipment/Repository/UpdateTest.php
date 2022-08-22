@@ -4,24 +4,32 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Facade\ShipmentRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
+use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Facade\MockApi;
 
 /**
  * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::update
  */
 
 it('updates shipment', function ($args, $path, $query) {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
-    MockApi::getMock()
-        ->append(new Response());
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api  = $pdk->get(ApiServiceInterface::class);
+    $mock = $api->getMock();
+    $mock->append(new Response());
 
-    $response = ShipmentRepository::update(...$args);
-    $request  = MockApi::getMock()
-        ->getLastRequest();
+    /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+    $repository = $pdk->get(ShipmentRepository::class);
+
+    $response = $repository->update(...$args);
+    $request  = $mock->getLastRequest();
+
+    if (! $request) {
+        throw new RuntimeException('Request not found.');
+    }
 
     $uri = $request->getUri();
 
@@ -78,11 +86,16 @@ it('updates shipment', function ($args, $path, $query) {
 ]);
 
 it('throws error when updating collection without ids or reference ids', function () {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
-    MockApi::getMock()
-        ->append(new Response());
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api  = $pdk->get(ApiServiceInterface::class);
+    $mock = $api->getMock();
+    $mock->append(new Response());
 
-    ShipmentRepository::update(
+    /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+    $repository = $pdk->get(ShipmentRepository::class);
+
+    $repository->update(
         new ShipmentCollection([
             ['carrier' => 'postnl'],
             ['carrier' => 'instabox'],

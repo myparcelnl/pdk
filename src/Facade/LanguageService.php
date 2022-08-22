@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
+use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
 
 /**
  * @method static array<string, string> getTranslations(string $language = null)
@@ -18,6 +19,6 @@ class LanguageService extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'service.language';
+        return LanguageServiceInterface::class;
     }
 }

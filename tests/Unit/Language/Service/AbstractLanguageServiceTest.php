@@ -5,13 +5,15 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use function DI\autowire;
 
 beforeEach(function () {
     PdkFactory::create(
         MockPdkConfig::create([
-            'service.language' => MockAbstractLanguageService::class,
+            LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
         ])
     );
 });

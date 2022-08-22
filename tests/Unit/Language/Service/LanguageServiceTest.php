@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    PdkFactory::create(MockPdkConfig::create());
 });
 
 it('gets translations', function () {

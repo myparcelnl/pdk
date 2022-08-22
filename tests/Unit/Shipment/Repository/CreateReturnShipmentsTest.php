@@ -3,15 +3,15 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\ShipmentRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\PostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Facade\MockApi;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 const INPUT_RECIPIENT = [
@@ -33,18 +33,24 @@ const DEFAULT_INPUT_SENDER = [
 ];
 
 it('creates return shipment', function (array $input, array $output) {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
-    $mock = MockApi::getMock();
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api  = $pdk->get(ApiServiceInterface::class);
+    $mock = $api->getMock();
     $mock->append(new PostShipmentsResponse());
 
+    $repository             = $pdk->get(ShipmentRepository::class);
     $inputShipments         = (new Collection($input))->mapInto(Shipment::class);
-    $createdReturnShipments = ShipmentRepository::createReturnShipments(
-        new ShipmentCollection($inputShipments->all())
-    );
+    $createdReturnShipments = $repository->createReturnShipments(new ShipmentCollection($inputShipments->all()));
 
     $request = $mock->getLastRequest();
-    $body    = json_decode(
+
+    if (! $request) {
+        throw new RuntimeException('Request is not set');
+    }
+
+    $body = json_decode(
         $request->getBody()
             ->getContents(),
         true
@@ -183,13 +189,16 @@ it('creates return shipment', function (array $input, array $output) {
 ]);
 
 it('creates a valid request from a shipment collection', function ($input, $path, $query, $contentType) {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
-    MockApi::getMock()
-        ->append(new PostShipmentsResponse());
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
-    $response = ShipmentRepository::createReturnShipments(new ShipmentCollection($input));
-    $request  = MockApi::getMock()
-        ->getLastRequest();
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api  = $pdk->get(ApiServiceInterface::class);
+    $mock = $api->getMock();
+    $mock->append(new PostShipmentsResponse());
+
+    $repository = $pdk->get(ShipmentRepository::class);
+    $response   = $repository->createReturnShipments(new ShipmentCollection($input));
+    $request    = $mock->getLastRequest();
 
     if (! $request) {
         throw new RuntimeException('Request is not set');

@@ -3,14 +3,15 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Config;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use function DI\autowire;
 
 const TEMP_CONFIG_FILE_PATH = __DIR__ . '/../../../config/pest-temp-config.php';
 
 beforeEach(function () {
-    PdkFactory::create(['config' => \MyParcelNL\Pdk\Base\Config::class] + MockPdkConfig::DEFAULT_CONFIG);
+    PdkFactory::create([ConfigInterface::class => autowire(\MyParcelNL\Pdk\Base\Config::class)]);
     file_put_contents(
         TEMP_CONFIG_FILE_PATH,
         <<<'EOF'

@@ -7,6 +7,7 @@ use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Tests\Api\Response\AccountResponse;
@@ -20,10 +21,10 @@ use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
 it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
-    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get('api');
+    $api = $pdk->get(ApiServiceInterface::class);
     $api->getMock()
         ->append(new $response());
 
@@ -68,28 +69,16 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 ]);
 
 it('uses all methods of repository', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get('api');
+    $api = $pdk->get(ApiServiceInterface::class);
     $api->getMock()
         ->append(new ShopResponse());
 
-    $repository = new MockRepository($pdk);
+    $repository = $pdk->get(MockRepository::class);
     $repository->save();
     $repository->save();
 
     expect($repository->getShopWithParameters(3))
         ->toBeInstanceOf(Shop::class);
 });
-
-//it('generates unique keys', function ($input, $output) {
-//    $pdk = PdkFactory::create(MockConfig::DEFAULT_CONFIG);
-//    /** @var \MyParcelNL\Pdk\Base\Repository\AbstractRepository $repository */
-//    $repository = $pdk->get(MockRepository::class);
-//
-//    expect($repository->generateKey($input))->toEqual($output);
-//})->with([
-//    'converts collections' => [
-//
-//    ]
-//]);
