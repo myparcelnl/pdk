@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.0](https://github.com/myparcelnl/pdk/compare/v1.14.0...v1.15.0) (2022-08-22)
+
+
+### :sparkles: New Features
+
+* **container:** change implementation to improve injection ([#31](https://github.com/myparcelnl/pdk/issues/31)) ([51ac114](https://github.com/myparcelnl/pdk/commit/51ac1142c701b58024e04a664cff357abf5d9bfb))
+
 ## [1.14.0](https://github.com/myparcelnl/pdk/compare/v1.13.0...v1.14.0) (2022-08-22)
 
 
