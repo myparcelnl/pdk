@@ -36,7 +36,7 @@ class ShipmentCollection extends Collection
     public function addIds(Collection $ids): self
     {
         return (new static($this->items))->map(function (Shipment $shipment) use ($ids) {
-            $match        = $ids->firstWhere('referenceIdentifier', $shipment->referenceIdentifier);
+            $match        = $ids->firstWhere('reference_identifier', $shipment->referenceIdentifier);
             $shipment->id = $match['id'] ?? null;
 
             return $shipment;

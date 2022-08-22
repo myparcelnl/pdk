@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 
 /**
  * @method static ShipmentCollection createConcepts(ShipmentCollection $collection)
+ * @method static ShipmentCollection createReturnShipments(ShipmentCollection $collection)
  * @method static ShipmentCollection getByReferenceIdentifiers(array $referenceIdentifiers, ?int $size = null)
  * @method static ShipmentCollection fetchLabelPdf(ShipmentCollection $collection, ?string $format, ?array $position)
  * @method static ShipmentCollection fetchLabelLink(ShipmentCollection $collection, ?string $format, ?array $position)
