@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.0](https://github.com/myparcelnl/pdk/compare/v1.13.0...v1.14.0) (2022-08-22)
+
+
+### :sparkles: New Features
+
+* add return shipments ([#27](https://github.com/myparcelnl/pdk/issues/27)) ([4b85c7e](https://github.com/myparcelnl/pdk/commit/4b85c7e9490ee774a1d85ffdd1a93f519d8eb447))
+
 ## [1.13.0](https://github.com/myparcelnl/pdk/compare/v1.12.0...v1.13.0) (2022-08-19)
 
 
