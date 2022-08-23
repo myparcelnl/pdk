@@ -62,7 +62,7 @@ class DropOffDayPossibilities extends Model
             $matchingDay = $this->dropOffDays->firstWhere('weekday', $weekday);
             $deviation   = $deviatedDays->firstWhere('date', '==', $dropOffDate);
 
-            $matchingDayArray = Utils::mergeArraysWithoutNull(
+            $matchingDayArray = Utils::mergeArraysIgnoringNull(
                 $matchingDay ? $matchingDay->toArray() : [],
                 $deviation ? $deviation->toArray() : []
             );
