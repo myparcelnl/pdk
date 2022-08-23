@@ -5,31 +5,22 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Base\Request\AbstractRequest;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
+use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class PostOrdersRequest extends AbstractRequest
 {
-    /**
-     * API currently does not support only sending location_code, however, the following properties are not used or
-     * validated beyond "must be a string".
-     */
-    private const DEFAULT_DROP_OFF_POINT = [
-        'postal_code'   => '',
-        'location_name' => '',
-        'city'          => '',
-        'street'        => '',
-        'number'        => '',
-    ];
+    use HasEncodesShipment;
 
     /**
      * @var string
      */
-    protected $path = '/shipments';
+    protected $path = '/fulfilment/orders';
 
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
     private $collection;
 
@@ -38,7 +29,7 @@ class PostOrdersRequest extends AbstractRequest
      */
     public function __construct(OrderCollection $collection)
     {
-        $this->collection = new Collection($collection->all());
+        $this->collection = $collection;
     }
 
     /**
@@ -48,11 +39,9 @@ class PostOrdersRequest extends AbstractRequest
     {
         return json_encode([
             'data' => [
-                'shipments' => $this->groupByMultiCollo()
-                    ->flatMap(function (Collection $groupedShipments) {
-                        return [$this->encodeShipment($groupedShipments)];
-                    })
-                    ->toArrayWithoutNull(),
+                'orders' => $this->collection->map(function ($order) {
+                    return $this->encodeOrder($order);
+                }),
             ],
         ]);
     }
@@ -76,132 +65,47 @@ class PostOrdersRequest extends AbstractRequest
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function encodeDropOffPoint(Shipment $shipment): ?array
-    {
-        if (! $shipment->dropOffPoint) {
-            return null;
-        }
-
-        return array_filter($shipment->dropOffPoint->toSnakeCaseArray()) + self::DEFAULT_DROP_OFF_POINT;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function encodeOptions(Shipment $shipment): ?array
-    {
-        $deliveryOptions = $shipment->deliveryOptions;
-        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-
-        if ($shipmentOptions) {
-            $options = array_map(static function ($item) {
-                return is_bool($item) ? (int) $item : $item;
-            }, $shipmentOptions->toSnakeCaseArray());
-        }
-
-        return array_filter(
-            [
-                'package_type'  => $this->getPackageTypeId($shipment),
-                'delivery_type' => $this->getDeliveryTypeId($shipment),
-                'delivery_date' => $deliveryOptions->date ? $deliveryOptions->date->format('Y-m-d H:i:s') : null,
-                'insurance'     => $shipmentOptions->insurance
-                    ? [
-                        'amount'   => $shipmentOptions->insurance * 100,
-                        'currency' => 'EUR',
-                    ] : null,
-            ] + ($options ?? [])
-        );
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
-     *
-     * @return null|array
-     */
-    private function encodeSecondaryShipments(Collection $groupedShipments): ?array
-    {
-        $groupedShipments->shift();
-
-        if ($groupedShipments->isEmpty()) {
-            return null;
-        }
-
-        return $groupedShipments
-            ->map(function (Shipment $shipment) {
-                return ['reference_identifier' => $shipment->referenceIdentifier];
-            })
-            ->toArray();
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
+     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function encodeShipment(Collection $groupedShipments): array
+    private function encodeOrder(Order $order): array
     {
-        $mainShipment = $groupedShipments->first();
-
         return [
-            'carrier'              => $mainShipment->carrier->id,
-            'reference_identifier' => $mainShipment->referenceIdentifier,
-            'status'               => $mainShipment->status,
-            'options'              => $this->encodeOptions($mainShipment),
-            'physical_properties'  => $mainShipment->physicalProperties
-                ? ['weight' => $this->getWeight($mainShipment)]
-                : null,
-            'pickup'               => $mainShipment->deliveryOptions->pickupLocation
-                ? ['location_code' => $mainShipment->deliveryOptions->pickupLocation->locationCode]
-                : null,
-            'drop_off_point'       => $this->encodeDropOffPoint($mainShipment),
-            'customs_declaration'  => $mainShipment->customsDeclaration
-                ? array_filter($mainShipment->customsDeclaration->toSnakeCaseArray())
-                : null,
-            'recipient'            => array_filter($mainShipment->recipient->toSnakeCaseArray()),
-            'secondary_shipments'  => $this->encodeSecondaryShipments($groupedShipments),
+            'external_identifier'           => $order->externalIdentifier,
+            'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
+            'order_date'                    => $order->orderDate,
+            'invoice_address'               => $order->invoiceAddress,
+            'order_lines'                   => $order->orderLines->toArrayWithoutNull(),
+            'shipment'                      => $this->encodeShipment($order->shipment),
         ];
     }
 
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
-     * @return null|int
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getDeliveryTypeId(Shipment $shipment): ?int
+    private function encodeShipment(Shipment $shipment): array
     {
-        return $shipment->deliveryOptions && $shipment->deliveryOptions->deliveryType
-            ? DeliveryOptions::DELIVERY_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->deliveryType]
-            : null;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|int
-     */
-    private function getPackageTypeId(Shipment $shipment): ?int
-    {
-        return $shipment->deliveryOptions && $shipment->deliveryOptions->packageType
-            ? DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->packageType]
-            : null;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $mainShipment
-     *
-     * @return null|int
-     */
-    private function getWeight(Shipment $mainShipment): ?int
-    {
-        return $mainShipment->customsDeclaration->weight ?? $mainShipment->physicalProperties->weight;
+        return [
+            'carrier'             => $shipment->carrier->id,
+            'customs_declaration' => $shipment->customsDeclaration
+                ? array_filter($shipment->customsDeclaration->toSnakeCaseArray())
+                : null,
+            'drop_off_point'      => $this->encodeDropOffPoint($shipment),
+            'options'             => $this->encodeOptions($shipment),
+            'physical_properties' => $shipment->physicalProperties
+                ? [
+                    'weight' => $this->getWeight($shipment)
+                ]
+                : null,
+            'pickup'              => $shipment->deliveryOptions->pickupLocation
+                ? ['location_code' => $shipment->deliveryOptions->pickupLocation->locationCode]
+                : null,
+            'recipient'           => $shipment->recipient->toSnakeCaseArray(),
+        ];
     }
 }

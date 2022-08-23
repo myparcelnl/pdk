@@ -6,11 +6,13 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Base\Request\AbstractRequest;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class PostReturnShipmentsRequest extends AbstractRequest
 {
+    use HasEncodesShipment;
+
     /**
      * @var string
      */
@@ -123,15 +125,5 @@ class PostReturnShipmentsRequest extends AbstractRequest
             ];
         })
             ->all();
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return int
-     */
-    private function getPackageTypeId(Shipment $shipment): int
-    {
-        return DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->packageType];
     }
 }

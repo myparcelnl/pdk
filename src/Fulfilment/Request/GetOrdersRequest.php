@@ -11,7 +11,7 @@ class GetOrdersRequest extends AbstractRequest
     /**
      * @var string
      */
-    protected $path = '/shipments';
+    protected $path = '/fulfilment/orders';
 
     /**
      * @var null|string
@@ -26,11 +26,17 @@ class GetOrdersRequest extends AbstractRequest
         $this->parameters = $parameters;
     }
 
+    /**
+     * @return string
+     */
     public function getHttpMethod(): string
     {
         return 'GET';
     }
 
+    /**
+     * @return array
+     */
     protected function getQueryParameters(): array
     {
         return array_filter($this->parameters);
