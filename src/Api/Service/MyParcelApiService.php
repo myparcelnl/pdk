@@ -12,7 +12,7 @@ use GuzzleHttp\Client;
  */
 class MyParcelApiService extends AbstractApiService
 {
-    private const PACKAGE_NAME     = 'myparcelnl/pdk';
+    public const  PACKAGE_NAME     = 'myparcelnl/pdk';
     private const DEFAULT_BASE_URL = 'https://api.myparcel.nl';
     private const DEFAULT_CONFIG   = [
         'baseUrl'   => self::DEFAULT_BASE_URL,
