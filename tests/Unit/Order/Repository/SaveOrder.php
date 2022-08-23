@@ -163,11 +163,11 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new ShipmentsResponse());
+    $mock->append(new GetOrdersResponse());
 
-    $repository = $pdk->get(ShipmentRepository::class);
+    $repository = $pdk->get(OrderRepository::class);
 
-    $response = $repository->createConcepts(new ShipmentCollection($input));
+    $response = $repository->createConcepts(new OrderCollection($input));
     $request  = $mock->getLastRequest();
 
     if (! $request) {
@@ -184,7 +184,7 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
         ->and($contentTypeHeader)
         ->toBe($contentType)
         ->and($response)
-        ->toBeInstanceOf(ShipmentCollection::class);
+        ->toBeInstanceOf(OrderCollection::class);
 })->with([
     'single shipment' => [
         'input'       => [

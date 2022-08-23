@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use Psr\Http\Message\StreamInterface;
 
-class PostOrdersResponse extends JsonResponse
+class PostOrdersResponse extends Response
 {
     public function getBody(): StreamInterface
     {
         return Utils::streamFor(
             json_encode([
                 'data' => [
-                    'orders' => [
+                    'ids' => [
                         ['uuid' => '123'],
                         ['uuid' => '456'],
                     ],

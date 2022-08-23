@@ -19,8 +19,8 @@ class GetOrdersResponse extends JsonResponse
                     'orders' => [
                         [
                             'invoice_address' => [
-                                'cc' => 'NL',
-                                'city' => 'Boskoop'
+                                'cc'   => 'NL',
+                                'city' => 'Boskoop',
                             ],
                             'language'        => null,
                             'order_date'      => '2022-08-22 00:00:00',
@@ -72,8 +72,21 @@ class GetOrdersResponse extends JsonResponse
                                 'physicalProperties'  => [
                                     'weight' => 3500,
                                 ],
-                                'recipient'           => DEFAULT_INPUT_RECIPIENT,
-                                'sender'              => DEFAULT_INPUT_SENDER,
+                                'recipient'           => [
+                                    'cc'         => 'NL',
+                                    'city'       => 'Hoofddorp',
+                                    'person'     => 'Jaappie Krekel',
+                                    'postalCode' => '2132JE',
+                                    'street'     => 'Antareslaan 31',
+                                ],
+                                'sender'              => [
+                                    'cc'         => 'NL',
+                                    'city'       => 'Amsterdam',
+                                    'number'     => '2',
+                                    'person'     => 'Willem Wever',
+                                    'postalCode' => '4164ZF',
+                                    'street'     => 'Werf',
+                                ],
                             ],
                             'shopId'          => null,
                             'status'          => null,

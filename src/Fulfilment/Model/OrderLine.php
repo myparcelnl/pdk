@@ -29,9 +29,9 @@ class OrderLine extends Model
     protected $casts      = [
         'uuid'          => 'string',
         'quantity'      => 'integer',
-        'price'         => Currency::class,
-        'vat'           => Currency::class,
-        'priceAfterVat' => Currency::class,
+        'price'         => 'int',
+        'vat'           => 'int',
+        'priceAfterVat' => 'int',
         'product'       => Product::class,
     ];
 }
