@@ -39,6 +39,14 @@ class Config implements ConfigInterface
     }
 
     /**
+     * @return string
+     */
+    public function getConfigDir(): string
+    {
+        return sprintf('%s/../../config', __DIR__);
+    }
+
+    /**
      * @param  string $filename
      *
      * @return mixed
@@ -46,13 +54,25 @@ class Config implements ConfigInterface
     private function getConfigFile(string $filename)
     {
         if (! isset(self::$cache[$filename])) {
-            $path = sprintf('%s/../../config/%s.php', __DIR__, $filename);
+            $dir = $this->getConfigDir();
 
-            if (! file_exists($path)) {
+            $phpPath  = "$dir/$filename.php";
+            $jsonPath = "$dir/$filename.json";
+
+            $isPhpFile  = file_exists($phpPath);
+            $isJsonFile = file_exists($jsonPath);
+
+            if (! $isPhpFile && ! $isJsonFile) {
                 throw new InvalidArgumentException(sprintf('File config/%s.php does not exist.', $filename));
             }
 
-            self::$cache[$filename] = require $path;
+            if ($isJsonFile) {
+                self::$cache[$filename] = json_decode(file_get_contents($jsonPath), true);
+            }
+
+            if ($isPhpFile) {
+                self::$cache[$filename] = require $phpPath;
+            }
         }
 
         return self::$cache[$filename];

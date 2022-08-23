@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
+use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 class MockConfig implements ConfigInterface
@@ -446,6 +448,12 @@ class MockConfig implements ConfigInterface
      */
     public function get(string $key)
     {
+        if (! Arr::has(self::CONFIG, $key)) {
+            /** @var \MyParcelNL\Pdk\Base\Config $config */
+            $config = Pdk::get(Config::class);
+            return $config->get($key);
+        }
+
         return Arr::get(self::CONFIG, $key);
     }
 }

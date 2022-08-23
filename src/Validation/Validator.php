@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Validation;
 
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
+use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -15,26 +16,27 @@ use MyParcelNL\Pdk\Validation\Helpers\ValidationHelper;
  */
 class Validator
 {
-    public const  DEFAULT_CARRIER          = 'postnl';
-    public const  DEFAULT_PLATFORM         = 'myparcel';
-    public const  DO_NOT_DELETE_BUT_REMOVE = [
+    private const DEFAULT_CARRIER   = 'postnl';
+    private const DEFAULT_PLATFORM  = 'myparcel';
+    private const VALIDATION_LAYERS = [
         ValidationHelper::CARRIER,
         ValidationHelper::CC,
         ValidationHelper::NAME,
         ValidationHelper::SHIPPING_ZONE,
         ValidationHelper::WEIGHT,
     ];
-    public const  SAVE_TO_ARRAY            = [
+    private const SAVE_TO_ARRAY     = [
         ValidationHelper::CC,
         ValidationHelper::ID,
         ValidationHelper::LOCATION_CODE,
         ValidationHelper::NAME,
         ValidationHelper::OPTIONS,
         ValidationHelper::REQUIREMENTS,
+        ValidationHelper::SCHEMA,
     ];
 
     /**
-     * @var
+     * @var array
      */
     private $mappedArray;
 
@@ -49,7 +51,7 @@ class Validator
     private $platform;
 
     /**
-     * @var
+     * @var array
      */
     private $platformSchema;
 
@@ -64,7 +66,7 @@ class Validator
     private $tempArray = [];
 
     /**
-     * @var ValidationHelper
+     * @var \MyParcelNL\Pdk\Validation\Helpers\ValidationHelper
      */
     private $validationHelper;
 
@@ -79,7 +81,7 @@ class Validator
     private $validationSchemaCopy;
 
     /**
-     * @param PdkOrder $order
+     * @param  PdkOrder $order
      */
     public function __construct(PdkOrder $order)
     {
@@ -89,7 +91,7 @@ class Validator
         // TODO: get correct platform from PDK instance
         $this->platform         = self::DEFAULT_PLATFORM;
         $this->validationHelper = new ValidationHelper();
-        $this->validationSchema = ValidationSchema::VALIDATION_SCHEMA;
+        $this->validationSchema = Config::get('orderValidator');
     }
 
     /**
@@ -103,7 +105,8 @@ class Validator
             $this->validationSchema['platform']
         );
         $this->validationSchemaCopy = $this->platformSchema;
-        $orderAttributes            = $this->getOrderAttributes();
+
+        $orderAttributes = $this->getOrderAttributes();
 
         if (! $orderAttributes['carrier']['value']) {
             // todo: carrier kiezen zodra er dus geen carrier is dit zal komen uit:
@@ -126,11 +129,25 @@ class Validator
      */
     public function validate(): bool
     {
-        $validationRules     = $this->getValidationRules();
-        $invalidOptions      = $this->validateOptions($validationRules[ValidationHelper::OPTIONS]);
-        $invalidRequirements = $this->validateRequirements($validationRules[ValidationHelper::REQUIREMENTS]);
+        $validationRules = $this->getValidationRules();
+        $orderArray      = $this->order->toArray();
+        $schema          = $validationRules['schema'] ?? null;
 
-        return $invalidOptions && $invalidRequirements;
+        if ($schema) {
+            // TODO: Hier wordt het globale schema opgehaald, en het sub-schema uit de validation dinges erin gemerged, waardoor je niet altijd dezelfde dingen herhaalt en alleen de overrides definieert. Zie de entries waar "CORRECT" bij staat in config/orderValidator.php. Deze data kun je in grote lijnen overnemen uit de api.
+            $schema    = array_replace_recursive(Config::get('schema/order'), $schema);
+            $validator = new \JsonSchema\Validator();
+            $validator->validate($orderArray, (object) $schema);
+
+            $optionsValid = $validator->isValid();
+        } else {
+            // TODO: dit moet helemaal weg wanneer alles 'schema' gebruikt
+            $optionsValid = $this->validateOptions($validationRules[ValidationHelper::OPTIONS]);
+        }
+
+        $requirementsValid = $this->validateRequirements($validationRules[ValidationHelper::REQUIREMENTS]);
+
+        return $optionsValid && $requirementsValid;
     }
 
     /**
@@ -142,19 +159,19 @@ class Validator
      */
     private function getFromSchema(string $key, string $column, string $value): void
     {
-        if (is_array($this->platformSchema[$key]) || $key===ValidationHelper::SHIPPING_ZONE) {
+        if (is_array($this->platformSchema[$key]) || $key === ValidationHelper::SHIPPING_ZONE) {
             $this->platformSchema = $this->validationHelper->getIndexByValue(
                 $value,
                 $column,
                 $this->platformSchema[$key]
             );
 
-            if ($key!=='packageType') {
+            if ('packageType' !== $key) {
                 $this->validationSchemaCopy = $this->platformSchema;
             }
 
-            if ($key===ValidationHelper::CARRIER) {
-                $this->mappedArray['carrier'] = $value;
+            if ($key === ValidationHelper::CARRIER) {
+                $this->mappedArray[$key] = $value;
             }
         }
 
@@ -189,8 +206,8 @@ class Validator
     }
 
     /**
-     * @param string $key
-     * @param string $value
+     * @param  string $key
+     * @param  string $value
      *
      * @return void
      */
@@ -198,35 +215,36 @@ class Validator
     {
         $path = $this->validationHelper->getArrayPath($value, $this->validationSchemaCopy);
 
-        if ($path) {
-            $correctPath = $this->validationSchemaCopy;
+        if (! $path) {
+            return;
+        }
 
-            $count = count($path) - 1;
-            for ($i = 0; $i < $count; $i++) {
-                $correctPath = $correctPath[$path[$i]];
-            }
+        $correctPath = $this->validationSchemaCopy;
 
-            if (! in_array($this->tempArray, $correctPath, true)) {
-                $temp = [];
-                foreach ($correctPath as $pathKey => $pathItem) {
-                    if (in_array($pathKey, self::SAVE_TO_ARRAY, true)) {
-                        $temp[$pathKey] = $pathItem;
-                    }
+        for ($i = 0; $i < (count($path) - 1); $i++) {
+            $correctPath = $correctPath[$path[$i]];
+        }
+
+        if (! in_array($this->tempArray, $correctPath, true)) {
+            $temp = [];
+            foreach ($correctPath as $pathKey => $pathItem) {
+                if (! in_array($pathKey, self::VALIDATION_LAYERS, true)) {
+                    $temp[$pathKey] = $pathItem;
                 }
-
-                $this->tempArray[$key][] = [
-                    'path'                 => $path,
-                    ValidationHelper::DATA => $temp,
-                ];
             }
 
-            if (! in_array($key, self::DO_NOT_DELETE_BUT_REMOVE, true)) {
-                $this->validationSchemaCopy = $this->validationHelper->removeFromCopySchema(
-                    $this->validationSchemaCopy,
-                    $path
-                );
-                $this->recursiveSearch($key, $value);
-            }
+            $this->tempArray[$key][] = [
+                'path'                 => $path,
+                ValidationHelper::DATA => $temp,
+            ];
+        }
+
+        if (! in_array($key, self::VALIDATION_LAYERS, true)) {
+            $this->validationSchemaCopy = $this->validationHelper->removeFromCopySchema(
+                $this->validationSchemaCopy,
+                $path
+            );
+            $this->recursiveSearch($key, $value);
         }
     }
 
@@ -284,11 +302,11 @@ class Validator
             ValidationHelper::AGE_CHECK,
         ];
 
-        foreach ($requirements as $key => $properties) {
+        foreach ($requirements as $key => $schema) {
             if (array_key_exists($key, $checkForBoundaries)
                 && ! $this->validationHelper->isValueWithinBoundaries(
                     $checkForBoundaries[$key],
-                    $properties
+                    $schema
                 )) {
                 $invalidRequirements[] = $key;
                 continue;
@@ -302,7 +320,7 @@ class Validator
             if (($key === ValidationHelper::LARGE_FORMAT)
                 && $this->validationHelper->isValueWithinBoundaries(
                     $checkForBoundaries[ValidationHelper::WEIGHT],
-                    $properties
+                    $schema
                 )) {
                 $invalidRequirements[] = $key;
                 continue;
@@ -311,10 +329,10 @@ class Validator
             if (in_array($key, $activateOtherOptions, true)
                 && in_array(
                     $this->shipmentOptions[$key],
-                    $properties[ValidationHelper::ENUM],
+                    $schema[ValidationHelper::ENUM],
                     true
                 )) {
-                foreach ($properties[ValidationHelper::OPTIONS] as $option => $value) {
+                foreach ($schema[ValidationHelper::OPTIONS] as $option => $value) {
                     if (! in_array($this->shipmentOptions[$option], $value, true)) {
                         $invalidRequirements[] = $option;
                     }

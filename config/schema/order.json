@@ -1,0 +1,98 @@
+{
+  "description": "Global order validation scheme.",
+  "type": "object",
+  "additionalItems": false,
+  "required": [
+    "deliveryOptions",
+    "weight"
+  ],
+  "properties": {
+    "weight": {
+      "type": "number"
+    },
+    "deliveryOptions": {
+      "type": "object",
+      "properties": {
+        "pickupLocation": {
+          "required": [
+            "locationCode"
+          ],
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "postalCode": {
+              "type": "string"
+            },
+            "locationName": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            },
+            "numberSuffix": {
+              "type": "string"
+            },
+            "boxNumber": {
+              "type": "string",
+              "maxLength": 8
+            },
+            "region": {
+              "type": "string",
+              "maxLength": 35
+            },
+            "state": {
+              "type": "string",
+              "maxLength": 2
+            },
+            "cc": {
+              "type": "string"
+            },
+            "locationCode": {
+              "type": "string"
+            },
+            "retail_network_id": {
+              "type": "string"
+            }
+          }
+        },
+        "shipmentOptions": {
+          "type": "object",
+          "properties": {
+            "ageCheck": {
+              "type": "boolean"
+            },
+            "insurance": {
+              "type": "integer"
+            },
+            "labelDescription": {
+              "type": "string"
+            },
+            "largeFormat": {
+              "type": "boolean"
+            },
+            "onlyRecipient": {
+              "type": "boolean"
+            },
+            "return": {
+              "type": "boolean"
+            },
+            "sameDayDelivery": {
+              "type": "boolean"
+            },
+            "signature": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}
