@@ -6,6 +6,8 @@ namespace MyParcelNL\Pdk\Base;
 
 class Pdk
 {
+    public const PACKAGE_NAME = 'myparcelnl/pdk';
+
     /**
      * @var \DI\Container
      */

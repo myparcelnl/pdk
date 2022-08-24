@@ -7,15 +7,17 @@ use Composer\InstalledVersions;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\autowire;
 
-it('get correct headers', function () {
+it('gets correct headers', function () {
     $pdk = PdkFactory::create(
         MockPdkConfig::create([
             ApiServiceInterface::class => autowire(MyParcelApiService::class)->constructor([
-                'userAgent' => 'Prestashop/1.7.8.6',
-                'apiKey'    => 'thisistheapikey',
+                'userAgent' => [
+                    'Prestashop' => '1.7.8.6',
+                ],
             ]),
         ])
     );
@@ -23,22 +25,24 @@ it('get correct headers', function () {
     $api = $pdk->get(ApiServiceInterface::class);
     expect($api->getHeaders())
         ->toBe([
-            'authorization' => 'appelboom dGhpc2lzdGhlYXBpa2V5',
+            'authorization' => 'appelboom ',
             'User-Agent'    => sprintf(
                 'Prestashop/1.7.8.6 MyParcel-PDK/%s php/7.4.30',
-                InstalledVersions::getPrettyVersion(MyParcelApiService::PACKAGE_NAME)
+                InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME)
             ),
         ]);
 });
 
-it('get base url', function () {
+it('gets base url', function () {
     $pdk = PdkFactory::create(
         MockPdkConfig::create([
-            ApiServiceInterface::class => autowire(MyParcelApiService::class),
+            ApiServiceInterface::class => autowire(MyParcelApiService::class)->constructor([
+                'baseUrl' => 'https://api.baseurl.com',
+            ]),
         ])
     );
 
     $api = $pdk->get(ApiServiceInterface::class);
     expect($api->getBaseUrl())
-        ->toBe('https://api.myparcel.nl');
+        ->toBe('https://api.baseurl.com');
 });

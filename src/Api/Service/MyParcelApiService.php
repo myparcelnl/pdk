@@ -6,18 +6,19 @@ namespace MyParcelNL\Pdk\Api\Service;
 
 use Composer\InstalledVersions;
 use GuzzleHttp\Client;
+use MyParcelNL\Pdk\Base\Pdk;
 
 /**
  * This will replace the SDK one day...
  */
 class MyParcelApiService extends AbstractApiService
 {
-    public const  PACKAGE_NAME     = 'myparcelnl/pdk';
     private const DEFAULT_BASE_URL = 'https://api.myparcel.nl';
     private const DEFAULT_CONFIG   = [
-        'baseUrl'   => self::DEFAULT_BASE_URL,
-        'client'    => Client::class,
-        'userAgent' => null,
+        'apiKey'     => '',
+        'baseUrl'    => self::DEFAULT_BASE_URL,
+        'httpClient' => Client::class,
+        'userAgent'  => null,
     ];
 
     /**
@@ -37,10 +38,10 @@ class MyParcelApiService extends AbstractApiService
     {
         $config += self::DEFAULT_CONFIG;
 
-        $this->httpClient = new $config['client']();
-        $this->baseUrl    = $config['baseUrl'];
-        $this->apiKey     = $config['apiKey'];
-        $this->userAgent  = $config['userAgent'];
+        $this->httpClient = new $config['httpClient']() ?? null;
+        $this->baseUrl    = $config['baseUrl'] ?? null;
+        $this->apiKey     = $config['apiKey'] ?? null;
+        $this->userAgent  = $config['userAgent'] ?? null;
     }
 
     /**
@@ -67,20 +68,16 @@ class MyParcelApiService extends AbstractApiService
      */
     protected function getUserAgentHeader(): string
     {
-        $userAgentStrings = [];
-        $userAgents       = array_merge(
-            [$this->userAgent],
-            ['MyParcel-PDK' => InstalledVersions::getPrettyVersion(self::PACKAGE_NAME)],
-            ['php' => PHP_VERSION]
-        );
+        $userAgentValue   = array_values($this->userAgent);
+        $userAgentStrings = [
+            array_key_first($this->userAgent) => array_shift($userAgentValue),
+            'MyParcel-PDK'                    => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
+            'php'                             => PHP_VERSION,
+        ];
 
-        foreach ($userAgents as $key => $value) {
-            if (is_int($key)) {
-                $userAgentStrings[] = $value;
-                continue;
-            }
-
-            $userAgentStrings[] = $key . '/' . $value;
+        foreach ($userAgentStrings as $platform => $version) {
+            $userAgentStrings[] = sprintf('%s/%s', $platform, $version);
+            unset($userAgentStrings[$platform]);
         }
 
         return implode(' ', $userAgentStrings);
