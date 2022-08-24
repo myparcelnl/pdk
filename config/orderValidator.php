@@ -112,21 +112,6 @@ return [
                                             ],
                                         ],
                                     ],
-                                    'requirements' => [
-                                        'ageCheck'    => [
-                                            'enum'    => [true],
-                                            'options' => [
-                                                'signature'     => [true],
-                                                'onlyRecipient' => [true],
-                                            ],
-                                        ],
-                                        'largeFormat' => [
-                                            'enum'     => [true],
-                                            'property' => 'weight',
-                                            'minimum'  => 0,
-                                            'maximum'  => 30000,
-                                        ],
-                                    ],
                                     'deliveryType' => [
                                         [
                                             'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,

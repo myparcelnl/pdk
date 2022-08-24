@@ -94,16 +94,18 @@ class Validator
         $this->validationSchema = Config::get('orderValidator');
     }
 
+
     /**
      * @return array
      */
     public function getValidationRules(): array
     {
-        $this->platformSchema       = $this->validationHelper->getIndexByValue(
+        $index                      = array_search(
             $this->platform,
-            ValidationHelper::NAME,
-            $this->validationSchema['platform']
+            array_column($this->validationSchema['platform'], 'name'),
+            true
         );
+        $this->platformSchema       = $this->validationSchema['platform'][$index];
         $this->validationSchemaCopy = $this->platformSchema;
 
         $orderAttributes = $this->getOrderAttributes();
@@ -130,11 +132,14 @@ class Validator
     public function validate(): bool
     {
         $validationRules = $this->getValidationRules();
+
         $orderArray      = $this->order->toArray();
         $schema          = $validationRules['schema'] ?? null;
 
         if ($schema) {
-            // TODO: Hier wordt het globale schema opgehaald, en het sub-schema uit de validation dinges erin gemerged, waardoor je niet altijd dezelfde dingen herhaalt en alleen de overrides definieert. Zie de entries waar "CORRECT" bij staat in config/orderValidator.php. Deze data kun je in grote lijnen overnemen uit de api.
+            // TODO: Hier wordt het globale schema opgehaald, en het sub-schema uit de validation dinges erin gemerged, waardoor je niet altijd dezelfde dingen herhaalt
+            // en alleen de overrides definieert. Zie de entries waar "CORRECT" bij staat in config/orderValidator.php. Deze data kun je in grote lijnen overnemen uit de api.
+
             $schema    = array_replace_recursive(Config::get('schema/order'), $schema);
             $validator = new \JsonSchema\Validator();
             $validator->validate($orderArray, (object) $schema);
@@ -160,11 +165,8 @@ class Validator
     private function getFromSchema(string $key, string $column, string $value): void
     {
         if (is_array($this->platformSchema[$key]) || $key === ValidationHelper::SHIPPING_ZONE) {
-            $this->platformSchema = $this->validationHelper->getIndexByValue(
-                $value,
-                $column,
-                $this->platformSchema[$key]
-            );
+            $index                = array_search($value, array_column($this->platformSchema[$key], $column), true);
+            $this->platformSchema = $this->platformSchema[$key][$index];
 
             if ('packageType' !== $key) {
                 $this->validationSchemaCopy = $this->platformSchema;

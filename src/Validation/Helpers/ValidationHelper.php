@@ -64,20 +64,6 @@ class ValidationHelper
     }
 
     /**
-     * @param  string $value
-     * @param  string $column
-     * @param  array  $array
-     *
-     * @return array
-     */
-    public function getIndexByValue(string $value, string $column, array $array): array
-    {
-        $index = array_search($value, array_column($array, $column), true);
-
-        return $array[$index];
-    }
-
-    /**
      * @param $order
      *
      * @return null|string
@@ -152,25 +138,59 @@ class ValidationHelper
     }
 
     /**
+     * @param  array  $baseArray
+     * @param  string $key
+     *
+     * @return array
+     */
+    private function getShipmentOptionByKey(array $baseArray, string $key): array
+    {
+        $shipmentOptions = $this->getShipmentOptions($baseArray);
+        return $shipmentOptions[$key];
+    }
+
+    /**
+     * @param  array $array
+     *
+     * @return array
+     */
+    private function getShipmentOptions(array $array): array
+    {
+        return $array[self::SCHEMA]['properties']['deliveryOptions']['properties']['shipmentOptions']['properties'];
+    }
+
+    /**
      * @param  array $data
      *
      * @return array
      */
     private function mergeDeliveryDataIntoPackageData(array $data): array
     {
-        $deliveryTypeData = $data['deliveryType'][self::DATA] ?? [];
-        $packageTypeData  = $data['packageType'][self::DATA] ?? [];
-
-        $this->mappedArray['packageType']  = $packageTypeData;
-        $this->mappedArray['deliveryType'] = $deliveryTypeData;
+        $this->mappedArray['packageType']    = $data['packageType'][self::DATA] ?? [];
+        $this->mappedArray['deliveryType']   = $data['deliveryType'][self::DATA] ?? [];
+        $this->mappedArray['allowedOptions'] = [];
 
         foreach (self::VALIDATION_KEYS as $index) {
-            if (array_key_exists($index, $deliveryTypeData)) {
-                $this->mappedArray[$index] = array_replace($packageTypeData[$index], $deliveryTypeData[$index]);
-                continue;
-            }
+            if (array_key_exists($index, $this->mappedArray['deliveryType'])) {
+                $deliveryOptions     = $this->getShipmentOptions($this->mappedArray['deliveryType']);
+                $deliveryOptionsKeys = array_keys($deliveryOptions);
 
-            $this->mappedArray[$index] = $packageTypeData[$index];
+                foreach ($deliveryOptionsKeys as $optionKey) {
+                    $this->mappedArray['allowedOptions'][$index][$optionKey] = $deliveryOptions[$optionKey];
+                }
+
+                $test = $this->mappedArray['allowedOptions'] + $this->getShipmentOptions(
+                        $this->mappedArray['packageType']
+                    );
+
+                //foreach ($this->mappedArray['deliveryType'][self::SCHEMA] as $key => $item) {
+                //$this->mappedArray['packageType'][self::SCHEMA][$key] = $item;
+                //}
+
+                //$this->mappedArray[$index] = $this->mappedArray['packageType'][self::SCHEMA];
+                //continue;
+            }
+            //$this->mappedArray[$index] = $this->mappedArray['packageType'][$index];
         }
 
         return $this->mappedArray;
