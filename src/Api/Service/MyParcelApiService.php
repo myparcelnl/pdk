@@ -15,14 +15,14 @@ class MyParcelApiService extends AbstractApiService
 {
     private const DEFAULT_BASE_URL = 'https://api.myparcel.nl';
     private const DEFAULT_CONFIG   = [
-        'apiKey'     => '',
+        'apiKey'     => null,
         'baseUrl'    => self::DEFAULT_BASE_URL,
         'httpClient' => Client::class,
-        'userAgent'  => null,
+        'userAgent'  => [],
     ];
 
     /**
-     * @var string
+     * @var null|string
      */
     private $apiKey;
 
@@ -38,10 +38,10 @@ class MyParcelApiService extends AbstractApiService
     {
         $config += self::DEFAULT_CONFIG;
 
-        $this->httpClient = new $config['httpClient']() ?? null;
+        $this->httpClient = new $config['httpClient']();
         $this->baseUrl    = $config['baseUrl'] ?? null;
         $this->apiKey     = $config['apiKey'] ?? null;
-        $this->userAgent  = $config['userAgent'] ?? null;
+        $this->userAgent  = $config['userAgent'] ?? [];
     }
 
     /**
@@ -58,7 +58,7 @@ class MyParcelApiService extends AbstractApiService
     public function getHeaders(): array
     {
         return [
-            'authorization' => sprintf('appelboom %s', base64_encode($this->apiKey)),
+            'authorization' => $this->apiKey ? sprintf('appelboom %s', base64_encode($this->apiKey)) : null,
             'User-Agent'    => $this->getUserAgentHeader(),
         ];
     }
@@ -68,16 +68,14 @@ class MyParcelApiService extends AbstractApiService
      */
     protected function getUserAgentHeader(): string
     {
-        $userAgentValue   = array_values($this->userAgent);
-        $userAgentStrings = [
-            array_key_first($this->userAgent) => array_shift($userAgentValue),
-            'MyParcel-PDK'                    => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
-            'php'                             => PHP_VERSION,
-        ];
+        $userAgentStrings = [];
+        $userAgents       = [
+                'MyParcel-PDK' => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
+                'php'          => PHP_VERSION,
+            ] + $this->userAgent;
 
-        foreach ($userAgentStrings as $platform => $version) {
+        foreach ($userAgents as $platform => $version) {
             $userAgentStrings[] = sprintf('%s/%s', $platform, $version);
-            unset($userAgentStrings[$platform]);
         }
 
         return implode(' ', $userAgentStrings);
