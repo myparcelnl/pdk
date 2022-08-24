@@ -23,6 +23,10 @@ class PostShipmentsResponse extends JsonResponse
                             'id'                   => 123,
                             'reference_identifier' => 'my_ref_id',
                         ],
+                        [
+                            'id'                   => 2,
+                            'reference_identifier' => 'joepie',
+                        ],
                     ],
                 ],
             ])

@@ -16,12 +16,12 @@ class UpdateShipmentsRequest extends AbstractRequest
     protected $path = '/shipments';
 
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @var \MyParcelNL\Pdk\Base\Support\Collection
      */
     private $ids;
 
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @var \MyParcelNL\Pdk\Base\Support\Collection
      */
     private $referenceIdentifiers;
 

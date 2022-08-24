@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
-use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**

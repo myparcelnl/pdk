@@ -69,16 +69,6 @@ trait HasEncodesShipment
     }
 
     /**
-     * @param  string $deliveryType
-     *
-     * @return null|string
-     */
-    private function getDeliveryTypeName(string $deliveryType): ?string
-    {
-        return array_flip(DeliveryOptions::DELIVERY_TYPES_NAMES_IDS_MAP)[$deliveryType] ?? null;
-    }
-
-    /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return null|int
@@ -88,16 +78,6 @@ trait HasEncodesShipment
         return $shipment->deliveryOptions && $shipment->deliveryOptions->packageType
             ? DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->packageType]
             : null;
-    }
-
-    /**
-     * @param  string $packageType
-     *
-     * @return null|string
-     */
-    private function getPackageTypeName(string $packageType): ?string
-    {
-        return array_flip(DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP)[$packageType] ?? null;
     }
 
     /**

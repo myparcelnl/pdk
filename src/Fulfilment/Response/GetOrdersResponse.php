@@ -11,15 +11,11 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
-use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Shipment\Concern\HasDecodesShipment;
 
 class GetOrdersResponse extends AbstractApiResponseWithBody
 {
-    use HasEncodesShipment;
+    use HasDecodesShipment;
 
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
@@ -72,7 +68,7 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
             'orderDate'                   => $data['order_date'],
             'orderLines'                  => $this->createOrderLines($data['order_lines']),
             'price'                       => $data['price'],
-            'shipment'                    => $this->createShipment($data['shipment']),
+            'shipment'                    => $this->decodeShipment($data['shipment']),
             'shopId'                      => $data['shop_id'],
             'status'                      => $data['status'],
             'type'                        => $data['type'],
@@ -94,59 +90,5 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
         }, $orderLinesArray);
 
         return new OrderLineCollection($orderLines);
-    }
-
-    /**
-     * @param  array $shipment
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
-     * @throws \Exception
-     */
-    private function createShipment(array $shipment): Shipment
-    {
-        return new Shipment([
-            'deliveryOptions' => new DeliveryOptions([
-                'carrier'         => $shipment['carrier'],
-                'date'            => $shipment['options']['delivery_date'],
-                'deliveryType'    => $this->getDeliveryTypeName($shipment['options']['delivery_type']),
-                'packageType'     => $this->getPackageTypeName($shipment['options']['package_type']),
-                'pickupLocation'  => $shipment['pickup'],
-                'shipmentOptions' => new ShipmentOptions([
-                    'ageCheck'         => $shipment['options']['age_check'],
-                    'insurance'        => $shipment['options']['insurance'],
-                    'labelDescription' => $shipment['options']['label_description'],
-                    'largeFormat'      => $shipment['options']['large_format'],
-                    'onlyRecipient'    => $shipment['options']['only_recipient'],
-                    'return'           => $shipment['options']['return'],
-                    'sameDayDelivery'  => $shipment['options']['same_day_delivery'],
-                    'signature'        => $shipment['options']['signature'],
-                ]),
-            ])
-        ]);
-    }
-
-    /**
-     * @param  null|array $item
-     *
-     * @return null|array
-     */
-    private function filter(?array $item): ?array
-    {
-        return array_filter($item ?? []) ?: null;
-    }
-
-    /**
-     * @param  array $options
-     *
-     * @return array
-     */
-    private function getShipmentOptions(array $options): array
-    {
-        $keys            = array_keys((new ShipmentOptions())->getAttributes('snake'));
-        $shipmentOptions = Arr::only($options, $keys);
-
-        $shipmentOptions['insurance'] = $options['insurance']['amount'] ?? null;
-
-        return $shipmentOptions;
     }
 }

@@ -47,21 +47,19 @@ class PostOrdersRequest extends AbstractRequest
     }
 
     /**
-     * @return string[]
-     */
-    public function getHeaders(): array
-    {
-        return [
-            'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
-        ];
-    }
-
-    /**
      * @return string
      */
     public function getHttpMethod(): string
     {
         return 'POST';
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
     }
 
     /**

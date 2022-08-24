@@ -10,9 +10,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
-use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\GetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\PostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
@@ -50,13 +48,13 @@ it('creates a valid request from an order collection', function (array $input, a
     $mock = $api->getMock();
     $mock->append(new PostOrdersResponse());
 
-    $inputShipments = (new Collection($input))->mapInto(Order::class);
+    $inputOrders = (new Collection($input))->mapInto(Order::class);
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
     $repository = $pdk->get(OrderRepository::class);
 
     $savedOrders = $repository->saveOrder(
-        new OrderCollection($inputShipments->all())
+        new OrderCollection($inputOrders->all())
     );
 
     $request = $mock->getLastRequest();
@@ -157,7 +155,7 @@ it('creates a valid request from an order collection', function (array $input, a
     ],
 ]);
 
-it('creates shipment', function ($input, $path, $query, $contentType) {
+it('creates order', function ($input, $path, $query) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
@@ -165,56 +163,109 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     $mock = $api->getMock();
     $mock->append(new GetOrdersResponse());
 
-    $repository = $pdk->get(OrderRepository::class);
+    $repository      = $pdk->get(OrderRepository::class);
+    $order           = new Order($input);
+    $orderCollection = (new OrderCollection())->push($order);
 
-    $response = $repository->createConcepts(new OrderCollection($input));
+    /** @var OrderRepository $response */
+    $response = $repository->saveOrder($orderCollection);
     $request  = $mock->getLastRequest();
 
     if (! $request) {
         throw new RuntimeException('Request is not set');
     }
 
-    $uri               = $request->getUri();
-    $contentTypeHeader = Arr::first($request->getHeaders()['Content-Type']);
+    $uri = $request->getUri();
 
     expect($uri->getQuery())
         ->toBe($query)
         ->and($uri->getPath())
         ->toBe($path)
-        ->and($contentTypeHeader)
-        ->toBe($contentType)
         ->and($response)
         ->toBeInstanceOf(OrderCollection::class);
 })->with([
-    'single shipment' => [
-        'input'       => [
-            [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
-                'deliveryOptions'    => [
-                    'date'            => '2022-07-10 16:00:00',
-                    'shipmentOptions' => [
-                        'ageCheck'         => true,
-                        'insurance'        => 500,
-                        'labelDescription' => 'order 204829',
-                        'largeFormat'      => false,
-                        'onlyRecipient'    => true,
-                        'return'           => false,
-                        'sameDayDelivery'  => false,
-                        'signature'        => false,
+    'empty query with single shipment response' => [
+        'input' => [
+            'invoiceAddress' => [
+                'cc'   => 'NL',
+                'city' => 'Boskoop',
+            ],
+            'language'       => null,
+            'orderDate'      => '2022-08-22 00:00:00',
+            'orderLines'     => [
+                [
+                    'uuid'          => '1234',
+                    'quantity'      => 1,
+                    'price'         => 250,
+                    'vat'           => 10,
+                    'priceAfterVat' => 260,
+                    'product'       => [
+                        'uuid'               => '12345',
+                        'sku'                => '018234',
+                        'ean'                => '018234',
+                        'externalIdentifier' => '018234',
+                        'name'               => 'Paarse stofzuiger',
+                        'description'        => 'Een paars object waarmee stof opgezogen kan worden',
+                        'width'              => null,
+                        'length'             => null,
+                        'height'             => null,
+                        'weight'             => 3500,
                     ],
                 ],
-                'physicalProperties' => [
-                    'height' => 100,
-                    'width'  => 120,
-                    'length' => 80,
-                    'weight' => 2000,
-                ],
-                'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                'sender'             => DEFAULT_INPUT_SENDER,
+
             ],
+            'price'          => 260,
+            'shipment'       => [
+                'carrier'            => [
+                    'id' => CarrierOptions::CARRIER_POSTNL_ID,
+                ],
+                'customsDeclaration' => null,
+                'deliveryOptions'    => [
+                    'date'            => '2022-08-22 00:00:00',
+                    'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    'shipmentOptions' => [
+                        'ageCheck'         => 1,
+                        'insurance'        => [
+                            'amount'   => 0,
+                            'currency' => 'EUR',
+                        ],
+                        'labelDescription' => null,
+                        'largeFormat'      => 0,
+                        'onlyRecipient'    => 0,
+                        'return'           => 0,
+                        'sameDayDelivery'  => 0,
+                        'signature'        => 1,
+                    ],
+                ],
+                'dropOffPoint'       => null,
+                'physicalProperties' => [
+                    'weight' => 3500,
+                ],
+                'recipient'          => [
+                    'cc'         => 'NL',
+                    'city'       => 'Hoofddorp',
+                    'person'     => 'Jaappie Krekel',
+                    'postalCode' => '2132JE',
+                    'street'     => 'Antareslaan 31',
+                ],
+                'sender'             => [
+                    'cc'         => 'NL',
+                    'city'       => 'Amsterdam',
+                    'number'     => '2',
+                    'person'     => 'Willem Wever',
+                    'postalCode' => '4164ZF',
+                    'street'     => 'Werf',
+                ],
+            ],
+            'shopId'         => null,
+            'status'         => null,
+            'type'           => null,
+            'updatedAt'      => null,
+            'uuid'           => null,
+            'vat'            => null,
         ],
-        'path'        => 'API/shipments',
-        'query'       => '',
-        'contentType' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
+        'path'  => 'API/fulfilment/orders',
+        'query' => '',
     ],
 ]);

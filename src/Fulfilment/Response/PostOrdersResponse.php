@@ -30,13 +30,6 @@ class PostOrdersResponse extends AbstractApiResponseWithBody
     protected function parseResponseBody(string $body): void
     {
         $parsedBody = json_decode($body, true);
-
-        if ($parsedBody['data']['orders']) {
-            $ids = array_map(static function ($order) {
-                return $order['uuid'];
-            }, $parsedBody['data']['orders']);
-        }
-
-        $this->ids  = new Collection($ids ?? []);
+        $this->ids  = new Collection($parsedBody['data']['ids'] ?? []);
     }
 }

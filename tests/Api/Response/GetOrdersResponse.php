@@ -48,9 +48,7 @@ class GetOrdersResponse extends JsonResponse
                             ],
                             'price'           => 260,
                             'shipment'        => [
-                                'carrier'             => [
-                                    'id' => CarrierOptions::CARRIER_POSTNL_ID,
-                                ],
+                                'carrier_id'          => CarrierOptions::CARRIER_POSTNL_ID,
                                 'customs_declaration' => null,
                                 'options'             => [
                                     'date'              => '2022-08-22 00:00:00',
