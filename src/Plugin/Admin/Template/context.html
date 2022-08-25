@@ -1,0 +1,13 @@
+<div id="__ID__" data-pdk-context="__CONTEXT__"></div>
+<script id="__ID__-script">
+(() => {
+  var e = '__EVENT__';
+  var listener = function(event) {
+    event.detail.render('__COMPONENT__', '__ID__');
+    document.getElementById('__ID__-script').remove();
+    document.removeEventListener(e, listener);
+  };
+
+  document.addEventListener(e, listener);
+})();
+</script>

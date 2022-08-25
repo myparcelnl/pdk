@@ -69,6 +69,10 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         $results = [];
 
         foreach (array_reverse(class_parents($class)) + [$class => $class] as $nextClass) {
+            if ($nextClass !== $class) {
+                $results[$nextClass] = $nextClass;
+            }
+
             $results += self::getClassTraitsRecursive($nextClass);
         }
 

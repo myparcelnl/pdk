@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
  * @property null|string                                            $barcode
  * @property null|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions      $carrier
  * @property null|string                                            $collectionContact
- * @property null|datetime                                          $created
+ * @property null|\DateTime                                         $created
  * @property null|string                                            $createdBy
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property null|bool                                              $delayed
@@ -33,9 +33,10 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
  * @property null|string                                            $multiColloMainShipmentId
  * @property null|array                                             $partnerTrackTraces
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties $physicalProperties
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
+ * @property \MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $sender
  * @property null|int                                               $shopId
+ * @property null|string                                            $orderId
  * @property null|int                                               $status
  * @property null|bool                                              $updated
  */
@@ -77,9 +78,10 @@ class Shipment extends Model
         'multiColloMainShipmentId' => null,
         'partnerTrackTraces'       => null,
         'physicalProperties'       => null,
-        'recipient'                => null,
+        'recipient'                => ContactDetails::class,
         'sender'                   => null,
         'shopId'                   => null,
+        'orderId'                  => null,
         'status'                   => null,
         'updated'                  => null,
     ];
@@ -110,6 +112,7 @@ class Shipment extends Model
         'recipient'                => ContactDetails::class,
         'sender'                   => ContactDetails::class,
         'shopId'                   => 'int',
+        'orderId'                  => 'string',
         'status'                   => 'int',
         'updated'                  => 'bool',
     ];
@@ -117,11 +120,9 @@ class Shipment extends Model
     /**
      * Carrier is passed to the delivery options.
      *
-     * @param  array $data
-     *
-     * @throws \Exception
+     * @param  null|array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(?array $data = [])
     {
         parent::__construct($data);
         $this->setDeliveryOptionsCarrier();

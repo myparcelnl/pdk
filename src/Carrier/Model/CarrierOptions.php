@@ -93,13 +93,15 @@ class CarrierOptions extends Model
         $carrierConfig = Config::get('carriers');
         $value         = $data['subscriptionId'] ?? $data['id'] ?? $data['name'] ?? null;
 
-        foreach (self::ORDERED_CARRIER_GETTER as $key => $type) {
-            $createdCarrier = Arr::first($carrierConfig, static function ($carrier) use ($key, $value, $type) {
-                return ($value === ($carrier[$key] ?? null) && $type === ($carrier['type'] ?? null));
-            });
+        if ($value) {
+            foreach (self::ORDERED_CARRIER_GETTER as $key => $type) {
+                $createdCarrier = Arr::first($carrierConfig, static function ($carrier) use ($key, $value, $type) {
+                    return ($value === ($carrier[$key] ?? null) && $type === ($carrier['type'] ?? null));
+                });
 
-            if ($createdCarrier) {
-                return $createdCarrier;
+                if ($createdCarrier) {
+                    return $createdCarrier;
+                }
             }
         }
 

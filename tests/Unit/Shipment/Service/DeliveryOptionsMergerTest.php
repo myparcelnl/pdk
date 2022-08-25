@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
+use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
@@ -28,7 +28,11 @@ it('is an instance of DeliveryOptions', function () {
 
 it('merges delivery options', function ($deliveryOptions, $expectation) {
     $result = DeliveryOptionsMerger::create($deliveryOptions);
-    expect($result->toArray())->toEqual($expectation);
+
+    expect($result)
+        ->toBeInstanceOf(DeliveryOptions::class)
+        ->and($result->toArray())
+        ->toEqual($expectation);
 })->with([
     'a single item' => [
         'deliveryOptions' => [
@@ -46,6 +50,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             'shipmentOptions' => $emptyShipmentOptions,
             'pickupLocation'  => null,
+            'labelAmount'     => 1,
         ],
     ],
 
@@ -87,6 +92,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'ageCheck'  => false,
                 ] + $emptyShipmentOptions,
             'pickupLocation'  => null,
+            'labelAmount'     => 1,
         ],
     ],
 
@@ -100,8 +106,8 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'insurance' => null,
                     'ageCheck'  => null,
                 ],
-                'pickupLocation'  => new RetailLocation([
-                    'cc'              => CountryCodes::CC_NL,
+                'pickupLocation'  => [
+                    'cc'              => CountryService::CC_NL,
                     'city'            => DEFAULT_CITY,
                     'locationCode'    => DEFAULT_LOCATION_CODE,
                     'locationName'    => DEFAULT_NAME,
@@ -109,7 +115,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'postalCode'      => DEFAULT_POSTAL,
                     'retailNetworkId' => DEFAULT_NETWORK_ID,
                     'street'          => DEFAULT_STREET,
-                ]),
+                ],
             ],
             [
                 'carrier'         => CarrierOptions::CARRIER_INSTABOX_NAME,
@@ -134,7 +140,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'signature' => false,
                 ] + $emptyShipmentOptions,
             'pickupLocation'  => [
-                    'cc'              => CountryCodes::CC_NL,
+                    'cc'              => CountryService::CC_NL,
                     'city'            => DEFAULT_CITY,
                     'locationCode'    => DEFAULT_LOCATION_CODE,
                     'locationName'    => DEFAULT_NAME,
@@ -143,6 +149,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'retailNetworkId' => DEFAULT_NETWORK_ID,
                     'street'          => DEFAULT_STREET,
                 ] + $emptyRetailLocation,
+            'labelAmount'     => 1,
         ],
     ],
 ]);

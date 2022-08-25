@@ -75,9 +75,10 @@ it('uses all methods of repository', function () {
     $api->getMock()
         ->append(new ExampleGetShopsResponse());
 
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockRepository $repository */
     $repository = $pdk->get(MockRepository::class);
-    $repository->save();
-    $repository->save();
+    $repository->persist();
+    $repository->persist();
 
     expect($repository->getShopWithParameters(3))
         ->toBeInstanceOf(Shop::class);

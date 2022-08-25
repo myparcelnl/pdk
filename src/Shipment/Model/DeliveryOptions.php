@@ -9,12 +9,13 @@ use DateTime;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions  $carrier
+ * @property null|string                                        $carrier
  * @property null|\DateTime                                     $date
  * @property null|string                                        $deliveryType
+ * @property int                                                $labelAmount
  * @property null|string                                        $packageType
- * @property \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions     $shipmentOptions
  * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation $pickupLocation
+ * @property \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions     $shipmentOptions
  */
 class DeliveryOptions extends Model
 {
@@ -87,8 +88,9 @@ class DeliveryOptions extends Model
     protected $attributes = [
         'carrier'         => null,
         'date'            => null,
-        'deliveryType'    => null,
-        'packageType'     => self::PACKAGE_TYPE_PACKAGE_NAME,
+        'deliveryType'    => self::DEFAULT_DELIVERY_TYPE_NAME,
+        'labelAmount'     => 1,
+        'packageType'     => self::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocation'  => null,
         'shipmentOptions' => ShipmentOptions::class,
     ];
@@ -97,6 +99,7 @@ class DeliveryOptions extends Model
         'carrier'         => 'string',
         'date'            => DateTime::class,
         'deliveryType'    => 'string',
+        'labelAmount'     => 'int',
         'packageType'     => 'string',
         'pickupLocation'  => RetailLocation::class,
         'shipmentOptions' => ShipmentOptions::class,

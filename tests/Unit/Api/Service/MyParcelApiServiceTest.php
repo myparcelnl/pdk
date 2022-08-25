@@ -24,6 +24,7 @@ it('gets correct headers', function () {
 
     /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
     $api = $pdk->get(ApiServiceInterface::class);
+
     expect($api->getHeaders())
         ->toBe([
             'Authorization' => null,

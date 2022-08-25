@@ -4,16 +4,13 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -50,14 +47,23 @@ it('creates a valid request from a shipment collection', function (array $input,
     $mock = $api->getMock();
     $mock->append(new ExamplePostShipmentsResponse());
 
-    $inputShipments = (new Collection($input))->mapInto(Shipment::class);
+    $mock->append(
+        new ExamplePostShipmentsResponse(
+            array_map(function (array $data) {
+                return [
+                    'id'                   => mt_rand(),
+                    'reference_identifier' => $data['reference_identifier'],
+                ];
+            }, $input)
+        )
+    );
+
+    $inputShipments = (new ShipmentCollection($input));
 
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
     $repository = $pdk->get(ShipmentRepository::class);
 
-    $createdConcepts = $repository->createConcepts(
-        new ShipmentCollection($inputShipments->all())
-    );
+    $createdConcepts = $repository->createConcepts($inputShipments);
 
     $request = $mock->getLastRequest();
 
@@ -93,8 +99,9 @@ it('creates a valid request from a shipment collection', function (array $input,
         ],
         'output' => [
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
-                'carrier'              => CarrierOptions::CARRIER_POSTNL_ID,
-                'options.package_type' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                'carrier'               => CarrierOptions::CARRIER_POSTNL_ID,
+                'options.delivery_type' => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
+                'options.package_type'  => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
             ]),
         ],
     ],
@@ -132,11 +139,12 @@ it('creates a valid request from a shipment collection', function (array $input,
                     'carrier'                    => CarrierOptions::CARRIER_POSTNL_ID,
                     'options.age_check'          => 1,
                     'options.delivery_date'      => '2022-07-10 16:00:00',
+                    'options.delivery_type'      => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
                     'options.insurance.amount'   => 50000,
                     'options.insurance.currency' => 'EUR',
                     'options.label_description'  => 'order 204829',
                     'options.only_recipient'     => 1,
-                    'options.package_type'       => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                    'options.package_type'       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                     'physical_properties.weight' => 2000,
                 ]
             ),
@@ -160,8 +168,8 @@ it('creates a valid request from a shipment collection', function (array $input,
                 DEFAULT_OUTPUT_RECIPIENT,
                 [
                     'carrier'               => CarrierOptions::CARRIER_POSTNL_ID,
-                    'options.package_type'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
                     'options.delivery_type' => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                    'options.package_type'  => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                     'pickup.location_code'  => 12345,
                 ]
             ),
@@ -187,14 +195,15 @@ it('creates a valid request from a shipment collection', function (array $input,
                 DEFAULT_OUTPUT_RECIPIENT,
                 [
                     'carrier'                      => CarrierOptions::CARRIER_INSTABOX_ID,
-                    'options.package_type'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                    'options.same_day_delivery'    => 1,
-                    'drop_off_point.location_code' => 45678,
-                    'drop_off_point.postal_code'   => '',
-                    'drop_off_point.location_name' => '',
                     'drop_off_point.city'          => '',
-                    'drop_off_point.street'        => '',
+                    'drop_off_point.location_code' => 45678,
+                    'drop_off_point.location_name' => '',
                     'drop_off_point.number'        => '',
+                    'drop_off_point.postal_code'   => '',
+                    'drop_off_point.street'        => '',
+                    'options.package_type'         => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
+                    'options.delivery_type'        => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
+                    'options.same_day_delivery'    => 1,
                 ]
             ),
         ],
@@ -203,7 +212,7 @@ it('creates a valid request from a shipment collection', function (array $input,
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
-                'recipient'          => ['cc' => CountryCodes::CC_CA] + DEFAULT_INPUT_RECIPIENT,
+                'recipient'          => ['cc' => CountryService::CC_CA] + DEFAULT_INPUT_RECIPIENT,
                 'customsDeclaration' => [
                     'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
                     'invoice'  => '25',
@@ -211,7 +220,7 @@ it('creates a valid request from a shipment collection', function (array $input,
                         [
                             'amount'         => 1,
                             'classification' => 9609,
-                            'country'        => CountryCodes::CC_NL,
+                            'country'        => CountryService::CC_NL,
                             'description'    => 'trendy pencil',
                             'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
                             'weight'         => 200,
@@ -219,7 +228,7 @@ it('creates a valid request from a shipment collection', function (array $input,
                         [
                             'amount'         => 1,
                             'classification' => 40169200,
-                            'country'        => CountryCodes::CC_NL,
+                            'country'        => CountryService::CC_NL,
                             'description'    => 'beautiful eraser',
                             'itemValue'      => ['amount' => 10000, 'currency' => 'EUR'],
                             'weight'         => 350,
@@ -231,8 +240,6 @@ it('creates a valid request from a shipment collection', function (array $input,
         'output' => [
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
                 'carrier'                                        => CarrierOptions::CARRIER_BPOST_ID,
-                'recipient.cc'                                   => CountryCodes::CC_CA,
-                'options.package_type'                           => 1,
                 'customs_declaration.contents'                   => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
                 'customs_declaration.invoice'                    => '25',
                 'customs_declaration.items.0.amount'             => 1,
@@ -250,6 +257,9 @@ it('creates a valid request from a shipment collection', function (array $input,
                 'customs_declaration.items.1.itemValue.currency' => 'EUR',
                 'customs_declaration.items.1.weight'             => 350,
                 'customs_declaration.weight'                     => 550,
+                'options.delivery_type'                          => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
+                'options.package_type'                           => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
+                'recipient.cc'                                   => CountryService::CC_CA,
             ]),
         ],
     ],
@@ -257,7 +267,7 @@ it('creates a valid request from a shipment collection', function (array $input,
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
-                'recipient'          => ['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT,
+                'recipient'          => ['cc' => CountryService::CC_DE] + DEFAULT_INPUT_RECIPIENT,
                 'deliveryOptions'    => [
                     'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                     'pickupLocation' => [
@@ -274,7 +284,7 @@ it('creates a valid request from a shipment collection', function (array $input,
                         [
                             'amount'         => 1,
                             'classification' => 9609,
-                            'country'        => CountryCodes::CC_BE,
+                            'country'        => CountryService::CC_BE,
                             'description'    => 'stofzuiger',
                             'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
                             'weight'         => 200,
@@ -282,7 +292,7 @@ it('creates a valid request from a shipment collection', function (array $input,
                         [
                             'amount'         => 2,
                             'classification' => 420690,
-                            'country'        => CountryCodes::CC_NL,
+                            'country'        => CountryService::CC_NL,
                             'description'    => 'ruler',
                             'itemValue'      => ['amount' => 900, 'currency' => 'EUR'],
                             'weight'         => 120,
@@ -294,10 +304,6 @@ it('creates a valid request from a shipment collection', function (array $input,
         'output' => [
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
                 'carrier'                                        => CarrierOptions::CARRIER_BPOST_ID,
-                'recipient.cc'                                   => CountryCodes::CC_DE,
-                'pickup.location_code'                           => '34653',
-                'options.delivery_type'                          => 4,
-                'options.package_type'                           => 1,
                 'customs_declaration.contents'                   => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
                 'customs_declaration.invoice'                    => '14',
                 'customs_declaration.items.0.amount'             => 1,
@@ -315,7 +321,11 @@ it('creates a valid request from a shipment collection', function (array $input,
                 'customs_declaration.items.1.itemValue.currency' => 'EUR',
                 'customs_declaration.items.1.weight'             => 120,
                 'customs_declaration.weight'                     => 440,
+                'options.delivery_type'                          => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                'options.package_type'                           => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 'physical_properties.weight'                     => 440,
+                'pickup.location_code'                           => '34653',
+                'recipient.cc'                                   => CountryService::CC_DE,
             ]),
         ],
     ],
@@ -323,7 +333,7 @@ it('creates a valid request from a shipment collection', function (array $input,
         'input'  => [
             [
                 'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
-                'recipient'          => ['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT,
+                'recipient'          => ['cc' => CountryService::CC_DE] + DEFAULT_INPUT_RECIPIENT,
                 'deliveryOptions'    => [
                     'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                     'pickupLocation' => [
@@ -337,7 +347,7 @@ it('creates a valid request from a shipment collection', function (array $input,
                         [
                             'amount'         => 1,
                             'classification' => 9609,
-                            'country'        => CountryCodes::CC_BE,
+                            'country'        => CountryService::CC_BE,
                             'description'    => 'stofzuiger',
                             'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
                             'weight'         => 200,
@@ -345,7 +355,7 @@ it('creates a valid request from a shipment collection', function (array $input,
                         [
                             'amount'         => 2,
                             'classification' => 420690,
-                            'country'        => CountryCodes::CC_NL,
+                            'country'        => CountryService::CC_NL,
                             'description'    => 'ruler',
                             'itemValue'      => ['amount' => 900, 'currency' => 'EUR'],
                             'weight'         => 120,
@@ -357,10 +367,6 @@ it('creates a valid request from a shipment collection', function (array $input,
         'output' => [
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
                 'carrier'                                        => CarrierOptions::CARRIER_BPOST_ID,
-                'recipient.cc'                                   => CountryCodes::CC_DE,
-                'pickup.location_code'                           => '34653',
-                'options.delivery_type'                          => 4,
-                'options.package_type'                           => 1,
                 'customs_declaration.contents'                   => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
                 'customs_declaration.invoice'                    => '14',
                 'customs_declaration.items.0.amount'             => 1,
@@ -378,6 +384,10 @@ it('creates a valid request from a shipment collection', function (array $input,
                 'customs_declaration.items.1.itemValue.currency' => 'EUR',
                 'customs_declaration.items.1.weight'             => 120,
                 'customs_declaration.weight'                     => 440,
+                'options.delivery_type'                          => 4,
+                'options.package_type'                           => 1,
+                'pickup.location_code'                           => '34653',
+                'recipient.cc'                                   => CountryService::CC_DE,
             ]),
         ],
     ],
@@ -399,7 +409,8 @@ it('creates a valid request from a shipment collection', function (array $input,
         'output' => [
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
                 'carrier'                                    => CarrierOptions::CARRIER_POSTNL_ID,
-                'options.package_type'                       => 1,
+                'options.delivery_type'                      => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
+                'options.package_type'                       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 'reference_identifier'                       => 'my-multicollo-set',
                 'secondary_shipments.0.reference_identifier' => 'my-multicollo-set',
             ]),
@@ -459,7 +470,8 @@ it('creates a valid request from a shipment collection', function (array $input,
         'output' => [
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
                 'carrier'                    => CarrierOptions::CARRIER_POSTNL_ID,
-                'options.package_type'       => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                'options.delivery_type'      => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
+                'options.package_type'       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 'options.delivery_date'      => '2022-07-20 16:00:00',
                 'options.age_check'          => 1,
                 'options.label_description'  => 'order 204829',
@@ -468,7 +480,8 @@ it('creates a valid request from a shipment collection', function (array $input,
             ]),
             array_merge(DEFAULT_OUTPUT_RECIPIENT, [
                 'carrier'                    => CarrierOptions::CARRIER_INSTABOX_ID,
-                'options.package_type'       => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                'options.delivery_type'      => DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID,
+                'options.package_type'       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 'options.delivery_date'      => '2022-07-20 16:00:00',
                 'options.age_check'          => 1,
                 'options.insurance.amount'   => 50000,
@@ -487,7 +500,7 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new ExampleGetShipmentsResponse());
+    $mock->append(new ExamplePostShipmentsResponse());
 
     $repository = $pdk->get(ShipmentRepository::class);
 

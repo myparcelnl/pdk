@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use ArrayAccess;
-use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Str;
 use ReturnTypeWillChange;
 
@@ -34,14 +34,14 @@ class Model implements Arrayable, ArrayAccess
      */
     public function __construct(?array $data = null)
     {
-        $data = Utils::changeArrayKeysCase($data ?? []);
-
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
 
         $this->bootIfNotBooted();
         $this->initializeTraits();
-        $this->validateAttributes($data);
+
+        $data = Arr::only(Utils::changeArrayKeysCase($data ?? []), array_keys($this->attributes));
+
         $this->fill($data + $this->attributes);
     }
 
@@ -147,6 +147,10 @@ class Model implements Arrayable, ArrayAccess
             }
 
             $key = $this->convertAttributeCase($key);
+
+            if (! array_key_exists($key, $this->attributes)) {
+                continue;
+            }
 
             if ($this->attributes[$key] && null === $value) {
                 continue;
@@ -256,30 +260,5 @@ class Model implements Arrayable, ArrayAccess
         foreach (static::$traitInitializers[static::class] as $method) {
             $this->{$method}();
         }
-    }
-
-    /**
-     * @param  null|array $data
-     *
-     * @return void
-     */
-    private function validateAttributes(?array $data): void
-    {
-        if (! $data) {
-            return;
-        }
-
-        $unknownAttributes = array_diff_key($data, $this->attributes);
-
-        if (empty($unknownAttributes)) {
-            return;
-        }
-
-        throw new InvalidArgumentException(
-            sprintf(
-                'Unknown attribute(s) passed: "%s". Attributes must be defined in $model->attributes.',
-                implode('", "', array_keys($unknownAttributes))
-            )
-        );
     }
 }

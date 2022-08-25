@@ -29,17 +29,19 @@ class ShipmentCollection extends Collection
     protected $cast = Shipment::class;
 
     /**
+     * Set ID and reference ID of shipment from API response.
+     *
      * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
      *
      * @return $this
      */
     public function addIds(Collection $ids): self
     {
-        return (new static($this->items))->map(function (Shipment $shipment) use ($ids) {
-            $match        = $ids->firstWhere('reference_identifier', $shipment->referenceIdentifier);
-            $shipment->id = $match['id'] ?? null;
-
+        $this->each(function (Shipment $shipment, int $index) use ($ids) {
+            $shipment->fill($ids->offsetGet($index) ?? []);
             return $shipment;
         });
+
+        return $this;
     }
 }

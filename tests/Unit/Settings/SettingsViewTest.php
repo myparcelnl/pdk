@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
@@ -38,7 +38,7 @@ function addCountryOptions(int $key): array
     $keys = [];
     $i    = 0;
 
-    foreach (CountryCodes::ALL as $countryCode) {
+    foreach (CountryService::ALL as $countryCode) {
         $keys["$key.options.$i"] = $countryCode;
         $i++;
     }

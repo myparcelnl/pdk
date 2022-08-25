@@ -3,13 +3,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
 use MyParcelNL\Pdk\Base\Model\Address;
+use MyParcelNL\Pdk\Base\Service\CountryService;
 
 it('initializes be address', function () {
     $address = new Address([
         'boxNumber'  => 'a',
-        'cc'         => CountryCodes::CC_BE,
+        'cc'         => CountryService::CC_BE,
         'number'     => 16,
         'postalCode' => '2000',
         'street'     => 'Adriaan Brouwerstraat',
@@ -29,7 +29,7 @@ it('sets from full street without country', function () {
 
 it('sets from full street', function () {
     $address = new Address([
-        'cc'         => CountryCodes::CC_NL,
+        'cc'         => CountryService::CC_NL,
         'postalCode' => '2132JE',
         'fullStreet' => 'Antareslaan 31a',
         'city'       => 'Hoofddorp',

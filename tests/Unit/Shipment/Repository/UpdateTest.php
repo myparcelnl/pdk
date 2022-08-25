@@ -11,10 +11,10 @@ use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 /**
- * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::update
+ * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::save
  */
 
-it('updates shipment', function ($args, $path, $query) {
+it('updates shipment', function (array $collection, ?int $size, $path, $query) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
@@ -24,7 +24,7 @@ it('updates shipment', function ($args, $path, $query) {
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
     $repository = $pdk->get(ShipmentRepository::class);
 
-    $response = $repository->update(...$args);
+    $response = $repository->update(new ShipmentCollection($collection), $size);
     $request  = $mock->getLastRequest();
 
     if (! $request) {
@@ -41,47 +41,41 @@ it('updates shipment', function ($args, $path, $query) {
         ->toBeInstanceOf(ShipmentCollection::class);
 })->with([
     'multiple ids'                => [
-        'args'  => [
-            (new ShipmentCollection([
-                ['id' => 5],
-                ['id' => 6],
-            ])),
-            100,
+        'collection' => [
+            ['id' => 5],
+            ['id' => 6],
         ],
+
+        'size'  => 100,
         'path'  => 'API/shipments/5;6',
         'query' => 'size=100',
     ],
     'multiple reference ids'      => [
-        'args'  => [
-            new ShipmentCollection([
-                ['referenceIdentifier' => 5],
-                ['referenceIdentifier' => 6],
-            ]),
-            30,
+        'collection' => [
+            ['referenceIdentifier' => 5],
+            ['referenceIdentifier' => 6],
         ],
-        'path'  => 'API/shipments',
-        'query' => 'reference_identifier=5%3B6&size=30',
+        'size'       => 30,
+        'path'       => 'API/shipments',
+        'query'      => 'reference_identifier=5%3B6&size=30',
     ],
     'both ids and reference ids'  => [
-        'args'  => [
-            (new ShipmentCollection([
-                ['id' => 10, 'referenceIdentifier' => 'order-11'],
-                ['id' => 55, 'referenceIdentifier' => 'order-12'],
-            ])),
+        'collection' => [
+            ['id' => 10, 'referenceIdentifier' => 'order-11'],
+            ['id' => 55, 'referenceIdentifier' => 'order-12'],
         ],
-        'path'  => 'API/shipments/10;55',
-        'query' => '',
+        'size'       => null,
+        'path'       => 'API/shipments/10;55',
+        'query'      => '',
     ],
     'one id and one reference id' => [
-        'args'  => [
-            (new ShipmentCollection([
-                ['id' => 10],
-                ['referenceIdentifier' => 'order-12'],
-            ])),
-            10,
+        'collection' => [
+            ['id' => 10],
+            ['referenceIdentifier' => 'order-12'],
         ],
-        'path'  => 'API/shipments/10',
-        'query' => 'size=10',
+        'size'       => 10,
+        'path'       => 'API/shipments/10',
+        'query'      => 'size=10',
     ],
 ]);
 
