@@ -37,6 +37,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'name'        => 'bloemkool',
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
+            'type'        => 'TextInput',
         ],
     ],
     'SelectInput'           => [
@@ -51,6 +52,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'label'       => 'selector text',
             'description' => 'Dit is een selector',
             'options'     => [],
+            'type'        => 'SelectInput',
         ],
     ],
     'ToggleInput'           => [
@@ -71,6 +73,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'values.1.id'    => 'off',
             'values.1.value' => 0,
             'values.1.label' => 'No',
+            'type'           => 'ToggleInput',
         ],
     ],
     'CheckboxInput'         => [
@@ -84,6 +87,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'name'        => 'bloemkool',
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
+            'type'        => 'CheckboxInput',
         ],
     ],
     'RadioButtonInput'      => [
@@ -107,6 +111,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'multiple'       => false,
             'options.0.id'   => 1,
             'options.0.name' => 'Spareribs',
+            'type'           => 'RadioButtonInput',
         ],
     ],
     'HiddenInput'           => [
@@ -120,6 +125,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'name'        => 'bloemkool',
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
+            'type'        => 'HiddenInput',
         ],
     ],
     'CountrySelectInput'    => [
@@ -134,6 +140,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
             'options'     => [],
+            'type'        => 'CountrySelectInput',
         ],
     ],
     'DropOffDaySelectInput' => [
@@ -149,6 +156,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'description' => 'Dit is een bloemkool',
             'multiple'    => false,
             'values'      => [],
+            'type'        => 'DropOffDaySelectInput',
         ],
     ],
 ]);
