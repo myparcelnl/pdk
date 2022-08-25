@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Base\Request\AbstractRequest;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class PostShipmentsRequest extends AbstractRequest

@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -48,37 +47,22 @@ it('creates a valid request from an order collection', function (array $input, a
     $mock = $api->getMock();
     $mock->append(new PostOrdersResponse());
 
-    $inputOrders = (new Collection($input))->mapInto(Order::class);
-
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
-    $repository = $pdk->get(OrderRepository::class);
+    $repository  = $pdk->get(OrderRepository::class);
+    $savedOrders = $repository->saveOrder(new OrderCollection($input));
 
-    $savedOrders = $repository->saveOrder(
-        new OrderCollection($inputOrders->all())
-    );
-
-    $request = $mock->getLastRequest();
-
-    if (! $request) {
-        throw new RuntimeException('Request not found.');
-    }
-
-    $body = json_decode(
-        $request->getBody()
-            ->getContents(),
-        true
-    );
-
-    $orders = Arr::get($body, 'data.orders');
-
-    expect($orders)
-        ->toBeArray()
-        ->and($savedOrders)
+    expect($savedOrders)
         ->toBeInstanceOf(OrderCollection::class)
         ->and(
-            array_map(function (array $order) {
-                return Arr::dot($order);
-            }, $orders)
+            $savedOrders->map(function (Order $order) {
+                return Arr::dot(
+                    Arr::except(
+                        $order->toArray(),
+                        ['shipment.carrier.capabilities', 'shipment.carrier.returnCapabilities']
+                    )
+                );
+            })
+                ->toArray()
         )
         ->toEqual($output);
 })->with([

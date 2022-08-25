@@ -73,7 +73,7 @@ class GetOrdersResponse extends JsonResponse
                                 'recipient'           => [
                                     'cc'         => 'NL',
                                     'city'       => 'Hoofddorp',
-                                    'person'     => 'Jaappie Krekel',
+                                    'person'     => 'Jaap Krekel',
                                     'postalCode' => '2132JE',
                                     'street'     => 'Antareslaan 31',
                                 ],

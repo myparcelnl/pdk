@@ -140,7 +140,7 @@ it('creates order collection from queried data', function (string $responseClass
             'shipment.recipient.streetAdditionalInfo'                   => null,
             'shipment.recipient.email'                                  => null,
             'shipment.recipient.phone'                                  => null,
-            'shipment.recipient.person'                                 => 'Jaappie Krekel',
+            'shipment.recipient.person'                                 => 'Jaap Krekel',
             'shipment.recipient.company'                                => null,
             'shipment.sender.boxNumber'                                 => null,
             'shipment.sender.cc'                                        => 'NL',

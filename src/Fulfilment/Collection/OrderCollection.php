@@ -29,8 +29,10 @@ class OrderCollection extends Collection
      */
     public function addIds(Collection $ids): self
     {
-        return (new static($this->items))->map(function (Order $order) use ($ids) {
-            $order->uuid = $ids;
+        $uuids = $ids->pluck('uuid');
+
+        return $this->map(function (Order $order, int $index) use ($uuids) {
+            $order->uuid = $uuids[$index];
 
             return $order;
         });
