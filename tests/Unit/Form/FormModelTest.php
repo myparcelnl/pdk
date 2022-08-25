@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::DEFAULT_CONFIG);
+    PdkFactory::create(MockPdkConfig::create());
 });
 
 it('creates input', function (string $class, array $input, array $output) {

@@ -132,7 +132,9 @@ class Model implements Arrayable, ArrayAccess
      */
     public function __set(string $key, $value)
     {
-        $this->setAttribute($key, $value);
+        if (! array_key_exists($key, $this->guarded)) {
+            $this->setAttribute($key, $value);
+        }
     }
 
     /**
@@ -145,6 +147,7 @@ class Model implements Arrayable, ArrayAccess
         foreach ($attributes as $key => $value) {
             if ($this->guarded[$key] !== $this->attributes[$key] && $this->isGuarded($key)) {
                 unset($this->attributes[$key]);
+                $this->attributes[$key] = $this->guarded[$key];
                 continue;
             }
 

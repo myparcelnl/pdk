@@ -114,7 +114,7 @@ it('checks if guarded properties cannot be modified', function () {
     $model['field'] = 2;
     $model->setField(3);
     $model->fill(['field' => 4]);
-    $model->field = 'test';
+    $model->field = 5;
 
     expect($model->field)->toEqual('test');
 });
