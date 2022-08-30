@@ -6,9 +6,9 @@ namespace MyParcelNL\Pdk\Tests\Mocks;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 
-class MyModel extends Model
+class MockMutateModel extends Model
 {
-    use InitTrait;
+    use MockInitTrait;
 
     protected $attributes = [
         'myProperty' => null,

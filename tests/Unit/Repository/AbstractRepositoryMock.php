@@ -6,17 +6,16 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApiService;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockStorage;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
-$pdk = PdkFactory::create([
-    'storage' => [
-        'default' => new MockStorage(),
-    ],
-    'api'     => new MockApiService(),
-]);
+/** @var \MyParcelNL\Pdk\Base\Pdk $pdk */
+$pdk = null;
+
+beforeEach(function () use (&$pdk) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+});
 
 it('sets up api', function () use ($pdk) {
     /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */

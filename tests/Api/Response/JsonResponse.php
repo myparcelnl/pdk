@@ -11,18 +11,40 @@ use Psr\Http\Message\StreamInterface;
 
 class JsonResponse extends Response
 {
+    /**
+     * @return \Psr\Http\Message\StreamInterface
+     */
     public function getBody(): StreamInterface
     {
-        return Utils::streamFor(
-            json_encode(['data' => []])
-        );
+        $content = $this->getContent();
+        $body    = null;
+
+        if (! empty($content)) {
+            $body = json_encode($content);
+        }
+
+        return Utils::streamFor($body);
     }
 
+    /**
+     * @return array
+     */
+    public function getContent(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return string[]
+     */
     public function getHeaders(): array
     {
         return ['Content-Type' => 'application/json'];
     }
 
+    /**
+     * @return int
+     */
     public function getStatusCode(): int
     {
         return ResponseCodes::HTTP_OK;

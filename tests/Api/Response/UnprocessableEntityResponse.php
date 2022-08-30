@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
-use MyParcelNL\Pdk\Base\Http\ResponseCodes;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\HttpFoundation\Response;
 
-class UnprocessableEntityResponse extends Response
+class UnprocessableEntityResponse extends JsonResponse
 {
     public function getBody(): StreamInterface
     {
@@ -21,8 +20,11 @@ class UnprocessableEntityResponse extends Response
         return ['Content-Type' => 'application/json'];
     }
 
+    /**
+     * @return int
+     */
     public function getStatusCode(): int
     {
-        return ResponseCodes::HTTP_UNPROCESSABLE_ENTITY;
+        return Response::HTTP_UNPROCESSABLE_ENTITY;
     }
 }

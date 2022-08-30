@@ -4,16 +4,16 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Tests\Mocks\AClass;
-use MyParcelNL\Pdk\Tests\Mocks\BeConcerned;
+use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
+use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
 
 it('gets parents of class recursively', function () {
-    expect(Utils::getClassParentsRecursive(new AClass()))
-        ->toEqual([BeConcerned::class => BeConcerned::class])
-        ->and(Utils::getClassParentsRecursive(AClass::class))
-        ->toEqual([BeConcerned::class => BeConcerned::class])
-        ->and(Utils::getClassParentsRecursive((object) new AClass()))
-        ->toEqual([BeConcerned::class => BeConcerned::class]);
+    expect(Utils::getClassParentsRecursive(new MockClassWithTrait()))
+        ->toEqual([MockBeConcerned::class => MockBeConcerned::class])
+        ->and(Utils::getClassParentsRecursive(MockClassWithTrait::class))
+        ->toEqual([MockBeConcerned::class => MockBeConcerned::class])
+        ->and(Utils::getClassParentsRecursive((object) new MockClassWithTrait()))
+        ->toEqual([MockBeConcerned::class => MockBeConcerned::class]);
 });
 
 it('changes case of array keys', function ($case, $expectation) {

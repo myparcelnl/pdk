@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 
-class ShipmentLabelsLinkV2Response extends Response
+class ShipmentLabelsLinkV2Response extends JsonResponse
 {
     public function getBody(): StreamInterface
     {
