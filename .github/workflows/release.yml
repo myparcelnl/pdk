@@ -15,3 +15,15 @@ jobs:
     uses: myparcelnl/actions/.github/workflows/--semantic-release.yml@v2
     needs: test
     secrets: inherit
+
+  rebase:
+    name: 'Rebase pull requests'
+    needs: release
+    if: always()
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: peter-evans/rebase@v2
+        with:
+          token: ${{ secrets.GH_REPO_TOKEN }}
+          base: main
+          exclude-drafts: true
