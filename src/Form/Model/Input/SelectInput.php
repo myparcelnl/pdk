@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MyParcelNL\Pdk\Form\Model\Input;
+
+use MyParcelNL\Pdk\Form\Collection\SelectOptionsCollection;
+
+/**
+ * @property string                                                  $type
+ * @property string                                                  $label
+ * @property string                                                  $name
+ * @property string                                                  $description
+ * @property \MyParcelNL\Pdk\Form\Collection\SelectOptionsCollection $options
+ */
+class SelectInput extends AbstractInput
+{
+    /**
+     * @param  null|array $data
+     */
+    public function __construct(?array $data = null)
+    {
+        $this->attributes['options'] = SelectOptionsCollection::class;
+
+        $this->casts['options'] = SelectOptionsCollection::class;
+
+        parent::__construct($data);
+    }
+}

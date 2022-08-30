@@ -36,8 +36,10 @@ class Model implements Arrayable, ArrayAccess
      */
     public function __construct(?array $data = null)
     {
-        $this->attributes = Utils::changeArrayKeysCase($this->attributes);
-        $data             = Utils::changeArrayKeysCase($data ?? []);
+        $data = Utils::changeArrayKeysCase($data ?? []);
+
+        $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
+        $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
 
         $this->bootIfNotBooted();
         $this->initializeTraits();
