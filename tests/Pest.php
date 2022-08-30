@@ -16,3 +16,7 @@ uses()
         Facade::setPdkInstance(null);
     })
     ->in(__DIR__);
+
+uses()
+    ->group('model')
+    ->in(__DIR__ . '/Unit/Base/Model');

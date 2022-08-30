@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use MyParcelNL\Pdk\Base\Http\ResponseCodes;
 use Psr\Http\Message\StreamInterface;
 
-class PostShipmentsResponse extends Response
+class PostShipmentsResponse extends JsonResponse
 {
     /**
      * @return \Psr\Http\Message\StreamInterface

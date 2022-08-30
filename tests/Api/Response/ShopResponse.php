@@ -4,15 +4,38 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\StreamInterface;
-
 class ShopResponse extends JsonResponse
 {
-    public function getBody(): StreamInterface
+    private const DEFAULT_SHOPS = [
+        [
+            'id'   => 3,
+            'name' => 'creme fraiche',
+        ],
+    ];
+
+    /**
+     * @var array
+     */
+    private $shops;
+
+    public function __construct(
+        array  $shops = self::DEFAULT_SHOPS,
+        int    $status = 200,
+        array  $headers = [],
+               $body = null,
+        string $version = '1.1',
+        string $reason = null
+    ) {
+        parent::__construct($status, $headers, $body, $version, $reason);
+        $this->shops = $shops;
+    }
+
+    public function getContent(): array
     {
-        return Utils::streamFor(
-            json_encode(['data' => ['shops' => [['id' => 3, 'name' => 'creme fraiche']]],])
-        );
+        return [
+            'data' => [
+                'shops' => $this->shops,
+            ],
+        ];
     }
 }

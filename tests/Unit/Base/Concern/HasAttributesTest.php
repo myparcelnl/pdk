@@ -8,6 +8,9 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
+use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
+
+uses()->group('model');
 
 it('casts attributes to classes', function () {
     $model = new MockCastingModel();
@@ -89,3 +92,15 @@ it('throws error on invalid cast', function () {
 
     $model->toArray();
 })->throws(InvalidCastException::class);
+
+it('gets only requested fields', function () {
+    $model = new MockMutateModel();
+
+    expect($model->only(['bloemkool', 'perenboom']))->toHaveKeys(['bloemkool', 'perenboom']);
+});
+
+it('gets only requested fields with string', function () {
+    $model = new MockMutateModel();
+
+    expect($model->only('myProperty'))->toHaveKeys(['myProperty']);
+});

@@ -4,30 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Utils;
 use MyParcelNL\Pdk\Base\Http\ResponseCodes;
-use Psr\Http\Message\StreamInterface;
 
-class MyParcelApiErrorResponse extends Response
+class MyParcelApiErrorResponse extends JsonResponse
 {
-    public function getBody(): StreamInterface
+    public function getContent(): array
     {
-        return Utils::streamFor(
-            json_encode([
-                'errors' => [
-                    [
-                        'field'   => 'bloemkool',
-                        'message' => 'verrot',
-                    ],
+        return [
+            'errors' => [
+                [
+                    'field'   => 'bloemkool',
+                    'message' => 'verrot',
                 ],
-            ])
-        );
-    }
-
-    public function getHeaders(): array
-    {
-        return ['Content-Type' => 'application/json'];
+            ],
+        ];
     }
 
     public function getStatusCode(): int

@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Mocks;
 
-trait InitTrait
+trait MockInitTrait
 {
-    public function initializeInitTrait(): void
+    public function initializeMockInitTrait(): void
     {
         $this->myProperty = 1;
     }
