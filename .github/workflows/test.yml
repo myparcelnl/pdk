@@ -60,12 +60,4 @@ jobs:
       - uses: codacy/codacy-analysis-cli-action@master
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          output: results.sarif
-          format: sarif
-          gh-code-scanning-compat: true
-          # Force 0 exit code to allow SARIF file generation
-          max-allowed-issues: 999999
-
-      - uses: github/codeql-action/upload-sarif@main
-        with:
-          sarif_file: results.sarif
+          upload: true
