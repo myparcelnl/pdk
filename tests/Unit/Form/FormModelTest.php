@@ -21,6 +21,7 @@ beforeEach(function () {
 
 it('creates input', function (string $class, array $input, array $output) {
     $instance = new $class($input);
+
     expect($instance)
         ->toBeInstanceOf($class)
         ->and(Arr::dot($instance->toArray()))

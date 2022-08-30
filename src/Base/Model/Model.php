@@ -36,9 +36,10 @@ class Model implements Arrayable, ArrayAccess
      */
     public function __construct(?array $data = null)
     {
-        $this->attributes = Utils::changeArrayKeysCase($this->attributes);
+        $data = Utils::changeArrayKeysCase($data ?? []);
+
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
-        $data             = Utils::changeArrayKeysCase($data ?? []);
+        $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
 
         $this->bootIfNotBooted();
         $this->initializeTraits();
@@ -132,9 +133,7 @@ class Model implements Arrayable, ArrayAccess
      */
     public function __set(string $key, $value)
     {
-        if (! array_key_exists($key, $this->guarded)) {
-            $this->setAttribute($key, $value);
-        }
+        $this->setAttribute($key, $value);
     }
 
     /**
@@ -145,12 +144,6 @@ class Model implements Arrayable, ArrayAccess
     public function fill(array $attributes): self
     {
         foreach ($attributes as $key => $value) {
-            if ($this->guarded[$key] !== $this->attributes[$key] && $this->isGuarded($key)) {
-                unset($this->attributes[$key]);
-                $this->attributes[$key] = $this->guarded[$key];
-                continue;
-            }
-
             if (is_string($value) && class_exists($value) && Str::contains($value, '\\')) {
                 $value = new $value();
             }

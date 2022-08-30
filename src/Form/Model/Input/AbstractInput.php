@@ -30,6 +30,7 @@ class AbstractInput extends Model
         $this->casts['name']        = 'string';
         $this->casts['label']       = 'string';
         $this->casts['description'] = 'string';
+
         parent::__construct($data);
     }
 }

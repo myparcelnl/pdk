@@ -174,6 +174,10 @@ trait HasAttributes
 
         $key = $this->convertAttributeCase($key);
 
+        if ($this->isGuarded($key)) {
+            return $this->guarded[$key];
+        }
+
         if (array_key_exists($key, $this->getAttributes()) || $this->hasGetMutator($key)) {
             return $this->getAttributeValue($key);
         }
@@ -251,6 +255,10 @@ trait HasAttributes
     public function setAttribute(string $key, $value): self
     {
         $key = $this->convertAttributeCase($key);
+
+        if ($this->isGuarded($key)) {
+            return $this;
+        }
 
         if ($this->hasSetMutator($key)) {
             return $this->setMutatedAttributeValue($key, $value);
