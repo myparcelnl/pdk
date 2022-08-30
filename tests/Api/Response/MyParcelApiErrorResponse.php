@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use Symfony\Component\HttpFoundation\Response;
+use MyParcelNL\Pdk\Base\Http\ResponseCodes;
 
 class MyParcelApiErrorResponse extends JsonResponse
 {
@@ -22,6 +22,6 @@ class MyParcelApiErrorResponse extends JsonResponse
 
     public function getStatusCode(): int
     {
-        return Response::HTTP_UNPROCESSABLE_ENTITY;
+        return ResponseCodes::HTTP_UNPROCESSABLE_ENTITY;
     }
 }
