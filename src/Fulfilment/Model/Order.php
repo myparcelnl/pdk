@@ -12,12 +12,8 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 /**
  * Order for use with fulfilment API.
  *
- * @property null|string                                                    $uuid
  * @property null|int                                                       $accountId
  * @property null|string                                                    $createdAt
- * @property null|int                                                       $shopId
- * @property null|string                                                    $expectedDeliveryDate
- * @property null|string                                                    $expectedDeliveryTimeframe
  * @property null|string                                                    $externalIdentifier
  * @property null|string                                                    $fulfilmentPartnerIdentifier
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                 $invoiceAddress
@@ -27,9 +23,11 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|int                                                       $price
  * @property null|int                                                       $priceAfterVat
  * @property null|\MyParcelNL\Pdk\Shipment\Model\Shipment                   $shipment
+ * @property null|int                                                       $shopId
  * @property null|string                                                    $status
  * @property null|string                                                    $type
  * @property null|string                                                    $updatedAt
+ * @property null|string                                                    $uuid
  * @property null|int                                                       $vat
  */
 class Order extends Model
@@ -37,8 +35,6 @@ class Order extends Model
     protected $attributes = [
         'accountId'                   => null,
         'createdAt'                   => null,
-        'expectedDeliveryDate'        => null,
-        'expectedDeliveryTimeframe'   => null,
         'externalIdentifier'          => null,
         'fulfilmentPartnerIdentifier' => null,
         'invoiceAddress'              => null,
@@ -59,8 +55,6 @@ class Order extends Model
     protected $casts      = [
         'accountId'                   => 'int',
         'createdAt'                   => 'string',
-        'expectedDeliveryDate'        => 'string',
-        'expectedDeliveryTimeframe'   => 'string',
         'externalIdentifier'          => 'string',
         'fulfilmentPartnerIdentifier' => 'string',
         'invoiceAddress'              => ContactDetails::class,

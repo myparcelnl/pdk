@@ -4,12 +4,37 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Shipment\Request\PostShipmentsRequest;
 
 trait HasEncodesShipment
 {
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function encodeShipment(Shipment $shipment): array
+    {
+        return [
+            'carrier'              => $shipment->carrier->id,
+            'customs_declaration'  => $shipment->customsDeclaration
+                ? array_filter($shipment->customsDeclaration->toSnakeCaseArray())
+                : null,
+            'drop_off_point'       => $this->encodeDropOffPoint($shipment),
+            'options'              => $this->encodeOptions($shipment),
+            'physical_properties'  => $shipment->physicalProperties
+                ? ['weight' => $this->getWeight($shipment)]
+                : null,
+            'pickup'               => $shipment->deliveryOptions->pickupLocation
+                ? ['location_code' => $shipment->deliveryOptions->pickupLocation->locationCode]
+                : null,
+            'recipient'            => array_filter($shipment->recipient->toSnakeCaseArray()),
+            'reference_identifier' => $shipment->referenceIdentifier,
+            'status'               => $shipment->status,
+        ];
+    }
+
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
@@ -22,7 +47,19 @@ trait HasEncodesShipment
             return null;
         }
 
-        return array_filter($shipment->dropOffPoint->toSnakeCaseArray()) + PostShipmentsRequest::DEFAULT_DROP_OFF_POINT;
+        /**
+         * API currently does not support only sending location_code, however, the following properties are not used or
+         * validated beyond "must be a string".
+         */
+        $defaults = [
+            'postal_code'   => '',
+            'location_name' => '',
+            'city'          => '',
+            'street'        => '',
+            'number'        => '',
+        ];
+
+        return array_filter($shipment->dropOffPoint->toSnakeCaseArray()) + $defaults;
     }
 
     /**
@@ -33,51 +70,23 @@ trait HasEncodesShipment
      */
     private function encodeOptions(Shipment $shipment): ?array
     {
-        $deliveryOptions = $shipment->deliveryOptions;
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-
-        if ($shipmentOptions) {
-            $options = array_map(static function ($item) {
-                return is_bool($item) ? (int) $item : $item;
-            }, $shipmentOptions->toSnakeCaseArray());
-        }
+        $options         = array_map(static function ($item) {
+            return is_bool($item) ? (int) $item : $item;
+        }, $shipmentOptions->toSnakeCaseArray());
 
         return array_filter(
             [
-                'package_type'  => $this->getPackageTypeId($shipment),
-                'delivery_type' => $this->getDeliveryTypeId($shipment),
-                'delivery_date' => $deliveryOptions->date ? $deliveryOptions->date->format('Y-m-d H:i:s') : null,
+                'package_type'  => $shipment->deliveryOptions->getPackageTypeId(),
+                'delivery_type' => $shipment->deliveryOptions->getDeliveryTypeId(),
+                'delivery_date' => $shipment->deliveryOptions->getDateAsString(),
                 'insurance'     => $shipmentOptions->insurance
                     ? [
                         'amount'   => $shipmentOptions->insurance * 100,
                         'currency' => 'EUR',
                     ] : null,
-            ] + ($options ?? [])
+            ] + $options
         );
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|int
-     */
-    private function getDeliveryTypeId(Shipment $shipment): ?int
-    {
-        return $shipment->deliveryOptions && $shipment->deliveryOptions->deliveryType
-            ? DeliveryOptions::DELIVERY_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->deliveryType]
-            : null;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|int
-     */
-    private function getPackageTypeId(Shipment $shipment): ?int
-    {
-        return $shipment->deliveryOptions && $shipment->deliveryOptions->packageType
-            ? DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->packageType]
-            : null;
     }
 
     /**

@@ -8,26 +8,26 @@ use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
  * @property null|string                                   $uuid
- * @property null|int                                      $quantity
- * @property null|\MyParcelNL\Pdk\Base\Model\Currency      $price
- * @property null|\MyParcelNL\Pdk\Base\Model\Currency      $vat
- * @property null|\MyParcelNL\Pdk\Base\Model\Currency      $priceAfterVat
+ * @property int                                           $quantity
+ * @property int                                           $price
+ * @property int                                           $vat
+ * @property int                                           $priceAfterVat
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Product $product
  */
 class OrderLine extends Model
 {
     protected $attributes = [
         'uuid'          => null,
-        'quantity'      => null,
-        'price'         => null,
-        'vat'           => null,
-        'priceAfterVat' => null,
+        'quantity'      => 1,
+        'price'         => 0,
+        'vat'           => 0,
+        'priceAfterVat' => 0,
         'product'       => null,
     ];
 
     protected $casts      = [
         'uuid'          => 'string',
-        'quantity'      => 'integer',
+        'quantity'      => 'int',
         'price'         => 'int',
         'vat'           => 'int',
         'priceAfterVat' => 'int',

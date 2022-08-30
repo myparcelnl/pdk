@@ -8,16 +8,10 @@ use MyParcelNL\Pdk\Base\Request\AbstractRequest;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class PostOrdersRequest extends AbstractRequest
 {
     use HasEncodesShipment;
-
-    /**
-     * @var string
-     */
-    protected $path = '/fulfilment/orders';
 
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
@@ -59,7 +53,7 @@ class PostOrdersRequest extends AbstractRequest
      */
     public function getPath(): string
     {
-        return $this->path;
+        return '/fulfilment/orders';
     }
 
     /**
@@ -77,33 +71,6 @@ class PostOrdersRequest extends AbstractRequest
             'invoice_address'               => $order->invoiceAddress,
             'order_lines'                   => $order->orderLines->toArrayWithoutNull(),
             'shipment'                      => $this->encodeShipment($order->shipment),
-        ];
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function encodeShipment(Shipment $shipment): array
-    {
-        return [
-            'carrier'             => $shipment->carrier->id,
-            'customs_declaration' => $shipment->customsDeclaration
-                ? array_filter($shipment->customsDeclaration->toSnakeCaseArray())
-                : null,
-            'drop_off_point'      => $this->encodeDropOffPoint($shipment),
-            'options'             => $this->encodeOptions($shipment),
-            'physical_properties' => $shipment->physicalProperties
-                ? [
-                    'weight' => $this->getWeight($shipment)
-                ]
-                : null,
-            'pickup'              => $shipment->deliveryOptions->pickupLocation
-                ? ['location_code' => $shipment->deliveryOptions->pickupLocation->locationCode]
-                : null,
-            'recipient'           => $shipment->recipient->toSnakeCaseArray(),
         ];
     }
 }

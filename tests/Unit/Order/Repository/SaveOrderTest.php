@@ -166,8 +166,6 @@ it('creates a valid request from an order collection', function (array $input, a
         'output' => [
             'accountId'                                                 => null,
             'createdAt'                                                 => null,
-            'expectedDeliveryDate'                                      => null,
-            'expectedDeliveryTimeframe'                                 => null,
             'externalIdentifier'                                        => null,
             'fulfilmentPartnerIdentifier'                               => null,
             'invoiceAddress'                                            => null,
@@ -360,8 +358,6 @@ it('creates a valid request from an order collection', function (array $input, a
         'output' => [
             'accountId'                                                    => null,
             'createdAt'                                                    => null,
-            'expectedDeliveryDate'                                         => null,
-            'expectedDeliveryTimeframe'                                    => null,
             'externalIdentifier'                                           => null,
             'fulfilmentPartnerIdentifier'                                  => null,
             'invoiceAddress'                                               => null,

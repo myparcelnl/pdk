@@ -13,10 +13,10 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property null|string $externalIdentifier
  * @property null|string $name
  * @property null|string $description
- * @property null|string $width
- * @property null|string $length
- * @property null|string $height
- * @property null|string $weight
+ * @property int         $width
+ * @property int         $length
+ * @property int         $height
+ * @property int         $weight
  */
 class Product extends Model
 {
@@ -27,10 +27,10 @@ class Product extends Model
         'externalIdentifier' => null,
         'name'               => null,
         'description'        => null,
-        'width'              => null,
-        'length'             => null,
-        'height'             => null,
-        'weight'             => null,
+        'width'              => 0,
+        'length'             => 0,
+        'height'             => 0,
+        'weight'             => 0,
     ];
 
     protected $casts      = [
@@ -40,9 +40,9 @@ class Product extends Model
         'externalIdentifier' => 'string',
         'name'               => 'string',
         'description'        => 'string',
-        'width'              => 'integer',
-        'length'             => 'integer',
-        'height'             => 'integer',
-        'weight'             => 'integer',
+        'width'              => 'int',
+        'length'             => 'int',
+        'height'             => 'int',
+        'weight'             => 'int',
     ];
 }

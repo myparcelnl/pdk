@@ -15,23 +15,6 @@ class PostShipmentsRequest extends AbstractRequest
     use HasEncodesShipment;
 
     /**
-     * API currently does not support only sending location_code, however, the following properties are not used or
-     * validated beyond "must be a string".
-     */
-    public const DEFAULT_DROP_OFF_POINT = [
-        'postal_code'   => '',
-        'location_name' => '',
-        'city'          => '',
-        'street'        => '',
-        'number'        => '',
-    ];
-
-    /**
-     * @var string
-     */
-    protected $path = '/shipments';
-
-    /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     private $collection;
@@ -41,7 +24,7 @@ class PostShipmentsRequest extends AbstractRequest
      */
     public function __construct(ShipmentCollection $collection)
     {
-        $this->collection = new Collection($collection->all());
+        $this->collection = $collection;
     }
 
     /**
@@ -53,7 +36,7 @@ class PostShipmentsRequest extends AbstractRequest
             'data' => [
                 'shipments' => $this->groupByMultiCollo()
                     ->flatMap(function (Collection $groupedShipments) {
-                        return [$this->encodeShipment($groupedShipments)];
+                        return [$this->encodeShipmentWithSecondaryShipments($groupedShipments)];
                     })
                     ->toArrayWithoutNull(),
             ],
@@ -83,7 +66,7 @@ class PostShipmentsRequest extends AbstractRequest
      */
     public function getPath(): string
     {
-        return $this->path;
+        return '/shipments';
     }
 
     /**
@@ -99,7 +82,10 @@ class PostShipmentsRequest extends AbstractRequest
             return null;
         }
 
-        return $groupedShipments
+        /**
+         * Turn grouped shipments into regular collection to avoid all shipment properties being added.
+         */
+        return (new Collection($groupedShipments->all()))
             ->map(function (Shipment $shipment) {
                 return ['reference_identifier' => $shipment->referenceIdentifier];
             })
@@ -107,33 +93,17 @@ class PostShipmentsRequest extends AbstractRequest
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function encodeShipment(Collection $groupedShipments): array
+    private function encodeShipmentWithSecondaryShipments(Collection $groupedShipments): array
     {
-        $mainShipment = $groupedShipments->first();
+        $shipment                        = $this->encodeShipment($groupedShipments->first());
+        $shipment['secondary_shipments'] = $this->encodeSecondaryShipments($groupedShipments);
 
-        return [
-            'carrier'              => $mainShipment->carrier->id,
-            'reference_identifier' => $mainShipment->referenceIdentifier,
-            'status'               => $mainShipment->status,
-            'options'              => $this->encodeOptions($mainShipment),
-            'physical_properties'  => $mainShipment->physicalProperties
-                ? ['weight' => $this->getWeight($mainShipment)]
-                : null,
-            'pickup'               => $mainShipment->deliveryOptions->pickupLocation
-                ? ['location_code' => $mainShipment->deliveryOptions->pickupLocation->locationCode]
-                : null,
-            'drop_off_point'       => $this->encodeDropOffPoint($mainShipment),
-            'customs_declaration'  => $mainShipment->customsDeclaration
-                ? array_filter($mainShipment->customsDeclaration->toSnakeCaseArray())
-                : null,
-            'recipient'            => array_filter($mainShipment->recipient->toSnakeCaseArray()),
-            'secondary_shipments'  => $this->encodeSecondaryShipments($groupedShipments),
-        ];
+        return $shipment;
     }
 
     /**

@@ -6,12 +6,11 @@ namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
 use MyParcelNL\Pdk\Shipment\Concern\HasDecodesShipment;
+use function array_map;
 
 class GetOrdersResponse extends AbstractApiResponseWithBody
 {
@@ -41,13 +40,11 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
         $parsedBody = json_decode($body, true);
         $orders     = $parsedBody['data']['orders'] ?? [];
 
-        $orderData = [];
-
-        foreach ($orders as $order) {
-            $orderData[] = $this->createOrderFromApiData($order);
-        }
-
-        $this->orders = (new OrderCollection($orderData));
+        $this->orders = (new OrderCollection(
+            array_map(function (array $order) {
+                return $this->createOrderFromApiData($order);
+            }, $orders)
+        ));
     }
 
     /**
@@ -66,7 +63,7 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
             'invoiceAddress'              => new ContactDetails($data['invoice_address'] ?? []),
             'language'                    => $data['language'],
             'orderDate'                   => $data['order_date'],
-            'orderLines'                  => $this->createOrderLines($data['order_lines']),
+            'orderLines'                  => new OrderLineCollection($data['order_lines'] ?? []),
             'price'                       => $data['price'],
             'shipment'                    => $this->decodeShipment($data['shipment']),
             'shopId'                      => $data['shop_id'],
@@ -76,19 +73,5 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
             'uuid'                        => $data['uuid'],
             'vat'                         => $data['vat'],
         ]);
-    }
-
-    /**
-     * @param $orderLinesArray
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
-    private function createOrderLines($orderLinesArray): Collection
-    {
-        $orderLines = array_map(static function ($item) {
-            return new OrderLine($item);
-        }, $orderLinesArray);
-
-        return new OrderLineCollection($orderLines);
     }
 }

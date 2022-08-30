@@ -48,8 +48,6 @@ it('creates order collection from queried data', function (string $responseClass
             'shopId'                                                    => null,
             'accountId'                                                 => null,
             'createdAt'                                                 => null,
-            'expectedDeliveryDate'                                      => null,
-            'expectedDeliveryTimeframe'                                 => null,
             'fulfilmentPartnerIdentifier'                               => null,
             'invoiceAddress.boxNumber'                                  => null,
             'invoiceAddress.cc'                                         => 'NL',

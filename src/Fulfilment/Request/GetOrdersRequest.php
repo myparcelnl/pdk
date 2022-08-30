@@ -9,11 +9,6 @@ use MyParcelNL\Pdk\Base\Request\AbstractRequest;
 class GetOrdersRequest extends AbstractRequest
 {
     /**
-     * @var string
-     */
-    protected $path = '/fulfilment/orders';
-
-    /**
      * @var null|string
      */
     private $parameters;
@@ -32,6 +27,14 @@ class GetOrdersRequest extends AbstractRequest
     public function getHttpMethod(): string
     {
         return 'GET';
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return '/fulfilment/orders';
     }
 
     /**
