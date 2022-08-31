@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.0](https://github.com/myparcelnl/pdk/compare/v1.17.0...v1.18.0) (2022-08-31)
+
+
+### :sparkles: New Features
+
+* add fulfilment order repository ([#33](https://github.com/myparcelnl/pdk/issues/33)) ([9ab1e65](https://github.com/myparcelnl/pdk/commit/9ab1e65556cce8ff1e61a24cba5b60f22f46ee5e))
+
 ## [1.17.0](https://github.com/myparcelnl/pdk/compare/v1.16.0...v1.17.0) (2022-08-30)
 
 
