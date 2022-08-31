@@ -4,37 +4,37 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
  * Order for use with fulfilment API.
  *
- * @property null|string $uuid
- * @property null|int    $accountId
- * @property null|int    $shopId
- * @property null|string $expectedDeliveryDate
- * @property null|string $expectedDeliveryTimeframe
- * @property null|string $externalIdentifier
- * @property null|string $fulfilmentPartnerIdentifier
- * @property null|array  $invoiceAddress
- * @property null|string $language
- * @property null|string $orderDate
- * @property null|array  $orderLines
- * @property null|int    $price
- * @property null|int    $priceAfterVat
- * @property null|array  $shipment
- * @property null|string $status
- * @property null|string $type
- * @property null|int    $vat
+ * @property null|int                                                       $accountId
+ * @property null|string                                                    $createdAt
+ * @property null|string                                                    $externalIdentifier
+ * @property null|string                                                    $fulfilmentPartnerIdentifier
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                 $invoiceAddress
+ * @property null|string                                                    $language
+ * @property null|string                                                    $orderDate
+ * @property null|\MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
+ * @property null|int                                                       $price
+ * @property null|int                                                       $priceAfterVat
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\Shipment                   $shipment
+ * @property null|int                                                       $shopId
+ * @property null|string                                                    $status
+ * @property null|string                                                    $type
+ * @property null|string                                                    $updatedAt
+ * @property null|string                                                    $uuid
+ * @property null|int                                                       $vat
  */
 class Order extends Model
 {
     protected $attributes = [
-        'uuid'                        => null,
         'accountId'                   => null,
-        'shopId'                      => null,
-        'expectedDeliveryDate'        => null,
-        'expectedDeliveryTimeframe'   => null,
+        'createdAt'                   => null,
         'externalIdentifier'          => null,
         'fulfilmentPartnerIdentifier' => null,
         'invoiceAddress'              => null,
@@ -44,28 +44,31 @@ class Order extends Model
         'price'                       => null,
         'priceAfterVat'               => null,
         'shipment'                    => null,
+        'shopId'                      => null,
         'status'                      => null,
         'type'                        => null,
+        'updatedAt'                   => null,
+        'uuid'                        => null,
         'vat'                         => null,
     ];
 
     protected $casts      = [
-        'uuid'                        => 'string',
         'accountId'                   => 'int',
-        'shopId'                      => 'int',
-        'expectedDeliveryDate'        => 'string',
-        'expectedDeliveryTimeframe'   => 'string',
+        'createdAt'                   => 'string',
         'externalIdentifier'          => 'string',
         'fulfilmentPartnerIdentifier' => 'string',
-        'invoiceAddress'              => 'array',
+        'invoiceAddress'              => ContactDetails::class,
         'language'                    => 'string',
         'orderDate'                   => 'string',
-        'orderLines'                  => 'array',
+        'orderLines'                  => OrderLineCollection::class,
         'price'                       => 'int',
         'priceAfterVat'               => 'int',
-        'shipment'                    => 'array',
+        'shipment'                    => Shipment::class,
+        'shopId'                      => 'int',
         'status'                      => 'string',
         'type'                        => 'string',
+        'updatedAt'                   => 'string',
+        'uuid'                        => 'string',
         'vat'                         => 'int',
     ];
 }

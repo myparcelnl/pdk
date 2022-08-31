@@ -6,16 +6,10 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Base\Request\AbstractRequest;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class PostReturnShipmentsRequest extends AbstractRequest
 {
-    /**
-     * @var string
-     */
-    protected $path = '/shipments';
-
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
@@ -71,7 +65,7 @@ class PostReturnShipmentsRequest extends AbstractRequest
      */
     public function getPath(): string
     {
-        return $this->path;
+        return '/shipments';
     }
 
     /**
@@ -97,7 +91,7 @@ class PostReturnShipmentsRequest extends AbstractRequest
 
         return array_filter(
             [
-                'package_type' => $this->getPackageTypeId($shipment),
+                'package_type' => $shipment->deliveryOptions->getPackageTypeId(),
                 'insurance'    => $shipmentOptions->insurance
                     ? [
                         'amount'   => $shipmentOptions->insurance * 100,
@@ -123,15 +117,5 @@ class PostReturnShipmentsRequest extends AbstractRequest
             ];
         })
             ->all();
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return int
-     */
-    private function getPackageTypeId(Shipment $shipment): int
-    {
-        return DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$shipment->deliveryOptions->packageType];
     }
 }

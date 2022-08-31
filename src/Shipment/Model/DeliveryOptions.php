@@ -102,6 +102,37 @@ class DeliveryOptions extends Model
     ];
 
     /**
+     * @return null|string
+     * @noinspection PhpUnused
+     */
+    public function getDateAsString(): ?string
+    {
+        return $this->date ? $this->date->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * @return null|int
+     * @noinspection PhpUnused
+     */
+    public function getDeliveryTypeId(): ?int
+    {
+        return $this->deliveryType && array_key_exists($this->deliveryType, self::DELIVERY_TYPES_NAMES_IDS_MAP)
+            ? self::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType]
+            : null;
+    }
+
+    /**
+     * @return null|int
+     * @noinspection PhpUnused
+     */
+    public function getPackageTypeId(): ?int
+    {
+        return $this->packageType && array_key_exists($this->packageType, self::PACKAGE_TYPES_NAMES_IDS_MAP)
+            ? self::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType]
+            : null;
+    }
+
+    /**
      * @return bool
      */
     public function isPickup(): bool
