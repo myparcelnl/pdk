@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.19.0](https://github.com/myparcelnl/pdk/compare/v1.18.1...v1.19.0) (2022-09-01)
+
+
+### :sparkles: New Features
+
+* add plugin hooks ([#35](https://github.com/myparcelnl/pdk/issues/35)) ([930d7a2](https://github.com/myparcelnl/pdk/commit/930d7a2fd38e3e5a0305404f523b32b4fd87e7e6))
+
 ## [1.18.1](https://github.com/myparcelnl/pdk/compare/v1.18.0...v1.18.1) (2022-09-01)
 
 
