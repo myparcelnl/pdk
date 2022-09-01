@@ -12,7 +12,7 @@
         "guzzlehttp/guzzle": ">= 7"
     },
     "scripts": {
-        "post-autoload-dump": "php private/generate_helper.php"
+        "post-autoload-dump": "php helper/generate.php"
     },
     "require-dev": {
         "myparcelnl/devtools": ">= 1",
@@ -26,8 +26,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "MyParcelNL\\Pdk\\": "tests/Unit",
-            "MyParcelNL\\Pdk\\Tests\\": "tests"
+            "MyParcelNL\\Pdk\\Tests\\": "tests/",
+            "MyParcelNL\\Pdk\\Helper\\": "helper/"
         }
     },
     "authors": [
