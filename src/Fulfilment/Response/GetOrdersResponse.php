@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Concern\HasDecodesShipment;
 
 class GetOrdersResponse extends AbstractApiResponseWithBody
@@ -37,38 +34,38 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
         $parsedBody = json_decode($this->getBody(), true);
         $orders     = $parsedBody['data']['orders'] ?? [];
 
-        $this->orders = (new OrderCollection(
-            array_map(function (array $order) {
-                return $this->createOrderFromApiData($order);
-            }, $orders)
-        ));
+        $this->createOrders($orders);
     }
 
     /**
-     * @param  array $data
+     * @param  array $orders
      *
-     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
+     * @return void
      * @throws \Exception
      */
-    private function createOrderFromApiData(array $data): Order
+    private function createOrders(array $orders): void
     {
-        return new Order([
-            'accountId'                   => null,
-            'createdAt'                   => $data['created_at'],
-            'externalIdentifier'          => $data['external_identifier'],
-            'fulfilmentPartnerIdentifier' => $data['fulfilment_partner_identifier'],
-            'invoiceAddress'              => new ContactDetails($data['invoice_address'] ?? []),
-            'language'                    => $data['language'],
-            'orderDate'                   => $data['order_date'],
-            'orderLines'                  => new OrderLineCollection($data['order_lines'] ?? []),
-            'price'                       => $data['price'],
-            'shipment'                    => $this->decodeShipment($data['shipment']),
-            'shopId'                      => $data['shop_id'],
-            'status'                      => $data['status'],
-            'type'                        => $data['type'],
-            'updatedAt'                   => $data['updated_at'],
-            'uuid'                        => $data['uuid'],
-            'vat'                         => $data['vat'],
-        ]);
+        $this->orders = (new OrderCollection(
+            array_map(function (array $order) {
+                return [
+                    'accountId'                   => null,
+                    'createdAt'                   => $order['created_at'],
+                    'externalIdentifier'          => $order['external_identifier'],
+                    'fulfilmentPartnerIdentifier' => $order['fulfilment_partner_identifier'],
+                    'invoiceAddress'              => $order['invoice_address'],
+                    'language'                    => $order['language'],
+                    'orderDate'                   => $order['order_date'],
+                    'orderLines'                  => $order['order_lines'] ?? [],
+                    'price'                       => $order['price'],
+                    'shipment'                    => $this->decodeShipment($order['shipment']),
+                    'shopId'                      => $order['shop_id'],
+                    'status'                      => $order['status'],
+                    'type'                        => $order['type'],
+                    'updatedAt'                   => $order['updated_at'],
+                    'uuid'                        => $order['uuid'],
+                    'vat'                         => $order['vat'],
+                ];
+            }, $orders)
+        ));
     }
 }

@@ -44,7 +44,6 @@ class ExampleGetOrdersResponse extends ExampleJsonResponse
                                     'weight'              => 3500,
                                 ],
                             ],
-
                         ],
                         'price'           => 260,
                         'shipment'        => [
