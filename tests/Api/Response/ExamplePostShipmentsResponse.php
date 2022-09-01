@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-class ShipmentsResponse extends JsonResponse
+use Symfony\Component\HttpFoundation\Response;
+
+class ExamplePostShipmentsResponse extends ExampleJsonResponse
 {
-    private const DEFAULT_IDS = [1];
+    private const DEFAULT_IDS = [
+        ['id' => 1],
+    ];
 
     /**
      * @var array|int[]
@@ -32,10 +36,16 @@ class ShipmentsResponse extends JsonResponse
     {
         return [
             'data' => [
-                'shipments' => array_map(static function (int $id) {
-                    return ['id' => $id];
-                }, $this->ids),
+                'ids' => $this->ids,
             ],
         ];
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_CREATED;
     }
 }

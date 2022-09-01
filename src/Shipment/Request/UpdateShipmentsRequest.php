@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
+use MyParcelNL\Sdk\src\Support\Collection;
 
-class UpdateShipmentsRequest extends AbstractRequest
+class UpdateShipmentsRequest extends Request
 {
     /**
      * @var string
@@ -31,11 +32,14 @@ class UpdateShipmentsRequest extends AbstractRequest
     private $size;
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipmentCollection
      * @param  null|int                                               $size
      */
-    public function __construct(ShipmentCollection $collection, ?int $size = null)
+    public function __construct(ShipmentCollection $shipmentCollection, ?int $size = null)
     {
+        parent::__construct();
+        $collection = new Collection($shipmentCollection->all());
+
         $this->size = $size;
 
         $this->ids                  = $collection->pluck('id')
@@ -53,14 +57,6 @@ class UpdateShipmentsRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getHttpMethod(): string
-    {
-        return 'GET';
-    }
-
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         if ($this->ids->isEmpty()) {
@@ -73,7 +69,7 @@ class UpdateShipmentsRequest extends AbstractRequest
     /**
      * @return array
      */
-    protected function getQueryParameters(): array
+    protected function getParameters(): array
     {
         $referenceIdentifiers = $this->ids->isEmpty() ? $this->referenceIdentifiers->toArray() : [];
 

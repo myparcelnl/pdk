@@ -19,7 +19,7 @@ interface RequestInterface
     /**
      * @return string
      */
-    public function getHttpMethod(): string;
+    public function getMethod(): string;
 
     /**
      * @return string

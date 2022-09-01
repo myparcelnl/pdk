@@ -21,14 +21,9 @@ class GetLabelsResponse extends AbstractApiResponseWithBody
         return $this->labelLink;
     }
 
-    /**
-     * @param  string $body
-     *
-     * @return void
-     */
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $parsedBody      = json_decode($body, true);
+        $parsedBody      = json_decode($this->getBody(), true);
         $responseKey     = array_key_exists('pdf', $parsedBody['data']) ? 'pdf' : 'pdfs';
         $this->labelLink = $parsedBody['data'][$responseKey]['url'];
     }

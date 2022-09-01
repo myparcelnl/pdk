@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Concern\HasDecodesShipment;
-use function array_map;
 
 class GetOrdersResponse extends AbstractApiResponseWithBody
 {
@@ -30,14 +29,12 @@ class GetOrdersResponse extends AbstractApiResponseWithBody
     }
 
     /**
-     * @param  string $body
-     *
      * @return void
      * @throws \Exception
      */
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $parsedBody = json_decode($body, true);
+        $parsedBody = json_decode($this->getBody(), true);
         $orders     = $parsedBody['data']['orders'] ?? [];
 
         $this->orders = (new OrderCollection(

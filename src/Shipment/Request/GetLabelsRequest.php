@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 
-class GetLabelsRequest extends AbstractRequest
+class GetLabelsRequest extends Request
 {
     private const PATH            = 'shipment_labels/:ids';
     private const PATH_V2         = 'v2/shipment_labels/:ids';
@@ -19,26 +19,13 @@ class GetLabelsRequest extends AbstractRequest
     private $collection;
 
     /**
-     * @var array
-     */
-    private $parameters;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipmentCollection
      * @param  array                                                  $parameters
      */
-    public function __construct(ShipmentCollection $collection, array $parameters)
+    public function __construct(ShipmentCollection $shipmentCollection, array $parameters)
     {
-        $this->collection = $collection;
-        $this->parameters = $parameters;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHttpMethod(): string
-    {
-        return 'GET';
+        $this->collection = $shipmentCollection;
+        parent::__construct(['parameters' => $parameters]);
     }
 
     /**
@@ -58,7 +45,7 @@ class GetLabelsRequest extends AbstractRequest
     /**
      * @return array
      */
-    protected function getQueryParameters(): array
+    protected function getParameters(): array
     {
         $parameters              = $this->parameters;
         $parameters['positions'] = implode(';', $parameters['positions'] ?? []);

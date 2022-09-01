@@ -7,9 +7,9 @@ use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\ShipmentLabelsLinkResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ShipmentLabelsLinkV2Response;
-use MyParcelNL\Pdk\Tests\Api\Response\ShipmentLabelsPdfResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsPdfResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 $array              = array_fill(0, 30, 'appelboom');
@@ -92,8 +92,8 @@ it(
 
         $mock->append(
             count($collection) > 25
-                ? new ShipmentLabelsLinkV2Response()
-                : new ShipmentLabelsLinkResponse()
+                ? new ExampleGetShipmentLabelsLinkV2Response()
+                : new ExampleGetShipmentLabelsLinkResponse()
         );
 
         /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
@@ -126,7 +126,7 @@ it(
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = $pdk->get(ApiServiceInterface::class);
         $mock = $api->getMock();
-        $mock->append(new ShipmentLabelsPdfResponse());
+        $mock->append(new ExampleGetShipmentLabelsPdfResponse());
 
         /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
         $repository = $pdk->get(ShipmentRepository::class);

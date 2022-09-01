@@ -10,10 +10,10 @@ use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Tests\Api\Response\AccountResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\CarrierConfigurationResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\CarrierOptionsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ShopResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
@@ -34,33 +34,33 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
     expect($repository->{$method}(...array_values($args)))->toBeInstanceOf($expected);
 })->with([
     [
-        AccountResponse::class,
+        ExampleGetAccountsResponse::class,
         AccountRepository::class,
         Account::class,
         'getAccount',
     ],
     [
-        ShopResponse::class,
+        ExampleGetShopsResponse::class,
         ShopRepository::class,
         Shop::class,
         'getShop',
     ],
     [
-        CarrierConfigurationResponse::class,
+        ExampleGetCarrierConfigurationResponse::class,
         ShopCarrierConfigurationRepository::class,
         Collection::class,
         'getCarrierConfigurations',
         ['shopId' => 3],
     ],
     [
-        CarrierConfigurationResponse::class,
+        ExampleGetCarrierConfigurationResponse::class,
         ShopCarrierConfigurationRepository::class,
         CarrierConfiguration::class,
         'getCarrierConfiguration',
         ['shopId' => 3, 'carrier' => 'postnl'],
     ],
     [
-        CarrierOptionsResponse::class,
+        ExampleGetCarrierOptionsResponse::class,
         CarrierOptionsRepository::class,
         Collection::class,
         'getCarrierOptions',
@@ -73,7 +73,7 @@ it('uses all methods of repository', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get(ApiServiceInterface::class);
     $api->getMock()
-        ->append(new ShopResponse());
+        ->append(new ExampleGetShopsResponse());
 
     $repository = $pdk->get(MockRepository::class);
     $repository->save();

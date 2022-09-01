@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Api\Service;
 
 use Composer\InstalledVersions;
 use GuzzleHttp\Client;
+use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
 use MyParcelNL\Pdk\Base\Pdk;
 
 /**
@@ -32,16 +33,18 @@ class MyParcelApiService extends AbstractApiService
     private $userAgent;
 
     /**
-     * @param  array $config
+     * @param  null|array                                         $config
+     * @param  \MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface $clientAdapter
      */
-    public function __construct(array $config = [])
+    public function __construct(?array $config, ClientAdapterInterface $clientAdapter)
     {
         $config += self::DEFAULT_CONFIG;
 
-        $this->httpClient = new $config['httpClient']();
-        $this->baseUrl    = $config['baseUrl'] ?? null;
-        $this->apiKey     = $config['apiKey'] ?? null;
-        $this->userAgent  = $config['userAgent'] ?? [];
+        $this->baseUrl   = $config['baseUrl'] ?? null;
+        $this->apiKey    = $config['apiKey'] ?? null;
+        $this->userAgent = $config['userAgent'] ?? [];
+
+        parent::__construct($clientAdapter);
     }
 
     /**

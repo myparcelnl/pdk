@@ -4,44 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetOrdersRequest extends AbstractRequest
+class GetOrdersRequest extends Request
 {
-    /**
-     * @var null|string
-     */
-    private $parameters;
-
-    /**
-     * @param  array $parameters
-     */
-    public function __construct(array $parameters = [])
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHttpMethod(): string
-    {
-        return 'GET';
-    }
-
     /**
      * @return string
      */
     public function getPath(): string
     {
         return '/fulfilment/orders';
-    }
-
-    /**
-     * @return array
-     */
-    protected function getQueryParameters(): array
-    {
-        return array_filter($this->parameters);
     }
 }

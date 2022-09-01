@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\PostShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
@@ -18,7 +18,7 @@ const INPUT_RECIPIENT = [
     'cc'         => 'NL',
     'city'       => 'Hoofddorp',
     'email'      => 'test@myparcel.nl',
-    'person'     => 'Jaappie Krekel',
+    'person'     => 'Jaap Krekel',
     'postalCode' => '2132JE',
     'street'     => 'Antareslaan 31',
 ];
@@ -38,7 +38,7 @@ it('creates return shipment', function (array $input, array $output) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new PostShipmentsResponse());
+    $mock->append(new ExamplePostShipmentsResponse());
 
     $repository             = $pdk->get(ShipmentRepository::class);
     $inputShipments         = (new Collection($input))->mapInto(Shipment::class);
@@ -99,7 +99,7 @@ it('creates return shipment', function (array $input, array $output) {
             '0.reference_identifier'       => 'Order-1',
             '0.carrier'                    => 1,
             '0.email'                      => 'test@myparcel.nl',
-            '0.name'                       => 'Jaappie Krekel',
+            '0.name'                       => 'Jaap Krekel',
             '0.options.package_type'       => 1,
             '0.options.age_check'          => 1,
             '0.options.label_description'  => 'order 204829',
@@ -168,7 +168,7 @@ it('creates return shipment', function (array $input, array $output) {
             '0.reference_identifier'       => 'Bestelling-12',
             '0.carrier'                    => 1,
             '0.email'                      => 'test@myparcel.nl',
-            '0.name'                       => 'Jaappie Krekel',
+            '0.name'                       => 'Jaap Krekel',
             '0.options.package_type'       => 1,
             '0.options.age_check'          => 1,
             '0.options.label_description'  => 'order 204829',
@@ -177,7 +177,7 @@ it('creates return shipment', function (array $input, array $output) {
             '1.reference_identifier'       => 'Hondenbrokken-43',
             '1.carrier'                    => 5,
             '1.email'                      => 'test@myparcel.nl',
-            '1.name'                       => 'Jaappie Krekel',
+            '1.name'                       => 'Jaap Krekel',
             '1.options.package_type'       => 1,
             '1.options.age_check'          => 1,
             '1.options.label_description'  => 'order 204829',
@@ -194,7 +194,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new PostShipmentsResponse());
+    $mock->append(new ExamplePostShipmentsResponse());
 
     $repository = $pdk->get(ShipmentRepository::class);
     $response   = $repository->createReturnShipments(new ShipmentCollection($input));

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-class AccountResponse extends JsonResponse
+class ExampleGetAccountsResponse extends ExampleJsonResponse
 {
     private const DEFAULT_ACCOUNTS = [
         [
@@ -24,6 +24,14 @@ class AccountResponse extends JsonResponse
      */
     private $accounts;
 
+    /**
+     * @param  array       $accounts
+     * @param  int         $status
+     * @param  array       $headers
+     * @param              $body
+     * @param  string      $version
+     * @param  string|null $reason
+     */
     public function __construct(
         array  $accounts = self::DEFAULT_ACCOUNTS,
         int    $status = 200,
@@ -36,6 +44,9 @@ class AccountResponse extends JsonResponse
         $this->accounts = $accounts;
     }
 
+    /**
+     * @return array
+     */
     public function getContent(): array
     {
         return [

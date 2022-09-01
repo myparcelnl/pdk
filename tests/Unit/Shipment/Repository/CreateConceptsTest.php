@@ -13,15 +13,15 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\PostShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 const DEFAULT_OUTPUT_RECIPIENT = [
     'recipient.cc'          => 'NL',
     'recipient.city'        => 'Hoofddorp',
-    'recipient.person'      => 'Jaappie Krekel',
+    'recipient.person'      => 'Jaap Krekel',
     'recipient.postal_code' => '2132JE',
     'recipient.street'      => 'Antareslaan 31',
 ];
@@ -29,7 +29,7 @@ const DEFAULT_OUTPUT_RECIPIENT = [
 const DEFAULT_INPUT_RECIPIENT = [
     'cc'         => 'NL',
     'city'       => 'Hoofddorp',
-    'person'     => 'Jaappie Krekel',
+    'person'     => 'Jaap Krekel',
     'postalCode' => '2132JE',
     'street'     => 'Antareslaan 31',
 ];
@@ -48,7 +48,7 @@ it('creates a valid request from a shipment collection', function (array $input,
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new PostShipmentsResponse());
+    $mock->append(new ExamplePostShipmentsResponse());
 
     $inputShipments = (new Collection($input))->mapInto(Shipment::class);
 
@@ -487,7 +487,7 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new ShipmentsResponse());
+    $mock->append(new ExampleGetShipmentsResponse());
 
     $repository = $pdk->get(ShipmentRepository::class);
 

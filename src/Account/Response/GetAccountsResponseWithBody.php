@@ -22,9 +22,9 @@ class GetAccountsResponseWithBody extends AbstractApiResponseWithBody
         return $this->account;
     }
 
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $data          = json_decode($body, true)['data']['accounts'][0];
+        $data          = json_decode($this->getBody(), true)['data']['accounts'][0];
         $this->account = new Account($data);
     }
 }

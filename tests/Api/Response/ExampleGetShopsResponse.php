@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-class ShopResponse extends JsonResponse
+class ExampleGetShopsResponse extends ExampleJsonResponse
 {
     private const DEFAULT_SHOPS = [
         [

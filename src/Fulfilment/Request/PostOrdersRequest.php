@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
 
-class PostOrdersRequest extends AbstractRequest
+class PostOrdersRequest extends Request
 {
     use HasEncodesShipment;
 
@@ -23,6 +23,7 @@ class PostOrdersRequest extends AbstractRequest
      */
     public function __construct(OrderCollection $collection)
     {
+        parent::__construct();
         $this->collection = $collection;
     }
 
@@ -43,7 +44,7 @@ class PostOrdersRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getHttpMethod(): string
+    public function getMethod(): string
     {
         return 'POST';
     }

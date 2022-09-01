@@ -4,41 +4,36 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
-use Psr\Http\Message\ResponseInterface;
-
 abstract class AbstractApiResponseWithBody extends AbstractApiResponse
 {
     /**
-     * @var string
+     * @var null|string
      */
     private $body;
 
     /**
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  \MyParcelNL\Pdk\Api\Response\ClientResponseInterface $response
      */
-    public function __construct(ResponseInterface $response)
+    public function __construct(ClientResponseInterface $response)
     {
         parent::__construct($response);
-        $this->body = (string) $response->getBody();
+        $this->body = $response->getBody();
 
-        if ($this->isUnprocessableEntity()) {
-            $this->parseErrors($this->getBody());
+        if ($this->body && $this->getStatusCode() >= 300) {
+            $this->parseErrors();
         }
 
         if ($this->isOkResponse()) {
-            $this->parseResponseBody((string) $response->getBody());
+            $this->parseResponseBody();
         }
     }
 
-    /**
-     * @param  string $body
-     */
-    abstract protected function parseResponseBody(string $body): void;
+    abstract protected function parseResponseBody(): void;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getBody(): string
+    public function getBody(): ?string
     {
         return $this->body;
     }

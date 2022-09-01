@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetAccountsRequest extends AbstractRequest
+class GetAccountsRequest extends Request
 {
     /**
-     * @var string
+     * @return string
      */
-    protected $path = '/accounts';
-
-    public function getHttpMethod(): string
+    public function getPath(): string
     {
-        return 'GET';
+        return '/accounts';
     }
 }

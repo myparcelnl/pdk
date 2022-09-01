@@ -4,35 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetShipmentsRequest extends AbstractRequest
+class GetShipmentsRequest extends Request
 {
-    /**
-     * @var string
-     */
-    protected $path = '/shipments';
-
-    /**
-     * @var null|string
-     */
-    private $parameters;
-
-    /**
-     * @param  array $parameters
-     */
-    public function __construct(array $parameters = [])
+    public function getPath(): string
     {
-        $this->parameters = $parameters;
-    }
-
-    public function getHttpMethod(): string
-    {
-        return 'GET';
-    }
-
-    protected function getQueryParameters(): array
-    {
-        return array_filter($this->parameters);
+        return '/shipments';
     }
 }

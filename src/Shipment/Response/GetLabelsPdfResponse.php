@@ -21,13 +21,8 @@ class GetLabelsPdfResponse extends AbstractApiResponseWithBody
         return $this->pdf;
     }
 
-    /**
-     * @param  string $body
-     *
-     * @return void
-     */
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $this->pdf = $body;
+        $this->pdf = $this->getBody();
     }
 }

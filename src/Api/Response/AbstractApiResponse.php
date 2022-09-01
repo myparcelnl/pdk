@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
-use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
-use MyParcelNL\Pdk\Base\Http\ResponseCodes;
-use MyParcelNL\Sdk\src\Exception\ApiException;
-use Psr\Http\Message\ResponseInterface;
+use MyParcelNL\Pdk\Api\Exception\ApiException;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractApiResponse implements ApiResponseInterface
 {
@@ -17,16 +15,16 @@ abstract class AbstractApiResponse implements ApiResponseInterface
     private $errors = [];
 
     /**
-     * @var int
+     * @var \MyParcelNL\Pdk\Api\Response\ClientResponseInterface
      */
-    private $statusCode;
+    private $response;
 
     /**
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  \MyParcelNL\Pdk\Api\Response\ClientResponseInterface $response
      */
-    public function __construct(ResponseInterface $response)
+    public function __construct(ClientResponseInterface $response)
     {
-        $this->statusCode = $response->getStatusCode();
+        $this->response = $response;
     }
 
     /**
@@ -42,7 +40,7 @@ abstract class AbstractApiResponse implements ApiResponseInterface
      */
     public function getStatusCode(): int
     {
-        return $this->statusCode;
+        return $this->response->getStatusCode();
     }
 
     /**
@@ -50,7 +48,7 @@ abstract class AbstractApiResponse implements ApiResponseInterface
      */
     public function isErrorResponse(): bool
     {
-        return $this->getStatusCode() < ResponseCodes::HTTP_OK || $this->getStatusCode() >= 299;
+        return $this->getStatusCode() < Response::HTTP_OK || $this->getStatusCode() >= 299;
     }
 
     /**
@@ -62,23 +60,10 @@ abstract class AbstractApiResponse implements ApiResponseInterface
     }
 
     /**
-     * @return bool
+     * @return void
      */
-    public function isUnprocessableEntity(): bool
+    protected function parseErrors(): void
     {
-        return ResponseCodes::HTTP_UNPROCESSABLE_ENTITY === $this->getStatusCode();
-    }
-
-    /**
-     * @param  string $body
-     */
-    protected function parseErrors(string $body): void
-    {
-        $this->errors = array_map(
-            static function ($errorData) {
-                return new ApiException($errorData['field'] . ': ' . $errorData['message']);
-            },
-            json_decode($body, true)['errors'] ?? []
-        );
+        $this->errors = [new ApiException($this->response)];
     }
 }

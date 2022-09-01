@@ -22,9 +22,9 @@ class GetCarrierOptionsResponseWithBody extends AbstractApiResponseWithBody
         return $this->options;
     }
 
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $options       = json_decode($body, true)['data']['carrier_options'];
+        $options       = json_decode($this->getBody(), true)['data']['carrier_options'];
         $this->options = new CarrierOptionsCollection($options);
     }
 }

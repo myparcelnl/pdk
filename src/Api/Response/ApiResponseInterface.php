@@ -2,21 +2,19 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Api\Concern;
-
-use Psr\Http\Message\ResponseInterface;
+namespace MyParcelNL\Pdk\Api\Response;
 
 interface ApiResponseInterface
 {
     /**
-     * @param  \Psr\Http\Message\ResponseInterface $response
+     * @param  \MyParcelNL\Pdk\Api\Response\ClientResponseInterface $response
      */
-    public function __construct(ResponseInterface $response);
+    public function __construct(ClientResponseInterface $response);
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getBody(): string;
+    public function getBody(): ?string;
 
     /**
      * @return array
@@ -37,9 +35,4 @@ interface ApiResponseInterface
      * @return bool
      */
     public function isOkResponse(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isUnprocessableEntity(): bool;
 }

@@ -22,14 +22,9 @@ class PostOrdersResponse extends AbstractApiResponseWithBody
         return $this->ids;
     }
 
-    /**
-     * @param  string $body
-     *
-     * @return void
-     */
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $parsedBody = json_decode($body, true);
+        $parsedBody = json_decode($this->getBody(), true);
         $this->ids  = new Collection($parsedBody['data']['ids'] ?? []);
     }
 }

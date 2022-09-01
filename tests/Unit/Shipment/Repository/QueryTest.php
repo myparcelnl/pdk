@@ -7,10 +7,10 @@ use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsFromContractResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsResponseWithDropOffPoint;
-use MyParcelNL\Pdk\Tests\Api\Response\GetShipmentsResponseWithPickup;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsFromContractResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithDropOffPoint;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithPickup;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
@@ -43,7 +43,7 @@ it('creates shipment collection from queried data', function (string $responseCl
         ->toEqual($output);
 })->with([
     'normal shipment'              => [
-        'response' => GetShipmentsResponse::class,
+        'response' => ExampleGetShipmentsResponse::class,
         'output'   => [
             'apiKey'                                           => null,
             'barcode'                                          => 'CV515676839NL',
@@ -135,7 +135,7 @@ it('creates shipment collection from queried data', function (string $responseCl
         ],
     ],
     'shipment with drop-off point' => [
-        'response' => GetShipmentsResponseWithDropOffPoint::class,
+        'response' => ExampleGetShipmentsResponseWithDropOffPoint::class,
         'output'   => [
             'id'                                               => 136510070,
             'apiKey'                                           => null,
@@ -231,7 +231,7 @@ it('creates shipment collection from queried data', function (string $responseCl
         ],
     ],
     'shipment with pickup'         => [
-        'response' => GetShipmentsResponseWithPickup::class,
+        'response' => ExampleGetShipmentsResponseWithPickup::class,
         'output'   => [
             'apiKey'                                              => null,
             'barcode'                                             => '3SMYPA056396924',
@@ -327,7 +327,7 @@ it('creates shipment collection from queried data', function (string $responseCl
         ],
     ],
     'shipment with contract'       => [
-        'response' => GetShipmentsFromContractResponse::class,
+        'response' => ExampleGetShipmentsFromContractResponse::class,
         'output'   => [
             'apiKey'                                           => null,
             'barcode'                                          => '3SMYPA123456789',
@@ -377,7 +377,7 @@ it('creates shipment collection from queried data', function (string $responseCl
             'recipient.streetAdditionalInfo'                   => null,
             'recipient.email'                                  => null,
             'recipient.phone'                                  => null,
-            'recipient.person'                                 => 'Jaappie Krekel',
+            'recipient.person'                                 => 'Jaap Krekel',
             'recipient.company'                                => null,
             'referenceIdentifier'                              => 'my-multicollo-set',
             'sender.boxNumber'                                 => null,

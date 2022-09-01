@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetShopRequest extends AbstractRequest
+class GetShopRequest extends Request
 {
-    /**
-     * @var string
-     */
-    protected $path = '/shops';
-
     /**
      * @var int
      */
@@ -23,15 +18,16 @@ class GetShopRequest extends AbstractRequest
      */
     public function __construct(int $shopId)
     {
+        parent::__construct();
         $this->shopId = $shopId;
     }
 
-    public function getHttpMethod(): string
+    public function getPath(): string
     {
-        return 'GET';
+        return '/shops';
     }
 
-    protected function getQueryParameters(): array
+    protected function getParameters(): array
     {
         return [
             'id' => $this->shopId,

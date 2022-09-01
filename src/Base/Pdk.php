@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base;
 
+use DI\Container;
+
 class Pdk
 {
     public const PACKAGE_NAME = 'myparcelnl/pdk';
@@ -16,7 +18,7 @@ class Pdk
     /**
      * @throws \Exception
      */
-    public function __construct(\DI\Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }

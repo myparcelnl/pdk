@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetShopsRequest extends AbstractRequest
+class GetShopsRequest extends Request
 {
-    /**
-     * @var string
-     */
-    protected $path = '/shops';
-
-    public function getHttpMethod(): string
+    public function getPath(): string
     {
-        return 'GET';
+        return '/shops';
     }
 }

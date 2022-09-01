@@ -21,7 +21,7 @@ class OrderRepository extends AbstractRepository
      */
     public function query(array $parameters): OrderCollection
     {
-        $request = new GetOrdersRequest($parameters);
+        $request = new GetOrdersRequest(['parameters' => $parameters]);
 
         return $this->retrieve($request->getUniqueKey(), function () use ($request) {
             /** @var \MyParcelNL\Pdk\Fulfilment\Response\GetOrdersResponse $response */

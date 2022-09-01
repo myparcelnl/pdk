@@ -23,9 +23,9 @@ class GetShopCarrierConfigurationsResponseWithBody extends AbstractApiResponseWi
         return $this->configurations;
     }
 
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $parsedBody           = json_decode($body, true);
+        $parsedBody           = json_decode($this->getBody(), true);
         $configurations       = $parsedBody['data']['carrier_configurations'] ?? [];
         $this->configurations = (new Collection($configurations))->map(
             function (array $data) {

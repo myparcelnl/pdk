@@ -9,12 +9,13 @@
         "myparcelnl/sdk": ">= 7",
         "php": ">=7.1.0",
         "php-di/php-di": ">= 6",
-        "guzzlehttp/guzzle": ">= 7"
+        "symfony/http-foundation": ">= 2 || >= 3 || >= 4 || >= 5"
     },
     "scripts": {
         "post-autoload-dump": "php helper/generate.php"
     },
     "require-dev": {
+        "guzzlehttp/guzzle": "^7.5",
         "myparcelnl/devtools": ">= 1",
         "nette/robot-loader": ">= 3",
         "pestphp/pest": ">= 1"

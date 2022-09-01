@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetShopCarrierConfigurationsRequest extends AbstractRequest
+class GetShopCarrierConfigurationsRequest extends Request
 {
     /**
      * @var string
@@ -20,12 +20,8 @@ class GetShopCarrierConfigurationsRequest extends AbstractRequest
 
     public function __construct(int $shopId)
     {
+        parent::__construct();
         $this->shopId = $shopId;
-    }
-
-    public function getHttpMethod(): string
-    {
-        return 'GET';
     }
 
     public function getPath(): string

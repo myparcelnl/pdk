@@ -4,30 +4,34 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-class GetShipmentsResponseWithPickup extends JsonResponse
+class ExampleGetShipmentsResponseWithDropOffPoint extends ExampleJsonResponse
 {
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function getContent(): array
     {
         return [
             'data' => [
                 'shipments' => [
                     [
-                        'id'                           => 136464938,
+                        'id'                           => 136510070,
                         'parent_id'                    => null,
                         'account_id'                   => 170402,
                         'shop_id'                      => 93683,
                         'shipment_type'                => 1,
                         'recipient'                    => [
                             'cc'                     => 'NL',
-                            'postal_code'            => '2771AX',
-                            'city'                   => 'Boskoop',
-                            'street'                 => 'Azalealaan',
+                            'postal_code'            => '7345AB',
+                            'city'                   => 'Wenum Wiesel',
+                            'street'                 => 'Wieselsedwarsweg',
                             'street_additional_info' => '',
-                            'number'                 => '25',
-                            'number_suffix'          => 'a',
-                            'person'                 => 'Piet Boomkweker',
-                            'email'                  => 'mooieplanten@kweker.nl',
-                            'phone'                  => '0613124565',
+                            'number'                 => '12',
+                            'number_suffix'          => 'c',
+                            'person'                 => 'Epke Zonderland',
+                            'email'                  => 'test@webshopje.nl',
+                            'phone'                  => '0172765435',
                         ],
                         'sender'                       => [
                             'phone'                  => '0606607834',
@@ -42,24 +46,24 @@ class GetShipmentsResponseWithPickup extends JsonResponse
                             'person'                 => 'Mister Parcel',
                             'number_suffix'          => '',
                         ],
-                        'status'                       => 2,
+                        'status'                       => 1,
                         'options'                      => [
                             'package_type'             => 1,
                             'collect'                  => 0,
-                            'only_recipient'           => 0,
-                            'signature'                => 1,
-                            'return'                   => 0,
+                            'only_recipient'           => 1,
+                            'signature'                => 0,
+                            'return'                   => 1,
                             'insurance'                => [
                                 'amount'   => 0,
                                 'currency' => 'EUR',
                             ],
-                            'large_format'             => 0,
-                            'same_day_delivery'        => 0,
-                            'age_check'                => 0,
+                            'large_format'             => 1,
+                            'same_day_delivery'        => 1,
+                            'age_check'                => 1,
                             'saturday_delivery'        => 0,
                             'drop_off_at_postal_point' => 0,
-                            'label_description'        => '',
-                            'delivery_type'            => 4,
+                            'label_description'        => 'Vliegtuig',
+                            'delivery_type'            => 2,
                         ],
                         'general_settings'             => [
                             'save_recipient_address' => 1,
@@ -74,38 +78,38 @@ class GetShipmentsResponseWithPickup extends JsonResponse
                                 'bcc_email'                        => '',
                             ],
                         ],
-                        'pickup'                       => [
-                            'postal_code'       => '2771GS',
-                            'location_name'     => 'Wolswijk thodn Intertoys Boskoop',
-                            'city'              => 'BOSKOOP',
-                            'street'            => 'Kerkstraat',
-                            'number'            => '7',
-                            'cc'                => 'NL',
-                            'location_code'     => '216107',
-                            'retail_network_id' => 'PNPNL-01',
-                        ],
+                        'pickup'                       => null,
                         'customs_declaration'          => null,
                         'physical_properties'          => [
-                            'weight' => 1000,
+                            'weight' => 5000,
                         ],
-                        'created'                      => '2022-07-12 17:28:27',
-                        'modified'                     => '2022-07-12 17:28:28',
+                        'created'                      => '2022-07-13 11:56:18',
+                        'modified'                     => '2022-07-13 11:56:18',
                         'reference_identifier'         => '',
                         'created_by'                   => 82444,
                         'modified_by'                  => 82444,
                         'transaction_status'           => 'unpaid',
-                        'drop_off_point'               => null,
+                        'drop_off_point'               => [
+                            'postal_code'   => '2321 TD',
+                            'location_name' => 'Instabox',
+                            'city'          => 'Leiden',
+                            'street'        => 'Telderskade',
+                            'number'        => '2',
+                            'number_suffix' => 'H',
+                            'cc'            => 'NL',
+                            'location_code' => 'ed14eb91-7374-4dcc-a41d-34c0d3e45c01',
+                        ],
                         'hidden'                       => 0,
                         'price'                        => [
-                            'amount'   => 625,
+                            'amount'   => 1920,
                             'currency' => 'EUR',
                         ],
-                        'barcode'                      => '3SMYPA056396924',
+                        'barcode'                      => '',
                         'region'                       => 'NL',
                         'external_provider'            => null,
                         'external_provider_id'         => null,
                         'payment_status'               => 'unpaid',
-                        'carrier_id'                   => 1,
+                        'carrier_id'                   => 5,
                         'contract_id'                  => null,
                         'platform_id'                  => 1,
                         'origin'                       => 'backoffice_shipment_form',
@@ -113,7 +117,7 @@ class GetShipmentsResponseWithPickup extends JsonResponse
                         'secondary_shipments'          => [],
                         'collection_contact'           => null,
                         'multi_collo_main_shipment_id' => null,
-                        'external_identifier'          => '3SMYPA056396924',
+                        'external_identifier'          => null,
                         'delayed'                      => false,
                         'delivered'                    => false,
                         'link_consumer_portal'         => null,

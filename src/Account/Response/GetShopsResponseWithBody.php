@@ -22,9 +22,9 @@ class GetShopsResponseWithBody extends AbstractApiResponseWithBody
         return $this->shop;
     }
 
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $data       = json_decode($body, true)['data']['shops'][0];
+        $data       = json_decode($this->getBody(), true)['data']['shops'][0];
         $this->shop = new Shop($data);
     }
 }

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Service;
 
-use GuzzleHttp\RequestOptions;
-use MyParcelNL\Pdk\Api\Concern\ApiResponseInterface;
+use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
+use MyParcelNL\Pdk\Api\Exception\ApiException;
+use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
-use MyParcelNL\Sdk\src\Exception\ApiException;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 
 abstract class AbstractApiService implements ApiServiceInterface
 {
@@ -17,48 +18,50 @@ abstract class AbstractApiService implements ApiServiceInterface
     protected $baseUrl;
 
     /**
-     * @var \GuzzleHttp\Client
+     * @var \MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface
      */
-    protected $httpClient;
+    protected $clientAdapter;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface $clientAdapter
+     */
+    public function __construct(ClientAdapterInterface $clientAdapter)
+    {
+        $this->clientAdapter = $clientAdapter;
+    }
 
     /**
      * @param  \MyParcelNL\Pdk\Base\Request\RequestInterface $request
      * @param  string                                        $responseClass
      *
-     * @return \MyParcelNL\Pdk\Api\Concern\ApiResponseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \MyParcelNL\Sdk\src\Exception\ApiException
+     * @return \MyParcelNL\Pdk\Api\Response\ApiResponseInterface
+     * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
      */
-    public function doRequest(
-        RequestInterface $request,
-        string           $responseClass
-    ): ApiResponseInterface {
-        $requestOptions = array_filter([
-            RequestOptions::HEADERS => $request->getHeaders() + $this->getHeaders(),
-            RequestOptions::BODY    => $request->getBody(),
+    public function doRequest(RequestInterface $request, string $responseClass): ApiResponseInterface
+    {
+        $uri        = $this->buildUri($request);
+        $httpMethod = $request->getMethod();
+
+        $options = [
+            'headers' => $request->getHeaders() + $this->getHeaders(),
+            'body'    => $request->getBody(),
+        ];
+
+        $response = $this->clientAdapter->doRequest($httpMethod, $uri, $options);
+
+        DefaultLogger::debug('Request to MyParcel', [
+            'uri'          => $uri,
+            'method'       => $httpMethod,
+            'options'      => $options,
+            'responseCode' => $response->getStatusCode(),
+            'body'         => $response->getBody(),
         ]);
 
-        $requestOptions[RequestOptions::HTTP_ERRORS] = false;
-
-        $response = $this->httpClient->request(
-            $request->getHttpMethod(),
-            $this->buildUri($request),
-            $requestOptions
-        );
-
-        /** @var \MyParcelNL\Pdk\Api\Concern\ApiResponseInterface $responseObject */
+        /** @var \MyParcelNL\Pdk\Api\Response\ApiResponseInterface $responseObject */
         $responseObject = new $responseClass($response);
 
         if ($responseObject->isErrorResponse()) {
-            throw new ApiException(
-                sprintf(
-                    'External request failed. Status code %s %s',
-                    $responseObject->getStatusCode(),
-                    implode(
-                        $responseObject->getErrors()
-                    )
-                )
-            );
+            throw new ApiException($response);
         }
 
         return $responseObject;

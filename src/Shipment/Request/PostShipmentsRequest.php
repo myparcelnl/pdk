@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
-class PostShipmentsRequest extends AbstractRequest
+class PostShipmentsRequest extends Request
 {
     use HasEncodesShipment;
 
@@ -24,6 +25,7 @@ class PostShipmentsRequest extends AbstractRequest
      */
     public function __construct(ShipmentCollection $collection)
     {
+        parent::__construct();
         $this->collection = $collection;
     }
 
@@ -49,14 +51,14 @@ class PostShipmentsRequest extends AbstractRequest
     public function getHeaders(): array
     {
         return [
-            'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
-        ];
+                'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
+            ] + parent::getHeaders();
     }
 
     /**
      * @return string
      */
-    public function getHttpMethod(): string
+    public function getMethod(): string
     {
         return 'POST';
     }
@@ -76,16 +78,18 @@ class PostShipmentsRequest extends AbstractRequest
      */
     private function encodeSecondaryShipments(Collection $groupedShipments): ?array
     {
-        $groupedShipments->shift();
+        $clonedCollection = new Collection($groupedShipments->all());
 
-        if ($groupedShipments->isEmpty()) {
+        $clonedCollection->shift();
+
+        if ($clonedCollection->isEmpty()) {
             return null;
         }
 
         /**
          * Turn grouped shipments into regular collection to avoid all shipment properties being added.
          */
-        return (new Collection($groupedShipments->all()))
+        return $clonedCollection
             ->map(function (Shipment $shipment) {
                 return ['reference_identifier' => $shipment->referenceIdentifier];
             })
@@ -111,7 +115,9 @@ class PostShipmentsRequest extends AbstractRequest
      */
     private function groupByMultiCollo(): Collection
     {
-        return $this->collection->groupBy(function (Shipment $shipment) {
+        return (new Collection($this->collection->all()))->groupBy(function ($shipment) {
+            $shipment = Utils::cast(Shipment::class, $shipment);
+
             if ($shipment->multiCollo) {
                 return $shipment->referenceIdentifier;
             }

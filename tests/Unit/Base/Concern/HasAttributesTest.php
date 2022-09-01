@@ -4,16 +4,14 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
-use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Tests\Mocks\ClassWithGuardedAttributes;
+use MyParcelNL\Pdk\Tests\Mocks\InvalidCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
 
 uses()->group('model');
-
-// todo of test guarded hier
 
 it('casts attributes to classes', function () {
     $model = new MockCastingModel();
@@ -82,13 +80,6 @@ it('can use casted properties', function () {
 });
 
 it('throws error on invalid cast', function () {
-    class InvalidCastingModel extends Model
-    {
-        protected $attributes = ['value' => null];
-
-        protected $casts      = ['value' => MockCastModel::class];
-    }
-
     $model = new InvalidCastingModel([
         'value' => new DateTime(),
     ]);

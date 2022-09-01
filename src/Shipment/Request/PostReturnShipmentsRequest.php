@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
-class PostReturnShipmentsRequest extends AbstractRequest
+class PostReturnShipmentsRequest extends Request
 {
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
@@ -16,18 +16,13 @@ class PostReturnShipmentsRequest extends AbstractRequest
     private $collection;
 
     /**
-     * @var array
-     */
-    private $parameters;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipmentCollection
      * @param  array                                                  $parameters
      */
-    public function __construct(ShipmentCollection $collection, array $parameters = [])
+    public function __construct(ShipmentCollection $shipmentCollection, array $parameters = [])
     {
-        $this->collection = $collection;
-        $this->parameters = $parameters;
+        $this->collection = $shipmentCollection;
+        parent::__construct(['parameters' => $parameters]);
     }
 
     /**
@@ -55,7 +50,7 @@ class PostReturnShipmentsRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getHttpMethod(): string
+    public function getMethod(): string
     {
         return 'POST';
     }
@@ -66,14 +61,6 @@ class PostReturnShipmentsRequest extends AbstractRequest
     public function getPath(): string
     {
         return '/shipments';
-    }
-
-    /**
-     * @return array
-     */
-    protected function getQueryParameters(): array
-    {
-        return array_filter($this->parameters);
     }
 
     /**

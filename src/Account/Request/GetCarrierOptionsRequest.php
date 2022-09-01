@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Request;
 
-use MyParcelNL\Pdk\Base\Request\AbstractRequest;
+use MyParcelNL\Pdk\Base\Request\Request;
 
-class GetCarrierOptionsRequest extends AbstractRequest
+class GetCarrierOptionsRequest extends Request
 {
-    /**
-     * @var string
-     */
     protected $path = '/carrier_management/shops/:shopId/carrier_options';
 
-    private   $shopId;
+    /**
+     * @var int
+     */
+    private $shopId;
 
+    /**
+     * @param  int $shopId
+     */
     public function __construct(int $shopId)
     {
+        parent::__construct();
         $this->shopId = $shopId;
     }
 
-    public function getHttpMethod(): string
-    {
-        return 'GET';
-    }
-
+    /**
+     * @return string
+     */
     public function getPath(): string
     {
         return strtr($this->path, [':shopId' => $this->shopId]);

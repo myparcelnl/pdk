@@ -26,14 +26,12 @@ class GetShipmentsResponse extends AbstractApiResponseWithBody
     }
 
     /**
-     * @param  string $body
-     *
      * @return void
      * @throws \Exception
      */
-    protected function parseResponseBody(string $body): void
+    protected function parseResponseBody(): void
     {
-        $parsedBody = json_decode($body, true);
+        $parsedBody = json_decode($this->getBody(), true);
         $shipments  = $parsedBody['data']['shipments'] ?? [];
 
         $shipmentData = [];

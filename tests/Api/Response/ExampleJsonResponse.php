@@ -6,10 +6,9 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
-use MyParcelNL\Pdk\Base\Http\ResponseCodes;
 use Psr\Http\Message\StreamInterface;
 
-class JsonResponse extends Response
+class ExampleJsonResponse extends Response
 {
     /**
      * @return \Psr\Http\Message\StreamInterface
@@ -47,6 +46,6 @@ class JsonResponse extends Response
      */
     public function getStatusCode(): int
     {
-        return ResponseCodes::HTTP_OK;
+        return \Symfony\Component\HttpFoundation\Response::HTTP_OK;
     }
 }

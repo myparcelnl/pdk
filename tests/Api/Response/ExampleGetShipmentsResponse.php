@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-class GetShipmentsResponse extends JsonResponse
+class ExampleGetShipmentsResponse extends ExampleJsonResponse
 {
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function getContent(): array
     {
         return [
