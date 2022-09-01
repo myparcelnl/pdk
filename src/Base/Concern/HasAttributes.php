@@ -453,36 +453,6 @@ trait HasAttributes
     }
 
     /**
-     * Get an attribute array of all arrayable attributes.
-     *
-     * @return array
-     */
-    protected function getArrayableAttributes(): array
-    {
-        return $this->getArrayableItems($this->getAttributes());
-    }
-
-    /**
-     * Get an attribute array of all arrayable values.
-     *
-     * @param  array $values
-     *
-     * @return array
-     */
-    protected function getArrayableItems(array $values): array
-    {
-        if (count($this->getVisible()) > 0) {
-            $values = array_intersect_key($values, array_flip($this->getVisible()));
-        }
-
-        if (count($this->getHidden()) > 0) {
-            $values = array_diff_key($values, array_flip($this->getHidden()));
-        }
-
-        return $values;
-    }
-
-    /**
      * Get an attribute from the $attributes array.
      *
      * @param  string $key

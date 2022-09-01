@@ -10,16 +10,19 @@ interface RenderServiceInterface
 {
     /**
      * @return string
+     * @noinspection PhpUnused
      */
     public function renderInitScript(): string;
 
     /**
      * @return string
+     * @noinspection PhpUnused
      */
     public function renderModals(): string;
 
     /**
      * @return string
+     * @noinspection PhpUnused
      */
     public function renderNotifications(): string;
 
@@ -27,6 +30,7 @@ interface RenderServiceInterface
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
      * @return string
+     * @noinspection PhpUnused
      */
     public function renderOrderCard(PdkOrder $order): string;
 
@@ -34,6 +38,7 @@ interface RenderServiceInterface
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
      * @return string
+     * @noinspection PhpUnused
      */
     public function renderOrderListColumn(PdkOrder $order): string;
 }

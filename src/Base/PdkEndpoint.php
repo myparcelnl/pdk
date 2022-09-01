@@ -27,6 +27,8 @@ class PdkEndpoint
      * @param  string $action
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @throws \Exception
      */
     public function call(string $action): Response
     {

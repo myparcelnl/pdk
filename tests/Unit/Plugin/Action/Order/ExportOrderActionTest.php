@@ -10,8 +10,8 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -112,7 +112,7 @@ it('exports and prints order', function () {
             ['id' => 30321, 'reference_identifier' => '263'],
             ['id' => 30322, 'reference_identifier' => '264'],
         ]),
-        new ExampleShipmentLabelsLinkV2Response()
+        new ExampleGetShipmentLabelsLinkV2Response()
     );
 
     $this->orderRepository->add(
@@ -186,35 +186,3 @@ it('exports and prints order', function () {
         ->and($response->getStatusCode())
         ->toBe(200);
 });
-
-//it('gets delivery options', function () {
-//    $response = Pdk::execute(PdkActions::GET_DELIVERY_OPTIONS);
-//    expect(Arr::dot(json_decode($response->getContent(), true)))->toBe([]);
-//    expect($response->getStatusCode())->toBe(1);
-//
-//    expect($response)->toBeInstanceOf(Response::class);
-//});
-//
-//it('gets label', function () {
-//    $response = Pdk::execute(PdkActions::GET_LABEL);
-//    expect(Arr::dot(json_decode($response->getContent(), true)))->toBe([]);
-//    expect($response->getStatusCode())->toBe(1);
-//
-//    expect($response)->toBeInstanceOf(Response::class);
-//});
-//
-//it('gets order data', function () {
-//    $response = Pdk::execute(PdkActions::GET_ORDER_DATA);
-//    expect(Arr::dot(json_decode($response->getContent(), true)))->toBe([]);
-//    expect($response->getStatusCode())->toBe(1);
-//
-//    expect($response)->toBeInstanceOf(Response::class);
-//});
-//
-//it('updates tracking number', function () {
-//    $response = Pdk::execute(PdkActions::UPDATE_TRACKING_NUMBER);
-//    expect(Arr::dot(json_decode($response->getContent(), true)))->toBe([]);
-//    expect($response->getStatusCode())->toBe(1);
-//
-//    expect($response)->toBeInstanceOf(Response::class);
-//});

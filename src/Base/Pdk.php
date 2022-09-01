@@ -34,6 +34,7 @@ class Pdk
      * @return null|\Symfony\Component\HttpFoundation\Response
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
+     * @throws \Exception
      */
     public function execute(string $action, array $params = []): ?Response
     {
