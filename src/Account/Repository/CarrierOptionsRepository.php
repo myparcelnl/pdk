@@ -7,17 +7,17 @@ namespace MyParcelNL\Pdk\Account\Repository;
 use MyParcelNL\Pdk\Account\Request\GetCarrierOptionsRequest;
 use MyParcelNL\Pdk\Account\Response\GetCarrierOptionsResponseWithBody;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 
 class CarrierOptionsRepository extends AbstractRepository
 {
     /**
      * @param  int $carrierId
      *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection
      * @noinspection PhpUnused
      */
-    public function getCarrierOptions(int $carrierId): Collection
+    public function getCarrierOptions(int $carrierId): CarrierOptionsCollection
     {
         return $this->retrieve('carrier_options', function () use ($carrierId) {
             /** @var \MyParcelNL\Pdk\Account\Response\GetCarrierOptionsResponseWithBody $response */

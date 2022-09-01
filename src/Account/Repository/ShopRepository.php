@@ -13,6 +13,7 @@ class ShopRepository extends AbstractRepository
 {
     /**
      * @return \MyParcelNL\Sdk\src\Model\Account\Shop
+     * @noinspection PhpUnused
      */
     public function getShop(): Shop
     {

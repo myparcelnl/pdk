@@ -1,5 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpEntryPointsManager">
+    <entry_point>
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Account\Repository\ShopRepository" />
+      <entry_point TYPE="phpNamespace" FQNAME="\MyParcelNL\Pdk\Account" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Account\Platform" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Factory\PdkFactory create" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Factory\PdkFactory" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Repository\AbstractRepository save" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Repository\AbstractRepository" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Repository\AbstractRepository __construct" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Http\ResponseCodes" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Service\WeightService convertToDigitalStamp" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Service\WeightService convertToGrams" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Service\WeightService" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger alert" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger critical" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger debug" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger emergency" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger error" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger info" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger notice" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Logger\AbstractLogger warning" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger create" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Service\DeliveryDateService" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Service\DeliveryDateService fixPastDeliveryDate" />
+      <entry_point TYPE="phpNamespace" FQNAME="\MyParcelNL\Pdk\Settings\View" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Settings\View\CarrierSettingsView" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Settings\View\CustomsSettingsView" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Settings\View\DeliveryOptionsStringsSettingsView" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Settings\View\GeneralSettingsView" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Settings\View\CarrierSettingsView getFields" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Settings\View\CustomsSettingsView getFields" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Settings\View\DeliveryOptionsStringsSettingsView getFields" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Settings\View\GeneralSettingsView getFields" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Settings\View\LabelSettingsView getFields" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Settings\View\LabelSettingsView" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Settings\View\OrderSettingsView getFields" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Settings\View\OrderSettingsView" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Support\Collection" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Support\Collection __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Support\Collection mapInto" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Model\Model" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Model\Model __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Model\Model offsetUnset" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Model\DropOffDay" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Model\DropOffDay __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions isPickup" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Model\Shipment setCarrierAttribute" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Shipment\Model\Shipment" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Model\Shipment __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Shipment\Model\Shipment setDeliveryOptionsAttribute" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Config" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Config get" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Pdk has" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Pdk" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Pdk __construct" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HasAttributes fromJson" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Concern\HasAttributes" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HasAttributes getArrayableAttributes" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HasAttributes only" />
+      <entry_point TYPE="phpClass" FQNAME="\MyParcelNL\Pdk\Base\Concern\HidesAttributes" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HidesAttributes makeHiddenIf" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HidesAttributes makeVisibleIf" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HidesAttributes setHidden" />
+      <entry_point TYPE="phpMethod" FQNAME="\MyParcelNL\Pdk\Base\Concern\HidesAttributes setVisible" />
+    </entry_point>
+    <pattern value="\MyParcelNL\Pdk\*\Repository\*Repository" />
+    <pattern value="\MyParcelNL\Pdk\Account\Platform" />
+    <pattern value="\MyParcelNL\Pdk\*\Factory\*Factory" member="create" />
+    <pattern value="\MyParcelNL\Pdk\Base\Http\ResponseCodes" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="alert" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="critical" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="debug" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="emergency" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="error" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="info" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="notice" />
+    <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="warning" />
+    <pattern value="\MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger" member="create" />
+    <pattern value="\MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger" />
+    <pattern value="\MyParcelNL\Pdk\*\Service\*Service" member="fixPastDeliveryDate" />
+    <pattern value="\MyParcelNL\Pdk\Settings\View\*View" member="getFields" />
+    <pattern value="\MyParcelNL\Pdk\Base\Support\Collection" />
+    <pattern value="\MyParcelNL\Pdk\Base\Support\Collection" member="__construct" />
+    <pattern value="\MyParcelNL\Pdk\Base\Support\Collection" member="mapInto" />
+    <pattern value="\MyParcelNL\Pdk\*\Model\*" />
+    <pattern value="\MyParcelNL\Pdk\Base\Config" />
+    <pattern value="\MyParcelNL\Pdk\Base\Config" member="get" />
+    <pattern value="\MyParcelNL\Pdk\Base\Pdk" member="has" />
+    <pattern value="\MyParcelNL\Pdk\Base\Pdk" />
+    <pattern value="\MyParcelNL\Pdk\Base\Pdk" member="__construct" />
+    <pattern value="\MyParcelNL\Pdk\Base\Concern\HasAttributes" member="fromJson" />
+    <pattern value="\MyParcelNL\Pdk\Base\Concern\HasAttributes" />
+    <pattern value="\MyParcelNL\Pdk\Base\Concern\HasAttributes" member="getArrayableAttributes" />
+    <pattern value="\MyParcelNL\Pdk\Base\Concern\HasAttributes" member="only" />
+  </component>
   <component name="TaskProjectConfiguration">
     <server type="JIRA" url="https://jira.dmp.zone" />
   </component>

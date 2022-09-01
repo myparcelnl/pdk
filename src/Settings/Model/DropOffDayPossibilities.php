@@ -85,7 +85,7 @@ class DropOffDayPossibilities extends Model
      */
     private function createFromDate(?DateTimeImmutable $date)
     {
-        $fromDate = (new DateTimeImmutable('today'))->modify("+{$this->dropOffDelay} day");
+        $fromDate = (new DateTimeImmutable('today'))->modify("+$this->dropOffDelay day");
 
         if ($date) {
             $newDate  = $date->setTime(0, 0);

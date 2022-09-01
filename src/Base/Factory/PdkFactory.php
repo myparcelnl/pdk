@@ -13,13 +13,6 @@ class PdkFactory
 {
     private const DEFAULT_CONFIG_PATH = __DIR__ . '/../../../config/default.php';
 
-    protected static $index = 0;
-
-    /**
-     * @var \DI\Container
-     */
-    public $container;
-
     /**
      * @param  array[]|string[] $config
      *

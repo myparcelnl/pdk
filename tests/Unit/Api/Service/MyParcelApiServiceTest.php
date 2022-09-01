@@ -22,10 +22,11 @@ it('gets correct headers', function () {
         ])
     );
 
+    /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
     $api = $pdk->get(ApiServiceInterface::class);
     expect($api->getHeaders())
         ->toBe([
-            'authorization' => null,
+            'Authorization' => null,
             'User-Agent'    => sprintf(
                 'MyParcel-PDK/%s php/7.4.30 Prestashop/1.7.8.6',
                 InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME)

@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Response;
 
 use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Sdk\src\Model\Account\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 
 class GetCarrierOptionsResponseWithBody extends AbstractApiResponseWithBody
 {
     /**
-     * @var mixed
+     * @var \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection
      */
     private $options;
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration[] | \MyParcelNL\Pdk\Base\Support\Collection
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection
      */
-    public function getCarrierOptions(): Collection
+    public function getCarrierOptions(): CarrierOptionsCollection
     {
         return $this->options;
     }
@@ -26,7 +25,6 @@ class GetCarrierOptionsResponseWithBody extends AbstractApiResponseWithBody
     protected function parseResponseBody(string $body): void
     {
         $options       = json_decode($body, true)['data']['carrier_options'];
-        $this->options = (new Collection($options))
-            ->mapInto(CarrierOptions::class);
+        $this->options = new CarrierOptionsCollection($options);
     }
 }

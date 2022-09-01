@@ -58,7 +58,7 @@ class MyParcelApiService extends AbstractApiService
     public function getHeaders(): array
     {
         return [
-            'authorization' => $this->apiKey ? sprintf('appelboom %s', base64_encode($this->apiKey)) : null,
+            'Authorization' => $this->apiKey ? sprintf('appelboom %s', base64_encode($this->apiKey)) : null,
             'User-Agent'    => $this->getUserAgentHeader(),
         ];
     }

@@ -65,6 +65,14 @@ abstract class AbstractApiService implements ApiServiceInterface
     }
 
     /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return [];
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Base\Request\RequestInterface $request
      *
      * @return string
@@ -81,13 +89,5 @@ abstract class AbstractApiService implements ApiServiceInterface
         }
 
         return $url;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getHeaders(): array
-    {
-        return [];
     }
 }

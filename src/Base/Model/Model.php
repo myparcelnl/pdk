@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Base\Model;
 use ArrayAccess;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
-use MyParcelNL\Pdk\Base\Concern\HidesAttributes;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -19,7 +18,6 @@ use ReturnTypeWillChange;
 class Model implements Arrayable, ArrayAccess
 {
     use HasAttributes;
-    use HidesAttributes;
 
     /**
      * @var array

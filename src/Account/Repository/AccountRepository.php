@@ -13,6 +13,7 @@ class AccountRepository extends AbstractRepository
 {
     /**
      * @return \MyParcelNL\Sdk\src\Model\Account\Account
+     * @noinspection PhpUnused
      */
     public function getAccount(): Account
     {
