@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.1](https://github.com/myparcelnl/pdk/compare/v1.18.0...v1.18.1) (2022-09-01)
+
+
+### :bug: Bug Fixes
+
+* **order:** fix order lines ([890c223](https://github.com/myparcelnl/pdk/commit/890c2233b88f341008779e68af5c287aa00631db))
+
 ## [1.18.0](https://github.com/myparcelnl/pdk/compare/v1.17.0...v1.18.0) (2022-08-31)
 
 
