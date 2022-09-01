@@ -77,6 +77,10 @@
             <option name="name" value="MyParcel PDK" />
             <option name="path" value="$PROJECT_DIR$/phpmd.xml" />
           </RulesetDescriptor>
+          <RulesetDescriptor>
+            <option name="name" value="MyParcel PDK" />
+            <option name="path" value="$PROJECT_DIR$/phpmd.xml" />
+          </RulesetDescriptor>
         </list>
       </option>
     </inspection_tool>

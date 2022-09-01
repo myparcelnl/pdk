@@ -3,6 +3,7 @@
   <component name="MessDetector">
     <phpmd_settings>
       <phpmd_by_interpreter interpreter_id="65878930-6f8e-40a5-9468-2a119b1c994a" tool_path="/app/vendor/bin/phpmd" timeout="30000" />
+      <MessDetectorConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpmd" />
     </phpmd_settings>
   </component>
   <component name="PhpIncludePathManager">
