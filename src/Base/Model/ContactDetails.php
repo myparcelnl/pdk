@@ -23,9 +23,9 @@ namespace MyParcelNL\Pdk\Base\Model;
 class ContactDetails extends Address
 {
     /**
-     * @param  array $data
+     * @param  null|array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(?array $data = [])
     {
         $this->attributes['email']   = null;
         $this->attributes['phone']   = null;

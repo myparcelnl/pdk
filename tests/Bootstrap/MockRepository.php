@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
@@ -21,10 +22,10 @@ class MockRepository extends AbstractRepository
     private $values;
 
     /**
-     * @param  \MyParcelNL\Pdk\Tests\Bootstrap\MockStorage     $storage
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage      $storage
      * @param  \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api
      */
-    public function __construct(MockStorage $storage, ApiServiceInterface $api)
+    public function __construct(MemoryCacheStorage $storage, ApiServiceInterface $api)
     {
         parent::__construct($storage, $api);
 

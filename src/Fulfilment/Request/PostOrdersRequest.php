@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
+use MyParcelNL\Sdk\src\Support\Collection;
 
 class PostOrdersRequest extends Request
 {
@@ -34,7 +35,7 @@ class PostOrdersRequest extends Request
     {
         return json_encode([
             'data' => [
-                'orders' => $this->collection->map(function ($order) {
+                'orders' => (new Collection($this->collection))->map(function ($order) {
                     return $this->encodeOrder($order);
                 }),
             ],

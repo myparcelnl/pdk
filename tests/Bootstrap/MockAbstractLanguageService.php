@@ -21,7 +21,7 @@ class MockAbstractLanguageService extends AbstractLanguageService
      */
     public function __construct(LanguageRepository $repository)
     {
-        $dir                = basename($this->getFilePath());
+        $dir                = dirname($this->getFilePath());
         $translationsPathNl = $this->getFilePath('nl');
         $translationsPathEn = $this->getFilePath('en');
 
@@ -73,6 +73,7 @@ class MockAbstractLanguageService extends AbstractLanguageService
      * @param  string $language
      *
      * @return $this
+     * @noinspection PhpUnused
      */
     public function setLanguage(string $language): self
     {
@@ -87,6 +88,6 @@ class MockAbstractLanguageService extends AbstractLanguageService
      */
     protected function getFilePath(?string $language = null): string
     {
-        return sprintf('%s/../../config/.tmp-translations-%s', __DIR__, $language);
+        return sprintf('%s/../../config/.tmp-translations%s', __DIR__, $language ? "-$language" : '');
     }
 }

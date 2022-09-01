@@ -86,7 +86,7 @@
     <pattern value="\MyParcelNL\Pdk\Logger\AbstractLogger" member="warning" />
     <pattern value="\MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger" member="create" />
     <pattern value="\MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger" />
-    <pattern value="\MyParcelNL\Pdk\*\Service\*Service" member="fixPastDeliveryDate" />
+    <pattern value="\MyParcelNL\Pdk\*\Service\*Service*" />
     <pattern value="\MyParcelNL\Pdk\Settings\View\*View" member="getFields" />
     <pattern value="\MyParcelNL\Pdk\Base\Support\Collection" />
     <pattern value="\MyParcelNL\Pdk\Base\Support\Collection" member="__construct" />

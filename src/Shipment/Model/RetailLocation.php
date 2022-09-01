@@ -23,9 +23,9 @@ use MyParcelNL\Pdk\Base\Model\Address;
 class RetailLocation extends Address
 {
     /**
-     * @param  array $data
+     * @param  null|array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(?array $data = [])
     {
         $this->attributes['locationCode']    = null;
         $this->attributes['locationName']    = null;

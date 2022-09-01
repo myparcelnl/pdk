@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Bootstrap;
+namespace MyParcelNL\Pdk\Storage;
 
-use MyParcelNL\Pdk\Storage\AbstractStorage;
 use MyParcelNL\Sdk\src\Support\Arr;
 
-class MockStorage extends AbstractStorage
+class MemoryCacheStorage extends AbstractStorage
 {
     private $data = [];
 
+    /**
+     * @param  string $storageKey
+     *
+     * @return void
+     */
     public function delete(string $storageKey): void
     {
         Arr::forget($this->data, $storageKey);

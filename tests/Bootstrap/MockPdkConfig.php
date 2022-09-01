@@ -8,6 +8,8 @@ use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
+use MyParcelNL\Pdk\Plugin\Action\EndpointActionsInterface;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -34,15 +36,16 @@ class MockPdkConfig
      */
     private static function getDefaultConfig(): array
     {
-        return Arr::dot([
+        return [
             ApiServiceInterface::class      => autowire(MockApiService::class),
             ClientAdapterInterface::class   => autowire(Guzzle7ClientAdapter::class),
             ConfigInterface::class          => autowire(MockConfig::class),
+            EndpointActionsInterface::class => autowire(MockEndpointActions::class),
             LanguageServiceInterface::class => autowire(MockLanguageService::class),
             LoggerInterface::class          => autowire(MockLogger::class),
-            StorageInterface::class         => autowire(MockStorage::class),
+            StorageInterface::class         => autowire(MemoryCacheStorage::class),
 
             'settings' => autowire(MockPluginSettings::class),
-        ]);
+        ];
     }
 }

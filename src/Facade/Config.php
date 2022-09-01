@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -16,6 +15,6 @@ class Config extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return ConfigInterface::class;
+        return \MyParcelNL\Pdk\Base\Config::class;
     }
 }

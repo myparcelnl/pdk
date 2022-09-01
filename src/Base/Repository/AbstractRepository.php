@@ -37,7 +37,7 @@ abstract class AbstractRepository
     /**
      * @return void
      */
-    public function save(): void
+    public function persist(): void
     {
         foreach ($this->storageHashMap as $key => $hash) {
             $data = $this->storage->get($key);
@@ -67,6 +67,19 @@ abstract class AbstractRepository
         }
 
         return $data ?? $this->storage->get($key);
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $data
+     *
+     * @return mixed
+     */
+    protected function save(string $key, $data)
+    {
+        $this->storage->set($key, $data);
+
+        return $data;
     }
 
     /**

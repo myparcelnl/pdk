@@ -1,5 +1,5 @@
 <?php
-/** @noinspection PhpUndefinedFieldInspection,StaticClosureCanBeUsedInspection */
+/** @noinspection PhpUndefinedFieldInspection,StaticClosureCanBeUsedInspection, PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
@@ -10,4 +10,11 @@ it('fills attributes', function () {
     $model->fill(['property' => 'poes']);
 
     expect($model->property)->toBe('poes');
+});
+
+it('ignores extraneous attributes', function () {
+    $model = new MockCastModel();
+    $model->fill(['property' => 'poes', 'extra' => 'extra']);
+
+    expect($model->toArray())->toBe(['property' => 'poes']);
 });

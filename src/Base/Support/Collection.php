@@ -25,6 +25,17 @@ class Collection extends \MyParcelNL\Sdk\src\Support\Collection implements Array
     }
 
     /**
+     * @param  string $key
+     * @param         $default
+     *
+     * @return mixed
+     */
+    public function dataGet(string $key, $default = null)
+    {
+        return (new Helpers())->data_get($this->toArray(), $key, $default);
+    }
+
+    /**
      * Map the values into a new class.
      *
      * @param  string $class

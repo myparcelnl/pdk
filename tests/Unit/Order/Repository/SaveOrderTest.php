@@ -4,9 +4,8 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Data\CountryCodes;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -35,7 +34,7 @@ const DEFAULT_INPUT_SENDER = [
     'street'     => 'Werf',
 ];
 
-it('creates a valid request from an order collection', function (array $input, array $output) {
+it('creates a valid order collection from api data', function (array $input, array $output) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
@@ -48,17 +47,7 @@ it('creates a valid request from an order collection', function (array $input, a
 
     expect($savedOrders)
         ->toBeInstanceOf(OrderCollection::class)
-        ->and(
-            Arr::dot(
-                (new Collection($savedOrders))->map(function (Order $order) {
-                    return Arr::except(
-                        $order->toArray(),
-                        ['shipment.carrier.capabilities', 'shipment.carrier.returnCapabilities']
-                    );
-                })
-                    ->toArray()
-            )
-        )
+        ->and(Arr::dot($savedOrders->toArray()))
         ->toHaveKeysAndValues($output);
 })->with([
     'order containing many attributes' => [
@@ -101,7 +90,7 @@ it('creates a valid request from an order collection', function (array $input, a
                             [
                                 'amount'         => 1,
                                 'classification' => 5256,
-                                'country'        => CountryCodes::CC_BE,
+                                'country'        => CountryService::CC_BE,
                                 'description'    => 'Vlaamse Patatekes',
                                 'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
                                 'weight'         => 200,
@@ -109,7 +98,7 @@ it('creates a valid request from an order collection', function (array $input, a
                             [
                                 'amount'         => 1,
                                 'classification' => 9221,
-                                'country'        => CountryCodes::CC_FR,
+                                'country'        => CountryService::CC_FR,
                                 'description'    => 'Omelette du Fromage',
                                 'itemValue'      => ['amount' => 10000, 'currency' => 'EUR'],
                                 'weight'         => 350,
