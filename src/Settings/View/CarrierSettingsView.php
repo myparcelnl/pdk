@@ -82,7 +82,7 @@ class CarrierSettingsView extends AbstractView
             ],
             [
                 'class' => DropOffDaySelectInput::class,
-                'name'  => CarrierSettings::DROP_OFF_DAYS,
+                'name'  => CarrierSettings::DROP_OFF_POSSIBILITIES,
                 'label' => 'Drop off days',
             ],
             [

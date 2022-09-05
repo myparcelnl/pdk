@@ -14,6 +14,16 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class CustomsSettings extends Model
 {
     /**
+     * Settings category ID.
+     */
+    public const ID = 'customs';
+    /**
+     * Settings in this category.
+     */
+    public const DEFAULT_COUNTRY_OF_ORIGIN = 'defaultCountryOfOrigin';
+    public const DEFAULT_CUSTOMS_CODE      = 'defaultCustomsCode';
+    public const DEFAULT_PACKAGE_CONTENTS  = 'defaultPackageContents';
+    /**
      * Package contents
      */
     public const PACKAGE_CONTENTS_COMMERCIAL_GOODS   = 1;
@@ -28,12 +38,6 @@ class CustomsSettings extends Model
         self::PACKAGE_CONTENTS_GIFTS              => 'Gifts',
         self::PACKAGE_CONTENTS_RETURN_SHIPMENT    => 'Return shipment',
     ];
-    /**
-     * Options
-     */
-    public const DEFAULT_COUNTRY_OF_ORIGIN = 'defaultCountryOfOrigin';
-    public const DEFAULT_CUSTOMS_CODE      = 'defaultCustomsCode';
-    public const DEFAULT_PACKAGE_CONTENTS  = 'defaultPackageContents';
 
     protected $attributes = [
         self::DEFAULT_COUNTRY_OF_ORIGIN => null,

@@ -4,29 +4,50 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Settings\Model\DropOffDayPossibilities;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
+use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPluginSettings;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 it(
     'returns correct delivery days using a specific date',
-    function (string $date, array $settingsOverrides, array $expectation) {
-        $pdkConfig = MockPdkConfig::create(['settings' => new MockPluginSettings($settingsOverrides)]);
-        PdkFactory::create($pdkConfig);
+    function (string $date, array $overrides, array $expectation) {
+        $pdk = PdkFactory::create(MockPdkConfig::create());
 
-        $deliveryDays = (new DropOffDayPossibilities())->getPossibleDropOffDays(new DateTimeImmutable($date));
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
+        $repository = $pdk->get(AbstractSettingsRepository::class);
+
+        /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrier */
+        $carrier = $repository->getSettings()->carrier->first();
+        $repository->set(
+            new SettingsModel([
+                CarrierSettings::ID => [
+                    [
+                        CarrierSettings::DROP_OFF_POSSIBILITIES => array_replace_recursive(
+                            $carrier->dropOffPossibilities->toArray(),
+                            $overrides
+                        ),
+                    ],
+                ],
+            ])
+        );
+
+        /** @var \MyParcelNL\Pdk\Settings\Model\DropOffPossibilities $possibilities */
+        $possibilities = Settings::get('carrier.0.dropOffPossibilities');
+        $deliveryDays  = $possibilities->getPossibleDropOffDays(new DateTimeImmutable($date));
 
         expect(Arr::dot($deliveryDays->toArray()))->toEqual($expectation);
     }
 )->with([
     'Monday, 3 Jan 2022' => [
-        'date'              => '2022-01-03 00:00:00',
-        'settingsOverrides' => [
-            'delivery.dropOffDayPossibilities.deliveryDaysWindow' => 3,
+        'date'        => '2022-01-03 00:00:00',
+        'overrides'   => [
+            'deliveryDaysWindow' => 3,
         ],
-        'expectation'       => [
+        'expectation' => [
             '0.cutoffTime'        => '17:00',
             '0.date'              => '2022-01-03 00:00:00',
             '0.dispatch'          => true,
@@ -46,9 +67,9 @@ it(
     ],
 
     'Monday, 3 Jan 2022 and deviations' => [
-        'date'              => '2022-01-03 00:00:00',
-        'settingsOverrides' => [
-            'delivery.dropOffDayPossibilities.dropOffDaysDeviations' => [
+        'date'        => '2022-01-03 00:00:00',
+        'overrides'   => [
+            'dropOffDaysDeviations' => [
                 [
                     'cutoffTime'        => '20:00',
                     'date'              => '2022-01-04 00:00:00',
@@ -75,7 +96,7 @@ it(
                 ],
             ],
         ],
-        'expectation'       => [
+        'expectation' => [
             '0.cutoffTime'        => '17:00',
             '0.date'              => '2022-01-03 00:00:00',
             '0.dispatch'          => true,
@@ -123,30 +144,48 @@ it(
             '6.weekday'           => DropOffDay::WEEKDAY_TUESDAY,
         ],
     ],
-
 ]);
 
 $dataset = [
     'deliveryDaysWindow 0' => [
-        'settingsOverrides' => ['delivery.dropOffDayPossibilities.deliveryDaysWindow' => 1],
-        'amountOfItems'     => 1,
+        'overrides'     => ['deliveryDaysWindow' => 1],
+        'amountOfItems' => 1,
     ],
 ];
 
 for ($i = 1; $i < 14; $i++) {
     $dataset["deliveryDaysWindow $i"] = [
-        'settingsOverrides' => ['delivery.dropOffDayPossibilities.deliveryDaysWindow' => $i],
-        'amountOfItems'     => $i,
+        'overrides'     => ['deliveryDaysWindow' => $i],
+        'amountOfItems' => $i,
     ];
 }
 
 dataset('deliveryDaysAmountDataset', $dataset);
 
-it('returns correct amount of delivery days', function (array $settingsOverrides, int $amountOfItems) {
-    $pdkConfig = MockPdkConfig::create(['settings' => new MockPluginSettings($settingsOverrides)]);
-    PdkFactory::create($pdkConfig);
+it('returns correct amount of delivery days', function (array $overrides, int $amountOfItems) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
 
-    $deliveryDays = (new DropOffDayPossibilities())->getPossibleDropOffDays();
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
+    $repository = $pdk->get(AbstractSettingsRepository::class);
+
+    /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrier */
+    $carrier = $repository->getSettings()->carrier->first();
+    $repository->set(
+        new SettingsModel([
+            CarrierSettings::ID => [
+                [
+                    CarrierSettings::DROP_OFF_POSSIBILITIES => array_replace_recursive(
+                        $carrier->dropOffPossibilities->toArray(),
+                        $overrides
+                    ),
+                ],
+            ],
+        ])
+    );
+
+    /** @var \MyParcelNL\Pdk\Settings\Model\DropOffPossibilities $possibilities */
+    $possibilities = Settings::get('carrier.0.dropOffPossibilities');
+    $deliveryDays  = $possibilities->getPossibleDropOffDays();
 
     expect($deliveryDays->toArray())->toHaveLength($amountOfItems);
 })->with('deliveryDaysAmountDataset');

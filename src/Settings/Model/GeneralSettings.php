@@ -22,6 +22,13 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class GeneralSettings extends Model
 {
+    /**
+     * Settings category ID.
+     */
+    public const ID = 'general';
+    /**
+     * Settings in this category.
+     */
     public const API_KEY                     = 'apiKey';
     public const BARCODE_IN_NOTE             = 'barcodeInNote';
     public const CONCEPT_SHIPMENTS           = 'conceptShipments';
