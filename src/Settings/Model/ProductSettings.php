@@ -24,18 +24,18 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class ProductSettings extends Model
 {
-    public const ALLOW_ONLY_RECIPIENT     = 'allowOnlyRecipient';
-    public const ALLOW_SIGNATURE          = 'allowSignature';
-    public const COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
-    public const CUSTOMS_CODE             = 'customsCode';
-    public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
-    public const DROP_OFF_DELAY           = 'dropOffDelay';
-    public const EXPORT_AGE_CHECK         = 'exportAgeCheck';
-    public const EXPORT_INSURANCE         = 'exportInsurance';
-    public const EXPORT_LARGE_FORMAT      = 'exportLargeFormat';
-    public const FIT_IN_MAILBOX           = 'fitInMailbox';
-    public const PACKAGE_TYPE             = 'packageType';
-    public const RETURN_SHIPMENTS         = 'returnShipments';
+    public const  ALLOW_ONLY_RECIPIENT     = 'allowOnlyRecipient';
+    public const  ALLOW_SIGNATURE          = 'allowSignature';
+    public const  COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
+    public const  CUSTOMS_CODE             = 'customsCode';
+    public const  DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
+    public const  DROP_OFF_DELAY           = 'dropOffDelay';
+    public const  EXPORT_AGE_CHECK         = 'exportAgeCheck';
+    public const  EXPORT_INSURANCE         = 'exportInsurance';
+    public const  EXPORT_LARGE_FORMAT      = 'exportLargeFormat';
+    public const  FIT_IN_MAILBOX           = 'fitInMailbox';
+    public const  PACKAGE_TYPE             = 'packageType';
+    public const  RETURN_SHIPMENTS         = 'returnShipments';
 
     protected $attributes = [
         self::ALLOW_ONLY_RECIPIENT     => false,

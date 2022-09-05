@@ -29,7 +29,7 @@ abstract class AbstractView implements Arrayable
         if (! $this->fields) {
             $this->fields = $this
                 ->getFields()
-                ->map(function ($item) {
+                ->map(function (array $item) {
                     $this->validate($item);
 
                     $item['type'] = Utils::classBasename($item['class']);

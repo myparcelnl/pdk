@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
@@ -7,11 +8,11 @@ namespace MyParcelNL\Pdk\Settings\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|string $defaultPosition
- * @property null|string $labelDescription
- * @property null|string $labelOpenDownload
- * @property null|string $labelSize
- * @property bool        $promptPosition
+ * @property null|string $description
+ * @property string      $format
+ * @property string      $output
+ * @property int         $position
+ * @property bool        $prompt
  */
 class LabelSettings extends Model
 {
@@ -22,25 +23,48 @@ class LabelSettings extends Model
     /**
      * Settings in this category.
      */
-    public const DEFAULT_POSITION    = 'defaultPosition';
-    public const LABEL_DESCRIPTION   = 'labelDescription';
-    public const LABEL_OPEN_DOWNLOAD = 'labelOpenDownload';
-    public const LABEL_SIZE          = 'labelSize';
-    public const PROMPT_POSITION     = 'promptPosition';
+    public const DESCRIPTION = 'description';
+    public const FORMAT      = 'format';
+    public const OUTPUT      = 'output';
+    public const POSITION    = 'position';
+    public const PROMPT      = 'prompt';
+    /**
+     * Format options.
+     */
+    public const FORMAT_A4 = 'A4';
+    public const FORMAT_A6 = 'A6';
+    /**
+     * Position options.
+     */
+    public const POSITION_1 = 1;
+    public const POSITION_2 = 2;
+    public const POSITION_3 = 3;
+    public const POSITION_4 = 4;
+    /**
+     * Output options.
+     */
+    public const OUTPUT_OPEN     = 'print';
+    public const OUTPUT_DOWNLOAD = 'download';
+    /**
+     * Default values.
+     */
+    public const DEFAULT_FORMAT   = self::FORMAT_A4;
+    public const DEFAULT_POSITION = self::POSITION_1;
+    public const DEFAULT_OUTPUT   = self::OUTPUT_OPEN;
 
     protected $attributes = [
-        self::DEFAULT_POSITION    => null,
-        self::LABEL_DESCRIPTION   => null,
-        self::LABEL_OPEN_DOWNLOAD => null,
-        self::LABEL_SIZE          => null,
-        self::PROMPT_POSITION     => false,
+        self::DESCRIPTION => null,
+        self::FORMAT      => self::DEFAULT_FORMAT,
+        self::OUTPUT      => self::DEFAULT_OUTPUT,
+        self::POSITION    => self::DEFAULT_POSITION,
+        self::PROMPT      => false,
     ];
 
     protected $casts      = [
-        self::DEFAULT_POSITION    => 'string',
-        self::LABEL_DESCRIPTION   => 'string',
-        self::LABEL_OPEN_DOWNLOAD => 'string',
-        self::LABEL_SIZE          => 'string',
-        self::PROMPT_POSITION     => 'bool',
+        self::DESCRIPTION => 'string',
+        self::FORMAT      => 'string',
+        self::OUTPUT      => 'string',
+        self::POSITION    => 'int',
+        self::PROMPT      => 'bool',
     ];
 }

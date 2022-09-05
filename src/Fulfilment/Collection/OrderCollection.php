@@ -9,11 +9,6 @@ use MyParcelNL\Pdk\Fulfilment\Model\Order;
 
 /**
  * @property \MyParcelNL\Pdk\Fulfilment\Model\Order[] $items
- * @method Order first(callable $callback = null, $default = null)
- * @method Order last(callable $callback = null, $default = null)
- * @method Order pop()
- * @method Order shift()
- * @method Order[] all()
  */
 class OrderCollection extends Collection
 {

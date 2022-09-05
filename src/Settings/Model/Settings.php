@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Settings\Collection\CarrierSettingsCollection;
  * @property OrderSettings             $order
  * @property LabelSettings             $label
  * @property CustomsSettings           $customs
+ * @property CheckoutSettings          $checkout
  * @property CarrierSettingsCollection $carrier
  */
 class Settings extends Model
@@ -21,8 +22,8 @@ class Settings extends Model
         OrderSettings::ID    => OrderSettings::class,
         LabelSettings::ID    => LabelSettings::class,
         CustomsSettings::ID  => CustomsSettings::class,
-        CarrierSettings::ID  => CarrierSettingsCollection::class,
         CheckoutSettings::ID => CheckoutSettings::class,
+        CarrierSettings::ID  => CarrierSettingsCollection::class,
     ];
 
     /**

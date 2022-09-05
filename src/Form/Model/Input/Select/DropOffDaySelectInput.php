@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Form\Model\Input\Select;
 
-use MyParcelNL\Pdk\Form\Model\Input\AbstractInput;
+use MyParcelNL\Pdk\Form\Model\Input\BaseInput;
 
 /**
  * @property string $type
@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Form\Model\Input\AbstractInput;
  * @property string $label
  * @property string $description
  */
-class DropOffDaySelectInput extends AbstractInput
+class DropOffDaySelectInput extends BaseInput
 {
     /**
      * @param  null|array $data

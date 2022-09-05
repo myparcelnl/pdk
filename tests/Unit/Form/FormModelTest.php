@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Form\Model\Input\CheckboxInput;
 use MyParcelNL\Pdk\Form\Model\Input\HiddenInput;
+use MyParcelNL\Pdk\Form\Model\Input\NumberInput;
 use MyParcelNL\Pdk\Form\Model\Input\RadioButtonInput;
 use MyParcelNL\Pdk\Form\Model\Input\Select\CountrySelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\Select\DropOffDaySelectInput;
@@ -38,7 +39,22 @@ it('creates input', function (string $class, array $input, array $output) {
             'name'        => 'bloemkool',
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
-            'type'        => 'TextInput',
+            'type'        => 'text',
+            'element'     => 'TextInput',
+        ],
+    ],
+    'NumberInput'           => [
+        'class'  => NumberInput::class,
+        'input'  => [
+            'name'  => 'bloemkool',
+            'label' => 'bloemkool_amount',
+        ],
+        'output' => [
+            'name'        => 'bloemkool',
+            'label'       => 'bloemkool_amount',
+            'type'        => 'number',
+            'element'     => 'NumberInput',
+            'description' => null,
         ],
     ],
     'SelectInput'           => [
@@ -53,7 +69,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'label'       => 'selector text',
             'description' => 'Dit is een selector',
             'options'     => [],
-            'type'        => 'SelectInput',
+            'element'     => 'SelectInput',
         ],
     ],
     'ToggleInput'           => [
@@ -70,11 +86,11 @@ it('creates input', function (string $class, array $input, array $output) {
             'isBool'         => true,
             'values.0.id'    => 'on',
             'values.0.value' => 1,
-            'values.0.label' => 'Yes',
+            'values.0.label' => 'input_toggle_on',
             'values.1.id'    => 'off',
             'values.1.value' => 0,
-            'values.1.label' => 'No',
-            'type'           => 'ToggleInput',
+            'values.1.label' => 'input_toggle_off',
+            'element'        => 'ToggleInput',
         ],
     ],
     'CheckboxInput'         => [
@@ -88,7 +104,8 @@ it('creates input', function (string $class, array $input, array $output) {
             'name'        => 'bloemkool',
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
-            'type'        => 'CheckboxInput',
+            'type'        => 'checkbox',
+            'element'     => 'CheckboxInput',
         ],
     ],
     'RadioButtonInput'      => [
@@ -112,7 +129,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'multiple'       => false,
             'options.0.id'   => 1,
             'options.0.name' => 'Spareribs',
-            'type'           => 'RadioButtonInput',
+            'element'        => 'RadioButtonInput',
         ],
     ],
     'HiddenInput'           => [
@@ -126,7 +143,8 @@ it('creates input', function (string $class, array $input, array $output) {
             'name'        => 'bloemkool',
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
-            'type'        => 'HiddenInput',
+            'type'        => 'hidden',
+            'element'     => 'HiddenInput',
         ],
     ],
     'CountrySelectInput'    => [
@@ -141,7 +159,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'label'       => 'Bloemkool text',
             'description' => 'Dit is een bloemkool',
             'options'     => [],
-            'type'        => 'CountrySelectInput',
+            'element'     => 'CountrySelectInput',
         ],
     ],
     'DropOffDaySelectInput' => [
@@ -157,7 +175,7 @@ it('creates input', function (string $class, array $input, array $output) {
             'description' => 'Dit is een bloemkool',
             'multiple'    => false,
             'values'      => [],
-            'type'        => 'DropOffDaySelectInput',
+            'element'     => 'DropOffDaySelectInput',
         ],
     ],
 ]);

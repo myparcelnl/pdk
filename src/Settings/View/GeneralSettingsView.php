@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\View;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\TextInput;
 use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
@@ -24,63 +23,47 @@ class GeneralSettingsView extends AbstractView
             [
                 'class' => TextInput::class,
                 'name'  => GeneralSettings::API_KEY,
-                'label' => 'Api Key',
+                'label' => 'settings_general_api_key',
             ],
             [
                 'class' => ToggleInput::class,
-                'name'  => GeneralSettings::ENABLE_API_LOGGING,
-                'label' => 'Api logging',
+                'name'  => GeneralSettings::API_LOGGING,
+                'label' => 'settings_general_api_logging',
             ],
             [
                 'class' => ToggleInput::class,
                 'name'  => GeneralSettings::SHARE_CUSTOMER_INFORMATION,
-                'label' => 'Share customer information',
-            ],
-            [
-                'class' => ToggleInput::class,
-                'name'  => GeneralSettings::USE_SEPARATE_ADDRESS_FIELDS,
-                'label' => 'Use second address field',
+                'label' => 'settings_general_share_customer_information',
             ],
             [
                 'class' => ToggleInput::class,
                 'name'  => GeneralSettings::CONCEPT_SHIPMENTS,
-                'label' => 'Turn on concept shipments',
+                'label' => 'settings_general_concept_shipments',
             ],
             [
                 'class' => ToggleInput::class,
                 'name'  => GeneralSettings::ORDER_MODE,
-                'label' => 'Turn on order management',
-            ],
-            [
-                'class'   => SelectInput::class,
-                'name'    => GeneralSettings::PRICE_TYPE,
-                'label'   => 'Price type display',
-                'options' => [],
+                'label' => 'settings_general_order_mode',
             ],
             [
                 'class' => ToggleInput::class,
-                'name'  => GeneralSettings::TRACK_TRACE_EMAIL,
-                'label' => 'Track & trace in email',
+                'name'  => GeneralSettings::TRACK_TRACE_IN_EMAIL,
+                'label' => 'settings_general_track_trace_in_email',
             ],
             [
                 'class' => ToggleInput::class,
-                'name'  => GeneralSettings::TRACK_TRACE_MY_ACCOUNT,
-                'label' => 'Track & Trace in my account',
-            ],
-            [
-                'class' => ToggleInput::class,
-                'name'  => GeneralSettings::SHOW_DELIVERY_DAY,
-                'label' => 'Show delivery day to customer',
+                'name'  => GeneralSettings::TRACK_TRACE_IN_ACCOUNT,
+                'label' => 'settings_general_track_trace_in_account',
             ],
             [
                 'class' => ToggleInput::class,
                 'name'  => GeneralSettings::BARCODE_IN_NOTE,
-                'label' => 'Save barcode in note',
+                'label' => 'settings_general_barcode_in_note',
             ],
             [
                 'class' => ToggleInput::class,
                 'name'  => GeneralSettings::PROCESS_DIRECTLY,
-                'label' => 'Process orders automatically',
+                'label' => 'settings_general_process_directly',
             ],
         ]);
     }

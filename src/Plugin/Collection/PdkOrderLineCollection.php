@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 
 /**
