@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Repository;
 
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
-abstract class AbstractPdkOrderRepository extends AbstractRepository
+abstract class ApiPdkOrderRepository extends ApiRepository
 {
     /**
      * Create a new order object from input data.

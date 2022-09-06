@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Account\Repository;
 
 use MyParcelNL\Pdk\Account\Request\GetShopsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
-class ShopRepository extends AbstractRepository
+class ShopRepository extends ApiRepository
 {
     /**
      * @return \MyParcelNL\Sdk\src\Model\Account\Shop

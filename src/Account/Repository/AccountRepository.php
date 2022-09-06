@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Account\Repository;
 
 use MyParcelNL\Pdk\Account\Request\GetAccountsRequest;
 use MyParcelNL\Pdk\Account\Response\GetAccountsResponseWithBody;
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 
-class AccountRepository extends AbstractRepository
+class AccountRepository extends ApiRepository
 {
     /**
      * @return \MyParcelNL\Sdk\src\Model\Account\Account

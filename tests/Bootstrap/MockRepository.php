@@ -8,13 +8,13 @@ use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Account\Request\GetShopRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
-class MockRepository extends AbstractRepository
+class MockRepository extends ApiRepository
 {
     /**
      * @var \MyParcelNL\Pdk\Base\Support\Collection

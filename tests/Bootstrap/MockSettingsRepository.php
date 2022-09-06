@@ -11,11 +11,11 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\DeliveryOptionsStringsSettings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\ApiSettingsRepository;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 
-class MockSettingsRepository extends AbstractSettingsRepository
+class MockSettingsRepository extends ApiSettingsRepository
 {
     private const DEFAULT_SETTINGS = [
         GeneralSettings::ID => [

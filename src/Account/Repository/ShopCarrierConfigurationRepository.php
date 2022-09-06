@@ -7,11 +7,11 @@ namespace MyParcelNL\Pdk\Account\Repository;
 use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationRequest;
 use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponseWithBody;
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 
-class ShopCarrierConfigurationRepository extends AbstractRepository
+class ShopCarrierConfigurationRepository extends ApiRepository
 {
     /**
      * @param  int    $shopId

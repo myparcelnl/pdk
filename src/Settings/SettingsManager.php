@@ -6,12 +6,12 @@ namespace MyParcelNL\Pdk\Settings;
 
 use MyParcelNL\Pdk\Base\Support\Helpers;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\ApiSettingsRepository;
 
 class SettingsManager
 {
     /**
-     * @var \MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository
+     * @var \MyParcelNL\Pdk\Settings\Repository\ApiSettingsRepository
      */
     protected $repository;
 
@@ -21,9 +21,9 @@ class SettingsManager
     protected $settings;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository $repository
+     * @param  \MyParcelNL\Pdk\Settings\Repository\ApiSettingsRepository $repository
      */
-    public function __construct(AbstractSettingsRepository $repository)
+    public function __construct(ApiSettingsRepository $repository)
     {
         $this->repository = $repository;
         $this->settings   = $this->repository->getSettings();

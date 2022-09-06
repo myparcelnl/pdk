@@ -6,12 +6,14 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Settings\Model\DeliveryOptionsStringsSettings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\View\AbstractView;
 use MyParcelNL\Pdk\Settings\View\CarrierSettingsView;
 use MyParcelNL\Pdk\Settings\View\CustomsSettingsView;
@@ -19,8 +21,23 @@ use MyParcelNL\Pdk\Settings\View\DeliveryOptionsStringsSettingsView;
 use MyParcelNL\Pdk\Settings\View\GeneralSettingsView;
 use MyParcelNL\Pdk\Settings\View\LabelSettingsView;
 use MyParcelNL\Pdk\Settings\View\OrderSettingsView;
+use MyParcelNL\Pdk\Settings\View\ProductSettingsView;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
+
+const EXAMPLE_PRODUCT = [
+    'uuid'               => '123',
+    'sku'                => '456',
+    'ean'                => '789',
+    'externalIdentifier' => 'stofzuiger',
+    'name'               => 'dyson',
+    'description'        => 'mooie stofzuiger die zijn werk goed doet',
+    'width'              => 30,
+    'length'             => 30,
+    'height'             => 70,
+    'weight'             => 4000,
+    'settings'           => [],
+];
 
 beforeEach(function () {
     PdkFactory::create(MockPdkConfig::create());
@@ -348,7 +365,75 @@ it('gets settings view', function (string $class, $output) {
             '4.type'       => 'ToggleInput',
         ],
     ],
+    'productSettings'                => [
+        'class'  => ProductSettingsView::class,
+        'output' => [
+                '0.name'                   => ProductSettings::ALLOW_ONLY_RECIPIENT,
+                '0.label'                  => 'Allow only recipient',
+                '0.type'                   => 'ToggleInput',
+                '1.name'                   => ProductSettings::ALLOW_SIGNATURE,
+                '1.label'                  => 'Allow signature',
+                '1.type'                   => 'ToggleInput',
+                '2.name'                   => ProductSettings::COUNTRY_OF_ORIGIN,
+                '2.label'                  => 'Country of origin',
+                '2.type'                   => 'SelectInput',
+                '3.name'                   => ProductSettings::CUSTOMS_CODE,
+                '3.label'                  => 'Customs code',
+                '3.type'                   => 'TextInput',
+                '4.name'                   => ProductSettings::DISABLE_DELIVERY_OPTIONS,
+                '4.label'                  => 'Disable delivery options',
+                '4.type'                   => 'ToggleInput',
+                '5.name'                   => ProductSettings::DROP_OFF_DELAY,
+                '5.label'                  => 'Drop-off delay',
+                '5.type'                   => 'TextInput',
+                '6.name'                   => ProductSettings::EXPORT_AGE_CHECK,
+                '6.label'                  => 'Export age check',
+                '6.type'                   => 'ToggleInput',
+                '7.name'                   => ProductSettings::EXPORT_INSURANCE,
+                '7.label'                  => 'Export insurance',
+                '7.type'                   => 'ToggleInput',
+                '8.name'                   => ProductSettings::EXPORT_LARGE_FORMAT,
+                '8.label'                  => 'Export large format',
+                '8.type'                   => 'ToggleInput',
+                '9.name'                   => ProductSettings::FIT_IN_MAILBOX,
+                '9.label'                  => 'Fit in mailbox',
+                '9.type'                   => 'TextInput',
+                '10.name'                  => ProductSettings::PACKAGE_TYPE,
+                '10.label'                 => 'Package type',
+                '10.options.package'       => 'Package',
+                '10.options.mailbox'       => 'Mailbox',
+                '10.options.letter'        => 'Letter',
+                '10.options.digital_stamp' => 'Digital stamp',
+                '10.type'                  => 'SelectInput',
+                '11.name'                  => ProductSettings::RETURN_SHIPMENTS,
+                '11.label'                 => 'Return shipments',
+                '11.type'                  => 'ToggleInput',
+            ] + addCountryOptions(2),
+    ],
 ]);
+
+it('gets settings from a product', function () {
+    $product  = new PdkProduct(EXAMPLE_PRODUCT);
+    $settings = $product->settings->toArray();
+
+    expect($settings)
+        ->toBe(
+            [
+                'allowOnlyRecipient'     => false,
+                'allowSignature'         => false,
+                'countryOfOrigin'        => 'NL',
+                'customsCode'            => '0',
+                'disableDeliveryOptions' => false,
+                'dropOffDelay'           => 0,
+                'exportAgeCheck'         => false,
+                'exportInsurance'        => false,
+                'exportLargeFormat'      => false,
+                'fitInMailbox'           => 0,
+                'packageType'            => 'package',
+                'returnShipments'        => false,
+            ]
+        );
+});
 
 it('throws error when class is invalid', function () {
     class InvalidClassView extends AbstractView

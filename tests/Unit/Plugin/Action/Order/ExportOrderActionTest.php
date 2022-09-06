@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
+use MyParcelNL\Pdk\Plugin\Repository\ApiPdkOrderRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
@@ -21,12 +21,12 @@ use function DI\autowire;
 beforeEach(function () {
     $this->pdk = PdkFactory::create(
         MockPdkConfig::create([
-            AbstractPdkOrderRepository::class => autowire(MockPdkOrderRepository::class),
+            ApiPdkOrderRepository::class => autowire(MockPdkOrderRepository::class),
         ])
     );
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
-    $orderRepository = $this->pdk->get(AbstractPdkOrderRepository::class);
+    $orderRepository = $this->pdk->get(ApiPdkOrderRepository::class);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $this->pdk->get(ApiServiceInterface::class);

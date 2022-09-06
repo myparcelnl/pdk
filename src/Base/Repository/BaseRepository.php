@@ -7,13 +7,8 @@ namespace MyParcelNL\Pdk\Base\Repository;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 
-abstract class AbstractRepository
+abstract class BaseRepository
 {
-    /**
-     * @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface
-     */
-    protected $api;
-
     /**
      * @var \MyParcelNL\Pdk\Storage\StorageInterface
      */
@@ -26,12 +21,10 @@ abstract class AbstractRepository
 
     /**
      * @param  \MyParcelNL\Pdk\Storage\StorageInterface        $storage
-     * @param  \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api
      */
-    public function __construct(StorageInterface $storage, ApiServiceInterface $api)
+    public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
-        $this->api     = $api;
     }
 
     /**
@@ -52,24 +45,6 @@ abstract class AbstractRepository
     }
 
     /**
-     * @param  string   $key
-     * @param  callable $callback
-     *
-     * @return mixed
-     */
-    protected function retrieve(string $key, callable $callback)
-    {
-        if (! $this->storage->has($key)) {
-            $data = $callback();
-
-            $this->storageHashMap[$key] = $this->generateDataHash(null);
-            $this->storage->set($key, $data);
-        }
-
-        return $data ?? $this->storage->get($key);
-    }
-
-    /**
      * @param  string $key
      * @param  mixed  $data
      *
@@ -87,7 +62,7 @@ abstract class AbstractRepository
      *
      * @return null|string
      */
-    private function generateDataHash($data): ?string
+    protected function generateDataHash($data): ?string
     {
         if (! $data) {
             return null;
