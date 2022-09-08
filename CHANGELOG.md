@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.0](https://github.com/myparcelnl/pdk/compare/v1.19.0...v1.20.0) (2022-09-08)
+
+
+### :sparkles: New Features
+
+* add settings manager ([#37](https://github.com/myparcelnl/pdk/issues/37)) ([0e6f979](https://github.com/myparcelnl/pdk/commit/0e6f979d26f7b1035364ff355596725a365ed792))
+
 ## [1.19.0](https://github.com/myparcelnl/pdk/compare/v1.18.1...v1.19.0) (2022-09-01)
 
 
