@@ -94,18 +94,6 @@ it('updates settings', function () {
     expect($repository->getFromStorage()->general->apiKey)->toEqual('acd736d67a892fad08346738caf979bc');
 });
 
-it('updates settings via dot notation', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-    $repository = $this->pdk->get(AbstractSettingsRepository::class);
-    $settings   = Settings::all();
-
-    $settings->general->apiKey = 'acd736d67a892fad08346738caf979bc';
-
-    expect($repository->getFromStorage()->general->apiKey)->toEqual('b03ad4237eab5bed119257012a4c5866');
-    Settings::persist();
-    expect($repository->getFromStorage()->general->apiKey)->toEqual('acd736d67a892fad08346738caf979bc');
-});
-
 it('updates settings by category', function () {
     $settings = Settings::all();
 
