@@ -17,6 +17,13 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class OrderSettings extends Model
 {
+    /**
+     * Settings category ID.
+     */
+    public const ID = 'order';
+    /**
+     * Settings in this category.
+     */
     public const IGNORE_ORDER_STATUSES               = 'ignoreOrderStatuses';
     public const ORDER_STATUS_MAIL                   = 'orderStatusMail';
     public const SEND_NOTIFICATION_AFTER             = 'sendNotificationAfter';

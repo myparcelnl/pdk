@@ -7,42 +7,49 @@ namespace MyParcelNL\Pdk\Settings\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property bool   $allowDeliveryOptions
- * @property bool   $allowEveningDelivery
- * @property bool   $allowMondayDelivery
- * @property bool   $allowMorningDelivery
- * @property bool   $allowOnlyRecipient
- * @property bool   $allowPickupLocations
- * @property bool   $allowSameDayDelivery
- * @property bool   $allowSaturdayDelivery
- * @property bool   $allowSignature
- * @property string $cutoffTime
- * @property string $cutoffTimeSameDay
- * @property string $defaultPackageType
- * @property string $digitalStampDefaultWeight
- * @property array  $dropOffDays
- * @property bool   $exportAgeCheck
- * @property bool   $exportExtraLargeFormat
- * @property bool   $exportInsured
- * @property int    $exportInsuredAmount
- * @property int    $exportInsuredAmountMax
- * @property bool   $exportInsuredForBe
- * @property bool   $exportOnlyRecipient
- * @property bool   $exportReturnShipments
- * @property bool   $exportSignature
- * @property bool   $featureShowDeliveryDate
- * @property int    $priceEveningDelivery
- * @property int    $priceMorningDelivery
- * @property int    $priceOnlyRecipient
- * @property int    $pricePackageTypeDigitalStamp
- * @property int    $pricePackageTypeMailbox
- * @property int    $pricePickup
- * @property int    $priceSameDayDelivery
- * @property int    $priceSignature
- * @property int    $priceStandardDelivery
+ * @property bool                 $allowDeliveryOptions
+ * @property bool                 $allowEveningDelivery
+ * @property bool                 $allowMondayDelivery
+ * @property bool                 $allowMorningDelivery
+ * @property bool                 $allowOnlyRecipient
+ * @property bool                 $allowPickupLocations
+ * @property bool                 $allowSameDayDelivery
+ * @property bool                 $allowSaturdayDelivery
+ * @property bool                 $allowSignature
+ * @property string               $cutoffTime
+ * @property string               $cutoffTimeSameDay
+ * @property string               $defaultPackageType
+ * @property string               $digitalStampDefaultWeight
+ * @property DropOffPossibilities $dropOffPossibilities
+ * @property bool                 $exportAgeCheck
+ * @property bool                 $exportExtraLargeFormat
+ * @property bool                 $exportInsured
+ * @property int                  $exportInsuredAmount
+ * @property int                  $exportInsuredAmountMax
+ * @property bool                 $exportInsuredForBe
+ * @property bool                 $exportOnlyRecipient
+ * @property bool                 $exportReturnShipments
+ * @property bool                 $exportSignature
+ * @property bool                 $featureShowDeliveryDate
+ * @property int                  $priceEveningDelivery
+ * @property int                  $priceMorningDelivery
+ * @property int                  $priceOnlyRecipient
+ * @property int                  $pricePackageTypeDigitalStamp
+ * @property int                  $pricePackageTypeMailbox
+ * @property int                  $pricePickup
+ * @property int                  $priceSameDayDelivery
+ * @property int                  $priceSignature
+ * @property int                  $priceStandardDelivery
  */
 class CarrierSettings extends Model
 {
+    /**
+     * Settings category ID.
+     */
+    public const ID = 'carrier';
+    /**
+     * Settings in this category.
+     */
     public const ALLOW_DELIVERY_OPTIONS           = 'allowDeliveryOptions';
     public const ALLOW_EVENING_DELIVERY           = 'allowEveningDelivery';
     public const ALLOW_MONDAY_DELIVERY            = 'allowMondayDelivery';
@@ -56,7 +63,7 @@ class CarrierSettings extends Model
     public const CUTOFF_TIME_SAME_DAY             = 'cutoffTimeSameDay';
     public const DEFAULT_PACKAGE_TYPE             = 'defaultPackageType';
     public const DIGITAL_STAMP_DEFAULT_WEIGHT     = 'digitalStampDefaultWeight';
-    public const DROP_OFF_DAYS                    = 'dropOffDays';
+    public const DROP_OFF_POSSIBILITIES           = 'dropOffPossibilities';
     public const EXPORT_AGE_CHECK                 = 'exportAgeCheck';
     public const EXPORT_EXTRA_LARGE_FORMAT        = 'exportExtraLargeFormat';
     public const EXPORT_INSURED                   = 'exportInsured';
@@ -91,7 +98,7 @@ class CarrierSettings extends Model
         self::CUTOFF_TIME_SAME_DAY             => null,
         self::DEFAULT_PACKAGE_TYPE             => null,
         self::DIGITAL_STAMP_DEFAULT_WEIGHT     => null,
-        self::DROP_OFF_DAYS                    => null,
+        self::DROP_OFF_POSSIBILITIES           => null,
         self::EXPORT_AGE_CHECK                 => false,
         self::EXPORT_EXTRA_LARGE_FORMAT        => false,
         self::EXPORT_INSURED                   => false,
@@ -127,7 +134,7 @@ class CarrierSettings extends Model
         self::CUTOFF_TIME_SAME_DAY             => 'string',
         self::DEFAULT_PACKAGE_TYPE             => 'string',
         self::DIGITAL_STAMP_DEFAULT_WEIGHT     => 'string',
-        self::DROP_OFF_DAYS                    => 'array',
+        self::DROP_OFF_POSSIBILITIES           => DropOffPossibilities::class,
         self::EXPORT_AGE_CHECK                 => 'bool',
         self::EXPORT_EXTRA_LARGE_FORMAT        => 'bool',
         self::EXPORT_INSURED                   => 'bool',

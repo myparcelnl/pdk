@@ -132,7 +132,7 @@ it('gets settings view', function (string $class, $output) {
             '10.name'       => CarrierSettings::CUTOFF_TIME_SAME_DAY,
             '10.label'      => 'Cutoff time same day',
             '10.type'       => 'TextInput',
-            '11.name'       => CarrierSettings::DROP_OFF_DAYS,
+            '11.name'       => CarrierSettings::DROP_OFF_POSSIBILITIES,
             '11.label'      => 'Drop off days',
             '11.type'       => 'DropOffDaySelectInput',
             '12.name'       => CarrierSettings::FEATURE_SHOW_DELIVERY_DATE,

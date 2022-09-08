@@ -15,6 +15,13 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class LabelSettings extends Model
 {
+    /**
+     * Settings category ID.
+     */
+    public const ID = 'label';
+    /**
+     * Settings in this category.
+     */
     public const DEFAULT_POSITION    = 'defaultPosition';
     public const LABEL_DESCRIPTION   = 'labelDescription';
     public const LABEL_OPEN_DOWNLOAD = 'labelOpenDownload';

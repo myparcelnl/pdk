@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Settings\Model;
 use DateTimeImmutable;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Settings;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
@@ -15,16 +14,16 @@ use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 /**
  * @property DropOffDayCollection $dropOffDays
  * @property DropOffDayCollection $dropOffDaysDeviations
- * @property null|int             $dropOffDelay
- * @property null|int             $deliveryDaysWindow
+ * @property int                  $dropOffDelay
+ * @property int                  $deliveryDaysWindow
  */
-class DropOffDayPossibilities extends Model
+class DropOffPossibilities extends Model
 {
     protected $attributes = [
         'dropOffDays'           => DropOffDayCollection::class,
         'dropOffDaysDeviations' => DropOffDayCollection::class,
-        'dropOffDelay'          => null,
-        'deliveryDaysWindow'    => null,
+        'dropOffDelay'          => 1,
+        'deliveryDaysWindow'    => 7,
     ];
 
     protected $casts      = [
@@ -34,9 +33,9 @@ class DropOffDayPossibilities extends Model
         'deliveryDaysWindow'    => 'int',
     ];
 
-    public function __construct()
+    public function __construct(?array $data = null)
     {
-        parent::__construct(Settings::get('delivery.dropOffDayPossibilities'));
+        parent::__construct($data);
     }
 
     /**
@@ -54,26 +53,28 @@ class DropOffDayPossibilities extends Model
         $day            = 0;
         $items          = 0;
 
-        do {
-            $dropOffDate = $fromDate->modify("+$day day");
-            $weekday     = (int) $dropOffDate->format('w');
+        if ($this->dropOffDays->isNotEmpty()) {
+            do {
+                $dropOffDate = $fromDate->modify("+$day day");
+                $weekday     = (int) $dropOffDate->format('w');
 
-            /** @var DropOffDay $matchingDay */
-            $matchingDay = $this->dropOffDays->firstWhere('weekday', $weekday);
-            $deviation   = $deviatedDays->firstWhere('date', '==', $dropOffDate);
+                /** @var DropOffDay $matchingDay */
+                $matchingDay = $this->dropOffDays->firstWhere('weekday', $weekday);
+                $deviation   = $deviatedDays->firstWhere('date', '==', $dropOffDate);
 
-            $matchingDayArray = Utils::mergeArraysWithoutNull(
-                $matchingDay ? $matchingDay->toArray() : [],
-                $deviation ? $deviation->toArray() : []
-            );
+                $matchingDayArray = Utils::mergeArraysWithoutNull(
+                    $matchingDay ? $matchingDay->toArray() : [],
+                    $deviation ? $deviation->toArray() : []
+                );
 
-            if ($matchingDayArray['dispatch']) {
-                $newDropOffDays[] = ['date' => $dropOffDate, 'weekday' => $weekday] + $matchingDayArray;
-                $items++;
-            }
+                if ($matchingDayArray['dispatch']) {
+                    $newDropOffDays[] = ['date' => $dropOffDate, 'weekday' => $weekday] + $matchingDayArray;
+                    $items++;
+                }
 
-            $day++;
-        } while ($items < $this->deliveryDaysWindow);
+                $day++;
+            } while ($items < $this->deliveryDaysWindow);
+        }
 
         return new DropOffDayCollection($newDropOffDays);
     }
