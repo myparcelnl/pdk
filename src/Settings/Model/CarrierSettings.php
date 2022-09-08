@@ -16,8 +16,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property bool                 $allowSameDayDelivery
  * @property bool                 $allowSaturdayDelivery
  * @property bool                 $allowSignature
- * @property string               $cutoffTime
- * @property string               $cutoffTimeSameDay
  * @property string               $defaultPackageType
  * @property string               $digitalStampDefaultWeight
  * @property DropOffPossibilities $dropOffPossibilities
@@ -59,8 +57,7 @@ class CarrierSettings extends Model
     public const ALLOW_SAME_DAY_DELIVERY          = 'allowSameDayDelivery';
     public const ALLOW_SATURDAY_DELIVERY          = 'allowSaturdayDelivery';
     public const ALLOW_SIGNATURE                  = 'allowSignature';
-    public const CUTOFF_TIME                      = 'cutoffTime';
-    public const CUTOFF_TIME_SAME_DAY             = 'cutoffTimeSameDay';
+    public const CARRIER_NAME                     = 'carrier';
     public const DEFAULT_PACKAGE_TYPE             = 'defaultPackageType';
     public const DIGITAL_STAMP_DEFAULT_WEIGHT     = 'digitalStampDefaultWeight';
     public const DROP_OFF_POSSIBILITIES           = 'dropOffPossibilities';
@@ -94,8 +91,7 @@ class CarrierSettings extends Model
         self::ALLOW_SAME_DAY_DELIVERY          => false,
         self::ALLOW_SATURDAY_DELIVERY          => false,
         self::ALLOW_SIGNATURE                  => false,
-        self::CUTOFF_TIME                      => null,
-        self::CUTOFF_TIME_SAME_DAY             => null,
+        self::CARRIER_NAME                     => null,
         self::DEFAULT_PACKAGE_TYPE             => null,
         self::DIGITAL_STAMP_DEFAULT_WEIGHT     => null,
         self::DROP_OFF_POSSIBILITIES           => null,
@@ -130,8 +126,7 @@ class CarrierSettings extends Model
         self::ALLOW_SAME_DAY_DELIVERY          => 'bool',
         self::ALLOW_SATURDAY_DELIVERY          => 'bool',
         self::ALLOW_SIGNATURE                  => 'bool',
-        self::CUTOFF_TIME                      => 'string',
-        self::CUTOFF_TIME_SAME_DAY             => 'string',
+        self::CARRIER_NAME                     => 'string',
         self::DEFAULT_PACKAGE_TYPE             => 'string',
         self::DIGITAL_STAMP_DEFAULT_WEIGHT     => 'string',
         self::DROP_OFF_POSSIBILITIES           => DropOffPossibilities::class,

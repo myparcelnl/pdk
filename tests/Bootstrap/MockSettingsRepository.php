@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutStrings;
+use MyParcelNL\Pdk\Settings\Model\DeliveryOptionsStringsSettings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
@@ -21,8 +25,18 @@ class MockSettingsRepository extends AbstractSettingsRepository
             GeneralSettings::SHARE_CUSTOMER_INFORMATION => true,
         ],
 
+        CheckoutSettings::ID => [
+            CheckoutSettings::SHOW_PRICE_SURCHARGE => true,
+            DeliveryOptionsStringsSettings::ID     => [
+                DeliveryOptionsStringsSettings::ADDRESS_NOT_FOUND => 'Adresgegevens zijn niet ingevuld',
+            ],
+        ],
+
         CarrierSettings::ID => [
             [
+                CarrierSettings::ALLOW_SIGNATURE        => true,
+                CarrierSettings::PRICE_SIGNATURE        => 80,
+                CarrierSettings::CARRIER_NAME           => CarrierOptions::CARRIER_POSTNL_NAME,
                 CarrierSettings::DROP_OFF_POSSIBILITIES => [
                     'dropOffDays' => [
                         [
@@ -69,6 +83,13 @@ class MockSettingsRepository extends AbstractSettingsRepository
                         ],
                     ],
                 ],
+            ],
+            [
+                CarrierSettings::ALLOW_SAME_DAY_DELIVERY => true,
+                CarrierSettings::CARRIER_NAME            => CarrierOptions::CARRIER_INSTABOX_NAME,
+            ],
+            [
+                CarrierSettings::CARRIER_NAME            => null,
             ],
         ],
     ];

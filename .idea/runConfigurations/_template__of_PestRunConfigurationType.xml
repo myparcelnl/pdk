@@ -8,6 +8,9 @@
     <option name="pestRunnerSettings">
       <PestRunner method="" options="--coverage-html coverage" />
     </option>
+    <option name="runnerSettings">
+      <PhpTestRunnerSettings method="" options="--coverage-html coverage" />
+    </option>
     <method v="2" />
   </configuration>
 </component>

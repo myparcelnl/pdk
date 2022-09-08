@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
+use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext;
 use MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -52,6 +53,11 @@ class ContextService implements ContextServiceInterface
         ]);
     }
 
+    public function createDeliveryOptionsContext(PdkOrder $order): DeliveryOptionsContext
+    {
+        return (new DeliveryOptionsContext())->fromOrder($order);
+    }
+
     /**
      * @param  null|array|PdkOrder|PdkOrderCollection $orderData
      *
@@ -74,7 +80,7 @@ class ContextService implements ContextServiceInterface
      * @param  string $contextId
      * @param  array  $data
      *
-     * @return null|\MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection|\MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext
+     * @return null|\MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection|\MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext|\MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext
      */
     protected function resolveContext(string $contextId, array $data = [])
     {
@@ -84,6 +90,9 @@ class ContextService implements ContextServiceInterface
 
             case Context::ID_ORDER_DATA:
                 return $this->createOrderDataContext($data['order'] ?? null);
+
+            case Context::ID_DELIVERY_OPTIONS_CONFIG:
+                return $this->createDeliveryOptionsContext($data['order'] ?? null);
         }
 
         DefaultLogger::alert('Invalid context key passed.', compact('contextId', 'data'));

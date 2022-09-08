@@ -17,11 +17,12 @@ use MyParcelNL\Pdk\Settings\Collection\CarrierSettingsCollection;
 class Settings extends Model
 {
     public $attributes = [
-        GeneralSettings::ID => GeneralSettings::class,
-        OrderSettings::ID   => OrderSettings::class,
-        LabelSettings::ID   => LabelSettings::class,
-        CustomsSettings::ID => CustomsSettings::class,
-        CarrierSettings::ID => CarrierSettingsCollection::class,
+        GeneralSettings::ID  => GeneralSettings::class,
+        OrderSettings::ID    => OrderSettings::class,
+        LabelSettings::ID    => LabelSettings::class,
+        CustomsSettings::ID  => CustomsSettings::class,
+        CarrierSettings::ID  => CarrierSettingsCollection::class,
+        CheckoutSettings::ID => CheckoutSettings::class,
     ];
 
     /**

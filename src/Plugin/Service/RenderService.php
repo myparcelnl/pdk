@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
+use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
 class RenderService implements RenderServiceInterface
@@ -22,7 +23,8 @@ class RenderService implements RenderServiceInterface
     private const COMPONENT_MODALS            = 'Modals';
     private const COMPONENT_NOTIFICATIONS     = 'Notifications';
     private const COMPONENT_ORDER_CARD        = 'OrderCard';
-    private const COMPONENT_ORDER_LIST_COLUMN = 'OrderListColumn';
+    private const COMPONENT_ORDER_LIST_COLUMN       = 'OrderListColumn';
+    private const COMPONENT_DELIVERY_OPTIONS_CONFIG = 'MyParcelConfig';
 
     /**
      * @var string
@@ -70,6 +72,22 @@ class RenderService implements RenderServiceInterface
     public function renderModals(): string
     {
         return $this->render(self::COMPONENT_MODALS);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig $config
+     *
+     * @return string
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @noinspection PhpUnused
+     */
+    public function renderDeliveryOptionsConfig(pdkOrder $order): string
+    {
+        $contextBag = $this->contextService->createContexts([
+            Context::ID_DELIVERY_OPTIONS_CONFIG,
+        ], ['order' => $order]);
+
+        return $this->render(self::COMPONENT_DELIVERY_OPTIONS_CONFIG, $contextBag);
     }
 
     /**

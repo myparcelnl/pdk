@@ -15,12 +15,14 @@ use MyParcelNL\Pdk\Plugin\Context;
 class ContextBag extends Model
 {
     public $attributes = [
-        Context::ID_GLOBAL     => null,
-        Context::ID_ORDER_DATA => null,
+        Context::ID_GLOBAL                  => null,
+        Context::ID_ORDER_DATA              => null,
+        Context::ID_DELIVERY_OPTIONS_CONFIG => null,
     ];
 
     public $casts      = [
-        Context::ID_GLOBAL     => GlobalContext::class,
-        Context::ID_ORDER_DATA => OrderDataContextCollection::class,
+        Context::ID_GLOBAL                  => GlobalContext::class,
+        Context::ID_ORDER_DATA              => OrderDataContextCollection::class,
+        Context::ID_DELIVERY_OPTIONS_CONFIG => DeliveryOptionsContext::class,
     ];
 }
