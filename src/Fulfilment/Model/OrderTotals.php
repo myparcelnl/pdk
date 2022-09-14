@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
+use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
 /**
  * @property int $orderPrice
@@ -44,17 +44,16 @@ class OrderTotals extends Model
         'totalPriceAfterVat'    => 'int',
     ];
 
-    public static function getFromOrderData(
-        ?OrderLineCollection $orderLines,
-        ?int                 $shipmentPrice = 0,
-        ?int                 $shipmentVat = 0
-    ): self {
-        $shipmentAfterVat = $shipmentPrice + $shipmentVat;
+    public static function getFromOrderData(PdkOrder $order): self
+    {
+        $shipmentPrice    = $order->shipmentPrice;
+        $shipmentVat      = $order->shipmentVat;
+        $shipmentAfterVat = ($shipmentPrice + $shipmentVat) ?? null;
         $price            = 0;
         $priceAfterVat    = 0;
 
-        if ($orderLines) {
-            foreach ($orderLines as $orderLine) {
+        if ($order->orderLines) {
+            foreach ($order->orderLines as $orderLine) {
                 $price         += $orderLine->quantity * $orderLine->getPrice();
                 $priceAfterVat += $orderLine->quantity * $orderLine->getPriceAfterVat();
             }

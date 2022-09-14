@@ -71,7 +71,7 @@ class PdkOrder extends Model
 
     public function updateOrderTotals(): void
     {
-        $this->attributes['orderTotals'] = OrderTotals::getFromOrderData($this->orderLines, $this->shipmentPrice, $this->shipmentVat);
+        $this->attributes['orderTotals'] = OrderTotals::getFromOrderData($this);
     }
 
     /**

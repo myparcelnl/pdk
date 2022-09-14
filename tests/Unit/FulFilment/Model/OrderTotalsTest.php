@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderTotals;
+use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
 it('gets order totals', function ($input, $expected) {
     expect(
-        OrderTotals::getFromOrderData($input['orderLines'], $input['shipmentPrice'], $input['shipmentVat'])
+        OrderTotals::getFromOrderData(new PdkOrder($input))
             ->toArray()
     )->toBe($expected);
 })->with([
@@ -15,22 +15,20 @@ it('gets order totals', function ($input, $expected) {
         'input'    => [
             'shipmentPrice' => 200,
             'shipmentVat'   => 42,
-            'orderLines'    => new OrderLineCollection(
+            'orderLines'    => [
                 [
-                    [
-                        'quantity'      => 1,
-                        'price'         => 100,
-                        'vat'           => 21,
-                        'priceAfterVat' => 121,
-                    ],
-                    [
-                        'quantity'      => 2,
-                        'price'         => 1000,
-                        'vat'           => 90,
-                        'priceAfterVat' => 1090,
-                    ],
-                ]
-            ),
+                    'quantity'      => 1,
+                    'price'         => 100,
+                    'vat'           => 21,
+                    'priceAfterVat' => 121,
+                ],
+                [
+                    'quantity'      => 2,
+                    'price'         => 1000,
+                    'vat'           => 90,
+                    'priceAfterVat' => 1090,
+                ],
+            ],
         ],
         'expected' => [
             'orderPrice'            => 2100,
