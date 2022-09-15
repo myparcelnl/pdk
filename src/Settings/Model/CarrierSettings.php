@@ -82,6 +82,7 @@ class CarrierSettings extends Model
     public const PRICE_STANDARD_DELIVERY          = 'priceStandardDelivery';
 
     protected $attributes = [
+        self::CARRIER_NAME                     => null,
         self::ALLOW_DELIVERY_OPTIONS           => false,
         self::ALLOW_EVENING_DELIVERY           => false,
         self::ALLOW_MONDAY_DELIVERY            => false,
@@ -91,7 +92,6 @@ class CarrierSettings extends Model
         self::ALLOW_SAME_DAY_DELIVERY          => false,
         self::ALLOW_SATURDAY_DELIVERY          => false,
         self::ALLOW_SIGNATURE                  => false,
-        self::CARRIER_NAME                     => null,
         self::DEFAULT_PACKAGE_TYPE             => null,
         self::DIGITAL_STAMP_DEFAULT_WEIGHT     => null,
         self::DROP_OFF_POSSIBILITIES           => null,
@@ -117,6 +117,7 @@ class CarrierSettings extends Model
     ];
 
     protected $casts      = [
+        self::CARRIER_NAME                     => 'string',
         self::ALLOW_DELIVERY_OPTIONS           => 'bool',
         self::ALLOW_EVENING_DELIVERY           => 'bool',
         self::ALLOW_MONDAY_DELIVERY            => 'bool',
@@ -126,7 +127,6 @@ class CarrierSettings extends Model
         self::ALLOW_SAME_DAY_DELIVERY          => 'bool',
         self::ALLOW_SATURDAY_DELIVERY          => 'bool',
         self::ALLOW_SIGNATURE                  => 'bool',
-        self::CARRIER_NAME                     => 'string',
         self::DEFAULT_PACKAGE_TYPE             => 'string',
         self::DIGITAL_STAMP_DEFAULT_WEIGHT     => 'string',
         self::DROP_OFF_POSSIBILITIES           => DropOffPossibilities::class,

@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Plugin\Context;
 /**
  * @property \MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext                $global
  * @property null|\MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection $orderData
+ * @property null|\MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext  $deliveryOptionsConfig
  */
 class ContextBag extends Model
 {

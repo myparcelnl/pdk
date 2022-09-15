@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Settings\Model\CheckoutStrings;
 use MyParcelNL\Pdk\Settings\Model\DeliveryOptionsStringsSettings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
@@ -27,7 +26,7 @@ class MockSettingsRepository extends AbstractSettingsRepository
 
         CheckoutSettings::ID => [
             CheckoutSettings::SHOW_PRICE_SURCHARGE => true,
-            DeliveryOptionsStringsSettings::ID     => [
+            'strings'                              => [
                 DeliveryOptionsStringsSettings::ADDRESS_NOT_FOUND => 'Adresgegevens zijn niet ingevuld',
             ],
         ],
@@ -89,7 +88,7 @@ class MockSettingsRepository extends AbstractSettingsRepository
                 CarrierSettings::CARRIER_NAME            => CarrierOptions::CARRIER_INSTABOX_NAME,
             ],
             [
-                CarrierSettings::CARRIER_NAME            => null,
+                CarrierSettings::CARRIER_NAME => null,
             ],
         ],
     ];

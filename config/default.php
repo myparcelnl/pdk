@@ -21,8 +21,10 @@ use function DI\env;
 use function DI\value;
 
 return [
-    'mode'    => env('PDK_MODE', Pdk::MODE_PRODUCTION),
-    'rootDir' => value(__DIR__ . '/../'),
+    'mode'            => env('PDK_MODE', Pdk::MODE_PRODUCTION),
+    'development_api' => env('DEV_API', 'api.dev.myparcel.nl'),
+    'production_api'  => env('PROD_API', Pdk::DEFAULT_API_URL),
+    'rootDir'         => value(__DIR__ . '/../'),
 
     AbstractPdkOrderRepository::class => autowire(),
     ApiServiceInterface::class        => autowire(MyParcelApiService::class),

@@ -34,9 +34,9 @@ interface ContextServiceInterface
     public function createOrderDataContext($orderData): OrderDataContextCollection;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
+     * @param null|array|PdkOrder $orderData
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext
      */
-    public function createDeliveryOptionsContext(pdkOrder $order): DeliveryOptionsContext;
+    public function createDeliveryOptionsContext($orderData): DeliveryOptionsContext;
 }

@@ -53,9 +53,16 @@ class ContextService implements ContextServiceInterface
         ]);
     }
 
-    public function createDeliveryOptionsContext(PdkOrder $order): DeliveryOptionsContext
+    /**
+     * @param null|array|PdkOrder $orderData
+     *
+     * @return \MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext
+     */
+    public function createDeliveryOptionsContext($orderData): DeliveryOptionsContext
     {
-        return (new DeliveryOptionsContext())->fromOrder($order);
+        $pdkOrder = is_a($orderData, PdkOrder::class) ? $orderData : new PdkOrder($orderData ?? []);
+
+        return new DeliveryOptionsContext(['order' => $pdkOrder]);
     }
 
     /**

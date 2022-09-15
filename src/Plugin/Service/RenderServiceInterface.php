@@ -10,13 +10,6 @@ use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 interface RenderServiceInterface
 {
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
-     *
-     * @return string
-     */
-    public function renderDeliveryOptionsConfig(pdkOrder $order): string;
-
-    /**
      * @return string
      * @noinspection PhpUnused
      */

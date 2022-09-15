@@ -6,9 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderTotals;
+use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -16,47 +14,61 @@ use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
- * @property null|string                                                    $externalIdentifier
- * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration         $customsDeclaration
- * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions            $deliveryOptions
- * @property null|\MyParcelNL\Pdk\Fulfilment\Collection\orderLineCollection $orderLines
- * @property null|\MyParcelNL\Pdk\Fulfilment\Model\OrderTotals              $orderTotals
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                 $recipient
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                 $sender
- * @property null|int                                                       $shipmentPrice
- * @property null|int                                                       $shipmentVat
- * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection    $shipments
- * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                      $label
+ * @property null|string                                                   $externalIdentifier
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration        $customsDeclaration
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions           $deliveryOptions
+ * @property null|\MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection $lines
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                $recipient
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                $sender
+ * @property null|int                                                      $shipmentPrice
+ * @property null|int                                                      $shipmentPriceAfterVat
+ * @property null|int                                                      $shipmentVat
+ * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection   $shipments
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                     $label
  */
 class PdkOrder extends Model
 {
     protected $attributes = [
         /** Plugin order id */
-        'externalIdentifier' => null,
-        'customsDeclaration' => CustomsDeclaration::class,
-        'deliveryOptions'    => DeliveryOptions::class,
-        'orderLines'         => null,
-        'orderTotals'        => OrderTotals::class,
-        'recipient'          => null,
-        'sender'             => null,
-        'shipmentPrice'      => null,
-        'shipmentVat'        => null,
-        'shipments'          => ShipmentCollection::class,
-        'label'              => null,
+        'externalIdentifier'    => null,
+        'customsDeclaration'    => CustomsDeclaration::class,
+        'deliveryOptions'       => DeliveryOptions::class,
+        'lines'                 => PdkOrderLineCollection::class,
+        'recipient'             => null,
+        'sender'                => null,
+        'shipmentPrice'         => null,
+        'shipmentVat'           => null,
+        'shipments'             => ShipmentCollection::class,
+        'label'                 => null,
+        /** Totals */
+        'orderPrice'            => 0,
+        'orderVat'              => 0,
+        'orderPriceAfterVat'    => 0,
+        'shipmentPriceAfterVat' => 0,
+        'totalPrice'            => 0,
+        'totalVat'              => 0,
+        'totalPriceAfterVat'    => 0,
     ];
 
     protected $casts      = [
-        'externalIdentifier' => 'string',
-        'customsDeclaration' => CustomsDeclaration::class,
-        'deliveryOptions'    => DeliveryOptions::class,
-        'orderLines'         => OrderLineCollection::class,
-        'orderTotals'        => OrderTotals::class,
-        'recipient'          => ContactDetails::class,
-        'sender'             => ContactDetails::class,
-        'shipmentPrice'      => 'int',
-        'shipmentVat'        => 'int',
-        'shipments'          => ShipmentCollection::class,
-        'label'              => Label::class,
+        'externalIdentifier'    => 'string',
+        'customsDeclaration'    => CustomsDeclaration::class,
+        'deliveryOptions'       => DeliveryOptions::class,
+        'lines'                 => PdkOrderLineCollection::class,
+        'recipient'             => ContactDetails::class,
+        'sender'                => ContactDetails::class,
+        'shipmentPrice'         => 'int',
+        'shipmentPriceAfterVat' => 'int',
+        'shipmentVat'           => 'int',
+        'shipments'             => ShipmentCollection::class,
+        'label'                 => Label::class,
+
+        'orderPrice'         => 'int',
+        'orderVat'           => 'int',
+        'orderPriceAfterVat' => 'int',
+        'totalPrice'         => 'int',
+        'totalVat'           => 'int',
+        'totalPriceAfterVat' => 'int',
     ];
 
     /**
@@ -71,7 +83,22 @@ class PdkOrder extends Model
 
     public function updateOrderTotals(): void
     {
-        $this->attributes['orderTotals'] = OrderTotals::getFromOrderData($this);
+        $price         = 0;
+        $vat           = 0;
+        $priceAfterVat = 0;
+
+        foreach ($this->lines as $line) {
+            $price         += $line->quantity * $line->getPrice();
+            $vat           += $line->quantity * $line->getVat();
+            $priceAfterVat += $line->quantity * $line->getPriceAfterVat();
+        }
+
+        $this->attributes['orderPrice']         = $price;
+        $this->attributes['orderPriceAfterVat'] = $priceAfterVat;
+        $this->attributes['orderVat']           = $vat;
+        $this->attributes['totalPrice']         = $price + $this->shipmentPrice;
+        $this->attributes['totalPriceAfterVat'] = $priceAfterVat + $this->shipmentPriceAfterVat;
+        $this->attributes['totalVat']           = $vat + $this->shipmentVat;
     }
 
     /**

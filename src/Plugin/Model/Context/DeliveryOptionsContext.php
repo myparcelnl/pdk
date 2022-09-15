@@ -24,11 +24,21 @@ class DeliveryOptionsContext extends Model
         'config'  => DeliveryOptionsConfig::class,
     ];
 
-    public function fromOrder(PdkOrder $pdkOrder): self
+    public function __construct(?array $data = null)
     {
-        $this->strings = Settings::get('checkout.strings');
-        $this->config = new DeliveryOptionsConfig(['order' => $pdkOrder]);
+        parent::__construct($data);
 
-        return $this;
+        $this->strings = Settings::get('checkout.strings');
+
+        if (! isset($data['order'])) {
+            return;
+        }
+
+        $this->fillOrderData($data['order']);
+    }
+
+    public function fillOrderData(PdkOrder $pdkOrder): void
+    {
+        $this->config = new DeliveryOptionsConfig(['order' => $pdkOrder]);
     }
 }

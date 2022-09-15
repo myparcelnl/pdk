@@ -25,12 +25,11 @@ class CheckoutSettings extends Model
     /**
      * Values
      */
-    public const PICKUP_LOCATIONS_DEFAULT_VIEW_MAP  = 'map';
-    public const PICKUP_LOCATIONS_DEFAULT_VIEW_LIST = 'list';
+    public const PICKUP_LOCATIONS_DEFAULT_VIEW_VALUE = 'map';
 
     protected $attributes = [
         self::SHOW_PRICE_SURCHARGE          => false,
-        self::PICKUP_LOCATIONS_DEFAULT_VIEW => self::PICKUP_LOCATIONS_DEFAULT_VIEW_MAP,
+        self::PICKUP_LOCATIONS_DEFAULT_VIEW => self::PICKUP_LOCATIONS_DEFAULT_VIEW_VALUE,
         self::STRINGS                       => DeliveryOptionsStringsSettings::class,
     ];
 
