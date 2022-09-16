@@ -71,16 +71,6 @@ class CarrierSettingsView extends AbstractView
                 'label' => 'Allow signature',
             ],
             [
-                'class' => TextInput::class,
-                'name'  => CarrierSettings::CUTOFF_TIME,
-                'label' => 'Cutoff time',
-            ],
-            [
-                'class' => TextInput::class,
-                'name'  => CarrierSettings::CUTOFF_TIME_SAME_DAY,
-                'label' => 'Cutoff time same day',
-            ],
-            [
                 'class' => DropOffDaySelectInput::class,
                 'name'  => CarrierSettings::DROP_OFF_POSSIBILITIES,
                 'label' => 'Drop off days',

@@ -9,11 +9,12 @@ use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 abstract class AbstractApiService implements ApiServiceInterface
 {
     /**
-     * @var string
+     * @var null|string
      */
     protected $baseUrl;
 
@@ -65,6 +66,14 @@ abstract class AbstractApiService implements ApiServiceInterface
         }
 
         return $responseObject;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl ?? Pdk::get('apiUrl');
     }
 
     /**

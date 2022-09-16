@@ -16,9 +16,4 @@ interface ApiServiceInterface
      * @return \MyParcelNL\Pdk\Api\Response\ApiResponseInterface
      */
     public function doRequest(RequestInterface $request, string $responseClass): ApiResponseInterface;
-
-    /**
-     * @return string
-     */
-    public function getBaseUrl(): string;
 }
