@@ -37,6 +37,18 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
+     * @param  null|array|PdkOrder $orderData
+     *
+     * @return \MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext
+     */
+    public function createDeliveryOptionsContext($orderData): DeliveryOptionsContext
+    {
+        $pdkOrder = is_a($orderData, PdkOrder::class) ? $orderData : new PdkOrder($orderData ?? []);
+
+        return new DeliveryOptionsContext(['order' => $pdkOrder]);
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext
      */
     public function createGlobalContext(): GlobalContext
@@ -51,18 +63,6 @@ class ContextService implements ContextServiceInterface
             // @todo Expose plugin settings to frontend here
             'pluginSettings' => [],
         ]);
-    }
-
-    /**
-     * @param null|array|PdkOrder $orderData
-     *
-     * @return \MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext
-     */
-    public function createDeliveryOptionsContext($orderData): DeliveryOptionsContext
-    {
-        $pdkOrder = is_a($orderData, PdkOrder::class) ? $orderData : new PdkOrder($orderData ?? []);
-
-        return new DeliveryOptionsContext(['order' => $pdkOrder]);
     }
 
     /**
@@ -98,7 +98,7 @@ class ContextService implements ContextServiceInterface
             case Context::ID_ORDER_DATA:
                 return $this->createOrderDataContext($data['order'] ?? null);
 
-            case Context::ID_DELIVERY_OPTIONS_CONFIG:
+            case Context::ID_DELIVERY_OPTIONS:
                 return $this->createDeliveryOptionsContext($data['order'] ?? null);
         }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
-use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
 interface RenderServiceInterface

@@ -21,6 +21,7 @@ use function DI\env;
 use function DI\value;
 
 return [
+    'apiUrl'  => env('PDK_API_URL', 'https://api.myparcel.nl'),
     'mode'    => env('PDK_MODE', Pdk::MODE_PRODUCTION),
     'rootDir' => value(__DIR__ . '/../'),
 

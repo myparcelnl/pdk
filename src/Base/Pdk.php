@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base;
 
 use DI\Container;
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Plugin\Action\PdkActionManager;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +13,6 @@ class Pdk
     public const PACKAGE_NAME     = 'myparcelnl/pdk';
     public const MODE_DEVELOPMENT = 'development';
     public const MODE_PRODUCTION  = 'production';
-    public const DEFAULT_API_URL  = 'api.myparcel.nl';
 
     /**
      * @var \DI\Container
@@ -68,15 +66,6 @@ class Pdk
     public function getMode(): string
     {
         return $this->get('mode');
-    }
-
-    /**
-     * @throws \DI\NotFoundException
-     * @throws \DI\DependencyException
-     */
-    public function getApiBaseUrl(): string
-    {
-        return $this->get(ApiServiceInterface::class)->getBaseUrl();
     }
 
     /**

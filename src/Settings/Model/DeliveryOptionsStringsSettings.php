@@ -33,9 +33,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class DeliveryOptionsStringsSettings extends Model
 {
-    /**
-     * Settings in this category.
-     */
     public const ADDRESS_NOT_FOUND            = 'addressNotFound';
     public const CC                           = 'cc';
     public const CITY                         = 'city';

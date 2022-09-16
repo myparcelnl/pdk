@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\RenderService;
-use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 

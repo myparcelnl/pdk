@@ -14,10 +14,9 @@ use MyParcelNL\Pdk\Base\Pdk;
  */
 class MyParcelApiService extends AbstractApiService
 {
-    private const DEFAULT_BASE_URL = 'https://api.myparcel.nl';
-    private const DEFAULT_CONFIG   = [
+    private const DEFAULT_CONFIG = [
         'apiKey'     => null,
-        'baseUrl'    => self::DEFAULT_BASE_URL,
+        'baseUrl'    => null,
         'httpClient' => Client::class,
         'userAgent'  => [],
     ];
@@ -40,19 +39,11 @@ class MyParcelApiService extends AbstractApiService
     {
         $config += self::DEFAULT_CONFIG;
 
-        $this->baseUrl   = $config['baseUrl'] ?? null;
+        $this->baseUrl   = $config['baseUrl'] ?? $this->baseUrl;
         $this->apiKey    = $config['apiKey'] ?? null;
         $this->userAgent = $config['userAgent'] ?? [];
 
         parent::__construct($clientAdapter);
-    }
-
-    /**
-     * @return string
-     */
-    public function getBaseUrl(): string
-    {
-        return $this->baseUrl;
     }
 
     /**
