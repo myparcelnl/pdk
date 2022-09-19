@@ -28,7 +28,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
     $api->getMock()
         ->append(new $response());
 
-    /** @var \MyParcelNL\Pdk\Base\Repository\AbstractRepository $repository */
+    /** @var \MyParcelNL\Pdk\Base\Repository\ApiRepository $repository */
     $repository = $pdk->get($repositoryClass);
 
     expect($repository->{$method}(...array_values($args)))->toBeInstanceOf($expected);

@@ -20,6 +20,9 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class Product extends Model
 {
+    /**
+     * @var array
+     */
     protected $attributes = [
         'uuid'               => null,
         'sku'                => null,
@@ -33,7 +36,10 @@ class Product extends Model
         'weight'             => 0,
     ];
 
-    protected $casts      = [
+    /**
+     * @var array
+     */
+    protected $casts = [
         'uuid'               => 'string',
         'sku'                => 'string',
         'ean'                => 'string',

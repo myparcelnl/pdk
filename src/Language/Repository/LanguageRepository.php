@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Language\Repository;
 
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 
-class LanguageRepository extends AbstractRepository
+class LanguageRepository extends ApiRepository
 {
     /**
      * @param  string   $language

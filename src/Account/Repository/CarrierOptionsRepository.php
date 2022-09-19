@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Account\Repository;
 
 use MyParcelNL\Pdk\Account\Request\GetCarrierOptionsRequest;
 use MyParcelNL\Pdk\Account\Response\GetCarrierOptionsResponseWithBody;
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 
-class CarrierOptionsRepository extends AbstractRepository
+class CarrierOptionsRepository extends ApiRepository
 {
     /**
      * @param  int $carrierId

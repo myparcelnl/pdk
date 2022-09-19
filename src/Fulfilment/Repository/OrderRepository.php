@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Request\GetOrdersRequest;
 use MyParcelNL\Pdk\Fulfilment\Request\PostOrdersRequest;
 use MyParcelNL\Pdk\Fulfilment\Response\GetOrdersResponse;
 use MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse;
 
-class OrderRepository extends AbstractRepository
+class OrderRepository extends ApiRepository
 {
     /**
      * @param  array $parameters

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -19,7 +19,7 @@ use MyParcelNL\Pdk\Shipment\Response\GetLabelsResponse;
 use MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse;
 use MyParcelNL\Pdk\Shipment\Response\PostShipmentsResponse;
 
-class ShipmentRepository extends AbstractRepository
+class ShipmentRepository extends ApiRepository
 {
     /**
      * @noinspection PhpUnused

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Repository;
 
-use MyParcelNL\Pdk\Base\Repository\AbstractRepository;
+use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
-abstract class AbstractSettingsRepository extends AbstractRepository
+abstract class AbstractSettingsRepository extends ApiRepository
 {
     /**
      * Retrieve existing settings from your platform.
