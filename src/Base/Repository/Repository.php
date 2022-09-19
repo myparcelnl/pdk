@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Repository;
 
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 
-abstract class BaseRepository
+class Repository
 {
     /**
      * @var \MyParcelNL\Pdk\Storage\StorageInterface
@@ -20,7 +19,7 @@ abstract class BaseRepository
     protected $storageHashMap = [];
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\StorageInterface        $storage
+     * @param  \MyParcelNL\Pdk\Storage\StorageInterface $storage
      */
     public function __construct(StorageInterface $storage)
     {
@@ -45,19 +44,6 @@ abstract class BaseRepository
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $data
-     *
-     * @return mixed
-     */
-    protected function save(string $key, $data)
-    {
-        $this->storage->set($key, $data);
-
-        return $data;
-    }
-
-    /**
      * @param  mixed $data
      *
      * @return null|string
@@ -69,5 +55,18 @@ abstract class BaseRepository
         }
 
         return md5(var_export($data, true));
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $data
+     *
+     * @return mixed
+     */
+    protected function save(string $key, $data)
+    {
+        $this->storage->set($key, $data);
+
+        return $data;
     }
 }

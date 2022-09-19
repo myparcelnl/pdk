@@ -7,16 +7,16 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|string                                    $uuid
- * @property null|string                                    $sku
- * @property null|string                                    $ean
- * @property null|string                                    $externalIdentifier
- * @property null|string                                    $name
- * @property null|string                                    $description
- * @property int                                            $width
- * @property int                                            $length
- * @property int                                            $height
- * @property int                                            $weight
+ * @property null|string $uuid
+ * @property null|string $sku
+ * @property null|string $ean
+ * @property null|string $externalIdentifier
+ * @property null|string $name
+ * @property null|string $description
+ * @property int         $width
+ * @property int         $length
+ * @property int         $height
+ * @property int         $weight
  */
 class Product extends Model
 {
@@ -37,7 +37,7 @@ class Product extends Model
     ];
 
     /**
-     * @var string[]
+     * @var array
      */
     protected $casts = [
         'uuid'               => 'string',

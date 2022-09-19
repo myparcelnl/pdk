@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Repository\ApiPdkOrderRepository;
+use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 
-class MockPdkOrderRepository extends ApiPdkOrderRepository
+class MockPdkOrderRepository extends AbstractPdkOrderRepository
 {
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder ...$orders

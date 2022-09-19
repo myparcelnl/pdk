@@ -7,7 +7,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
-use MyParcelNL\Pdk\Settings\Repository\ApiSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -18,7 +18,7 @@ it(
         $pdk = PdkFactory::create(MockPdkConfig::create());
 
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-        $repository = $pdk->get(ApiSettingsRepository::class);
+        $repository = $pdk->get(AbstractSettingsRepository::class);
 
         /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrier */
         $carrier = $repository->getSettings()->carrier->first();
@@ -166,7 +166,7 @@ it('returns correct amount of delivery days', function (array $overrides, int $a
     $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-    $repository = $pdk->get(ApiSettingsRepository::class);
+    $repository = $pdk->get(AbstractSettingsRepository::class);
 
     /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrier */
     $carrier = $repository->getSettings()->carrier->first();

@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
 use MyParcelNL\Pdk\Plugin\Action\EndpointActionsInterface;
-use MyParcelNL\Pdk\Plugin\Repository\ApiPdkOrderRepository;
+use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
@@ -25,13 +25,13 @@ return [
     'mode'    => env('PDK_MODE', Pdk::MODE_PRODUCTION),
     'rootDir' => value(__DIR__ . '/../'),
 
-    ApiPdkOrderRepository::class    => autowire(),
-    ApiServiceInterface::class      => autowire(MyParcelApiService::class),
-    ClientAdapterInterface::class   => autowire(),
-    ContextServiceInterface::class  => autowire(ContextService::class),
-    EndpointActionsInterface::class => autowire(),
-    LanguageServiceInterface::class => autowire(),
-    LoggerInterface::class          => autowire(),
-    RenderServiceInterface::class   => autowire(RenderService::class),
-    StorageInterface::class         => autowire(MemoryCacheStorage::class),
+    AbstractPdkOrderRepository::class => autowire(),
+    ApiServiceInterface::class        => autowire(MyParcelApiService::class),
+    ClientAdapterInterface::class     => autowire(),
+    ContextServiceInterface::class    => autowire(ContextService::class),
+    EndpointActionsInterface::class   => autowire(),
+    LanguageServiceInterface::class   => autowire(),
+    LoggerInterface::class            => autowire(),
+    RenderServiceInterface::class     => autowire(RenderService::class),
+    StorageInterface::class           => autowire(MemoryCacheStorage::class),
 ];

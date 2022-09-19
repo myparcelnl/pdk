@@ -7,7 +7,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
-use MyParcelNL\Pdk\Settings\Repository\ApiSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
@@ -17,7 +17,7 @@ beforeEach(function () {
 
 it('has correct default values', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-    $repository = $this->pdk->get(ApiSettingsRepository::class);
+    $repository = $this->pdk->get(AbstractSettingsRepository::class);
     $repository->set(new SettingsModel());
 
     $settings = Settings::all();
@@ -109,7 +109,7 @@ it('retrieves a specific setting via category', function () {
 
 it('updates settings', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-    $repository = $this->pdk->get(ApiSettingsRepository::class);
+    $repository = $this->pdk->get(AbstractSettingsRepository::class);
     $settings   = Settings::all();
 
     $settings->general->apiKey = 'acd736d67a892fad08346738caf979bc';

@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Order;
 
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Repository\ApiPdkOrderRepository;
+use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +17,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     private $shipmentRepository;
 
-    public function __construct(ApiPdkOrderRepository $orderRepository, ShipmentRepository $shipmentRepository)
+    public function __construct(AbstractPdkOrderRepository $orderRepository, ShipmentRepository $shipmentRepository)
     {
         parent::__construct($orderRepository);
         $this->shipmentRepository = $shipmentRepository;

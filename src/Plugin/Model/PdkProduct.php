@@ -24,7 +24,7 @@ class PdkProduct extends Model
     ];
 
     /**
-     * @var string[]
+     * @var array
      */
     protected $casts = [
         'sku'      => 'string',

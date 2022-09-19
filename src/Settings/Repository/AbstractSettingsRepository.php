@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Settings\Repository;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
-abstract class ApiSettingsRepository extends ApiRepository
+abstract class AbstractSettingsRepository extends ApiRepository
 {
     /**
      * Retrieve existing settings from your platform.

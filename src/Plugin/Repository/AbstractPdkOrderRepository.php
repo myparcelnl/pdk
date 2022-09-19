@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
-abstract class ApiPdkOrderRepository extends ApiRepository
+abstract class AbstractPdkOrderRepository extends ApiRepository
 {
     /**
      * Create a new order object from input data.

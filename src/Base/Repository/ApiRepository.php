@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Base\Repository;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 
-class ApiRepository extends BaseRepository
+class ApiRepository extends Repository
 {
     /**
      * @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface
