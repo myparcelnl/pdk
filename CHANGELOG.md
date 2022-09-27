@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.23.0](https://github.com/myparcelnl/pdk/compare/v1.22.0...v1.23.0) (2022-09-27)
+
+
+### :sparkles: New Features
+
+* add platform ([#41](https://github.com/myparcelnl/pdk/issues/41)) ([8af20ad](https://github.com/myparcelnl/pdk/commit/8af20ad606735667c871ac8ef5ff1738e1034e0d))
+
 ## [1.22.0](https://github.com/myparcelnl/pdk/compare/v1.21.0...v1.22.0) (2022-09-19)
 
 
