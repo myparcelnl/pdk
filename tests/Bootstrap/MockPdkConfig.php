@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\ConfigInterface;
@@ -39,6 +40,8 @@ class MockPdkConfig
     private static function getDefaultConfig(): array
     {
         return [
+            'platform' => Platform::MYPARCEL_NAME,
+
             ApiServiceInterface::class        => autowire(MockApiService::class),
             ClientAdapterInterface::class     => autowire(Guzzle7ClientAdapter::class),
             ConfigInterface::class            => autowire(MockConfig::class),
