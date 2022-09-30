@@ -1,0 +1,18 @@
+{
+    "properties": {
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "enum": [
+                                0,
+                                50000
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -19,11 +19,18 @@ class Config implements ConfigInterface
      */
     public function get(string $key)
     {
-        [$pathParts, $filename] = $this->parseKey($key);
+        $pathParts = [];
+
+        if (Str::contains($key, '.')) {
+            $pathParts = explode('.', $key);
+            $filename  = $pathParts[0];
+        } else {
+            $filename = $key;
+        }
 
         $data = $this->getConfigFile($filename);
 
-        if ($pathParts && count($pathParts)) {
+        if (count($pathParts)) {
             array_shift($pathParts);
             return Arr::get($data, implode('.', $pathParts));
         }
@@ -32,20 +39,11 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param  string $key
-     *
-     * @return array
+     * @return string
      */
-    public function parseKey(string $key): array
+    public function getConfigDir(): string
     {
-        if (Str::contains($key, '.')) {
-            $pathParts = explode('.', $key);
-            $filename  = $pathParts[0];
-
-            return [$pathParts, $filename];
-        }
-
-        return [null, $key];
+        return sprintf('%s/../../config', __DIR__);
     }
 
     /**
@@ -56,13 +54,25 @@ class Config implements ConfigInterface
     private function getConfigFile(string $filename)
     {
         if (! isset(self::$cache[$filename])) {
-            $path = sprintf('%s/../../config/%s.php', __DIR__, $filename);
+            $dir = $this->getConfigDir();
 
-            if (! file_exists($path)) {
+            $phpPath  = "$dir/$filename.php";
+            $jsonPath = "$dir/$filename.json";
+
+            $isPhpFile  = file_exists($phpPath);
+            $isJsonFile = file_exists($jsonPath);
+
+            if (! $isPhpFile && ! $isJsonFile) {
                 throw new InvalidArgumentException(sprintf('File config/%s.php does not exist.', $filename));
             }
 
-            self::$cache[$filename] = require $path;
+            if ($isJsonFile) {
+                self::$cache[$filename] = json_decode(file_get_contents($jsonPath), true);
+            }
+
+            if ($isPhpFile) {
+                self::$cache[$filename] = require $phpPath;
+            }
         }
 
         return self::$cache[$filename];

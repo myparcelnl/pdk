@@ -1,0 +1,30 @@
+{
+    "description": "belgie/order/bpost/nl_package",
+    "properties": {
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "insurance": {
+                            "enum": [
+                                0,
+                                50000,
+                                null
+                            ]
+                        },
+                        "signature": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

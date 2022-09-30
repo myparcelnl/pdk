@@ -1,0 +1,283 @@
+{
+    "description": "belgie/order/postnl/base",
+    "type": "array",
+    "allOf": [
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "required": [
+                                        "ageCheck"
+                                    ],
+                                    "properties": {
+                                        "ageCheck": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "onlyRecipient": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "ageCheck": {
+                                            "enum": [
+                                                null,
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "required": [
+                                        "largeFormat"
+                                    ],
+                                    "properties": {
+                                        "largeFormat": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "physicalProperties": {
+                            "properties": {
+                                "weight": {
+                                    "minimum": 1,
+                                    "maximum": 30000
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "physicalProperties": {
+                            "properties": {
+                                "weight": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 23000
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "deliveryType"
+                            ],
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "standard",
+                                        null
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "date"
+                            ],
+                            "properties": {
+                                "date": {
+                                    "type": "string",
+                                    "pattern": "^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})$"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "deliveryType",
+                                "pickupLocation"
+                            ],
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "pickup"
+                                    ]
+                                },
+                                "pickupLocation": {
+                                    "type": "array",
+                                    "required": [
+                                        "locationCode"
+                                    ],
+                                    "properties": {
+                                        "locationCode": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "onlyRecipient": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "return": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "morning",
+                                        "standard",
+                                        "evening",
+                                        null
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "required": [
+                                        "insurance"
+                                    ],
+                                    "properties": {
+                                        "insurance": {
+                                            "enum": [
+                                                500
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "onlyRecipient": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "insurance": {
+                                            "enum": [
+                                                0,
+                                                null
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "note": "Do not put weight here, it will take precedence over any (deeper) allOf / anyOf statement"
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "labelDescription": {
+                            "maxLength": 45
+                        },
+                        "sameDayDelivery": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "description": "pickup",
+    "type": "array",
+    "additionalItems": false,
+    "required": [
+        "deliveryOptions"
+    ],
+    "properties": {
+        "deliveryOptions": {
+            "type": "array",
+            "additionalProperties": false,
+            "required": [
+                "pickupLocation"
+            ],
+            "properties": {
+                "pickupLocation": {
+                    "required": [
+                        "locationCode"
+                    ],
+                    "type": [
+                        "array",
+                        "null"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "postalCode": {
+                            "type": "string"
+                        },
+                        "locationName": {
+                            "type": "string"
+                        },
+                        "city": {
+                            "type": "string"
+                        },
+                        "street": {
+                            "type": "string"
+                        },
+                        "number": {
+                            "type": "string"
+                        },
+                        "numberSuffix": {
+                            "type": "string"
+                        },
+                        "boxNumber": {
+                            "type": "string",
+                            "maxLength": 8
+                        },
+                        "region": {
+                            "type": "string",
+                            "maxLength": 35
+                        },
+                        "state": {
+                            "type": "string"
+                        },
+                        "cc": {
+                            "type": "string",
+                            "maxLength": 2,
+                            "minLength": 2,
+                            "pattern": "^[A-z]{2}$"
+                        },
+                        "locationCode": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "retailNetworkId": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

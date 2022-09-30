@@ -3,12 +3,14 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Shipment\Service\DeliveryOptionsMerger;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 const DEFAULT_LOCATION_CODE = '98125';
 const DEFAULT_DATE          = '2022-07-22 06:00:00';
@@ -21,6 +23,10 @@ const DEFAULT_NETWORK_ID    = '1';
 
 $emptyRetailLocation  = (new RetailLocation())->toArray();
 $emptyShipmentOptions = (new ShipmentOptions())->toArray();
+
+beforeEach(function () {
+    PdkFactory::create(MockPdkConfig::create());
+});
 
 it('is an instance of DeliveryOptions', function () {
     expect(DeliveryOptionsMerger::create([new DeliveryOptions()]))->toBeInstanceOf(DeliveryOptions::class);

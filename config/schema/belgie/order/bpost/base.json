@@ -1,0 +1,191 @@
+{
+    "description": "belgie/order/bpost/base",
+    "type": "array",
+    "allOf": [
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "deliveryType"
+                            ],
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "standard",
+                                        null
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "date"
+                            ],
+                            "properties": {
+                                "date": {
+                                    "type": "string",
+                                    "pattern": "^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "required": [
+                                "deliveryType",
+                                "pickupLocation"
+                            ],
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "pickup"
+                                    ]
+                                },
+                                "pickupLocation": {
+                                    "properties": {
+                                        "locationCode": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "onlyRecipient": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "deliveryType": {
+                                    "enum": [
+                                        "standard",
+                                        null
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "required": [
+                                        "insurance"
+                                    ],
+                                    "properties": {
+                                        "insurance": {
+                                            "enum": [
+                                                500
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "insurance": {
+                                            "enum": [
+                                                0,
+                                                null
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "minimum": 1,
+                    "maximum": 30000
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "labelDescription": {
+                            "maxLength": 45
+                        },
+                        "sameDayDelivery": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "largeFormat": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "return": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -96,17 +96,27 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
-     * @param  array $arrayA
-     * @param  array $arrayB
+     * @param  array $previous
+     * @param  array $current
      *
      * @return array
      */
-    public static function mergeArraysWithoutNull(array $arrayA, array $arrayB): array
+    public static function mergeArraysIgnoringNull(array $previous, array $current): array
     {
-        $filtered = array_filter($arrayB, static function ($value) {
-            return null !== $value;
-        });
+        $keys = array_keys($current);
 
-        return array_replace($arrayA, $filtered);
+        foreach ($keys as $key) {
+            if (is_array($current[$key])) {
+                $current[$key] = self::mergeArraysIgnoringNull($previous[$key] ?? [], $current[$key]);
+            }
+
+            if (null !== $current[$key]) {
+                continue;
+            }
+
+            $current[$key] = $previous[$key] ?? null;
+        }
+
+        return $current + $previous;
     }
 }

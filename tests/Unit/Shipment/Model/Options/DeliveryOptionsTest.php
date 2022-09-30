@@ -3,9 +3,15 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+
+beforeEach(function () {
+    PdkFactory::create(MockPdkConfig::create());
+});
 
 it('instantiates default delivery options', function () {
     $deliveryOptions = new DeliveryOptions();

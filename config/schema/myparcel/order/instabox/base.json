@@ -1,0 +1,126 @@
+{
+    "description": "myparcel/order/instabox/base",
+    "type": "array",
+    "allOf": [
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "required": [
+                                        "ageCheck"
+                                    ],
+                                    "properties": {
+                                        "ageCheck": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "onlyRecipient": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "signature": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "properties": {
+                                        "ageCheck": {
+                                            "enum": [
+                                                null,
+                                                false
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "anyOf": [
+                {
+                    "properties": {
+                        "deliveryOptions": {
+                            "properties": {
+                                "shipmentOptions": {
+                                    "required": [
+                                        "largeFormat"
+                                    ],
+                                    "properties": {
+                                        "largeFormat": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "physicalProperties": {
+                            "properties": {
+                                "weight": {
+                                    "maximum": 30000
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "physicalProperties": {
+                            "properties": {
+                                "weight": {
+                                    "type": "integer",
+                                    "maximum": 20000
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "note": "Do not put weight here, it will take precedence over any (deeper) allOf / anyOf statement"
+                }
+            }
+        },
+        "deliveryOptions": {
+            "properties": {
+                "shipmentOptions": {
+                    "properties": {
+                        "labelDescription": {
+                            "maxLength": 45
+                        },
+                        "signature": {
+                            "enum": [
+                                true
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
