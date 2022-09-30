@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Helper\Docs;
 
 use MyParcelNL\Pdk\Helper\Php\PhpHelperGenerator;
+use MyParcelNL\Pdk\Helper\Shared\PhpDoc;
 use MyParcelNL\Sdk\src\Support\Arr;
 use Reflection;
 use ReflectionClass;
@@ -185,11 +186,16 @@ class DocGenerator extends PhpHelperGenerator
                 )
                 : 'void';
 
-            $parameters       = $this->getMethodParameters($method);
-            $parsedDocComment = $this->parseDocComment($method);
+            //            $parameters      = $this->getMethodParameters($method);
+
+            $doc       = new PhpDoc($method);
+            $parentDoc = $parentMethod ? new PhpDoc($parentMethod) : null;
+
+            $parsedDoc       = $this->parseDocComment($method);
+            $parsedParentDoc = $parentMethod ? $this->parseDocComment($parentMethod) : null;
 
             $parameterTable = $method->getNumberOfParameters() ? $this->toMarkdownTable(['Name', 'Type', 'Description'],
-                array_map(function (ReflectionParameter $parameter) use ($parsedDocComment) {
+                array_map(function (ReflectionParameter $parameter) use ($parsedDoc) {
                     return [
                         $parameter->getName(),
                         $parameter->getType() ? $this->getLinkToClass(
@@ -198,7 +204,7 @@ class DocGenerator extends PhpHelperGenerator
                         ) : 'mixed',
                         implode(
                             ', ',
-                            Arr::first($parsedDocComment, static function (array $item) use ($parameter) {
+                            Arr::first($parsedDoc, static function (array $item) use ($parameter) {
                                 return 'param' === $item['param'] && $item['name'] === $parameter->getName();
                             })['types'] ?? []
                         ),
@@ -219,22 +225,32 @@ class DocGenerator extends PhpHelperGenerator
                 ),
             ] : [];
 
+            $sourceLink = sprintf(
+                'https://github.com/myparcelnl/pdk/blob/main/src/%s.php#L%s-L%s',
+                strtr($currentClass->getName(), [
+                    'MyParcelNL\\Pdk\\' => '',
+                    '\\'                => '/',
+                ]),
+                $method->getStartLine(),
+                $method->getEndLine()
+            );
+
             $methodsList .= implode(
                     str_repeat(PHP_EOL, 2),
                     array_filter(
-                        array_merge(
-                            [
-                                PHP_EOL . "##### $name",
-                                $this->extractDescriptionFromPhpDocComment($docComment ?: $parentDocComment ?: ''),
-                                '**Implementation**',
-                                $methodStr,
-                                //                                'Returns ' . $returnType,
-
-                                //                    '**Parameters:** ' . implode(PHP_EOL, $parameters),
-                                //                    $parameterTable,
-                            ],
-                            [] // $parameterList
-                        )
+                        [
+                            PHP_EOL . "##### $name",
+                            '**Source:** ' . $this->createLink(
+                                $currentClass->getName() . '::' . $method->getName(),
+                                $sourceLink
+                            ),
+                            $parsedDoc['description'] ?? $parsedParentDoc['description'] ?? '',
+                            '**Parameters**',
+                            $parameterTable,
+                            '**Return type:** ' . $returnType,
+                            '**Implementation**',
+                            $methodStr,
+                        ]
                     )
                 ) . PHP_EOL;
         }
@@ -281,35 +297,11 @@ class DocGenerator extends PhpHelperGenerator
     }
 
     /**
-     * @param  string $docComment
-     *
-     * @return string
-     */
-    protected function extractDescriptionFromPhpDocComment(string $docComment): string
-    {
-        $descriptionLines = [];
-
-        $lines = explode("\n", $docComment);
-
-        foreach ($lines as $line) {
-            $trimmedLine = trim($line, " \t/*");
-
-            if (! $trimmedLine || 0 === strpos($trimmedLine, '@')) {
-                continue;
-            }
-
-            $descriptionLines[] = $trimmedLine;
-        }
-
-        return implode(' ', $descriptionLines);
-    }
-
-    /**
      * @return string
      */
     protected function getFileName(): string
     {
-        return BASE_DIR . '/docs/:file.md';
+        return BASE_DIR . '/types/docs/:file.md';
     }
 
     /**
@@ -411,6 +403,10 @@ class DocGenerator extends PhpHelperGenerator
         return implode("\r", $lines);
     }
 
+    /**
+     * @return void
+     * @throws \ReflectionException
+     */
     protected function write(): void
     {
         foreach ($this->data as $data) {
@@ -429,14 +425,28 @@ class DocGenerator extends PhpHelperGenerator
                 array_map(function (array $property) {
                     $typesArray = array_map(function (string $type) {
                         return $this->getLinkToClass($type);
-                    }, $property['types']);
+                    }, $property['types'] ?? []);
 
                     $types = implode(' ', $typesArray);
 
                     return [$property['name'], $types];
-                }, $properties));
+                },
+                    array_filter($properties, static function (array $property) {
+                        return 'property' === $property['param'];
+                    })));
 
-            $parent       = $ref->getParentClass();
+            $parent = $ref->getParentClass();
+
+            $parsedDoc       = $this->parseDocComment($ref);
+            $parsedParentDoc = $parent ? $this->parseDocComment($parent) : [];
+
+            $description = array_filter(
+                               array_merge($parsedDoc, $parsedParentDoc),
+                               static function ($value) {
+                                   return 'description' === ($value['param'] ?? null);
+                               }
+                           )[0]['description'] ?? null;
+
             $parentString = $parent ? sprintf("\n**🔺Extends %s**", $this->getLinkToClass($parent->getName())) : '';
 
             $propertiesString = count($properties) > 0 ? sprintf("\n#### Properties\n\n%s", $propertiesList) : '';
@@ -453,6 +463,18 @@ class DocGenerator extends PhpHelperGenerator
             sort($this->fileLinks);
             $linksString = count($this->fileLinks) > 0 ? sprintf("\n%s", implode("\n", $this->fileLinks)) : '';
 
+            $content = implode(
+                "\n",
+                array_filter([
+                    $description,
+                    $parentString,
+                    $propertiesString,
+                    $methodsString,
+                    $inheritedMethodsString,
+                    $linksString,
+                ])
+            );
+
             fwrite(
                 $handle,
                 <<<EOF
@@ -463,11 +485,8 @@ editLink: false
 ---
 
 ### {$ref->getShortName()}
-$parentString
-$propertiesString
-$methodsString
-$inheritedMethodsString
-$linksString
+
+$content
 
 EOF
             );

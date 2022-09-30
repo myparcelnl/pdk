@@ -32,7 +32,7 @@ class PhpHelperGenerator extends AbstractHelperGenerator
 
         foreach ($properties as $property) {
             $baseProperty       = $property['name'];
-            $types              = $property['types'];
+            $types              = $property['types'] ?? [];
             $typeHint           = $this->getTypeHint($types);
             $fqClassNamesString = implode('|', $types);
 

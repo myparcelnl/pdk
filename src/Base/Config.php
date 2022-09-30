@@ -13,24 +13,22 @@ class Config implements ConfigInterface
     private static $cache = [];
 
     /**
+     * Get a key from the config. Separate by forward slashes to traverse directories and files, and separate by dots
+     * to select specific values in the resolved file. Example: Config::get('')
+     *
+     * @example Config::get('platform/myparcel.human'); // MyParcel
+     *
      * @param  string $key
      *
      * @return mixed
      */
     public function get(string $key)
     {
-        $pathParts = [];
-
-        if (Str::contains($key, '.')) {
-            $pathParts = explode('.', $key);
-            $filename  = $pathParts[0];
-        } else {
-            $filename = $key;
-        }
+        [$pathParts, $filename] = $this->parseKey($key);
 
         $data = $this->getConfigFile($filename);
 
-        if (count($pathParts)) {
+        if ($pathParts && count($pathParts)) {
             array_shift($pathParts);
             return Arr::get($data, implode('.', $pathParts));
         }
@@ -44,6 +42,23 @@ class Config implements ConfigInterface
     public function getConfigDir(): string
     {
         return sprintf('%s/../../config', __DIR__);
+    }
+
+    /**
+     * @param  string $key
+     *
+     * @return array
+     */
+    protected function parseKey(string $key): array
+    {
+        if (Str::contains($key, '.')) {
+            $pathParts = explode('.', $key);
+            $filename  = $pathParts[0];
+
+            return [$pathParts, $filename];
+        }
+
+        return [null, $key];
     }
 
     /**

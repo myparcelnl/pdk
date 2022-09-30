@@ -64,6 +64,30 @@ abstract class AbstractHelperGenerator
     }
 
     /**
+     * @param  string $docComment
+     *
+     * @return string
+     */
+    protected function extractDescriptionFromPhpDocComment(string $docComment): string
+    {
+        $descriptionLines = [];
+
+        $lines = explode("\n", $docComment);
+
+        foreach ($lines as $line) {
+            $trimmedLine = trim($line, " \t/*");
+
+            if (! $trimmedLine || 0 === strpos($trimmedLine, '@')) {
+                continue;
+            }
+
+            $descriptionLines[] = $trimmedLine;
+        }
+
+        return implode(' ', $descriptionLines);
+    }
+
+    /**
      * @return resource
      */
     protected function getFileHandle()
@@ -145,30 +169,64 @@ abstract class AbstractHelperGenerator
             return [];
         }
 
-        $pattern = "#@([a-zA-Z]+)\s+([|\[\]<>{}:,\w\s\\\]*?)\s+(\\$\w+)#";
-        preg_match_all($pattern, $comment, $matches);
+        preg_match_all('#@(\w+)(?:\s+(.+))?#', $comment, $matchingTags);
 
-        $i     = 0;
+        $i = 0;
+
         $array = [];
 
-        foreach ($matches[3] as $property) {
-            $baseProperty = str_replace('$', '', $property);
+        $description = $this->extractDescriptionFromPhpDocComment($comment);
 
-            $types        = explode('|', $matches[2][$i]);
-            $fqClassNames = $this->getFullyQualifiedClassNames(
-                $reflection->getNamespaceName(),
-                $types,
-                $uses[1]
-            );
+        if ($description) {
+            $array[] = [
+                'param'       => 'description',
+                'name'        => 'description',
+                'description' => $description,
+            ];
+        }
+
+        foreach (array_filter($matchingTags[0]) as $tag) {
+            $type = $matchingTags[1][$i] ?? null;
+
+            if (in_array($type, ['param', 'type', 'property', 'var', 'return'])) {
+                $value = $matchingTags[2][$i] ?? null;
+                preg_match_all(
+                    '/(?:(?P<type>[|\[\]<>{}:,\w\s\\\]*?)\s+)?(?P<property>\$\w+)(?:\s+(?P<description>.+))?/',
+                    $value,
+                    $matches
+                );
+
+                $baseProperty = str_replace('$', '', $matches['property'][0] ?? '');
+
+                $fqClassNames = $this->getFullyQualifiedClassNames(
+                    $reflection->getNamespaceName(),
+                    explode('|', $matches['type'][0] ?? ''),
+                    $uses[1]
+                );
+
+                $array[] = [
+                    'param'       => $type,
+                    'name'        => $baseProperty,
+                    'types'       => $fqClassNames,
+                    'description' => $matches['description'][0] ?? null,
+                ];
+
+                $i++;
+                continue;
+            }
 
             $array[] = [
-                'param' => $matches[1][$i],
-                'name'  => $baseProperty,
-                'types' => $fqClassNames,
+                'param'       => $type,
+                'name'        => $type,
+                'types'       => [],
+                'description' => $matchingTags[2][$i] ?? null,
             ];
 
             $i++;
         }
+
+        $pattern = "#@([a-zA-Z]+)\s+(?:([|\[\]<>{}:,\w\s\\\]*?)\s+)?(\\$\w+)(?:\s+(.+))?#";
+        preg_match_all($pattern, $comment, $matchingTags);
 
         return $array;
     }

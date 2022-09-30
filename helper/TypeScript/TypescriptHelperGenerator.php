@@ -141,11 +141,9 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
                 }
 
                 $baseProperty = $property['name'];
-                $types        = $property['types'];
-
-                $tsTypes = array_map(function ($string) {
+                $tsTypes      = array_map(function ($string) {
                     return $this->getTsType($string);
-                }, $types);
+                }, $property['types'] ?? []);
 
                 sort($tsTypes);
 
