@@ -8,9 +8,9 @@ namespace MyParcelNL\Pdk\Helper\TypeScript;
 use ArrayIterator;
 use DateTime;
 use DateTimeImmutable;
+use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -98,8 +98,8 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
     protected function write(): void
     {
         fwrite(
-            $this->getHandle(),
-            "// @ts-nocheck\n/* eslint-disable */\n// noinspection JSUnusedGlobalSymbols\n\nexport namespace MyParcelPdk {"
+            $this->getFileHandle(),
+            "// eslint-disable-next-line @typescript-eslint/ban-ts-comment\n// @ts-nocheck\n/* eslint-disable */\n// noinspection JSUnusedGlobalSymbols\n\nexport namespace MyParcelPdk {"
         );
         $spaces = str_repeat(' ', self::SPACES_AMOUNT);
 
@@ -108,6 +108,12 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
             $reflectionClass = $data['reflectionClass'];
             $properties      = $data['properties'];
             $parents         = $data['parents'];
+
+            $isFacade = in_array(Facade::class, $parents, true);
+
+            if ($isFacade || $reflectionClass->isInterface() || $reflectionClass->isTrait()) {
+                continue;
+            }
 
             $isCollection = in_array(Collection::class, $parents, true);
             $isModel      = in_array(Model::class, $parents, true);
@@ -170,19 +176,51 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
                 $value    = sprintf('= %s%s%s[];', $multiple ? '(' : '', implode(' | ', $data), $multiple ? ')' : '');
             }
 
+            $extends = 'interface' === $type && $reflectionClass->getParentClass()
+                ? sprintf(
+                    ' extends %s',
+                    $this->getClassName(
+                        $reflectionClass->getParentClass()
+                            ->getName()
+                    )
+                ) : '';
+
             fwrite(
-                $this->getHandle(),
+                $this->getFileHandle(),
                 sprintf(
-                    "\n%sexport %s %s %s\n",
+                    "\n%sexport %s %s%s %s\n",
                     $spaces,
                     $type,
-                    Utils::classBasename($reflectionClass->getName()),
+                    $this->getClassName($reflectionClass->getName()),
+                    $extends,
                     $value
                 )
             );
         }
 
-        fwrite($this->getHandle(), "}\n");
+        fwrite($this->getFileHandle(), "}\n");
+    }
+
+    /**
+     * @param  string $class
+     *
+     * @return string
+     */
+    private function getClassName(string $class): string
+    {
+        $parts = explode('\\', ltrim($class, '\\'));
+
+        if (count($parts) > 2) {
+            $parts = array_slice($parts, 2);
+
+            $kebab = Str::kebab(Arr::last($parts));
+
+            if ($parts[1] === ucfirst(Arr::last(explode('-', $kebab)))) {
+                unset($parts[1]);
+            }
+        }
+
+        return implode('', $parts);
     }
 
     /**
@@ -197,7 +235,7 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
             $base   = $string;
 
             if (Str::startsWith($string, '\\')) {
-                $base   = Utils::classBasename($string);
+                $base   = $this->getClassName($string);
                 $result = $base;
             }
 

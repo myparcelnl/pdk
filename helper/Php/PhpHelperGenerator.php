@@ -9,50 +9,11 @@ use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
 use MyParcelNL\Sdk\src\Support\Str;
 
-final class PhpHelperGenerator extends AbstractHelperGenerator
+class PhpHelperGenerator extends AbstractHelperGenerator
 {
     protected function getFileName(): string
     {
         return BASE_DIR . '/types/pdk_ide_helper.php';
-    }
-
-    /**
-     * @return void
-     * @throws \ReflectionException
-     */
-    protected function write(): void
-    {
-        fwrite($this->getHandle(), '<?php /** @noinspection ALL */' . str_repeat(PHP_EOL, 2));
-
-        foreach ($this->data as $data) {
-            $ref        = $data['reflectionClass'];
-            $properties = $data['properties'];
-            $parents    = $data['parents'];
-
-            [$modelGetters, $modelSetters, $modelProperties] = $this->getModelProperties($parents, $properties);
-
-            $propertyList = sprintf(
-                ' * %s',
-                implode(
-                    PHP_EOL . ' * ',
-                    array_merge($modelProperties, $modelGetters, $modelSetters)
-                )
-            );
-
-            fwrite(
-                $this->getHandle(),
-                <<<EOF
-
-namespace {$ref->getNamespaceName()};
-
-/**
-$propertyList
- */
-class {$ref->getShortName()} { }
-
-EOF
-            );
-        }
     }
 
     /**
@@ -61,7 +22,7 @@ EOF
      *
      * @return array[]
      */
-    private function getModelProperties(array $parents, array $properties): array
+    protected function getModelProperties(array $parents, array $properties): array
     {
         $isCollection = in_array(Collection::class, $parents, true);
 
@@ -106,7 +67,7 @@ EOF
      *
      * @return string
      */
-    private function getTypeHint($types): string
+    protected function getTypeHint($types): string
     {
         $singleType = '';
 
@@ -138,5 +99,44 @@ EOF
         }
 
         return "$types[0] ";
+    }
+
+    /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function write(): void
+    {
+        fwrite($this->getFileHandle(), '<?php /** @noinspection ALL */' . str_repeat(PHP_EOL, 2));
+
+        foreach ($this->data as $data) {
+            $ref        = $data['reflectionClass'];
+            $properties = $data['properties'];
+            $parents    = $data['parents'];
+
+            [$modelGetters, $modelSetters, $modelProperties] = $this->getModelProperties($parents, $properties);
+
+            $propertyList = sprintf(
+                ' * %s',
+                implode(
+                    PHP_EOL . ' * ',
+                    array_merge($modelProperties, $modelGetters, $modelSetters)
+                )
+            );
+
+            fwrite(
+                $this->getFileHandle(),
+                <<<EOF
+
+namespace {$ref->getNamespaceName()};
+
+/**
+$propertyList
+ */
+class {$ref->getShortName()} { }
+
+EOF
+            );
+        }
     }
 }

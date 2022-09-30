@@ -66,7 +66,7 @@ abstract class AbstractHelperGenerator
     /**
      * @return resource
      */
-    public function getHandle()
+    protected function getFileHandle()
     {
         if (! $this->handle) {
             $outputFile = $this->getFileName();

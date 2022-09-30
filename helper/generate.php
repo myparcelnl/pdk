@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Helper\Docs\DocGenerator;
 use MyParcelNL\Pdk\Helper\Php\PhpHelperGenerator;
 use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
 use MyParcelNL\Pdk\Helper\TypeScript\TypescriptHelperGenerator;
@@ -13,6 +14,7 @@ require_once BASE_DIR . '/vendor/autoload.php';
 
 /** @var AbstractHelperGenerator[] $generators */
 $generators = [
+    new DocGenerator(),
     new PhpHelperGenerator(),
     new TypescriptHelperGenerator(),
 ];
