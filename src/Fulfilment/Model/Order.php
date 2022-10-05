@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 
 /**
  * Order for use with fulfilment API.
@@ -22,7 +22,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|\MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
  * @property null|int                                                       $price
  * @property null|int                                                       $priceAfterVat
- * @property null|\MyParcelNL\Pdk\Shipment\Model\Shipment                   $shipment
+ * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection    $shipments
  * @property null|int                                                       $shopId
  * @property null|string                                                    $status
  * @property null|string                                                    $type
@@ -43,7 +43,7 @@ class Order extends Model
         'orderLines'                  => null,
         'price'                       => null,
         'priceAfterVat'               => null,
-        'shipment'                    => null,
+        'shipments'                   => ShipmentCollection::class,
         'shopId'                      => null,
         'status'                      => null,
         'type'                        => null,
@@ -63,7 +63,7 @@ class Order extends Model
         'orderLines'                  => OrderLineCollection::class,
         'price'                       => 'int',
         'priceAfterVat'               => 'int',
-        'shipment'                    => Shipment::class,
+        'shipments'                   => ShipmentCollection::class,
         'shopId'                      => 'int',
         'status'                      => 'string',
         'type'                        => 'string',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
+use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 trait HasEncodesShipment
@@ -17,21 +18,52 @@ trait HasEncodesShipment
     protected function encodeShipment(Shipment $shipment): array
     {
         return [
-            'carrier'              => $shipment->carrier->id,
-            'customs_declaration'  => $shipment->customsDeclaration
-                ? array_filter($shipment->customsDeclaration->toSnakeCaseArray())
-                : null,
-            'drop_off_point'       => $this->encodeDropOffPoint($shipment),
-            'options'              => $this->encodeOptions($shipment),
-            'physical_properties'  => $shipment->physicalProperties
-                ? ['weight' => $this->getWeight($shipment)]
-                : null,
-            'pickup'               => $shipment->deliveryOptions->pickupLocation
-                ? ['location_code' => $shipment->deliveryOptions->pickupLocation->locationCode]
-                : null,
-            'recipient'            => array_filter($shipment->recipient->toSnakeCaseArray()),
-            'reference_identifier' => $shipment->referenceIdentifier,
-            'status'               => $shipment->status,
+                'carrier'              => $shipment->carrier->id,
+                'customs_declaration'  => $shipment->customsDeclaration
+                    ? array_filter($shipment->customsDeclaration->toSnakeCaseArray())
+                    : null,
+                'drop_off_point'       => $this->encodeDropOffPoint($shipment),
+                'options'              => $this->encodeOptions($shipment),
+                'physical_properties'  => $shipment->physicalProperties
+                    ? ['weight' => $this->getWeight($shipment)]
+                    : null,
+                'recipient'            => array_filter($shipment->recipient->toSnakeCaseArray()),
+                'reference_identifier' => $shipment->referenceIdentifier,
+                'status'               => $shipment->status,
+            ] + $pickup;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function encodeShipmentCollection(ShipmentCollection $collection): array
+    {
+        $result = [];
+        foreach ($collection as $shipment) {
+            $result[] = $this->encodeShipment($shipment);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return array|string[]
+     */
+    protected function verifyPickup(Shipment $shipment): array
+    {
+        if (empty($shipment->deliveryOptions->pickupLocation)) {
+            return [''];
+        }
+
+        return [
+            'pickup' => [
+                'location_code' => $shipment->deliveryOptions->pickupLocation->locationCode,
+            ],
         ];
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -43,6 +44,20 @@ class PdkOrderCollection extends Collection
             $acc->push(...$order->shipments);
             return $acc;
         }, new ShipmentCollection());
+    }
+
+    /**
+     * @return void
+     */
+    public function getOrderCollection(): OrderCollection
+    {
+        $orderCollection = new OrderCollection();
+        $this->generateShipments();
+        $this->each(function (PdkOrder $pdkOrder) use ($orderCollection) {
+            $orderCollection->push($pdkOrder->convertToFulfilmentOrder());
+        });
+
+        return $orderCollection;
     }
 
     /**

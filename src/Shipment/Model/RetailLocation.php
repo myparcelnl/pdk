@@ -27,7 +27,7 @@ class RetailLocation extends Address
      */
     public function __construct(?array $data = [])
     {
-        $this->attributes['locationCode']    = null;
+        $this->attributes['locationCode']    = '';
         $this->attributes['locationName']    = null;
         $this->attributes['retailNetworkId'] = null;
 

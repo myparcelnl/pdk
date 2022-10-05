@@ -72,7 +72,7 @@ class PostOrdersRequest extends Request
             'order_date'                    => $order->orderDate,
             'invoice_address'               => $order->invoiceAddress,
             'order_lines'                   => $order->orderLines->toArrayWithoutNull(),
-            'shipment'                      => $this->encodeShipment($order->shipment),
+            'shipments'                     => $this->encodeShipmentCollection($order->shipments),
         ];
     }
 }

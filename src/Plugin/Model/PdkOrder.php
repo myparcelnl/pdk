@@ -6,6 +6,8 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -84,6 +86,53 @@ class PdkOrder extends Model
         $this->updateOrderTotals();
     }
 
+    public function convertToFulfilmentOrder(): Order
+    {
+        return new Order([
+            //            'accountId'                   => null,
+            //            'createdAt'                   => null,
+            'externalIdentifier' => $this->externalIdentifier,
+            //            'fulfilmentPartnerIdentifier' => null,
+            //            'invoiceAddress'              => null,
+            //            'language'                    => null,
+            //            'orderDate'                   => null,
+            'orderLines'         => $this->lines,
+            //            'price'                       => null,
+            //            'priceAfterVat'               => null,
+            'shipments'          => $this->shipments,
+            //            'shopId'                      => null,
+            //            'status'                      => null,
+            //            'type'                        => null,
+            //            'updatedAt'                   => null,
+            //            'uuid'                        => null,
+            //            'vat'                         => null,
+        ]);
+    }
+
+    /**
+     * @param  array $data
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
+     * @throws \Exception
+     */
+    public function createShipment(array $data = []): Shipment
+    {
+        $this->shipments->push(
+            array_replace_recursive(
+                [
+                    'carrier'         => new CarrierOptions(['name' => $this->deliveryOptions->getCarrier()]),
+                    'deliveryOptions' => $this->deliveryOptions,
+                    'recipient'       => $this->recipient,
+                    'sender'          => $this->sender,
+                ],
+                $data,
+                ['orderId' => $this->externalIdentifier]
+            )
+        );
+
+        return $this->shipments->last();
+    }
+
     public function updateOrderTotals(): void
     {
         $price         = 0;
@@ -102,28 +151,6 @@ class PdkOrder extends Model
         $this->attributes['totalPrice']         = $price + $this->shipmentPrice;
         $this->attributes['totalPriceAfterVat'] = $priceAfterVat + $this->shipmentPriceAfterVat;
         $this->attributes['totalVat']           = $vat + $this->shipmentVat;
-    }
-
-    /**
-     * @param  array $data
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
-     */
-    public function createShipment(array $data = []): Shipment
-    {
-        $this->shipments->push(
-            array_replace_recursive(
-                [
-                    'deliveryOptions' => $this->deliveryOptions,
-                    'recipient'       => $this->recipient,
-                    'sender'          => $this->sender,
-                ],
-                $data,
-                ['orderId' => $this->externalIdentifier]
-            )
-        );
-
-        return $this->shipments->last();
     }
 
     /**
