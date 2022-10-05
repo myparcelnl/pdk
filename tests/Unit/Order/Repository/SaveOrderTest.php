@@ -235,12 +235,12 @@ it('creates a valid order collection from api data', function (array $input, arr
                     ],
                 ],
                 'price'          => 260,
-                'shipment'       => [
-                    'apiKey'             => '123',
-                    'carrier'            => [
+                'shipments' => [
+                    'apiKey'          => '123',
+                    'carrier'         => [
                         'id' => CarrierOptions::CARRIER_POSTNL_ID,
                     ],
-                    'deliveryOptions'    => [
+                    'deliveryOptions' => [
                         'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,

@@ -30,6 +30,7 @@ class PostOrdersRequest extends Request
 
     /**
      * @return null|string
+     * @throws \JsonException
      */
     public function getBody(): string
     {
@@ -39,7 +40,7 @@ class PostOrdersRequest extends Request
                     return $this->encodeOrder($order);
                 }),
             ],
-        ]);
+        ], JSON_THROW_ON_ERROR);
     }
 
     /**

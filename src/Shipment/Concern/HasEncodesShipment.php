@@ -54,19 +54,19 @@ trait HasEncodesShipment
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
-     * @return array|string[]
+     * @return null|array[]
      */
-    protected function verifyPickup(Shipment $shipment): array
+    protected function verifyPickup(Shipment $shipment): ?array
     {
-        if (empty($shipment->deliveryOptions->pickupLocation)) {
-            return [''];
+        if (! empty($shipment->deliveryOptions->pickupLocation)) {
+            return [
+                'pickup' => [
+                    'location_code' => $shipment->deliveryOptions->pickupLocation->locationCode,
+                ],
+            ];
         }
 
-        return [
-            'pickup' => [
-                'location_code' => $shipment->deliveryOptions->pickupLocation->locationCode,
-            ],
-        ];
+        return [];
     }
 
     /**
