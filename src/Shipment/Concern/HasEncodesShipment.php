@@ -17,6 +17,8 @@ trait HasEncodesShipment
      */
     protected function encodeShipment(Shipment $shipment): array
     {
+        $pickup = $this->verifyPickup($shipment);
+
         return [
                 'carrier'              => $shipment->carrier->id,
                 'customs_declaration'  => $shipment->customsDeclaration
