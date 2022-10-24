@@ -18,9 +18,23 @@ class PdkOrderCollection extends Collection
     protected $cast = PdkOrder::class;
 
     /**
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \Exception
+     */
+    public function generateReturnShipments(): ShipmentCollection
+    {
+        $this->each(function (PdkOrder $order) {
+            $order->createShipment([
+                'parent' => $order->id,
+            ]);
+        });
+    }
+
+    /**
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \Exception
      */
     public function generateShipments(array $data = []): ShipmentCollection
     {
@@ -47,7 +61,8 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @return void
+     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
+     * @throws \Exception
      */
     public function getOrderCollection(): OrderCollection
     {
