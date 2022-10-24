@@ -34,6 +34,8 @@ class PdkOrder extends Model
     protected $attributes = [
         /** Plugin order id */
         'externalIdentifier'    => null,
+        'orderDate'             => null,
+        'language'              => null,
         'customsDeclaration'    => CustomsDeclaration::class,
         'deliveryOptions'       => DeliveryOptions::class,
         'lines'                 => PdkOrderLineCollection::class,
@@ -56,6 +58,8 @@ class PdkOrder extends Model
 
     protected $casts      = [
         'externalIdentifier'    => 'string',
+        'orderDate'             => 'string',
+        'language'              => 'string',
         'customsDeclaration'    => CustomsDeclaration::class,
         'deliveryOptions'       => DeliveryOptions::class,
         'lines'                 => PdkOrderLineCollection::class,
