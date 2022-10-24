@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -62,17 +63,39 @@ class PdkOrderCollection extends Collection
 
     /**
      * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     * @throws \Exception
      */
     public function getOrderCollection(): OrderCollection
     {
-        $orderCollection = new OrderCollection();
-        $this->generateShipments();
-        $this->each(function (PdkOrder $pdkOrder) use ($orderCollection) {
-            $orderCollection->push($pdkOrder->convertToFulfilmentOrder());
+        $fulfilmentCollection = new OrderCollection();
+
+        /** @var PdkOrder $pdkOrder */
+        $this->each(function ($pdkOrder) use ($fulfilmentCollection) {
+            $fulfilmentOrder = new Order([
+                // TODO: AccountId from AccountRepository -> getAccount()
+                'accountId'                   => 12512,
+                'createdAt'                   => $pdkOrder->orderDate,
+                'externalIdentifier'          => $pdkOrder->externalIdentifier,
+                'language'                    => $pdkOrder->language,
+                'fulfilmentPartnerIdentifier' => null,
+                'invoiceAddress'              => $pdkOrder->recipient,
+                'orderDate'                   => $pdkOrder->orderDate,
+                'orderLines'                  => $pdkOrder->lines,
+                'price'                       => $pdkOrder->orderPrice,
+                'priceAfterVat'               => $pdkOrder->orderPriceAfterVat,
+                'shipments'                   => $pdkOrder->shipments,
+                // TODO: ShopId from ShopRepoistory -> getShop()
+                'shopId'                      => 251,
+                'status'                      => 2,
+                'type'                        => null,
+                'updatedAt'                   => null,
+                'uuid'                        => null,
+                'vat'                         => $pdkOrder->totalVat,
+            ]);
+
+            $fulfilmentCollection->push($fulfilmentOrder);
         });
 
-        return $orderCollection;
+        return $fulfilmentCollection;
     }
 
     /**
