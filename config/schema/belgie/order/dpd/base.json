@@ -1,6 +1,6 @@
 {
     "description": "belgie/order/dpd/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
         {
             "anyOf": [

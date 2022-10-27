@@ -1,6 +1,6 @@
 {
     "description": "/order",
-    "type": "array",
+    "type": "object",
     "additionalItems": false,
     "required": [
         "deliveryOptions",
@@ -9,7 +9,7 @@
     ],
     "properties": {
         "recipient": {
-            "type": "array",
+            "type": "object",
             "required": [
                 "cc"
             ],
@@ -21,7 +21,7 @@
             }
         },
         "deliveryOptions": {
-            "type": "array",
+            "type": "object",
             "additionalProperties": false,
             "properties": {
                 "carrier": {
@@ -51,7 +51,7 @@
                 },
                 "pickupLocation": {
                     "type": [
-                        "array",
+                        "object",
                         "null"
                     ],
                     "additionalProperties": false,
@@ -93,13 +93,11 @@
                         },
                         "cc": {
                             "type": "string",
-                            "maxLength": 2,
-                            "minLength": 2,
                             "pattern": "^[A-z]{2}$"
                         },
                         "locationCode": {
                             "type": "string",
-                            "minLength": 2
+                            "minLength": 1
                         },
                         "retailNetworkId": {
                             "type": "string"
@@ -107,7 +105,7 @@
                     }
                 },
                 "shipmentOptions": {
-                    "type": "array",
+                    "type": "object",
                     "additionalProperties": false,
                     "properties": {
                         "ageCheck": {

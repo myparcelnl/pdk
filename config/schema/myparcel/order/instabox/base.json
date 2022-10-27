@@ -1,59 +1,7 @@
 {
     "description": "myparcel/order/instabox/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
-        {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "required": [
-                                        "ageCheck"
-                                    ],
-                                    "properties": {
-                                        "ageCheck": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        },
-                                        "onlyRecipient": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        },
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "ageCheck": {
-                                            "enum": [
-                                                null,
-                                                false
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        },
         {
             "anyOf": [
                 {
@@ -106,17 +54,28 @@
                 }
             }
         },
+        "recipient": {
+            "properties": {
+                "cc": {
+                    "enum": [
+                        "NL"
+                    ]
+                }
+            }
+        },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        "pickup",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "labelDescription": {
                             "maxLength": 45
-                        },
-                        "signature": {
-                            "enum": [
-                                true
-                            ]
                         }
                     }
                 }

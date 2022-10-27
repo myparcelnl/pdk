@@ -1,14 +1,14 @@
 {
     "description": "myparcel/order/postnl/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
         {
             "anyOf": [
                 {
-                    "type": "array",
+                    "type": "object",
                     "properties": {
                         "deliveryOptions": {
-                            "type": "array",
+                            "type": "object",
                             "properties": {
                                 "shipmentOptions": {
                                     "required": [
@@ -37,10 +37,10 @@
                     }
                 },
                 {
-                    "type": "array",
+                    "type": "object",
                     "properties": {
                         "deliveryOptions": {
-                            "type": "array",
+                            "type": "object",
                             "properties": {
                                 "shipmentOptions": {
                                     "properties": {
@@ -92,7 +92,6 @@
                         "physicalProperties": {
                             "properties": {
                                 "weight": {
-                                    "type": "integer",
                                     "maximum": 23000
                                 }
                             }
@@ -153,6 +152,7 @@
                                     ]
                                 },
                                 "pickupLocation": {
+                                    "type": "object",
                                     "properties": {
                                         "locationCode": {
                                             "type": "string"
@@ -211,6 +211,15 @@
         },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        "morning",
+                        "evening",
+                        "pickup",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "labelDescription": {

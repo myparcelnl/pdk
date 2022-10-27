@@ -1,6 +1,6 @@
 {
     "description": "belgie/order/postnl/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
         {
             "anyOf": [
@@ -151,7 +151,7 @@
                                     ]
                                 },
                                 "pickupLocation": {
-                                    "type": "array",
+                                    "type": "object",
                                     "required": [
                                         "locationCode"
                                     ],

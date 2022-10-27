@@ -1,6 +1,6 @@
 {
     "description": "belgie/order/bpost/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
         {
             "anyOf": [

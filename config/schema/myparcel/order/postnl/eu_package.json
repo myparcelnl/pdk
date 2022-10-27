@@ -1,5 +1,11 @@
 {
     "properties": {
+        "deliveryType": {
+            "enum": [
+                "standard",
+                null
+            ]
+        },
         "physicalProperties": {
             "properties": {
                 "weight": {
@@ -10,6 +16,12 @@
         },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "insurance": {

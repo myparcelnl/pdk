@@ -1,20 +1,14 @@
 {
+    "description": "myparcel/order/instabox/nl_package",
     "properties": {
         "deliveryOptions": {
             "properties": {
-                "deliveryType": {
-                    "enum": [
-                        "standard",
-                        "pickup",
-                        null
-                    ]
-                },
                 "shipmentOptions": {
                     "properties": {
                         "insurance": {
                             "enum": [
                                 0,
-                                50000
+                                null
                             ]
                         }
                     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation;
 
+use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator as JsonSchemaValidator;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Facade\Config;
@@ -79,7 +80,7 @@ class OrderValidator
     public function validate(): bool
     {
         $validator = new JsonSchemaValidator();
-        $validator->validate($this->orderArray, $this->baseSchema);
+        $validator->validate($this->orderArray, $this->baseSchema, Constraint::CHECK_MODE_TYPE_CAST);
 
         $this->errors = $validator->getErrors();
 
@@ -114,8 +115,13 @@ class OrderValidator
      */
     private function mergeIntoSchema(string $attribute, string $column, $value): self
     {
-        $extras        = $this->additionalSchema[$attribute] ?? [];
-        $index         = array_search($value, array_column($extras, $column), true) ?: 0;
+        $extras = $this->additionalSchema[$attribute] ?? [];
+        $index  = array_search($value, array_column($extras, $column), true);
+
+        if (false === $index) {
+            return $this;
+        }
+
         $matchedExtras = $extras[$index];
         $platform      = Pdk::get('platform');
 

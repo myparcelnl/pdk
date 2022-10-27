@@ -109,7 +109,8 @@ it('returns correct schema', function ($input, $output) {
     $pdkOrder  = new PdkOrder($input);
     $validator = new OrderValidator($pdkOrder);
 
-    $val = $validator->getValidationSchema();
+    $val   = $validator->getValidationSchema();
+    $order = $pdkOrder->toArray(); //debug
 
     expect(Arr::dot($val))
         ->toBe($output);
@@ -128,16 +129,16 @@ it('returns correct schema', function ($input, $output) {
         ),
         'output' => [
             'description'                                                                                           => 'myparcel/order/postnl/nl_package',
-            'type'                                                                                                  => 'array',
+            'type'                                                                                                  => 'object',
             'additionalItems'                                                                                       => false,
             'required.0'                                                                                            => 'deliveryOptions',
             'required.1'                                                                                            => 'physicalProperties',
             'required.2'                                                                                            => 'recipient',
-            'properties.recipient.type'                                                                             => 'array',
+            'properties.recipient.type'                                                                             => 'object',
             'properties.recipient.required.0'                                                                       => 'cc',
             'properties.recipient.properties.cc.type'                                                               => 'string',
             'properties.recipient.properties.cc.pattern'                                                            => '^[A-z]{2}$',
-            'properties.deliveryOptions.type'                                                                       => 'array',
+            'properties.deliveryOptions.type'                                                                       => 'object',
             'properties.deliveryOptions.additionalProperties'                                                       => false,
             'properties.deliveryOptions.properties.carrier.type'                                                    => 'string',
             'properties.deliveryOptions.properties.date.type.0'                                                     => 'string',
@@ -145,10 +146,15 @@ it('returns correct schema', function ($input, $output) {
             'properties.deliveryOptions.properties.date.pattern'                                                    => '([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})',
             'properties.deliveryOptions.properties.deliveryType.type.0'                                             => 'string',
             'properties.deliveryOptions.properties.deliveryType.type.1'                                             => 'null',
+            'properties.deliveryOptions.properties.deliveryType.enum.0'                                             => 'standard',
+            'properties.deliveryOptions.properties.deliveryType.enum.1'                                             => 'morning',
+            'properties.deliveryOptions.properties.deliveryType.enum.2'                                             => 'evening',
+            'properties.deliveryOptions.properties.deliveryType.enum.3'                                             => 'pickup',
+            'properties.deliveryOptions.properties.deliveryType.enum.4'                                             => null,
             'properties.deliveryOptions.properties.labelAmount.type.0'                                              => 'integer',
             'properties.deliveryOptions.properties.labelAmount.type.1'                                              => 'null',
             'properties.deliveryOptions.properties.packageType.type'                                                => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.type.0'                                           => 'array',
+            'properties.deliveryOptions.properties.pickupLocation.type.0'                                           => 'object',
             'properties.deliveryOptions.properties.pickupLocation.type.1'                                           => 'null',
             'properties.deliveryOptions.properties.pickupLocation.additionalProperties'                             => false,
             'properties.deliveryOptions.properties.pickupLocation.properties.postalCode.type'                       => 'string',
@@ -168,13 +174,11 @@ it('returns correct schema', function ($input, $output) {
             'properties.deliveryOptions.properties.pickupLocation.properties.region.maxLength'                      => 35,
             'properties.deliveryOptions.properties.pickupLocation.properties.state.type'                            => 'string',
             'properties.deliveryOptions.properties.pickupLocation.properties.cc.type'                               => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.cc.maxLength'                          => 2,
-            'properties.deliveryOptions.properties.pickupLocation.properties.cc.minLength'                          => 2,
             'properties.deliveryOptions.properties.pickupLocation.properties.cc.pattern'                            => '^[A-z]{2}$',
             'properties.deliveryOptions.properties.pickupLocation.properties.locationCode.type'                     => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.locationCode.minLength'                => 2,
+            'properties.deliveryOptions.properties.pickupLocation.properties.locationCode.minLength'                => 1,
             'properties.deliveryOptions.properties.pickupLocation.properties.retailNetworkId.type'                  => 'string',
-            'properties.deliveryOptions.properties.shipmentOptions.type'                                            => 'array',
+            'properties.deliveryOptions.properties.shipmentOptions.type'                                            => 'object',
             'properties.deliveryOptions.properties.shipmentOptions.additionalProperties'                            => false,
             'properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.type.0'                      => 'boolean',
             'properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.type.1'                      => 'null',
@@ -209,20 +213,19 @@ it('returns correct schema', function ($input, $output) {
             'properties.deliveryOptions.properties.shipmentOptions.properties.signature.type.0'                     => 'boolean',
             'properties.deliveryOptions.properties.shipmentOptions.properties.signature.type.1'                     => 'null',
             'properties.physicalProperties.properties.weight.note'                                                  => 'Do not put weight here, it will take precedence over any (deeper) allOf / anyOf statement',
-            'allOf.0.anyOf.0.type'                                                                                  => 'array',
-            'allOf.0.anyOf.0.properties.deliveryOptions.type'                                                       => 'array',
+            'allOf.0.anyOf.0.type'                                                                                  => 'object',
+            'allOf.0.anyOf.0.properties.deliveryOptions.type'                                                       => 'object',
             'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.required.0'                      => 'ageCheck',
             'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.enum.0'      => true,
             'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.onlyRecipient.enum.0' => true,
             'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.signature.enum.0'     => true,
-            'allOf.0.anyOf.1.type'                                                                                  => 'array',
-            'allOf.0.anyOf.1.properties.deliveryOptions.type'                                                       => 'array',
+            'allOf.0.anyOf.1.type'                                                                                  => 'object',
+            'allOf.0.anyOf.1.properties.deliveryOptions.type'                                                       => 'object',
             'allOf.0.anyOf.1.properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.enum.0'      => null,
             'allOf.0.anyOf.1.properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.enum.1'      => false,
             'allOf.1.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.required.0'                      => 'largeFormat',
             'allOf.1.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.largeFormat.enum.0'   => true,
             'allOf.1.anyOf.0.properties.physicalProperties.properties.weight.maximum'                               => 30000,
-            'allOf.1.anyOf.1.properties.physicalProperties.properties.weight.type'                                  => 'integer',
             'allOf.1.anyOf.1.properties.physicalProperties.properties.weight.maximum'                               => 23000,
             'allOf.2.anyOf.0.properties.deliveryOptions.required.0'                                                 => 'deliveryType',
             'allOf.2.anyOf.0.properties.deliveryOptions.properties.deliveryType.enum.0'                             => 'standard',
@@ -233,6 +236,7 @@ it('returns correct schema', function ($input, $output) {
             'allOf.3.anyOf.0.properties.deliveryOptions.required.0'                                                 => 'deliveryType',
             'allOf.3.anyOf.0.properties.deliveryOptions.required.1'                                                 => 'pickupLocation',
             'allOf.3.anyOf.0.properties.deliveryOptions.properties.deliveryType.enum.0'                             => 'pickup',
+            'allOf.3.anyOf.0.properties.deliveryOptions.properties.pickupLocation.type'                             => 'object',
             'allOf.3.anyOf.0.properties.deliveryOptions.properties.pickupLocation.properties.locationCode.type'     => 'string',
             'allOf.3.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.onlyRecipient.enum.0' => false,
             'allOf.3.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.signature.enum.0'     => true,
@@ -256,15 +260,35 @@ it('validates order', function (array $input, array $errors = []) {
         ->and($isValid)
         ->toBe(empty($errors));
 })->with([
-        // TODO the validator does not validate against the date pattern here... why?
+        'instabox to France'                        => [
+            'input'  => arrayMergeOrder(
+                STANDARD_INPUT,
+                [
+                    'recipient'       => [
+                        'cc' => 'FR',
+                    ],
+                    'deliveryOptions' => [
+                        'carrier' => 'instabox',
+                    ],
+                ]
+            ),
+            'errors' => [
+                '0.property'   => 'recipient.cc',
+                '0.pointer'    => '/recipient/cc',
+                '0.message'    => 'Does not have a value in the enumeration ["NL"]',
+                '0.constraint' => 'enum',
+                '0.context'    => 1,
+                '0.enum.0'     => 'NL',
+            ],
+        ],
         'postnl non-standard delivery without date' => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
-                        'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                        'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
                         'date'            => null,
-                        'shipmentOptions' => ['signature' => true],
+                        'shipmentOptions' => ['signature' => true, 'only_recipient' => true],
                     ],
                 ]
             ),
@@ -281,6 +305,45 @@ it('validates order', function (array $input, array $errors = []) {
                 '1.message'    => 'NULL value found, but a string is required',
                 '1.constraint' => 'type',
                 '1.context'    => 1,
+                '2.property'   => '',
+                '2.pointer'    => '',
+                '2.message'    => 'Failed to match at least one schema',
+                '2.constraint' => 'anyOf',
+                '2.context'    => 1,
+                '3.property'   => '',
+                '3.pointer'    => '',
+                '3.message'    => 'Failed to match all schemas',
+                '3.constraint' => 'allOf',
+                '3.context'    => 1,
+            ],
+        ],
+        'pickup without pickupLocation'             => [
+            'input'  => arrayMergeOrder(
+                STANDARD_INPUT,
+                [
+                    'deliveryOptions' => [
+                        'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                        'shipmentOptions' => [
+                            'signature' => true,
+                        ],
+                    ],
+                ]
+            ),
+            'errors' => [
+                '0.property'   => 'deliveryOptions.pickupLocation',
+                '0.pointer'    => '/deliveryOptions/pickupLocation',
+                '0.message'    => 'NULL value found, but an object is required',
+                '0.constraint' => 'type',
+                '0.context'    => 1,
+                '1.property'   => 'deliveryOptions.deliveryType',
+                '1.pointer'    => '/deliveryOptions/deliveryType',
+                '1.message'    => 'Does not have a value in the enumeration ["morning","standard","evening",null]',
+                '1.constraint' => 'enum',
+                '1.context'    => 1,
+                '1.enum.0'     => 'morning',
+                '1.enum.1'     => 'standard',
+                '1.enum.2'     => 'evening',
+                '1.enum.3'     => null,
                 '2.property'   => '',
                 '2.pointer'    => '',
                 '2.message'    => 'Failed to match at least one schema',
@@ -508,16 +571,6 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.1'     => 'pickup',
                 '0.enum.2'     => null,
             ],
-        ],
-        'instabox'                                  => [
-            'input' => arrayMergeOrder(
-                STANDARD_INPUT,
-                [
-                    'deliveryOptions' => [
-                        'carrier' => 'instabox',
-                    ],
-                ]
-            ),
         ],
         'EU package without insurance'              => [
             'input'  => arrayMergeOrder(
