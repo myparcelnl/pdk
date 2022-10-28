@@ -30,63 +30,7 @@
                             "properties": {
                                 "date": {
                                     "type": "string",
-                                    "pattern": "^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$"
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "required": [
-                                "deliveryType",
-                                "pickupLocation"
-                            ],
-                            "properties": {
-                                "deliveryType": {
-                                    "enum": [
-                                        "pickup"
-                                    ]
-                                },
-                                "pickupLocation": {
-                                    "properties": {
-                                        "locationCode": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "onlyRecipient": {
-                                            "enum": [
-                                                false
-                                            ]
-                                        },
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "deliveryType": {
-                                    "enum": [
-                                        "standard",
-                                        null
-                                    ]
+                                    "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
                                 }
                             }
                         }
@@ -107,7 +51,7 @@
                                     "properties": {
                                         "insurance": {
                                             "enum": [
-                                                500
+                                                50000
                                             ]
                                         },
                                         "signature": {

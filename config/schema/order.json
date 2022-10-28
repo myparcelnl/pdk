@@ -8,6 +8,16 @@
         "recipient"
     ],
     "properties": {
+        "physicalProperties": {
+            "properties": {
+                "weight": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                }
+            }
+        },
         "recipient": {
             "type": "object",
             "required": [
@@ -32,7 +42,7 @@
                         "string",
                         "null"
                     ],
-                    "pattern": "([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})"
+                    "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
                 },
                 "deliveryType": {
                     "type": [

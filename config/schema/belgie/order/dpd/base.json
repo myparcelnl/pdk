@@ -20,21 +20,8 @@
                                 "pickupLocation": {
                                     "properties": {
                                         "locationCode": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "onlyRecipient": {
-                                            "enum": [
-                                                false
-                                            ]
-                                        },
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
+                                            "type": "string",
+                                            "minLength": 1
                                         }
                                     }
                                 }
@@ -68,12 +55,48 @@
                 }
             }
         },
+        "recipient": {
+            "properties": {
+                "cc": {
+                    "enum": [
+                        "NL",
+                        "BE",
+                        "FR",
+                        "BG",
+                        "DK",
+                        "DE",
+                        "EE",
+                        "FI",
+                        "GR",
+                        "HU",
+                        "IT",
+                        "LV",
+                        "LT",
+                        "LU",
+                        "AT",
+                        "PL",
+                        "PT",
+                        "RO",
+                        "SI",
+                        "SK",
+                        "ES",
+                        "CZ",
+                        "SE"
+                    ]
+                }
+            }
+        },
         "deliveryOptions": {
             "properties": {
                 "shipmentOptions": {
                     "properties": {
                         "labelDescription": {
                             "maxLength": 45
+                        },
+                        "insurance": {
+                            "enum": [
+                                52000
+                            ]
                         },
                         "sameDayDelivery": {
                             "enum": [
