@@ -15,12 +15,12 @@
                                 50000
                             ]
                         },
-                        "signature": {
+                        "onlyRecipient": {
                             "enum": [
                                 false
                             ]
                         },
-                        "onlyRecipient": {
+                        "signature": {
                             "enum": [
                                 false
                             ]

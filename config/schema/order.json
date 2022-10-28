@@ -3,9 +3,9 @@
     "type": "object",
     "additionalItems": false,
     "required": [
-        "deliveryOptions",
         "physicalProperties",
-        "recipient"
+        "recipient",
+        "deliveryOptions"
     ],
     "properties": {
         "physicalProperties": {

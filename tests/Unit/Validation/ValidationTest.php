@@ -109,8 +109,7 @@ it('returns correct schema', function ($input, $output) {
     $pdkOrder  = new PdkOrder($input);
     $validator = new OrderValidator($pdkOrder);
 
-    $val   = $validator->getValidationSchema();
-    $order = $pdkOrder->toArray(); //debug
+    $val = $validator->getValidationSchema();
 
     expect(Arr::dot($val))
         ->toBe($output);
@@ -131,12 +130,12 @@ it('returns correct schema', function ($input, $output) {
             'description'                                                                                           => 'myparcel/order/postnl/nl_package',
             'type'                                                                                                  => 'object',
             'additionalItems'                                                                                       => false,
-            'required.0'                                                                                            => 'deliveryOptions',
-            'required.1'                                                                                            => 'physicalProperties',
-            'required.2'                                                                                            => 'recipient',
+            'required.0'                                                                                            => 'physicalProperties',
+            'required.1'                                                                                            => 'recipient',
+            'required.2'                                                                                            => 'deliveryOptions',
             'properties.physicalProperties.properties.weight.type.0'                                                => 'integer',
             'properties.physicalProperties.properties.weight.type.1'                                                => 'null',
-            'properties.physicalProperties.properties.weight.note'                                                  => 'Do not put maximum here, it will take precedence over any (deeper) allOf / anyOf statement',
+            'properties.physicalProperties.properties.weight.note'                                                  => 'Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf',
             'properties.recipient.type'                                                                             => 'object',
             'properties.recipient.required.0'                                                                       => 'cc',
             'properties.recipient.properties.cc.type'                                                               => 'string',
@@ -149,14 +148,19 @@ it('returns correct schema', function ($input, $output) {
             'properties.deliveryOptions.properties.date.pattern'                                                    => '^(20\d\d)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0123]):([012345]\d):([012345]\d)$',
             'properties.deliveryOptions.properties.deliveryType.type.0'                                             => 'string',
             'properties.deliveryOptions.properties.deliveryType.type.1'                                             => 'null',
-            'properties.deliveryOptions.properties.deliveryType.enum.0'                                             => 'standard',
-            'properties.deliveryOptions.properties.deliveryType.enum.1'                                             => 'morning',
+            'properties.deliveryOptions.properties.deliveryType.enum.0'                                             => 'morning',
+            'properties.deliveryOptions.properties.deliveryType.enum.1'                                             => 'standard',
             'properties.deliveryOptions.properties.deliveryType.enum.2'                                             => 'evening',
             'properties.deliveryOptions.properties.deliveryType.enum.3'                                             => 'pickup',
             'properties.deliveryOptions.properties.deliveryType.enum.4'                                             => null,
             'properties.deliveryOptions.properties.labelAmount.type.0'                                              => 'integer',
             'properties.deliveryOptions.properties.labelAmount.type.1'                                              => 'null',
             'properties.deliveryOptions.properties.packageType.type'                                                => 'string',
+            'properties.deliveryOptions.properties.packageType.enum.0'                                              => 'digital_stamp',
+            'properties.deliveryOptions.properties.packageType.enum.1'                                              => 'letter',
+            'properties.deliveryOptions.properties.packageType.enum.2'                                              => 'mailbox',
+            'properties.deliveryOptions.properties.packageType.enum.3'                                              => 'package',
+            'properties.deliveryOptions.properties.packageType.enum.4'                                              => null,
             'properties.deliveryOptions.properties.pickupLocation.type.0'                                           => 'object',
             'properties.deliveryOptions.properties.pickupLocation.type.1'                                           => 'null',
             'properties.deliveryOptions.properties.pickupLocation.additionalProperties'                             => false,
@@ -262,7 +266,7 @@ it('validates order', function (array $input, array $errors = []) {
         ->and($isValid)
         ->toBe(empty($errors));
 })->with([
-        'instabox to France'                        => [
+        'instabox to France'                          => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -283,7 +287,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.0'     => 'NL',
             ],
         ],
-        'postnl non-standard delivery without date' => [
+        'postnl non-standard delivery without date'   => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -319,7 +323,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '3.context'    => 1,
             ],
         ],
-        'pickup without pickupLocation'             => [
+        'pickup without pickupLocation'               => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -358,7 +362,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '3.context'    => 1,
             ],
         ],
-        'pickup without location code'              => [
+        'pickup without location code'                => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -427,7 +431,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '9.context'    => 1,
             ],
         ],
-        'package without country'                   => [
+        'package without country'                     => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -444,7 +448,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.context'    => 1,
             ],
         ],
-        'postnl with same day delivery'             => [
+        'postnl with same day delivery'               => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 ['deliveryOptions' => ['shipmentOptions' => ['sameDayDelivery' => true]]]
@@ -458,7 +462,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.0'     => false,
             ],
         ],
-        'morning delivery with age check'           => [
+        'morning delivery with age check'             => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -506,7 +510,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '5.enum.0'     => false,
             ],
         ],
-        'weight of 25kg'                            => [
+        'weight of 25kg'                              => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -538,7 +542,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '3.context'    => 1,
             ],
         ],
-        'weight of 29kg with large_format'          => [
+        'weight of 29kg with large_format'            => [
             'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -553,7 +557,7 @@ it('validates order', function (array $input, array $errors = []) {
                 ]
             ),
         ],
-        'mailbox with morning delivery'             => [
+        'mailbox with morning delivery'               => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -574,7 +578,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.2'     => null,
             ],
         ],
-        'EU package without insurance'              => [
+        'EU package without insurance'                => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -593,7 +597,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.0'     => 50000,
             ],
         ],
-        'EU package with no weight'                 => [
+        'EU package with no weight'                   => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -613,7 +617,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.minimum'    => 1,
             ],
         ],
-        'EU package with correct insurance'         => [
+        'EU package with correct insurance'           => [
             'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -624,7 +628,7 @@ it('validates order', function (array $input, array $errors = []) {
                 ]
             ),
         ],
-        'mailbox with shipmentOptions'              => [
+        'mailbox with shipmentOptions'                => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -645,7 +649,7 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.0'     => false,
             ],
         ],
-        'BE mailbox'                                => [
+        'BE mailbox'                                  => [
             'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
@@ -667,14 +671,51 @@ it('validates order', function (array $input, array $errors = []) {
                 '0.enum.1'     => 'package',
             ],
         ],
-        'ROW package'                               => [
-            'input' => arrayMergeOrder(
+        'ROW package without weight, without invoice' => [
+            'input'  => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient'       => [
                         'cc' => 'US',
                     ],
                     'deliveryOptions' => [
+                        'shipmentOptions' => [
+                            'insurance' => 20000,
+                        ],
+                    ],
+                ]
+            ),
+            'errors' => [
+                '0.property'   => 'customsDeclaration.invoice',
+                '0.pointer'    => '/customsDeclaration/invoice',
+                '0.message'    => 'NULL value found, but a string is required',
+                '0.constraint' => 'type',
+                '0.context'    => 1,
+                '1.property'   => 'customsDeclaration.weight',
+                '1.pointer'    => '/customsDeclaration/weight',
+                '1.message'    => 'Must have a minimum value of 1',
+                '1.constraint' => 'minimum',
+                '1.context'    => 1,
+                '1.minimum'    => 1,
+            ],
+        ],
+        'ROW package'                                 => [
+            'input' => arrayMergeOrder(
+                STANDARD_INPUT,
+                [
+                    'recipient'          => [
+                        'cc' => 'US',
+                    ],
+                    'customsDeclaration' => [
+                        'invoice' => '1',
+                        'items'   => [
+                            [
+                                'amount' => 1,
+                                'weight' => 1000,
+                            ],
+                        ],
+                    ],
+                    'deliveryOptions'    => [
                         'shipmentOptions' => [
                             'insurance' => 20000,
                         ],

@@ -40,6 +40,7 @@ return [
                 ],
                 [
                     'cc'          => CountryService::ZONE_ROW,
+                    'schema'      => 'customs_declaration',
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -93,42 +94,25 @@ return [
                     'cc'          => CountryService::ZONE_EU,
                     'packageType' => [
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/postnl/eu_package',
-                            'deliveryType' => [
-                                [
-                                    'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                    'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                ],
-                            ],
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/postnl/eu_package',
                         ],
                     ],
                 ],
                 [
                     'cc'          => CountryService::ZONE_ROW,
+                    'schema'      => 'customs_declaration',
                     'packageType' => [
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/postnl/row_package',
-                            'deliveryType' => [
-                                [
-                                    'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                    'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                ],
-                            ],
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/postnl/row_package',
                         ],
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                            'schema'       => 'order/postnl/letter',
-                            'deliveryType' => [
-                                [
-                                    'id'   => DeliveryOptions::DELIVERY_TYPE_STANDARD_ID,
-                                    'name' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                                ],
-                            ],
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                            'schema' => 'order/postnl/letter',
                         ],
                     ],
                 ],

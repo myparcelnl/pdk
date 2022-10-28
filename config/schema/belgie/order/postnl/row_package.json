@@ -27,12 +27,12 @@
                                 false
                             ]
                         },
-                        "signature": {
+                        "onlyRecipient": {
                             "enum": [
                                 false
                             ]
                         },
-                        "onlyRecipient": {
+                        "signature": {
                             "enum": [
                                 false
                             ]

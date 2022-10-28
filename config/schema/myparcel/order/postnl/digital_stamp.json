@@ -19,10 +19,6 @@
                 "shipmentOptions": {
                     "properties": {
                         "insurance": {
-                            "type": [
-                                "null",
-                                "integer"
-                            ],
                             "enum": [
                                 0,
                                 null

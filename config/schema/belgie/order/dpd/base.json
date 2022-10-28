@@ -59,29 +59,29 @@
             "properties": {
                 "cc": {
                     "enum": [
-                        "NL",
+                        "AT",
                         "BE",
-                        "FR",
                         "BG",
-                        "DK",
+                        "CZ",
                         "DE",
+                        "DK",
                         "EE",
+                        "ES",
                         "FI",
+                        "FR",
                         "GR",
                         "HU",
                         "IT",
-                        "LV",
                         "LT",
                         "LU",
-                        "AT",
+                        "LV",
+                        "NL",
                         "PL",
                         "PT",
                         "RO",
+                        "SE",
                         "SI",
-                        "SK",
-                        "ES",
-                        "CZ",
-                        "SE"
+                        "SK"
                     ]
                 }
             }
@@ -90,25 +90,25 @@
             "properties": {
                 "shipmentOptions": {
                     "properties": {
-                        "labelDescription": {
-                            "maxLength": 45
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
                         },
                         "insurance": {
                             "enum": [
                                 52000
                             ]
                         },
-                        "sameDayDelivery": {
-                            "enum": [
-                                false
-                            ]
+                        "labelDescription": {
+                            "maxLength": 45
                         },
                         "largeFormat": {
                             "enum": [
                                 false
                             ]
                         },
-                        "ageCheck": {
+                        "onlyRecipient": {
                             "enum": [
                                 false
                             ]
@@ -118,7 +118,7 @@
                                 false
                             ]
                         },
-                        "onlyRecipient": {
+                        "sameDayDelivery": {
                             "enum": [
                                 false
                             ]

@@ -151,12 +151,12 @@
                                                 500
                                             ]
                                         },
-                                        "signature": {
+                                        "onlyRecipient": {
                                             "enum": [
                                                 true
                                             ]
                                         },
-                                        "onlyRecipient": {
+                                        "signature": {
                                             "enum": [
                                                 true
                                             ]
@@ -192,7 +192,7 @@
         "physicalProperties": {
             "properties": {
                 "weight": {
-                    "note": "Do not put maximum here, it will take precedence over any (deeper) allOf / anyOf statement",
+                    "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf",
                     "minimum": 1
                 }
             }

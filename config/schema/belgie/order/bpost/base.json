@@ -112,10 +112,7 @@
                 },
                 "shipmentOptions": {
                     "properties": {
-                        "labelDescription": {
-                            "maxLength": 45
-                        },
-                        "sameDayDelivery": {
+                        "ageCheck": {
                             "enum": [
                                 false
                             ]
@@ -125,17 +122,20 @@
                                 false
                             ]
                         },
-                        "ageCheck": {
+                        "labelDescription": {
+                            "maxLength": 45
+                        },
+                        "onlyRecipient": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "sameDayDelivery": {
                             "enum": [
                                 false
                             ]
                         },
                         "return": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "onlyRecipient": {
                             "enum": [
                                 false
                             ]

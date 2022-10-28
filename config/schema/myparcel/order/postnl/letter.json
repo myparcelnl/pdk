@@ -11,11 +11,12 @@
                 },
                 "shipmentOptions": {
                     "properties": {
+                        "ageCheck": {
+                            "enum": [
+                                false
+                            ]
+                        },
                         "insurance": {
-                            "type": [
-                                "null",
-                                "integer"
-                            ],
                             "enum": [
                                 0,
                                 null
@@ -31,17 +32,12 @@
                                 false
                             ]
                         },
-                        "signature": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "ageCheck": {
-                            "enum": [
-                                false
-                            ]
-                        },
                         "return": {
+                            "enum": [
+                                false
+                            ]
+                        },
+                        "signature": {
                             "enum": [
                                 false
                             ]

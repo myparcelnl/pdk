@@ -50,7 +50,7 @@
         "physicalProperties": {
             "properties": {
                 "weight": {
-                    "note": "Do not put weight here, it will take precedence over any (deeper) allOf / anyOf statement"
+                    "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
                 }
             }
         },
@@ -69,6 +69,13 @@
                     "enum": [
                         "standard",
                         "pickup",
+                        null
+                    ]
+                },
+                "packageType": {
+                    "enum": [
+                        "mailbox",
+                        "package",
                         null
                     ]
                 },
