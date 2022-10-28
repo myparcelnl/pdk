@@ -97,6 +97,19 @@
         },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        "pickup",
+                        null
+                    ]
+                },
+                "packageType": {
+                    "enum": [
+                        "package",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "labelDescription": {
