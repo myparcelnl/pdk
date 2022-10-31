@@ -5,8 +5,7 @@
                 "pickupLocation": {
                     "properties": {
                         "locationCode": {
-                            "minLength": 5,
-                            "maxLength": 50
+                            "minLength": 1
                         }
                     }
                 },
@@ -14,6 +13,7 @@
                     "properties": {
                         "insurance": {
                             "enum": [
+                                null,
                                 0,
                                 50000
                             ]

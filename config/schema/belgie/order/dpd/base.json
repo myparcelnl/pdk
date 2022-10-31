@@ -101,7 +101,7 @@
                             ]
                         },
                         "labelDescription": {
-                            "maxLength": 45
+                            "maxLength": 50
                         },
                         "largeFormat": {
                             "enum": [

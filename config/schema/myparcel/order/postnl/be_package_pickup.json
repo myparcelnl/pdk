@@ -5,8 +5,7 @@
                 "pickupLocation": {
                     "properties": {
                         "locationCode": {
-                            "minLength": 5,
-                            "maxLength": 50
+                            "minLength": 1
                         }
                     }
                 },

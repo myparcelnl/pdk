@@ -10,6 +10,12 @@
         },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "ageCheck": {

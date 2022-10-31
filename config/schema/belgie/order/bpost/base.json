@@ -123,7 +123,7 @@
                             ]
                         },
                         "labelDescription": {
-                            "maxLength": 45
+                            "maxLength": 30
                         },
                         "onlyRecipient": {
                             "enum": [

@@ -12,9 +12,9 @@
             "properties": {
                 "weight": {
                     "type": [
-                        "integer",
-                        "null"
-                    ]
+                        "integer"
+                    ],
+                    "minimum": 1
                 }
             }
         },

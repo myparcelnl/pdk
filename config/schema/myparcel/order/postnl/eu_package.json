@@ -6,14 +6,6 @@
                 null
             ]
         },
-        "physicalProperties": {
-            "properties": {
-                "weight": {
-                    "minimum": 1,
-                    "maximum": 23000
-                }
-            }
-        },
         "deliveryOptions": {
             "properties": {
                 "deliveryType": {

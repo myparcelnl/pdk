@@ -13,7 +13,6 @@
                 "deliveryType": {
                     "enum": [
                         "standard",
-                        "pickup",
                         null
                     ]
                 },
@@ -25,10 +24,6 @@
                             ]
                         },
                         "insurance": {
-                            "type": [
-                                "null",
-                                "integer"
-                            ],
                             "enum": [
                                 0,
                                 null
