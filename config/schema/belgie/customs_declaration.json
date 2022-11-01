@@ -5,10 +5,49 @@
     "required": [
         "customsDeclaration"
     ],
+    "anyOf": [
+        {
+            "properties": {
+                "customsDeclaration": {
+                    "required": [
+                        "invoice"
+                    ],
+                    "properties": {
+                        "contents": {
+                            "enum": [
+                                1,
+                                2,
+                                5
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "properties": {
+                "customsDeclaration": {
+                    "properties": {
+                        "contents": {
+                            "enum": [
+                                3,
+                                4
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    ],
     "properties": {
         "customsDeclaration": {
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "contents",
+                "weight",
+                "items"
+            ],
             "properties": {
                 "contents": {
                     "type": "integer",
