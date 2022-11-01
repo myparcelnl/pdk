@@ -1,6 +1,6 @@
 {
     "description": "belgie/order/dpd/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
         {
             "anyOf": [
@@ -20,21 +20,8 @@
                                 "pickupLocation": {
                                     "properties": {
                                         "locationCode": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "onlyRecipient": {
-                                            "enum": [
-                                                false
-                                            ]
-                                        },
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
+                                            "type": "string",
+                                            "minLength": 1
                                         }
                                     }
                                 }
@@ -68,24 +55,60 @@
                 }
             }
         },
+        "recipient": {
+            "properties": {
+                "cc": {
+                    "enum": [
+                        "AT",
+                        "BE",
+                        "BG",
+                        "CZ",
+                        "DE",
+                        "DK",
+                        "EE",
+                        "ES",
+                        "FI",
+                        "FR",
+                        "GR",
+                        "HU",
+                        "IT",
+                        "LT",
+                        "LU",
+                        "LV",
+                        "NL",
+                        "PL",
+                        "PT",
+                        "RO",
+                        "SE",
+                        "SI",
+                        "SK"
+                    ]
+                }
+            }
+        },
         "deliveryOptions": {
             "properties": {
                 "shipmentOptions": {
                     "properties": {
-                        "labelDescription": {
-                            "maxLength": 45
-                        },
-                        "sameDayDelivery": {
+                        "ageCheck": {
                             "enum": [
                                 false
                             ]
+                        },
+                        "insurance": {
+                            "enum": [
+                                52000
+                            ]
+                        },
+                        "labelDescription": {
+                            "maxLength": 50
                         },
                         "largeFormat": {
                             "enum": [
                                 false
                             ]
                         },
-                        "ageCheck": {
+                        "onlyRecipient": {
                             "enum": [
                                 false
                             ]
@@ -95,7 +118,7 @@
                                 false
                             ]
                         },
-                        "onlyRecipient": {
+                        "sameDayDelivery": {
                             "enum": [
                                 false
                             ]

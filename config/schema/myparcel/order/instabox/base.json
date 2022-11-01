@@ -1,59 +1,7 @@
 {
     "description": "myparcel/order/instabox/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
-        {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "required": [
-                                        "ageCheck"
-                                    ],
-                                    "properties": {
-                                        "ageCheck": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        },
-                                        "onlyRecipient": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        },
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "ageCheck": {
-                                            "enum": [
-                                                null,
-                                                false
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        },
         {
             "anyOf": [
                 {
@@ -102,20 +50,44 @@
         "physicalProperties": {
             "properties": {
                 "weight": {
-                    "note": "Do not put weight here, it will take precedence over any (deeper) allOf / anyOf statement"
+                    "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
+                }
+            }
+        },
+        "recipient": {
+            "properties": {
+                "cc": {
+                    "enum": [
+                        "NL"
+                    ]
                 }
             }
         },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        "pickup",
+                        null
+                    ]
+                },
+                "packageType": {
+                    "enum": [
+                        "mailbox",
+                        "package",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "labelDescription": {
-                            "maxLength": 45
+                            "maxLength": 50
                         },
                         "signature": {
                             "enum": [
-                                true
+                                false,
+                                null
                             ]
                         }
                     }

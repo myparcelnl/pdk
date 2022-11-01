@@ -5,8 +5,7 @@
                 "pickupLocation": {
                     "properties": {
                         "locationCode": {
-                            "minLength": 5,
-                            "maxLength": 50
+                            "minLength": 1
                         }
                     }
                 },
@@ -18,12 +17,12 @@
                                 50000
                             ]
                         },
-                        "signature": {
+                        "onlyRecipient": {
                             "enum": [
                                 false
                             ]
                         },
-                        "onlyRecipient": {
+                        "signature": {
                             "enum": [
                                 false
                             ]

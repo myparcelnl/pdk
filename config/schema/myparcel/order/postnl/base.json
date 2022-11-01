@@ -1,14 +1,14 @@
 {
     "description": "myparcel/order/postnl/base",
-    "type": "array",
+    "type": "object",
     "allOf": [
         {
             "anyOf": [
                 {
-                    "type": "array",
+                    "type": "object",
                     "properties": {
                         "deliveryOptions": {
-                            "type": "array",
+                            "type": "object",
                             "properties": {
                                 "shipmentOptions": {
                                     "required": [
@@ -37,10 +37,10 @@
                     }
                 },
                 {
-                    "type": "array",
+                    "type": "object",
                     "properties": {
                         "deliveryOptions": {
-                            "type": "array",
+                            "type": "object",
                             "properties": {
                                 "shipmentOptions": {
                                     "properties": {
@@ -92,7 +92,6 @@
                         "physicalProperties": {
                             "properties": {
                                 "weight": {
-                                    "type": "integer",
                                     "maximum": 23000
                                 }
                             }
@@ -129,7 +128,7 @@
                             "properties": {
                                 "date": {
                                     "type": "string",
-                                    "pattern": "^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})$"
+                                    "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
                                 }
                             }
                         }
@@ -153,6 +152,7 @@
                                     ]
                                 },
                                 "pickupLocation": {
+                                    "type": "object",
                                     "properties": {
                                         "locationCode": {
                                             "type": "string"
@@ -205,16 +205,34 @@
         "physicalProperties": {
             "properties": {
                 "weight": {
-                    "note": "Do not put weight here, it will take precedence over any (deeper) allOf / anyOf statement"
+                    "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
                 }
             }
         },
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "morning",
+                        "standard",
+                        "evening",
+                        "pickup",
+                        null
+                    ]
+                },
+                "packageType": {
+                    "enum": [
+                        "digital_stamp",
+                        "letter",
+                        "mailbox",
+                        "package",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "labelDescription": {
-                            "maxLength": 45
+                            "maxLength": 50
                         },
                         "sameDayDelivery": {
                             "enum": [

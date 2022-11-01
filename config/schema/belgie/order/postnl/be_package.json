@@ -2,10 +2,18 @@
     "properties": {
         "deliveryOptions": {
             "properties": {
+                "deliveryType": {
+                    "enum": [
+                        "standard",
+                        "pickup",
+                        null
+                    ]
+                },
                 "shipmentOptions": {
                     "properties": {
                         "insurance": {
                             "enum": [
+                                null,
                                 0,
                                 50000
                             ]
