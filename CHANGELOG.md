@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.24.0](https://github.com/myparcelnl/pdk/compare/v1.23.0...v1.24.0) (2022-11-01)
+
+
+### :sparkles: New Features
+
+* add validation to pdk orders ([#36](https://github.com/myparcelnl/pdk/issues/36)) ([0113b5e](https://github.com/myparcelnl/pdk/commit/0113b5edff7813e0ae2d49f971b79519fab47205))
+
+
+### :bug: Bug Fixes
+
+* validate shipments correctly ([#43](https://github.com/myparcelnl/pdk/issues/43)) ([2336727](https://github.com/myparcelnl/pdk/commit/2336727e7e5b2bd55aa40702e07c7146b824fe2a))
+
 ## [1.23.0](https://github.com/myparcelnl/pdk/compare/v1.22.0...v1.23.0) (2022-09-27)
 
 
