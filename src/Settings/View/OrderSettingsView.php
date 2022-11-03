@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Settings\View;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Form\Model\Input\CheckboxInput;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
+use MyParcelNL\Pdk\Form\Model\Input\TextInput;
 use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 
@@ -25,41 +26,56 @@ class OrderSettingsView extends AbstractView
             [
                 'class'   => SelectInput::class,
                 'name'    => OrderSettings::STATUS_ON_LABEL_CREATE,
-                'label'   => 'Order status when label created',
+                'label'   => 'settings_order_status_on_label_create',
                 'options' => [],
             ],
             [
                 'class'   => SelectInput::class,
                 'name'    => OrderSettings::STATUS_WHEN_LABEL_SCANNED,
-                'label'   => 'Order status when label scanned',
+                'label'   => 'settings_order_status_when_label_scanned',
                 'options' => [],
             ],
             [
                 'class'   => SelectInput::class,
                 'name'    => OrderSettings::STATUS_WHEN_DELIVERED,
-                'label'   => 'Order status when delivered',
+                'label'   => 'settings_order_status_when_delivered',
                 'options' => [],
             ],
             [
                 'class' => CheckboxInput::class,
                 'name'  => OrderSettings::IGNORE_ORDER_STATUSES,
-                'label' => 'Ignore order statuses',
+                'label' => 'settings_order_ignore_order_statuses',
             ],
             [
                 'class' => ToggleInput::class,
                 'name'  => OrderSettings::ORDER_STATUS_MAIL,
-                'label' => 'Order status mail',
+                'label' => 'settings_order_order_status_mail',
             ],
             [
                 'class'   => SelectInput::class,
                 'name'    => OrderSettings::SEND_NOTIFICATION_AFTER,
-                'label'   => 'Send notification after',
+                'label'   => 'settings_order_send_notification_after',
                 'options' => [],
             ],
             [
                 'class' => ToggleInput::class,
-                'name'  => OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMPS,
-                'label' => 'Automatic set order state to sent for digital stamp',
+                'name'  => OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMP,
+                'label' => 'settings_order_send_order_state_for_digital_stamp',
+            ],
+            [
+                'class' => ToggleInput::class,
+                'name'  => OrderSettings::SAVE_CUSTOMER_ADDRESS,
+                'label' => 'settings_order_save_customer_address',
+            ],
+            [
+                'class' => TextInput::class,
+                'name'  => OrderSettings::EMPTY_PARCEL_WEIGHT,
+                'label' => 'settings_order_save_customer_address',
+            ],
+            [
+                'class' => TextInput::class,
+                'name'  => OrderSettings::SAVE_CUSTOMER_ADDRESS,
+                'label' => 'settings_order_save_customer_address',
             ],
         ]);
     }

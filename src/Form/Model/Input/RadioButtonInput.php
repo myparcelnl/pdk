@@ -7,14 +7,14 @@ namespace MyParcelNL\Pdk\Form\Model\Input;
 use MyParcelNL\Pdk\Form\Collection\InputOptionsCollection;
 
 /**
- * @property string                                  $name
- * @property string                                  $label
  * @property string                                  $description
- * @property string                                  $type
+ * @property string                                  $element
+ * @property string                                  $label
  * @property bool                                    $multiple
+ * @property string                                  $name
  * @property \MyParcelNL\Pdk\Form\Model\InputOptions $options
  */
-class RadioButtonInput extends AbstractInput
+class RadioButtonInput extends BaseInput
 {
     /**
      * @param  null|array $data

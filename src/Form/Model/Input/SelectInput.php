@@ -7,13 +7,14 @@ namespace MyParcelNL\Pdk\Form\Model\Input;
 use MyParcelNL\Pdk\Form\Collection\SelectOptionsCollection;
 
 /**
- * @property string                                                  $type
+ * @property string                                                  $description
+ * @property string                                                  $element
  * @property string                                                  $label
  * @property string                                                  $name
- * @property string                                                  $description
  * @property \MyParcelNL\Pdk\Form\Collection\SelectOptionsCollection $options
+ * @property string                                                  $type
  */
-class SelectInput extends AbstractInput
+class SelectInput extends BaseInput
 {
     /**
      * @param  null|array $data

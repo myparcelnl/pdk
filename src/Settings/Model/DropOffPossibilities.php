@@ -33,11 +33,6 @@ class DropOffPossibilities extends Model
         'deliveryDaysWindow'    => 'int',
     ];
 
-    public function __construct(?array $data = null)
-    {
-        parent::__construct($data);
-    }
-
     /**
      * @param  null|\DateTimeImmutable $date
      *

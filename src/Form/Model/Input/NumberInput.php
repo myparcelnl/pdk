@@ -11,9 +11,9 @@ namespace MyParcelNL\Pdk\Form\Model\Input;
  * @property string $name
  * @property string $type
  */
-class CheckboxInput extends BaseInput
+class NumberInput extends TextInput
 {
     protected $guarded = [
-        'type' => 'checkbox',
+        'type' => 'number',
     ];
 }

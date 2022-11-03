@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Form\Model\Input;
 
 /**
- * @property string $type
+ * @property string $description
+ * @property string $element
  * @property bool   $isBool
  * @property string $label
  * @property string $name
- * @property string $description
+ * @property string $type
  * @property array  $values
  */
-class ToggleInput extends AbstractInput
+class ToggleInput extends BaseInput
 {
     /**
      * @param  null|array $data
@@ -24,12 +25,12 @@ class ToggleInput extends AbstractInput
             [
                 'id'    => 'on',
                 'value' => 1,
-                'label' => 'Yes',
+                'label' => 'input_toggle_on',
             ],
             [
                 'id'    => 'off',
                 'value' => 0,
-                'label' => 'No',
+                'label' => 'input_toggle_off',
             ],
         ];
 

@@ -8,7 +8,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
 
 class MemoryCacheStorage extends AbstractStorage
 {
-    private $data = [];
+    protected $data = [];
 
     /**
      * @param  string $storageKey

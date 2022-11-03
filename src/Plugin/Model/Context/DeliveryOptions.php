@@ -58,7 +58,7 @@ class DeliveryOptions extends Model
         'platform'                   => Platform::MYPARCEL_NAME, // TODO get from pdk / plugin
         'basePrice'                  => 0,
         'showPriceSurcharge'         => 0,
-        'pickupLocationsDefaultView' => CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW_VALUE,
+        'pickupLocationsDefaultView' => CheckoutSettings::DEFAULT_PICKUP_LOCATIONS_VIEW,
         'priceStandardDelivery'      => 0,
         'carrierSettings'            => [],
     ];
@@ -131,10 +131,6 @@ class DeliveryOptions extends Model
     {
         $settings                          = $carrierSettings->only(self::CARRIER_SETTINGS_IN_DELIVERY_OPTIONS);
         $settings['allowShowDeliveryDate'] = $carrierSettings->featureShowDeliveryDate;
-
-        if (! $carrierSettings->dropOffPossibilities) {
-            return $settings;
-        }
 
         return $settings
             + $this->createDropOffData($carrierSettings)

@@ -22,44 +22,44 @@ class LabelSettingsView extends AbstractView
     {
         return new Collection([
             [
-                'class' => TextInput::class,
-                'name'  => LabelSettings::LABEL_DESCRIPTION,
-                'label' => 'Label description',
-                'desc'  => 'The maximum length is 45 characters. You can add the following variables to the description',
+                'class'       => TextInput::class,
+                'name'        => LabelSettings::DESCRIPTION,
+                'label'       => 'settings_label_description',
+                'description' => 'settings_label_description_description',
             ],
             [
                 'class'   => SelectInput::class,
-                'name'    => LabelSettings::LABEL_SIZE,
-                'label'   => 'Default label size',
+                'name'    => LabelSettings::FORMAT,
+                'label'   => 'settings_label_format',
                 'options' => [
-                    'a4' => 'A4',
-                    'a6' => 'A6',
+                    LabelSettings::FORMAT_A4 => 'settings_label_format_option_a4',
+                    LabelSettings::FORMAT_A6 => 'settings_label_format_option_a6',
                 ],
             ],
             [
                 'class'   => SelectInput::class,
-                'name'    => LabelSettings::DEFAULT_POSITION,
-                'label'   => 'Default label position',
+                'name'    => LabelSettings::POSITION,
+                'label'   => 'settings_label_position',
                 'options' => [
-                    1 => 'Top left',
-                    2 => 'Top right',
-                    3 => 'Bottom left',
-                    4 => 'Bottom right',
+                    LabelSettings::POSITION_1 => 'settings_label_position_option_1',
+                    LabelSettings::POSITION_2 => 'settings_label_position_option_2',
+                    LabelSettings::POSITION_3 => 'settings_label_position_option_3',
+                    LabelSettings::POSITION_4 => 'settings_label_position_option_4',
                 ],
             ],
             [
                 'class'   => SelectInput::class,
-                'name'    => LabelSettings::LABEL_OPEN_DOWNLOAD,
-                'label'   => 'Open or download label',
+                'name'    => LabelSettings::OUTPUT,
+                'label'   => 'settings_label_output',
                 'options' => [
-                    true  => 'Open',
-                    false => 'Download',
+                    LabelSettings::OUTPUT_OPEN     => 'settings_label_output_option_open',
+                    LabelSettings::OUTPUT_DOWNLOAD => 'settings_label_output_option_download',
                 ],
             ],
             [
                 'class' => ToggleInput::class,
-                'name'  => LabelSettings::PROMPT_POSITION,
-                'label' => 'Prompt for label position',
+                'name'  => LabelSettings::PROMPT,
+                'label' => 'settings_label_prompt',
             ],
         ]);
     }

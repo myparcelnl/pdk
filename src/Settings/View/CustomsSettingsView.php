@@ -23,19 +23,19 @@ class CustomsSettingsView extends AbstractView
         return new Collection([
             [
                 'class'   => SelectInput::class,
-                'name'    => CustomsSettings::DEFAULT_PACKAGE_CONTENTS,
-                'label'   => 'Package contents',
+                'name'    => CustomsSettings::PACKAGE_CONTENTS,
+                'label'   => 'settings_customs_package_contents',
                 'options' => CustomsSettings::PACKAGE_CONTENTS_LIST,
             ],
             [
                 'class' => TextInput::class,
-                'name'  => CustomsSettings::DEFAULT_CUSTOMS_CODE,
-                'label' => 'Default customs code',
+                'name'  => CustomsSettings::CUSTOMS_CODE,
+                'label' => 'settings_customs_customs_code',
             ],
             [
                 'class'   => SelectInput::class,
-                'name'    => CustomsSettings::DEFAULT_COUNTRY_OF_ORIGIN,
-                'label'   => 'Default country of origin',
+                'name'    => CustomsSettings::COUNTRY_OF_ORIGIN,
+                'label'   => 'settings_customs_country_of_origin',
                 'options' => CountryService::ALL,
             ],
         ]);

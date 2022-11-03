@@ -9,12 +9,6 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
  * @property \MyParcelNL\Pdk\Shipment\Model\Shipment[] $items
- * @property \MyParcelNL\Pdk\Shipment\Model\Label      $label
- * @method Shipment first(callable $callback = null, $default = null)
- * @method Shipment last(callable $callback = null, $default = null)
- * @method Shipment pop()
- * @method Shipment shift()
- * @method Shipment[] all()
  */
 class ShipmentCollection extends Collection
 {
