@@ -105,6 +105,7 @@ it('exports order', function () {
         ->and($response->getStatusCode())
         ->toBe(200);
 });
+
 it('prints order', function () {
     $this->mock->append(
         new ExampleGetShipmentLabelsLinkV2Response()
@@ -136,8 +137,8 @@ it('prints order', function () {
     );
 
     $response = $this->pdk->execute(PdkActions::PRINT_ORDER, [
-        'orderIds'    => ['701', '702'],
-        'downloadPdf' => true,
+        'orderIds' => ['701', '702'],
+        'download' => true,
     ]);
 
     if (! $response) {
