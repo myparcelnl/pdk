@@ -105,6 +105,57 @@ it('exports order', function () {
         ->and($response->getStatusCode())
         ->toBe(200);
 });
+it('prints order', function () {
+    $this->mock->append(
+        new ExampleGetShipmentLabelsLinkV2Response()
+    );
+
+    $this->orderRepository->add(
+        new PdkOrder(
+            [
+                'externalIdentifier' => '701',
+                'shipments'          => [
+                    [
+                        'id'                  => 100001,
+                        'referenceIdentifier' => '1',
+                    ],
+                    [
+                        'id'                  => 100002,
+                        'referenceIdentifier' => '2',
+                        'deliveryOptions'     => [
+                            'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+                            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+                            'shipmentOptions' => [
+                                'signature' => true,
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        )
+    );
+
+    $response = $this->pdk->execute(PdkActions::PRINT_ORDER, [
+        'orderIds'    => ['701', '702'],
+        'downloadPdf' => true,
+    ]);
+
+    if (! $response) {
+        throw new RuntimeException('Response is empty');
+    }
+
+    $content = json_decode($response->getContent(), true);
+
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and(Arr::dot($content))
+        ->toHaveKeysAndValues([
+            'data.link' => null,
+            'data.pdf'  => '{"data":{"pdf":{"url":"\/pdfs\/label_hash"}}}',
+        ])
+        ->and($response->getStatusCode())
+        ->toBe(200);
+});
 
 it('exports and prints order', function () {
     $this->mock->append(

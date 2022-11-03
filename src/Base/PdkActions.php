@@ -12,6 +12,7 @@ class PdkActions
      */
     public const EXPORT_ORDER           = 'exportOrder';
     public const EXPORT_AND_PRINT_ORDER = 'exportAndPrintOrder';
+    public const PRINT_ORDER            = 'printOrder';
     public const GET_ORDER_DATA         = 'getOrderData';
     public const UPDATE_TRACKING_NUMBER = 'updateTrackingNumber';
     public const REQUIRED               = [
@@ -21,5 +22,6 @@ class PdkActions
     ];
     public const OPTIONAL               = [
         self::UPDATE_TRACKING_NUMBER,
+        self::PRINT_ORDER,
     ];
 }
