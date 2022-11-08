@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Order;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
+use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +37,7 @@ class ExportOrderAction extends AbstractOrderAction
         $shipments = $this->shipmentRepository->createConcepts($shipments);
 
         if (true === $parameters['print']) {
-            $shipments = $this->shipmentRepository->fetchLabelLink($shipments, 'a6');
+            $shipments = $this->shipmentRepository->fetchLabelLink($shipments, LabelSettings::FORMAT_A6);
             Pdk::execute(PdkActions::UPDATE_TRACKING_NUMBER);
         }
 
