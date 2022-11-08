@@ -19,9 +19,9 @@ class PdkActions
         PdkActions::EXPORT_ORDER,
         PdkActions::EXPORT_AND_PRINT_ORDER,
         PdkActions::GET_ORDER_DATA,
+        PdkActions::PRINT_ORDER,
     ];
     public const OPTIONAL               = [
         self::UPDATE_TRACKING_NUMBER,
-        self::PRINT_ORDER,
     ];
 }
