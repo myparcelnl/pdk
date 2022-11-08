@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.25.0](https://github.com/myparcelnl/pdk/compare/v1.24.0...v1.25.0) (2022-11-08)
+
+
+### :sparkles: New Features
+
+* **actions:** add print order action ([#44](https://github.com/myparcelnl/pdk/issues/44)) ([aecef4e](https://github.com/myparcelnl/pdk/commit/aecef4ea25fd12a658df861a3ef9f6be9186a2b7))
+
 ## [1.24.0](https://github.com/myparcelnl/pdk/compare/v1.23.0...v1.24.0) (2022-11-01)
 
 
