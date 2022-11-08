@@ -8,8 +8,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Fulfilment\Model\Product;
 
 /**
- * todo use PdkProduct class not fulfilment product
- *
  * @property int                                           $quantity
  * @property int                                           $price
  * @property int                                           $vat
@@ -31,6 +29,6 @@ class PdkOrderLine extends Model
         'price'         => 'int',
         'vat'           => 'int',
         'priceAfterVat' => 'int',
-        'product'       => Product::class,
+        'product'       => PdkProduct::class,
     ];
 }
