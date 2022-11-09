@@ -31,7 +31,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     public function handle(array $parameters): Response
     {
-        $orders = $this->orderRepository->getMany($parameters['orderIds']);
+        $orders = $this->orderRepository->getMany((array) $parameters['orderIds']);
 
         $shipments = $orders->generateShipments();
         $shipments = $this->shipmentRepository->createConcepts($shipments);
