@@ -7,6 +7,7 @@ use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -198,7 +199,13 @@ it('exports and prints order', function () {
         throw new RuntimeException('Response is empty');
     }
 
-    $content = json_decode($response->getContent(), true);
+    $content    = json_decode($response->getContent(), true);
+    $collection = new PdkOrderCollection($content['data']['orders']);
+    $lastOrders = $collection->getLastShipments();
+
+    foreach ($lastOrders as $orderId => $order) {
+        $lastOrders[$orderId] = $order->toArray();
+    }
 
     expect($response)
         ->toBeInstanceOf(Response::class)
@@ -236,5 +243,102 @@ it('exports and prints order', function () {
             'data.orders.1.shipments.0.orderId'                                   => '264',
         ])
         ->and($response->getStatusCode())
-        ->toBe(200);
+        ->toBe(200)
+        ->and($lastOrders)
+        ->toBe([
+            '263' => [
+                'id'                       => 30321,
+                'referenceIdentifier'      => '263',
+                'externalIdentifier'       => null,
+                'apiKey'                   => null,
+                'barcode'                  => null,
+                'carrier'                  => null,
+                'collectionContact'        => null,
+                'created'                  => null,
+                'createdBy'                => null,
+                'customsDeclaration'       => null,
+                'delayed'                  => false,
+                'delivered'                => false,
+                'deliveryOptions'          => [
+                    'carrier'         => 'instabox',
+                    'date'            => null,
+                    'deliveryType'    => 'standard',
+                    'labelAmount'     => 1,
+                    'packageType'     => 'package',
+                    'pickupLocation'  => null,
+                    'shipmentOptions' => [
+                        'ageCheck'         => null,
+                        'insurance'        => null,
+                        'labelDescription' => null,
+                        'largeFormat'      => null,
+                        'onlyRecipient'    => null,
+                        'return'           => null,
+                        'sameDayDelivery'  => null,
+                        'signature'        => null,
+                    ],
+                ],
+                'dropOffPoint'             => null,
+                'isReturn'                 => false,
+                'linkConsumerPortal'       => null,
+                'modified'                 => null,
+                'modifiedBy'               => null,
+                'multiCollo'               => false,
+                'multiColloMainShipmentId' => null,
+                'partnerTrackTraces'       => null,
+                'physicalProperties'       => null,
+                'recipient'                => null,
+                'sender'                   => null,
+                'shopId'                   => null,
+                'orderId'                  => '263',
+                'status'                   => null,
+                'updated'                  => null,
+            ],
+            '264' => [
+                'id'                       => 30322,
+                'referenceIdentifier'      => '264',
+                'externalIdentifier'       => null,
+                'apiKey'                   => null,
+                'barcode'                  => null,
+                'carrier'                  => null,
+                'collectionContact'        => null,
+                'created'                  => null,
+                'createdBy'                => null,
+                'customsDeclaration'       => null,
+                'delayed'                  => false,
+                'delivered'                => false,
+                'deliveryOptions'          => [
+                    'carrier'         => 'postnl',
+                    'date'            => null,
+                    'deliveryType'    => 'morning',
+                    'labelAmount'     => 1,
+                    'packageType'     => 'package',
+                    'pickupLocation'  => null,
+                    'shipmentOptions' => [
+                        'ageCheck'         => null,
+                        'insurance'        => null,
+                        'labelDescription' => null,
+                        'largeFormat'      => null,
+                        'onlyRecipient'    => null,
+                        'return'           => null,
+                        'sameDayDelivery'  => null,
+                        'signature'        => true,
+                    ],
+                ],
+                'dropOffPoint'             => null,
+                'isReturn'                 => false,
+                'linkConsumerPortal'       => null,
+                'modified'                 => null,
+                'modifiedBy'               => null,
+                'multiCollo'               => false,
+                'multiColloMainShipmentId' => null,
+                'partnerTrackTraces'       => null,
+                'physicalProperties'       => null,
+                'recipient'                => null,
+                'sender'                   => null,
+                'shopId'                   => null,
+                'orderId'                  => '264',
+                'status'                   => null,
+                'updated'                  => null,
+            ],
+        ]);
 });
