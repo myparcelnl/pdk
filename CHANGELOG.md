@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.25.1](https://github.com/myparcelnl/pdk/compare/v1.25.0...v1.25.1) (2022-11-10)
+
+
+### :bug: Bug Fixes
+
+* **order:** add carrier when creating shipment ([#46](https://github.com/myparcelnl/pdk/issues/46)) ([eb24ce2](https://github.com/myparcelnl/pdk/commit/eb24ce2defeff4a88e8bcd05585793353807f86c))
+
 ## [1.25.0](https://github.com/myparcelnl/pdk/compare/v1.24.0...v1.25.0) (2022-11-08)
 
 
