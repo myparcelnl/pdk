@@ -22,13 +22,20 @@ abstract class AbstractPdkOrderRepository extends ApiRepository
     /**
      * Create a collection of order objects from input data.
      *
-     * @param  array $array
+     * @param  mixed $orderIds
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection
      * @noinspection PhpUnused
      */
-    public function getMany(array $array): PdkOrderCollection
+    public function getMany($orderIds): PdkOrderCollection
     {
+        $array = array_reduce((array) $orderIds, static function (array $acc, string $item) {
+            $ids = explode(';', $item);
+            array_push($acc, ...$ids);
+
+            return $acc;
+        }, []);
+
         return new PdkOrderCollection(array_map([$this, 'get'], $array));
     }
 
