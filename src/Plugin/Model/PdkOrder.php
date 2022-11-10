@@ -84,6 +84,33 @@ class PdkOrder extends Model
         $this->updateOrderTotals();
     }
 
+    /**
+     * @param  array $data
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function createShipment(array $data = []): Shipment
+    {
+        $this->shipments->push(
+            array_replace_recursive(
+                [
+                    'deliveryOptions' => $this->deliveryOptions,
+                    'recipient'       => $this->recipient,
+                    'sender'          => $this->sender,
+                    'carrier'         => [
+                        'name' => $this->deliveryOptions->carrier,
+                    ],
+                ],
+                $data,
+                ['orderId' => $this->externalIdentifier]
+            )
+        );
+
+        return $this->getAttribute('shipments')
+            ->last();
+    }
+
     public function updateOrderTotals(): void
     {
         $price         = 0;
@@ -102,28 +129,6 @@ class PdkOrder extends Model
         $this->attributes['totalPrice']         = $price + $this->shipmentPrice;
         $this->attributes['totalPriceAfterVat'] = $priceAfterVat + $this->shipmentPriceAfterVat;
         $this->attributes['totalVat']           = $vat + $this->shipmentVat;
-    }
-
-    /**
-     * @param  array $data
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
-     */
-    public function createShipment(array $data = []): Shipment
-    {
-        $this->shipments->push(
-            array_replace_recursive(
-                [
-                    'deliveryOptions' => $this->deliveryOptions,
-                    'recipient'       => $this->recipient,
-                    'sender'          => $this->sender,
-                ],
-                $data,
-                ['orderId' => $this->externalIdentifier]
-            )
-        );
-
-        return $this->shipments->last();
     }
 
     /**
