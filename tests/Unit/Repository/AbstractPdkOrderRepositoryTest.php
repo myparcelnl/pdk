@@ -32,7 +32,6 @@ it('gets a single order', function () {
 });
 
 it('gets multiple orders', function () {
-    //$orders = $this->repository->getMany([1, 2, 3]);
     $orders = $this->repository->getMany(['1;2', 3]);
 
     expect($orders)
