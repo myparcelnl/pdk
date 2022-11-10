@@ -46,24 +46,6 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment[]
-     */
-    public function getLastShipments(): array
-    {
-        $groupOfShipments = $this->getAllShipments()
-            ->groupBy('orderId')
-            ->all();
-
-        $result = [];
-
-        foreach ($groupOfShipments as $orderId => $shipments) {
-            $result[$orderId] = $shipments->last();
-        }
-
-        return $result;
-    }
-
-    /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
      *
      * @return $this
