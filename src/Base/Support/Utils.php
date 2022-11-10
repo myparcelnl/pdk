@@ -119,4 +119,19 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
         return $current + $previous;
     }
+
+    /**
+     * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
+     *
+     * @return array
+     */
+    public static function toArray($orderIds): array
+    {
+        return array_reduce((array) $orderIds, static function (array $acc, string $item) {
+            $ids = explode(';', $item);
+            array_push($acc, ...$ids);
+
+            return $acc;
+        }, []);
+    }
 }

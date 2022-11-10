@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Repository;
 
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
@@ -22,21 +23,14 @@ abstract class AbstractPdkOrderRepository extends ApiRepository
     /**
      * Create a collection of order objects from input data.
      *
-     * @param  mixed $orderIds
+     * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection
      * @noinspection PhpUnused
      */
     public function getMany($orderIds): PdkOrderCollection
     {
-        $array = array_reduce((array) $orderIds, static function (array $acc, string $item) {
-            $ids = explode(';', $item);
-            array_push($acc, ...$ids);
-
-            return $acc;
-        }, []);
-
-        return new PdkOrderCollection(array_map([$this, 'get'], $array));
+        return new PdkOrderCollection(array_map([$this, 'get'], Utils::toArray($orderIds)));
     }
 
     /**
