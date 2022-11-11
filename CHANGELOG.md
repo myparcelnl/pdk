@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.25.3](https://github.com/myparcelnl/pdk/compare/v1.25.2...v1.25.3) (2022-11-11)
+
+
+### :bug: Bug Fixes
+
+* **actions:** cast orderId parameter to array ([#47](https://github.com/myparcelnl/pdk/issues/47)) ([11279e9](https://github.com/myparcelnl/pdk/commit/11279e99113bde08c01a56a39d36c191fbcab5d3))
+
 ## [1.25.2](https://github.com/myparcelnl/pdk/compare/v1.25.1...v1.25.2) (2022-11-10)
 
 
