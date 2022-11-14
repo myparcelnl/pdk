@@ -10,6 +10,11 @@ use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
+$array              = array_fill(0, 30, 'appelboom');
+$bulkShipmentsArray = array_map(function ($item, $index) {
+    return ['id' => (int) $index + 1];
+}, $array, array_keys($array));
+
 dataset('shipments', [
     'single shipment id'    => [
         [5],
