@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +34,13 @@ class ExportOrderAction extends AbstractOrderAction
     {
         $orders = $this->orderRepository->getMany($parameters['orderIds']);
 
-        $shipments = $orders->generateShipments();
+        $shipments = $orders->generateShipments()
+            ->groupBy('orderId')
+            ->reduce(static function (ShipmentCollection $acc, $shipments) {
+                $acc->push($shipments->last());
+                return $acc;
+            }, new ShipmentCollection());
+
         $shipments = $this->shipmentRepository->createConcepts($shipments);
 
         if (true === $parameters['print']) {
