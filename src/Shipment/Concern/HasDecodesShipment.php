@@ -36,6 +36,7 @@ trait HasDecodesShipment
             'recipient'                => $this->filter($data['recipient']),
             'sender'                   => $this->filter($data['sender']),
             'deliveryOptions'          => [
+                'carrier'         => $data['carrier_id'],
                 'deliveryType'    => $options['delivery_type'],
                 'packageType'     => $options['package_type'],
                 'shipmentOptions' => $this->getShipmentOptions($options),
@@ -54,7 +55,7 @@ trait HasDecodesShipment
             'multiColloMainShipmentId' => $data['multi_collo_main_shipment_id'],
             'partnerTrackTraces'       => $data['partner_tracktraces'],
             'referenceIdentifier'      => $data['reference_identifier'],
-            'updated'                  => $data['updated'],
+            'updated'                  => $data['updated'] ?? null,
             'created'                  => $data['created'],
             'createdBy'                => $data['created_by'],
             'modified'                 => $data['modified'],
