@@ -238,3 +238,70 @@ it('exports and prints order', function () {
         ->and($response->getStatusCode())
         ->toBe(200);
 });
+
+it('exports return', function () {
+    $this->mock->append(new ExamplePostShipmentsResponse([['id' => 30011], ['id' => 30012]]));
+    $this->orderRepository->add(
+        new PdkOrder(
+            [
+                'externalIdentifier' => '245',
+                'deliveryOptions'    => [
+                    'carrier' => CarrierOptions::CARRIER_POSTNL_NAME,
+                ],
+            ]
+        ),
+        new PdkOrder(
+            [
+                'externalIdentifier' => '247',
+                'deliveryOptions'    => [
+                    'carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+                ],
+            ]
+        )
+    );
+
+    $response = $this->pdk->execute(PdkActions::EXPORT_RETURN, [
+        'orderIds' => ['245', '247'],
+    ]);
+
+    if (! $response) {
+        throw new RuntimeException('Response is empty');
+    }
+
+    $content = json_decode($response->getContent(), true);
+
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and(Arr::dot($content))
+        ->toHaveKeysAndValues([
+            /**
+             * 245
+             */
+            'data.orders.0.externalIdentifier'                       => '245',
+            'data.orders.0.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_POSTNL_NAME,
+            'data.orders.0.deliveryOptions.labelAmount'              => 1,
+            'data.orders.0.deliveryOptions.packageType'              => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            'data.orders.0.label'                                    => null,
+            'data.orders.0.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
+            'data.orders.0.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+            'data.orders.0.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            'data.orders.0.shipments.0.id'                           => 30011,
+            'data.orders.0.shipments.0.orderId'                      => '245',
+
+            'data.orders.1.externalIdentifier'                       => '247',
+            'data.orders.1.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_POSTNL_NAME,
+            'data.orders.1.deliveryOptions.deliveryType'             => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+            'data.orders.1.deliveryOptions.labelAmount'              => 1,
+            'data.orders.1.deliveryOptions.packageType'              => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            'data.orders.1.label'                                    => null,
+            'data.orders.1.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
+            'data.orders.1.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+            'data.orders.1.shipments.0.deliveryOptions.labelAmount'  => 1,
+            'data.orders.1.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            'data.orders.1.shipments.0.id'                           => 30012,
+            'data.orders.1.shipments.0.orderId'                      => '247',
+        ])
+        ->and($response->getStatusCode())
+        ->toBe(200);
+});

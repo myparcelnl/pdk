@@ -5,10 +5,12 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Plugin\Action\Order\ExportOrderAction;
 use MyParcelNL\Pdk\Plugin\Action\Order\ExportPrintOrderAction;
+use MyParcelNL\Pdk\Plugin\Action\Order\ExportReturnAction;
 use MyParcelNL\Pdk\Plugin\Action\Order\GetOrderDataAction;
 use MyParcelNL\Pdk\Plugin\Action\Order\PrintOrderAction;
 use MyParcelNL\Pdk\Plugin\Request\ExportOrderEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\ExportPrintOrderEndpointRequest;
+use MyParcelNL\Pdk\Plugin\Request\ExportReturnEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\GetOrderDataEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\PrintOrderEndpointRequest;
 
@@ -32,6 +34,11 @@ return [
         PdkActions::GET_ORDER_DATA => [
             'request' => GetOrderDataEndpointRequest::class,
             'action'  => GetOrderDataAction::class,
+        ],
+
+        PdkActions::EXPORT_RETURN => [
+            'request' => ExportReturnEndpointRequest::class,
+            'action'  => ExportReturnAction::class,
         ],
     ],
 
