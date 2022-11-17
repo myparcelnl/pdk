@@ -3,11 +3,9 @@
 
 declare(strict_types=1);
 
-use Composer\InstalledVersions;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\autowire;
 
@@ -30,7 +28,7 @@ it('gets correct headers', function () {
             'Authorization' => null,
             'User-Agent'    => sprintf(
                 'MyParcel-PDK/%s php/7.4.30 Prestashop/1.7.8.6',
-                InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME)
+                MyParcelApiService::getVersion()
             ),
         ]);
 });

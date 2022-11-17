@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Service;
 
-use Composer\InstalledVersions;
 use GuzzleHttp\Client;
 use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
-use MyParcelNL\Pdk\Base\Pdk;
 
 /**
  * This will replace the SDK one day...
@@ -47,6 +45,16 @@ class MyParcelApiService extends AbstractApiService
     }
 
     /**
+     * @return string
+     */
+    public static function getVersion(): string
+    {
+        $composerJson = json_decode(file_get_contents(__DIR__ . '../../../../composer.json'), false);
+
+        return $composerJson->version;
+    }
+
+    /**
      * @return array
      */
     public function getHeaders(): array
@@ -64,7 +72,7 @@ class MyParcelApiService extends AbstractApiService
     {
         $userAgentStrings = [];
         $userAgents       = [
-                'MyParcel-PDK' => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
+                'MyParcel-PDK' => self::getVersion(),
                 'php'          => PHP_VERSION,
             ] + $this->userAgent;
 
