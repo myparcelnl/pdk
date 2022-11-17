@@ -127,6 +127,10 @@ class DeliveryOptions extends Model
      */
     public function getDeliveryTypeId(): ?int
     {
+        if ((int) $this->deliveryType) {
+            return (int) $this->deliveryType;
+        }
+
         return $this->deliveryType && array_key_exists($this->deliveryType, self::DELIVERY_TYPES_NAMES_IDS_MAP)
             ? self::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType]
             : null;
@@ -138,6 +142,10 @@ class DeliveryOptions extends Model
      */
     public function getPackageTypeId(): ?int
     {
+        if ((int) $this->packageType) {
+            return (int) $this->packageType;
+        }
+
         return $this->packageType && array_key_exists($this->packageType, self::PACKAGE_TYPES_NAMES_IDS_MAP)
             ? self::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType]
             : null;
