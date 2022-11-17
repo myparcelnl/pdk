@@ -20,6 +20,7 @@ class PdkOrderCollection extends Collection
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function generateShipments(array $data = []): ShipmentCollection
     {

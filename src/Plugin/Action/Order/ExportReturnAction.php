@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Order;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
+use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +34,13 @@ class ExportReturnAction extends AbstractOrderAction
     {
         $orders = $this->orderRepository->getMany($parameters['orderIds']);
 
-        $shipments = $orders->generateShipments();
+        $shipments = $orders->getAllShipments()
+            ->groupBy('orderId')
+            ->reduce(static function (ShipmentCollection $acc, $shipments) {
+                $acc->push($shipments->last());
+                return $acc;
+            }, new ShipmentCollection());
+
         $shipments = $this->shipmentRepository->createReturnShipments($shipments);
 
         $orders->updateShipments($shipments);
