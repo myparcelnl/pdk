@@ -27,6 +27,7 @@ it('gets context data', function (string $id, array $arguments, array $expectati
         'id'          => Context::ID_GLOBAL,
         'arguments'   => [],
         'expectation' => [
+            'deliveryOptions'                                        => null,
             'global.baseUrl'                                         => 'CMS_URL',
             'global.bootstrapId'                                     => 'myparcel-pdk-bootstrap',
             'global.endpoints.exportAndPrintOrder.body'              => null,
@@ -39,6 +40,11 @@ it('gets context data', function (string $id, array $arguments, array $expectati
             'global.endpoints.exportOrder.method'                    => 'POST',
             'global.endpoints.exportOrder.parameters.action'         => 'exportOrder',
             'global.endpoints.exportOrder.path'                      => '',
+            'global.endpoints.exportReturn.body'                     => null,
+            'global.endpoints.exportReturn.headers'                  => [],
+            'global.endpoints.exportReturn.method'                   => 'POST',
+            'global.endpoints.exportReturn.parameters.action'        => 'exportReturn',
+            'global.endpoints.exportReturn.path'                     => '',
             'global.endpoints.getOrderData.body'                     => null,
             'global.endpoints.getOrderData.headers'                  => [],
             'global.endpoints.getOrderData.method'                   => 'GET',
@@ -54,7 +60,6 @@ it('gets context data', function (string $id, array $arguments, array $expectati
             'global.pluginSettings'                                  => [],
             'global.translations.apple_tree'                         => 'Appelboom',
             'orderData'                                              => null,
-            'deliveryOptions'                                        => null,
         ],
     ],
 
