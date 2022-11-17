@@ -1,9 +1,6 @@
-name: 'Run tests 🧪'
-on:
-  pull_request:
-    branches:
-      - main
+name: '🔸 Run tests 🧪'
 
+on:
   workflow_dispatch:
 
   workflow_call:
@@ -14,6 +11,7 @@ on:
 
 jobs:
   test:
+    name: 'Run pest tests'
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -50,4 +48,4 @@ jobs:
 
       - uses: codacy/codacy-coverage-reporter-action@v1
         with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          api-token: ${{ secrets.CODACY_API_TOKEN }}

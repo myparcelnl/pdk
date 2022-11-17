@@ -1,9 +1,9 @@
 {
     "name": "@myparcel/php-pdk",
+    "license": "MIT",
     "private": true,
     "scripts": {
-        "preinstall": "npx -q only-allow yarn",
-        "test": "docker compose exec php vendor/bin/pest",
+        "test": "docker compose run --rm php vendor/bin/pest",
         "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'"
     },
     "release": {
@@ -11,5 +11,6 @@
     },
     "devDependencies": {
         "@myparcel/semantic-release-config": "^4.0.0"
-    }
+    },
+    "packageManager": "yarn@3.3.0"
 }

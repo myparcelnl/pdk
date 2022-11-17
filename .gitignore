@@ -9,3 +9,10 @@ pdk_ide_helper.php
 /coverage/
 /node_modules/
 /vendor/
+
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
