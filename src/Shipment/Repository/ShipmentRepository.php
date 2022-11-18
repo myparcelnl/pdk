@@ -150,6 +150,23 @@ class ShipmentRepository extends ApiRepository
     }
 
     /**
+     * @param  array $ids
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    public function getShipments(array $ids): ShipmentCollection
+    {
+        $request = new GetShipmentsRequest($ids);
+
+        return $this->retrieve($request->getUniqueKey(), function () use ($request) {
+            /** @var \MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse $response */
+            $response = $this->api->doRequest($request, GetShipmentsResponse::class);
+
+            return $response->getShipments();
+        });
+    }
+
+    /**
      * @param  array $parameters
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection

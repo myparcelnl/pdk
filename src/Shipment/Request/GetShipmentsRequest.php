@@ -8,8 +8,25 @@ use MyParcelNL\Pdk\Base\Request\Request;
 
 class GetShipmentsRequest extends Request
 {
+    /**
+     * @var array
+     */
+    private $ids;
+
+    /**
+     * @param  array $ids
+     */
+    public function __construct(array $ids)
+    {
+        $this->ids = $ids;
+        parent::__construct();
+    }
+
+    /**
+     * @return string
+     */
     public function getPath(): string
     {
-        return '/shipments';
+        return '/shipments/' . implode(';', $this->ids);
     }
 }
