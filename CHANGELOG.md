@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.26.0](https://github.com/myparcelnl/pdk/compare/v1.25.3...v1.26.0) (2022-11-18)
+
+
+### :sparkles: New Features
+
+* **shipments:** get by id ([#49](https://github.com/myparcelnl/pdk/issues/49)) ([fd8477e](https://github.com/myparcelnl/pdk/commit/fd8477eeeee03a64c67af4366a400570d7e41105))
+
 ## [1.25.3](https://github.com/myparcelnl/pdk/compare/v1.25.2...v1.25.3) (2022-11-11)
 
 
