@@ -95,15 +95,18 @@ class PdkOrder extends Model
         $this->shipments->push(
             array_replace_recursive(
                 [
-                    'deliveryOptions' => $this->deliveryOptions,
-                    'recipient'       => $this->recipient,
-                    'sender'          => $this->sender,
-                    'carrier'         => [
+                    'deliveryOptions'    => $this->deliveryOptions,
+                    'recipient'          => $this->recipient,
+                    'sender'             => $this->sender,
+                    'carrier'            => [
                         'name' => $this->deliveryOptions->carrier,
                     ],
+                    ['orderId' => $this->externalIdentifier],
+                    'physicalProperties' => [
+                        'weight' => $this->customsDeclaration->weight,
+                    ],
                 ],
-                $data,
-                ['orderId' => $this->externalIdentifier]
+                $data
             )
         );
 
