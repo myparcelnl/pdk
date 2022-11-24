@@ -7,6 +7,7 @@ use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
+use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsPdfResponse;
@@ -25,7 +26,7 @@ dataset('collections', [
         'format'     => null,
         'position'   => null,
         'path'       => 'API/shipment_labels/5',
-        'query'      => '',
+        'query'      => 'positions=A4%3B2%3B4%3B1%3B3',
     ],
     'multiple shipment ids'             => [
         'collection' => [
@@ -35,7 +36,7 @@ dataset('collections', [
         'format'     => null,
         'position'   => null,
         'path'       => 'API/shipment_labels/5;6',
-        'query'      => '',
+        'query'      => 'positions=A4%3B2%3B4%3B1%3B3',
     ],
     'with position'                     => [
         'collection' => [
@@ -44,7 +45,7 @@ dataset('collections', [
         'format'     => null,
         'position'   => [1],
         'path'       => 'API/shipment_labels/12425',
-        'query'      => 'positions=1',
+        'query'      => 'positions=A4%3B4%3B1%3B3',
     ],
     'a4 format'                         => [
         'collection' => [
@@ -53,7 +54,7 @@ dataset('collections', [
         'format'     => 'a4',
         'position'   => null,
         'path'       => 'API/shipment_labels/5',
-        'query'      => 'format=a4',
+        'query'      => 'format=a4&positions=A4%3B2%3B4%3B1%3B3',
     ],
     'a6 format'                         => [
         'collection' => [
@@ -62,7 +63,7 @@ dataset('collections', [
         'format'     => 'a6',
         'position'   => null,
         'path'       => 'API/shipment_labels/5',
-        'query'      => 'format=a6',
+        'query'      => 'format=a6&positions=A4%3B2%3B4%3B1%3B3',
     ],
     'a6 format with positions'          => [
         'collection' => [
@@ -71,14 +72,14 @@ dataset('collections', [
         'format'     => 'a6',
         'position'   => [2, 3],
         'path'       => 'API/shipment_labels/5',
-        'query'      => 'format=a6&positions=2%3B3',
+        'query'      => 'format=a6&positions=A4%3B1%3B3',
     ],
     'bulk with a6 format and positions' => [
         'collection' => $bulkShipmentsArray,
         'format'     => 'a6',
         'position'   => [2, 3],
         'path'       => 'API/v2/shipment_labels/1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21;22;23;24;25;26;27;28;29;30',
-        'query'      => 'format=a6&positions=2%3B3',
+        'query'      => 'format=a6&positions=A4%3B1%3B3',
     ],
 ]);
 
@@ -150,3 +151,25 @@ it(
             ->toStartWith('%PDF-1.6');
     }
 )->with('collections');
+
+it('sets label parameters', function (array $parameters, $output) {
+    $request = new GetLabelsRequest(new ShipmentCollection(), $parameters);
+    expect($request->getQueryString())
+        ->toBe($output);
+})->with([
+        'positions as array' => [
+            [
+                'format'    => 'a4',
+                'positions' => [2],
+            ],
+            'format=A4&position=1%3B3',
+        ],
+        'positions as int'   => [
+            [
+                'format'    => 'a4',
+                'positions' => [1, 3],
+            ],
+            'format=A4&position=4%3B1%3B3',
+        ],
+    ]
+);

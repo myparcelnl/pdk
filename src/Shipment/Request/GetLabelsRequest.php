@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Base\Request\Request;
-use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 
 class GetLabelsRequest extends Request
@@ -26,9 +25,9 @@ class GetLabelsRequest extends Request
      */
     public function __construct(ShipmentCollection $shipmentCollection, array $parameters)
     {
-        $this->collection        = $shipmentCollection;
-        $positions               = array_slice(self::DEFAULT_POSITIONS, $parameters['positions'][0] % 4);
-        $parameters['positions'] = $this->setLabelParameters($positions);
+        $this->collection = $shipmentCollection;
+        $positions        = array_slice(self::DEFAULT_POSITIONS, $parameters['positions'][0] % 4);
+        $parameters       = $this->setLabelParameters($positions);
         parent::__construct(['parameters' => $parameters]);
     }
 
@@ -65,35 +64,6 @@ class GetLabelsRequest extends Request
     }
 
     /**
-     * Generating positions for A4 paper
-     *
-     * @param  array $parameters
-     *
-     * @return string
-     */
-    private function getPositions(array $parameters): string
-    {
-        $aPositions = [];
-        switch ($parameters['position']) {
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 1:
-                $aPositions[] = 1;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 2:
-                $aPositions[] = 2;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 3:
-                $aPositions[] = 3;
-            /** @noinspection PhpMissingBreakStatementInspection */
-            case 4:
-                $aPositions[] = 4;
-                break;
-        }
-
-        return implode(';', $aPositions);
-    }
-
-    /**
      * @return bool
      */
     private function hasBulkPrepare(): bool
@@ -112,21 +82,16 @@ class GetLabelsRequest extends Request
      *
      * @return array
      */
-    private function setLabelParameters($positions): array
+    private function setLabelParameters(?array $positions): array
     {
-        /** If $positions is not false, set paper size to A4 */
-        if (is_numeric($positions)) {
-            /** Generating positions for A4 paper */
-            $format   = LabelSettings::FORMAT_A4;
-            $position = $this->getPositions($positions);
-        } elseif (is_array($positions)) {
+        /** Set paper size to A6 */
+        $format   = 'A6';
+        $position = null;
+
+        if ($positions) {
             /** Set positions for A4 paper */
             $format   = 'A4';
             $position = implode(';', $positions);
-        } else {
-            /** Set paper size to A6 */
-            $format   = 'A6';
-            $position = null;
         }
 
         return [
