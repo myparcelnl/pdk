@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Label;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsAsPdfRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetShipmentsRequest;
@@ -54,21 +53,11 @@ class ShipmentRepository extends ApiRepository
             PostShipmentsResponse::class
         );
 
-        $returnShipments = [];
+        $returnIds = $response->getIds()
+            ->pluck('id')
+            ->toArray();
 
-        foreach ($collection->toArray() as $shipment) {
-            $returnShipments[] = new Shipment($shipment);
-        }
-
-        $returnCollection = new ShipmentCollection($returnShipments);
-        $returnCollection->addIds($response->getIds());
-
-        $returnCollection->each(static function (Shipment $shipment) use ($collection) {
-            $shipment->isReturn = true;
-            $collection->push($shipment);
-        });
-
-        return $collection;
+        return $this->getShipments($returnIds);
     }
 
     /**
