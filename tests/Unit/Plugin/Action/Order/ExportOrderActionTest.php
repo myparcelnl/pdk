@@ -244,9 +244,23 @@ it('exports return', function () {
     $this->orderRepository->add(
         new PdkOrder(
             [
-                'externalIdentifier' => '245',
-                'deliveryOptions'    => [
-                    'carrier' => CarrierOptions::CARRIER_POSTNL_NAME,
+                'externalIdentifier' => '701',
+                'shipments'          => [
+                    [
+                        'id'                  => 100001,
+                        'referenceIdentifier' => '1',
+                    ],
+                    [
+                        'id'                  => 100002,
+                        'referenceIdentifier' => '2',
+                        'deliveryOptions'     => [
+                            'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+                            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+                            'shipmentOptions' => [
+                                'signature' => true,
+                            ],
+                        ],
+                    ],
                 ],
             ]
         ),
@@ -262,7 +276,7 @@ it('exports return', function () {
     );
 
     $response = $this->pdk->execute(PdkActions::EXPORT_RETURN, [
-        'orderIds' => ['245', '247'],
+        'orderIds' => ['701', '247'],
     ]);
 
     if (! $response) {
@@ -278,7 +292,7 @@ it('exports return', function () {
             /**
              * 245
              */
-            'data.orders.0.externalIdentifier'           => '245',
+            'data.orders.0.externalIdentifier'           => '701',
             'data.orders.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.deliveryOptions.labelAmount'  => 1,
             'data.orders.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
