@@ -40,30 +40,21 @@ it('creates return shipment', function (array $input, array $output) {
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostShipmentsResponse());
+    $mock->append(new ExampleGetShipmentsResponse());
 
     $repository             = $pdk->get(ShipmentRepository::class);
     $inputShipments         = (new Collection($input))->mapInto(Shipment::class);
     $createdReturnShipments = $repository->createReturnShipments(new ShipmentCollection($inputShipments->all()));
+    $array                  = $createdReturnShipments->toArray();
 
-    $request = $mock->getLastRequest();
-
-    if (! $request) {
-        throw new RuntimeException('Request is not set');
+    foreach ($array as $index => $shipment) {
+        unset($shipment['carrier']['capabilities'], $shipment['carrier']['returnCapabilities']);
+        $array[$index] = $shipment;
     }
 
-    $body = json_decode(
-        $request->getBody()
-            ->getContents(),
-        true
-    );
-
-    $shipments = Arr::get($body, 'data.return_shipments');
-
-    expect($shipments)
-        ->toBeArray()
-        ->and($createdReturnShipments)
+    expect($createdReturnShipments)
         ->toBeInstanceOf(ShipmentCollection::class)
-        ->and(Arr::dot($shipments))
+        ->and(Arr::dot($array))
         ->toEqual($output);
 })->with([
     'simple domestic shipment' => [
@@ -96,95 +87,96 @@ it('creates return shipment', function (array $input, array $output) {
             ],
         ],
         'output' => [
-            '0.parent'                     => 65435213,
-            '0.reference_identifier'       => 'Order-1',
-            '0.carrier'                    => 1,
-            '0.email'                      => 'test@myparcel.nl',
-            '0.name'                       => 'Jaap Krekel',
-            '0.options.package_type'       => 1,
-            '0.options.age_check'          => 1,
-            '0.options.label_description'  => 'order 204829',
-            '0.options.only_recipient'     => 1,
-            '0.options.insurance.amount'   => 50000,
-            '0.options.insurance.currency' => 'EUR',
-        ],
-    ],
-    'multiple shipments'       => [
-        'input'  => [
-            [
-                'id'                  => 4321,
-                'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
-                'deliveryOptions'     => [
-                    'date'            => '2022-07-20 16:00:00',
-                    'shipmentOptions' => [
-                        'ageCheck'         => true,
-                        'insurance'        => 0,
-                        'labelDescription' => 'order 204829',
-                        'largeFormat'      => false,
-                        'onlyRecipient'    => true,
-                        'return'           => false,
-                        'sameDayDelivery'  => false,
-                        'signature'        => false,
-                    ],
-                ],
-                'physicalProperties'  => [
-                    'height' => 100,
-                    'width'  => 120,
-                    'length' => 80,
-                    'weight' => 2000,
-                ],
-                'recipient'           => INPUT_RECIPIENT,
-                'referenceIdentifier' => 'Bestelling-12',
-                'sender'              => DEFAULT_INPUT_SENDER,
-            ],
-            [
-                'id'                  => 24,
-                'carrier'             => ['id' => CarrierOptions::CARRIER_INSTABOX_ID],
-                'deliveryOptions'     => [
-                    'date'            => '2022-07-20 16:00:00',
-                    'shipmentOptions' => [
-                        'ageCheck'         => true,
-                        'insurance'        => 500,
-                        'labelDescription' => 'order 204829',
-                        'largeFormat'      => false,
-                        'onlyRecipient'    => true,
-                        'return'           => false,
-                        'sameDayDelivery'  => false,
-                        'signature'        => false,
-                    ],
-                ],
-                'physicalProperties'  => [
-                    'height' => 100,
-                    'width'  => 120,
-                    'length' => 80,
-                    'weight' => 2000,
-                ],
-                'recipient'           => INPUT_RECIPIENT,
-                'referenceIdentifier' => 'Hondenbrokken-43',
-                'sender'              => DEFAULT_INPUT_SENDER,
-            ],
-        ],
-        'output' => [
-            '0.parent'                     => 4321,
-            '0.reference_identifier'       => 'Bestelling-12',
-            '0.carrier'                    => 1,
-            '0.email'                      => 'test@myparcel.nl',
-            '0.name'                       => 'Jaap Krekel',
-            '0.options.package_type'       => 1,
-            '0.options.age_check'          => 1,
-            '0.options.label_description'  => 'order 204829',
-            '0.options.only_recipient'     => 1,
-            '1.parent'                     => 24,
-            '1.reference_identifier'       => 'Hondenbrokken-43',
-            '1.carrier'                    => 5,
-            '1.email'                      => 'test@myparcel.nl',
-            '1.name'                       => 'Jaap Krekel',
-            '1.options.package_type'       => 1,
-            '1.options.age_check'          => 1,
-            '1.options.label_description'  => 'order 204829',
-            '1.options.only_recipient'     => 1,
-            '1.options.insurance.amount'   => 50000,
-            '1.options.insurance.currency' => 'EUR',
+            '0.id'                                               => 7,
+            '0.referenceIdentifier'                              => 'GeheimeDingen-1',
+            '0.externalIdentifier'                               => 'CV515676839NL',
+            '0.apiKey'                                           => null,
+            '0.barcode'                                          => 'CV515676839NL',
+            '0.carrier.id'                                       => 1,
+            '0.carrier.name'                                     => 'postnl',
+            '0.carrier.human'                                    => null,
+            '0.carrier.subscriptionId'                           => null,
+            '0.carrier.primary'                                  => true,
+            '0.carrier.isDefault'                                => null,
+            '0.carrier.optional'                                 => null,
+            '0.carrier.label'                                    => null,
+            '0.carrier.type'                                     => 'main',
+            '0.collectionContact'                                => null,
+            '0.created'                                          => '2021-04-26 14:06:45',
+            '0.createdBy'                                        => 35159,
+            '0.customsDeclaration.contents'                      => 1,
+            '0.customsDeclaration.invoice'                       => '123456',
+            '0.customsDeclaration.items.0.amount'                => 1,
+            '0.customsDeclaration.items.0.classification'        => '123456',
+            '0.customsDeclaration.items.0.country'               => 'NL',
+            '0.customsDeclaration.items.0.description'           => 'Product',
+            '0.customsDeclaration.items.0.itemValue.amount'      => 1000,
+            '0.customsDeclaration.items.0.itemValue.currency'    => 'EUR',
+            '0.customsDeclaration.items.0.weight'                => 500,
+            '0.customsDeclaration.weight'                        => 3500,
+            '0.delayed'                                          => false,
+            '0.delivered'                                        => false,
+            '0.deliveryOptions.carrier'                          => 'postnl',
+            '0.deliveryOptions.date'                             => null,
+            '0.deliveryOptions.deliveryType'                     => '2',
+            '0.deliveryOptions.labelAmount'                      => 1,
+            '0.deliveryOptions.packageType'                      => '1',
+            '0.deliveryOptions.pickupLocation'                   => null,
+            '0.deliveryOptions.shipmentOptions.ageCheck'         => false,
+            '0.deliveryOptions.shipmentOptions.insurance'        => 20000,
+            '0.deliveryOptions.shipmentOptions.labelDescription' => 'standaard kenmerk',
+            '0.deliveryOptions.shipmentOptions.largeFormat'      => false,
+            '0.deliveryOptions.shipmentOptions.onlyRecipient'    => false,
+            '0.deliveryOptions.shipmentOptions.return'           => false,
+            '0.deliveryOptions.shipmentOptions.sameDayDelivery'  => null,
+            '0.deliveryOptions.shipmentOptions.signature'        => false,
+            '0.dropOffPoint'                                     => null,
+            '0.isReturn'                                         => false,
+            '0.linkConsumerPortal'                               => null,
+            '0.modified'                                         => '2021-05-03 07:42:43',
+            '0.modifiedBy'                                       => 35159,
+            '0.multiCollo'                                       => false,
+            '0.multiColloMainShipmentId'                         => null,
+            '0.partnerTrackTraces'                               => [],
+            '0.physicalProperties.height'                        => 20,
+            '0.physicalProperties.length'                        => 40,
+            '0.physicalProperties.weight'                        => 3500,
+            '0.physicalProperties.width'                         => 30,
+            '0.recipient.boxNumber'                              => null,
+            '0.recipient.cc'                                     => 'CW',
+            '0.recipient.city'                                   => 'Willemstad',
+            '0.recipient.fullStreet'                             => null,
+            '0.recipient.number'                                 => '12',
+            '0.recipient.numberSuffix'                           => null,
+            '0.recipient.postalCode'                             => null,
+            '0.recipient.region'                                 => null,
+            '0.recipient.state'                                  => null,
+            '0.recipient.street'                                 => 'Schottegatweg Oost',
+            '0.recipient.streetAdditionalInfo'                   => null,
+            '0.recipient.email'                                  => 'meneer@groenteboer.nl',
+            '0.recipient.phone'                                  => '+31699335577',
+            '0.recipient.person'                                 => 'Joep Meloen',
+            '0.recipient.company'                                => 'MyParcel',
+            '0.sender.boxNumber'                                 => null,
+            '0.sender.cc'                                        => 'NL',
+            '0.sender.city'                                      => 'Hoofddorp',
+            '0.sender.fullStreet'                                => null,
+            '0.sender.number'                                    => '31',
+            '0.sender.numberSuffix'                              => null,
+            '0.sender.postalCode'                                => '2132 JE',
+            '0.sender.region'                                    => null,
+            '0.sender.state'                                     => null,
+            '0.sender.street'                                    => 'Antareslaan',
+            '0.sender.streetAdditionalInfo'                      => null,
+            '0.sender.email'                                     => 'shop@geheimedingen.nl',
+            '0.sender.phone'                                     => '0612345678',
+            '0.sender.person'                                    => 'Denzel Crocker',
+            '0.sender.company'                                   => 'Geheime Dingen',
+            '0.shopId'                                           => 6,
+            '0.orderId'                                          => null,
+            '0.status'                                           => 2,
+            '0.updated'                                          => null,
+
         ],
     ],
 ]);
@@ -206,8 +198,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
         throw new RuntimeException('Request is not set');
     }
 
-    $uri               = $request->getUri();
-    $contentTypeHeader = Arr::first($request->getHeaders()['Content-Type']);
+    $uri = $request->getUri();
 
     expect($uri->getQuery())
         ->toBe($query)
