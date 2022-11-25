@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -195,6 +196,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostShipmentsResponse());
+    $mock->append(new ExampleGetShipmentsResponse());
 
     $repository = $pdk->get(ShipmentRepository::class);
     $response   = $repository->createReturnShipments(new ShipmentCollection($input));
@@ -211,8 +213,6 @@ it('creates a valid request from a shipment collection', function ($input, $path
         ->toBe($query)
         ->and($uri->getPath())
         ->toBe($path)
-        ->and($contentTypeHeader)
-        ->toBe($contentType)
         ->and($response)
         ->toBeInstanceOf(ShipmentCollection::class);
 })->with([
@@ -245,8 +245,8 @@ it('creates a valid request from a shipment collection', function ($input, $path
                 'sender'              => DEFAULT_INPUT_SENDER,
             ],
         ],
-        'path'        => 'API/shipments',
-        'query'       => 'send_return_mail=1',
+        'path'        => 'API/shipments/1',
+        'query'       => '',
         'contentType' => 'application/vnd.return_shipment+json;charset=utf-8',
     ],
 ]);
