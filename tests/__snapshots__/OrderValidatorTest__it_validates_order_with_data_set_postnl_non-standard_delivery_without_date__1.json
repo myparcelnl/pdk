@@ -1,0 +1,34 @@
+[
+    {
+        "property": "deliveryOptions.deliveryType",
+        "pointer": "\/deliveryOptions\/deliveryType",
+        "message": "Does not have a value in the enumeration [\"standard\",null]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            "standard",
+            null
+        ]
+    },
+    {
+        "property": "deliveryOptions.date",
+        "pointer": "\/deliveryOptions\/date",
+        "message": "NULL value found, but a string is required",
+        "constraint": "type",
+        "context": 1
+    },
+    {
+        "property": "",
+        "pointer": "",
+        "message": "Failed to match at least one schema",
+        "constraint": "anyOf",
+        "context": 1
+    },
+    {
+        "property": "",
+        "pointer": "",
+        "message": "Failed to match all schemas",
+        "constraint": "allOf",
+        "context": 1
+    }
+]

@@ -39,23 +39,4 @@ class ShipmentOptions extends Model
         'sameDayDelivery'  => 'bool',
         'signature'        => 'bool',
     ];
-
-    /**
-     * Set all options to a defined value instead of null.
-     *
-     * @return \MyParcelNL\Pdk\Base\Model\Model|\MyParcelNL\Pdk\Shipment\Model\ShipmentOptions
-     */
-    public function lockShipmentOptions(): ShipmentOptions
-    {
-        return $this->fill([
-            'ageCheck'         => (bool) $this->ageCheck,
-            'insurance'        => (int) $this->insurance,
-            'labelDescription' => (string) $this->labelDescription,
-            'largeFormat'      => (bool) $this->largeFormat,
-            'onlyRecipient'    => (bool) $this->onlyRecipient,
-            'return'           => (bool) $this->return,
-            'sameDayDelivery'  => (bool) $this->sameDayDelivery,
-            'signature'        => (bool) $this->signature,
-        ]);
-    }
 }

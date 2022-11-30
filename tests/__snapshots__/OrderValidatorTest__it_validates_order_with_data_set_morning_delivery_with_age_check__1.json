@@ -1,0 +1,57 @@
+[
+    {
+        "property": "deliveryOptions.shipmentOptions.onlyRecipient",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/onlyRecipient",
+        "message": "Does not have a value in the enumeration [true]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            true
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.signature",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
+        "message": "Does not have a value in the enumeration [true]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            true
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.ageCheck",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
+        "message": "Does not have a value in the enumeration [null,false]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            null,
+            false
+        ]
+    },
+    {
+        "property": "",
+        "pointer": "",
+        "message": "Failed to match at least one schema",
+        "constraint": "anyOf",
+        "context": 1
+    },
+    {
+        "property": "",
+        "pointer": "",
+        "message": "Failed to match all schemas",
+        "constraint": "allOf",
+        "context": 1
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.ageCheck",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
+        "message": "Does not have a value in the enumeration [false]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            false
+        ]
+    }
+]

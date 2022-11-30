@@ -8,7 +8,7 @@ namespace MyParcelNL\Pdk\Plugin\Action;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Plugin\Request\AbstractEndpointRequest;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 abstract class PdkEndpointActions implements EndpointActionsInterface
 {

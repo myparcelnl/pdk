@@ -15,11 +15,11 @@ return [
             'schema'       => 'order/bpost/base',
             'shippingZone' => [
                 [
-                    'cc'   => CountryService::CC_BE,
+                    'name' => CountryService::CC_BE,
                     'note' => 'Is validated using base',
                 ],
                 [
-                    'cc'          => CountryService::CC_NL,
+                    'name'        => CountryService::CC_NL,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -29,7 +29,7 @@ return [
                     ],
                 ],
                 [
-                    'cc'          => CountryService::ZONE_EU,
+                    'name'        => CountryService::ZONE_EU,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -39,7 +39,7 @@ return [
                     ],
                 ],
                 [
-                    'cc'          => CountryService::ZONE_ROW,
+                    'name'        => CountryService::ZONE_ROW,
                     'schema'      => 'customs_declaration',
                     'packageType' => [
                         [
@@ -64,7 +64,7 @@ return [
             'schema'       => 'order/postnl/base',
             'shippingZone' => [
                 [
-                    'cc'          => CountryService::CC_BE,
+                    'name'        => CountryService::CC_BE,
                     'packageType' => [
                         [
                             'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -81,7 +81,7 @@ return [
                     ],
                 ],
                 [
-                    'cc'          => CountryService::CC_NL,
+                    'name'        => CountryService::CC_NL,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -91,7 +91,7 @@ return [
                     ],
                 ],
                 [
-                    'cc'          => CountryService::ZONE_EU,
+                    'name'        => CountryService::ZONE_EU,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -101,7 +101,7 @@ return [
                     ],
                 ],
                 [
-                    'cc'          => CountryService::ZONE_ROW,
+                    'name'        => CountryService::ZONE_ROW,
                     'schema'      => 'customs_declaration',
                     'packageType' => [
                         [

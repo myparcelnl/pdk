@@ -1,4 +1,5 @@
 {
+    "description": "myparcel/order/postnl/eu_package",
     "properties": {
         "deliveryType": {
             "enum": [

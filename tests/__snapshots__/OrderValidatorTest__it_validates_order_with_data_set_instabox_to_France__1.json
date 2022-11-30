@@ -1,0 +1,12 @@
+[
+    {
+        "property": "recipient.cc",
+        "pointer": "\/recipient\/cc",
+        "message": "Does not have a value in the enumeration [\"NL\"]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            "NL"
+        ]
+    }
+]

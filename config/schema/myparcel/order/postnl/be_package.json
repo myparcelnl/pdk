@@ -1,4 +1,5 @@
 {
+    "description": "myparcel/order/postnl/be_package",
     "properties": {
         "deliveryOptions": {
             "properties": {

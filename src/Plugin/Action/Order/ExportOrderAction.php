@@ -18,6 +18,10 @@ class ExportOrderAction extends AbstractOrderAction
      */
     private $shipmentRepository;
 
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository $orderRepository
+     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository       $shipmentRepository
+     */
     public function __construct(AbstractPdkOrderRepository $orderRepository, ShipmentRepository $shipmentRepository)
     {
         parent::__construct($orderRepository);
@@ -32,8 +36,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     public function handle(array $parameters): Response
     {
-        $orders = $this->orderRepository->getMany($parameters['orderIds']);
-
+        $orders    = $this->orderRepository->getMany($parameters['orderIds']);
         $shipments = $orders->generateShipments();
         $shipments = $this->shipmentRepository->createConcepts($shipments);
 

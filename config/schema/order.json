@@ -82,16 +82,25 @@
                             "type": "string"
                         },
                         "streetAdditionalInfo": {
-                            "type": ["null","string"]
+                            "type": [
+                                "null",
+                                "string"
+                            ]
                         },
                         "number": {
                             "type": "string"
                         },
                         "numberSuffix": {
-                            "type": ["null","string"]
+                            "type": [
+                                "null",
+                                "string"
+                            ]
                         },
                         "boxNumber": {
-                            "type": ["null","string"],
+                            "type": [
+                                "null",
+                                "string"
+                            ],
                             "maxLength": 8
                         },
                         "region": {
@@ -169,6 +178,12 @@
                     }
                 }
             }
+        },
+        "multiCollo": {
+            "type": "boolean",
+            "enum": [
+                false
+            ]
         }
     }
 }
