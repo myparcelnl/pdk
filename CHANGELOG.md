@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.26.1](https://github.com/myparcelnl/pdk/compare/v1.26.0...v1.26.1) (2022-11-30)
+
+
+### :bug: Bug Fixes
+
+* **returns:** return correct return shipment ([#56](https://github.com/myparcelnl/pdk/issues/56)) ([42a9ff7](https://github.com/myparcelnl/pdk/commit/42a9ff7f8e2e19f1c29fb1caef75f861c62a35f9))
+
 ## [1.26.0](https://github.com/myparcelnl/pdk/compare/v1.25.3...v1.26.0) (2022-11-18)
 
 
