@@ -338,6 +338,7 @@ it('creates order', function ($input, $path, $query) {
     $mock = $api->getMock();
     $mock->append(new ExampleGetOrdersResponse());
 
+    /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
     $repository      = $pdk->get(OrderRepository::class);
     $order           = new Order($input);
     $orderCollection = (new OrderCollection())->push($order);

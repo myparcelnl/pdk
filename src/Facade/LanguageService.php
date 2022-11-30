@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
 
 /**
+ * @method static string getLanguage()
  * @method static array<string, string> getTranslations(string $language = null)
  * @method static string translate(string $string, string $language = null)
  * @implements \MyParcelNL\Pdk\Language\Service\LanguageServiceInterface

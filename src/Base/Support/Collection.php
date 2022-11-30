@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
+use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 
-class Collection extends \MyParcelNL\Sdk\src\Support\Collection implements Arrayable
+class Collection extends SdkCollection implements Arrayable
 {
     /**
      * Defines a class items should be cast into.

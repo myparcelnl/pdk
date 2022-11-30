@@ -6,6 +6,13 @@ namespace MyParcelNL\Pdk\Base\Request;
 
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
+/**
+ * @property string|null           $body
+ * @property array{string, string} $headers
+ * @property string                $method
+ * @property array{string, string} $parameters
+ * @property string                $path
+ */
 class Request implements RequestInterface
 {
     /**
