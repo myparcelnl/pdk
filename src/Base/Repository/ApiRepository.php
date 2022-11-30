@@ -24,22 +24,4 @@ class ApiRepository extends Repository
 
         $this->api = $api;
     }
-
-    /**
-     * @param  string   $key
-     * @param  callable $callback
-     *
-     * @return mixed
-     */
-    protected function retrieve(string $key, callable $callback)
-    {
-        if (! $this->storage->has($key)) {
-            $data = $callback();
-
-            $this->storageHashMap[$key] = $this->generateDataHash(null);
-            $this->storage->set($key, $data);
-        }
-
-        return $data ?? $this->storage->get($key);
-    }
 }
