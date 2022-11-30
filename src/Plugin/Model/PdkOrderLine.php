@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Model;
 
+use MyParcelNL\Pdk\Base\Concern\HasPrices;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Fulfilment\Model\Product;
 
 /**
  * @property int                                           $quantity
@@ -16,6 +16,8 @@ use MyParcelNL\Pdk\Fulfilment\Model\Product;
  */
 class PdkOrderLine extends Model
 {
+    use HasPrices;
+
     protected $attributes = [
         'quantity'      => 1,
         'price'         => 0,
@@ -31,4 +33,15 @@ class PdkOrderLine extends Model
         'priceAfterVat' => 'int',
         'product'       => PdkProduct::class,
     ];
+
+    /**
+     * @param  null|array $data
+     *
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+        $this->calculateVatTotals();
+    }
 }

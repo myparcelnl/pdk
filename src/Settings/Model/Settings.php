@@ -28,8 +28,6 @@ class Settings extends Model
 
     /**
      * @param  null|array $data
-     *
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __construct(?array $data = null)
     {
@@ -37,7 +35,7 @@ class Settings extends Model
         parent::__construct($data);
 
         foreach (array_keys($this->getAttributes()) as $key) {
-            $this->guarded[$key] = $this->getAttribute($key);
+            $this->guarded[$key] = $this->{$key};
         }
     }
 }

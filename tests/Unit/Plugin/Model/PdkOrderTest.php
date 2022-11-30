@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -40,12 +42,20 @@ it('instantiates shipments', function (array $input) {
     ],
 ]);
 
-it('has correct totals', function (array $input, array $totals) {
-    $order = (new PdkOrder($input))->toArray();
+it('calculates correct totals', function (array $input, array $totals) {
+    $order = new PdkOrder($input);
 
-    foreach ($totals as $key => $value) {
-        expect($order[$key])->toEqual($value);
-    }
+    expect(
+        $order->only([
+                'orderPrice',
+                'orderVat',
+                'orderPriceAfterVat',
+                'totalPrice',
+                'totalVat',
+                'totalPriceAfterVat',
+            ]
+        )
+    )->toEqual($totals);
 })->with([
     'one line'  => [
         'input'  => [
@@ -100,3 +110,45 @@ it('has correct totals', function (array $input, array $totals) {
         ],
     ],
 ]);
+
+//it('calculates totals if order lines are set after constructing', function () {
+//    $order = new PdkOrder([
+//        'shipmentPrice'         => 100,
+//        'shipmentPriceAfterVat' => 120,
+//        'shipmentVat'           => 20,
+//        'lines'                 => [],
+//    ]);
+//
+//    $order->lines = [
+//        [
+//            'quantity'      => 1,
+//            'price'         => 20,
+//            'priceAfterVat' => 24,
+//            'vat'           => 4,
+//        ],
+//        [
+//            'quantity'      => 4,
+//            'price'         => 40,
+//            'priceAfterVat' => 48,
+//            'vat'           => 8,
+//        ],
+//    ];
+//
+//    expect(
+//        $order->only([
+//            'orderPrice',
+//            'orderPriceAfterVat',
+//            'orderVat',
+//            'totalPrice',
+//            'totalPriceAfterVat',
+//            'totalVat',
+//        ])
+//    )->toEqual([
+//        'orderPrice'         => 180,
+//        'orderPriceAfterVat' => 216,
+//        'orderVat'           => 36,
+//        'totalPrice'         => 280,
+//        'totalPriceAfterVat' => 336,
+//        'totalVat'           => 56,
+//    ]);
+//});

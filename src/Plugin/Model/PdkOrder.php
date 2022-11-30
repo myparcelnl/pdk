@@ -18,14 +18,20 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|string                                                   $externalIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration        $customsDeclaration
  * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions           $deliveryOptions
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                     $label
  * @property null|\MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection $lines
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                $sender
- * @property null|int                                                      $shipmentPrice
- * @property null|int                                                      $shipmentPriceAfterVat
- * @property null|int                                                      $shipmentVat
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection   $shipments
- * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                     $label
+ * @property int                                                           $shipmentPrice
+ * @property int                                                           $shipmentPriceAfterVat
+ * @property int                                                           $shipmentVat
+ * @property int                                                           $orderPrice
+ * @property int                                                           $orderPriceAfterVat
+ * @property int                                                           $orderVat
+ * @property int                                                           $totalPrice
+ * @property int                                                           $totalPriceAfterVat
+ * @property int                                                           $totalVat
  */
 class PdkOrder extends Model
 {
@@ -34,19 +40,19 @@ class PdkOrder extends Model
         'externalIdentifier'    => null,
         'customsDeclaration'    => CustomsDeclaration::class,
         'deliveryOptions'       => DeliveryOptions::class,
+        'label'                 => null,
         'lines'                 => PdkOrderLineCollection::class,
         'physicalProperties'    => PhysicalProperties::class,
         'recipient'             => null,
         'sender'                => null,
-        'shipmentPrice'         => null,
-        'shipmentVat'           => null,
         'shipments'             => ShipmentCollection::class,
-        'label'                 => null,
-        /** Totals */
-        'orderPrice'            => 0,
-        'orderVat'              => 0,
-        'orderPriceAfterVat'    => 0,
+        'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
+        'shipmentVat'           => 0,
+        /* The following values are calculated automatically */
+        'orderPrice'            => 0,
+        'orderPriceAfterVat'    => 0,
+        'orderVat'              => 0,
         'totalPrice'            => 0,
         'totalVat'              => 0,
         'totalPriceAfterVat'    => 0,
@@ -56,39 +62,36 @@ class PdkOrder extends Model
         'externalIdentifier'    => 'string',
         'customsDeclaration'    => CustomsDeclaration::class,
         'deliveryOptions'       => DeliveryOptions::class,
+        'label'                 => Label::class,
         'lines'                 => PdkOrderLineCollection::class,
         'physicalProperties'    => PhysicalProperties::class,
         'recipient'             => ContactDetails::class,
         'sender'                => ContactDetails::class,
+        'shipments'             => ShipmentCollection::class,
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
         'shipmentVat'           => 'int',
-        'shipments'             => ShipmentCollection::class,
-        'label'                 => Label::class,
-
-        'orderPrice'         => 'int',
-        'orderVat'           => 'int',
-        'orderPriceAfterVat' => 'int',
-        'totalPrice'         => 'int',
-        'totalVat'           => 'int',
-        'totalPriceAfterVat' => 'int',
+        'orderPrice'            => 'int',
+        'orderPriceAfterVat'    => 'int',
+        'orderVat'              => 'int',
+        'totalPrice'            => 'int',
+        'totalVat'              => 'int',
+        'totalPriceAfterVat'    => 'int',
     ];
 
     /**
      * @param  null|array $data
      */
-    public function __construct(?array $data = [])
+    public function __construct(?array $data = null)
     {
         parent::__construct($data);
-        $this->updateShipments();
-        $this->updateOrderTotals();
+        $this->updateTotals();
     }
 
     /**
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createShipment(array $data = []): Shipment
     {
@@ -107,28 +110,19 @@ class PdkOrder extends Model
             )
         );
 
-        return $this->getAttribute('shipments')
-            ->last();
+        return $this->shipments->last();
     }
 
-    public function updateOrderTotals(): void
+    /**
+     * @param  mixed $orderLines
+     *
+     * @return $this
+     */
+    protected function setLinesAttribute($orderLines): self
     {
-        $price         = 0;
-        $vat           = 0;
-        $priceAfterVat = 0;
-
-        foreach ($this->lines as $line) {
-            $price         += $line->quantity * $line->getPrice();
-            $vat           += $line->quantity * $line->getVat();
-            $priceAfterVat += $line->quantity * $line->getPriceAfterVat();
-        }
-
-        $this->attributes['orderPrice']         = $price;
-        $this->attributes['orderPriceAfterVat'] = $priceAfterVat;
-        $this->attributes['orderVat']           = $vat;
-        $this->attributes['totalPrice']         = $price + $this->shipmentPrice;
-        $this->attributes['totalPriceAfterVat'] = $priceAfterVat + $this->shipmentPriceAfterVat;
-        $this->attributes['totalVat']           = $vat + $this->shipmentVat;
+        $this->attributes['lines'] = $orderLines;
+        $this->updateTotals();
+        return $this;
     }
 
     /**
@@ -155,5 +149,30 @@ class PdkOrder extends Model
             $shipment->recipient       = $this->recipient;
             $shipment->sender          = $this->sender;
         });
+    }
+
+    /**
+     * @return void
+     */
+    private function updateTotals(): void
+    {
+        [$price, $vat, $priceAfterVat] = $this->lines->reduce(
+            function (array $carry, $line) {
+                $carry[0] += $line['quantity'] * $line['price'];
+                $carry[1] += $line['quantity'] * $line['vat'];
+                $carry[2] += $line['quantity'] * $line['priceAfterVat'];
+
+                return $carry;
+            },
+            [0, 0, 0]
+        );
+
+        $this->attributes['orderPrice']         = $price;
+        $this->attributes['orderPriceAfterVat'] = $priceAfterVat;
+        $this->attributes['orderVat']           = $vat;
+
+        $this->attributes['totalPrice']         = $price + $this->attributes['shipmentPrice'];
+        $this->attributes['totalPriceAfterVat'] = $priceAfterVat + $this->attributes['shipmentPriceAfterVat'];
+        $this->attributes['totalVat']           = $vat + $this->attributes['shipmentVat'];
     }
 }

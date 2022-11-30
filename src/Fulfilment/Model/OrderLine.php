@@ -1,9 +1,11 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\Base\Concern\HasPrices;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
@@ -13,9 +15,13 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property int                                           $vat
  * @property int                                           $priceAfterVat
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Product $product
+ * @property string                                        $instructions
+ * @property bool                                          $shippable
  */
 class OrderLine extends Model
 {
+    use HasPrices;
+
     protected $attributes = [
         'uuid'          => null,
         'quantity'      => 1,
@@ -33,4 +39,15 @@ class OrderLine extends Model
         'priceAfterVat' => 'int',
         'product'       => Product::class,
     ];
+
+    /**
+     * @param  null|array $data
+     *
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+        $this->calculateVatTotals();
+    }
 }

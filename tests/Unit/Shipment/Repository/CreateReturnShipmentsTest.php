@@ -82,7 +82,7 @@ it('creates return shipment', function (array $input, array $output) {
                     'weight' => 2000,
                 ],
                 'recipient'           => INPUT_RECIPIENT,
-                'referenceIdentifier' => 'Order-1',
+                'referenceIdentifier' => 'Fulfilment-1',
                 'sender'              => DEFAULT_INPUT_SENDER,
             ],
         ],

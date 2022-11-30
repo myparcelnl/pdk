@@ -30,6 +30,11 @@ class Model implements Arrayable, ArrayAccess
     protected static $traitInitializers = [];
 
     /**
+     * @var bool
+     */
+    protected $initialized = false;
+
+    /**
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
