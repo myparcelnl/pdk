@@ -83,7 +83,7 @@
     <interpreters>
       <interpreter id="65878930-6f8e-40a5-9468-2a119b1c994a" name="php" home="docker-compose://DATA" debugger_id="php.debugger.XDebug">
         <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="php" DOCKER_REMOTE_PROJECT_PATH="/opt/project">
-          <type_data command="EXEC" />
+          <type_data command="RUN" />
           <dockerComposeConfigurationPaths>
             <item value="$PROJECT_DIR$/docker-compose.yml" />
           </dockerComposeConfigurationPaths>
