@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Account\Request\GetShopRequest;
-use MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody;
+use MyParcelNL\Pdk\Account\Response\GetShopsResponse;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -76,8 +76,8 @@ class MockRepository extends ApiRepository
     public function getShopWithParameters(int $shopId): Shop
     {
         return $this->retrieve('shop', function () use ($shopId) {
-            /** @var \MyParcelNL\Pdk\Account\Response\GetShopsResponseWithBody $response */
-            $response = $this->api->doRequest(new GetShopRequest($shopId), GetShopsResponseWithBody::class);
+            /** @var \MyParcelNL\Pdk\Account\Response\GetShopsResponse $response */
+            $response = $this->api->doRequest(new GetShopRequest($shopId), GetShopsResponse::class);
 
             return $response->getShop();
         });

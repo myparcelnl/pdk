@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Api\Response;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class AbstractApiResponse implements ApiResponseInterface
+class ApiResponse implements ApiResponseInterface
 {
     /**
      * @var array
@@ -25,6 +25,14 @@ abstract class AbstractApiResponse implements ApiResponseInterface
     public function __construct(ClientResponseInterface $response)
     {
         $this->response = $response;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getBody(): ?string
+    {
+        return null;
     }
 
     /**

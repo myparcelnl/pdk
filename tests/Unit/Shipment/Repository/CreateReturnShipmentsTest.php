@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
@@ -39,7 +39,7 @@ it('creates return shipment', function (array $input, array $output) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new ExamplePostShipmentsResponse());
+    $mock->append(new ExamplePostIdsResponse());
     $mock->append(new ExampleGetShipmentsResponse());
 
     $repository             = $pdk->get(ShipmentRepository::class);
@@ -187,7 +187,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
-    $mock->append(new ExamplePostShipmentsResponse());
+    $mock->append(new ExamplePostIdsResponse());
     $mock->append(new ExampleGetShipmentsResponse());
 
     $repository = $pdk->get(ShipmentRepository::class);

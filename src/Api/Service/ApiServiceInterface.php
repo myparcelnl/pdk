@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Service;
 
+use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
 
@@ -15,5 +16,8 @@ interface ApiServiceInterface
      *
      * @return \MyParcelNL\Pdk\Api\Response\ApiResponseInterface
      */
-    public function doRequest(RequestInterface $request, string $responseClass): ApiResponseInterface;
+    public function doRequest(
+        RequestInterface $request,
+        string           $responseClass = ApiResponse::class
+    ): ApiResponseInterface;
 }

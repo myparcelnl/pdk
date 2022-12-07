@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
-abstract class AbstractApiResponseWithBody extends AbstractApiResponse
+abstract class ApiResponseWithBody extends ApiResponse
 {
     /**
      * @var null|string

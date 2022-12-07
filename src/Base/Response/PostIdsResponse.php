@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Fulfilment\Response;
+namespace MyParcelNL\Pdk\Base\Response;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
+use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Base\Support\Collection;
 
-class PostOrdersResponse extends AbstractApiResponseWithBody
+class PostIdsResponse extends ApiResponseWithBody
 {
     /**
      * @var \MyParcelNL\Pdk\Base\Support\Collection

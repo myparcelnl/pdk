@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Response;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
+use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
 
-class GetShopsResponseWithBody extends AbstractApiResponseWithBody
+class GetShopsResponse extends ApiResponseWithBody
 {
     /**
      * @var mixed
