@@ -218,12 +218,31 @@ class Model implements Arrayable, ArrayAccess
     /**
      * Convert the model instance to an array.
      *
+     * @param  null|int $flags
+     *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
-        return $this->attributesToArray();
+        return $this->attributesToArray($flags);
+    }
+
+    /**
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toArrayWithoutNull(): array
+    {
+        return $this->attributesToArray(Arrayable::SKIP_NULL);
+    }
+
+    /**
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toKebabCaseArray(): array
+    {
+        return $this->attributesToArray(Arrayable::CASE_KEBAB);
     }
 
     /**
@@ -232,7 +251,16 @@ class Model implements Arrayable, ArrayAccess
      */
     public function toSnakeCaseArray(): array
     {
-        return $this->attributesToArray('snake');
+        return $this->attributesToArray(Arrayable::CASE_SNAKE);
+    }
+
+    /**
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStudlyCaseArray(): array
+    {
+        return $this->attributesToArray(Arrayable::CASE_STUDLY);
     }
 
     /**

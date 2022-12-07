@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
+use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -80,7 +81,7 @@ trait HasDecodesShipment
      */
     private function getShipmentOptions(array $options): array
     {
-        $keys            = array_keys((new ShipmentOptions())->getAttributes('snake'));
+        $keys            = array_keys((new ShipmentOptions())->getAttributes(Arrayable::CASE_SNAKE));
         $shipmentOptions = Arr::only($options, $keys);
 
         $shipmentOptions['insurance'] = $options['insurance']['amount'] ?? null;
