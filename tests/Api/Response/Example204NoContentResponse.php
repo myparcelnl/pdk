@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class Example204NoContentResponse extends ExampleJsonResponse
+class Example204NoContentResponse extends \GuzzleHttp\Psr7\Response
 {
     public function getStatusCode(): int
     {

@@ -74,6 +74,13 @@ it('subscribes to a webhook using a shorthand method', function () {
         ->toEqual(['id' => 5731310]);
 });
 
+it('throws an exception when calling a non-existing method', function () {
+    /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
+    $repository = Pdk::get(WebhookSubscriptionRepository::class);
+
+    $repository->someRandomMethod('https://example.com/webhook');
+})->throws(BadMethodCallException::class);
+
 it('unsubscribes from a webhook', function () {
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);

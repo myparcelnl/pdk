@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Webhook\Repository;
 
+use BadMethodCallException;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -34,16 +35,17 @@ class WebhookSubscriptionRepository extends ApiRepository
      * @param  mixed $name
      * @param  mixed $arguments
      *
-     * @return mixed
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
      */
     public function __call($name, $arguments)
     {
-        if (Str::startsWith($name, self::SHORTHAND_PREFIX)) {
-            $hook = Str::snake(Str::replaceFirst(self::SHORTHAND_PREFIX, '', $name));
-            return $this->subscribe($hook, $arguments[0]);
+        if (! Str::startsWith($name, self::SHORTHAND_PREFIX)) {
+            throw new BadMethodCallException("Method {$name} does not exist.");
         }
 
-        return $this->{$name}(...$arguments);
+        $hook = Str::snake(Str::replaceFirst(self::SHORTHAND_PREFIX, '', $name));
+
+        return $this->subscribe($hook, $arguments[0]);
     }
 
     /**
