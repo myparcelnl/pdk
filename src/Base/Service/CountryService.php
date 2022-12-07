@@ -594,9 +594,9 @@ class CountryService
      *
      * @return bool
      */
-    public function isEuCountry(string $country): bool
+    public function isEu(string $country): bool
     {
-        return $this->getShippingZone($country) === self::ZONE_EU;
+        return self::ZONE_EU === $this->getShippingZone($country);
     }
 
     /**
@@ -604,9 +604,9 @@ class CountryService
      *
      * @return bool
      */
-    public function isRowCountry(string $country): bool
+    public function isRow(string $country): bool
     {
-        return $this->getShippingZone($country) === self::ZONE_ROW;
+        return self::ZONE_ROW === $this->getShippingZone($country);
     }
 
     /**
@@ -614,8 +614,8 @@ class CountryService
      *
      * @return bool
      */
-    public function isUniqueCountry(string $country): bool
+    public function isUnique(string $country): bool
     {
-        return $this->getShippingZone($country) === $country;
+        return $country === $this->getShippingZone($country);
     }
 }
