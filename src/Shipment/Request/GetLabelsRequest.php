@@ -33,7 +33,7 @@ class GetLabelsRequest extends Request
      */
     public function getHeaders(): array
     {
-        return $this->headers += ['Accept' => 'application/json;charset=utf8'];
+        return $this->headers + ['Accept' => 'application/json;charset=utf8'];
     }
 
     /**
