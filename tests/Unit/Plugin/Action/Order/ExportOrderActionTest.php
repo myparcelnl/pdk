@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
@@ -241,6 +242,7 @@ it('exports and prints order', function () {
 
 it('exports return', function () {
     $this->mock->append(new ExamplePostShipmentsResponse([['id' => 30011], ['id' => 30012]]));
+    $this->mock->append(new ExampleGetShipmentsResponse());
     $this->orderRepository->add(
         new PdkOrder(
             [
