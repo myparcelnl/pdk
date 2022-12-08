@@ -19,7 +19,8 @@
         "guzzlehttp/guzzle": "^7.5",
         "myparcelnl/devtools": ">= 1",
         "nette/robot-loader": ">= 3",
-        "pestphp/pest": ">= 1"
+        "pestphp/pest": ">= 1",
+        "spatie/pest-plugin-snapshots": ">= 1"
     },
     "autoload": {
         "psr-4": {
