@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.26.2](https://github.com/myparcelnl/pdk/compare/v1.26.1...v1.26.2) (2022-12-08)
+
+
+### :bug: Bug Fixes
+
+* **model:** invalidate cast cache when setting attribute ([#63](https://github.com/myparcelnl/pdk/issues/63)) ([83b4434](https://github.com/myparcelnl/pdk/commit/83b4434cf59a4a83eed95ee924e61759596b3360))
+
 ## [1.26.1](https://github.com/myparcelnl/pdk/compare/v1.26.0...v1.26.1) (2022-11-30)
 
 
