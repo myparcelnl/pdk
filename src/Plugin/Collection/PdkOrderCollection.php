@@ -53,7 +53,10 @@ class PdkOrderCollection extends Collection
     public function updateShipments(ShipmentCollection $shipments): self
     {
         $this->each(function (PdkOrder $order) use ($shipments) {
-            $order->shipments        = $shipments->where('orderId', $order->externalIdentifier);
+            $matchingShipments = $shipments->where('orderId', $order->externalIdentifier);
+
+            // Using values() to reset the collection keys.
+            $order->shipments        = $matchingShipments->values();
             $order->shipments->label = $shipments->label;
             $order->label            = $shipments->label;
         });
