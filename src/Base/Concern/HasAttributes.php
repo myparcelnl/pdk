@@ -260,6 +260,11 @@ trait HasAttributes
             return $this;
         }
 
+        // Invalidate cast cache
+        if (array_key_exists($key, $this->classCastCache)) {
+            unset($this->classCastCache[$key]);
+        }
+
         if ($this->hasSetMutator($key)) {
             return $this->setMutatedAttributeValue($key, $value);
         }
