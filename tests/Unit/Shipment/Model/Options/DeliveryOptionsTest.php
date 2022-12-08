@@ -83,29 +83,27 @@ it('instantiates delivery options with pickup location', function () {
         ->toBeTrue();
 });
 
-it('always returns an int as id', function () {
+it('returns package type id as int', function () {
+    $faultyDeliveryOptions = new DeliveryOptions(
+        [
+            'date'        => '2022-02-20 16:00:00',
+            'packageType' => '2',
+        ]
+    );
+
+    expect($faultyDeliveryOptions->getPackageTypeId())
+        ->toBe(2);
+});
+
+it('returns delivery type id as int', function () {
     $faultyDeliveryOptions = new DeliveryOptions(
         [
             'date'         => '2022-02-20 16:00:00',
             'deliveryType' => '1',
-            'packageType'  => '2',
-        ]
-    );
-
-    $faultyDeliveryOptions2 = new DeliveryOptions(
-        [
-            'date'         => '2022-02-20 16:00:00',
-            'deliveryType' => 3,
-            'packageType'  => 4,
         ]
     );
 
     expect($faultyDeliveryOptions->getDeliveryTypeId())
-        ->toBe(1)
-        ->and($faultyDeliveryOptions->getPackageTypeId())
-        ->toBe(2)
-        ->and($faultyDeliveryOptions2->getDeliveryTypeId())
-        ->toBe(3)
-        ->and($faultyDeliveryOptions2->getPackageTypeId())
-        ->toBe(4);
+        ->toBe(1);
 });
+
