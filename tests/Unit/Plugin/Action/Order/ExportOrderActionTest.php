@@ -103,6 +103,12 @@ it('exports order', function () {
             'data.orders.1.shipments.0.id'                           => 30012,
             'data.orders.1.shipments.0.orderId'                      => '247',
         ])
+        ->and($content['data']['orders'])
+        ->toHaveLength(2)
+        ->and($content['data']['orders'][0]['shipments'])
+        ->toHaveLength(1)
+        ->and($content['data']['orders'][1]['shipments'])
+        ->toHaveLength(1)
         ->and($response->getStatusCode())
         ->toBe(200);
 });
@@ -236,6 +242,12 @@ it('exports and prints order', function () {
             'data.orders.1.shipments.0.id'                                        => 30322,
             'data.orders.1.shipments.0.orderId'                                   => '264',
         ])
+        ->and($content['data']['orders'])
+        ->toHaveLength(2)
+        ->and($content['data']['orders'][0]['shipments'])
+        ->toHaveLength(1)
+        ->and($content['data']['orders'][1]['shipments'])
+        ->toHaveLength(1)
         ->and($response->getStatusCode())
         ->toBe(200);
 });
