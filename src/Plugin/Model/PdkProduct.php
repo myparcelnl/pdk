@@ -9,6 +9,8 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
 /**
  * @property null|string                                    $sku
+ * @property null|string                                    $ean
+ * @property null|string                                    $name
  * @property int                                            $weight
  * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings $settings
  */
@@ -19,6 +21,8 @@ class PdkProduct extends Model
      */
     protected $attributes = [
         'sku'      => null,
+        'ean'      => null,
+        'name'     => null,
         'weight'   => 0,
         'settings' => ProductSettings::class,
     ];
@@ -28,6 +32,8 @@ class PdkProduct extends Model
      */
     protected $casts = [
         'sku'      => 'string',
+        'ean'      => 'string',
+        'name'     => 'string',
         'weight'   => 'int',
         'settings' => ProductSettings::class,
     ];

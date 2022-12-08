@@ -1,0 +1,12 @@
+{
+    "attributes": {
+        "global": null,
+        "orderData": {},
+        "deliveryOptions": null
+    },
+    "casts": {
+        "global": "MyParcelNL\\Pdk\\Plugin\\Model\\Context\\GlobalContext",
+        "orderData": "MyParcelNL\\Pdk\\Plugin\\Collection\\OrderDataContextCollection",
+        "deliveryOptions": "MyParcelNL\\Pdk\\Plugin\\Model\\Context\\DeliveryOptionsContext"
+    }
+}

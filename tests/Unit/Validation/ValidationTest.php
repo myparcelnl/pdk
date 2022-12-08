@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Validation\OrderValidator;
 use MyParcelNL\Sdk\src\Support\Arr;
+use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 /**
  * From Laravel 8
@@ -105,17 +106,16 @@ beforeEach(function () {
     PdkFactory::create(MockPdkConfig::create());
 });
 
-it('returns correct schema', function ($input, $output) {
+it('returns correct schema', function (array $input) {
     $pdkOrder  = new PdkOrder($input);
     $validator = new OrderValidator($pdkOrder);
 
-    $val = $validator->getValidationSchema();
+    $schema = $validator->getValidationSchema();
 
-    expect(Arr::dot($val))
-        ->toBe($output);
+    assertMatchesJsonSnapshot(json_encode($schema));
 })->with([
     'pickup without location code' => [
-        'input'  => arrayMergeOrder(
+        'input' => arrayMergeOrder(
             STANDARD_INPUT,
             [
                 'deliveryOptions' => [
@@ -126,132 +126,6 @@ it('returns correct schema', function ($input, $output) {
                 ],
             ]
         ),
-        'output' => [
-            'description'                                                                                           => 'myparcel/order/postnl/nl_package',
-            'type'                                                                                                  => 'object',
-            'additionalItems'                                                                                       => false,
-            'required.0'                                                                                            => 'physicalProperties',
-            'required.1'                                                                                            => 'recipient',
-            'required.2'                                                                                            => 'deliveryOptions',
-            'properties.physicalProperties.properties.weight.type.0'                                                => 'integer',
-            'properties.physicalProperties.properties.weight.minimum'                                               => 1,
-            'properties.physicalProperties.properties.weight.note'                                                  => 'Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf',
-            'properties.recipient.type'                                                                             => 'object',
-            'properties.recipient.required.0'                                                                       => 'cc',
-            'properties.recipient.properties.cc.type'                                                               => 'string',
-            'properties.recipient.properties.cc.pattern'                                                            => '^[A-z]{2}$',
-            'properties.deliveryOptions.type'                                                                       => 'object',
-            'properties.deliveryOptions.additionalProperties'                                                       => false,
-            'properties.deliveryOptions.properties.carrier.type'                                                    => 'string',
-            'properties.deliveryOptions.properties.date.type.0'                                                     => 'string',
-            'properties.deliveryOptions.properties.date.type.1'                                                     => 'null',
-            'properties.deliveryOptions.properties.date.pattern'                                                    => '^(20\d\d)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0123]):([012345]\d):([012345]\d)$',
-            'properties.deliveryOptions.properties.deliveryType.type.0'                                             => 'string',
-            'properties.deliveryOptions.properties.deliveryType.type.1'                                             => 'null',
-            'properties.deliveryOptions.properties.deliveryType.enum.0'                                             => 'morning',
-            'properties.deliveryOptions.properties.deliveryType.enum.1'                                             => 'standard',
-            'properties.deliveryOptions.properties.deliveryType.enum.2'                                             => 'evening',
-            'properties.deliveryOptions.properties.deliveryType.enum.3'                                             => 'pickup',
-            'properties.deliveryOptions.properties.deliveryType.enum.4'                                             => null,
-            'properties.deliveryOptions.properties.labelAmount.type.0'                                              => 'integer',
-            'properties.deliveryOptions.properties.labelAmount.type.1'                                              => 'null',
-            'properties.deliveryOptions.properties.packageType.type'                                                => 'string',
-            'properties.deliveryOptions.properties.packageType.enum.0'                                              => 'digital_stamp',
-            'properties.deliveryOptions.properties.packageType.enum.1'                                              => 'letter',
-            'properties.deliveryOptions.properties.packageType.enum.2'                                              => 'mailbox',
-            'properties.deliveryOptions.properties.packageType.enum.3'                                              => 'package',
-            'properties.deliveryOptions.properties.packageType.enum.4'                                              => null,
-            'properties.deliveryOptions.properties.pickupLocation.type.0'                                           => 'object',
-            'properties.deliveryOptions.properties.pickupLocation.type.1'                                           => 'null',
-            'properties.deliveryOptions.properties.pickupLocation.additionalProperties'                             => false,
-            'properties.deliveryOptions.properties.pickupLocation.properties.postalCode.type'                       => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.locationName.type'                     => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.city.type'                             => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.fullStreet.type'                       => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.street.type'                           => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.streetAdditionalInfo.type.0'           => 'null',
-            'properties.deliveryOptions.properties.pickupLocation.properties.streetAdditionalInfo.type.1'           => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.number.type'                           => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.numberSuffix.type.0'                   => 'null',
-            'properties.deliveryOptions.properties.pickupLocation.properties.numberSuffix.type.1'                   => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.boxNumber.type.0'                      => 'null',
-            'properties.deliveryOptions.properties.pickupLocation.properties.boxNumber.type.1'                      => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.boxNumber.maxLength'                   => 8,
-            'properties.deliveryOptions.properties.pickupLocation.properties.region.type'                           => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.region.maxLength'                      => 35,
-            'properties.deliveryOptions.properties.pickupLocation.properties.state.type'                            => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.cc.type'                               => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.cc.pattern'                            => '^[A-z]{2}$',
-            'properties.deliveryOptions.properties.pickupLocation.properties.locationCode.type'                     => 'string',
-            'properties.deliveryOptions.properties.pickupLocation.properties.locationCode.minLength'                => 1,
-            'properties.deliveryOptions.properties.pickupLocation.properties.retailNetworkId.type'                  => 'string',
-            'properties.deliveryOptions.properties.shipmentOptions.type'                                            => 'object',
-            'properties.deliveryOptions.properties.shipmentOptions.additionalProperties'                            => false,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.type.0'                      => 'boolean',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.type.1'                      => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.type.0'                     => 'integer',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.type.1'                     => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.0'                     => 0,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.1'                     => 10000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.2'                     => 25000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.3'                     => 50000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.4'                     => 100000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.5'                     => 150000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.6'                     => 200000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.7'                     => 250000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.8'                     => 300000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.9'                     => 350000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.10'                    => 400000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.11'                    => 450000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.12'                    => 500000,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.insurance.enum.13'                    => null,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.labelDescription.type.0'              => 'string',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.labelDescription.type.1'              => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.labelDescription.maxLength'           => 50,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.largeFormat.type.0'                   => 'boolean',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.largeFormat.type.1'                   => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.onlyRecipient.type.0'                 => 'boolean',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.onlyRecipient.type.1'                 => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.return.type.0'                        => 'boolean',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.return.type.1'                        => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.sameDayDelivery.type.0'               => 'boolean',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.sameDayDelivery.type.1'               => 'null',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.sameDayDelivery.enum.0'               => false,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.signature.type.0'                     => 'boolean',
-            'properties.deliveryOptions.properties.shipmentOptions.properties.signature.type.1'                     => 'null',
-            'allOf.0.anyOf.0.type'                                                                                  => 'object',
-            'allOf.0.anyOf.0.properties.deliveryOptions.type'                                                       => 'object',
-            'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.required.0'                      => 'ageCheck',
-            'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.enum.0'      => true,
-            'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.onlyRecipient.enum.0' => true,
-            'allOf.0.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.signature.enum.0'     => true,
-            'allOf.0.anyOf.1.type'                                                                                  => 'object',
-            'allOf.0.anyOf.1.properties.deliveryOptions.type'                                                       => 'object',
-            'allOf.0.anyOf.1.properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.enum.0'      => null,
-            'allOf.0.anyOf.1.properties.deliveryOptions.properties.shipmentOptions.properties.ageCheck.enum.1'      => false,
-            'allOf.1.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.required.0'                      => 'largeFormat',
-            'allOf.1.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.largeFormat.enum.0'   => true,
-            'allOf.1.anyOf.0.properties.physicalProperties.properties.weight.maximum'                               => 30000,
-            'allOf.1.anyOf.1.properties.physicalProperties.properties.weight.maximum'                               => 23000,
-            'allOf.2.anyOf.0.properties.deliveryOptions.required.0'                                                 => 'deliveryType',
-            'allOf.2.anyOf.0.properties.deliveryOptions.properties.deliveryType.enum.0'                             => 'standard',
-            'allOf.2.anyOf.0.properties.deliveryOptions.properties.deliveryType.enum.1'                             => null,
-            'allOf.2.anyOf.1.properties.deliveryOptions.required.0'                                                 => 'date',
-            'allOf.2.anyOf.1.properties.deliveryOptions.properties.date.type'                                       => 'string',
-            'allOf.2.anyOf.1.properties.deliveryOptions.properties.date.pattern'                                    => '^(20\d\d)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0123]):([012345]\d):([012345]\d)$',
-            'allOf.3.anyOf.0.properties.deliveryOptions.required.0'                                                 => 'deliveryType',
-            'allOf.3.anyOf.0.properties.deliveryOptions.required.1'                                                 => 'pickupLocation',
-            'allOf.3.anyOf.0.properties.deliveryOptions.properties.deliveryType.enum.0'                             => 'pickup',
-            'allOf.3.anyOf.0.properties.deliveryOptions.properties.pickupLocation.type'                             => 'object',
-            'allOf.3.anyOf.0.properties.deliveryOptions.properties.pickupLocation.properties.locationCode.type'     => 'string',
-            'allOf.3.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.onlyRecipient.enum.0' => false,
-            'allOf.3.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.signature.enum.0'     => true,
-            'allOf.3.anyOf.0.properties.deliveryOptions.properties.shipmentOptions.properties.return.enum.0'        => false,
-            'allOf.3.anyOf.1.properties.deliveryOptions.properties.deliveryType.enum.0'                             => 'morning',
-            'allOf.3.anyOf.1.properties.deliveryOptions.properties.deliveryType.enum.1'                             => 'standard',
-            'allOf.3.anyOf.1.properties.deliveryOptions.properties.deliveryType.enum.2'                             => 'evening',
-            'allOf.3.anyOf.1.properties.deliveryOptions.properties.deliveryType.enum.3'                             => null,
-        ],
     ],
 ]);
 

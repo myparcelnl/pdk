@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 /**
  * @property null|int $height
  * @property null|int $length
- * @property null|int $weight
+ * @property int      $weight
  * @property null|int $width
  */
 class PhysicalProperties extends Model
@@ -17,7 +17,7 @@ class PhysicalProperties extends Model
     protected $attributes = [
         'height' => null,
         'length' => null,
-        'weight' => null,
+        'weight' => 0,
         'width'  => null,
     ];
 

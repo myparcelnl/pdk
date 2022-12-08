@@ -1,0 +1,133 @@
+[
+    {
+        "name": "useSeparateAddressFields",
+        "label": "settings_checkout_use_separate_address_fields",
+        "type": "ToggleInput"
+    },
+    {
+        "name": "priceType",
+        "label": "settings_checkout_price_type",
+        "options": [],
+        "type": "SelectInput"
+    },
+    {
+        "name": "showDeliveryDay",
+        "label": "settings_checkout_show_delivery_day",
+        "type": "ToggleInput"
+    },
+    {
+        "name": "stringDelivery",
+        "label": "settings_checkout_string_delivery",
+        "description": "settings_checkout_string_delivery_description",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringStandardDelivery",
+        "label": "settings_checkout_string_standard_delivery",
+        "description": "settings_checkout_string_standard_delivery_description",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringMorningDelivery",
+        "label": "settings_checkout_string_morning_delivery",
+        "description": "settings_checkout_string_standard_delivery_description",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringEveningDelivery",
+        "label": "settings_checkout_string_evening_delivery",
+        "description": "settings_checkout_string_standard_delivery_description",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringSaturdayDelivery",
+        "label": "settings_checkout_string_saturday_delivery",
+        "description": "settings_checkout_string_standard_delivery_description",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringSignature",
+        "label": "settings_checkout_string_signature",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringOnlyRecipient",
+        "label": "settings_checkout_string_only_recipient",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringPickup",
+        "label": "settings_checkout_string_pickup",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringHouseNumber",
+        "label": "settings_checkout_string_house_number",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringCity",
+        "label": "settings_checkout_string_city",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringPostalCode",
+        "label": "settings_checkout_string_postal_code",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringCountry",
+        "label": "settings_checkout_string_country",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringOpeningHours",
+        "label": "settings_checkout_string_opening_hours",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringLoadMore",
+        "label": "settings_checkout_string_load_more",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringPickupLocationsMapButton",
+        "label": "settings_checkout_string_pickup_locations_map_button",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringPickupLocationsListButton",
+        "label": "settings_checkout_string_pickup_locations_list_button",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringRetry",
+        "label": "settings_checkout_string_retry",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringAddressNotFound",
+        "label": "settings_checkout_string_address_not_found",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringWrongPostalCodeCity",
+        "label": "settings_checkout_string_wrong_postal_code_city",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringWrongNumberPostalCode",
+        "label": "settings_checkout_string_wrong_number_postal_code",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringFrom",
+        "label": "settings_checkout_string_from",
+        "type": "TextInput"
+    },
+    {
+        "name": "stringDiscount",
+        "label": "settings_checkout_string_discount",
+        "type": "TextInput"
+    }
+]

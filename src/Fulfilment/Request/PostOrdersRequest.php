@@ -7,13 +7,10 @@ namespace MyParcelNL\Pdk\Fulfilment\Request;
 use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
-use MyParcelNL\Pdk\Shipment\Concern\HasEncodesShipment;
 use MyParcelNL\Sdk\src\Support\Collection;
 
 class PostOrdersRequest extends Request
 {
-    use HasEncodesShipment;
-
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
@@ -72,7 +69,7 @@ class PostOrdersRequest extends Request
             'order_date'                    => $order->orderDate,
             'invoice_address'               => $order->invoiceAddress,
             'order_lines'                   => $order->orderLines->toArrayWithoutNull(),
-            'shipment'                      => $this->encodeShipment($order->shipment),
+            'shipment'                      => $order->shipment ? $order->shipment->toSnakeCaseArray() : null,
         ];
     }
 }

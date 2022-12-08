@@ -103,26 +103,57 @@ trait HasAttributes
     /**
      * Convert the model's attributes to an array.
      *
-     * @param  null|string $case - camel, snake, studly etc.
+     * @param  null|int $flags
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function attributesToArray(string $case = null): array
+    public function attributesToArray(?int $flags = null): array
     {
-        $attributes        = $this->getAttributes($case);
+        $attributes        = $this->getAttributes($flags);
         $mutatedAttributes = $this->getMutatedAttributes();
 
         $attributes = $this->addMutatedAttributesToArray(
             $attributes,
             $mutatedAttributes,
-            $case
+            $flags
         );
 
         return $this->addCastAttributesToArray(
             $attributes,
-            $mutatedAttributes
+            $mutatedAttributes,
+            $flags
         );
+    }
+
+    /**
+     * @param      $attributes
+     * @param  int $flags
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function except($attributes, int $flags): array
+    {
+        $attributes = is_array($attributes) ? $attributes : func_get_args();
+
+        $results = [];
+
+        foreach ($this->attributes as $attribute => $value) {
+            if (in_array($attribute, $attributes, true)) {
+                continue;
+            }
+
+            $value = $this->getAttribute($attribute);
+
+            if ($flags & Arrayable::SKIP_NULL && $value === null) {
+                continue;
+            }
+
+            $results[$attribute] = $value;
+        }
+
+        return $results;
     }
 
     /**
@@ -189,17 +220,27 @@ trait HasAttributes
     /**
      * Get all the current attributes on the model.
      *
-     * @param  null|string $case
+     * @param  null|int $flags
      *
      * @return array
      */
-    public function getAttributes(string $case = null): array
+    public function getAttributes(?int $flags = null): array
     {
-        if ($case) {
-            return Utils::changeArrayKeysCase($this->attributes, $case);
+        $attributes = $this->attributes;
+
+        if ($flags) {
+            if ($flags & Arrayable::SKIP_NULL) {
+                return array_filter($attributes, static function ($value) {
+                    return null !== $value;
+                });
+            }
+
+            if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
+                $attributes = Utils::changeArrayKeysCase($this->attributes, $this->getFlagCase($flags));
+            }
         }
 
-        return $this->attributes;
+        return $attributes;
     }
 
     /**
@@ -230,16 +271,23 @@ trait HasAttributes
      * Get a subset of the model's attributes.
      *
      * @param  array|mixed $attributes
+     * @param  null|int    $flags
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function only($attributes): array
+    public function only($attributes, ?int $flags = null): array
     {
         $results = [];
 
         foreach (is_array($attributes) ? $attributes : func_get_args() as $attribute) {
-            $results[$attribute] = $this->getAttribute($attribute);
+            $value = $this->getAttribute($attribute);
+
+            if ($flags & Arrayable::SKIP_NULL && $value === null) {
+                continue;
+            }
+
+            $results[$attribute] = $value;
         }
 
         return $results;
@@ -277,16 +325,18 @@ trait HasAttributes
     /**
      * Add the cast attributes to the attributes array.
      *
-     * @param  array $attributes
-     * @param  array $mutatedAttributes
+     * @param  array    $attributes
+     * @param  array    $mutatedAttributes
+     * @param  null|int $flags
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes): array
+    protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
         foreach ($this->getCasts() as $key => $value) {
-            $key = $this->convertAttributeCase($key);
+            $originalKey = $this->convertAttributeCase($key);
+            $key         = $this->convertAttributeCase($key, $flags);
 
             if (! array_key_exists($key, $attributes) || in_array($key, $mutatedAttributes, true)) {
                 continue;
@@ -295,7 +345,7 @@ trait HasAttributes
             // Here we will cast the attribute. Then, if the cast is a date or datetime cast
             // then we will serialize the date for the array. This will convert the dates
             // to strings based on the date format specified for these Eloquent models.
-            $attributes[$key] = $this->castAttribute($key, $attributes[$key]);
+            $attributes[$key] = $this->castAttribute($originalKey, $attributes[$key]);
 
             // If the attribute cast was a date or a datetime, we will serialize the date as
             // a string. This allows the developers to customize how dates are serialized
@@ -305,12 +355,16 @@ trait HasAttributes
             }
 
             if ($attributes[$key] instanceof DateTimeInterface
-                && $this->isClassCastable($key)) {
+                && $this->isClassCastable($originalKey)) {
                 $attributes[$key] = $this->serializeDate($attributes[$key]);
             }
 
             if ($attributes[$key] instanceof Arrayable) {
                 $attributes[$key] = $attributes[$key]->toArray();
+            }
+
+            if ($flags & Arrayable::SKIP_NULL && null === $attributes[$key]) {
+                unset($attributes[$key]);
             }
         }
 
@@ -318,25 +372,27 @@ trait HasAttributes
     }
 
     /**
-     * @param  array       $attributes
-     * @param  array       $mutatedAttributes
-     * @param  null|string $case
+     * @param  array    $attributes
+     * @param  array    $mutatedAttributes
+     * @param  null|int $flags
      *
      * @return array
      */
-    protected function addMutatedAttributesToArray(
-        array   $attributes,
-        array   $mutatedAttributes,
-        ?string $case = null
-    ): array {
+    protected function addMutatedAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
+    {
         foreach ($mutatedAttributes as $key) {
-            $key = $this->convertAttributeCase($key, $case);
+            $originalKey = $this->convertAttributeCase($key);
+            $key         = $this->convertAttributeCase($key, $flags);
 
             if (! array_key_exists($key, $attributes)) {
                 continue;
             }
 
-            $attributes[$key] = $this->mutateAttributeForArray($key, $attributes[$key]);
+            $attributes[$key] = $this->mutateAttributeForArray($originalKey, $attributes[$key]);
+
+            if ($flags & Arrayable::SKIP_NULL && null === $attributes[$key]) {
+                unset($attributes[$key]);
+            }
         }
 
         return $attributes;
@@ -406,8 +462,9 @@ trait HasAttributes
     /**
      * Cast an attribute to a native PHP type.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  string   $key
+     * @param  mixed    $value
+     * @param  null|int $flags
      *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
@@ -456,14 +513,16 @@ trait HasAttributes
     }
 
     /**
-     * @param  string      $key
-     * @param  null|string $case
+     * @param  string   $key
+     * @param  null|int $flags
      *
      * @return string
      */
-    protected function convertAttributeCase(string $key, ?string $case = null): string
+    protected function convertAttributeCase(string $key, ?int $flags = null): string
     {
-        return Str::{$case ?? 'camel'}($key);
+        $case = $this->getFlagCase($flags);
+
+        return Str::{$case}($key);
     }
 
     /**
@@ -537,6 +596,28 @@ trait HasAttributes
         }
 
         return $value;
+    }
+
+    /**
+     * @param  null|int $flags
+     *
+     * @return null|string
+     */
+    protected function getFlagCase(?int $flags): ?string
+    {
+        if ($flags & Arrayable::CASE_SNAKE) {
+            return 'snake';
+        }
+
+        if ($flags & Arrayable::CASE_KEBAB) {
+            return 'kebab';
+        }
+
+        if ($flags & Arrayable::CASE_STUDLY) {
+            return 'studly';
+        }
+
+        return 'camel';
     }
 
     /**

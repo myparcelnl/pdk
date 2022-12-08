@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 
 /**
  * @property null|string $uuid
@@ -51,4 +52,23 @@ class Product extends Model
         'height'             => 'int',
         'weight'             => 'int',
     ];
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
+     *
+     * @return static
+     */
+    public static function fromPdkProduct(?PdkProduct $product): self
+    {
+        if (! $product) {
+            return new self();
+        }
+
+        return new self([
+            'sku'    => $product->sku,
+            'ean'    => $product->ean,
+            'name'   => $product->name,
+            'weight' => $product->weight,
+        ]);
+    }
 }

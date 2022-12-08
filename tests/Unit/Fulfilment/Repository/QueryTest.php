@@ -14,14 +14,13 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 /**
  * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::query
  */
-
-it('creates order collection from queried data', function (string $responseClass) {
+it('creates order collection from queried data', function () {
     $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = $pdk->get(ApiServiceInterface::class);
     $api->getMock()
-        ->append(new $responseClass());
+        ->append(new ExampleGetOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
     $repository = $pdk->get(OrderRepository::class);
@@ -37,8 +36,4 @@ it('creates order collection from queried data', function (string $responseClass
     );
 
     assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
-})->with([
-    'normal shipment' => [
-        'response' => ExampleGetOrdersResponse::class,
-    ],
-]);
+});

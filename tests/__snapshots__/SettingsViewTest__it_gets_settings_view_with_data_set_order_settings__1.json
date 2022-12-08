@@ -1,0 +1,56 @@
+[
+    {
+        "name": "statusOnLabelCreate",
+        "label": "settings_order_status_on_label_create",
+        "options": [],
+        "type": "SelectInput"
+    },
+    {
+        "name": "statusWhenLabelScanned",
+        "label": "settings_order_status_when_label_scanned",
+        "options": [],
+        "type": "SelectInput"
+    },
+    {
+        "name": "statusWhenDelivered",
+        "label": "settings_order_status_when_delivered",
+        "options": [],
+        "type": "SelectInput"
+    },
+    {
+        "name": "ignoreOrderStatuses",
+        "label": "settings_order_ignore_order_statuses",
+        "type": "CheckboxInput"
+    },
+    {
+        "name": "orderStatusMail",
+        "label": "settings_order_order_status_mail",
+        "type": "ToggleInput"
+    },
+    {
+        "name": "sendNotificationAfter",
+        "label": "settings_order_send_notification_after",
+        "options": [],
+        "type": "SelectInput"
+    },
+    {
+        "name": "sendOrderStateForDigitalStamp",
+        "label": "settings_order_send_order_state_for_digital_stamp",
+        "type": "ToggleInput"
+    },
+    {
+        "name": "saveCustomerAddress",
+        "label": "settings_order_save_customer_address",
+        "type": "ToggleInput"
+    },
+    {
+        "name": "emptyParcelWeight",
+        "label": "settings_order_save_customer_address",
+        "type": "TextInput"
+    },
+    {
+        "name": "saveCustomerAddress",
+        "label": "settings_order_save_customer_address",
+        "type": "TextInput"
+    }
+]

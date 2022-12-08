@@ -76,9 +76,6 @@ it('exports order', function () {
         ->toBeInstanceOf(Response::class)
         ->and(Arr::dot($content))
         ->toHaveKeysAndValues([
-            /**
-             * 245
-             */
             'data.orders.0.externalIdentifier'                       => '245',
             'data.orders.0.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.deliveryOptions.labelAmount'              => 1,
@@ -179,7 +176,7 @@ it('exports and prints order', function () {
             [
                 'externalIdentifier' => '263',
                 'deliveryOptions'    => [
-                    'carrier' => CarrierOptions::CARRIER_INSTABOX_NAME,
+                    'carrier' => CarrierOptions::CARRIER_POSTNL_NAME,
                 ],
             ]
         ),
@@ -215,12 +212,12 @@ it('exports and prints order', function () {
              * 245
              */
             'data.orders.0.externalIdentifier'                       => '263',
-            'data.orders.0.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_INSTABOX_NAME,
+            'data.orders.0.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.deliveryOptions.labelAmount'              => 1,
             'data.orders.0.deliveryOptions.packageType'              => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
             'data.orders.0.label.link'                               => 'API/pdfs/label_hash',
             'data.orders.0.label.pdf'                                => null,
-            'data.orders.0.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_INSTABOX_NAME,
+            'data.orders.0.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'data.orders.0.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
             'data.orders.0.shipments.0.id'                           => 30321,

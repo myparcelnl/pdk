@@ -7,38 +7,45 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Sdk\src\Support\Arr;
 
 /**
  * @property null|int                                               $id
+ * @property null|int                                               $shopId
+ * @property null|string                                            $orderId
  * @property null|string                                            $referenceIdentifier
  * @property null|string                                            $externalIdentifier
  * @property null|string                                            $apiKey
  * @property null|string                                            $barcode
  * @property null|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions      $carrier
  * @property null|string                                            $collectionContact
- * @property null|\DateTime                                         $created
- * @property null|string                                            $createdBy
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
- * @property null|bool                                              $delayed
- * @property null|bool                                              $delivered
+ * @property bool                                                   $delayed
+ * @property bool                                                   $delivered
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions         $deliveryOptions
  * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
- * @property null|bool                                              $isReturn
+ * @property bool                                                   $hidden
+ * @property bool                                                   $isReturn
  * @property null|string                                            $linkConsumerPortal
- * @property null|\DateTime                                         $modified
- * @property null|string                                            $modifiedBy
  * @property bool                                                   $multiCollo
  * @property null|string                                            $multiColloMainShipmentId
- * @property null|array                                             $partnerTrackTraces
+ * @property array                                                  $partnerTrackTraces
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties $physicalProperties
- * @property \MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
+ * @property \MyParcelNL\Pdk\Base\Model\Currency                    $price
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $sender
- * @property null|int                                               $shopId
- * @property null|string                                            $orderId
+ * @property null|int                                               $shipmentType
  * @property null|int                                               $status
- * @property null|bool                                              $updated
+ * @property null|\DateTime                                         $deleted
+ * @property null|\DateTime                                         $updated
+ * @property null|\DateTime                                         $created
+ * @property null|int                                               $createdBy
+ * @property null|\DateTime                                         $modified
+ * @property null|int                                               $modifiedBy
  */
 class Shipment extends Model
 {
@@ -56,76 +63,162 @@ class Shipment extends Model
     ];
 
     protected $attributes = [
+        /**
+         * ID of the order this shipment belongs to, if any.
+         */
+        'orderId'                  => null,
+
+        /**
+         * MultiCollo shipments are shipments that are split into multiple shipments.
+         */
+        'multiCollo'               => false,
+
+        /**
+         * The date and time when the shipment was last updated. Supposed to be saved in the plugin.
+         */
+        'updated'                  => null,
+
+        /**
+         * PLUGIN ONLY: Whether the shipment is deleted.
+         */
+        'deleted'                  => null,
+
+        /**
+         * Shipment ID. Filled by the API after exporting shipment.
+         */
         'id'                       => null,
+        'shopId'                   => null,
         'referenceIdentifier'      => null,
         'externalIdentifier'       => null,
         'apiKey'                   => null,
         'barcode'                  => null,
         'carrier'                  => null,
         'collectionContact'        => null,
-        'created'                  => null,
-        'createdBy'                => null,
         'customsDeclaration'       => null,
         'delayed'                  => false,
         'delivered'                => false,
         'deliveryOptions'          => DeliveryOptions::class,
         'dropOffPoint'             => null,
+        'hidden'                   => false,
         'isReturn'                 => false,
+        /**
+         * The link to the track and trace page of the consumer portal.
+         */
         'linkConsumerPortal'       => null,
-        'modified'                 => null,
-        'modifiedBy'               => null,
-        'multiCollo'               => false,
+        /**
+         * Main shipment if this shipment belongs to a multi-collo shipment.
+         */
         'multiColloMainShipmentId' => null,
-        'partnerTrackTraces'       => null,
-        'physicalProperties'       => null,
-        'recipient'                => ContactDetails::class,
-        'sender'                   => null,
-        'shopId'                   => null,
-        'orderId'                  => null,
-        'status'                   => null,
-        'updated'                  => null,
+        /**
+         * Partner track traces are track traces of other carriers that are linked to this shipment.
+         */
+        'partnerTrackTraces'       => [],
+        /**
+         * Physical properties of the shipment.
+         */
+
+        'physicalProperties' => null,
+        /**
+         * The billed price of the shipment.
+         */
+        'price'              => Currency::class,
+        /**
+         * The recipient of the shipment.
+         */
+        'recipient'          => ContactDetails::class,
+        /**
+         * The sender of the shipment.
+         */
+        'sender'             => ContactDetails::class,
+        /**
+         * Type of shipment.
+         */
+        'shipmentType'       => null,
+        /**
+         * Status of the shipment.
+         *
+         * @see https://developer.myparcel.nl/api-reference/04.data-types.html#shipment-status
+         */
+        'status'             => null,
+        /**
+         * The date and time when the shipment was created in the API.
+         */
+        'created'            => null,
+        /**
+         * The id of the user that created the shipment in the API.
+         */
+        'createdBy'          => null,
+        /**
+         * The date and time when the shipment was last updated in the API.
+         */
+        'modified'           => null,
+        /**
+         * The id of the user that last updated the shipment in the API.
+         */
+        'modifiedBy'         => null,
     ];
 
     protected $casts      = [
         'id'                       => 'int',
+        'shopId'                   => 'int',
+        'orderId'                  => 'string',
         'referenceIdentifier'      => 'string',
         'externalIdentifier'       => 'string',
         'apiKey'                   => 'string',
         'barcode'                  => 'string',
         'carrier'                  => CarrierOptions::class,
         'collectionContact'        => 'string',
-        'created'                  => DateTime::class,
-        'createdBy'                => 'int',
         'customsDeclaration'       => CustomsDeclaration::class,
         'delayed'                  => 'bool',
         'delivered'                => 'bool',
         'deliveryOptions'          => DeliveryOptions::class,
         'dropOffPoint'             => RetailLocation::class,
+        'hidden'                   => 'bool',
         'isReturn'                 => 'bool',
         'linkConsumerPortal'       => 'string',
-        'modified'                 => DateTime::class,
-        'modifiedBy'               => 'int',
         'multiCollo'               => 'bool',
         'multiColloMainShipmentId' => 'string',
         'partnerTrackTraces'       => 'array',
         'physicalProperties'       => PhysicalProperties::class,
+        'price'                    => Currency::class,
         'recipient'                => ContactDetails::class,
         'sender'                   => ContactDetails::class,
-        'shopId'                   => 'int',
-        'orderId'                  => 'string',
+        'shipmentType'             => 'int',
         'status'                   => 'int',
-        'updated'                  => 'bool',
+        'deleted'                  => DateTime::class,
+        'updated'                  => DateTime::class,
+        'created'                  => DateTime::class,
+        'createdBy'                => 'int',
+        'modified'                 => DateTime::class,
+        'modifiedBy'               => 'int',
     ];
 
     /**
      * Carrier is passed to the delivery options.
      *
      * @param  null|array $data
+     *
+     * @throws \Exception
      */
     public function __construct(?array $data = [])
     {
         parent::__construct($data);
-        $this->setDeliveryOptionsCarrier();
+        $this->updateCarrier();
+    }
+
+    /**
+     * Returns the model as an array that can be saved in a database.
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        $attributes = $this->toArray(Arrayable::SKIP_NULL);
+
+        Arr::forget($attributes, ['carrier.capabilities', 'carrier.returnCapabilities']);
+
+        return $attributes;
     }
 
     /**
@@ -137,7 +230,7 @@ class Shipment extends Model
     protected function setCarrierAttribute($carrier): self
     {
         $this->attributes['carrier'] = $carrier;
-        $this->setDeliveryOptionsCarrier();
+        $this->updateCarrier();
 
         return $this;
     }
@@ -146,28 +239,31 @@ class Shipment extends Model
      * @param  array|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $deliveryOptions
      *
      * @return $this
+     * @throws \Exception
      */
     protected function setDeliveryOptionsAttribute($deliveryOptions): self
     {
         $this->attributes['deliveryOptions'] = $deliveryOptions;
-        $this->setDeliveryOptionsCarrier();
+        $this->updateCarrier();
 
         return $this;
     }
 
     /**
      * @return void
+     * @throws \Exception
      */
-    private function setDeliveryOptionsCarrier(): void
+    private function updateCarrier(): void
     {
         // In case the model hasn't fully initialized yet (e.g. in the constructor).
-        if (! $this->attributes['deliveryOptions']
-            || is_string($this->attributes['deliveryOptions'])
-            || ! $this->attributes['carrier']
-            || is_string($this->attributes['carrier'])) {
+        if (is_string($this->attributes['deliveryOptions']) || is_string($this->attributes['carrier'])) {
             return;
         }
 
-        $this->deliveryOptions->carrier = $this->carrier->name;
+        if ($this->carrier) {
+            $this->attributes['deliveryOptions']['carrier'] = $this->carrier->name;
+        } elseif ($this->deliveryOptions->carrier) {
+            $this->attributes['carrier'] = ['name' => $this->deliveryOptions->carrier];
+        }
     }
 }

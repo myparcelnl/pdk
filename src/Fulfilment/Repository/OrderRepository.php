@@ -37,7 +37,7 @@ class OrderRepository extends ApiRepository
      * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      * @noinspection PhpUnused
      */
-    public function saveOrder(OrderCollection $collection): OrderCollection
+    public function postOrders(OrderCollection $collection): OrderCollection
     {
         /** @var \MyParcelNL\Pdk\Base\Response\PostIdsResponse $response */
         $response = $this->api->doRequest(new PostOrdersRequest($collection), PostIdsResponse::class);

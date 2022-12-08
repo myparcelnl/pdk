@@ -28,6 +28,7 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  array $parameters
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function handle(array $parameters): Response
     {
