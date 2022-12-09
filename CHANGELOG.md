@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.28.1](https://github.com/myparcelnl/pdk/compare/v1.28.0...v1.28.1) (2022-12-09)
+
+
+### :bug: Bug Fixes
+
+* **label:** set correct headers ([#50](https://github.com/myparcelnl/pdk/issues/50)) ([fa32ec5](https://github.com/myparcelnl/pdk/commit/fa32ec584416648b40079ed3c88b424ec053b074))
+
 ## [1.28.0](https://github.com/myparcelnl/pdk/compare/v1.27.0...v1.28.0) (2022-12-09)
 
 
