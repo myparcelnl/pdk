@@ -98,12 +98,14 @@ class OrderValidator
         $deliveryOptions = $this->order->deliveryOptions;
         $deliveryOptions->shipmentOptions->lockShipmentOptions();
 
-        $carrier = $deliveryOptions->getCarrier() ?? Platform::get('defaultCarrier');
+        $carrier      = $deliveryOptions->carrier ?? Platform::get('defaultCarrier');
+        $country      = $this->order->recipient->cc;
+        $shippingZone = $country ? $countryService->getShippingZone($country) : null;
 
         $this->mergeIntoSchema('carrier', 'name', $carrier)
-            ->mergeIntoSchema('shippingZone', 'cc', $countryService->getShippingZone($this->order->recipient->cc))
-            ->mergeIntoSchema('packageType', 'name', $deliveryOptions->getPackageType())
-            ->mergeIntoSchema('deliveryType', 'name', $deliveryOptions->getDeliveryType());
+            ->mergeIntoSchema('shippingZone', 'cc', $shippingZone)
+            ->mergeIntoSchema('packageType', 'name', $deliveryOptions->packageType)
+            ->mergeIntoSchema('deliveryType', 'name', $deliveryOptions->deliveryType);
     }
 
     /**

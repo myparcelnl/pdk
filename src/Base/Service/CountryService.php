@@ -572,16 +572,12 @@ class CountryService
     }
 
     /**
-     * @param  null|string $country
+     * @param  string $country
      *
-     * @return null|string
+     * @return string
      */
-    public function getShippingZone(?string $country): ?string
+    public function getShippingZone(string $country): string
     {
-        if (! $country) {
-            return null;
-        }
-
         if (in_array($country, self::UNIQUE_COUNTRIES, true)) {
             return $country;
         }
@@ -591,5 +587,35 @@ class CountryService
         }
 
         return self::ZONE_ROW;
+    }
+
+    /**
+     * @param  string $country
+     *
+     * @return bool
+     */
+    public function isEu(string $country): bool
+    {
+        return self::ZONE_EU === $this->getShippingZone($country);
+    }
+
+    /**
+     * @param  string $country
+     *
+     * @return bool
+     */
+    public function isRow(string $country): bool
+    {
+        return self::ZONE_ROW === $this->getShippingZone($country);
+    }
+
+    /**
+     * @param  string $country
+     *
+     * @return bool
+     */
+    public function isUnique(string $country): bool
+    {
+        return $country === $this->getShippingZone($country);
     }
 }
