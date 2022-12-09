@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.28.0](https://github.com/myparcelnl/pdk/compare/v1.27.0...v1.28.0) (2022-12-09)
+
+
+### :sparkles: New Features
+
+* **service:** add more methods to country service ([#58](https://github.com/myparcelnl/pdk/issues/58)) ([0ee9017](https://github.com/myparcelnl/pdk/commit/0ee9017e2742694b152572da1d5b235289f4c169))
+
 ## [1.27.0](https://github.com/myparcelnl/pdk/compare/v1.26.2...v1.27.0) (2022-12-08)
 
 
