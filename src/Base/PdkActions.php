@@ -12,12 +12,14 @@ class PdkActions
      */
     public const EXPORT_ORDER           = 'exportOrder';
     public const EXPORT_AND_PRINT_ORDER = 'exportAndPrintOrder';
+    public const EXPORT_RETURN          = 'exportReturn';
     public const PRINT_ORDER            = 'printOrder';
     public const GET_ORDER_DATA         = 'getOrderData';
     public const UPDATE_TRACKING_NUMBER = 'updateTrackingNumber';
     public const REQUIRED               = [
         PdkActions::EXPORT_ORDER,
         PdkActions::EXPORT_AND_PRINT_ORDER,
+        PdkActions::EXPORT_RETURN,
         PdkActions::GET_ORDER_DATA,
         PdkActions::PRINT_ORDER,
     ];

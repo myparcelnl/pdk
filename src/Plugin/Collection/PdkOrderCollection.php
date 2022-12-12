@@ -20,6 +20,7 @@ class PdkOrderCollection extends Collection
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function generateShipments(array $data = []): ShipmentCollection
     {
@@ -43,6 +44,19 @@ class PdkOrderCollection extends Collection
             $acc->push(...$order->shipments);
             return $acc;
         }, new ShipmentCollection());
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    public function getLastShipments(): ShipmentCollection
+    {
+        return $this->getAllShipments()
+            ->groupBy('orderId')
+            ->reduce(static function (ShipmentCollection $acc, $shipments) {
+                $acc->push($shipments->last());
+                return $acc;
+            }, new ShipmentCollection());
     }
 
     /**
