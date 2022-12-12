@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Plugin\Action\Order;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
-use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,14 +20,8 @@ class PrintOrderAction extends AbstractOrderAction
     public function handle(array $parameters): Response
     {
         $orders    = $this->orderRepository->getMany($parameters['orderIds'] ?? []);
-        $shipments = $orders->getAllShipments()
-            ->groupBy('orderId')
-            ->reduce(static function (ShipmentCollection $acc, $shipments) {
-                $acc->push($shipments->last());
-                return $acc;
-            }, new ShipmentCollection());
-
-        $method = isset($parameters['download']) && $parameters['download'] ? 'fetchLabelPdf' : 'fetchLabelLink';
+        $shipments = $orders->getLastShipments();
+        $method    = isset($parameters['download']) && $parameters['download'] ? 'fetchLabelPdf' : 'fetchLabelLink';
 
         $shipments = Pdk::get(ShipmentRepository::class)
             ->$method(

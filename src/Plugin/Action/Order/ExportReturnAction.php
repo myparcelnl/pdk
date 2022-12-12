@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Plugin\Action\Order;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
-use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +17,10 @@ class ExportReturnAction extends AbstractOrderAction
      */
     private $shipmentRepository;
 
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository $orderRepository
+     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository       $shipmentRepository
+     */
     public function __construct(AbstractPdkOrderRepository $orderRepository, ShipmentRepository $shipmentRepository)
     {
         parent::__construct($orderRepository);
@@ -32,15 +35,8 @@ class ExportReturnAction extends AbstractOrderAction
      */
     public function handle(array $parameters): Response
     {
-        $orders = $this->orderRepository->getMany($parameters['orderIds']);
-
-        $shipments = $orders->getAllShipments()
-            ->groupBy('orderId')
-            ->reduce(static function (ShipmentCollection $acc, $shipments) {
-                $acc->push($shipments->last());
-                return $acc;
-            }, new ShipmentCollection());
-
+        $orders    = $this->orderRepository->getMany($parameters['orderIds']);
+        $shipments = $orders->getLastShipments();
         $shipments = $this->shipmentRepository->createReturnShipments($shipments);
 
         $orders->updateShipments($shipments);
