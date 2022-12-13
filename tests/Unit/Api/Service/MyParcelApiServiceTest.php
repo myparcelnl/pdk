@@ -29,7 +29,7 @@ it('gets correct headers', function () {
         ->toBe([
             'Authorization' => null,
             'User-Agent'    => sprintf(
-                'MyParcel-PDK/%s php/7.4.30 Prestashop/1.7.8.6',
+                'MyParcelNL-PDK/%s php/7.4.30 Prestashop/1.7.8.6',
                 InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME)
             ),
         ]);

@@ -64,8 +64,8 @@ class MyParcelApiService extends AbstractApiService
     {
         $userAgentStrings = [];
         $userAgents       = [
-                'MyParcel-PDK' => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
-                'php'          => PHP_VERSION,
+                'MyParcelNL-PDK' => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
+                'php'            => PHP_VERSION,
             ] + $this->userAgent;
 
         foreach ($userAgents as $platform => $version) {
