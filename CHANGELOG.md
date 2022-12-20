@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.29.1](https://github.com/myparcelnl/pdk/compare/v1.29.0...v1.29.1) (2022-12-20)
+
+
+### :bug: Bug Fixes
+
+* **api:** correct user agent ([e367c74](https://github.com/myparcelnl/pdk/commit/e367c7498b61ffc97ac134f348817052322d2119))
+
 ## [1.29.0](https://github.com/myparcelnl/pdk/compare/v1.28.1...v1.29.0) (2022-12-12)
 
 
