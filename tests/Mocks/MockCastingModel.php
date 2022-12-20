@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Mocks;
 
+use DateTime;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 
@@ -21,6 +22,11 @@ class MockCastingModel extends Model
         'object'         => ['property' => 'hello'],
         'date'           => '2022-01-10',
         'datetime'       => '2022-01-10 14:03:00',
+        'date_from_arr'  => [
+            'date'          => '2022-12-25 17:02:32.000000',
+            'timezone_type' => 3,
+            'timezone'      => 'Europe/Amsterdam',
+        ],
         'timestamp'      => '2022-01-10 14:03:00',
         'string_int'     => '4',
         'string_bool'    => 'true',
@@ -32,16 +38,17 @@ class MockCastingModel extends Model
     ];
 
     protected $casts      = [
-        'collection'   => Collection::class,
-        'object'       => MockCastModel::class,
-        'date'         => 'date',
-        'datetime'     => 'datetime',
-        'timestamp'    => 'timestamp',
-        'string_int'   => 'int',
-        'string_bool'  => 'bool',
-        'int_string'   => 'string',
-        'int_float'    => 'float',
-        'string_float' => 'float',
-        'null'         => 'string',
+        'collection'    => Collection::class,
+        'object'        => MockCastModel::class,
+        'date'          => 'date',
+        'datetime'      => 'datetime',
+        'date_from_arr' => DateTime::class,
+        'timestamp'     => 'timestamp',
+        'string_int'    => 'int',
+        'string_bool'   => 'bool',
+        'int_string'    => 'string',
+        'int_float'     => 'float',
+        'string_float'  => 'float',
+        'null'          => 'string',
     ];
 }
