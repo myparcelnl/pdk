@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.30.0](https://github.com/myparcelnl/pdk/compare/v1.29.1...v1.30.0) (2022-12-20)
+
+
+### :sparkles: New Features
+
+* add webhook repository ([#57](https://github.com/myparcelnl/pdk/issues/57)) ([8c97d57](https://github.com/myparcelnl/pdk/commit/8c97d57381aeee3dd2048085f9c1f760435746ba))
+
 ## [1.29.1](https://github.com/myparcelnl/pdk/compare/v1.29.0...v1.29.1) (2022-12-20)
 
 
