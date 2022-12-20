@@ -241,7 +241,7 @@ it('exports and prints order', function () {
 });
 
 it('exports return', function () {
-    $this->mock->append(new ExamplePostShipmentsResponse([['id' => 30011], ['id' => 30012]]));
+    $this->mock->append(new ExamplePostIdsResponse([['id' => 30011], ['id' => 30012]]));
     $this->mock->append(new ExampleGetShipmentsResponse());
     $this->orderRepository->add(
         new PdkOrder(
