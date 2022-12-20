@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class ExamplePostShipmentsResponse extends ExampleJsonResponse
+class ExamplePostIdsResponse extends ExampleJsonResponse
 {
     private const DEFAULT_IDS = [
         ['id' => 1],

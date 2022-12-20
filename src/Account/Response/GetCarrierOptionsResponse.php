@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Response;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
+use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 
-class GetCarrierOptionsResponseWithBody extends AbstractApiResponseWithBody
+class GetCarrierOptionsResponse extends ApiResponseWithBody
 {
     /**
      * @var \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection

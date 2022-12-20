@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
+use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Concern\HasDecodesShipment;
 
-class GetOrdersResponse extends AbstractApiResponseWithBody
+class GetOrdersResponse extends ApiResponseWithBody
 {
     use HasDecodesShipment;
 

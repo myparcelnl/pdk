@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Response;
 
-use MyParcelNL\Pdk\Api\Response\AbstractApiResponseWithBody;
+use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 
-class GetLabelsResponse extends AbstractApiResponseWithBody
+class GetLabelsResponse extends ApiResponseWithBody
 {
     /**
      * @var string

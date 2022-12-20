@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Api\Service;
 
 use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
+use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
@@ -38,8 +39,10 @@ abstract class AbstractApiService implements ApiServiceInterface
      * @return \MyParcelNL\Pdk\Api\Response\ApiResponseInterface
      * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
      */
-    public function doRequest(RequestInterface $request, string $responseClass): ApiResponseInterface
-    {
+    public function doRequest(
+        RequestInterface $request,
+        string           $responseClass = ApiResponse::class
+    ): ApiResponseInterface {
         $uri        = $this->buildUri($request);
         $httpMethod = $request->getMethod();
 
