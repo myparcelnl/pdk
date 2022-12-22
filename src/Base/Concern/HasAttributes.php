@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Base\Concern;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -347,6 +348,7 @@ trait HasAttributes
      * @param  mixed $value
      *
      * @return \DateTimeImmutable
+     * @throws \Exception
      */
     protected function asDate($value): DateTimeImmutable
     {
@@ -357,9 +359,10 @@ trait HasAttributes
     /**
      * Return a timestamp as DateTime object.
      *
-     * @param  mixed $value
+     * @param  \DateTimeInterface|string|array{date: string, timezone: string, timezone_type: int} $value
      *
      * @return \DateTimeImmutable
+     * @throws \Exception
      */
     protected function asDateTime($value): DateTimeImmutable
     {
@@ -367,8 +370,12 @@ trait HasAttributes
             return $value;
         }
 
-        if ($value instanceof DateTimeInterface) {
-            $value = $value->format($this->dateFormats[0]);
+        if ($value instanceof DateTime) {
+            return DateTimeImmutable::createFromMutable($value);
+        }
+
+        if (is_array($value) && isset($value['date'], $value['timezone'])) {
+            return new DateTimeImmutable($value['date'], new DateTimeZone($value['timezone']));
         }
 
         foreach ($this->dateFormats as $dateFormat) {
@@ -388,6 +395,7 @@ trait HasAttributes
      * @param  mixed $value
      *
      * @return int
+     * @throws \Exception
      */
     protected function asTimestamp($value): int
     {
@@ -403,6 +411,7 @@ trait HasAttributes
      *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @throws \Exception
      */
     protected function castAttribute(string $key, $value)
     {
