@@ -38,7 +38,11 @@ jobs:
 
       - name: 'Run tests'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
-        run: docker run -v $(pwd):/app ${{ steps.docker.outputs.tagged-image }}
+        run: |
+          docker run \ 
+            -v $(pwd):/app \
+            -v /app/vendor \
+            ${{ steps.docker.outputs.tagged-image }}
 
       - name: 'Get coverage file from container'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
