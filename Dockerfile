@@ -7,7 +7,7 @@ FROM ghcr.io/myparcelnl/php-xd:${PHP_VERSION} AS test
 
 COPY composer.json phpunit.xml ./
 
-RUN composer install --dev --no-interaction --no-scripts
+RUN composer install --dev --no-scripts
 
 CMD ["vendor/bin/pest"]
 
