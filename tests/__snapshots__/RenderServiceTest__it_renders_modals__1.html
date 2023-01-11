@@ -1,9 +1,10 @@
+<html><body>
 <div id="__ID__" data-pdk-context="{}"></div>
 <script id="__ID__-script">
 (() => {
   var e = 'myparcel_pdk_loaded';
   var listener = function(event) {
-    event.detail.render('Notifications', '__ID__');
+    event.detail.render('Modals', '__ID__');
     document.getElementById('__ID__-script').remove();
     document.removeEventListener(e, listener);
   };
@@ -11,3 +12,4 @@
   document.addEventListener(e, listener);
 })();
 </script>
+</body></html>

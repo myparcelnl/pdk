@@ -7,7 +7,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\RenderService;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use function Spatie\Snapshots\assertMatchesSnapshot;
+use function Spatie\Snapshots\assertMatchesHtmlSnapshot;
 
 beforeEach(function () {
     PdkFactory::create(MockPdkConfig::create());
@@ -24,25 +24,25 @@ function replaceIds(string $result): string
 
 it('renders init script', function () {
     $result = RenderService::renderInitScript();
-    assertMatchesSnapshot(replaceIds($result));
+    assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders modals', function () {
     $result = RenderService::renderModals();
-    assertMatchesSnapshot(replaceIds($result));
+    assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders notifications', function () {
     $result = RenderService::renderNotifications();
-    assertMatchesSnapshot(replaceIds($result));
+    assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders order card', function () {
     $result = RenderService::renderOrderCard(new PdkOrder(['externalIdentifier' => 'P00924872']));
-    assertMatchesSnapshot(replaceIds($result));
+    assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders order list column', function () {
     $result = RenderService::renderOrderListColumn(new PdkOrder(['externalIdentifier' => 'P00924878']));
-    assertMatchesSnapshot(replaceIds($result));
+    assertMatchesHtmlSnapshot(replaceIds($result));
 });
