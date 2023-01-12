@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingCollection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 
@@ -26,4 +27,27 @@ it('casts items to class on push', function () {
     $collection->each(function ($item) {
         expect($item)->toBeInstanceOf(MockCastModel::class);
     });
+});
+
+it('merges another collection by key', function () {
+    $collection = new Collection([
+        ['id' => 1, 'name' => 'berend'],
+        ['id' => 2, 'name' => 'piet'],
+        ['id' => 3, 'name' => 'joep'],
+    ]);
+
+    $newCollection = new Collection([
+        ['id' => 2, 'name' => 'willem'],
+        ['id' => 3, 'name' => 'henk'],
+    ]);
+
+    $merged = $collection->mergeByKey($newCollection, 'id');
+
+    $all = $merged->all();
+
+    expect($all)->toEqual([
+        ['id' => 1, 'name' => 'berend'],
+        ['id' => 2, 'name' => 'willem'],
+        ['id' => 3, 'name' => 'henk'],
+    ]);
 });
