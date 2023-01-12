@@ -29,10 +29,8 @@ class DeliveryOptionsContext extends Model
 
         $this->strings = Settings::get('checkout.strings');
 
-        if (! isset($data['order'])) {
-            return;
+        if (isset($data['order']) && ! isset($data['config'])) {
+            $this->config = new DeliveryOptions(['order' => $data['order']]);
         }
-
-        $this->config = new DeliveryOptions(['order' => $data['order']]);
     }
 }

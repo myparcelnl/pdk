@@ -207,21 +207,6 @@ class Shipment extends Model
     }
 
     /**
-     * Returns the model as an array that can be saved in a database.
-     *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    public function toStorableArray(): array
-    {
-        $attributes = $this->toArray(Arrayable::SKIP_NULL);
-
-        Arr::forget($attributes, ['carrier.capabilities', 'carrier.returnCapabilities']);
-
-        return $attributes;
-    }
-
-    /**
      * @param  int|string|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrier
      *
      * @return $this

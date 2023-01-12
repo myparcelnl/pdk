@@ -8,8 +8,6 @@ use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 beforeEach(function () {
@@ -68,33 +66,6 @@ it('gets all shipments of all orders', function () {
         ->toBe(2);
 });
 
-it('can update shipments', function () {
-    $pdkOrderCollection = new PdkOrderCollection();
-
-    $pdkOrderCollection->push(['externalIdentifier' => 'wham', 'shipments' => [['id' => 59]]]);
-    $pdkOrderCollection->push(['externalIdentifier' => 'last_christmas', 'shipments' => [['id' => 60]]]);
-
-    $shipmentCollection = new ShipmentCollection([
-        ['id' => 81, 'orderId' => 'wham'],
-        ['id' => 82, 'orderId' => 'wham'],
-        ['id' => 83, 'orderId' => 'citroen'],
-    ]);
-
-    $pdkOrderCollection = $pdkOrderCollection->updateShipments($shipmentCollection);
-
-    /** @var \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order1 */
-    $order1 = $pdkOrderCollection->firstWhere('externalIdentifier', 'wham');
-
-    /** @var \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order2 */
-    $order2 = $pdkOrderCollection->firstWhere('externalIdentifier', 'last_christmas');
-
-    expect($order1->shipments->count())
-        ->toBe(2)
-        ->and($order2->shipments->count())
-        ->toBe(0)
-        ->and($order1->shipments->firstWhere('id', 81))->not->toBeNull()
-        ->and($order1->shipments->firstWhere('id', 82))->not->toBeNull();
-});
 it('updates order shipments by shipment ids', function () {
     $orders = new PdkOrderCollection([
         [

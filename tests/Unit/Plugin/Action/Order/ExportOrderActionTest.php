@@ -54,6 +54,13 @@ it('exports order', function () {
         new PdkOrder(
             [
                 'externalIdentifier' => '247',
+                'recipient'          => [
+                    'cc'          => 'NL',
+                    'city'        => 'Hoofddorp',
+                    'person'      => 'Felicia Parcel',
+                    'postal_code' => '2132 JE',
+                    'full_street' => 'Antareslaan 31',
+                ],
                 'deliveryOptions'    => [
                     'carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
                     'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,

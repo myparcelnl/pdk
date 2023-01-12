@@ -1,0 +1,29 @@
+{
+    "carrier": null,
+    "contractId": null,
+    "customsDeclaration": {
+        "contents": 1,
+        "invoice": null,
+        "items": [],
+        "weight": 0
+    },
+    "options": null,
+    "pickup": null,
+    "recipient": {
+        "boxNumber": null,
+        "cc": null,
+        "city": null,
+        "fullStreet": null,
+        "number": null,
+        "numberSuffix": null,
+        "postalCode": null,
+        "region": null,
+        "state": null,
+        "street": null,
+        "streetAdditionalInfo": null,
+        "email": null,
+        "phone": null,
+        "person": null,
+        "company": null
+    }
+}
