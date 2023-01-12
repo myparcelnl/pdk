@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.32.1](https://github.com/myparcelnl/pdk/compare/v1.32.0...v1.32.1) (2023-01-12)
+
+
+### :bug: Bug Fixes
+
+* improve shipments and orders ([#65](https://github.com/myparcelnl/pdk/issues/65)) ([d387c54](https://github.com/myparcelnl/pdk/commit/d387c546058a42c2a8165d6454e1407260e91601))
+
 ## [1.32.0](https://github.com/myparcelnl/pdk/compare/v1.31.0...v1.32.0) (2023-01-12)
 
 
