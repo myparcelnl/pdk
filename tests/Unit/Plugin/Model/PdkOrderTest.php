@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -40,12 +42,20 @@ it('instantiates shipments', function (array $input) {
     ],
 ]);
 
-it('has correct totals', function (array $input, array $totals) {
-    $order = (new PdkOrder($input))->toArray();
+it('calculates correct totals', function (array $input, array $totals) {
+    $order = new PdkOrder($input);
 
-    foreach ($totals as $key => $value) {
-        expect($order[$key])->toEqual($value);
-    }
+    expect(
+        $order->only([
+                'orderPrice',
+                'orderVat',
+                'orderPriceAfterVat',
+                'totalPrice',
+                'totalVat',
+                'totalPriceAfterVat',
+            ]
+        )
+    )->toEqual($totals);
 })->with([
     'one line'  => [
         'input'  => [

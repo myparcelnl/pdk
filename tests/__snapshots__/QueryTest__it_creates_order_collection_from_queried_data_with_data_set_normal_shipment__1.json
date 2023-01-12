@@ -1,8 +1,9 @@
 {
-    "accountId": null,
-    "createdAt": null,
+    "uuid": null,
     "externalIdentifier": null,
     "fulfilmentPartnerIdentifier": null,
+    "shopId": null,
+    "accountId": null,
     "invoiceAddress": {
         "boxNumber": null,
         "cc": "NL",
@@ -43,8 +44,6 @@
             }
         }
     ],
-    "price": 260,
-    "priceAfterVat": null,
     "shipment": {
         "id": null,
         "referenceIdentifier": null,
@@ -134,10 +133,11 @@
         "status": null,
         "updated": null
     },
-    "shopId": null,
     "status": null,
     "type": null,
-    "updatedAt": null,
-    "uuid": null,
-    "vat": null
+    "price": 260,
+    "vat": null,
+    "priceAfterVat": 0,
+    "createdAt": null,
+    "updatedAt": null
 }
