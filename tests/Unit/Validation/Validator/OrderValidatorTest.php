@@ -371,6 +371,16 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
             'input'  => null,
             'output' => false,
         ],
+        'check signature'                  => [
+            'order'  => [
+                'carrier' => [
+                    'name' => 'postnl',
+                ],
+            ],
+            'method' => 'canHaveSignature',
+            'input'  => null,
+            'output' => true,
+        ],
     ]
 );
 
