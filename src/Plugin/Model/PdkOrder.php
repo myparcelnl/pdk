@@ -15,23 +15,24 @@ use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
- * @property null|string                                                   $externalIdentifier
- * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration        $customsDeclaration
- * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions           $deliveryOptions
- * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                     $label
- * @property null|\MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection $lines
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                $recipient
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                $sender
- * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection   $shipments
- * @property int                                                           $shipmentPrice
- * @property int                                                           $shipmentPriceAfterVat
- * @property int                                                           $shipmentVat
- * @property int                                                           $orderPrice
- * @property int                                                           $orderPriceAfterVat
- * @property int                                                           $orderVat
- * @property int                                                           $totalPrice
- * @property int                                                           $totalPriceAfterVat
- * @property int                                                           $totalVat
+ * @property null|string                                                 $externalIdentifier
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
+ * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                   $label
+ * @property \MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection    $lines
+ * @property \MyParcelNL\Pdk\Base\Model\ContactDetails                   $recipient
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
+ * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property null|\DateTimeImmutable                                     $orderDate
+ * @property int                                                         $shipmentPrice
+ * @property int                                                         $shipmentPriceAfterVat
+ * @property int                                                         $shipmentVat
+ * @property int                                                         $orderPrice
+ * @property int                                                         $orderPriceAfterVat
+ * @property int                                                         $orderVat
+ * @property int                                                         $totalPrice
+ * @property int                                                         $totalPriceAfterVat
+ * @property int                                                         $totalVat
  */
 class PdkOrder extends Model
 {
@@ -43,9 +44,10 @@ class PdkOrder extends Model
         'label'                 => null,
         'lines'                 => PdkOrderLineCollection::class,
         'physicalProperties'    => PhysicalProperties::class,
-        'recipient'             => null,
+        'recipient'             => ContactDetails::class,
         'sender'                => null,
         'shipments'             => ShipmentCollection::class,
+        'orderDate'             => null,
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
         'shipmentVat'           => 0,
@@ -68,6 +70,7 @@ class PdkOrder extends Model
         'recipient'             => ContactDetails::class,
         'sender'                => ContactDetails::class,
         'shipments'             => ShipmentCollection::class,
+        'orderDate'             => 'datetime',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
         'shipmentVat'           => 'int',
@@ -85,6 +88,7 @@ class PdkOrder extends Model
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
+        $this->updateShipments();
         $this->updateTotals();
     }
 
@@ -114,9 +118,23 @@ class PdkOrder extends Model
     }
 
     /**
+     * @param  mixed $deliveryOptions
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     */
+    protected function setDeliveryOptionsAttribute($deliveryOptions): self
+    {
+        $this->attributes['deliveryOptions'] = $deliveryOptions;
+        $this->updateShipments();
+        return $this;
+    }
+
+    /**
      * @param  mixed $orderLines
      *
      * @return $this
+     * @noinspection PhpUnused
      */
     protected function setLinesAttribute($orderLines): self
     {
@@ -126,7 +144,7 @@ class PdkOrder extends Model
     }
 
     /**
-     * @param $shipments
+     * @param  mixed $shipments
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\PdkOrder
      * @noinspection PhpUnused

@@ -1,0 +1,70 @@
+{
+    "global": null,
+    "orderData": [
+        {
+            "externalIdentifier": "123",
+            "customsDeclaration": {
+                "contents": 1,
+                "invoice": null,
+                "items": [],
+                "weight": 0
+            },
+            "deliveryOptions": {
+                "carrier": "postnl",
+                "date": null,
+                "deliveryType": "standard",
+                "labelAmount": 1,
+                "packageType": "package",
+                "pickupLocation": null,
+                "shipmentOptions": {
+                    "ageCheck": null,
+                    "insurance": null,
+                    "labelDescription": null,
+                    "largeFormat": null,
+                    "onlyRecipient": null,
+                    "return": null,
+                    "sameDayDelivery": null,
+                    "signature": null
+                }
+            },
+            "label": null,
+            "lines": [],
+            "physicalProperties": {
+                "height": null,
+                "length": null,
+                "weight": 0,
+                "width": null
+            },
+            "recipient": {
+                "boxNumber": null,
+                "cc": null,
+                "city": null,
+                "fullStreet": null,
+                "number": null,
+                "numberSuffix": null,
+                "postalCode": null,
+                "region": null,
+                "state": null,
+                "street": null,
+                "streetAdditionalInfo": null,
+                "email": null,
+                "phone": null,
+                "person": null,
+                "company": null
+            },
+            "sender": null,
+            "shipments": [],
+            "orderDate": null,
+            "shipmentPrice": 0,
+            "shipmentPriceAfterVat": 0,
+            "shipmentVat": 0,
+            "orderPrice": 0,
+            "orderPriceAfterVat": 0,
+            "orderVat": 0,
+            "totalPrice": 0,
+            "totalVat": 0,
+            "totalPriceAfterVat": 0
+        }
+    ],
+    "deliveryOptions": null
+}

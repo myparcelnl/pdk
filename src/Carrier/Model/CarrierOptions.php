@@ -15,13 +15,13 @@ use MyParcelNL\Sdk\src\Support\Arr;
  * @property null|string                                                      $name
  * @property null|string                                                      $human
  * @property null|int                                                         $subscriptionId
- * @property null|bool                                                        $primary
- * @property null|bool                                                        $isDefault
- * @property null|bool                                                        $optional
+ * @property bool                                                             $primary
+ * @property bool                                                             $isDefault
+ * @property bool                                                             $optional
  * @property null|string                                                      $label
  * @property null|string                                                      $type
- * @property \MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection $options
- * @property \MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection $returnOptions
+ * @property \MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection $capabilities
+ * @property \MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection $returnCapabilities
  */
 class CarrierOptions extends Model
 {
@@ -46,9 +46,9 @@ class CarrierOptions extends Model
         'name'               => null,
         'human'              => null,
         'subscriptionId'     => null,
-        'primary'            => null,
-        'isDefault'          => null,
-        'optional'           => null,
+        'primary'            => false,
+        'isDefault'          => false,
+        'optional'           => false,
         'label'              => null,
         'type'               => null,
         'capabilities'       => CarrierCapabilitiesCollection::class,

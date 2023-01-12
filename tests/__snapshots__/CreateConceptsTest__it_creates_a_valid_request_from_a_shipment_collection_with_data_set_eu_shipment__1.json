@@ -1,0 +1,48 @@
+[
+    {
+        "carrier": 2,
+        "customs_declaration": {
+            "contents": 1,
+            "invoice": "25",
+            "items": [
+                {
+                    "amount": 1,
+                    "classification": "9609",
+                    "country": "NL",
+                    "description": "trendy pencil",
+                    "itemValue": {
+                        "amount": 5000,
+                        "currency": "EUR"
+                    },
+                    "weight": 200
+                },
+                {
+                    "amount": 1,
+                    "classification": "40169200",
+                    "country": "NL",
+                    "description": "beautiful eraser",
+                    "itemValue": {
+                        "amount": 10000,
+                        "currency": "EUR"
+                    },
+                    "weight": 350
+                }
+            ],
+            "weight": 550
+        },
+        "options": {
+            "package_type": 1,
+            "delivery_type": 2
+        },
+        "physical_properties": {
+            "weight": 550
+        },
+        "recipient": {
+            "cc": "CA",
+            "city": "Hoofddorp",
+            "postal_code": "2132JE",
+            "street": "Antareslaan 31",
+            "person": "Jaap Krekel"
+        }
+    }
+]

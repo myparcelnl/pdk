@@ -52,6 +52,29 @@ class Collection extends SdkCollection implements Arrayable
     }
 
     /**
+     * Merge the collection with the given items where the keys and values match.
+     *
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $collection
+     * @param  string                                  $key
+     *
+     * @return $this
+     */
+    public function mergeByKey(Collection $collection, string $key): self
+    {
+        $valueRetriever = $this->valueRetriever($key);
+        $results        = [];
+
+        foreach ($this->items as $itemKey => $item) {
+            $value          = $valueRetriever($item, $itemKey);
+            $collectionItem = $collection->firstWhere($key, $value);
+
+            $results[] = $collectionItem ?? $item;
+        }
+
+        return new static($results);
+    }
+
+    /**
      * Push an item onto the end of the collection.
      *
      * @param  mixed $values [optional]

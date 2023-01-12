@@ -56,6 +56,18 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
+     * @param  array $array
+     *
+     * @return array
+     */
+    public static function filterNull(array $array): array
+    {
+        return array_filter($array, static function ($value) {
+            return null !== $value;
+        });
+    }
+
+    /**
      * @param $class
      *
      * @return array

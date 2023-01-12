@@ -7,9 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Facade\Settings;
 
 /**
  * @property null|string                                        $carrier
@@ -108,9 +106,10 @@ class DeliveryOptions extends Model
         'shipmentOptions' => ShipmentOptions::class,
     ];
 
-    public function __construct(?array $data = null) {
+    public function __construct(?array $data = null)
+    {
         parent::__construct($data);
-        $this->carrier = $this->carrier ?? Platform::get('defaultCarrier');
+        $this->attributes['carrier'] = $this->attributes['carrier'] ?? Platform::get('defaultCarrier');
     }
 
     /**

@@ -48,22 +48,23 @@ class GetOrdersResponse extends ApiResponseWithBody
         $this->orders = (new OrderCollection(
             array_map(function (array $order) {
                 return [
-                    'accountId'                   => null,
-                    'createdAt'                   => $order['created_at'],
+                    'uuid'                        => $order['uuid'],
+                    'shopId'                      => $order['shop_id'],
+                    'accountId'                   => $order['account_id'],
                     'externalIdentifier'          => $order['external_identifier'],
                     'fulfilmentPartnerIdentifier' => $order['fulfilment_partner_identifier'],
-                    'invoiceAddress'              => $order['invoice_address'],
                     'language'                    => $order['language'],
                     'orderDate'                   => $order['order_date'],
-                    'orderLines'                  => $order['order_lines'] ?? [],
-                    'price'                       => $order['price'],
-                    'shipment'                    => $this->decodeShipment($order['shipment']),
-                    'shopId'                      => $order['shop_id'],
                     'status'                      => $order['status'],
                     'type'                        => $order['type'],
-                    'updatedAt'                   => $order['updated_at'],
-                    'uuid'                        => $order['uuid'],
+                    'price'                       => $order['price'],
                     'vat'                         => $order['vat'],
+                    'priceAfterVat'               => $order['price_after_vat'],
+                    'invoiceAddress'              => $order['invoice_address'],
+                    'orderLines'                  => $order['order_lines'] ?? [],
+                    'shipment'                    => $this->decodeShipment($order['shipment'] ?? []),
+                    'createdAt'                   => $order['created_at'],
+                    'updatedAt'                   => $order['updated_at'],
                 ];
             }, $orders)
         ));

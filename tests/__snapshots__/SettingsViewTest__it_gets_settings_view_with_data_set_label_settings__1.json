@@ -1,0 +1,42 @@
+[
+    {
+        "name": "description",
+        "label": "settings_label_description",
+        "description": "settings_label_description_description",
+        "type": "TextInput"
+    },
+    {
+        "name": "format",
+        "label": "settings_label_format",
+        "options": {
+            "A4": "settings_label_format_option_a4",
+            "A6": "settings_label_format_option_a6"
+        },
+        "type": "SelectInput"
+    },
+    {
+        "name": "position",
+        "label": "settings_label_position",
+        "options": {
+            "1": "settings_label_position_option_1",
+            "2": "settings_label_position_option_2",
+            "3": "settings_label_position_option_3",
+            "4": "settings_label_position_option_4"
+        },
+        "type": "SelectInput"
+    },
+    {
+        "name": "output",
+        "label": "settings_label_output",
+        "options": {
+            "print": "settings_label_output_option_open",
+            "download": "settings_label_output_option_download"
+        },
+        "type": "SelectInput"
+    },
+    {
+        "name": "prompt",
+        "label": "settings_label_prompt",
+        "type": "ToggleInput"
+    }
+]

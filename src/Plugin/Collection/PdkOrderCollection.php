@@ -28,7 +28,7 @@ class PdkOrderCollection extends Collection
             $order->createShipment($data);
         });
 
-        return $this->getAllShipments();
+        return $this->getLastShipments();
     }
 
     /**
@@ -47,16 +47,20 @@ class PdkOrderCollection extends Collection
     }
 
     /**
+     * @param  array $data
+     *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
-    public function getLastShipments(): ShipmentCollection
+    public function getLastShipments(array $data = []): ShipmentCollection
     {
-        return $this->getAllShipments()
-            ->groupBy('orderId')
-            ->reduce(static function (ShipmentCollection $acc, $shipments) {
-                $acc->push($shipments->last());
-                return $acc;
-            }, new ShipmentCollection());
+        return $this->reduce(function (ShipmentCollection $acc, PdkOrder $order) {
+            $order->shipments->each(function (Shipment $shipment) use ($order) {
+                $shipment->orderId = $order->externalIdentifier;
+            });
+
+            $acc->push($order->shipments->last());
+            return $acc;
+        }, new ShipmentCollection());
     }
 
     /**
@@ -67,12 +71,21 @@ class PdkOrderCollection extends Collection
     public function updateShipments(ShipmentCollection $shipments): self
     {
         $this->each(function (PdkOrder $order) use ($shipments) {
-            $matchingShipments = $shipments->where('orderId', $order->externalIdentifier);
+            $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
 
-            // Using values() to reset the collection keys.
-            $order->shipments        = $matchingShipments->values();
-            $order->shipments->label = $shipments->label;
-            $order->label            = $shipments->label;
+            if ($byOrderId->isEmpty()) {
+                $order->shipments = $order->shipments
+                    ->mergeByKey($shipments, 'id')
+                    ->map(function (Shipment $shipment) use ($order) {
+                        $shipment->orderId = $order->externalIdentifier;
+                        return $shipment;
+                    });
+            } else {
+                // Using values() to reset the collection keys.
+                $order->shipments        = $byOrderId->values();
+                $order->shipments->label = $shipments->label;
+                $order->label            = $shipments->label;
+            }
         });
 
         return $this;

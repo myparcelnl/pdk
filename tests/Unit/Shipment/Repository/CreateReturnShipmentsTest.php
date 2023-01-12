@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Sdk\src\Support\Arr;
+use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 const INPUT_RECIPIENT = [
     'cc'         => 'NL',
@@ -33,7 +33,7 @@ const DEFAULT_INPUT_SENDER = [
     'street'     => 'Werf',
 ];
 
-it('creates return shipment', function (array $input, array $output) {
+it('creates return shipment', function (array $input) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
@@ -53,12 +53,12 @@ it('creates return shipment', function (array $input, array $output) {
     }
 
     expect($createdReturnShipments)
-        ->toBeInstanceOf(ShipmentCollection::class)
-        ->and(Arr::dot($array))
-        ->toEqual($output);
+        ->toBeInstanceOf(ShipmentCollection::class);
+
+    assertMatchesJsonSnapshot(json_encode($array));
 })->with([
     'simple domestic shipment' => [
-        'input'  => [
+        'input' => [
             [
                 'id'                  => 65435213,
                 'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
@@ -85,98 +85,6 @@ it('creates return shipment', function (array $input, array $output) {
                 'referenceIdentifier' => 'Fulfilment-1',
                 'sender'              => DEFAULT_INPUT_SENDER,
             ],
-        ],
-        'output' => [
-            '0.id'                                               => 7,
-            '0.referenceIdentifier'                              => 'GeheimeDingen-1',
-            '0.externalIdentifier'                               => 'CV515676839NL',
-            '0.apiKey'                                           => null,
-            '0.barcode'                                          => 'CV515676839NL',
-            '0.carrier.id'                                       => 1,
-            '0.carrier.name'                                     => 'postnl',
-            '0.carrier.human'                                    => null,
-            '0.carrier.subscriptionId'                           => null,
-            '0.carrier.primary'                                  => true,
-            '0.carrier.isDefault'                                => null,
-            '0.carrier.optional'                                 => null,
-            '0.carrier.label'                                    => null,
-            '0.carrier.type'                                     => 'main',
-            '0.collectionContact'                                => null,
-            '0.created'                                          => '2021-04-26 14:06:45',
-            '0.createdBy'                                        => 35159,
-            '0.customsDeclaration.contents'                      => 1,
-            '0.customsDeclaration.invoice'                       => '123456',
-            '0.customsDeclaration.items.0.amount'                => 1,
-            '0.customsDeclaration.items.0.classification'        => '123456',
-            '0.customsDeclaration.items.0.country'               => 'NL',
-            '0.customsDeclaration.items.0.description'           => 'Product',
-            '0.customsDeclaration.items.0.itemValue.amount'      => 1000,
-            '0.customsDeclaration.items.0.itemValue.currency'    => 'EUR',
-            '0.customsDeclaration.items.0.weight'                => 500,
-            '0.customsDeclaration.weight'                        => 3500,
-            '0.delayed'                                          => false,
-            '0.delivered'                                        => false,
-            '0.deliveryOptions.carrier'                          => 'postnl',
-            '0.deliveryOptions.date'                             => null,
-            '0.deliveryOptions.deliveryType'                     => '2',
-            '0.deliveryOptions.labelAmount'                      => 1,
-            '0.deliveryOptions.packageType'                      => '1',
-            '0.deliveryOptions.pickupLocation'                   => null,
-            '0.deliveryOptions.shipmentOptions.ageCheck'         => false,
-            '0.deliveryOptions.shipmentOptions.insurance'        => 20000,
-            '0.deliveryOptions.shipmentOptions.labelDescription' => 'standaard kenmerk',
-            '0.deliveryOptions.shipmentOptions.largeFormat'      => false,
-            '0.deliveryOptions.shipmentOptions.onlyRecipient'    => false,
-            '0.deliveryOptions.shipmentOptions.return'           => false,
-            '0.deliveryOptions.shipmentOptions.sameDayDelivery'  => null,
-            '0.deliveryOptions.shipmentOptions.signature'        => false,
-            '0.dropOffPoint'                                     => null,
-            '0.isReturn'                                         => false,
-            '0.linkConsumerPortal'                               => null,
-            '0.modified'                                         => '2021-05-03 07:42:43',
-            '0.modifiedBy'                                       => 35159,
-            '0.multiCollo'                                       => false,
-            '0.multiColloMainShipmentId'                         => null,
-            '0.partnerTrackTraces'                               => [],
-            '0.physicalProperties.height'                        => 20,
-            '0.physicalProperties.length'                        => 40,
-            '0.physicalProperties.weight'                        => 3500,
-            '0.physicalProperties.width'                         => 30,
-            '0.recipient.boxNumber'                              => null,
-            '0.recipient.cc'                                     => 'CW',
-            '0.recipient.city'                                   => 'Willemstad',
-            '0.recipient.fullStreet'                             => null,
-            '0.recipient.number'                                 => '12',
-            '0.recipient.numberSuffix'                           => null,
-            '0.recipient.postalCode'                             => null,
-            '0.recipient.region'                                 => null,
-            '0.recipient.state'                                  => null,
-            '0.recipient.street'                                 => 'Schottegatweg Oost',
-            '0.recipient.streetAdditionalInfo'                   => null,
-            '0.recipient.email'                                  => 'meneer@groenteboer.nl',
-            '0.recipient.phone'                                  => '+31699335577',
-            '0.recipient.person'                                 => 'Joep Meloen',
-            '0.recipient.company'                                => 'MyParcel',
-            '0.sender.boxNumber'                                 => null,
-            '0.sender.cc'                                        => 'NL',
-            '0.sender.city'                                      => 'Hoofddorp',
-            '0.sender.fullStreet'                                => null,
-            '0.sender.number'                                    => '31',
-            '0.sender.numberSuffix'                              => null,
-            '0.sender.postalCode'                                => '2132 JE',
-            '0.sender.region'                                    => null,
-            '0.sender.state'                                     => null,
-            '0.sender.street'                                    => 'Antareslaan',
-            '0.sender.streetAdditionalInfo'                      => null,
-            '0.sender.email'                                     => 'shop@geheimedingen.nl',
-            '0.sender.phone'                                     => '0612345678',
-            '0.sender.person'                                    => 'Denzel Crocker',
-            '0.sender.company'                                   => 'Geheime Dingen',
-            '0.shopId'                                           => 6,
-            '0.orderId'                                          => null,
-            '0.status'                                           => 2,
-            '0.updated'                                          => null,
-
         ],
     ],
 ]);

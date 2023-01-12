@@ -51,6 +51,8 @@ it('returns complete carrier object', function () {
                 'id'                                                         => CarrierOptions::CARRIER_INSTABOX_ID,
                 'name'                                                       => CarrierOptions::CARRIER_INSTABOX_NAME,
                 'primary'                                                    => true,
+                'isDefault'                                                  => false,
+                'optional'                                                   => false,
                 'type'                                                       => CarrierOptions::TYPE_MAIN,
                 'returnCapabilities'                                         => [],
                 'capabilities.0.packageType.id'                              => 1,

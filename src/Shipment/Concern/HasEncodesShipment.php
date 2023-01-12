@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
+use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 trait HasEncodesShipment
@@ -16,20 +19,18 @@ trait HasEncodesShipment
      */
     protected function encodeShipment(Shipment $shipment): array
     {
+        $customsDeclaration = $this->getCustomsDeclaration($shipment);
+
         return [
             'carrier'              => $shipment->carrier->id,
-            'customs_declaration'  => $shipment->customsDeclaration
-                ? array_filter($shipment->customsDeclaration->toSnakeCaseArray())
-                : null,
-            'drop_off_point'       => $this->encodeDropOffPoint($shipment),
-            'options'              => $this->encodeOptions($shipment),
-            'physical_properties'  => $shipment->physicalProperties
-                ? ['weight' => $this->getWeight($shipment)]
-                : null,
+            'customs_declaration'  => $customsDeclaration,
+            'drop_off_point'       => $this->getDropOffPoint($shipment),
+            'options'              => $this->getOptions($shipment),
+            'physical_properties'  => ['weight' => $this->getWeight($shipment)],
             'pickup'               => $shipment->deliveryOptions->pickupLocation
                 ? ['location_code' => $shipment->deliveryOptions->pickupLocation->locationCode]
                 : null,
-            'recipient'            => array_filter($shipment->recipient->toSnakeCaseArray()),
+            'recipient'            => $this->getRecipient($shipment),
             'reference_identifier' => $shipment->referenceIdentifier,
             'status'               => $shipment->status,
         ];
@@ -41,7 +42,28 @@ trait HasEncodesShipment
      * @return null|array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function encodeDropOffPoint(Shipment $shipment): ?array
+    private function getCustomsDeclaration(Shipment $shipment): ?array
+    {
+        /** @var \MyParcelNL\Pdk\Base\Service\CountryService $countryService */
+        $countryService = Pdk::get(CountryService::class);
+        $cc             = $shipment->recipient->cc;
+
+        if (! $cc || ! $countryService->isRow($cc)) {
+            return null;
+        }
+
+        return $shipment->customsDeclaration
+            ? Utils::filterNull($shipment->customsDeclaration->toSnakeCaseArray())
+            : null;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return null|array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function getDropOffPoint(Shipment $shipment): ?array
     {
         if (! $shipment->dropOffPoint) {
             return null;
@@ -59,7 +81,7 @@ trait HasEncodesShipment
             'number'        => '',
         ];
 
-        return array_filter($shipment->dropOffPoint->toSnakeCaseArray()) + $defaults;
+        return Utils::filterNull($shipment->dropOffPoint->toSnakeCaseArray()) + $defaults;
     }
 
     /**
@@ -68,7 +90,7 @@ trait HasEncodesShipment
      * @return null|array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function encodeOptions(Shipment $shipment): ?array
+    private function getOptions(Shipment $shipment): ?array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
         $options         = array_map(static function ($item) {
@@ -92,10 +114,28 @@ trait HasEncodesShipment
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
-     * @return null|int
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getWeight(Shipment $shipment): ?int
+    private function getRecipient(Shipment $shipment): array
     {
-        return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight;
+        $recipient = Utils::filterNull($shipment->recipient->toSnakeCaseArray());
+
+        if ($recipient['full_street']) {
+            $recipient['street'] = $recipient['full_street'];
+            unset($recipient['full_street'], $recipient['number'], $recipient['number_suffix']);
+        }
+
+        return $recipient;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return int
+     */
+    private function getWeight(Shipment $shipment): int
+    {
+        return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
     }
 }

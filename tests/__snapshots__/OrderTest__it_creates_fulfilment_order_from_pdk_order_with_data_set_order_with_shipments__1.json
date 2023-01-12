@@ -1,0 +1,58 @@
+{
+    "uuid": null,
+    "externalIdentifier": null,
+    "fulfilmentPartnerIdentifier": null,
+    "shopId": null,
+    "accountId": null,
+    "invoiceAddress": null,
+    "language": "nl",
+    "orderDate": null,
+    "orderLines": [],
+    "shipment": {
+        "carrier": 1,
+        "contractId": null,
+        "customsDeclaration": {
+            "contents": 1,
+            "invoice": null,
+            "items": [],
+            "weight": 0
+        },
+        "options": {
+            "ageCheck": null,
+            "insurance": null,
+            "labelDescription": null,
+            "largeFormat": null,
+            "onlyRecipient": null,
+            "return": null,
+            "sameDayDelivery": null,
+            "signature": null,
+            "packageType": 1,
+            "deliveryType": 2
+        },
+        "pickup": null,
+        "recipient": {
+            "boxNumber": null,
+            "cc": null,
+            "city": null,
+            "fullStreet": null,
+            "number": null,
+            "numberSuffix": null,
+            "postalCode": null,
+            "region": null,
+            "state": null,
+            "street": null,
+            "streetAdditionalInfo": null,
+            "email": null,
+            "phone": null,
+            "person": null,
+            "company": null
+        }
+    },
+    "status": null,
+    "type": null,
+    "price": 0,
+    "vat": 0,
+    "priceAfterVat": 0,
+    "createdAt": null,
+    "updatedAt": null
+}

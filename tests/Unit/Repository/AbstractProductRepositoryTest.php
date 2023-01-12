@@ -27,8 +27,8 @@ it('has correct default values', function () {
         ->toBeInstanceOf(PdkProduct::class)
         ->and(Arr::dot($product->toArray()))
         ->toEqual([
-            'sku'                             => '123',
-            'weight'                          => 4000,
+            'ean'                             => null,
+            'name'                            => null,
             'settings.allowOnlyRecipient'     => false,
             'settings.allowSignature'         => false,
             'settings.countryOfOrigin'        => 'NL',
@@ -41,6 +41,8 @@ it('has correct default values', function () {
             'settings.fitInMailbox'           => 0,
             'settings.packageType'            => 'package',
             'settings.returnShipments'        => false,
+            'sku'                             => '123',
+            'weight'                          => 4000,
         ]);
 });
 

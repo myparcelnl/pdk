@@ -6,8 +6,10 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
+use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 
 /**
  * Order for use with fulfilment API.
@@ -21,7 +23,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property null|string                                               $language
  * @property null|string                                               $orderDate
  * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
- * @property null|\MyParcelNL\Pdk\Shipment\Model\Shipment              $shipment
+ * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment            $shipment
  * @property null|string                                               $status
  * @property null|string                                               $type
  * @property int                                                       $price
@@ -60,7 +62,7 @@ class Order extends Model
         'accountId'                   => 'int',
         'invoiceAddress'              => ContactDetails::class,
         'language'                    => 'string',
-        'orderDate'                   => 'string',
+        'orderDate'                   => 'datetime',
         'orderLines'                  => OrderLineCollection::class,
         'shipment'                    => Shipment::class,
         'status'                      => 'string',
@@ -71,4 +73,51 @@ class Order extends Model
         'createdAt'                   => 'datetime',
         'updatedAt'                   => 'datetime',
     ];
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkOrder $pdkOrder
+     *
+     * @return static
+     * @noinspection PhpUnused
+     */
+    public static function fromPdkOrder(?PdkOrder $pdkOrder): self
+    {
+        if (! $pdkOrder) {
+            return new self();
+        }
+
+        $shipment = $pdkOrder->shipments->isNotEmpty()
+            ? Shipment::fromPdkShipment($pdkOrder->shipments->first())
+            : [
+                'deliveryOptions' => $pdkOrder->deliveryOptions,
+                'recipient'       => $pdkOrder->recipient,
+            ];
+
+        return new static(
+            [
+                'externalIdentifier'          => $pdkOrder->externalIdentifier,
+                'fulfilmentPartnerIdentifier' => null,
+                'deliveryOptions'             => $pdkOrder->deliveryOptions,
+                // TODO: add billing address to pdk order
+                'invoiceAddress'              => null,
+                'language'                    => LanguageService::getLanguage(),
+                'orderDate'                   => $pdkOrder->orderDate,
+                'orderLines'                  => $pdkOrder->lines
+                    ->map(function (PdkOrderLine $pdkOrderLine) {
+                        return new OrderLine(
+                            [
+                                'product' => Product::fromPdkProduct($pdkOrderLine->product),
+                            ] + $pdkOrderLine->toSnakeCaseArray()
+                        );
+                    })
+                    ->toArray(),
+                'shipment'                    => $shipment,
+                'price'                       => $pdkOrder->orderPrice,
+                'priceAfterVat'               => $pdkOrder->orderPriceAfterVat,
+                'vat'                         => $pdkOrder->orderVat,
+                'status'                      => null,
+                'type'                        => null,
+            ]
+        );
+    }
 }

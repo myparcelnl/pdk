@@ -1,0 +1,19 @@
+[
+    {
+        "carrier": 1,
+        "options": {
+            "package_type": 1,
+            "delivery_type": 2
+        },
+        "physical_properties": {
+            "weight": 0
+        },
+        "recipient": {
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "postal_code": "2132JE",
+            "street": "Antareslaan 31",
+            "person": "Jaap Krekel"
+        }
+    }
+]
