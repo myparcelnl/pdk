@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.33.0](https://github.com/myparcelnl/pdk/compare/v1.32.1...v1.33.0) (2023-01-12)
+
+
+### :sparkles: New Features
+
+* **actions:** add multicollo to export ([#66](https://github.com/myparcelnl/pdk/issues/66)) ([43b7e5e](https://github.com/myparcelnl/pdk/commit/43b7e5eab9bbbd73db74f1ec2eebb87b27f97c24))
+
 ## [1.32.1](https://github.com/myparcelnl/pdk/compare/v1.32.0...v1.32.1) (2023-01-12)
 
 
