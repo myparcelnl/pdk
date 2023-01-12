@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -13,6 +14,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
 /**
  * @property null|string                                                 $externalIdentifier
@@ -33,6 +35,14 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
  * @property int                                                         $totalPrice
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
+ * @method canHaveMultiCollo(): bool
+ * @method canHaveSignature(): bool
+ * @method canHaveInsurance(int $value = 100): bool
+ * @method canHaveOnlyRecipient(): bool
+ * @method canHaveAgeCheck(): bool
+ * @method canHaveLargeFormat(): bool
+ * @method canHaveWeight(int $value = 1): bool
+ * @method canHaveDate(): bool
  */
 class PdkOrder extends Model
 {
@@ -83,6 +93,11 @@ class PdkOrder extends Model
     ];
 
     /**
+     * @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator
+     */
+    private $validator;
+
+    /**
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
@@ -115,6 +130,20 @@ class PdkOrder extends Model
         );
 
         return $this->shipments->last();
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Validation\Validator\OrderValidator
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function getValidator(): OrderValidator
+    {
+        if (! $this->validator) {
+            $this->validator = Pdk::get(OrderValidator::class);
+            $this->validator->setOrder($this);
+        }
+
+        return $this->validator;
     }
 
     /**

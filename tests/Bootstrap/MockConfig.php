@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 class MockConfig implements ConfigInterface
 {

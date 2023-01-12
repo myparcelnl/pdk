@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
 

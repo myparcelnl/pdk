@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\TextInput;
 use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 beforeEach(function () {
     PdkFactory::create(MockPdkConfig::create());

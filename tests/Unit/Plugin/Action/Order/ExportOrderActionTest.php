@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\PdkActions;
+use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
@@ -13,9 +14,10 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 
@@ -41,13 +43,23 @@ afterEach(function () {
 });
 
 it('exports order', function () {
-    $this->mock->append(new ExamplePostIdsResponse([['id' => 30011], ['id' => 30012]]));
-    $this->orderRepository->add(
+    $this->mock->append(new ExamplePostShipmentsResponse());
+
+    $pdkOrders = [
         new PdkOrder(
             [
                 'externalIdentifier' => '245',
                 'deliveryOptions'    => [
-                    'carrier' => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'carrier'     => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'packageType' => 'package',
+                    'labelAmount' => 2,
+                ],
+                'recipient'          => [
+                    'cc'         => CountryService::CC_NL,
+                    'street'     => 'Pietjestraat',
+                    'number'     => '35',
+                    'postalCode' => '2771BW',
+                    'city'       => 'Bikinibroek',
                 ],
             ]
         ),
@@ -66,7 +78,12 @@ it('exports order', function () {
                     'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
                 ],
             ]
-        )
+        ),
+    ];
+
+    $this->orderRepository->add(
+        $pdkOrders[0],
+        $pdkOrders[1]
     );
 
     $response = $this->pdk->execute(PdkActions::EXPORT_ORDER, [
@@ -85,13 +102,12 @@ it('exports order', function () {
         ->toHaveKeysAndValues([
             'data.orders.0.externalIdentifier'                       => '245',
             'data.orders.0.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_POSTNL_NAME,
-            'data.orders.0.deliveryOptions.labelAmount'              => 1,
+            'data.orders.0.deliveryOptions.labelAmount'              => 2,
             'data.orders.0.deliveryOptions.packageType'              => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.0.label'                                    => null,
             'data.orders.0.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'data.orders.0.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.0.shipments.0.id'                           => 30011,
+            'data.orders.0.shipments.0.id'                           => null,
             'data.orders.0.shipments.0.orderId'                      => '245',
 
             'data.orders.1.externalIdentifier'                       => '247',
@@ -99,12 +115,11 @@ it('exports order', function () {
             'data.orders.1.deliveryOptions.deliveryType'             => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
             'data.orders.1.deliveryOptions.labelAmount'              => 1,
             'data.orders.1.deliveryOptions.packageType'              => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.1.label'                                    => null,
             'data.orders.1.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.1.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
             'data.orders.1.shipments.0.deliveryOptions.labelAmount'  => 1,
             'data.orders.1.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.1.shipments.0.id'                           => 30012,
+            'data.orders.1.shipments.0.id'                           => null,
             'data.orders.1.shipments.0.orderId'                      => '247',
         ])
         ->and($content['data']['orders'])

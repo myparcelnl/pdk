@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 /**
  * @property null|int                                                         $id

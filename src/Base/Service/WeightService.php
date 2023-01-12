@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Base\Service;
 
 use InvalidArgumentException;
 use MyParcelNL\Sdk\src\Exception\ValidationException;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 class WeightService
 {

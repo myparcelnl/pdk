@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 /**
  * Global Pest test configuration.

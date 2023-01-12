@@ -1,0 +1,12 @@
+[
+    {
+        "property": "deliveryOptions.shipmentOptions.sameDayDelivery",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/sameDayDelivery",
+        "message": "Does not have a value in the enumeration [false]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            false
+        ]
+    }
+]

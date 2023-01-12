@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Storage;
 
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 class MemoryCacheStorage extends AbstractStorage
 {

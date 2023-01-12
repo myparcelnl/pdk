@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Pdk\Product\Repository\AbstractProductRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 const EXAMPLE_PRODUCT = [
     'sku'      => '123',

@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Concern;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Arr;
 
 trait HasDecodesShipment
 {
