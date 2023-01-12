@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -13,6 +14,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
 /**
  * @property null|string                                                 $externalIdentifier
@@ -89,6 +91,11 @@ class PdkOrder extends Model
         'totalVat'              => 'int',
         'totalPriceAfterVat'    => 'int',
     ];
+
+    /**
+     * @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator
+     */
+    private $validator;
 
     /**
      * @param  null|array $data

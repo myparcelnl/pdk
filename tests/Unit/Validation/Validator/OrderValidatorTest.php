@@ -384,40 +384,13 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
     ]
 );
 
-it('throws an error when calling a nonexistent function', function (array $order, string $method, $input) use (
-    $createOrder
-) {
-    $order = $createOrder($order);
+it('throws an error when calling a nonexistent function', function () use ($createOrder) {
+    $order     = $createOrder();
+    $validator = $order->getValidator();
 
-    $order->{$method}($input);
-})
-    ->throws(BadMethodCallException::class)
-    ->with(
-        [
-            'invalid method' => [
-                'order'  => [
-                    'externalIdentifier' => '245',
-                    'physicalProperties' => [
-                        'weight' => 80,
-                    ],
-                    'deliveryOptions'    => [
-                        'carrier'     => CarrierOptions::CARRIER_POSTNL_NAME,
-                        'packageType' => 'mailbox',
-                        'labelAmount' => 1,
-                    ],
-                    'recipient'          => [
-                        'cc'         => CountryService::CC_NL,
-                        'street'     => 'P.C. Hooftstraat',
-                        'number'     => '1',
-                        'postalCode' => '2243AA',
-                        'city'       => 'Amsterdam',
-                    ],
-                ],
-                'method' => 'canHavePietje',
-                'input'  => 'Pietje',
-            ],
-        ]
-    );
+    /** @noinspection PhpUndefinedMethodInspection */
+    $validator->canHavePietje();
+})->throws(BadMethodCallException::class);
 
 it('throws error when trying to validate without an order', function () {
     $validator = Pdk::get(OrderValidator::class);

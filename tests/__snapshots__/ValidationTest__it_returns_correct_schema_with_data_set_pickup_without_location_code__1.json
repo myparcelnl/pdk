@@ -213,6 +213,12 @@
                     }
                 }
             }
+        },
+        "multiCollo": {
+            "type": "boolean",
+            "enum": [
+                true
+            ]
         }
     },
     "allOf": [

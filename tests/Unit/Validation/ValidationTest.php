@@ -4,10 +4,11 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Validation\OrderValidator;
+use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 use MyParcelNL\Sdk\src\Support\Arr;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -107,10 +108,12 @@ beforeEach(function () {
 });
 
 it('returns correct schema', function (array $input) {
-    $pdkOrder  = new PdkOrder($input);
-    $validator = new OrderValidator($pdkOrder);
+    $pdkOrder = new PdkOrder($input);
+    /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
+    $validator = Pdk::get(OrderValidator::class);
+    $validator->setOrder($pdkOrder);
 
-    $schema = $validator->getValidationSchema();
+    $schema = $validator->getSchema();
 
     assertMatchesJsonSnapshot(json_encode($schema));
 })->with([
@@ -130,8 +133,10 @@ it('returns correct schema', function (array $input) {
 ]);
 
 it('validates order', function (array $input, array $errors = []) {
-    $pdkOrder  = new PdkOrder($input);
-    $validator = new OrderValidator($pdkOrder);
+    $pdkOrder = new PdkOrder($input);
+    /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
+    $validator = Pdk::get(OrderValidator::class);
+    $validator->setOrder($pdkOrder);
 
     $isValid = $validator->validate();
 
