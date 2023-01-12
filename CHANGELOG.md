@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.32.0](https://github.com/myparcelnl/pdk/compare/v1.31.0...v1.32.0) (2023-01-12)
+
+
+### :sparkles: New Features
+
+* **orders:** calculate totals via order lines ([#59](https://github.com/myparcelnl/pdk/issues/59)) ([cc9a644](https://github.com/myparcelnl/pdk/commit/cc9a644ffa9b32232fb4fe18938b7262839623ba))
+
 ## [1.31.0](https://github.com/myparcelnl/pdk/compare/v1.30.0...v1.31.0) (2022-12-22)
 
 
