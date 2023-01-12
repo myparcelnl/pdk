@@ -31,7 +31,7 @@ class CurrencyService
             $priceAfterVat = $price;
         } elseif ($priceAfterVat && ! $price && ! $vat) {
             $price = $priceAfterVat;
-        } elseif ($vat && ! $price && ! $priceAfterVat) {
+        } elseif ($vat) {
             $priceAfterVat = $vat;
         }
 
