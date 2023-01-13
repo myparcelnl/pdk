@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
@@ -13,8 +13,8 @@ beforeEach(function () {
 });
 
 it('calculates vat totals', function (array $input, array $expected) {
-    /** @var \MyParcelNL\Pdk\Base\Service\CurrencyService $currencyService */
-    $currencyService = Pdk::get(CurrencyService::class);
+    /** @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService */
+    $currencyService = Pdk::get(CurrencyServiceInterface::class);
     expect($currencyService->calculateVatTotals($input))->toEqual($expected);
 })->with([
     'all'                     => [
@@ -106,8 +106,8 @@ it('calculates vat totals', function (array $input, array $expected) {
 ]);
 
 it('converts to cents', function ($input, int $expected) {
-    /** @var \MyParcelNL\Pdk\Base\Service\CurrencyService $currencyService */
-    $currencyService = Pdk::get(CurrencyService::class);
+    /** @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService */
+    $currencyService = Pdk::get(CurrencyServiceInterface::class);
     expect($currencyService->convertToCents($input))->toEqual($expected);
 })->with([
     'float 1.00'   => [
