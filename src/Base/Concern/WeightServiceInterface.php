@@ -6,9 +6,6 @@ namespace MyParcelNL\Pdk\Base\Concern;
 
 interface WeightServiceInterface
 {
-    public const UNIT_OUNCES          = 'oz';
-    public const UNIT_POUNDS          = 'lbs';
-    public const UNIT_GRAMS           = 'g';
     public const DIGITAL_STAMP_RANGES = [
         [
             'min'     => 0,
@@ -36,7 +33,10 @@ interface WeightServiceInterface
             'average' => 1175,
         ],
     ];
+    public const UNIT_GRAMS           = 'g';
     public const UNIT_KILOGRAMS       = 'kg';
+    public const UNIT_OUNCES          = 'oz';
+    public const UNIT_POUNDS          = 'lbs';
 
     /**
      * Convert a weight into a digital stamp range.
