@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
+use MyParcelNL\Sdk\src\Support\Str;
+use Throwable;
 
 class RenderService implements RenderServiceInterface
 {
@@ -49,22 +52,25 @@ class RenderService implements RenderServiceInterface
 
     /**
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
     public function renderInitScript(): string
     {
-        $context = $this->contextService->createContexts([Context::ID_GLOBAL]);
+        try {
+            $context = $this->contextService->createContexts([Context::ID_GLOBAL]);
 
-        return strtr($this->getJavaScriptInitTemplate(), [
-            '__BOOTSTRAP_CONTAINER_ID__' => self::BOOTSTRAP_DATA_CONTAINER_ID,
-            '__CONTEXT__'                => $this->encodeContext($context),
-        ]);
+            return strtr($this->getJavaScriptInitTemplate(), [
+                '__BOOTSTRAP_CONTAINER_ID__' => self::BOOTSTRAP_DATA_CONTAINER_ID,
+                '__CONTEXT__'                => $this->encodeContext($context),
+            ]);
+        } catch (Throwable $e) {
+            DefaultLogger::error($e->getMessage());
+            return '';
+        }
     }
 
     /**
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
     public function renderModals(): string
@@ -75,7 +81,6 @@ class RenderService implements RenderServiceInterface
     /**
      * @return string
      * @noinspection PhpUnused
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function renderNotifications(): string
     {
@@ -86,32 +91,24 @@ class RenderService implements RenderServiceInterface
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
     public function renderOrderCard(PdkOrder $order): string
     {
-        $contextBag = $this->contextService->createContexts([
+        return $this->render(self::COMPONENT_ORDER_CARD, [
             Context::ID_ORDER_DATA,
         ], ['order' => $order]);
-
-        return $this->render(self::COMPONENT_ORDER_CARD, $contextBag);
     }
 
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
     public function renderOrderListColumn(PdkOrder $order): string
     {
-        $contextBag = $this->contextService->createContexts([
-            Context::ID_ORDER_DATA,
-        ], ['order' => $order]);
-
-        return $this->render(self::COMPONENT_ORDER_LIST_COLUMN, $contextBag);
+        return $this->render(self::COMPONENT_ORDER_LIST_COLUMN, [Context::ID_ORDER_DATA], ['order' => $order]);
     }
 
     /**
@@ -139,20 +136,28 @@ class RenderService implements RenderServiceInterface
     }
 
     /**
-     * @param  string                                               $method
-     * @param  null|\MyParcelNL\Pdk\Plugin\Model\Context\ContextBag $context
+     * @param  string $component
+     * @param  array  $contexts
+     * @param  array  $arguments
      *
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    protected function render(string $method, ?ContextBag $context = null): string
+    protected function render(string $component, array $contexts = [], array $arguments = []): string
     {
-        return strtr($this->getRenderTemplate(), [
-            '__ID__'        => sprintf('pdk-%s', mt_rand()),
-            '__COMPONENT__' => $method,
-            '__CONTEXT__'   => $this->encodeContext($context),
-            '__EVENT__'     => self::BOOTSTRAP_RENDER_EVENT,
-        ]);
+        try {
+            $contextBag = count($contexts) ? $this->contextService->createContexts($contexts, $arguments) : null;
+
+            return strtr($this->getRenderTemplate(), [
+                '__ID__'        => sprintf('pdk-%s-%s', Str::kebab($component), mt_rand()),
+                '__COMPONENT__' => $component,
+                '__CONTEXT__'   => $this->encodeContext($contextBag),
+                '__EVENT__'     => self::BOOTSTRAP_RENDER_EVENT,
+            ]);
+        } catch (Throwable $e) {
+            DefaultLogger::error($e->getMessage());
+
+            return '';
+        }
     }
 
     /**
