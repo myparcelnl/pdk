@@ -27,7 +27,7 @@ jobs:
           path: ./clover.xml
           key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './Dockerfile', './src/**', './tests/**') }}
 
-      - uses: myparcelnl/actions/build-docker-image-reg@v2
+      - uses: myparcelnl/actions/build-docker-image-reg@v3
         if: steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
