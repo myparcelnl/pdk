@@ -1,13 +1,10 @@
 [
-    {
-        "property": "deliveryOptions.packageType",
-        "pointer": "\/deliveryOptions\/packageType",
-        "message": "Does not have a value in the enumeration [\"letter\",\"package\"]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            "letter",
-            "package"
-        ]
-    }
+  {
+    "property": "deliveryOptions.packageType",
+    "pointer": "/deliveryOptions/packageType",
+    "message": "Does not have a value in the enumeration [\"letter\",\"package\"]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": ["letter", "package"]
+  }
 ]

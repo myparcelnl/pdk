@@ -1,47 +1,47 @@
 [
-    {
-        "name": "apiKey",
-        "label": "settings_general_api_key",
-        "type": "TextInput"
-    },
-    {
-        "name": "apiLogging",
-        "label": "settings_general_api_logging",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "shareCustomerInformation",
-        "label": "settings_general_share_customer_information",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "conceptShipments",
-        "label": "settings_general_concept_shipments",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "orderMode",
-        "label": "settings_general_order_mode",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "trackTraceInEmail",
-        "label": "settings_general_track_trace_in_email",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "trackTraceInAccount",
-        "label": "settings_general_track_trace_in_account",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "barcodeInNote",
-        "label": "settings_general_barcode_in_note",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "processDirectly",
-        "label": "settings_general_process_directly",
-        "type": "ToggleInput"
-    }
+  {
+    "name": "apiKey",
+    "label": "settings_general_api_key",
+    "type": "TextInput"
+  },
+  {
+    "name": "apiLogging",
+    "label": "settings_general_api_logging",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "shareCustomerInformation",
+    "label": "settings_general_share_customer_information",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "conceptShipments",
+    "label": "settings_general_concept_shipments",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "orderMode",
+    "label": "settings_general_order_mode",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "trackTraceInEmail",
+    "label": "settings_general_track_trace_in_email",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "trackTraceInAccount",
+    "label": "settings_general_track_trace_in_account",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "barcodeInNote",
+    "label": "settings_general_barcode_in_note",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "processDirectly",
+    "label": "settings_general_process_directly",
+    "type": "ToggleInput"
+  }
 ]

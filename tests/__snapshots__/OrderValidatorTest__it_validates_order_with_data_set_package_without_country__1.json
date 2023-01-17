@@ -1,9 +1,9 @@
 [
-    {
-        "property": "recipient.cc",
-        "pointer": "\/recipient\/cc",
-        "message": "NULL value found, but a string is required",
-        "constraint": "type",
-        "context": 1
-    }
+  {
+    "property": "recipient.cc",
+    "pointer": "/recipient/cc",
+    "message": "NULL value found, but a string is required",
+    "constraint": "type",
+    "context": 1
+  }
 ]

@@ -1,36 +1,25 @@
 {
-    "description": "belgie/order/bpost/nl_package",
-    "properties": {
-        "deliveryOptions": {
-            "properties": {
-                "deliveryType": {
-                    "enum": [
-                        "standard",
-                        null
-                    ]
-                },
-                "shipmentOptions": {
-                    "properties": {
-                        "insurance": {
-                            "enum": [
-                                0,
-                                50000,
-                                null
-                            ]
-                        },
-                        "onlyRecipient": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "signature": {
-                            "enum": [
-                                false
-                            ]
-                        }
-                    }
-                }
+  "description": "belgie/order/bpost/nl_package",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [0, 50000, null]
+            },
+            "onlyRecipient": {
+              "enum": [false]
+            },
+            "signature": {
+              "enum": [false]
             }
+          }
         }
+      }
     }
+  }
 }

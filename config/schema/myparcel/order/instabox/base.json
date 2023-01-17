@@ -1,98 +1,81 @@
 {
-    "description": "myparcel/order/instabox/base",
-    "type": "object",
-    "allOf": [
+  "description": "myparcel/order/instabox/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
         {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "required": [
-                                        "largeFormat"
-                                    ],
-                                    "properties": {
-                                        "largeFormat": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "physicalProperties": {
-                            "properties": {
-                                "weight": {
-                                    "maximum": 30000
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "physicalProperties": {
-                            "properties": {
-                                "weight": {
-                                    "type": "integer",
-                                    "maximum": 20000
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        }
-    ],
-    "properties": {
-        "physicalProperties": {
-            "properties": {
-                "weight": {
-                    "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
-                }
-            }
-        },
-        "recipient": {
-            "properties": {
-                "cc": {
-                    "enum": [
-                        "NL"
-                    ]
-                }
-            }
-        },
-        "deliveryOptions": {
-            "properties": {
-                "deliveryType": {
-                    "enum": [
-                        "standard",
-                        "pickup",
-                        null
-                    ]
-                },
-                "packageType": {
-                    "enum": [
-                        "mailbox",
-                        "package",
-                        null
-                    ]
-                },
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
                 "shipmentOptions": {
-                    "properties": {
-                        "labelDescription": {
-                            "maxLength": 50
-                        },
-                        "signature": {
-                            "enum": [
-                                false,
-                                null
-                            ]
-                        }
+                  "required": ["largeFormat"],
+                  "properties": {
+                    "largeFormat": {
+                      "enum": [true]
                     }
+                  }
                 }
+              }
+            },
+            "physicalProperties": {
+              "properties": {
+                "weight": {
+                  "maximum": 30000
+                }
+              }
             }
+          }
+        },
+        {
+          "properties": {
+            "physicalProperties": {
+              "properties": {
+                "weight": {
+                  "type": "integer",
+                  "maximum": 20000
+                }
+              }
+            }
+          }
         }
+      ]
     }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
+        }
+      }
+    },
+    "recipient": {
+      "properties": {
+        "cc": {
+          "enum": ["NL"]
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
+        "packageType": {
+          "enum": ["mailbox", "package", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "labelDescription": {
+              "maxLength": 50
+            },
+            "signature": {
+              "enum": [false, null]
+            }
+          }
+        }
+      }
+    }
+  }
 }

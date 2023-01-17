@@ -1,12 +1,10 @@
 [
-    {
-        "property": "deliveryOptions.shipmentOptions.signature",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
-        "message": "Does not have a value in the enumeration [false]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            false
-        ]
-    }
+  {
+    "property": "deliveryOptions.shipmentOptions.signature",
+    "pointer": "/deliveryOptions/shipmentOptions/signature",
+    "message": "Does not have a value in the enumeration [false]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [false]
+  }
 ]

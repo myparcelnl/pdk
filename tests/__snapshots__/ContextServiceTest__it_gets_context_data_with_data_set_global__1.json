@@ -1,61 +1,61 @@
 {
-    "global": {
-        "baseUrl": "CMS_URL",
-        "bootstrapId": "myparcel-pdk-bootstrap",
-        "endpoints": {
-            "exportOrder": {
-                "body": null,
-                "headers": [],
-                "method": "POST",
-                "path": "",
-                "parameters": {
-                    "action": "exportOrder"
-                }
-            },
-            "exportAndPrintOrder": {
-                "body": null,
-                "headers": [],
-                "method": "POST",
-                "path": "",
-                "parameters": {
-                    "action": "exportAndPrintOrder"
-                }
-            },
-            "printOrder": {
-                "body": null,
-                "headers": [],
-                "method": "POST",
-                "path": "",
-                "parameters": {
-                    "action": "printOrder"
-                }
-            },
-            "getOrderData": {
-                "body": null,
-                "headers": [],
-                "method": "GET",
-                "path": "",
-                "parameters": {
-                    "action": "getOrderData"
-                }
-            },
-            "exportReturn": {
-                "body": null,
-                "headers": [],
-                "method": "POST",
-                "path": "",
-                "parameters": {
-                    "action": "exportReturn"
-                }
-            }
-        },
-        "event": "myparcel_pdk_loaded",
-        "mode": "production",
-        "pluginSettings": [],
-        "translations": {
-            "apple_tree": "Appelboom"
+  "global": {
+    "baseUrl": "CMS_URL",
+    "bootstrapId": "myparcel-pdk-bootstrap",
+    "endpoints": {
+      "exportOrder": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "path": "",
+        "parameters": {
+          "action": "exportOrder"
         }
+      },
+      "exportAndPrintOrder": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "path": "",
+        "parameters": {
+          "action": "exportAndPrintOrder"
+        }
+      },
+      "printOrder": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "path": "",
+        "parameters": {
+          "action": "printOrder"
+        }
+      },
+      "getOrderData": {
+        "body": null,
+        "headers": [],
+        "method": "GET",
+        "path": "",
+        "parameters": {
+          "action": "getOrderData"
+        }
+      },
+      "exportReturn": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "path": "",
+        "parameters": {
+          "action": "exportReturn"
+        }
+      }
     },
-    "orderData": null,
-    "deliveryOptions": null
+    "event": "myparcel_pdk_loaded",
+    "mode": "production",
+    "pluginSettings": [],
+    "translations": {
+      "apple_tree": "Appelboom"
+    }
+  },
+  "orderData": null,
+  "deliveryOptions": null
 }

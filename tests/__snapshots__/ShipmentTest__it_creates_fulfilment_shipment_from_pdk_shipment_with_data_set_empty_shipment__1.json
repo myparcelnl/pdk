@@ -1,40 +1,40 @@
 {
-    "carrier": 1,
-    "contractId": null,
-    "customsDeclaration": {
-        "contents": 1,
-        "invoice": null,
-        "items": [],
-        "weight": 0
-    },
-    "options": {
-        "ageCheck": null,
-        "insurance": null,
-        "labelDescription": null,
-        "largeFormat": null,
-        "onlyRecipient": null,
-        "return": null,
-        "sameDayDelivery": null,
-        "signature": null,
-        "packageType": 1,
-        "deliveryType": 2
-    },
-    "pickup": null,
-    "recipient": {
-        "boxNumber": null,
-        "cc": null,
-        "city": null,
-        "fullStreet": null,
-        "number": null,
-        "numberSuffix": null,
-        "postalCode": null,
-        "region": null,
-        "state": null,
-        "street": null,
-        "streetAdditionalInfo": null,
-        "email": null,
-        "phone": null,
-        "person": null,
-        "company": null
-    }
+  "carrier": 1,
+  "contractId": null,
+  "customsDeclaration": {
+    "contents": 1,
+    "invoice": null,
+    "items": [],
+    "weight": 0
+  },
+  "options": {
+    "ageCheck": null,
+    "insurance": null,
+    "labelDescription": null,
+    "largeFormat": null,
+    "onlyRecipient": null,
+    "return": null,
+    "sameDayDelivery": null,
+    "signature": null,
+    "packageType": 1,
+    "deliveryType": 2
+  },
+  "pickup": null,
+  "recipient": {
+    "boxNumber": null,
+    "cc": null,
+    "city": null,
+    "fullStreet": null,
+    "number": null,
+    "numberSuffix": null,
+    "postalCode": null,
+    "region": null,
+    "state": null,
+    "street": null,
+    "streetAdditionalInfo": null,
+    "email": null,
+    "phone": null,
+    "person": null,
+    "company": null
+  }
 }

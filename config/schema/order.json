@@ -1,189 +1,134 @@
 {
-    "description": "/order",
-    "type": "object",
-    "additionalItems": false,
-    "required": [
-        "physicalProperties",
-        "recipient",
-        "deliveryOptions"
-    ],
-    "properties": {
-        "physicalProperties": {
-            "properties": {
-                "weight": {
-                    "type": [
-                        "integer"
-                    ],
-                    "minimum": 1
-                }
-            }
-        },
-        "recipient": {
-            "type": "object",
-            "required": [
-                "cc"
-            ],
-            "properties": {
-                "cc": {
-                    "type": "string",
-                    "pattern": "^[A-z]{2}$"
-                }
-            }
-        },
-        "deliveryOptions": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "carrier": {
-                    "type": "string"
-                },
-                "date": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
-                },
-                "deliveryType": {
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "labelAmount": {
-                    "type": [
-                        "integer",
-                        "null"
-                    ]
-                },
-                "packageType": {
-                    "type": "string"
-                },
-                "pickupLocation": {
-                    "type": [
-                        "object",
-                        "null"
-                    ],
-                    "additionalProperties": false,
-                    "properties": {
-                        "postalCode": {
-                            "type": "string"
-                        },
-                        "locationName": {
-                            "type": "string"
-                        },
-                        "city": {
-                            "type": "string"
-                        },
-                        "fullStreet": {
-                            "type": "string"
-                        },
-                        "street": {
-                            "type": "string"
-                        },
-                        "streetAdditionalInfo": {
-                            "type": [
-                                "null",
-                                "string"
-                            ]
-                        },
-                        "number": {
-                            "type": "string"
-                        },
-                        "numberSuffix": {
-                            "type": [
-                                "null",
-                                "string"
-                            ]
-                        },
-                        "boxNumber": {
-                            "type": [
-                                "null",
-                                "string"
-                            ],
-                            "maxLength": 8
-                        },
-                        "region": {
-                            "type": "string",
-                            "maxLength": 35
-                        },
-                        "state": {
-                            "type": "string"
-                        },
-                        "cc": {
-                            "type": "string",
-                            "pattern": "^[A-z]{2}$"
-                        },
-                        "locationCode": {
-                            "type": "string",
-                            "minLength": 1
-                        },
-                        "retailNetworkId": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "shipmentOptions": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "ageCheck": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        },
-                        "insurance": {
-                            "type": [
-                                "integer",
-                                "null"
-                            ]
-                        },
-                        "labelDescription": {
-                            "type": [
-                                "string",
-                                "null"
-                            ]
-                        },
-                        "largeFormat": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        },
-                        "onlyRecipient": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        },
-                        "return": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        },
-                        "sameDayDelivery": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        },
-                        "signature": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "multiCollo": {
-            "type": "boolean",
-            "enum": [
-                false
-            ]
+  "description": "/order",
+  "type": "object",
+  "additionalItems": false,
+  "required": ["physicalProperties", "recipient", "deliveryOptions"],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "type": ["integer"],
+          "minimum": 1
         }
+      }
+    },
+    "recipient": {
+      "type": "object",
+      "required": ["cc"],
+      "properties": {
+        "cc": {
+          "type": "string",
+          "pattern": "^[A-z]{2}$"
+        }
+      }
+    },
+    "deliveryOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "carrier": {
+          "type": "string"
+        },
+        "date": {
+          "type": ["string", "null"],
+          "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
+        },
+        "deliveryType": {
+          "type": ["string", "null"]
+        },
+        "labelAmount": {
+          "type": ["integer", "null"]
+        },
+        "packageType": {
+          "type": "string"
+        },
+        "pickupLocation": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "postalCode": {
+              "type": "string"
+            },
+            "locationName": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "fullStreet": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "streetAdditionalInfo": {
+              "type": ["null", "string"]
+            },
+            "number": {
+              "type": "string"
+            },
+            "numberSuffix": {
+              "type": ["null", "string"]
+            },
+            "boxNumber": {
+              "type": ["null", "string"],
+              "maxLength": 8
+            },
+            "region": {
+              "type": "string",
+              "maxLength": 35
+            },
+            "state": {
+              "type": "string"
+            },
+            "cc": {
+              "type": "string",
+              "pattern": "^[A-z]{2}$"
+            },
+            "locationCode": {
+              "type": "string",
+              "minLength": 1
+            },
+            "retailNetworkId": {
+              "type": "string"
+            }
+          }
+        },
+        "shipmentOptions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ageCheck": {
+              "type": ["boolean", "null"]
+            },
+            "insurance": {
+              "type": ["integer", "null"]
+            },
+            "labelDescription": {
+              "type": ["string", "null"]
+            },
+            "largeFormat": {
+              "type": ["boolean", "null"]
+            },
+            "onlyRecipient": {
+              "type": ["boolean", "null"]
+            },
+            "return": {
+              "type": ["boolean", "null"]
+            },
+            "sameDayDelivery": {
+              "type": ["boolean", "null"]
+            },
+            "signature": {
+              "type": ["boolean", "null"]
+            }
+          }
+        }
+      }
+    },
+    "multiCollo": {
+      "type": "boolean",
+      "enum": [false]
     }
+  }
 }

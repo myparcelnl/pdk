@@ -1,75 +1,54 @@
 {
-    "description": "/order/customs_declaration",
-    "type": "object",
-    "additionalItems": false,
-    "required": [
-        "customsDeclaration"
-    ],
-    "anyOf": [
-        {
-            "properties": {
-                "customsDeclaration": {
-                    "required": [
-                        "invoice"
-                    ],
-                    "properties": {
-                        "contents": {
-                            "enum": [
-                                1,
-                                2,
-                                5
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "properties": {
-                "customsDeclaration": {
-                    "properties": {
-                        "contents": {
-                            "enum": [
-                                3,
-                                4
-                            ]
-                        }
-                    }
-                }
-            }
-        }
-    ],
-    "properties": {
+  "description": "/order/customs_declaration",
+  "type": "object",
+  "additionalItems": false,
+  "required": ["customsDeclaration"],
+  "anyOf": [
+    {
+      "properties": {
         "customsDeclaration": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-                "contents",
-                "weight",
-                "items"
-            ],
-            "properties": {
-                "contents": {
-                    "type": "integer",
-                    "enum": [
-                        1,
-                        2,
-                        3,
-                        4,
-                        5
-                    ]
-                },
-                "invoice": {
-                    "type": "string"
-                },
-                "items": {
-                    "type": "array"
-                },
-                "weight": {
-                    "type": "integer",
-                    "minimum": 1
-                }
+          "required": ["invoice"],
+          "properties": {
+            "contents": {
+              "enum": [1, 2, 5]
             }
+          }
         }
+      }
+    },
+    {
+      "properties": {
+        "customsDeclaration": {
+          "properties": {
+            "contents": {
+              "enum": [3, 4]
+            }
+          }
+        }
+      }
     }
+  ],
+  "properties": {
+    "customsDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contents", "weight", "items"],
+      "properties": {
+        "contents": {
+          "type": "integer",
+          "enum": [1, 2, 3, 4, 5]
+        },
+        "invoice": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array"
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
 }

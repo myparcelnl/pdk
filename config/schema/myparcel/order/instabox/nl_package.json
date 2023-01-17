@@ -1,19 +1,16 @@
 {
-    "description": "myparcel/order/instabox/nl_package",
-    "properties": {
-        "deliveryOptions": {
-            "properties": {
-                "shipmentOptions": {
-                    "properties": {
-                        "insurance": {
-                            "enum": [
-                                0,
-                                null
-                            ]
-                        }
-                    }
-                }
+  "description": "myparcel/order/instabox/nl_package",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [0, null]
             }
+          }
         }
+      }
     }
+  }
 }

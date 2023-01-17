@@ -1,26 +1,19 @@
 {
-    "description": "myparcel/order/postnl/be_package",
-    "properties": {
-        "deliveryOptions": {
-            "properties": {
-                "deliveryType": {
-                    "enum": [
-                        "standard",
-                        "pickup",
-                        null
-                    ]
-                },
-                "shipmentOptions": {
-                    "properties": {
-                        "insurance": {
-                            "enum": [
-                                0,
-                                50000
-                            ]
-                        }
-                    }
-                }
+  "description": "myparcel/order/postnl/be_package",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [0, 50000]
             }
+          }
         }
+      }
     }
+  }
 }

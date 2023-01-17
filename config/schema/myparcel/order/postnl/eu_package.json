@@ -1,30 +1,22 @@
 {
-    "description": "myparcel/order/postnl/eu_package",
-    "properties": {
+  "description": "myparcel/order/postnl/eu_package",
+  "properties": {
+    "deliveryType": {
+      "enum": ["standard", null]
+    },
+    "deliveryOptions": {
+      "properties": {
         "deliveryType": {
-            "enum": [
-                "standard",
-                null
-            ]
+          "enum": ["standard", null]
         },
-        "deliveryOptions": {
-            "properties": {
-                "deliveryType": {
-                    "enum": [
-                        "standard",
-                        null
-                    ]
-                },
-                "shipmentOptions": {
-                    "properties": {
-                        "insurance": {
-                            "enum": [
-                                50000
-                            ]
-                        }
-                    }
-                }
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [50000]
             }
+          }
         }
+      }
     }
+  }
 }

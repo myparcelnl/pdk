@@ -1,224 +1,184 @@
 {
-    "description": "belgie/order/postnl/base",
-    "type": "object",
-    "allOf": [
+  "description": "belgie/order/postnl/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
         {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "required": [
-                                        "largeFormat"
-                                    ],
-                                    "properties": {
-                                        "largeFormat": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "physicalProperties": {
-                            "properties": {
-                                "weight": {
-                                    "maximum": 30000
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "physicalProperties": {
-                            "properties": {
-                                "weight": {
-                                    "maximum": 20000
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "required": [
-                                "deliveryType"
-                            ],
-                            "properties": {
-                                "deliveryType": {
-                                    "enum": [
-                                        "standard",
-                                        null
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "required": [
-                                "date"
-                            ],
-                            "properties": {
-                                "date": {
-                                    "type": "string",
-                                    "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "required": [
-                                "deliveryType",
-                                "pickupLocation"
-                            ],
-                            "properties": {
-                                "deliveryType": {
-                                    "enum": [
-                                        "pickup"
-                                    ]
-                                },
-                                "pickupLocation": {
-                                    "type": "object",
-                                    "required": [
-                                        "locationCode"
-                                    ],
-                                    "properties": {
-                                        "locationCode": {
-                                            "type": "string"
-                                        }
-                                    }
-                                },
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "deliveryType": {
-                                    "enum": [
-                                        "standard",
-                                        null
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "anyOf": [
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "required": [
-                                        "insurance"
-                                    ],
-                                    "properties": {
-                                        "insurance": {
-                                            "enum": [
-                                                500
-                                            ]
-                                        },
-                                        "onlyRecipient": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        },
-                                        "signature": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                {
-                    "properties": {
-                        "deliveryOptions": {
-                            "properties": {
-                                "shipmentOptions": {
-                                    "properties": {
-                                        "insurance": {
-                                            "enum": [
-                                                0,
-                                                null
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            ]
-        }
-    ],
-    "properties": {
-        "physicalProperties": {
-            "properties": {
-                "weight": {
-                    "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf",
-                    "minimum": 1
-                }
-            }
-        },
-        "deliveryOptions": {
-            "properties": {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
                 "shipmentOptions": {
-                    "properties": {
-                        "deliveryType": {
-                            "enum": [
-                                "standard",
-                                "pickup",
-                                null
-                            ]
-                        },
-                        "labelDescription": {
-                            "maxLength": 50
-                        },
-                        "sameDayDelivery": {
-                            "enum": [
-                                false
-                            ]
-                        }
+                  "required": ["largeFormat"],
+                  "properties": {
+                    "largeFormat": {
+                      "enum": [true]
                     }
+                  }
                 }
+              }
+            },
+            "physicalProperties": {
+              "properties": {
+                "weight": {
+                  "maximum": 30000
+                }
+              }
             }
+          }
+        },
+        {
+          "properties": {
+            "physicalProperties": {
+              "properties": {
+                "weight": {
+                  "maximum": 20000
+                }
+              }
+            }
+          }
         }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["standard", null]
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["date"],
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType", "pickupLocation"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["pickup"]
+                },
+                "pickupLocation": {
+                  "type": "object",
+                  "required": ["locationCode"],
+                  "properties": {
+                    "locationCode": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "shipmentOptions": {
+                  "properties": {
+                    "signature": {
+                      "enum": [true]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "deliveryType": {
+                  "enum": ["standard", null]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "shipmentOptions": {
+                  "required": ["insurance"],
+                  "properties": {
+                    "insurance": {
+                      "enum": [500]
+                    },
+                    "onlyRecipient": {
+                      "enum": [true]
+                    },
+                    "signature": {
+                      "enum": [true]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "shipmentOptions": {
+                  "properties": {
+                    "insurance": {
+                      "enum": [0, null]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf",
+          "minimum": 1
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "shipmentOptions": {
+          "properties": {
+            "deliveryType": {
+              "enum": ["standard", "pickup", null]
+            },
+            "labelDescription": {
+              "maxLength": 50
+            },
+            "sameDayDelivery": {
+              "enum": [false]
+            }
+          }
+        }
+      }
+    }
+  }
 }

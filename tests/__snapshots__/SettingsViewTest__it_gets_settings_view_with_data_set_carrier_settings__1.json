@@ -1,158 +1,158 @@
 [
-    {
-        "name": "allowDeliveryOptions",
-        "label": "settings_carrier_allow_delivery_options",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowEveningDelivery",
-        "label": "settings_carrier_allow_evening_delivery",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowMondayDelivery",
-        "label": "settings_carrier_allow_monday_delivery",
-        "description": "settings_carrier_allow_monday_delivery_description",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowMorningDelivery",
-        "label": "settings_carrier_allow_morning_delivery",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowOnlyRecipient",
-        "label": "settings_carrier_allow_only_recipient",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowPickupLocations",
-        "label": "settings_carrier_allow_pickup_locations",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowSameDayDelivery",
-        "label": "settings_carrier_allow_same_day_delivery",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowSaturdayDelivery",
-        "label": "settings_carrier_allow_saturday_delivery",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "allowSignature",
-        "label": "settings_carrier_allow_signature",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "dropOffPossibilities",
-        "label": "settings_carrier_drop_off_days",
-        "type": "DropOffDaySelectInput"
-    },
-    {
-        "name": "featureShowDeliveryDate",
-        "label": "settings_carrier_feature_show_delivery_date",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "priceEveningDelivery",
-        "label": "settings_carrier_price_evening_delivery",
-        "type": "TextInput"
-    },
-    {
-        "name": "priceMorningDelivery",
-        "label": "settings_carrier_price_morning_delivery",
-        "type": "TextInput"
-    },
-    {
-        "name": "priceOnlyRecipient",
-        "label": "settings_carrier_price_only_recipient",
-        "type": "TextInput"
-    },
-    {
-        "name": "pricePackageTypeDigitalStamp",
-        "label": "settings_carrier_price_package_type_digital_stamp",
-        "type": "TextInput"
-    },
-    {
-        "name": "pricePackageTypeMailbox",
-        "label": "settings_carrier_price_package_type_mailbox",
-        "type": "TextInput"
-    },
-    {
-        "name": "pricePickup",
-        "label": "settings_carrier_price_pickup",
-        "type": "TextInput"
-    },
-    {
-        "name": "priceSameDayDelivery",
-        "label": "settings_carrier_price_same_day_delivery",
-        "type": "TextInput"
-    },
-    {
-        "name": "priceSignature",
-        "label": "settings_carrier_price_signature",
-        "type": "TextInput"
-    },
-    {
-        "name": "priceStandardDelivery",
-        "label": "settings_carrier_price_standard_delivery",
-        "type": "TextInput"
-    },
-    {
-        "name": "defaultPackageType",
-        "label": "settings_carrier_default_package_type",
-        "type": "SelectInput"
-    },
-    {
-        "name": "exportAgeCheck",
-        "label": "settings_carrier_export_age_check",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "exportInsurance",
-        "label": "settings_carrier_export_insurance",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "exportInsuranceAmount",
-        "label": "settings_carrier_export_insurance_amount",
-        "type": "TextInput"
-    },
-    {
-        "name": "exportInsuranceUpTo",
-        "label": "settings_carrier_export_insurance_up_to",
-        "type": "SelectInput"
-    },
-    {
-        "name": "allowInsuranceBelgium",
-        "label": "settings_carrier_allow_insurance_belgium",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "exportLargeFormat",
-        "label": "settings_carrier_export_large_format",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "exportOnlyRecipient",
-        "label": "settings_carrier_export_only_recipient",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "exportReturnShipments",
-        "label": "settings_carrier_export_return_shipments",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "exportSignature",
-        "label": "settings_carrier_export_signature",
-        "type": "ToggleInput"
-    },
-    {
-        "name": "digitalStampDefaultWeight",
-        "label": "settings_carrier_digital_stamp_default_weight",
-        "type": "SelectInput"
-    }
+  {
+    "name": "allowDeliveryOptions",
+    "label": "settings_carrier_allow_delivery_options",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowEveningDelivery",
+    "label": "settings_carrier_allow_evening_delivery",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowMondayDelivery",
+    "label": "settings_carrier_allow_monday_delivery",
+    "description": "settings_carrier_allow_monday_delivery_description",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowMorningDelivery",
+    "label": "settings_carrier_allow_morning_delivery",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowOnlyRecipient",
+    "label": "settings_carrier_allow_only_recipient",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowPickupLocations",
+    "label": "settings_carrier_allow_pickup_locations",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowSameDayDelivery",
+    "label": "settings_carrier_allow_same_day_delivery",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowSaturdayDelivery",
+    "label": "settings_carrier_allow_saturday_delivery",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "allowSignature",
+    "label": "settings_carrier_allow_signature",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "dropOffPossibilities",
+    "label": "settings_carrier_drop_off_days",
+    "type": "DropOffDaySelectInput"
+  },
+  {
+    "name": "featureShowDeliveryDate",
+    "label": "settings_carrier_feature_show_delivery_date",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "priceEveningDelivery",
+    "label": "settings_carrier_price_evening_delivery",
+    "type": "TextInput"
+  },
+  {
+    "name": "priceMorningDelivery",
+    "label": "settings_carrier_price_morning_delivery",
+    "type": "TextInput"
+  },
+  {
+    "name": "priceOnlyRecipient",
+    "label": "settings_carrier_price_only_recipient",
+    "type": "TextInput"
+  },
+  {
+    "name": "pricePackageTypeDigitalStamp",
+    "label": "settings_carrier_price_package_type_digital_stamp",
+    "type": "TextInput"
+  },
+  {
+    "name": "pricePackageTypeMailbox",
+    "label": "settings_carrier_price_package_type_mailbox",
+    "type": "TextInput"
+  },
+  {
+    "name": "pricePickup",
+    "label": "settings_carrier_price_pickup",
+    "type": "TextInput"
+  },
+  {
+    "name": "priceSameDayDelivery",
+    "label": "settings_carrier_price_same_day_delivery",
+    "type": "TextInput"
+  },
+  {
+    "name": "priceSignature",
+    "label": "settings_carrier_price_signature",
+    "type": "TextInput"
+  },
+  {
+    "name": "priceStandardDelivery",
+    "label": "settings_carrier_price_standard_delivery",
+    "type": "TextInput"
+  },
+  {
+    "name": "defaultPackageType",
+    "label": "settings_carrier_default_package_type",
+    "type": "SelectInput"
+  },
+  {
+    "name": "exportAgeCheck",
+    "label": "settings_carrier_export_age_check",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "exportInsurance",
+    "label": "settings_carrier_export_insurance",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "exportInsuranceAmount",
+    "label": "settings_carrier_export_insurance_amount",
+    "type": "TextInput"
+  },
+  {
+    "name": "exportInsuranceUpTo",
+    "label": "settings_carrier_export_insurance_up_to",
+    "type": "SelectInput"
+  },
+  {
+    "name": "allowInsuranceBelgium",
+    "label": "settings_carrier_allow_insurance_belgium",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "exportLargeFormat",
+    "label": "settings_carrier_export_large_format",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "exportOnlyRecipient",
+    "label": "settings_carrier_export_only_recipient",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "exportReturnShipments",
+    "label": "settings_carrier_export_return_shipments",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "exportSignature",
+    "label": "settings_carrier_export_signature",
+    "type": "ToggleInput"
+  },
+  {
+    "name": "digitalStampDefaultWeight",
+    "label": "settings_carrier_digital_stamp_default_weight",
+    "type": "SelectInput"
+  }
 ]

@@ -1,32 +1,23 @@
 {
-    "description": "myparcel/order/postnl/morning_evening",
-    "properties": {
-        "deliveryOptions": {
-            "properties": {
-                "shipmentOptions": {
-                    "required": [
-                        "onlyRecipient",
-                        "signature"
-                    ],
-                    "properties": {
-                        "ageCheck": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "onlyRecipient": {
-                            "enum": [
-                                true
-                            ]
-                        },
-                        "signature": {
-                            "enum": [
-                                true
-                            ]
-                        }
-                    }
-                }
+  "description": "myparcel/order/postnl/morning_evening",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "shipmentOptions": {
+          "required": ["onlyRecipient", "signature"],
+          "properties": {
+            "ageCheck": {
+              "enum": [false]
+            },
+            "onlyRecipient": {
+              "enum": [true]
+            },
+            "signature": {
+              "enum": [true]
             }
+          }
         }
+      }
     }
+  }
 }

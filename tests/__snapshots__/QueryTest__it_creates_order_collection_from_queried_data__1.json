@@ -1,121 +1,121 @@
 {
-    "uuid": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
-    "externalIdentifier": "#1025",
-    "fulfilmentPartnerIdentifier": null,
-    "shopId": 122377,
-    "accountId": 123456,
-    "invoiceAddress": {
-        "boxNumber": null,
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "fullStreet": null,
-        "number": null,
-        "numberSuffix": null,
-        "postalCode": "2132 JE",
-        "region": null,
-        "state": null,
-        "street": "Antareslaan 31",
-        "streetAdditionalInfo": null,
-        "email": null,
-        "phone": null,
-        "person": "Felicia Parcel",
-        "company": null
+  "uuid": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
+  "externalIdentifier": "#1025",
+  "fulfilmentPartnerIdentifier": null,
+  "shopId": 122377,
+  "accountId": 123456,
+  "invoiceAddress": {
+    "boxNumber": null,
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "fullStreet": null,
+    "number": null,
+    "numberSuffix": null,
+    "postalCode": "2132 JE",
+    "region": null,
+    "state": null,
+    "street": "Antareslaan 31",
+    "streetAdditionalInfo": null,
+    "email": null,
+    "phone": null,
+    "person": "Felicia Parcel",
+    "company": null
+  },
+  "language": "nl",
+  "orderDate": "2022-11-24 20:16:45",
+  "orderLines": [
+    {
+      "uuid": "4040ae40-d54a-4a64-aa5a-1ebd73680fdc",
+      "quantity": 2,
+      "price": 519,
+      "vat": 276,
+      "priceAfterVat": 795,
+      "product": {
+        "uuid": null,
+        "sku": null,
+        "ean": null,
+        "externalIdentifier": "43597032554725",
+        "name": "Hendel (per stuk)",
+        "description": "Zilver",
+        "width": 0,
+        "length": 0,
+        "height": 0,
+        "weight": 6
+      }
     },
-    "language": "nl",
-    "orderDate": "2022-11-24 20:16:45",
-    "orderLines": [
-        {
-            "uuid": "4040ae40-d54a-4a64-aa5a-1ebd73680fdc",
-            "quantity": 2,
-            "price": 519,
-            "vat": 276,
-            "priceAfterVat": 795,
-            "product": {
-                "uuid": null,
-                "sku": null,
-                "ean": null,
-                "externalIdentifier": "43597032554725",
-                "name": "Hendel (per stuk)",
-                "description": "Zilver",
-                "width": 0,
-                "length": 0,
-                "height": 0,
-                "weight": 6
-            }
-        },
-        {
-            "uuid": "d9d4de59-1b88-467e-bba5-fdacb8bf27b3",
-            "quantity": 1,
-            "price": 1483,
-            "vat": 312,
-            "priceAfterVat": 1795,
-            "product": {
-                "uuid": null,
-                "sku": null,
-                "ean": null,
-                "externalIdentifier": "12746352738812",
-                "name": "Stofzuigerzak - Met diamantjes",
-                "description": "1 per verpakking",
-                "width": 0,
-                "length": 0,
-                "height": 0,
-                "weight": 21
-            }
-        },
-        {
-            "uuid": "84bbe3b0-da17-4de6-8233-e6555bdf8be3",
-            "quantity": 2,
-            "price": 583,
-            "vat": 311,
-            "priceAfterVat": 894,
-            "product": {
-                "uuid": null,
-                "sku": null,
-                "ean": null,
-                "externalIdentifier": "32436582546543",
-                "name": "Stofzuigerzak",
-                "description": "1 per verpakking",
-                "width": 0,
-                "length": 0,
-                "height": 0,
-                "weight": 8
-            }
-        }
-    ],
-    "shipment": {
-        "carrier": 1,
-        "contractId": null,
-        "customsDeclaration": {
-            "contents": 1,
-            "invoice": null,
-            "items": [],
-            "weight": 0
-        },
-        "options": null,
-        "pickup": null,
-        "recipient": {
-            "boxNumber": null,
-            "cc": "NL",
-            "city": "Hoofddorp",
-            "fullStreet": null,
-            "number": "31",
-            "numberSuffix": null,
-            "postalCode": "2132 JE",
-            "region": null,
-            "state": null,
-            "street": "Antareslaan",
-            "streetAdditionalInfo": null,
-            "email": null,
-            "phone": null,
-            "person": "Felicia Parcel",
-            "company": null
-        }
+    {
+      "uuid": "d9d4de59-1b88-467e-bba5-fdacb8bf27b3",
+      "quantity": 1,
+      "price": 1483,
+      "vat": 312,
+      "priceAfterVat": 1795,
+      "product": {
+        "uuid": null,
+        "sku": null,
+        "ean": null,
+        "externalIdentifier": "12746352738812",
+        "name": "Stofzuigerzak - Met diamantjes",
+        "description": "1 per verpakking",
+        "width": 0,
+        "length": 0,
+        "height": 0,
+        "weight": 21
+      }
     },
-    "status": "processed",
-    "type": "consumer",
-    "price": 0,
-    "vat": 0,
-    "priceAfterVat": 0,
-    "createdAt": "2022-11-24 20:16:50",
-    "updatedAt": "2022-11-25 13:09:07"
+    {
+      "uuid": "84bbe3b0-da17-4de6-8233-e6555bdf8be3",
+      "quantity": 2,
+      "price": 583,
+      "vat": 311,
+      "priceAfterVat": 894,
+      "product": {
+        "uuid": null,
+        "sku": null,
+        "ean": null,
+        "externalIdentifier": "32436582546543",
+        "name": "Stofzuigerzak",
+        "description": "1 per verpakking",
+        "width": 0,
+        "length": 0,
+        "height": 0,
+        "weight": 8
+      }
+    }
+  ],
+  "shipment": {
+    "carrier": 1,
+    "contractId": null,
+    "customsDeclaration": {
+      "contents": 1,
+      "invoice": null,
+      "items": [],
+      "weight": 0
+    },
+    "options": null,
+    "pickup": null,
+    "recipient": {
+      "boxNumber": null,
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "fullStreet": null,
+      "number": "31",
+      "numberSuffix": null,
+      "postalCode": "2132 JE",
+      "region": null,
+      "state": null,
+      "street": "Antareslaan",
+      "streetAdditionalInfo": null,
+      "email": null,
+      "phone": null,
+      "person": "Felicia Parcel",
+      "company": null
+    }
+  },
+  "status": "processed",
+  "type": "consumer",
+  "price": 0,
+  "vat": 0,
+  "priceAfterVat": 0,
+  "createdAt": "2022-11-24 20:16:50",
+  "updatedAt": "2022-11-25 13:09:07"
 }

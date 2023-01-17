@@ -1,36 +1,28 @@
 {
-    "properties": {
-        "deliveryOptions": {
-            "properties": {
-                "pickupLocation": {
-                    "properties": {
-                        "locationCode": {
-                            "minLength": 1
-                        }
-                    }
-                },
-                "shipmentOptions": {
-                    "properties": {
-                        "insurance": {
-                            "enum": [
-                                null,
-                                0,
-                                50000
-                            ]
-                        },
-                        "signature": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "onlyRecipient": {
-                            "enum": [
-                                false
-                            ]
-                        }
-                    }
-                }
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "pickupLocation": {
+          "properties": {
+            "locationCode": {
+              "minLength": 1
             }
+          }
+        },
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [null, 0, 50000]
+            },
+            "signature": {
+              "enum": [false]
+            },
+            "onlyRecipient": {
+              "enum": [false]
+            }
+          }
         }
+      }
     }
+  }
 }

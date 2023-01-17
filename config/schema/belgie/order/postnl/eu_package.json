@@ -1,33 +1,24 @@
 {
-    "properties": {
-        "deliveryOptions": {
-            "properties": {
-                "deliveryType": {
-                    "enum": [
-                        "standard",
-                        null
-                    ]
-                },
-                "shipmentOptions": {
-                    "properties": {
-                        "insurance": {
-                            "enum": [
-                                50000
-                            ]
-                        },
-                        "onlyRecipient": {
-                            "enum": [
-                                false
-                            ]
-                        },
-                        "signature": {
-                            "enum": [
-                                false
-                            ]
-                        }
-                    }
-                }
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [50000]
+            },
+            "onlyRecipient": {
+              "enum": [false]
+            },
+            "signature": {
+              "enum": [false]
             }
+          }
         }
+      }
     }
+  }
 }

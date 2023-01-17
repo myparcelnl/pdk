@@ -1,28 +1,28 @@
 [
-    {
-        "carrier": 5,
-        "drop_off_point": {
-            "location_code": "45678",
-            "postal_code": "",
-            "location_name": "",
-            "city": "",
-            "street": "",
-            "number": ""
-        },
-        "options": {
-            "package_type": 1,
-            "delivery_type": 2,
-            "same_day_delivery": 1
-        },
-        "physical_properties": {
-            "weight": 0
-        },
-        "recipient": {
-            "cc": "NL",
-            "city": "Hoofddorp",
-            "postal_code": "2132JE",
-            "street": "Antareslaan 31",
-            "person": "Jaap Krekel"
-        }
+  {
+    "carrier": 5,
+    "drop_off_point": {
+      "location_code": "45678",
+      "postal_code": "",
+      "location_name": "",
+      "city": "",
+      "street": "",
+      "number": ""
+    },
+    "options": {
+      "package_type": 1,
+      "delivery_type": 2,
+      "same_day_delivery": 1
+    },
+    "physical_properties": {
+      "weight": 0
+    },
+    "recipient": {
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "postal_code": "2132JE",
+      "street": "Antareslaan 31",
+      "person": "Jaap Krekel"
     }
+  }
 ]
