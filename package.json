@@ -1,16 +1,26 @@
 {
-    "name": "@myparcel/php-pdk",
-    "license": "MIT",
-    "private": true,
-    "scripts": {
-        "test": "docker compose run --rm php vendor/bin/pest",
-        "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'"
-    },
-    "release": {
-        "extends": "@myparcel/semantic-release-config/github-composer"
-    },
-    "devDependencies": {
-        "@myparcel/semantic-release-config": "^4.1.0"
-    },
-    "packageManager": "yarn@3.3.0"
+  "name": "@myparcel/php-pdk",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "prepare": "is-ci || husky install",
+    "test": "docker compose run --rm php vendor/bin/pest",
+    "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'"
+  },
+  "lint-staged": {
+    "*.{json,md}": "prettier --write"
+  },
+  "prettier": "@myparcel/prettier-config",
+  "release": {
+    "extends": "@myparcel/semantic-release-config/github-composer"
+  },
+  "devDependencies": {
+    "@myparcel/prettier-config": "^1.1.0",
+    "@myparcel/semantic-release-config": "^4.1.0",
+    "husky": "^8.0.3",
+    "is-ci": "^3.0.1",
+    "lint-staged": "^13.1.0",
+    "prettier": "^2.8.3"
+  },
+  "packageManager": "yarn@3.3.0"
 }
