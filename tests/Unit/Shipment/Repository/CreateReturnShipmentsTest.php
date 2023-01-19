@@ -4,19 +4,16 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesEachMockPdkInstance());
 
 const INPUT_RECIPIENT = [
     'cc'         => 'NL',
@@ -37,13 +34,15 @@ const DEFAULT_INPUT_SENDER = [
 ];
 
 it('creates return shipment', function (array $input) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
+    $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostIdsResponse());
     $mock->append(new ExampleGetShipmentsResponse());
 
-    $repository             = Pdk::get(ShipmentRepository::class);
+    $repository             = $pdk->get(ShipmentRepository::class);
     $inputShipments         = (new Collection($input))->mapInto(Shipment::class);
     $createdReturnShipments = $repository->createReturnShipments(new ShipmentCollection($inputShipments->all()));
     $array                  = $createdReturnShipments->toArray();
@@ -62,7 +61,7 @@ it('creates return shipment', function (array $input) {
         'input' => [
             [
                 'id'                  => 65435213,
-                'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'     => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [
@@ -91,13 +90,15 @@ it('creates return shipment', function (array $input) {
 ]);
 
 it('creates a valid request from a shipment collection', function ($input, $path, $query, $contentType) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
+    $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostIdsResponse());
     $mock->append(new ExampleGetShipmentsResponse());
 
-    $repository = Pdk::get(ShipmentRepository::class);
+    $repository = $pdk->get(ShipmentRepository::class);
     $response   = $repository->createReturnShipments(new ShipmentCollection($input));
     $request    = $mock->getLastRequest();
 
@@ -118,7 +119,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
         'input'       => [
             [
                 'id'                  => 65435213,
-                'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'     => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [

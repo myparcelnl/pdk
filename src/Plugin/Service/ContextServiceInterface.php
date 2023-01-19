@@ -6,13 +6,25 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 
 use MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\Plugin\Model\Context\CheckoutContext;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
-use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext;
+use MyParcelNL\Pdk\Plugin\Model\Context\DynamicContext;
 use MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext;
+use MyParcelNL\Pdk\Plugin\Model\Context\PluginSettingsViewContext;
+use MyParcelNL\Pdk\Plugin\Model\Context\ProductSettingsViewContext;
+use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
+use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 
 interface ContextServiceInterface
 {
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     *
+     * @return \MyParcelNL\Pdk\Plugin\Model\Context\CheckoutContext
+     */
+    public function createCheckoutContext(PdkCart $cart): CheckoutContext;
+
     /**
      * @param  array $contexts
      * @param  array $data
@@ -20,6 +32,11 @@ interface ContextServiceInterface
      * @return \MyParcelNL\Pdk\Plugin\Model\Context\ContextBag
      */
     public function createContexts(array $contexts, array $data = []): ContextBag;
+
+    /**
+     * @return \MyParcelNL\Pdk\Plugin\Model\Context\DynamicContext
+     */
+    public function createDynamicContext(): DynamicContext;
 
     /**
      * @return \MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext
@@ -34,9 +51,14 @@ interface ContextServiceInterface
     public function createOrderDataContext($orderData): OrderDataContextCollection;
 
     /**
-     * @param null|array|PdkOrder $orderData
-     *
-     * @return \MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext
+     * @return \MyParcelNL\Pdk\Plugin\Model\Context\PluginSettingsViewContext
      */
-    public function createDeliveryOptionsContext($orderData): DeliveryOptionsContext;
+    public function createPluginSettingsViewContext(): PluginSettingsViewContext;
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
+     *
+     * @return \MyParcelNL\Pdk\Plugin\Model\Context\ProductSettingsViewContext
+     */
+    public function createProductSettingsViewContext(?PdkProduct $product): ProductSettingsViewContext;
 }

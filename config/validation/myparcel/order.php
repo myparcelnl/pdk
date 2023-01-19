@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Service\CountryService;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 return [
     'description' => 'myparcel/order',
     'carrier'     => [
         [
-            'id'           => CarrierOptions::CARRIER_POSTNL_ID,
-            'name'         => CarrierOptions::CARRIER_POSTNL_NAME,
+            'id'           => Carrier::CARRIER_POSTNL_ID,
+            'name'         => Carrier::CARRIER_POSTNL_NAME,
             'human'        => 'PostNL',
             'schema'       => 'order/postnl/base',
             'shippingZone' => [
@@ -122,8 +122,8 @@ return [
             ],
         ],
         [
-            'id'           => CarrierOptions::CARRIER_INSTABOX_ID,
-            'name'         => CarrierOptions::CARRIER_INSTABOX_NAME,
+            'id'           => Carrier::CARRIER_INSTABOX_ID,
+            'name'         => Carrier::CARRIER_INSTABOX_NAME,
             'human'        => 'Instabox',
             'schema'       => 'order/instabox/base',
             'shippingZone' => [

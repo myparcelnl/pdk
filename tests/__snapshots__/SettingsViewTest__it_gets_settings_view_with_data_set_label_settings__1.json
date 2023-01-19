@@ -1,42 +1,76 @@
-[
-  {
-    "name": "description",
-    "label": "settings_label_description",
-    "description": "settings_label_description_description",
-    "type": "TextInput"
-  },
-  {
-    "name": "format",
-    "label": "settings_label_format",
-    "options": {
-      "A4": "settings_label_format_option_a4",
-      "A6": "settings_label_format_option_a6"
+{
+  "id": "label",
+  "title": "settings_view_label_title",
+  "description": "settings_view_label_description",
+  "elements": [
+    {
+      "name": "description",
+      "$component": "TextInput",
+      "label": "settings_label_description",
+      "description": "settings_label_description_description"
     },
-    "type": "SelectInput"
-  },
-  {
-    "name": "position",
-    "label": "settings_label_position",
-    "options": {
-      "1": "settings_label_position_option_1",
-      "2": "settings_label_position_option_2",
-      "3": "settings_label_position_option_3",
-      "4": "settings_label_position_option_4"
+    {
+      "name": "format",
+      "$component": "SelectInput",
+      "options": [
+        {
+          "value": "A4",
+          "label": "settings_label_format_option_a4"
+        },
+        {
+          "value": "A6",
+          "label": "settings_label_format_option_a6"
+        }
+      ],
+      "label": "settings_label_format",
+      "description": "settings_label_format_description"
     },
-    "type": "SelectInput"
-  },
-  {
-    "name": "output",
-    "label": "settings_label_output",
-    "options": {
-      "print": "settings_label_output_option_open",
-      "download": "settings_label_output_option_download"
+    {
+      "name": "position",
+      "$component": "SelectInput",
+      "options": [
+        {
+          "value": 1,
+          "label": "settings_label_position_option_1"
+        },
+        {
+          "value": 2,
+          "label": "settings_label_position_option_2"
+        },
+        {
+          "value": 3,
+          "label": "settings_label_position_option_3"
+        },
+        {
+          "value": 4,
+          "label": "settings_label_position_option_4"
+        }
+      ],
+      "label": "settings_label_position",
+      "description": "settings_label_position_description"
     },
-    "type": "SelectInput"
-  },
-  {
-    "name": "prompt",
-    "label": "settings_label_prompt",
-    "type": "ToggleInput"
-  }
-]
+    {
+      "name": "output",
+      "$component": "SelectInput",
+      "options": [
+        {
+          "value": "open",
+          "label": "settings_label_output_option_open"
+        },
+        {
+          "value": "download",
+          "label": "settings_label_output_option_download"
+        }
+      ],
+      "label": "settings_label_output",
+      "description": "settings_label_output_description"
+    },
+    {
+      "name": "prompt",
+      "$component": "ToggleInput",
+      "label": "settings_label_prompt",
+      "description": "settings_label_prompt_description"
+    }
+  ],
+  "children": null
+}

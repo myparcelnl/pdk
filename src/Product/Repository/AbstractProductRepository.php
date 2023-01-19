@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Plugin\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
-abstract class AbstractProductRepository extends Repository
+abstract class AbstractProductRepository extends Repository implements ProductRepositoryInterface
 {
     /**
      * @param  mixed $identifier
@@ -30,12 +30,12 @@ abstract class AbstractProductRepository extends Repository
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkProductCollection
      */
-    abstract public function getProducts(array $identifiers): PdkProductCollection;
+    abstract public function getProducts(array $identifiers = []): PdkProductCollection;
 
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
      *
      * @return void
      */
-    abstract public function store(PdkProduct $product): void;
+    abstract public function update(PdkProduct $product): void;
 }

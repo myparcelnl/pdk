@@ -9,15 +9,22 @@
   },
   "options": {
     "ageCheck": null,
+    "collect": null,
+    "cooledDelivery": null,
+    "deliveryDate": null,
+    "deliveryType": 2,
+    "dropOffAtPostalPoint": null,
+    "extraAssurance": null,
+    "hideSender": null,
     "insurance": null,
     "labelDescription": null,
     "largeFormat": null,
     "onlyRecipient": null,
+    "packageType": 1,
     "return": null,
     "sameDayDelivery": null,
-    "signature": null,
-    "packageType": 1,
-    "deliveryType": 2
+    "saturdayDelivery": null,
+    "signature": null
   },
   "pickup": null,
   "recipient": {

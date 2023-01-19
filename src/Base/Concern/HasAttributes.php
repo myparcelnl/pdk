@@ -366,6 +366,10 @@ trait HasAttributes
             if ($flags & Arrayable::SKIP_NULL && null === $attributes[$key]) {
                 unset($attributes[$key]);
             }
+
+            if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
+                $attributes = Utils::changeArrayKeysCase($this->attributes, $this->getFlagCase($flags));
+            }
         }
 
         return $attributes;
@@ -435,7 +439,7 @@ trait HasAttributes
         }
 
         foreach ($this->dateFormats as $dateFormat) {
-            $date = DateTimeImmutable::createFromFormat($dateFormat, $value);
+            $date = DateTimeImmutable::createFromFormat($dateFormat, (string) $value);
 
             if ($date) {
                 return $date;

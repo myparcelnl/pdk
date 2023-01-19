@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\StorableArrayable;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -24,8 +25,10 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property \MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection    $lines
  * @property \MyParcelNL\Pdk\Base\Model\ContactDetails                   $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\DateTimeImmutable                                     $orderDate
+ * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
  * @property int                                                         $shipmentVat
@@ -44,23 +47,40 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @method canHaveWeight(int $value = 1): bool
  * @method canHaveDate(): bool
  */
-class PdkOrder extends Model
+class PdkOrder extends Model implements StorableArrayable
 {
     protected $attributes = [
         /** Plugin order id */
-        'externalIdentifier'    => null,
-        'customsDeclaration'    => CustomsDeclaration::class,
-        'deliveryOptions'       => DeliveryOptions::class,
-        'label'                 => null,
-        'lines'                 => PdkOrderLineCollection::class,
-        'physicalProperties'    => PhysicalProperties::class,
-        'recipient'             => ContactDetails::class,
-        'sender'                => null,
-        'shipments'             => ShipmentCollection::class,
-        'orderDate'             => null,
+        'externalIdentifier' => null,
+        'deliveryOptions'    => DeliveryOptions::class,
+        'label'              => null,
+
+        'billingAddress'     => null,
+        'recipient'          => ContactDetails::class,
+        'sender'             => null,
+
+        /**
+         * Order shipments. Applicable when NOT using order mode.
+         */
+        'shipments'          => ShipmentCollection::class,
+        'lines'              => PdkOrderLineCollection::class,
+        'customsDeclaration' => CustomsDeclaration::class,
+        'physicalProperties' => PhysicalProperties::class,
+
+        /**
+         * Timestamp of when the order was placed.
+         */
+        'orderDate'          => null,
+
+        /**
+         * Whether the order has been exported as an entire order. Applicable only when using order mode.
+         */
+        'exported'           => false,
+
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
         'shipmentVat'           => 0,
+
         /* The following values are calculated automatically */
         'orderPrice'            => 0,
         'orderPriceAfterVat'    => 0,
@@ -71,16 +91,21 @@ class PdkOrder extends Model
     ];
 
     protected $casts      = [
-        'externalIdentifier'    => 'string',
-        'customsDeclaration'    => CustomsDeclaration::class,
-        'deliveryOptions'       => DeliveryOptions::class,
-        'label'                 => Label::class,
-        'lines'                 => PdkOrderLineCollection::class,
-        'physicalProperties'    => PhysicalProperties::class,
-        'recipient'             => ContactDetails::class,
-        'sender'                => ContactDetails::class,
-        'shipments'             => ShipmentCollection::class,
+        'externalIdentifier' => 'string',
+        'deliveryOptions'    => DeliveryOptions::class,
+        'label'              => Label::class,
+
+        'billingAddress' => ContactDetails::class,
+        'recipient'      => ContactDetails::class,
+        'sender'         => ContactDetails::class,
+
+        'shipments'          => ShipmentCollection::class,
+        'customsDeclaration' => CustomsDeclaration::class,
+        'physicalProperties' => PhysicalProperties::class,
+        'lines'              => PdkOrderLineCollection::class,
+
         'orderDate'             => 'datetime',
+        'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
         'shipmentVat'           => 'int',
@@ -114,22 +139,19 @@ class PdkOrder extends Model
      */
     public function createShipment(array $data = []): Shipment
     {
-        $this->shipments->push(
+        return new Shipment(
             array_replace_recursive(
                 [
-                    'deliveryOptions' => $this->deliveryOptions,
-                    'recipient'       => $this->recipient,
-                    'sender'          => $this->sender,
-                    'carrier'         => [
-                        'name' => $this->deliveryOptions->carrier,
-                    ],
+                    'customsDeclaration'  => $this->customsDeclaration,
+                    'deliveryOptions'     => $this->deliveryOptions,
+                    'recipient'           => $this->recipient,
+                    'sender'              => $this->sender,
+                    'referenceIdentifier' => $this->externalIdentifier,
                 ],
                 $data,
                 ['orderId' => $this->externalIdentifier]
             )
         );
-
-        return $this->shipments->last();
     }
 
     /**
@@ -144,6 +166,20 @@ class PdkOrder extends Model
         }
 
         return $this->validator;
+    }
+
+    /**
+     * Turns data into an array that should be stored in the plugin.
+     *
+     * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        return [
+            'exported'        => $this->exported,
+            'deliveryOptions' => $this->deliveryOptions->toArrayWithoutNull(),
+        ];
     }
 
     /**
@@ -191,10 +227,11 @@ class PdkOrder extends Model
     private function updateShipments(): void
     {
         $this->shipments->each(function (Shipment $shipment) {
-            $shipment->orderId         = $this->externalIdentifier;
-            $shipment->deliveryOptions = $this->deliveryOptions;
-            $shipment->recipient       = $this->recipient;
-            $shipment->sender          = $this->sender;
+            $shipment->orderId            = $this->externalIdentifier;
+            $shipment->customsDeclaration = $this->customsDeclaration;
+            $shipment->deliveryOptions    = $this->deliveryOptions;
+            $shipment->recipient          = $this->recipient;
+            $shipment->sender             = $this->sender;
         });
     }
 

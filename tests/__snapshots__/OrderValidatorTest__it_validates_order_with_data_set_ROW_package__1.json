@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "property": "deliveryOptions.shipmentOptions.insurance",
+    "pointer": "/deliveryOptions/shipmentOptions/insurance",
+    "message": "Does not have a value in the enumeration [0,5000,50000]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 5000, 50000]
+  }
+]

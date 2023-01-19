@@ -121,7 +121,12 @@ class MockProductRepository extends AbstractProductRepository
         return $this->getProduct($identifier)['settings'];
     }
 
-    public function getProducts(array $identifiers): PdkProductCollection
+    /**
+     * @param  array $identifiers
+     *
+     * @return \MyParcelNL\Pdk\Plugin\Collection\PdkProductCollection
+     */
+    public function getProducts(array $identifiers = []): PdkProductCollection
     {
         $foundProducts = [];
 
@@ -151,7 +156,7 @@ class MockProductRepository extends AbstractProductRepository
      * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function store(PdkProduct $product): void
+    public function update(PdkProduct $product): void
     {
         $this->saved[] = $product->toArray();
     }

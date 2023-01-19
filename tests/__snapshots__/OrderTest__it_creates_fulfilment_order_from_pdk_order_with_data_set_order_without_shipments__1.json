@@ -29,15 +29,45 @@
     }
   ],
   "shipment": {
-    "carrier": null,
+    "carrier": 1,
     "contractId": null,
     "customsDeclaration": {
-      "contents": 1,
-      "invoice": null,
-      "items": [],
-      "weight": 0
+      "contents": 0,
+      "invoice": "ABC123456",
+      "items": [
+        {
+          "amount": 10,
+          "classification": "12345",
+          "country": "NL",
+          "description": "A word",
+          "itemValue": {
+            "amount": 100,
+            "currency": "EUR"
+          },
+          "weight": 100
+        }
+      ],
+      "weight": 1000
     },
-    "options": null,
+    "options": {
+      "ageCheck": null,
+      "collect": null,
+      "cooledDelivery": null,
+      "deliveryDate": null,
+      "deliveryType": 2,
+      "dropOffAtPostalPoint": null,
+      "extraAssurance": null,
+      "hideSender": null,
+      "insurance": null,
+      "labelDescription": null,
+      "largeFormat": null,
+      "onlyRecipient": true,
+      "packageType": 1,
+      "return": null,
+      "sameDayDelivery": null,
+      "saturdayDelivery": null,
+      "signature": true
+    },
     "pickup": null,
     "recipient": {
       "boxNumber": null,

@@ -11,15 +11,19 @@
     "apiKey": null,
     "barcode": "CV515676839NL",
     "carrier": {
-      "id": 1,
-      "name": "postnl",
-      "human": null,
-      "subscriptionId": null,
-      "primary": true,
-      "isDefault": false,
-      "optional": false,
-      "label": null,
-      "type": "main"
+      "carrier": {
+        "externalIdentifier": "",
+        "id": null,
+        "name": null,
+        "human": null,
+        "subscriptionId": null,
+        "enabled": false,
+        "isDefault": false,
+        "label": null,
+        "optional": false,
+        "primary": false,
+        "type": null
+      }
     },
     "collectionContact": null,
     "customsDeclaration": {

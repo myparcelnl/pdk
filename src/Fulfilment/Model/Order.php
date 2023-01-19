@@ -21,7 +21,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
  * @property null|int                                                  $accountId
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails            $invoiceAddress
  * @property null|string                                               $language
- * @property null|string                                               $orderDate
+ * @property null|\DateTime                                            $orderDate
  * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment            $shipment
  * @property null|string                                               $status
@@ -86,21 +86,15 @@ class Order extends Model
             return new self();
         }
 
-        $shipment = $pdkOrder->shipments->isNotEmpty()
-            ? Shipment::fromPdkShipment($pdkOrder->shipments->first())
-            : [
-                'deliveryOptions' => $pdkOrder->deliveryOptions,
-                'recipient'       => $pdkOrder->recipient,
-            ];
+        $shipment = Shipment::fromPdkShipment($pdkOrder->createShipment());
 
         return new static(
             [
                 'externalIdentifier'          => $pdkOrder->externalIdentifier,
                 'fulfilmentPartnerIdentifier' => null,
                 'deliveryOptions'             => $pdkOrder->deliveryOptions,
-                // TODO: add billing address to pdk order
-                'invoiceAddress'              => null,
-                'language'                    => LanguageService::getLanguage(),
+                'invoiceAddress'              => $pdkOrder->billingAddress ?? null,
+                'language'                    => LanguageService::getIso2(),
                 'orderDate'                   => $pdkOrder->orderDate,
                 'orderLines'                  => $pdkOrder->lines
                     ->map(function (PdkOrderLine $pdkOrderLine) {

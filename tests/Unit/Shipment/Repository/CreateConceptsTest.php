@@ -6,8 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -37,7 +36,7 @@ const DEFAULT_INPUT_SENDER = [
 it('creates a valid request from a shipment collection', function (array $input) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
+    $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostIdsResponse());
 
@@ -55,7 +54,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     $inputShipments = (new ShipmentCollection($input));
 
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
-    $repository = Pdk::get(ShipmentRepository::class);
+    $repository = $pdk->get(ShipmentRepository::class);
 
     $createdConcepts = $repository->createConcepts($inputShipments);
 
@@ -83,7 +82,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'bare minimum'                                => [
         'input' => [
             [
-                'carrier'   => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'recipient' => DEFAULT_INPUT_RECIPIENT,
             ],
         ],
@@ -91,7 +90,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'simple domestic shipment'                    => [
         'input' => [
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'    => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [
@@ -119,7 +118,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'domestic with pickup'                        => [
         'input' => [
             [
-                'carrier'         => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'         => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'recipient'       => DEFAULT_INPUT_RECIPIENT,
                 'deliveryOptions' => [
                     'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
@@ -133,7 +132,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'instabox same day delivery'                  => [
         'input' => [
             [
-                'carrier'         => ['name' => CarrierOptions::CARRIER_INSTABOX_NAME],
+                'carrier'         => ['name' => Carrier::CARRIER_INSTABOX_NAME],
                 'recipient'       => DEFAULT_INPUT_RECIPIENT,
                 'deliveryOptions' => [
                     'shipmentOptions' => [
@@ -149,7 +148,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'eu shipment'                                 => [
         'input' => [
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_BPOST_ID],
                 'recipient'          => ['cc' => CountryService::CC_CA] + DEFAULT_INPUT_RECIPIENT,
                 'customsDeclaration' => [
                     'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
@@ -179,7 +178,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'shipment with weight in customs declaration' => [
         'input' => [
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_BPOST_ID],
                 'recipient'          => ['cc' => CountryService::CC_DE] + DEFAULT_INPUT_RECIPIENT,
                 'deliveryOptions'    => [
                     'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
@@ -218,7 +217,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'eu shipment with pickup'                     => [
         'input' => [
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_BPOST_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_BPOST_ID],
                 'recipient'          => ['cc' => CountryService::CC_DE] + DEFAULT_INPUT_RECIPIENT,
                 'deliveryOptions'    => [
                     'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
@@ -254,13 +253,13 @@ it('creates a valid request from a shipment collection', function (array $input)
     'multicollo'                                  => [
         'input' => [
             [
-                'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'multiCollo'          => true,
                 'recipient'           => DEFAULT_INPUT_RECIPIENT,
                 'referenceIdentifier' => 'my-multicollo-set',
             ],
             [
-                'carrier'             => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'multiCollo'          => true,
                 'recipient'           => DEFAULT_INPUT_RECIPIENT,
                 'referenceIdentifier' => 'my-multicollo-set',
@@ -270,7 +269,7 @@ it('creates a valid request from a shipment collection', function (array $input)
     'multiple shipments'                          => [
         'input' => [
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'    => [
                     'date'            => '2022-07-20 16:00:00',
                     'shipmentOptions' => [
@@ -294,7 +293,7 @@ it('creates a valid request from a shipment collection', function (array $input)
                 'sender'             => DEFAULT_INPUT_SENDER,
             ],
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_INSTABOX_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_INSTABOX_ID],
                 'deliveryOptions'    => [
                     'date'            => '2022-07-20 16:00:00',
                     'shipmentOptions' => [
@@ -325,11 +324,11 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
+    $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostIdsResponse());
 
-    $repository = Pdk::get(ShipmentRepository::class);
+    $repository = $pdk->get(ShipmentRepository::class);
 
     $response = $repository->createConcepts(new ShipmentCollection($input));
     $request  = $mock->getLastRequest();
@@ -353,7 +352,7 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     'single shipment' => [
         'input'       => [
             [
-                'carrier'            => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
+                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'    => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [

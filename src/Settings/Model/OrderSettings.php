@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-
 /**
  * @property int|null    $emptyDigitalStampWeight
  * @property int|null    $emptyParcelWeight
@@ -18,7 +16,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property string|null $statusWhenDelivered
  * @property string|null $statusWhenLabelScanned
  */
-class OrderSettings extends Model
+class OrderSettings extends AbstractSettingsModel
 {
     /**
      * Settings category ID.
@@ -39,6 +37,8 @@ class OrderSettings extends Model
     public const STATUS_WHEN_LABEL_SCANNED          = 'statusWhenLabelScanned';
 
     protected $attributes = [
+        'id' => self::ID,
+
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => null,
         self::EMPTY_PARCEL_WEIGHT                => null,
         self::IGNORE_ORDER_STATUSES              => null,

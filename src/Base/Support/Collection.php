@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 
@@ -16,6 +15,11 @@ class Collection extends SdkCollection implements Arrayable
      * @var null|class-string
      */
     protected $cast;
+
+    /**
+     * @var array
+     */
+    private $classCastCache = [];
 
     /**
      * @param  mixed $items
@@ -57,21 +61,31 @@ class Collection extends SdkCollection implements Arrayable
      * @param  \MyParcelNL\Pdk\Base\Support\Collection $collection
      * @param  string                                  $key
      *
-     * @return $this
+     * @return self
      */
     public function mergeByKey(Collection $collection, string $key): self
     {
         $valueRetriever = $this->valueRetriever($key);
-        $results        = [];
+        $result         = $this->keyBy($key);
 
-        foreach ($this->items as $itemKey => $item) {
-            $value          = $valueRetriever($item, $itemKey);
-            $collectionItem = $collection->firstWhere($key, $value);
-
-            $results[] = $collectionItem ?? $item;
+        foreach ($collection->all() as $item) {
+            $keyValue = $valueRetriever($item);
+            $result->put($keyValue, $item);
         }
 
-        return new static($results);
+        return $result->values();
+    }
+
+    /**
+     * @param  mixed $key
+     * @param  mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($key, $value): void
+    {
+        parent::offsetSet($key, $value);
+        $this->castItems();
     }
 
     /**
@@ -86,6 +100,16 @@ class Collection extends SdkCollection implements Arrayable
         parent::push(...$values);
         $this->castItems();
         return $this;
+    }
+
+    /**
+     * @param  null|string $class
+     *
+     * @return void
+     */
+    public function setCast(?string $class): void
+    {
+        $this->cast = $class;
     }
 
     /**

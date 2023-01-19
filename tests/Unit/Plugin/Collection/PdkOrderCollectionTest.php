@@ -90,13 +90,13 @@ it('updates order shipments by shipment ids', function () {
         ],
     ]);
 
-    $shipments = new ShipmentCollection([
-        ['id' => 30000, 'status' => 7],
-        ['id' => 30010, 'status' => 7],
-        ['id' => 30020, 'status' => 7],
-    ]);
-
-    $orders->updateShipments($shipments);
+    $orders->updateShipments(
+        new ShipmentCollection([
+            ['id' => 30000, 'status' => 7],
+            ['id' => 30010, 'status' => 7],
+            ['id' => 30020, 'status' => 7],
+        ])
+    );
 
     // TODO: simplify when collections support "only" method
     $shipments = array_map(function (array $shipment) {
@@ -112,6 +112,7 @@ it('updates order shipments by shipment ids', function () {
         ['orderId' => '🦊', 'id' => 30070, 'status' => 1],
     ]);
 });
+
 it('updates order shipments by order ids', function () {
     $orders = new PdkOrderCollection([
         [
@@ -139,13 +140,13 @@ it('updates order shipments by order ids', function () {
         ],
     ]);
 
-    $shipments = new ShipmentCollection([
-        ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
-        ['orderId' => '🐸', 'id' => 40000, 'status' => 7],
-        ['orderId' => '🐷', 'id' => 30020, 'status' => 7],
-    ]);
-
-    $orders->updateShipments($shipments);
+    $orders->updateShipments(
+        new ShipmentCollection([
+            ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
+            ['orderId' => '🐸', 'id' => 40000, 'status' => 7],
+            ['orderId' => '🐷', 'id' => 30020, 'status' => 7],
+        ])
+    );
 
     // TODO: simplify when collections support "only" method
     $shipments = array_map(function (array $shipment) {
@@ -155,7 +156,9 @@ it('updates order shipments by order ids', function () {
             ->toArray());
 
     expect($shipments)->toBe([
+        ['orderId' => '🐰', 'id' => 29090, 'status' => 1],
         ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
+        ['orderId' => '🐸', 'id' => 30010, 'status' => 1],
         ['orderId' => '🐸', 'id' => 40000, 'status' => 7],
         ['orderId' => '🐷', 'id' => 30020, 'status' => 7],
         ['orderId' => '🦊', 'id' => 30070, 'status' => 1],

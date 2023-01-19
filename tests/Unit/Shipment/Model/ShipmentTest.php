@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Model\Address;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
@@ -19,33 +19,33 @@ it('sets carrier correctly', function ($carrier, string $expectedName) {
         ->toBe($expectedName);
 })->with([
     'carrier id'      => [
-        'carrier'      => ['id' => CarrierOptions::CARRIER_POSTNL_ID],
-        'expectedName' => CarrierOptions::CARRIER_POSTNL_NAME,
+        'carrier'      => ['id' => Carrier::CARRIER_POSTNL_ID],
+        'expectedName' => Carrier::CARRIER_POSTNL_NAME,
     ],
     'carrier name'    => [
-        'carrier'      => ['name' => CarrierOptions::CARRIER_INSTABOX_NAME],
-        'expectedName' => CarrierOptions::CARRIER_INSTABOX_NAME,
+        'carrier'      => ['name' => Carrier::CARRIER_INSTABOX_NAME],
+        'expectedName' => Carrier::CARRIER_INSTABOX_NAME,
     ],
     'subscription id' => [
         'carrier'      => ['subscriptionId' => MockConfig::ID_CUSTOM_SUBSCRIPTION_DPD],
-        'expectedName' => CarrierOptions::CARRIER_DPD_NAME,
+        'expectedName' => Carrier::CARRIER_DPD_NAME,
     ],
     'carrier class'   => [
-        'carrier'      => function () { return new CarrierOptions(['name' => CarrierOptions::CARRIER_INSTABOX_NAME]); },
-        'expectedName' => CarrierOptions::CARRIER_INSTABOX_NAME,
+        'carrier'      => function () { return new Carrier(['name' => Carrier::CARRIER_INSTABOX_NAME]); },
+        'expectedName' => Carrier::CARRIER_INSTABOX_NAME,
     ],
 ]);
 
 it('can hold and expose data', function () {
     $shipment = new Shipment([
-        'carrier'         => new CarrierOptions(['name' => CarrierOptions::CARRIER_POSTNL_NAME]),
+        'carrier'         => new Carrier(['name' => Carrier::CARRIER_POSTNL_NAME]),
         'sender'          => new Address(),
         'recipient'       => new Address(),
         'deliveryOptions' => new DeliveryOptions(),
     ]);
 
     expect($shipment->getCarrier())
-        ->toBeInstanceOf(CarrierOptions::class)
+        ->toBeInstanceOf(Carrier::class)
         ->and($shipment->getRecipient())
         ->toBeInstanceOf(Address::class)
         ->and($shipment->getSender())
@@ -56,7 +56,7 @@ it('can hold and expose data', function () {
 
 it('passes carrier to delivery options', function () {
     $shipment = new Shipment([
-        'carrier'         => new CarrierOptions(['name' => CarrierOptions::CARRIER_POSTNL_NAME]),
+        'carrier'         => new Carrier(['name' => Carrier::CARRIER_POSTNL_NAME]),
         'deliveryOptions' => new DeliveryOptions([
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
             'shipmentOptions' => [
@@ -66,5 +66,5 @@ it('passes carrier to delivery options', function () {
     ]);
 
     $deliveryOptions = $shipment->getDeliveryOptions();
-    expect($deliveryOptions ? $deliveryOptions->getCarrier() : null)->toEqual(CarrierOptions::CARRIER_POSTNL_NAME);
+    expect($deliveryOptions ? $deliveryOptions->getCarrier() : null)->toEqual(Carrier::CARRIER_POSTNL_NAME);
 });

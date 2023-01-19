@@ -9,7 +9,8 @@ use DateTime;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Support\StorableArrayable;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Sdk\src\Support\Arr;
 
@@ -47,7 +48,7 @@ use MyParcelNL\Sdk\src\Support\Arr;
  * @property null|\DateTime                                         $modified
  * @property null|int                                               $modifiedBy
  */
-class Shipment extends Model
+class Shipment extends Model implements StorableArrayable
 {
     public const SHIPMENT_TYPE_STANDARD       = 1;
     public const SHIPMENT_TYPE_RETURN         = 2;
@@ -207,6 +208,46 @@ class Shipment extends Model
     }
 
     /**
+     * @return string
+     */
+    public function getTrackTraceLink(): string
+    {
+        if (CountryService::CC_NL === $this->recipient->cc) {
+            return sprintf(
+                'https://myparcel.me/track-trace/%s/%s/%s',
+                $this->barcode,
+                $this->recipient->postalCode,
+                $this->recipient->cc
+            );
+        }
+
+        return sprintf(
+            'https://www.internationalparceltracking.com/Main.aspx#/track/%s/%s/%s',
+            $this->barcode,
+            $this->recipient->cc,
+            $this->recipient->postalCode
+        );
+    }
+
+    /**
+     * Returns the model as an array that can be saved in a database.
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        $this->updated = new DateTime();
+
+        $attributes = $this->toArrayWithoutNull();
+
+        // TODO: replace this with except() when nested properties are supported
+        Arr::forget($attributes, ['carrier.capabilities', 'carrier.returnCapabilities']);
+
+        return $attributes;
+    }
+
+    /**
      * @param  int|string|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrier
      *
      * @return $this
@@ -246,9 +287,13 @@ class Shipment extends Model
         }
 
         if ($this->carrier) {
-            $this->attributes['deliveryOptions']['carrier'] = $this->carrier->name;
+            $this->attributes['deliveryOptions']['carrier'] = $this->carrier->carrier->name;
         } elseif ($this->deliveryOptions->carrier) {
-            $this->attributes['carrier'] = ['name' => $this->deliveryOptions->carrier];
+            $this->attributes['carrier'] = new CarrierOptions([
+                'carrier' => [
+                    'name' => $this->deliveryOptions->carrier,
+                ],
+            ]);
         }
     }
 }

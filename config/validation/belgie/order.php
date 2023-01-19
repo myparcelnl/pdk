@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Service\CountryService;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 return [
     'carrier' => [
         [
-            'id'           => CarrierOptions::CARRIER_BPOST_ID,
-            'name'         => CarrierOptions::CARRIER_BPOST_NAME,
+            'id'           => Carrier::CARRIER_BPOST_ID,
+            'name'         => Carrier::CARRIER_BPOST_NAME,
             'human'        => 'Bpost',
             'schema'       => 'order/bpost/base',
             'shippingZone' => [
@@ -52,14 +52,14 @@ return [
             ],
         ],
         [
-            'id'     => CarrierOptions::CARRIER_DPD_ID,
-            'name'   => CarrierOptions::CARRIER_DPD_NAME,
+            'id'     => Carrier::CARRIER_DPD_ID,
+            'name'   => Carrier::CARRIER_DPD_NAME,
             'human'  => 'DPD',
             'schema' => 'order/dpd/base',
         ],
         [
-            'id'           => CarrierOptions::CARRIER_POSTNL_ID,
-            'name'         => CarrierOptions::CARRIER_POSTNL_NAME,
+            'id'           => Carrier::CARRIER_POSTNL_ID,
+            'name'         => Carrier::CARRIER_POSTNL_NAME,
             'human'        => 'PostNL',
             'schema'       => 'order/postnl/base',
             'shippingZone' => [

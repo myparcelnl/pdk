@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Fulfilment\Repository;
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
@@ -16,9 +16,8 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use RuntimeException;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 const DEFAULT_INPUT_RECIPIENT = [
@@ -38,16 +37,15 @@ const DEFAULT_INPUT_SENDER = [
     'street'     => 'Werf',
 ];
 
-usesShared(new UsesMockPdkInstance());
-
 it('creates a valid order collection from api data', function (array $input) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
+    $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
-    $repository  = Pdk::get(OrderRepository::class);
+    $repository  = $pdk->get(OrderRepository::class);
     $savedOrders = $repository->postOrders(new OrderCollection($input));
 
     expect($savedOrders)
@@ -86,7 +84,7 @@ it('creates a valid order collection from api data', function (array $input) {
                 'shipment'       => [
                     'apiKey'             => '123',
                     'carrier'            => [
-                        'id' => CarrierOptions::CARRIER_POSTNL_ID,
+                        'id' => Carrier::CARRIER_POSTNL_ID,
                     ],
                     'customsDeclaration' => [
                         'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
@@ -111,7 +109,7 @@ it('creates a valid order collection from api data', function (array $input) {
                         ],
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+                        'carrier'         => Carrier::CARRIER_POSTNL_NAME,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -174,10 +172,10 @@ it('creates a valid order collection from api data', function (array $input) {
                 'shipment'       => [
                     'apiKey'             => '123',
                     'carrier'            => [
-                        'id' => CarrierOptions::CARRIER_POSTNL_ID,
+                        'id' => Carrier::CARRIER_POSTNL_ID,
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+                        'carrier'         => Carrier::CARRIER_POSTNL_NAME,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -214,13 +212,15 @@ it('creates a valid order collection from api data', function (array $input) {
 ]);
 
 it('creates order', function ($input, $path, $query) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
+    $api  = $pdk->get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExampleGetOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
-    $repository      = Pdk::get(OrderRepository::class);
+    $repository      = $pdk->get(OrderRepository::class);
     $order           = new Order($input);
     $orderCollection = (new OrderCollection())->push($order);
 
@@ -274,7 +274,7 @@ it('creates order', function ($input, $path, $query) {
             'price'          => 260,
             'shipment'       => [
                 'carrier'            => [
-                    'id' => CarrierOptions::CARRIER_POSTNL_ID,
+                    'id' => Carrier::CARRIER_POSTNL_ID,
                 ],
                 'customsDeclaration' => null,
                 'deliveryOptions'    => [

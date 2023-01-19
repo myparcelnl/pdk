@@ -6,10 +6,10 @@
       </PhpTestInterpreterSettings>
     </CommandLine>
     <option name="pestRunnerSettings">
-      <PestRunner method="" scope="ConfigurationFile" options="--coverage-html coverage" />
+      <PestRunner method="" scope="ConfigurationFile" />
     </option>
     <option name="runnerSettings">
-      <PhpTestRunnerSettings method="" scope="ConfigurationFile" options="--coverage-html coverage" />
+      <PhpTestRunnerSettings method="" scope="ConfigurationFile" />
     </option>
     <method v="2" />
   </configuration>

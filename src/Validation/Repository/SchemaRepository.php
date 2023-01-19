@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 
@@ -22,7 +23,7 @@ class SchemaRepository extends Repository
      *
      * @return array
      */
-    public function getCapabilitiesSchema(
+    public function getOrderValidationSchema(
         ?string $carrier = null,
         ?string $cc = null,
         ?string $packageType = null,
@@ -82,10 +83,46 @@ class SchemaRepository extends Repository
      */
     public function validateOption(array $schema, string $path, $value): bool
     {
-        $key = sprintf('option_%s_%s_%s', $this->generateDataHash($schema), $path, $value);
+        return (bool) $this->handleOption($schema, $path, $value);
+    }
+
+    /**
+     * @param  array  $schema
+     * @param  string $path
+     *
+     * @return array the values in the enum for this option, empty array otherwise
+     */
+    public function validOptions(array $schema, string $path): array
+    {
+        return $this->handleOption($schema, $path, []);
+    }
+
+    /**
+     * @param  array  $schema
+     * @param  string $path
+     * @param         $value mixed when array this returns the enum, otherwise will validate against the value
+     *
+     * @return mixed array when $value is array, bool otherwise
+     */
+    protected function handleOption(array $schema, string $path, $value)
+    {
+        $key = $this->generateDataHash($schema);
+        $key = is_array($value) ? "option_{$key}_$path" : "option_{$key}_{$path}_$value";
 
         return $this->retrieve($key, function () use ($schema, $path, $value) {
             $result = Arr::get($schema, $path);
+
+            if (! $result) {
+//                DefaultLogger::warning('Schema does not contain path', [
+//                    'path'   => $path,
+//                    'schema' => Arr::get($schema, 'description') ?: 'unknown',
+//                ]);
+                return is_array($value) ? [] : false;
+            }
+
+            if (is_array($value)) {
+                return $result['enum'] ?? [];
+            }
 
             $validator = new Validator();
             $validator->validate($value, $result);

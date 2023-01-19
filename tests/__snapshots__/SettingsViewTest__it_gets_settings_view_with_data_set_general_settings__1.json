@@ -1,47 +1,56 @@
-[
-  {
-    "name": "apiKey",
-    "label": "settings_general_api_key",
-    "type": "TextInput"
-  },
-  {
-    "name": "apiLogging",
-    "label": "settings_general_api_logging",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "shareCustomerInformation",
-    "label": "settings_general_share_customer_information",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "conceptShipments",
-    "label": "settings_general_concept_shipments",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "orderMode",
-    "label": "settings_general_order_mode",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "trackTraceInEmail",
-    "label": "settings_general_track_trace_in_email",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "trackTraceInAccount",
-    "label": "settings_general_track_trace_in_account",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "barcodeInNote",
-    "label": "settings_general_barcode_in_note",
-    "type": "ToggleInput"
-  },
-  {
-    "name": "processDirectly",
-    "label": "settings_general_process_directly",
-    "type": "ToggleInput"
-  }
-]
+{
+  "id": "general",
+  "title": "settings_view_general_title",
+  "description": "settings_view_general_description",
+  "elements": [
+    {
+      "name": "apiLogging",
+      "$component": "ToggleInput",
+      "label": "settings_general_api_logging",
+      "description": "settings_general_api_logging_description"
+    },
+    {
+      "name": "shareCustomerInformation",
+      "$component": "ToggleInput",
+      "label": "settings_general_share_customer_information",
+      "description": "settings_general_share_customer_information_description"
+    },
+    {
+      "name": "conceptShipments",
+      "$component": "ToggleInput",
+      "label": "settings_general_concept_shipments",
+      "description": "settings_general_concept_shipments_description"
+    },
+    {
+      "name": "orderMode",
+      "$component": "ToggleInput",
+      "label": "settings_general_order_mode",
+      "description": "settings_general_order_mode_description"
+    },
+    {
+      "name": "trackTraceInEmail",
+      "$component": "ToggleInput",
+      "label": "settings_general_track_trace_in_email",
+      "description": "settings_general_track_trace_in_email_description"
+    },
+    {
+      "name": "trackTraceInAccount",
+      "$component": "ToggleInput",
+      "label": "settings_general_track_trace_in_account",
+      "description": "settings_general_track_trace_in_account_description"
+    },
+    {
+      "name": "barcodeInNote",
+      "$component": "ToggleInput",
+      "label": "settings_general_barcode_in_note",
+      "description": "settings_general_barcode_in_note_description"
+    },
+    {
+      "name": "processDirectly",
+      "$component": "ToggleInput",
+      "label": "settings_general_process_directly",
+      "description": "settings_general_process_directly_description"
+    }
+  ],
+  "children": null
+}

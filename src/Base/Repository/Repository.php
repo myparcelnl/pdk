@@ -31,16 +31,53 @@ class Repository
      */
     public function persist(): void
     {
+        $prefix = $this->getKeyPrefix();
+
         foreach ($this->storageHashMap as $key => $hash) {
-            $data = $this->storage->get($key);
+            $fullKey = $prefix . $key;
+            $data    = $this->storage->get($fullKey);
 
             if ($hash === $this->generateDataHash($data)) {
                 continue;
             }
 
-            $this->storage->set($key, $data);
-            $this->storageHashMap[$key] = $this->generateDataHash($data);
+            $this->storage->set($fullKey, $data);
+            $this->storageHashMap[$fullKey] = $this->generateDataHash($data);
         }
+    }
+
+    /**
+     * @param  string   $key
+     * @param  callable $callback
+     * @param  bool     $force
+     *
+     * @return mixed
+     */
+    public function retrieve(string $key, callable $callback, bool $force = false)
+    {
+        $fullKey = $this->getKeyPrefix() . $key;
+
+        if ($force || ! $this->storage->has($fullKey)) {
+            $data = $callback();
+
+            $this->storage->set($fullKey, $data);
+        }
+
+        $var = $this->storage->get($fullKey);
+        return is_object($var) ? clone $var : $var;
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $data
+     *
+     * @return mixed
+     */
+    public function save(string $key, $data)
+    {
+        $this->storage->set($this->getKeyPrefix() . $key, $data);
+
+        return $data;
     }
 
     /**
@@ -58,33 +95,10 @@ class Repository
     }
 
     /**
-     * @param  string   $key
-     * @param  callable $callback
-     *
-     * @return mixed
+     * @return string
      */
-    protected function retrieve(string $key, callable $callback)
+    protected function getKeyPrefix(): string
     {
-        if (! $this->storage->has($key)) {
-            $data = $callback();
-
-            $this->storageHashMap[$key] = $this->generateDataHash(null);
-            $this->storage->set($key, $data);
-        }
-
-        return $data ?? $this->storage->get($key);
-    }
-
-    /**
-     * @param  string $key
-     * @param  mixed  $data
-     *
-     * @return mixed
-     */
-    protected function save(string $key, $data)
-    {
-        $this->storage->set($key, $data);
-
-        return $data;
+        return '';
     }
 }

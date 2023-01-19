@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Repository\AccountRepository;
-use MyParcelNL\Pdk\Account\Repository\CarrierOptionsRepository;
+use MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository;
+use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
@@ -38,7 +38,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 })->with([
     [
         ExampleGetAccountsResponse::class,
-        AccountRepository::class,
+        AbstractAccountRepository::class,
         Account::class,
         'getAccount',
     ],
@@ -64,7 +64,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
     ],
     [
         ExampleGetCarrierOptionsResponse::class,
-        CarrierOptionsRepository::class,
+        ShopCarrierOptionsRepository::class,
         Collection::class,
         'getCarrierOptions',
         ['shopId' => 3],

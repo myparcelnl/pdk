@@ -3,14 +3,14 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 return [
     [
-        'id'                 => CarrierOptions::CARRIER_POSTNL_ID,
-        'name'               => CarrierOptions::CARRIER_POSTNL_NAME,
+        'id'                 => Carrier::CARRIER_POSTNL_ID,
+        'name'               => Carrier::CARRIER_POSTNL_NAME,
         'primary'            => 1,
-        'type'               => CarrierOptions::TYPE_MAIN,
+        'type'               => Carrier::TYPE_MAIN,
         'capabilities'       => [
             [
                 'packageType'     => [
@@ -194,10 +194,10 @@ return [
         ],
     ],
     [
-        'id'                 => CarrierOptions::CARRIER_INSTABOX_ID,
-        'name'               => CarrierOptions::CARRIER_INSTABOX_NAME,
+        'id'                 => Carrier::CARRIER_INSTABOX_ID,
+        'name'               => Carrier::CARRIER_INSTABOX_NAME,
         'primary'            => 1,
-        'type'               => CarrierOptions::TYPE_MAIN,
+        'type'               => Carrier::TYPE_MAIN,
         'capabilities'       => [
             [
                 'packageType'     => [
@@ -253,11 +253,11 @@ return [
         'returnCapabilities' => [],
     ],
     [
-        'id'                 => CarrierOptions::CARRIER_BPOST_ID,
-        'name'               => CarrierOptions::CARRIER_BPOST_NAME,
+        'id'                 => Carrier::CARRIER_BPOST_ID,
+        'name'               => Carrier::CARRIER_BPOST_NAME,
         'subscriptionId'     => 10921,
         'primary'            => 0,
-        'type'               => CarrierOptions::TYPE_CUSTOM,
+        'type'               => Carrier::TYPE_CUSTOM,
         'capabilities'       => [
             [
                 'packageType'     => [
@@ -343,11 +343,11 @@ return [
         ],
     ],
     [
-        'id'                 => CarrierOptions::CARRIER_DPD_ID,
-        'name'               => CarrierOptions::CARRIER_DPD_NAME,
+        'id'                 => Carrier::CARRIER_DPD_ID,
+        'name'               => Carrier::CARRIER_DPD_NAME,
         'subscriptionId'     => 10932621,
         'primary'            => 0,
-        'type'               => CarrierOptions::TYPE_CUSTOM,
+        'type'               => Carrier::TYPE_CUSTOM,
         'capabilities'       => [
             [
                 'packageType'     => [
@@ -386,10 +386,10 @@ return [
         'returnCapabilities' => [],
     ],
     [
-        'id'                 => CarrierOptions::CARRIER_BPOST_ID,
-        'name'               => CarrierOptions::CARRIER_BPOST_NAME,
+        'id'                 => Carrier::CARRIER_BPOST_ID,
+        'name'               => Carrier::CARRIER_BPOST_NAME,
         'primary'            => 1,
-        'type'               => CarrierOptions::TYPE_MAIN,
+        'type'               => Carrier::TYPE_MAIN,
         'capabilities'       => [
             [
                 'packageType'     => [
