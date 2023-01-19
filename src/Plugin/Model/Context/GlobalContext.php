@@ -21,7 +21,7 @@ class GlobalContext extends Model
 {
     public    $attributes = [
         'baseUrl'        => null,
-        'bootstrapId'    => RenderService::BOOTSTRAP_DATA_CONTAINER_ID,
+        'bootstrapId'    => RenderService::BOOTSTRAP_CONTAINER_ID,
         'endpoints'      => EndpointRequestCollection::class,
         'event'          => RenderService::BOOTSTRAP_RENDER_EVENT,
         'mode'           => null,
