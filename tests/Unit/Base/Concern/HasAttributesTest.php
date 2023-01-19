@@ -88,13 +88,13 @@ it('throws error on invalid cast', function () {
     $model->toArray();
 })->throws(InvalidCastException::class);
 
-it('gets only requested fields', function () {
+it('gets only requested elements', function () {
     $model = new MockMutateModel();
 
     expect($model->only(['bloemkool', 'perenboom']))->toHaveKeys(['bloemkool', 'perenboom']);
 });
 
-it('gets only requested fields with string', function () {
+it('gets only requested elements with string', function () {
     $model = new MockMutateModel();
 
     expect($model->only('myProperty'))->toHaveKeys(['myProperty']);

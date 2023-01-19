@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
-use InvalidArgumentException;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
+use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
+use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
@@ -19,15 +20,21 @@ class RenderService implements RenderServiceInterface
      * Ids and events
      */
     public const  BOOTSTRAP_RENDER_EVENT = 'myparcel_pdk_loaded';
-    public const  BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-bootstrap';
+    public const  BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-boot';
     /**
-     * Components
+     * Delivery options
      */
-    private const COMPONENT_INIT_SCRIPT       = 'init';
-    private const COMPONENT_MODALS            = 'Modals';
-    private const COMPONENT_NOTIFICATIONS     = 'Notifications';
-    private const COMPONENT_ORDER_CARD        = 'OrderCard';
-    private const COMPONENT_ORDER_LIST_COLUMN = 'OrderListColumn';
+    protected const COMPONENT_DELIVERY_OPTIONS = 'DeliveryOptions';
+    /**
+     * Admin components
+     */
+    protected const COMPONENT_INIT_SCRIPT      = 'init';
+    protected const COMPONENT_MODALS           = 'Modals';
+    protected const COMPONENT_NOTIFICATIONS    = 'Notifications';
+    protected const COMPONENT_ORDER_BOX        = 'OrderBox';
+    protected const COMPONENT_ORDER_LIST_ITEM  = 'OrderListItem';
+    protected const COMPONENT_PLUGIN_SETTINGS  = 'PluginSettings';
+    protected const COMPONENT_PRODUCT_SETTINGS = 'ProductSettings';
 
     /**
      * @var string
@@ -42,7 +49,7 @@ class RenderService implements RenderServiceInterface
     /**
      * @var \MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface
      */
-    private $contextService;
+    protected $contextService;
 
     /**
      * @var \MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface
@@ -61,6 +68,26 @@ class RenderService implements RenderServiceInterface
 
     /**
      * @return string
+     */
+    public function getInitHtml(): string
+    {
+        return '';
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     *
+     * @return string
+     */
+    public function renderDeliveryOptions(PdkCart $cart): string
+    {
+        return $this->renderComponent(self::COMPONENT_DELIVERY_OPTIONS, [
+            Context::ID_CHECKOUT,
+        ], ['cart' => $cart]);
+    }
+
+    /**
+     * @return string
      * @noinspection PhpUnused
      */
     public function renderInitScript(): string
@@ -72,7 +99,7 @@ class RenderService implements RenderServiceInterface
         return $this->renderTemplate(
             $this->getJavaScriptInitTemplate(),
             ['__ID__' => self::BOOTSTRAP_CONTAINER_ID],
-            [Context::ID_GLOBAL]
+            [Context::ID_GLOBAL, Context::ID_DYNAMIC]
         );
     }
 
@@ -100,11 +127,11 @@ class RenderService implements RenderServiceInterface
      * @return string
      * @noinspection PhpUnused
      */
-    public function renderOrderCard(PdkOrder $order): string
+    public function renderOrderBox(PdkOrder $order): string
     {
-        return $this->renderComponent(self::COMPONENT_ORDER_CARD, [
+        return $this->renderComponent(self::COMPONENT_ORDER_BOX, [
             Context::ID_ORDER_DATA,
-        ], ['order' => $order]);
+        ], ['order' => (new ShipmentOptionsService($order))->calculate()]);
     }
 
     /**
@@ -113,9 +140,42 @@ class RenderService implements RenderServiceInterface
      * @return string
      * @noinspection PhpUnused
      */
-    public function renderOrderListColumn(PdkOrder $order): string
+    public function renderOrderListItem(PdkOrder $order): string
     {
-        return $this->renderComponent(self::COMPONENT_ORDER_LIST_COLUMN, [Context::ID_ORDER_DATA], ['order' => $order]);
+        return $this->renderComponent(self::COMPONENT_ORDER_LIST_ITEM, [Context::ID_ORDER_DATA], ['order' => $order]);
+    }
+
+    /**
+     * @return string
+     */
+    public function renderPluginSettings(): string
+    {
+        return $this->renderComponent(self::COMPONENT_PLUGIN_SETTINGS, [Context::ID_PLUGIN_SETTINGS_VIEW]);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
+     *
+     * @return string
+     */
+    public function renderProductSettings(PdkProduct $product): string
+    {
+        return $this->renderComponent(
+            self::COMPONENT_PRODUCT_SETTINGS,
+            [Context::ID_PRODUCT_SETTINGS_VIEW],
+            ['product' => $product]
+        );
+    }
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Plugin\Model\Context\ContextBag $context
+     *
+     * @return string
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function encodeContext(?ContextBag $context): string
+    {
+        return $context ? htmlspecialchars(json_encode(array_filter($context->toArray())), ENT_QUOTES, 'UTF-8') : '{}';
     }
 
     /**
@@ -213,26 +273,24 @@ class RenderService implements RenderServiceInterface
             case self::COMPONENT_NOTIFICATIONS:
                 return $this->viewService->hasNotifications();
 
-            case self::COMPONENT_ORDER_CARD:
+            case self::COMPONENT_ORDER_BOX:
                 return $this->viewService->isOrderPage();
 
-            case self::COMPONENT_ORDER_LIST_COLUMN:
+            case self::COMPONENT_ORDER_LIST_ITEM:
                 return $this->viewService->isOrderListPage();
 
-            default:
-                throw new InvalidArgumentException(sprintf('Unknown component "%s"', $component));
-        }
-    }
+            case self::COMPONENT_PLUGIN_SETTINGS:
+                return $this->viewService->isPluginSettingsPage();
 
-    /**
-     * @param  null|\MyParcelNL\Pdk\Plugin\Model\Context\ContextBag $context
-     *
-     * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function encodeContext(?ContextBag $context): string
-    {
-        return $context ? htmlspecialchars(json_encode(array_filter($context->toArray())), ENT_QUOTES, 'UTF-8') : '{}';
+            case self::COMPONENT_PRODUCT_SETTINGS:
+                return $this->viewService->isProductPage();
+
+            case self::COMPONENT_DELIVERY_OPTIONS:
+                return $this->viewService->isCheckoutPage();
+
+            default:
+                return true;
+        }
     }
 
     /**

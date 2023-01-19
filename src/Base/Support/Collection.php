@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 
@@ -16,6 +15,11 @@ class Collection extends SdkCollection implements Arrayable
      * @var null|class-string
      */
     protected $cast;
+
+    /**
+     * @var array
+     */
+    private $classCastCache = [];
 
     /**
      * @param  mixed $items
@@ -73,6 +77,18 @@ class Collection extends SdkCollection implements Arrayable
     }
 
     /**
+     * @param  mixed $key
+     * @param  mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($key, $value): void
+    {
+        parent::offsetSet($key, $value);
+        $this->castItems();
+    }
+
+    /**
      * Push an item onto the end of the collection.
      *
      * @param  mixed $values [optional]
@@ -82,6 +98,18 @@ class Collection extends SdkCollection implements Arrayable
     public function push(...$values): self
     {
         parent::push(...$values);
+        $this->castItems();
+        return $this;
+    }
+
+    /**
+     * @param  null|string $class
+     *
+     * @return self
+     */
+    public function setCast(?string $class): self
+    {
+        $this->cast = $class;
         $this->castItems();
         return $this;
     }

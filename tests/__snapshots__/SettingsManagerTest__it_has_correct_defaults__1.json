@@ -1,0 +1,57 @@
+{
+  "account": {
+    "id": "account",
+    "apiKey": null
+  },
+  "general": {
+    "id": "general",
+    "apiLogging": false,
+    "barcodeInNote": false,
+    "conceptShipments": true,
+    "exportWithAutomaticStatus": null,
+    "orderMode": false,
+    "processDirectly": false,
+    "shareCustomerInformation": false,
+    "trackTraceInAccount": false,
+    "trackTraceInEmail": false
+  },
+  "order": {
+    "id": "order",
+    "emptyDigitalStampWeight": null,
+    "emptyParcelWeight": null,
+    "ignoreOrderStatuses": null,
+    "orderStatusMail": true,
+    "saveCustomerAddress": false,
+    "sendNotificationAfter": null,
+    "sendOrderStateForDigitalStamp": true,
+    "statusOnLabelCreate": null,
+    "statusWhenDelivered": null,
+    "statusWhenLabelScanned": null
+  },
+  "label": {
+    "id": "label",
+    "description": null,
+    "format": "A4",
+    "output": "open",
+    "position": 1,
+    "prompt": false
+  },
+  "customs": {
+    "id": "customs",
+    "countryOfOrigin": null,
+    "customsCode": "0",
+    "packageContents": "1"
+  },
+  "checkout": {
+    "id": "checkout",
+    "deliveryOptionsCustomCss": null,
+    "deliveryOptionsDisplay": false,
+    "deliveryOptionsHeader": null,
+    "deliveryOptionsPosition": null,
+    "pickupLocationsDefaultView": "list",
+    "priceType": "included",
+    "showDeliveryDay": true,
+    "useSeparateAddressFields": false
+  },
+  "carrier": []
+}

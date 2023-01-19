@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -40,14 +40,14 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
     'a single item' => [
         'deliveryOptions' => [
             [
-                'carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
+                'carrier'      => Carrier::CARRIER_POSTNL_NAME,
                 'date'         => DEFAULT_DATE,
                 'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             ],
         ],
         'expectation'     => [
-            'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+            'carrier'         => Carrier::CARRIER_POSTNL_NAME,
             'date'            => DEFAULT_DATE,
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
@@ -60,7 +60,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
     'with two items' => [
         'deliveryOptions' => [
             [
-                'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+                'carrier'         => Carrier::CARRIER_POSTNL_NAME,
                 'date'            => DEFAULT_DATE,
                 'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -72,7 +72,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                 'pickupLocation'  => null,
             ],
             [
-                'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+                'carrier'         => Carrier::CARRIER_POSTNL_NAME,
                 'date'            => null,
                 'deliveryType'    => null,
                 'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
@@ -85,7 +85,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
             ],
         ],
         'expectation'     => [
-            'carrier'         => CarrierOptions::CARRIER_POSTNL_NAME,
+            'carrier'         => Carrier::CARRIER_POSTNL_NAME,
             'date'            => DEFAULT_DATE,
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
@@ -102,7 +102,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
     'with two items with pickup' => [
         'deliveryOptions' => [
             [
-                'carrier'         => CarrierOptions::CARRIER_INSTABOX_NAME,
+                'carrier'         => Carrier::CARRIER_INSTABOX_NAME,
                 'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 'shipmentOptions' => [
                     'signature' => null,
@@ -121,7 +121,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                 ],
             ],
             [
-                'carrier'         => CarrierOptions::CARRIER_INSTABOX_NAME,
+                'carrier'         => Carrier::CARRIER_INSTABOX_NAME,
                 'date'            => null,
                 'deliveryType'    => null,
                 'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
@@ -133,7 +133,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
             ],
         ],
         'expectation'     => [
-            'carrier'         => CarrierOptions::CARRIER_INSTABOX_NAME,
+            'carrier'         => Carrier::CARRIER_INSTABOX_NAME,
             'date'            => null,
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'packageType'     => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,

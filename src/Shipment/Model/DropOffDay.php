@@ -10,11 +10,11 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|string        $cutoffTime
- * @property \DateTimeImmutable $date
- * @property null|bool          $dispatch
- * @property null|string        $sameDayCutoffTime
- * @property int                $weekday
+ * @property null|string             $cutoffTime
+ * @property null|\DateTimeImmutable $date
+ * @property null|bool               $dispatch
+ * @property null|string             $sameDayCutoffTime
+ * @property int                     $weekday
  */
 class DropOffDay extends Model
 {

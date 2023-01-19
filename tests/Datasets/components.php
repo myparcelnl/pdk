@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Facade\RenderService;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
+use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
 
 /**
@@ -41,10 +42,10 @@ dataset('components', [
         'views'    => MockAbstractViewService::ALL_PDK_PAGES,
     ],
 
-    'order card' => [
+    'order box' => [
         'callback' => function () {
             return function () {
-                return RenderService::renderOrderCard(new PdkOrder(['externalIdentifier' => 'P00924872']));
+                return RenderService::renderOrderBox(new PdkOrder(['externalIdentifier' => 'P00924872']));
             };
         },
         'views'    => [MockAbstractViewService::PAGE_ORDER],
@@ -53,9 +54,27 @@ dataset('components', [
     'order list column' => [
         'callback' => function () {
             return function () {
-                return RenderService::renderOrderListColumn(new PdkOrder(['externalIdentifier' => 'P00924878']));
+                return RenderService::renderOrderListItem(new PdkOrder(['externalIdentifier' => 'P00924878']));
             };
         },
         'views'    => [MockAbstractViewService::PAGE_ORDER_LIST],
+    ],
+
+    'plugin settings' => [
+        'callback' => function () {
+            return function () {
+                return RenderService::renderPluginSettings();
+            };
+        },
+        'views'    => [MockAbstractViewService::PAGE_PLUGIN_SETTINGS],
+    ],
+
+    'product settings' => [
+        'callback' => function () {
+            return function () {
+                return RenderService::renderProductSettings(new PdkProduct());
+            };
+        },
+        'views'    => [MockAbstractViewService::PAGE_PRODUCT],
     ],
 ]);

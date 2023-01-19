@@ -24,10 +24,25 @@ interface ViewServiceInterface
     /**
      * @return bool
      */
+    public function isCheckoutPage(): bool;
+
+    /**
+     * @return bool
+     */
     public function isOrderListPage(): bool;
 
     /**
      * @return bool
      */
     public function isOrderPage(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isPluginSettingsPage(): bool;
+
+    /**
+     * @return bool
+     */
+    public function isProductPage(): bool;
 }

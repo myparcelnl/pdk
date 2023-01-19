@@ -1,5 +1,8 @@
 {
   "global": null,
+  "dynamic": null,
   "orderData": [],
-  "deliveryOptions": null
+  "pluginSettingsView": null,
+  "productSettingsView": null,
+  "checkout": null
 }

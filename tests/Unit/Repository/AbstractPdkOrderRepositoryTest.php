@@ -4,9 +4,8 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
+use MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use function DI\autowire;
@@ -15,13 +14,15 @@ beforeEach(function () {
     $pdk = PdkFactory::create(
         MockPdkConfig::create(
             [
-                AbstractPdkOrderRepository::class => autowire(MockPdkOrderRepository::class),
+                PdkOrderRepositoryInterface::class => autowire(
+                    MockPdkOrderRepository::class
+                ),
             ]
         )
     );
 
-    /** @var \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository $repository */
-    $repository = Pdk::get(AbstractPdkOrderRepository::class);
+    /** @var \MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface $repository */
+    $repository = $pdk->get(PdkOrderRepositoryInterface::class);
 
     $this->repository = $repository;
 });

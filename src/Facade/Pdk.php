@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  * @method static bool has(string $id)
  * @method static bool isDevelopment()
  * @method static bool isProduction()
- * @method static Response execute(string $id, array $params = [])
  * @implements \MyParcelNL\Pdk\Base\Pdk
  */
 class Pdk extends Facade

@@ -9,6 +9,16 @@ use MyParcelNL\Sdk\src\Support\Str;
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 {
     /**
+     * @var array
+     */
+    private static $classBasenameCache = [];
+
+    /**
+     * @var array
+     */
+    private static $classCastCache = [];
+
+    /**
      * @param  string $class
      * @param  mixed  ...$args
      *
@@ -20,7 +30,13 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
             return $args[0];
         }
 
-        return new $class(...$args);
+        $cacheKey = sprintf('%s-%s', $class, md5(json_encode($args)));
+
+        if (! isset(self::$classCastCache[$cacheKey])) {
+            self::$classCastCache[$cacheKey] = new $class(...$args);
+        }
+
+        return self::$classCastCache[$cacheKey];
     }
 
     /**
@@ -34,6 +50,16 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         $newArray = [];
 
         foreach ($array as $key => $value) {
+            $key = (string) $key;
+
+            if (is_object($value) && method_exists($value, 'toArray')) {
+                $value = $value->toArray();
+            }
+
+            if (is_array($value)) {
+                $value = self::changeArrayKeysCase($value, $case);
+            }
+
             $newArray[Str::{$case ?? 'camel'}($key)] = $value;
         }
 
@@ -49,10 +75,14 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
      */
     public static function classBasename($class): string
     {
-        $class    = is_object($class) ? get_class($class) : $class;
-        $lastPart = strrchr('\\' . ltrim($class, '\\'), '\\');
+        if (! isset(self::$classBasenameCache[$class])) {
+            $class    = is_object($class) ? get_class($class) : $class;
+            $lastPart = strrchr('\\' . ltrim($class, '\\'), '\\');
 
-        return substr($lastPart, 1);
+            self::$classBasenameCache[$class] = substr($lastPart, 1);
+        }
+
+        return self::$classBasenameCache[$class];
     }
 
     /**
@@ -133,13 +163,21 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
-     * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
+     * @param  string|string[] $value
      *
      * @return array
      */
-    public static function toArray($orderIds): array
+    public static function toArray($value): array
     {
-        return array_reduce((array) $orderIds, static function (array $acc, string $item) {
+        if (! $value) {
+            return [];
+        }
+
+        if (is_array($value)) {
+            return $value;
+        }
+
+        return array_reduce((array) $value, static function (array $acc, string $item) {
             $ids = explode(';', $item);
             array_push($acc, ...$ids);
 

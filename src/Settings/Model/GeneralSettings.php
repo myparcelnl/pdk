@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-
 /**
- * @property null|string $apiKey
  * @property bool        $apiLogging
  * @property bool        $barcodeInNote
  * @property bool        $conceptShipments
@@ -18,7 +15,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property bool        $trackTraceInAccount
  * @property bool        $trackTraceInEmail
  */
-class GeneralSettings extends Model
+class GeneralSettings extends AbstractSettingsModel
 {
     /**
      * Settings category ID.
@@ -27,9 +24,9 @@ class GeneralSettings extends Model
     /**
      * Settings in this category.
      */
-    public const API_KEY                      = 'apiKey';
     public const API_LOGGING                  = 'apiLogging';
     public const BARCODE_IN_NOTE              = 'barcodeInNote';
+    public const BARCODE_IN_NOTE_TITLE        = 'barcodeInNoteTitle';
     public const CONCEPT_SHIPMENTS            = 'conceptShipments';
     public const EXPORT_WITH_AUTOMATIC_STATUS = 'exportWithAutomaticStatus';
     public const ORDER_MODE                   = 'orderMode';
@@ -39,9 +36,11 @@ class GeneralSettings extends Model
     public const TRACK_TRACE_IN_EMAIL         = 'trackTraceInEmail';
 
     protected $attributes = [
-        self::API_KEY                      => null,
+        'id' => self::ID,
+
         self::API_LOGGING                  => false,
         self::BARCODE_IN_NOTE              => false,
+        self::BARCODE_IN_NOTE_TITLE        => null,
         self::CONCEPT_SHIPMENTS            => true,
         self::EXPORT_WITH_AUTOMATIC_STATUS => null,
         self::ORDER_MODE                   => false,
@@ -52,9 +51,9 @@ class GeneralSettings extends Model
     ];
 
     protected $casts      = [
-        self::API_KEY                      => 'string',
         self::API_LOGGING                  => 'bool',
         self::BARCODE_IN_NOTE              => 'bool',
+        self::BARCODE_IN_NOTE_TITLE        => 'string',
         self::CONCEPT_SHIPMENTS            => 'bool',
         self::EXPORT_WITH_AUTOMATIC_STATUS => 'string',
         self::ORDER_MODE                   => 'bool',

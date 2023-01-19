@@ -8,7 +8,7 @@ namespace MyParcelNL\Pdk\Tests\Unit\Validation\Validator;
 use BadMethodCallException;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -282,7 +282,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'weight' => 20,
                 ],
                 'deliveryOptions'    => [
-                    'carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'carrier'      => Carrier::CARRIER_POSTNL_NAME,
                     'packageType'  => 'package',
                     'labelAmount'  => 2,
                     'deliveryDate' => '2022-12-12 00:00:00',
@@ -306,7 +306,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'weight' => 20,
                 ],
                 'deliveryOptions'    => [
-                    'carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'carrier'      => Carrier::CARRIER_POSTNL_NAME,
                     'packageType'  => 'package',
                     'labelAmount'  => 2,
                     'deliveryDate' => '2022-12-12 00:00:00',
@@ -330,7 +330,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'weight' => 80,
                 ],
                 'deliveryOptions'    => [
-                    'carrier'     => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'carrier'     => Carrier::CARRIER_POSTNL_NAME,
                     'packageType' => 'mailbox',
                     'labelAmount' => 1,
                 ],
@@ -353,7 +353,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'weight' => 80,
                 ],
                 'deliveryOptions'    => [
-                    'carrier'     => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'carrier'     => Carrier::CARRIER_POSTNL_NAME,
                     'packageType' => 'mailbox',
                     'labelAmount' => 1,
                 ],

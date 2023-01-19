@@ -3,53 +3,44 @@
 
 declare(strict_types=1);
 
-use Composer\InstalledVersions;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\autowire;
+use function DI\value;
 
 it('gets correct headers', function () {
-    PdkFactory::create(
+    $pdk = PdkFactory::create(
         MockPdkConfig::create([
-            ApiServiceInterface::class => autowire(MyParcelApiService::class)->constructor([
-                'userAgent' => [
-                    'Prestashop' => '1.7.8.6',
-                ],
-            ]),
+            'userAgent'                => value(['MyParcelNL-Platform' => '2.0.0', 'Platform' => '1.2.3']),
+            ApiServiceInterface::class => autowire(MyParcelApiService::class),
         ])
     );
 
-    /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
-    $api = \MyParcelNL\Pdk\Facade\Pdk::get(ApiServiceInterface::class);
+    /** @var \MyParcelNL\Pdk\Api\Service\MyParcelApiService $api */
+    $api = $pdk->get(ApiServiceInterface::class);
 
     $headers = $api->getHeaders();
-
-    expect($headers)
-        ->toHaveKeys(['Authorization', 'User-Agent'])
+    expect(array_keys($headers))
+        ->toEqual(['Authorization', 'User-Agent'])
         ->and($headers['Authorization'])
-        ->toBeNull()
+        ->toBe('appelboom YjAzYWQ0MjM3ZWFiNWJlZDExOTI1NzAxMmE0YzU4NjY=')
         ->and($headers['User-Agent'])
         ->toMatch(
-            sprintf(
-                '/MyParcelNL-PDK\/%s php\/[0-9.]+ Prestashop\/1.7.8.6/',
-                str_replace('.', '\.', InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME))
-            )
+            '/MyParcelNL-Platform\/2\.0\.0 Platform\/1\.2\.3 MyParcelNL-PDK\/[\d.]+ php\/[\d.]+/'
         );
 });
 
 it('gets base url', function () {
-    PdkFactory::create(
+    $pdk = PdkFactory::create(
         MockPdkConfig::create([
-            ApiServiceInterface::class => autowire(MyParcelApiService::class)->constructor([
-                'baseUrl' => 'https://api.baseurl.com',
-            ]),
+            'apiUrl'                   => 'https://api.baseurl.com',
+            ApiServiceInterface::class => autowire(MyParcelApiService::class),
         ])
     );
 
-    $api = \MyParcelNL\Pdk\Facade\Pdk::get(ApiServiceInterface::class);
+    $api = $pdk->get(ApiServiceInterface::class);
     expect($api->getBaseUrl())
         ->toBe('https://api.baseurl.com');
 });

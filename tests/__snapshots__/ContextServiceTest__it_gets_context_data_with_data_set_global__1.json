@@ -1,61 +1,173 @@
 {
   "global": {
-    "baseUrl": "CMS_URL",
-    "bootstrapId": "myparcel-pdk-bootstrap",
+    "appInfo": {
+      "name": "test",
+      "title": "test"
+    },
+    "baseUrl": "BACKEND_URL",
+    "bootstrapId": "myparcel-pdk-boot",
     "endpoints": {
-      "exportOrder": {
+      "updateAccount": {
         "body": null,
         "headers": [],
         "method": "POST",
-        "path": "",
         "parameters": {
-          "action": "exportOrder"
-        }
+          "action": "updateAccount"
+        },
+        "path": "",
+        "property": "account_settings"
       },
-      "exportAndPrintOrder": {
+      "exportOrders": {
         "body": null,
         "headers": [],
         "method": "POST",
-        "path": "",
         "parameters": {
-          "action": "exportAndPrintOrder"
-        }
-      },
-      "printOrder": {
-        "body": null,
-        "headers": [],
-        "method": "POST",
+          "action": "exportOrders"
+        },
         "path": "",
-        "parameters": {
-          "action": "printOrder"
-        }
+        "property": "orders"
       },
-      "getOrderData": {
+      "fetchOrders": {
         "body": null,
         "headers": [],
         "method": "GET",
-        "path": "",
         "parameters": {
-          "action": "getOrderData"
-        }
+          "action": "fetchOrders"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "printOrders": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "printOrders"
+        },
+        "path": "",
+        "property": "pdfs"
+      },
+      "updateOrders": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "updateOrders"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "fetchShipments": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "fetchShipments"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "deleteShipments": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "deleteShipments"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "printShipments": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "printShipments"
+        },
+        "path": "",
+        "property": "pdfs"
+      },
+      "updatePluginSettings": {
+        "body": null,
+        "headers": [],
+        "method": "PUT",
+        "parameters": {
+          "action": "updatePluginSettings"
+        },
+        "path": "",
+        "property": "plugin_settings"
+      },
+      "updateProductSettings": {
+        "body": null,
+        "headers": [],
+        "method": "PUT",
+        "parameters": {
+          "action": "updateProductSettings"
+        },
+        "path": "",
+        "property": "product_settings"
       },
       "exportReturn": {
         "body": null,
         "headers": [],
         "method": "POST",
-        "path": "",
         "parameters": {
           "action": "exportReturn"
-        }
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "createWebhooks": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "createWebhooks"
+        },
+        "path": "",
+        "property": "webhooks"
+      },
+      "deleteWebhooks": {
+        "body": null,
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "deleteWebhooks"
+        },
+        "path": "",
+        "property": "webhooks"
+      },
+      "fetchWebhooks": {
+        "body": null,
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "fetchWebhooks"
+        },
+        "path": "",
+        "property": "webhooks"
+      },
+      "fetchContext": {
+        "body": null,
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "fetchContext"
+        },
+        "path": "",
+        "property": "context"
       }
     },
     "event": "myparcel_pdk_loaded",
+    "language": "nl",
     "mode": "production",
-    "pluginSettings": [],
     "translations": {
       "apple_tree": "Appelboom"
     }
   },
+  "dynamic": null,
   "orderData": null,
-  "deliveryOptions": null
+  "pluginSettingsView": null,
+  "productSettingsView": null,
+  "checkout": null
 }

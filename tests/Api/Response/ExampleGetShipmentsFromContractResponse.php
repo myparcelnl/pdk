@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 
 class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
@@ -87,7 +87,7 @@ class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
                         'external_provider'            => null,
                         'external_provider_id'         => null,
                         'payment_status'               => 'unpaid',
-                        'carrier_id'                   => CarrierOptions::CARRIER_DPD_ID,
+                        'carrier_id'                   => Carrier::CARRIER_DPD_ID,
                         'platform_id'                  => 1,
                         'origin'                       => 'postman',
                         'user_agent'                   => 'PostmanRuntime/7.29.2',
@@ -161,7 +161,7 @@ class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
                                 'external_provider'            => null,
                                 'external_provider_id'         => null,
                                 'payment_status'               => 'unpaid',
-                                'carrier_id'                   => CarrierOptions::CARRIER_DPD_ID,
+                                'carrier_id'                   => Carrier::CARRIER_DPD_ID,
                                 'platform_id'                  => 1,
                                 'origin'                       => null,
                                 'user_agent'                   => null,

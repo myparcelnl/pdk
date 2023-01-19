@@ -31,25 +31,6 @@ class Pdk
     }
 
     /**
-     * @param  string $action
-     * @param  array  $params
-     *
-     * @return null|\Symfony\Component\HttpFoundation\Response
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
-     * @throws \Exception
-     */
-    public function execute(string $action, array $params = []): ?Response
-    {
-        /** @var \MyParcelNL\Pdk\Plugin\Action\PdkActionManager $manager */
-        $manager = $this->get(PdkActionManager::class);
-
-        $params['action'] = $action;
-
-        return $manager->execute($params);
-    }
-
-    /**
      * @param  string $key
      *
      * @return mixed

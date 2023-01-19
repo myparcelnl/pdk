@@ -22,7 +22,7 @@ class ShopCarrierConfigurationRepository extends ApiRepository
      */
     public function getCarrierConfiguration(int $shopId, string $carrier): CarrierConfiguration
     {
-        return $this->retrieve('carrier_configurations', function () use ($carrier, $shopId) {
+        return $this->retrieve("shop_carrier_configuration_$carrier", function () use ($carrier, $shopId) {
             /** @var \MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponse $response */
             $response = $this->api->doRequest(
                 new GetShopCarrierConfigurationRequest($shopId, $carrier),
@@ -43,14 +43,20 @@ class ShopCarrierConfigurationRepository extends ApiRepository
      */
     public function getCarrierConfigurations(int $shopId): Collection
     {
-        return $this->retrieve('carrier_configurations', function () use ($shopId) {
+        return $this->retrieve('shop_carrier_configurations', function () use ($shopId) {
             /** @var \MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponse $response */
             $response = $this->api->doRequest(
                 new GetShopCarrierConfigurationsRequest($shopId),
                 GetShopCarrierConfigurationsResponse::class
             );
 
-            return $response->getCarrierConfigurations();
+            $collection = $response->getCarrierConfigurations();
+
+            foreach ($collection->all() as $config) {
+                $this->save(sprintf('shop_carrier_configuration_%s', $config->carrier), $config);
+            }
+
+            return $collection;
         });
     }
 }

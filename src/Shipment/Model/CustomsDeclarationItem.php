@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 
 /**
@@ -22,7 +23,7 @@ class CustomsDeclarationItem extends Model
     public const  DEFAULT_CLASSIFICATION = '0000';
     private const DEFAULTS               = [
         'amount'         => 1,
-        'classification' => self::DEFAULT_CLASSIFICATION,
+        'classification' => null,
         'country'        => null,
         'description'    => null,
         'itemValue'      => Currency::class,
@@ -48,14 +49,21 @@ class CustomsDeclarationItem extends Model
      */
     public static function fromProduct(PdkProduct $product, array $additionalFields = []): self
     {
+        $classification = $product->settings->customsCode ?? Settings::get('customs.customsCode');
+        $country        = $product->settings->countryOfOrigin ?? Settings::get('customs.countryOfOrigin');
+
         return new static(
             array_merge(
                 self::DEFAULTS,
                 Utils::filterNull([
-                    'classification' => $product->settings->customsCode,
-                    'country'        => $product->settings->countryOfOrigin,
+                    'classification' => $classification,
+                    'country'        => $country,
                     'description'    => $product->name,
                     'weight'         => $product->weight,
+                    'itemValue'      => [
+                        'currency' => $product->price->currency,
+                        'amount'   => $product->price->amount,
+                    ],
                 ]),
                 $additionalFields
             )

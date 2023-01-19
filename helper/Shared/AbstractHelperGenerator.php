@@ -13,6 +13,7 @@ use MyParcelNL\Sdk\src\Support\Str;
 use Nette\Loaders\RobotLoader;
 use ReflectionClass;
 use RuntimeException;
+use Throwable;
 
 abstract class AbstractHelperGenerator
 {
@@ -60,14 +61,18 @@ abstract class AbstractHelperGenerator
     public function generate(): void
     {
         echo '    Generating helper ' . static::class . PHP_EOL;
-        $this->parseSource();
+        try {
+            $this->parseSource();
 
-        $this->write();
+            $this->write();
 
-        $this->close();
+            $this->close();
 
-        $path = realpath($this->getFileName());
-        echo " ✅  Wrote to $path" . PHP_EOL;
+            $path = realpath($this->getFileName());
+            echo " ✅  Wrote to $path" . PHP_EOL;
+        } catch (Throwable $e) {
+            throw $e;
+        }
     }
 
     /**

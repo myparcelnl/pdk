@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation\Validator;
 
-interface ValidatorInterface
+interface ValidatorInterface extends SchemaInterface
 {
     /**
      * @return array
      */
     public function getErrors(): array;
-
-    /**
-     * @return array
-     */
-    public function getSchema(): array;
 
     /**
      * @return bool

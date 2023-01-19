@@ -12,9 +12,6 @@
         },
         "shipmentOptions": {
           "properties": {
-            "insurance": {
-              "enum": [0, 50000]
-            },
             "onlyRecipient": {
               "enum": [false]
             },

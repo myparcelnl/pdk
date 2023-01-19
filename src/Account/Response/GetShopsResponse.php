@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Response;
 
+use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Sdk\src\Model\Account\Shop;
 
 class GetShopsResponse extends ApiResponseWithBody
 {
@@ -15,7 +15,7 @@ class GetShopsResponse extends ApiResponseWithBody
     private $shop;
 
     /**
-     * @return \MyParcelNL\Sdk\src\Model\Account\Shop;
+     * @return \MyParcelNL\Pdk\Account\Model\Shop
      */
     public function getShop(): Shop
     {

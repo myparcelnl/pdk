@@ -41,6 +41,11 @@ class Request implements RequestInterface
     protected $path = '';
 
     /**
+     * @var string
+     */
+    private $property;
+
+    /**
      * @param  array $config
      */
     public function __construct(array $config = [])
@@ -50,6 +55,7 @@ class Request implements RequestInterface
         $this->method     = $config['method'] ?? $this->method;
         $this->parameters = $config['parameters'] ?? $this->parameters;
         $this->path       = $config['path'] ?? $this->path;
+        $this->property   = $config['property'] ?? $this->property;
     }
 
     /**
@@ -82,6 +88,14 @@ class Request implements RequestInterface
     public function getPath(): string
     {
         return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProperty(): string
+    {
+        return $this->property;
     }
 
     /**

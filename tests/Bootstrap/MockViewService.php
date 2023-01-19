@@ -23,12 +23,27 @@ class MockViewService implements ViewServiceInterface
         return true;
     }
 
+    public function isCheckoutPage(): bool
+    {
+        return true;
+    }
+
     public function isOrderListPage(): bool
     {
         return true;
     }
 
     public function isOrderPage(): bool
+    {
+        return true;
+    }
+
+    public function isPluginSettingsPage(): bool
+    {
+        return true;
+    }
+
+    public function isProductPage(): bool
     {
         return true;
     }

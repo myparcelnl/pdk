@@ -8,11 +8,11 @@ use MyParcelNL\Pdk\Base\Concern\HasPrices;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property int                                           $quantity
- * @property int                                           $price
- * @property int                                           $vat
- * @property int                                           $priceAfterVat
- * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Product $product
+ * @property int                                          $quantity
+ * @property int                                          $price
+ * @property int                                          $vat
+ * @property int                                          $priceAfterVat
+ * @property null|\MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
  */
 class PdkOrderLine extends Model
 {

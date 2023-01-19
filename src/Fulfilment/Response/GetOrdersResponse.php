@@ -6,12 +6,9 @@ namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Shipment\Concern\HasDecodesShipment;
 
 class GetOrdersResponse extends ApiResponseWithBody
 {
-    use HasDecodesShipment;
-
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
@@ -46,7 +43,7 @@ class GetOrdersResponse extends ApiResponseWithBody
     private function createOrders(array $orders): void
     {
         $this->orders = (new OrderCollection(
-            array_map(function (array $order) {
+            array_map(static function (array $order) {
                 return [
                     'uuid'                        => $order['uuid'],
                     'shopId'                      => $order['shop_id'],
@@ -62,7 +59,7 @@ class GetOrdersResponse extends ApiResponseWithBody
                     'priceAfterVat'               => $order['price_after_vat'],
                     'invoiceAddress'              => $order['invoice_address'],
                     'orderLines'                  => $order['order_lines'] ?? [],
-                    'shipment'                    => $this->decodeShipment($order['shipment'] ?? []),
+                    'shipment'                    => $order['shipment'] ?? [],
                     'createdAt'                   => $order['created_at'],
                     'updatedAt'                   => $order['updated_at'],
                 ];
