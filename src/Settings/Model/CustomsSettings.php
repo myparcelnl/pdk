@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-
 /**
  * @property null|string $countryOfOrigin
  * @property string      $customsCode
  * @property string      $packageContents
  */
-class CustomsSettings extends Model
+class CustomsSettings extends AbstractSettingsModel
 {
     /**
      * Settings category ID.
@@ -45,6 +43,8 @@ class CustomsSettings extends Model
     ];
 
     protected $attributes = [
+        'id' => self::ID,
+
         self::COUNTRY_OF_ORIGIN => null,
         self::CUSTOMS_CODE      => self::DEFAULT_CUSTOMS_CODE,
         self::PACKAGE_CONTENTS  => self::DEFAULT_PACKAGE_CONTENTS,

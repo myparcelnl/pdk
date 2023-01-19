@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings;
 
-use MyParcelNL\Pdk\Base\Support\Helpers;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 
 class SettingsManager
 {
     /**
-     * @var \MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository
+     * @var \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface
      */
     protected $repository;
 
@@ -21,12 +20,12 @@ class SettingsManager
     protected $settings;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository $repository
+     * @param  \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface $repository
      */
-    public function __construct(AbstractSettingsRepository $repository)
+    public function __construct(SettingsRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->settings   = $this->repository->getSettings();
+        $this->settings   = $this->repository->all();
     }
 
     /**
@@ -38,23 +37,17 @@ class SettingsManager
     }
 
     /**
-     * @param  string $key
+     * @param  string      $key
+     * @param  null|string $namespace
      *
      * @return mixed
      */
-    public function get(string $key)
+    public function get(string $key, ?string $namespace = null)
     {
-        $keyParts = explode('.', $key);
-        $first    = array_shift($keyParts);
+        if ($namespace) {
+            $key = sprintf('%s.%s', $namespace, $key);
+        }
 
-        return (new Helpers())->data_get($this->settings[$first], $keyParts);
-    }
-
-    /**
-     * @return void
-     */
-    public function persist(): void
-    {
-        $this->repository->store($this->settings);
+        return $this->repository->get($key);
     }
 }

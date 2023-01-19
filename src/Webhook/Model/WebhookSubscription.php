@@ -8,8 +8,9 @@ namespace MyParcelNL\Pdk\Webhook\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property string $hook
- * @property string $url
+ * @property null|int    $id
+ * @property null|string $hook
+ * @property null|string $url
  */
 class WebhookSubscription extends Model
 {
@@ -37,13 +38,26 @@ class WebhookSubscription extends Model
      * Called when the carrier configuration is updated, e.g. when a carrier's settings are changed.
      */
     public const SHOP_CARRIER_CONFIGURATION_UPDATED = 'shop_carrier_configuration_updated';
+    /**
+     * All possible hooks.
+     */
+    public const ALL = [
+        self::SHIPMENT_STATUS_CHANGE,
+        self::SHIPMENT_LABEL_CREATED,
+        self::ORDER_STATUS_CHANGE,
+        self::SHOP_UPDATED,
+        self::SHOP_CARRIER_ACCESSIBILITY_UPDATED,
+        self::SHOP_CARRIER_CONFIGURATION_UPDATED,
+    ];
 
     public    $attributes = [
+        'id'   => null,
         'hook' => null,
         'url'  => null,
     ];
 
     protected $casts      = [
+        'id'   => 'int',
         'hook' => 'string',
         'url'  => 'string',
     ];

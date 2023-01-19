@@ -18,25 +18,34 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class ShipmentOptions extends Model
 {
+    public const AGE_CHECK         = 'ageCheck';
+    public const INSURANCE         = 'insurance';
+    public const LABEL_DESCRIPTION = 'labelDescription';
+    public const LARGE_FORMAT      = 'largeFormat';
+    public const ONLY_RECIPIENT    = 'onlyRecipient';
+    public const RETURN            = 'return';
+    public const SAME_DAY_DELIVERY = 'sameDayDelivery';
+    public const SIGNATURE         = 'signature';
+
     protected $attributes = [
-        'ageCheck'         => null,
-        'insurance'        => null,
-        'labelDescription' => null,
-        'largeFormat'      => null,
-        'onlyRecipient'    => null,
-        'return'           => null,
-        'sameDayDelivery'  => null,
-        'signature'        => null,
+        self::AGE_CHECK         => null,
+        self::INSURANCE         => null,
+        self::LABEL_DESCRIPTION => null,
+        self::LARGE_FORMAT      => null,
+        self::ONLY_RECIPIENT    => null,
+        self::RETURN            => null,
+        self::SAME_DAY_DELIVERY => null,
+        self::SIGNATURE         => null,
     ];
 
     protected $casts      = [
-        'ageCheck'         => 'bool',
-        'insurance'        => 'int',
-        'labelDescription' => 'string',
-        'largeFormat'      => 'bool',
-        'onlyRecipient'    => 'bool',
-        'return'           => 'bool',
-        'sameDayDelivery'  => 'bool',
-        'signature'        => 'bool',
+        self::AGE_CHECK         => 'bool',
+        self::INSURANCE         => 'int',
+        self::LABEL_DESCRIPTION => 'string',
+        self::LARGE_FORMAT      => 'bool',
+        self::ONLY_RECIPIENT    => 'bool',
+        self::RETURN            => 'bool',
+        self::SAME_DAY_DELIVERY => 'bool',
+        self::SIGNATURE         => 'bool',
     ];
 }

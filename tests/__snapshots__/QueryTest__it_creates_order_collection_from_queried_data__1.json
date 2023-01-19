@@ -91,7 +91,25 @@
       "items": [],
       "weight": 0
     },
-    "options": null,
+    "options": {
+      "ageCheck": false,
+      "collect": null,
+      "cooledDelivery": null,
+      "deliveryDate": "2022-11-24 20:16:50",
+      "deliveryType": 2,
+      "dropOffAtPostalPoint": null,
+      "extraAssurance": null,
+      "hideSender": null,
+      "insurance": null,
+      "labelDescription": true,
+      "largeFormat": false,
+      "onlyRecipient": false,
+      "packageType": 2,
+      "return": false,
+      "sameDayDelivery": null,
+      "saturdayDelivery": null,
+      "signature": false
+    },
     "pickup": null,
     "recipient": {
       "boxNumber": null,

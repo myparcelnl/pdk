@@ -16,13 +16,33 @@ class SchemaRepository extends Repository
 {
     /**
      * @param  null|string $carrier
+     * @param  null|string $shippingZone
+     * @param  null|string $packageType
+     * @param  null|string $deliveryType
+     *
+     * @return string
+     */
+    public function getKey(
+        ?string $carrier = null,
+        ?string $shippingZone = null,
+        ?string $packageType = null,
+        ?string $deliveryType = null
+    ): string {
+        return implode(
+            '/',
+            [$carrier ?? '*', $shippingZone ?? '*', $packageType ?? '*', $deliveryType ?? '*']
+        );
+    }
+
+    /**
+     * @param  null|string $carrier
      * @param  null|string $cc
      * @param  null|string $packageType
      * @param  null|string $deliveryType
      *
      * @return array
      */
-    public function getCapabilitiesSchema(
+    public function getOrderValidationSchema(
         ?string $carrier = null,
         ?string $cc = null,
         ?string $packageType = null,
@@ -54,23 +74,14 @@ class SchemaRepository extends Repository
     }
 
     /**
-     * @param  null|string $carrier
-     * @param  null|string $shippingZone
-     * @param  null|string $packageType
-     * @param  null|string $deliveryType
+     * @param  array  $schema
+     * @param  string $path
      *
-     * @return string
+     * @return array
      */
-    public function getKey(
-        ?string $carrier = null,
-        ?string $shippingZone = null,
-        ?string $packageType = null,
-        ?string $deliveryType = null
-    ): string {
-        return implode(
-            '/',
-            [$carrier ?? '*', $shippingZone ?? '*', $packageType ?? '*', $deliveryType ?? '*']
-        );
+    public function getValidOptions(array $schema, string $path): array
+    {
+        return $this->handleOption($schema, $path, []);
     }
 
     /**
@@ -82,10 +93,31 @@ class SchemaRepository extends Repository
      */
     public function validateOption(array $schema, string $path, $value): bool
     {
-        $key = sprintf('option_%s_%s_%s', $this->generateDataHash($schema), $path, $value);
+        return (bool) $this->handleOption($schema, $path, $value);
+    }
+
+    /**
+     * @param  array  $schema
+     * @param  string $path
+     * @param         $value mixed when array this returns the enum, otherwise will validate against the value
+     *
+     * @return mixed array when $value is array, bool otherwise
+     */
+    protected function handleOption(array $schema, string $path, $value)
+    {
+        $key = $this->generateDataHash($schema);
+        $key = is_array($value) ? "option_{$key}_$path" : "option_{$key}_{$path}_$value";
 
         return $this->retrieve($key, function () use ($schema, $path, $value) {
             $result = Arr::get($schema, $path);
+
+            if (! $result) {
+                return is_array($value) ? [] : false;
+            }
+
+            if (is_array($value)) {
+                return $result['enum'] ?? [];
+            }
 
             $validator = new Validator();
             $validator->validate($value, $result);

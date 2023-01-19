@@ -56,16 +56,19 @@ class MockPdkConfig
 
             'platform' => value(Platform::MYPARCEL_NAME),
 
-            ApiServiceInterface::class        => autowire(MockApiService::class),
-            ClientAdapterInterface::class     => autowire(Guzzle7ClientAdapter::class),
-            ConfigInterface::class            => autowire(MockConfig::class),
-            EndpointActionsInterface::class   => autowire(MockEndpointActions::class),
-            LanguageServiceInterface::class   => autowire(MockLanguageService::class),
-            LoggerInterface::class            => autowire(MockLogger::class),
-            StorageInterface::class           => autowire(MemoryCacheStorage::class),
-            AbstractSettingsRepository::class => autowire(MockSettingsRepository::class),
-            AbstractProductRepository::class  => autowire(MockProductRepository::class),
-            ViewServiceInterface::class       => autowire(MockViewService::class),
+            AccountRepositoryInterface::class       => autowire(MockAccountRepository::class),
+            ApiServiceInterface::class              => autowire(MockApiService::class),
+            ClientAdapterInterface::class           => autowire(Guzzle7ClientAdapter::class),
+            ConfigInterface::class                  => autowire(MockConfig::class),
+            BackendEndpointServiceInterface::class  => autowire(MockBackendEndpointService::class),
+            FrontendEndpointServiceInterface::class => autowire(MockFrontendEndpointService::class),
+            LanguageServiceInterface::class         => autowire(MockLanguageService::class),
+            LoggerInterface::class                  => autowire(MockLogger::class),
+            OrderStatusServiceInterface::class      => autowire(MockOrderStatusService::class),
+            ProductRepositoryInterface::class       => autowire(MockProductRepository::class),
+            SettingsRepositoryInterface::class      => autowire(MockSettingsRepository::class),
+            StorageInterface::class                 => autowire(MemoryCacheStorage::class),
+            ViewServiceInterface::class             => autowire(MockViewService::class),
         ];
     }
 }

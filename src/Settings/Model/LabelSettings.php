@@ -5,8 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-
 /**
  * @property null|string $description
  * @property string      $format
@@ -14,7 +12,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property int         $position
  * @property bool        $prompt
  */
-class LabelSettings extends Model
+class LabelSettings extends AbstractSettingsModel
 {
     /**
      * Settings category ID.
@@ -43,7 +41,7 @@ class LabelSettings extends Model
     /**
      * Output options.
      */
-    public const OUTPUT_OPEN     = 'print';
+    public const OUTPUT_OPEN     = 'open';
     public const OUTPUT_DOWNLOAD = 'download';
     /**
      * Default values.
@@ -53,6 +51,8 @@ class LabelSettings extends Model
     public const DEFAULT_OUTPUT   = self::OUTPUT_OPEN;
 
     protected $attributes = [
+        'id' => self::ID,
+
         self::DESCRIPTION => null,
         self::FORMAT      => self::DEFAULT_FORMAT,
         self::OUTPUT      => self::DEFAULT_OUTPUT,

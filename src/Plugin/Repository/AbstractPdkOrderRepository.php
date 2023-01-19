@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Repository;
 
-use MyParcelNL\Pdk\Base\Repository\ApiRepository;
+use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
-abstract class AbstractPdkOrderRepository extends ApiRepository
+abstract class AbstractPdkOrderRepository extends Repository implements PdkOrderRepositoryInterface
 {
     /**
-     * Create a new order object from input data.
-     *
      * @param  mixed $input
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\PdkOrder
@@ -21,12 +19,9 @@ abstract class AbstractPdkOrderRepository extends ApiRepository
     abstract public function get($input): PdkOrder;
 
     /**
-     * Create a collection of order objects from input data.
-     *
-     * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
+     * @param  string|string[] $orderIds
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection
-     * @noinspection PhpUnused
      */
     public function getMany($orderIds): PdkOrderCollection
     {
@@ -34,8 +29,6 @@ abstract class AbstractPdkOrderRepository extends ApiRepository
     }
 
     /**
-     * Update order data.
-     *
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\PdkOrder
@@ -46,8 +39,6 @@ abstract class AbstractPdkOrderRepository extends ApiRepository
     }
 
     /**
-     * Update order data in bulk.
-     *
      * @param  \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection $collection
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection

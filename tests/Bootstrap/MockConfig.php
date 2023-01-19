@@ -6,9 +6,9 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\ConfigInterface;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 class MockConfig implements ConfigInterface
 {
@@ -17,10 +17,10 @@ class MockConfig implements ConfigInterface
     private const CONFIG                       = [
         'carriers' => [
             [
-                'id'                 => CarrierOptions::CARRIER_POSTNL_ID,
-                'name'               => CarrierOptions::CARRIER_POSTNL_NAME,
+                'id'                 => Carrier::CARRIER_POSTNL_ID,
+                'name'               => Carrier::CARRIER_POSTNL_NAME,
                 'primary'            => 1,
-                'type'               => CarrierOptions::TYPE_MAIN,
+                'type'               => Carrier::TYPE_MAIN,
                 'capabilities'       => [
                     [
                         'packageType'     => [
@@ -204,10 +204,10 @@ class MockConfig implements ConfigInterface
                 ],
             ],
             [
-                'id'                 => CarrierOptions::CARRIER_INSTABOX_ID,
-                'name'               => CarrierOptions::CARRIER_INSTABOX_NAME,
+                'id'                 => Carrier::CARRIER_INSTABOX_ID,
+                'name'               => Carrier::CARRIER_INSTABOX_NAME,
                 'primary'            => 1,
-                'type'               => CarrierOptions::TYPE_MAIN,
+                'type'               => Carrier::TYPE_MAIN,
                 'capabilities'       => [
                     [
                         'packageType'     => [
@@ -263,11 +263,11 @@ class MockConfig implements ConfigInterface
                 'returnCapabilities' => [],
             ],
             [
-                'id'                 => CarrierOptions::CARRIER_BPOST_ID,
-                'name'               => CarrierOptions::CARRIER_BPOST_NAME,
+                'id'                 => Carrier::CARRIER_BPOST_ID,
+                'name'               => Carrier::CARRIER_BPOST_NAME,
                 'subscriptionId'     => self::ID_CUSTOM_SUBSCRIPTION_BPOST,
                 'primary'            => 0,
-                'type'               => CarrierOptions::TYPE_CUSTOM,
+                'type'               => Carrier::TYPE_CUSTOM,
                 'capabilities'       => [
                     [
                         'packageType'     => [
@@ -353,11 +353,11 @@ class MockConfig implements ConfigInterface
                 ],
             ],
             [
-                'id'                 => CarrierOptions::CARRIER_DPD_ID,
-                'name'               => CarrierOptions::CARRIER_DPD_NAME,
+                'id'                 => Carrier::CARRIER_DPD_ID,
+                'name'               => Carrier::CARRIER_DPD_NAME,
                 'subscriptionId'     => self::ID_CUSTOM_SUBSCRIPTION_DPD,
                 'primary'            => 0,
-                'type'               => CarrierOptions::TYPE_CUSTOM,
+                'type'               => Carrier::TYPE_CUSTOM,
                 'capabilities'       => [
                     [
                         'packageType'     => [
@@ -396,10 +396,10 @@ class MockConfig implements ConfigInterface
                 'returnCapabilities' => [],
             ],
             [
-                'id'                 => CarrierOptions::CARRIER_BPOST_ID,
-                'name'               => CarrierOptions::CARRIER_BPOST_NAME,
+                'id'                 => Carrier::CARRIER_BPOST_ID,
+                'name'               => Carrier::CARRIER_BPOST_NAME,
                 'primary'            => 1,
-                'type'               => CarrierOptions::TYPE_MAIN,
+                'type'               => Carrier::TYPE_MAIN,
                 'capabilities'       => [
                     [
                         'packageType'     => [

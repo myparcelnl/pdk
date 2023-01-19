@@ -5,53 +5,57 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
-usesShared(new UsesMockPdkInstance());
+beforeEach(function () {
+    PdkFactory::create(MockPdkConfig::create());
+});
 
 it('creates main carrier by name', function () {
-    $carrier = new CarrierOptions(['name' => CarrierOptions::CARRIER_POSTNL_NAME]);
+    $carrier = new Carrier(['name' => Carrier::CARRIER_POSTNL_NAME]);
 
     expect($carrier->getName())
-        ->toBe($carrier::CARRIER_POSTNL_NAME)
+        ->toBe(Carrier::CARRIER_POSTNL_NAME)
         ->and($carrier->getType())
-        ->toBe($carrier::TYPE_MAIN);
+        ->toBe(Carrier::TYPE_MAIN);
 });
 
 it('creates main carrier by carrierId', function () {
-    $carrier = new CarrierOptions(['id' => CarrierOptions::CARRIER_INSTABOX_ID]);
+    $carrier = new Carrier(['id' => Carrier::CARRIER_INSTABOX_ID]);
 
     expect($carrier->getName())
-        ->toBe($carrier::CARRIER_INSTABOX_NAME)
+        ->toBe(Carrier::CARRIER_INSTABOX_NAME)
         ->and($carrier->getType())
-        ->toBe($carrier::TYPE_MAIN);
+        ->toBe(Carrier::TYPE_MAIN);
 });
 
 it('creates custom carrier by subscriptionId', function () {
-    $carrier = new CarrierOptions(['subscriptionId' => 10932621]);
+    $carrier = new Carrier(['subscriptionId' => 10932621]);
 
     expect($carrier->getName())
-        ->toBe($carrier::CARRIER_DPD_NAME)
+        ->toBe(Carrier::CARRIER_DPD_NAME)
         ->and($carrier->getType())
-        ->toBe($carrier::TYPE_CUSTOM);
+        ->toBe(Carrier::TYPE_CUSTOM);
 });
 
 it('returns complete carrier object', function () {
-    $carrier = new CarrierOptions(['id' => CarrierOptions::CARRIER_INSTABOX_ID]);
+    $carrier = new Carrier(['id' => Carrier::CARRIER_INSTABOX_ID]);
 
     expect(array_filter(Arr::dot($carrier->toArray()), function ($item) { return null !== $item; }))
         ->toEqual(
             [
-                'id'                                                         => CarrierOptions::CARRIER_INSTABOX_ID,
-                'name'                                                       => CarrierOptions::CARRIER_INSTABOX_NAME,
+                'id'                                                         => Carrier::CARRIER_INSTABOX_ID,
+                'name'                                                       => Carrier::CARRIER_INSTABOX_NAME,
                 'primary'                                                    => true,
                 'isDefault'                                                  => false,
                 'optional'                                                   => false,
-                'type'                                                       => CarrierOptions::TYPE_MAIN,
+                'type'                                                       => Carrier::TYPE_MAIN,
+                'isDefault'                                                  => false,
+                'optional'                                                   => false,
                 'returnCapabilities'                                         => [],
                 'capabilities.0.packageType.id'                              => 1,
                 'capabilities.0.packageType.name'                            => 'package',
@@ -97,7 +101,7 @@ it('returns complete carrier object', function () {
 });
 
 it('creates empty carrier and log', function () {
-    $carrier = new CarrierOptions(['name' => 'not_a_carrier']);
+    $carrier = new Carrier(['name' => 'not_a_carrier']);
 
     expect($carrier->getName())
         ->toBe(null)

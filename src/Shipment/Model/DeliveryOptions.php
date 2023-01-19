@@ -20,6 +20,14 @@ use MyParcelNL\Pdk\Facade\Platform;
  */
 class DeliveryOptions extends Model
 {
+    /**
+     * Names
+     */
+    public const DELIVERY_TYPE = 'deliveryType';
+    public const PACKAGE_TYPE  = 'packageType';
+    /**
+     * Values
+     */
     public const DELIVERY_TYPE_MORNING_ID    = 1;
     public const DELIVERY_TYPE_MORNING_NAME  = 'morning';
     public const DELIVERY_TYPE_EVENING_ID    = 3;
@@ -57,6 +65,9 @@ class DeliveryOptions extends Model
     ];
     public const DEFAULT_DELIVERY_TYPE_ID        = self::DELIVERY_TYPE_STANDARD_ID;
     public const DEFAULT_DELIVERY_TYPE_NAME      = self::DELIVERY_TYPE_STANDARD_NAME;
+    /**
+     * Package types
+     */
     public const PACKAGE_TYPE_PACKAGE_ID         = 1;
     public const PACKAGE_TYPE_MAILBOX_ID         = 2;
     public const PACKAGE_TYPE_LETTER_ID          = 3;
@@ -87,23 +98,23 @@ class DeliveryOptions extends Model
     public const DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
 
     protected $attributes = [
-        'carrier'         => null,
-        'date'            => null,
-        'deliveryType'    => self::DEFAULT_DELIVERY_TYPE_NAME,
-        'labelAmount'     => 1,
-        'packageType'     => self::DEFAULT_PACKAGE_TYPE_NAME,
-        'pickupLocation'  => null,
-        'shipmentOptions' => ShipmentOptions::class,
+        'carrier'           => null,
+        'date'              => null,
+        'labelAmount'       => 1,
+        'pickupLocation'    => null,
+        'shipmentOptions'   => ShipmentOptions::class,
+        self::DELIVERY_TYPE => self::DEFAULT_DELIVERY_TYPE_NAME,
+        self::PACKAGE_TYPE  => self::DEFAULT_PACKAGE_TYPE_NAME,
     ];
 
     protected $casts      = [
-        'carrier'         => 'string',
-        'date'            => DateTime::class,
-        'deliveryType'    => 'string',
-        'labelAmount'     => 'int',
-        'packageType'     => 'string',
-        'pickupLocation'  => RetailLocation::class,
-        'shipmentOptions' => ShipmentOptions::class,
+        'carrier'           => 'string',
+        'date'              => DateTime::class,
+        'labelAmount'       => 'int',
+        'pickupLocation'    => RetailLocation::class,
+        'shipmentOptions'   => ShipmentOptions::class,
+        self::DELIVERY_TYPE => 'string',
+        self::PACKAGE_TYPE  => 'string',
     ];
 
     public function __construct(?array $data = null)

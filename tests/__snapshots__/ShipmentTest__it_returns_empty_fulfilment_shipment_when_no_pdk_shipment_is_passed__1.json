@@ -1,5 +1,5 @@
 {
-  "carrier": null,
+  "carrier": 1,
   "contractId": null,
   "customsDeclaration": {
     "contents": 1,
@@ -7,7 +7,25 @@
     "items": [],
     "weight": 0
   },
-  "options": null,
+  "options": {
+    "ageCheck": null,
+    "collect": null,
+    "cooledDelivery": null,
+    "deliveryDate": null,
+    "deliveryType": null,
+    "dropOffAtPostalPoint": null,
+    "extraAssurance": null,
+    "hideSender": null,
+    "insurance": null,
+    "labelDescription": null,
+    "largeFormat": null,
+    "onlyRecipient": null,
+    "packageType": null,
+    "return": null,
+    "sameDayDelivery": null,
+    "saturdayDelivery": null,
+    "signature": null
+  },
   "pickup": null,
   "recipient": {
     "boxNumber": null,

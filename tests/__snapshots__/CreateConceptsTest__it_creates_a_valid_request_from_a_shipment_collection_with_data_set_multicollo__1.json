@@ -1,6 +1,8 @@
 [
   {
-    "carrier": 1,
+    "general_settings": {
+      "save_recipient_address": 0
+    },
     "options": {
       "package_type": 1,
       "delivery_type": 2
@@ -18,7 +20,7 @@
     "reference_identifier": "my-multicollo-set",
     "secondary_shipments": [
       {
-        "reference_identifier": "my-multicollo-set"
+        "reference_identifier": null
       }
     ]
   }

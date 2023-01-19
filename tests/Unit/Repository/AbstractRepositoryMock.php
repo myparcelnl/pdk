@@ -3,38 +3,34 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Repository\AccountRepository;
+use MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-/** @var \MyParcelNL\Pdk\Base\Pdk $pdk */
-$pdk = null;
+usesShared(new UsesMockPdkInstance());
 
-beforeEach(function () use (&$pdk) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-});
-
-it('sets up api', function () use ($pdk) {
+it('retrieves api instance', function () {
     /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
-    $api = Pdk::get('api');
+    $api = Pdk::get(ApiServiceInterface::class);
 
     expect($api)->toBeInstanceOf(AbstractApiService::class);
 });
 
-it('handles repository', function () use ($pdk) {
+it('handles repository', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockRepository $repository */
     $repository = Pdk::get(MockRepository::class);
 
     expect($repository->getShopWithParameters(1))->toBeInstanceOf(Shop::class);
 });
 
-it('apis the api', function () use ($pdk) {
-    /** @var \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository */
-    $accountRepository = Pdk::get(AccountRepository::class);
+it('gets data from the api', function () {
+    /** @var \MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface $accountRepository */
+    $accountRepository = Pdk::get(AbstractAccountRepository::class);
 
     expect(
         $accountRepository

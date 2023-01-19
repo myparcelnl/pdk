@@ -1,16 +1,15 @@
 [
   {
-    "carrier": 2,
     "customs_declaration": {
       "contents": 1,
       "invoice": "25",
       "items": [
         {
           "amount": 1,
-          "classification": "9609",
+          "classification": 9609,
           "country": "NL",
           "description": "trendy pencil",
-          "itemValue": {
+          "item_value": {
             "amount": 5000,
             "currency": "EUR"
           },
@@ -18,17 +17,19 @@
         },
         {
           "amount": 1,
-          "classification": "40169200",
+          "classification": 40169200,
           "country": "NL",
           "description": "beautiful eraser",
-          "itemValue": {
+          "item_value": {
             "amount": 10000,
             "currency": "EUR"
           },
           "weight": 350
         }
-      ],
-      "weight": 550
+      ]
+    },
+    "general_settings": {
+      "save_recipient_address": 0
     },
     "options": {
       "package_type": 1,

@@ -4,18 +4,20 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use function DI\autowire;
 
 function createPdk(array $settingsOverrides): void
 {
     $config = MockPdkConfig::create([
-        AbstractSettingsRepository::class => autowire(MockSettingsRepository::class)->constructor(
+        SettingsRepositoryInterface::class => autowire(
+            MockSettingsRepository::class
+        )->constructor(
             $settingsOverrides
         ),
     ]);

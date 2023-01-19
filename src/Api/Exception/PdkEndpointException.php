@@ -10,12 +10,34 @@ use Throwable;
 class PdkEndpointException extends Exception
 {
     /**
+     * @var int
+     */
+    private $statusCode;
+
+    /**
      * @param  string          $message
-     * @param  int             $code
+     * @param  int             $statusCode
      * @param  \Throwable|null $previous
      */
-    public function __construct(string $message, int $code = 0, Throwable $previous = null)
+    public function __construct(string $message, int $statusCode = 0, Throwable $previous = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, 0, $previous);
+        $this->setStatusCode($statusCode);
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * @param  int $statusCode
+     */
+    public function setStatusCode(int $statusCode): void
+    {
+        $this->statusCode = $statusCode;
     }
 }

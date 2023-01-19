@@ -1,14 +1,9 @@
 {
   "global": null,
+  "dynamic": null,
   "orderData": [
     {
       "externalIdentifier": "123",
-      "customsDeclaration": {
-        "contents": 1,
-        "invoice": null,
-        "items": [],
-        "weight": 0
-      },
       "deliveryOptions": {
         "carrier": "postnl",
         "date": null,
@@ -28,13 +23,7 @@
         }
       },
       "label": null,
-      "lines": [],
-      "physicalProperties": {
-        "height": null,
-        "length": null,
-        "weight": 0,
-        "width": null
-      },
+      "billingAddress": null,
       "recipient": {
         "boxNumber": null,
         "cc": null,
@@ -54,7 +43,21 @@
       },
       "sender": null,
       "shipments": [],
+      "lines": [],
+      "customsDeclaration": {
+        "contents": 1,
+        "invoice": null,
+        "items": [],
+        "weight": 0
+      },
+      "physicalProperties": {
+        "height": null,
+        "length": null,
+        "weight": 0,
+        "width": null
+      },
       "orderDate": null,
+      "exported": false,
       "shipmentPrice": 0,
       "shipmentPriceAfterVat": 0,
       "shipmentVat": 0,
@@ -66,5 +69,7 @@
       "totalPriceAfterVat": 0
     }
   ],
-  "deliveryOptions": null
+  "pluginSettingsView": null,
+  "productSettingsView": null,
+  "checkout": null
 }

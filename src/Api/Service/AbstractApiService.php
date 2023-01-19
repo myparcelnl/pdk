@@ -11,6 +11,8 @@ use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
+use RuntimeException;
+use Throwable;
 
 abstract class AbstractApiService implements ApiServiceInterface
 {
@@ -43,22 +45,35 @@ abstract class AbstractApiService implements ApiServiceInterface
         RequestInterface $request,
         string           $responseClass = ApiResponse::class
     ): ApiResponseInterface {
-        $uri        = $this->buildUri($request);
-        $httpMethod = $request->getMethod();
+        $uri    = $this->buildUri($request);
+        $method = $request->getMethod();
 
         $options = [
-            'headers' => $request->getHeaders() + $this->getHeaders(),
-            'body'    => $request->getBody(),
+            'headers'     => $request->getHeaders() + $this->getHeaders(),
+            'body'        => $request->getBody(),
+            'http_errors' => false,
         ];
 
-        $response = $this->clientAdapter->doRequest($httpMethod, $uri, $options);
+        DefaultLogger::debug('Sending request to MyParcel', [
+            'uri'     => $uri,
+            'method'  => $method,
+            'options' => $options,
+        ]);
 
-        DefaultLogger::debug('Request to MyParcel', [
-            'uri'          => $uri,
-            'method'       => $httpMethod,
-            'options'      => $options,
-            'responseCode' => $response->getStatusCode(),
-            'body'         => $response->getBody(),
+        try {
+            $response = $this->clientAdapter->doRequest($method, $uri, $options);
+        } catch (Throwable $e) {
+            DefaultLogger::error('Error sending request to MyParcel', [
+                'uri'     => $uri,
+                'method'  => $method,
+                'options' => $options,
+                'error'   => $e->getMessage(),
+            ]);
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        DefaultLogger::debug('Received response from MyParcel', [
+            'response' => $response,
         ]);
 
         /** @var \MyParcelNL\Pdk\Api\Response\ApiResponseInterface $responseObject */

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\StorableArrayable;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
  * @property \MyParcelNL\Pdk\Shipment\Model\Shipment[] $items
  */
-class ShipmentCollection extends Collection
+class ShipmentCollection extends Collection implements StorableArrayable
 {
     /**
      * @var \MyParcelNL\Pdk\Shipment\Model\Label
@@ -37,5 +38,15 @@ class ShipmentCollection extends Collection
         });
 
         return $this;
+    }
+
+    /**
+     * @return void
+     */
+    public function toStorableArray(): array
+    {
+        return $this->map(function (Shipment $shipment) {
+            return $shipment->toStorableArray();
+        })->toArray();
     }
 }

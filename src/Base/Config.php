@@ -28,7 +28,7 @@ class Config implements ConfigInterface
             $filename = $key;
         }
 
-        $data = $this->getConfigFile($filename);
+        $data = $this->findConfig($filename);
 
         if (count($pathParts)) {
             array_shift($pathParts);
@@ -51,7 +51,7 @@ class Config implements ConfigInterface
      *
      * @return mixed
      */
-    private function getConfigFile(string $filename)
+    private function findConfig(string $filename)
     {
         if (! isset(self::$cache[$filename])) {
             $dir = $this->getConfigDir();

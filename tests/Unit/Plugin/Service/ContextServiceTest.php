@@ -3,20 +3,19 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-usesShared(new UsesMockPdkInstance());
-
 it('gets context data', function (string $id, array $arguments) {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+
     /** @var \MyParcelNL\Pdk\Plugin\Service\ContextService $service */
-    $service = Pdk::get(ContextService::class);
+    $service = $pdk->get(ContextService::class);
 
     $context = $service->createContexts([$id], $arguments);
 
@@ -61,11 +60,11 @@ it('gets context data', function (string $id, array $arguments) {
     ],
 
     'delivery options config' => [
-        'id'        => Context::ID_DELIVERY_OPTIONS,
+        'id'        => Context::ID_CHECKOUT,
         'arguments' => [
             'order' => [
                 'deliveryOptions' => [
-                    'carrier'     => CarrierOptions::CARRIER_POSTNL_NAME,
+                    'carrier'     => Carrier::CARRIER_POSTNL_NAME,
                     'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
             ],
@@ -74,8 +73,10 @@ it('gets context data', function (string $id, array $arguments) {
 ]);
 
 it('handles invalid context keys', function () {
+    $pdk = PdkFactory::create(MockPdkConfig::create());
+
     /** @var \MyParcelNL\Pdk\Plugin\Service\ContextService $service */
-    $service    = Pdk::get(ContextService::class);
+    $service    = $pdk->get(ContextService::class);
     $contextBag = $service->createContexts(['random_word']);
 
     expect($contextBag->toArray())->toEqual([

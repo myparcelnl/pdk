@@ -12,7 +12,7 @@ it('gets parents of class recursively', function () {
         ->toEqual([MockBeConcerned::class => MockBeConcerned::class])
         ->and(Utils::getClassParentsRecursive(MockClassWithTrait::class))
         ->toEqual([MockBeConcerned::class => MockBeConcerned::class])
-        ->and(Utils::getClassParentsRecursive((object) new MockClassWithTrait()))
+        ->and(Utils::getClassParentsRecursive(new MockClassWithTrait()))
         ->toEqual([MockBeConcerned::class => MockBeConcerned::class]);
 });
 

@@ -3,21 +3,22 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
-use MyParcelNL\Pdk\Product\Repository\AbstractProductRepository;
+use MyParcelNL\Pdk\Product\Repository\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 const EXAMPLE_PRODUCT = [
     'sku'      => '123',
     'weight'   => 4000,
     'settings' => [],
 ];
+
+beforeEach(function () {
+    $this->pdk = PdkFactory::create(MockPdkConfig::create());
+});
 
 it('has correct default values', function () {
     $product = new PdkProduct(EXAMPLE_PRODUCT);
@@ -47,7 +48,7 @@ it('has correct default values', function () {
 
 it('updates product settings', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository $repository */
-    $repository = Pdk::get(AbstractProductRepository::class);
+    $repository = $this->pdk->get(ProductRepositoryInterface::class);
 
     $product = $repository->getProduct('123');
 

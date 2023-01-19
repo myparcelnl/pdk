@@ -29,5 +29,10 @@ interface RequestInterface
     /**
      * @return string
      */
+    public function getProperty(): string;
+
+    /**
+     * @return string
+     */
     public function getQueryString(): string;
 }

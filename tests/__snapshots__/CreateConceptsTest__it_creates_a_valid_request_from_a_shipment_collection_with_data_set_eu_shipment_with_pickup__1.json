@@ -1,6 +1,8 @@
 [
   {
-    "carrier": 2,
+    "general_settings": {
+      "save_recipient_address": 0
+    },
     "options": {
       "package_type": 1,
       "delivery_type": 4

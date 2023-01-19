@@ -13,4 +13,19 @@ use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 class WebhookSubscriptionCollection extends Collection
 {
     protected $cast = WebhookSubscription::class;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
+     *
+     * @return $this
+     */
+    public function addIds(Collection $ids): self
+    {
+        $this->each(function (WebhookSubscription $shipment, int $index) use ($ids) {
+            $shipment->fill($ids->offsetGet($index) ?? []);
+            return $shipment;
+        });
+
+        return $this;
+    }
 }

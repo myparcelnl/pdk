@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\PostReturnShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\PostShipmentsRequest;
-use MyParcelNL\Pdk\Shipment\Request\UpdateShipmentsRequest;
+use MyParcelNL\Pdk\Shipment\Request\FetchShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Response\GetLabelsPdfResponse;
 use MyParcelNL\Pdk\Shipment\Response\GetLabelsResponse;
 use MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse;
@@ -182,7 +182,7 @@ class ShipmentRepository extends ApiRepository
      */
     public function update(ShipmentCollection $collection, ?int $size = null): ShipmentCollection
     {
-        $request = new UpdateShipmentsRequest($collection, $size);
+        $request = new FetchShipmentsRequest($collection, $size);
 
         return $this->retrieve($request->getUniqueKey(), function () use ($request) {
             /** @var \MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse $response */

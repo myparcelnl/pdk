@@ -9,14 +9,14 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Mocks\ExceptionThrowingContextService;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesHtmlSnapshot;
 
 uses()->group('frontend');
 
-usesShared(new UsesMockPdkInstance());
+beforeEach(function () {
+    PdkFactory::create(MockPdkConfig::create());
+});
 
 it('renders component', function (callable $callback) {
     $result = $callback();
