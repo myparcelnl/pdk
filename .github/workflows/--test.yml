@@ -17,9 +17,16 @@ jobs:
       contents: read
       packages: write
     steps:
+      - uses: myparcelnl/actions/setup-git-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         with:
           persist-credentials: false
+          token: ${{ steps.credentials.outputs.token }}
 
       - uses: actions/cache@v3
         id: cache-coverage
@@ -27,14 +34,14 @@ jobs:
           path: ./clover.xml
           key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './Dockerfile', './src/**', './tests/**') }}
 
-      - uses: myparcelnl/actions/build-docker-image-reg@v2
+      - uses: ./.github/actions/build-docker-image-reg
         if: steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
-          image: myparcelnl/php-pdk
+          image: ${{ github.repository_owner }}/php-pdk
           target: test
           registry-user: ${{ github.actor }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          registry-password: ${{ steps.credentials.outputs.token }}
 
       - name: 'Run tests'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
@@ -46,7 +53,7 @@ jobs:
 
       - uses: codecov/codecov-action@v3
 
-      # todo: fix apps not working with SAML
-      # - uses: codacy/codacy-coverage-reporter-action@v1
-      #   with:
-      #     api-token: ${{ secrets.CODACY_API_TOKEN }}
+      - uses: codacy/codacy-coverage-reporter-action@v1
+        continue-on-error: true
+        with:
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
