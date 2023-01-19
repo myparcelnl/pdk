@@ -13,53 +13,29 @@ jobs:
   test:
     name: 'Run pest tests'
     runs-on: ubuntu-22.04
-    env:
-      DOCKER_IMAGE: ghcr.io/myparcelnl/php-xd:7.4
     permissions:
       contents: read
       packages: write
     steps:
-      - uses: myparcelnl/actions/setup-git-credentials@v3
-        id: credentials
-        with:
-          app-id: ${{ secrets.MYPARCEL_APP_ID }}
-          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
-
       - uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          token: ${{ steps.credentials.outputs.token }}
-
-#      - uses: actions/cache@v3
-#        id: cache-coverage
-#        with:
-#          path: ./clover.xml
-#          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './Dockerfile', './src/**', './tests/**') }}
 
       - uses: actions/cache@v3
-        id: docker-cache
+        id: cache-coverage
         with:
-            path: ~/docker-cache
-            key: docker-cache-${{ runner.os }}
+          path: ./clover.xml
+          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
 
-      - name: 'Pull Docker image'
-        if: steps.docker-cache.outputs.cache-hit != 'true'
-        run: |
-            docker pull ${{ env.DOCKER_IMAGE }}
-            mkdir -p ~/docker-cache
-            docker save -o ~/docker-cache/image.tar ${{ env.DOCKER_IMAGE }}   
-
-      - name: 'Load Docker image'
-        if: steps.docker-cache.outputs.cache-hit == 'true'
-        run: |
-          docker load -i ~/docker-cache/image.tar
+      - uses: myparcelnl/actions/pull-docker-image@v3
+        id: docker
+        with:
+          image: ghcr.io/myparcelnl/php-xd:7.4
 
       - name: 'Run tests'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
         run: |
           docker run \
             --volume $PWD:/app \
-            ${{ env.DOCKER_IMAGE }} \
+            ${{ steps.docker.outputs.image }} \
             sh -c 'composer install --dev --no-progress --no-suggest --no-scripts --no-plugins && ./vendor/bin/pest'
 
       - name: 'Get coverage file from container'
