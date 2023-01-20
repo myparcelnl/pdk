@@ -19,24 +19,28 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/cache@v3
+      - name: 'Handle coverage cache'
+        uses: actions/cache@v3
         id: cache-coverage
         with:
           path: ./clover.xml
-          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}-invalidate
+          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}-invalidate2
+
+      - name: 'Handle composer cache'
+        uses: actions/cache@v3
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
+        id: cache-composer
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
       - uses: myparcelnl/actions/pull-docker-image@v3
         if: steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
           image: ghcr.io/myparcelnl/php-xd:7.4
-
-      - uses: actions/cache@v3
-        if: steps.cache-coverage.outputs.cache-hit != 'true'
-        id: cache-composer
-        with:
-          path: ~/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
 
       - name: 'Install composer dependencies'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
