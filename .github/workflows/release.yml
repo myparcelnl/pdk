@@ -13,7 +13,6 @@ jobs:
     secrets: inherit
 
   release:
-    name: 'Run Semantic Release'
     runs-on: ubuntu-22.04
     needs: test
     steps:
@@ -34,8 +33,7 @@ jobs:
         with:
           token: ${{ steps.credentials.outputs.token }}
 
-  rebase:
-    name: 'Rebase pull requests'
+  rebase-prs:
     needs: release
     if: always()
     runs-on: ubuntu-22.04
@@ -49,5 +47,5 @@ jobs:
       - uses: peter-evans/rebase@v2
         with:
           token: ${{ steps.credentials.outputs.token }}
-          base: main
+          base: ${{ github.ref }}
           exclude-drafts: true

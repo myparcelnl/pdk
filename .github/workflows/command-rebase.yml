@@ -1,4 +1,4 @@
-name: 'Rebase pull request'
+name: 'Command: Rebase pull request'
 
 on:
   repository_dispatch:
