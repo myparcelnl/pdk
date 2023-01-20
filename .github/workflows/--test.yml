@@ -26,9 +26,27 @@ jobs:
           key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
 
       - uses: myparcelnl/actions/pull-docker-image@v3
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
         id: docker
         with:
           image: ghcr.io/myparcelnl/php-xd:7.4
+
+      - uses: actions/cache@v3
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
+        id: cache-composer
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+
+      - name: 'Install composer dependencies'
+        if: steps.cache-coverage.outputs.cache-hit != 'true'
+        run: |
+          docker run \
+            --volume $PWD:/app \
+            --volume $HOME/.composer:/root/.composer \
+            --env COMPOSER_CACHE_DIR=/root/.composer \
+            ${{ steps.docker.outputs.image }} \
+            composer install --no-progress --no-scripts --no-plugins
 
       - name: 'Run tests'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
@@ -36,14 +54,13 @@ jobs:
           docker run \
             --volume $PWD:/app \
             ${{ steps.docker.outputs.image }} \
-            sh -c 'composer install --dev --no-progress --no-suggest --no-scripts --no-plugins && ./vendor/bin/pest'
+            vendor/bin/pest
 
       - name: 'Get coverage file from container'
         if: steps.cache-coverage.outputs.cache-hit != 'true'
         run: docker cp $(docker ps -alq):/app/clover.xml .
 
       - name: 'Upload coverage artifact'
-        if: steps.cache-coverage.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverage
