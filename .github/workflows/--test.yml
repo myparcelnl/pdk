@@ -23,7 +23,7 @@ jobs:
         id: cache-coverage
         with:
           path: ./clover.xml
-          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
+          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}-invalidate
 
       - uses: myparcelnl/actions/pull-docker-image@v3
         if: steps.cache-coverage.outputs.cache-hit != 'true'
