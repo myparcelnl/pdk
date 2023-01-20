@@ -24,7 +24,7 @@ jobs:
         id: cache-coverage
         with:
           path: ./clover.xml
-          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}-invalidate2
+          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
 
       - name: 'Handle composer cache'
         uses: actions/cache@v3
