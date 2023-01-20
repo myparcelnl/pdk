@@ -11,7 +11,7 @@ COPY src/                      ./src/
 COPY helper/                   ./helper/
 COPY config/                   ./config/
 
-RUN composer install --dev
+RUN composer install --dev --no-scripts
 
 CMD ["vendor/bin/pest"]
 

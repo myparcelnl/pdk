@@ -13,30 +13,39 @@ jobs:
     secrets: inherit
 
   release:
-    name: 'Run Semantic Release'
     runs-on: ubuntu-22.04
     needs: test
     steps:
+      - uses: myparcelnl/actions/setup-git-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          persist-credentials: false
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
 
       - uses: myparcelnl/actions/yarn2-install@v2
 
       - uses: myparcelnl/actions/semantic-release@v2
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
 
-  rebase:
-    name: 'Rebase pull requests'
+  rebase-prs:
     needs: release
     if: always()
     runs-on: ubuntu-22.04
     steps:
+      - uses: myparcelnl/actions/setup-git-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
       - uses: peter-evans/rebase@v2
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
-          base: main
+          token: ${{ steps.credentials.outputs.token }}
+          base: ${{ github.ref }}
           exclude-drafts: true
