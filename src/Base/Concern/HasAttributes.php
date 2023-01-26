@@ -127,13 +127,13 @@ trait HasAttributes
     }
 
     /**
-     * @param      $attributes
-     * @param  int $flags
+     * @param  string|array $attributes
+     * @param  null|int     $flags
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function except($attributes, int $flags): array
+    public function except($attributes, ?int $flags = null): array
     {
         $attributes = is_array($attributes) ? $attributes : func_get_args();
 
