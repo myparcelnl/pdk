@@ -27,9 +27,9 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.credentials.outputs.token }}
 
-      - uses: myparcelnl/actions/yarn2-install@v2
+      - uses: myparcelnl/actions/yarn-install@v3
 
-      - uses: myparcelnl/actions/semantic-release@v2
+      - uses: myparcelnl/actions/semantic-release@v3
         with:
           token: ${{ steps.credentials.outputs.token }}
 
