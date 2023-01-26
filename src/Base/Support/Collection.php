@@ -57,21 +57,19 @@ class Collection extends SdkCollection implements Arrayable
      * @param  \MyParcelNL\Pdk\Base\Support\Collection $collection
      * @param  string                                  $key
      *
-     * @return $this
+     * @return self
      */
     public function mergeByKey(Collection $collection, string $key): self
     {
         $valueRetriever = $this->valueRetriever($key);
-        $results        = [];
+        $result         = $this->keyBy($key);
 
-        foreach ($this->items as $itemKey => $item) {
-            $value          = $valueRetriever($item, $itemKey);
-            $collectionItem = $collection->firstWhere($key, $value);
-
-            $results[] = $collectionItem ?? $item;
+        foreach ($collection->all() as $item) {
+            $keyValue = $valueRetriever($item);
+            $result->put($keyValue, $item);
         }
 
-        return new static($results);
+        return $result->values();
     }
 
     /**

@@ -23,11 +23,15 @@ class PdkOrderCollection extends Collection
      */
     public function generateShipments(array $data = []): ShipmentCollection
     {
-        $this->each(function (PdkOrder $order) use ($data) {
-            $order->createShipment($data);
+        $newShipments = new ShipmentCollection();
+
+        $this->each(function (PdkOrder $order) use ($newShipments, $data) {
+            $newShipment = $order->createShipment($data);
+            $newShipments->push($newShipment);
+            $order->shipments->push($newShipment);
         });
 
-        return $this->getLastShipments();
+        return $newShipments;
     }
 
     /**
@@ -46,25 +50,23 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @param  array $data
-     *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     public function getLastShipments(): ShipmentCollection
     {
         return $this->getAllShipments()
             ->groupBy('orderId')
-            ->reduce(static function (ShipmentCollection $acc, ShipmentCollection $shipments) {
+            ->reduce(static function (ShipmentCollection $collection, ShipmentCollection $shipments) {
                 $lastShipment = $shipments->last();
                 $labelAmount  = $lastShipment->deliveryOptions->labelAmount;
                 $offset       = $shipments->count() - $labelAmount;
                 $allShipments = $shipments->slice($offset, $labelAmount);
 
-                $allShipments->each(static function (Shipment $shipment) use ($acc) {
-                    $acc->push($shipment);
+                $allShipments->each(static function (Shipment $shipment) use ($collection) {
+                    $collection->push($shipment);
                 });
 
-                return $acc;
+                return $collection;
             }, new ShipmentCollection());
     }
 
@@ -75,24 +77,57 @@ class PdkOrderCollection extends Collection
      */
     public function updateShipments(ShipmentCollection $shipments): self
     {
-        $this->each(function (PdkOrder $order) use ($shipments) {
-            $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
+        $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
 
-            if ($byOrderId->isEmpty()) {
-                $order->shipments = $order->shipments
-                    ->mergeByKey($shipments, 'id')
-                    ->map(function (Shipment $shipment) use ($order) {
-                        $shipment->orderId = $order->externalIdentifier;
-                        return $shipment;
-                    });
-            } else {
-                // Using values() to reset the collection keys.
-                $order->shipments        = $byOrderId->values();
-                $order->shipments->label = $shipments->label;
-                $order->label            = $shipments->label;
-            }
+        $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
+            $order->shipments = $useOrderId
+                ? $this->mergeShipmentsByOrder($shipments, $order)
+                : $this->mergeShipmentsById($shipments, $order);
         });
 
         return $this;
     }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder                  $order
+     *
+     * @return null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    private function mergeShipmentsById(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
+    {
+        $idShipments    = $shipments->keyBy('id');
+        $orderShipments = $order->shipments->keyBy('id');
+
+        foreach ($orderShipments as $id => $orderShipment) {
+            /** @var null|\MyParcelNL\Pdk\Shipment\Model\Shipment $matchingShipment */
+            $matchingShipment = $idShipments->get($id);
+
+            if (! $matchingShipment) {
+                continue;
+            }
+
+            $matchingShipment->orderId = $order->externalIdentifier;
+            $orderShipments->put($id, $matchingShipment);
+        }
+
+        return $orderShipments->values();
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder                  $order
+     *
+     * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    private function mergeShipmentsByOrder(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
+    {
+        $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
+
+        $mergedShipments = $order->shipments->mergeByKey($byOrderId, 'id');
+        $order->label    = $shipments->label;
+
+        return $mergedShipments;
+    }
 }
+

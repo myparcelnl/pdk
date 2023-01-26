@@ -76,10 +76,7 @@ it('exports order', function () {
         ),
     ];
 
-    $orderRepository->add(
-        $pdkOrders[0],
-        $pdkOrders[1]
-    );
+    $orderRepository->add(...$pdkOrders);
 
     $response = Pdk::execute(PdkActions::EXPORT_ORDER, [
         'orderIds' => ['245', '247'],
@@ -102,7 +99,7 @@ it('exports order', function () {
             'data.orders.0.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'data.orders.0.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.0.shipments.0.id'                           => null,
+            'data.orders.0.shipments.0.id'                           => 123,
             'data.orders.0.shipments.0.orderId'                      => '245',
 
             'data.orders.1.externalIdentifier'                       => '247',
@@ -114,7 +111,7 @@ it('exports order', function () {
             'data.orders.1.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
             'data.orders.1.shipments.0.deliveryOptions.labelAmount'  => 1,
             'data.orders.1.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.1.shipments.0.id'                           => null,
+            'data.orders.1.shipments.0.id'                           => 456,
             'data.orders.1.shipments.0.orderId'                      => '247',
         ])
         ->and($content['data']['orders'])
@@ -239,15 +236,10 @@ it('exports and prints order', function () {
         ->toBeInstanceOf(Response::class)
         ->and(Arr::dot($content))
         ->toHaveKeysAndValues([
-            /**
-             * 245
-             */
             'data.orders.0.externalIdentifier'                       => '263',
             'data.orders.0.deliveryOptions.carrier'                  => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.deliveryOptions.labelAmount'              => 1,
             'data.orders.0.deliveryOptions.packageType'              => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'data.orders.0.label.link'                               => 'API/pdfs/label_hash',
-            'data.orders.0.label.pdf'                                => null,
             'data.orders.0.shipments.0.deliveryOptions.carrier'      => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.0.shipments.0.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
             'data.orders.0.shipments.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -260,8 +252,6 @@ it('exports and prints order', function () {
             'data.orders.1.deliveryOptions.labelAmount'                           => 1,
             'data.orders.1.deliveryOptions.packageType'                           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
             'data.orders.1.deliveryOptions.shipmentOptions.signature'             => true,
-            'data.orders.1.label.link'                                            => 'API/pdfs/label_hash',
-            'data.orders.1.label.pdf'                                             => null,
             'data.orders.1.shipments.0.deliveryOptions.carrier'                   => CarrierOptions::CARRIER_POSTNL_NAME,
             'data.orders.1.shipments.0.deliveryOptions.deliveryType'              => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
             'data.orders.1.shipments.0.deliveryOptions.labelAmount'               => 1,
