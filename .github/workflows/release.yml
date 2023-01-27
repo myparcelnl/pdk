@@ -31,7 +31,8 @@ jobs:
 
       - uses: myparcelnl/actions/semantic-release@v3
         with:
-          token: ${{ steps.credentials.outputs.token }}
+          # TODO: change to app token when GitHub apps are allowed to bypass status checks. https://github.com/orgs/community/discussions/43460
+          token: ${{ secrets.GH_REPO_TOKEN }}
 
   rebase-prs:
     needs: release
