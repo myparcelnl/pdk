@@ -60,10 +60,6 @@ jobs:
             ${{ steps.docker.outputs.image }} \
             vendor/bin/pest
 
-      - name: 'Get coverage file from container'
-        if: steps.cache-coverage.outputs.cache-hit != 'true'
-        run: docker cp $(docker ps -alq):/app/clover.xml .
-
       - name: 'Upload coverage artifact'
         uses: actions/upload-artifact@v3
         with:
