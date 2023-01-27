@@ -60,22 +60,9 @@ jobs:
             ${{ steps.docker.outputs.image }} \
             vendor/bin/pest
 
-      - name: 'Upload coverage artifact'
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: ./clover.xml
-
-  coverage:
-    name: 'Upload coverage'
-    runs-on: ubuntu-22.04
-    needs: test
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: coverage
-
       - uses: codecov/codecov-action@v3
+        with:
+          verbose: true
 
       - uses: codacy/codacy-coverage-reporter-action@v1
         continue-on-error: true
