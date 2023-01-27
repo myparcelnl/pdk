@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Service;
 
-class CurrencyService
+use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
+
+class CurrencyService implements CurrencyServiceInterface
 {
     /**
-     * Normalizes an array of any combination of price, vat or priceAfterVat, provided that at least two of the three
-     * are present.
-     *
      * @param  array{price?: int, vat?: int, priceAfterVat?: int} $prices
      *
      * @return array
@@ -49,7 +48,6 @@ class CurrencyService
      */
     public function convertToCents($amount): int
     {
-        $float = (float) $amount;
-        return (int) round($float * 100);
+        return (int) round(((float) $amount) * 100);
     }
 }

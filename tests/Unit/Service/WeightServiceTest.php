@@ -3,8 +3,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Service\WeightService;
-use MyParcelNL\Sdk\src\Exception\ValidationException;
+namespace MyParcelNL\Pdk\Tests\Unit\Service;
+
+use InvalidArgumentException;
+use MyParcelNL\Pdk\Base\Concern\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 const CUSTOM_RANGES = [
     [
@@ -19,21 +24,34 @@ const CUSTOM_RANGES = [
     ],
 ];
 
-it('converts units correctly', function ($unit, $input, $expectation) {
-    expect(WeightService::convertToGrams($input, $unit))->toEqual($expectation);
+beforeEach(function () {
+    PdkFactory::create(MockPdkConfig::create());
+});
+
+it('converts to grams', function (string $unit, $input, int $expectation) {
+    /** @var \MyParcelNL\Pdk\Base\Concern\WeightServiceInterface $weightService */
+    $weightService = Pdk::get(WeightServiceInterface::class);
+
+    expect($weightService->convertToGrams($input, $unit))->toEqual($expectation);
 })->with([
-    [WeightService::UNIT_GRAMS, 50, 50],
-    [WeightService::UNIT_KILOGRAMS, 50, 50000],
-    [WeightService::UNIT_POUNDS, 50, 22680],
-    [WeightService::UNIT_OUNCES, 50, 1418],
+    [WeightServiceInterface::UNIT_GRAMS, 50, 50],
+    [WeightServiceInterface::UNIT_KILOGRAMS, 50, 50000],
+    [WeightServiceInterface::UNIT_POUNDS, 50, 22680],
+    [WeightServiceInterface::UNIT_OUNCES, 0.5, 15],
 ]);
 
 it('throws error with unknown unit', function () {
-    WeightService::convertToGrams(0.1, 'bloemkool');
+    /** @var \MyParcelNL\Pdk\Base\Concern\WeightServiceInterface $weightService */
+    $weightService = Pdk::get(WeightServiceInterface::class);
+
+    $weightService->convertToGrams(0.1, 'bloemkool');
 })->throws(InvalidArgumentException::class);
 
-it('converts to digital stamp correctly', function ($input, $expectation) {
-    expect(WeightService::convertToDigitalStamp($input))->toEqual($expectation);
+it('converts weight to digital stamp range', function ($input, $expectation) {
+    /** @var \MyParcelNL\Pdk\Base\Concern\WeightServiceInterface $weightService */
+    $weightService = Pdk::get(WeightServiceInterface::class);
+
+    expect($weightService->convertToDigitalStamp($input))->toEqual($expectation);
 })->with([
     [-1, 15],
     [0, 15],
@@ -49,14 +67,21 @@ it('converts to digital stamp correctly', function ($input, $expectation) {
 ]);
 
 it('throws error when weight is higher than max for digital stamp', function ($input, $errorClassName) {
-    $this->expectException($errorClassName);
-    WeightService::convertToDigitalStamp($input);
+    /** @var \MyParcelNL\Pdk\Base\Concern\WeightServiceInterface $weightService */
+    $weightService = Pdk::get(WeightServiceInterface::class);
+
+    expect(function () use ($weightService, $input) {
+        $weightService->convertToDigitalStamp($input);
+    })->toThrow($errorClassName);
 })->with([
-    [3000, ValidationException::class],
+    [3000, InvalidArgumentException::class],
 ]);
 
-it('converts to digital stamp using custom range correctly', function ($ranges, $input, $expectation) {
-    expect(WeightService::convertToDigitalStamp($input, $ranges))->toEqual($expectation);
+it('converts to digital stamp using custom range', function ($ranges, $input, $expectation) {
+    /** @var \MyParcelNL\Pdk\Base\Concern\WeightServiceInterface $weightService */
+    $weightService = Pdk::get(WeightServiceInterface::class);
+
+    expect($weightService->convertToDigitalStamp($input, $ranges))->toEqual($expectation);
 })->with([
     [CUSTOM_RANGES, CUSTOM_RANGES[0]['min'], CUSTOM_RANGES[0]['average']],
     [CUSTOM_RANGES, CUSTOM_RANGES[0]['max'], CUSTOM_RANGES[0]['average']],
