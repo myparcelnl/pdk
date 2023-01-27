@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.34.0](https://github.com/myparcelnl/pdk/compare/v1.33.0...v1.34.0) (2023-01-27)
+
+
+### :bug: Bug Fixes
+
+* **model:** fix flags being required on except ([be80df5](https://github.com/myparcelnl/pdk/commit/be80df5079b5bfe67723c2aae7aefbf9351d4f24))
+
+
+### :sparkles: New Features
+
+* **base:** increase consistency of services ([#73](https://github.com/myparcelnl/pdk/issues/73)) ([8272f10](https://github.com/myparcelnl/pdk/commit/8272f10beaba7739da7cc2cf236767afd6c1b076))
+
 ## [1.33.0](https://github.com/myparcelnl/pdk/compare/v1.32.1...v1.33.0) (2023-01-12)
 
 
