@@ -6,17 +6,19 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\Validation\Validator;
 
 use BadMethodCallException;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 use RuntimeException;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+
+usesShared(new UsesEachMockPdkInstance());
 
 /**
  * array_merge overwrites entire keys, array_merge_recursive only adds to them, thereby corrupting the array.
@@ -78,10 +80,6 @@ $defaultOrderData = [
 $createOrder = function (array $input = []) use ($defaultOrderData): PdkOrder {
     return new PdkOrder(arrayMergeOrder($defaultOrderData, $input));
 };
-
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
 
 it('returns correct schema', function (array $order) use ($createOrder) {
     $validator = $createOrder($order)->getValidator();

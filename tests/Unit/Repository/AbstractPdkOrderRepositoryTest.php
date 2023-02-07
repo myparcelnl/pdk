@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
@@ -20,7 +21,7 @@ beforeEach(function () {
     );
 
     /** @var \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository $repository */
-    $repository = $pdk->get(AbstractPdkOrderRepository::class);
+    $repository = Pdk::get(AbstractPdkOrderRepository::class);
 
     $this->repository = $repository;
 });

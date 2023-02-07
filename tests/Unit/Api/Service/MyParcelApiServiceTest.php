@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\autowire;
 
 it('gets correct headers', function () {
-    $pdk = PdkFactory::create(
+    PdkFactory::create(
         MockPdkConfig::create([
             ApiServiceInterface::class => autowire(MyParcelApiService::class)->constructor([
                 'userAgent' => [
@@ -23,7 +23,7 @@ it('gets correct headers', function () {
     );
 
     /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = \MyParcelNL\Pdk\Facade\Pdk::get(ApiServiceInterface::class);
 
     expect($api->getHeaders())
         ->toBe([
@@ -36,7 +36,7 @@ it('gets correct headers', function () {
 });
 
 it('gets base url', function () {
-    $pdk = PdkFactory::create(
+    PdkFactory::create(
         MockPdkConfig::create([
             ApiServiceInterface::class => autowire(MyParcelApiService::class)->constructor([
                 'baseUrl' => 'https://api.baseurl.com',
@@ -44,7 +44,7 @@ it('gets base url', function () {
         ])
     );
 
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = \MyParcelNL\Pdk\Facade\Pdk::get(ApiServiceInterface::class);
     expect($api->getBaseUrl())
         ->toBe('https://api.baseurl.com');
 });

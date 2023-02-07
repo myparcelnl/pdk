@@ -8,14 +8,16 @@ use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Plugin\Action\PdkActionManager;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\value;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesMockPdkInstance());
 
 it('returns error response on nonexistent action', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Plugin\Action\PdkActionManager $manager */
-    $manager  = $pdk->get(PdkActionManager::class);
+    $manager  = \MyParcelNL\Pdk\Facade\Pdk::get(PdkActionManager::class);
     $response = $manager->execute(['action' => 'nonexistent']);
 
     if (! $response) {
@@ -41,10 +43,10 @@ it('returns error response on nonexistent action', function () {
 });
 
 it('shows stack trace in development mode', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create(['mode' => value(Pdk::MODE_DEVELOPMENT)]));
+    PdkFactory::create(MockPdkConfig::create(['mode' => value(Pdk::MODE_DEVELOPMENT)]));
 
     /** @var \MyParcelNL\Pdk\Plugin\Action\PdkActionManager $manager */
-    $manager  = $pdk->get(PdkActionManager::class);
+    $manager  = \MyParcelNL\Pdk\Facade\Pdk::get(PdkActionManager::class);
     $response = $manager->execute(['action' => 'nonexistent']);
 
     if (! $response) {
@@ -58,10 +60,8 @@ it('shows stack trace in development mode', function () {
 });
 
 it('ignores missing action if it is optional', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Plugin\Action\PdkActionManager $manager */
-    $manager  = $pdk->get(PdkActionManager::class);
+    $manager  = \MyParcelNL\Pdk\Facade\Pdk::get(PdkActionManager::class);
     $response = $manager->execute(['action' => PdkActions::UPDATE_TRACKING_NUMBER]);
 
     expect($response)

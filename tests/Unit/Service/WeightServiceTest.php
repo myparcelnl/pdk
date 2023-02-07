@@ -7,9 +7,9 @@ namespace MyParcelNL\Pdk\Tests\Unit\Service;
 
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\WeightServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
 const CUSTOM_RANGES = [
     [
@@ -24,10 +24,7 @@ const CUSTOM_RANGES = [
     ],
 ];
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
-
+usesShared(new UsesMockPdkInstance());
 it('converts to grams', function (string $unit, $input, int $expectation) {
     /** @var \MyParcelNL\Pdk\Base\Concern\WeightServiceInterface $weightService */
     $weightService = Pdk::get(WeightServiceInterface::class);

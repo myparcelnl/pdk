@@ -4,10 +4,11 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -15,35 +16,29 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    $this->pdk = PdkFactory::create(
-        MockPdkConfig::create([
-            AbstractPdkOrderRepository::class => autowire(MockPdkOrderRepository::class),
-        ])
-    );
-
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
-    $orderRepository = $this->pdk->get(AbstractPdkOrderRepository::class);
-
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $this->pdk->get(ApiServiceInterface::class);
-
-    $this->orderRepository = $orderRepository;
-    $this->mock            = $api->getMock();
-});
-
-afterEach(function () {
-    $this->mock->reset();
-});
+usesShared(
+    new UsesMockPdkInstance([
+        AbstractPdkOrderRepository::class => autowire(MockPdkOrderRepository::class),
+    ]),
+    new UsesApiMock()
+);
 
 it('exports order', function () {
-    $this->mock->append(new ExamplePostShipmentsResponse());
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
+    $orderRepository = Pdk::get(AbstractPdkOrderRepository::class);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = Pdk::get(ApiServiceInterface::class);
+
+    $api->getMock()
+        ->append(new ExamplePostShipmentsResponse());
 
     $pdkOrders = [
         new PdkOrder(
@@ -81,12 +76,12 @@ it('exports order', function () {
         ),
     ];
 
-    $this->orderRepository->add(
+    $orderRepository->add(
         $pdkOrders[0],
         $pdkOrders[1]
     );
 
-    $response = $this->pdk->execute(PdkActions::EXPORT_ORDER, [
+    $response = Pdk::execute(PdkActions::EXPORT_ORDER, [
         'orderIds' => ['245', '247'],
     ]);
 
@@ -133,11 +128,18 @@ it('exports order', function () {
 });
 
 it('prints order', function () {
-    $this->mock->append(
-        new ExampleGetShipmentLabelsLinkV2Response()
-    );
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
+    $orderRepository = Pdk::get(AbstractPdkOrderRepository::class);
 
-    $this->orderRepository->add(
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = Pdk::get(ApiServiceInterface::class);
+
+    $api->getMock()
+        ->append(
+            new ExampleGetShipmentLabelsLinkV2Response()
+        );
+
+    $orderRepository->add(
         new PdkOrder(
             [
                 'externalIdentifier' => '701',
@@ -162,7 +164,7 @@ it('prints order', function () {
         )
     );
 
-    $response = $this->pdk->execute(PdkActions::PRINT_ORDER, [
+    $response = Pdk::execute(PdkActions::PRINT_ORDER, [
         'orderIds' => ['701', '702'],
         'download' => true,
     ]);
@@ -185,15 +187,22 @@ it('prints order', function () {
 });
 
 it('exports and prints order', function () {
-    $this->mock->append(
-        new ExamplePostIdsResponse([
-            ['id' => 30321, 'reference_identifier' => '263'],
-            ['id' => 30322, 'reference_identifier' => '264'],
-        ]),
-        new ExampleGetShipmentLabelsLinkV2Response()
-    );
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
+    $orderRepository = Pdk::get(AbstractPdkOrderRepository::class);
 
-    $this->orderRepository->add(
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = Pdk::get(ApiServiceInterface::class);
+
+    $api->getMock()
+        ->append(
+            new ExamplePostIdsResponse([
+                ['id' => 30321, 'reference_identifier' => '263'],
+                ['id' => 30322, 'reference_identifier' => '264'],
+            ]),
+            new ExampleGetShipmentLabelsLinkV2Response()
+        );
+
+    $orderRepository->add(
         new PdkOrder(
             [
                 'externalIdentifier' => '263',
@@ -216,7 +225,7 @@ it('exports and prints order', function () {
         )
     );
 
-    $response = $this->pdk->execute(PdkActions::EXPORT_AND_PRINT_ORDER, [
+    $response = Pdk::execute(PdkActions::EXPORT_AND_PRINT_ORDER, [
         'orderIds' => ['263', '264'],
     ]);
 
@@ -272,9 +281,17 @@ it('exports and prints order', function () {
 });
 
 it('exports return', function () {
-    $this->mock->append(new ExamplePostIdsResponse([['id' => 30011], ['id' => 30012]]));
-    $this->mock->append(new ExampleGetShipmentsResponse());
-    $this->orderRepository->add(
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
+    $orderRepository = Pdk::get(AbstractPdkOrderRepository::class);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = Pdk::get(ApiServiceInterface::class);
+
+    $mock = $api->getMock();
+    $mock->append(new ExamplePostIdsResponse([['id' => 30011], ['id' => 30012]]));
+    $mock->append(new ExampleGetShipmentsResponse());
+
+    $orderRepository->add(
         new PdkOrder(
             [
                 'externalIdentifier' => '701',
@@ -308,7 +325,7 @@ it('exports return', function () {
         )
     );
 
-    $response = $this->pdk->execute(PdkActions::EXPORT_RETURN, [
+    $response = Pdk::execute(PdkActions::EXPORT_RETURN, [
         'orderIds' => ['701', '247'],
     ]);
 

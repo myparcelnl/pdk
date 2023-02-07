@@ -4,13 +4,14 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('can get and set items', function () {
     $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage */
-    $storage = $pdk->get(MemoryCacheStorage::class);
+    $storage = Pdk::get(MemoryCacheStorage::class);
 
     $storage->set('foo', 'bar');
 
@@ -20,7 +21,7 @@ it('can get and set items', function () {
 it('can delete items', function () {
     $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage */
-    $storage = $pdk->get(MemoryCacheStorage::class);
+    $storage = Pdk::get(MemoryCacheStorage::class);
 
     $storage->set('foo', 'bar');
     $storage->delete('foo');

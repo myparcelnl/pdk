@@ -4,13 +4,11 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
+usesShared(new UsesMockPdkInstance());
 
 it('calculates vat totals', function (array $input, array $expected) {
     /** @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService */

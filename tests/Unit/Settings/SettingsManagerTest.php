@@ -3,7 +3,8 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
@@ -11,16 +12,14 @@ use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    $this->pdk = PdkFactory::create(MockPdkConfig::create());
-});
+usesShared(new UsesEachMockPdkInstance());
 
 it('has correct default values', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-    $repository = $this->pdk->get(AbstractSettingsRepository::class);
+    $repository = Pdk::get(AbstractSettingsRepository::class);
     $repository->set(new SettingsModel());
 
     $settings = Settings::all();
@@ -119,7 +118,7 @@ it('retrieves a specific setting via category', function () {
 
 it('updates settings', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-    $repository = $this->pdk->get(AbstractSettingsRepository::class);
+    $repository = Pdk::get(AbstractSettingsRepository::class);
     $settings   = Settings::all();
 
     $settings->general->apiKey = 'acd736d67a892fad08346738caf979bc';

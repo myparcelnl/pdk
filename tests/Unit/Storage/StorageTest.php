@@ -3,12 +3,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\StorageInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesMockPdkInstance());
 
 it('gets storage', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
-    expect($pdk->get(StorageInterface::class))->toBeInstanceOf(StorageInterface::class);
+    expect(Pdk::get(StorageInterface::class))->toBeInstanceOf(StorageInterface::class);
 });

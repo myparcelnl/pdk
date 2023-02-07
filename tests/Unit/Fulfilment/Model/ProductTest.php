@@ -5,16 +5,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Fulfilment\Model;
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Fulfilment\Model\Product;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
-
+usesShared(new UsesMockPdkInstance());
 it('creates fulfilment product from pdk product', function (array $input) {
     $pdkProduct = new PdkProduct($input);
     $product    = Product::fromPdkProduct($pdkProduct);

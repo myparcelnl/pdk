@@ -3,16 +3,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
-
+usesShared(new UsesMockPdkInstance());
 it('instantiates default delivery options', function () {
     $deliveryOptions = new DeliveryOptions();
 

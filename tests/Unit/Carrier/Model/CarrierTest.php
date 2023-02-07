@@ -5,15 +5,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
+usesShared(new UsesMockPdkInstance());
 
 it('creates main carrier by name', function () {
     $carrier = new CarrierOptions(['name' => CarrierOptions::CARRIER_POSTNL_NAME]);

@@ -4,22 +4,22 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesMockPdkInstance());
 
 beforeEach(function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = Pdk::get(ApiServiceInterface::class);
 
     $this->mock = $api->getMock();
 });

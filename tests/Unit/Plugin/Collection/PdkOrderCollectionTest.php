@@ -3,17 +3,14 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\src\Support\Arr;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
-
+usesShared(new UsesMockPdkInstance());
 it('holds PdkOrders', function () {
     $pdkOrderCollection = new PdkOrderCollection();
 

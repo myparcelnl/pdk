@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
@@ -87,7 +88,7 @@ it(
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
         $pdk = PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-        $api  = $pdk->get(ApiServiceInterface::class);
+        $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
 
         $mock->append(
@@ -97,7 +98,7 @@ it(
         );
 
         /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
-        $repository = $pdk->get(ShipmentRepository::class);
+        $repository = Pdk::get(ShipmentRepository::class);
 
         $response = $repository->fetchLabelLink(new ShipmentCollection($collection), $format, $position);
         $request  = $mock->getLastRequest();
@@ -124,12 +125,12 @@ it(
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
         $pdk = PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-        $api  = $pdk->get(ApiServiceInterface::class);
+        $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
         $mock->append(new ExampleGetShipmentLabelsPdfResponse());
 
         /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
-        $repository = $pdk->get(ShipmentRepository::class);
+        $repository = Pdk::get(ShipmentRepository::class);
 
         $response = $repository->fetchLabelPdf(new ShipmentCollection($collection), $format, $position);
         $request  = $mock->getLastRequest();

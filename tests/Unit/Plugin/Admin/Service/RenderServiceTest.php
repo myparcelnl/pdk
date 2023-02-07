@@ -9,8 +9,12 @@ use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Mocks\ExceptionThrowingContextService;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesHtmlSnapshot;
+
+usesShared(new UsesMockPdkInstance());
 
 /**
  * Replace the randomly generated ids in the html with placeholders to support snapshot testing.
@@ -22,31 +26,26 @@ function replaceIds(string $result): string
 }
 
 it('renders init script', function () {
-    PdkFactory::create(MockPdkConfig::create());
     $result = RenderService::renderInitScript();
     assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders modals', function () {
-    PdkFactory::create(MockPdkConfig::create());
     $result = RenderService::renderModals();
     assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders notifications', function () {
-    PdkFactory::create(MockPdkConfig::create());
     $result = RenderService::renderNotifications();
     assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders order card', function () {
-    PdkFactory::create(MockPdkConfig::create());
     $result = RenderService::renderOrderCard(new PdkOrder(['externalIdentifier' => 'P00924872']));
     assertMatchesHtmlSnapshot(replaceIds($result));
 });
 
 it('renders order list column', function () {
-    PdkFactory::create(MockPdkConfig::create());
     $result = RenderService::renderOrderListColumn(new PdkOrder(['externalIdentifier' => 'P00924878']));
     assertMatchesHtmlSnapshot(replaceIds($result));
 });

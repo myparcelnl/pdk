@@ -3,7 +3,6 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Settings\View\AbstractView;
@@ -14,12 +13,11 @@ use MyParcelNL\Pdk\Settings\View\GeneralSettingsView;
 use MyParcelNL\Pdk\Settings\View\LabelSettingsView;
 use MyParcelNL\Pdk\Settings\View\OrderSettingsView;
 use MyParcelNL\Pdk\Settings\View\ProductSettingsView;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
+usesShared(new UsesMockPdkInstance());
 
 /**
  * Shortcut to not have to write ~260 lines for the country options.

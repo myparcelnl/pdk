@@ -3,18 +3,15 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
-
+usesShared(new UsesMockPdkInstance());
 it('sets carrier correctly', function ($carrier, string $expectedName) {
     $carrier = is_callable($carrier) ? $carrier() : $carrier;
 

@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Form\Model\Input\CheckboxInput;
 use MyParcelNL\Pdk\Form\Model\Input\HiddenInput;
 use MyParcelNL\Pdk\Form\Model\Input\NumberInput;
@@ -13,12 +13,10 @@ use MyParcelNL\Pdk\Form\Model\Input\Select\DropOffDaySelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 use MyParcelNL\Pdk\Form\Model\Input\TextInput;
 use MyParcelNL\Pdk\Form\Model\Input\ToggleInput;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
+usesShared(new UsesMockPdkInstance());
 
 it('creates input', function (string $class, array $input, array $output) {
     $instance = new $class($input);

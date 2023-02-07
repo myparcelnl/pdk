@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
@@ -26,13 +27,13 @@ it(
     function (array $collection, string $path) {
         $pdk = PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-        $api  = $pdk->get(ApiServiceInterface::class);
+        $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
 
         $mock->append(new ExampleGetShipmentsResponse());
 
         /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
-        $repository = $pdk->get(ShipmentRepository::class);
+        $repository = Pdk::get(ShipmentRepository::class);
 
         $response = $repository->getShipments($collection);
         $request  = $mock->getLastRequest();

@@ -3,13 +3,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 use MyParcelNL\Sdk\src\Support\Arr;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 /**
@@ -103,10 +103,7 @@ const STANDARD_INPUT = [
     'shipments'          => null,
 ];
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
-
+usesShared(new UsesMockPdkInstance());
 it('returns correct schema', function (array $input) {
     $pdkOrder = new PdkOrder($input);
     /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */

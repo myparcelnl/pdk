@@ -3,25 +3,28 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Base\PdkEndpoint;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Action\PdkActionManager;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionManager;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(
+    new UsesEachMockPdkInstance([
+        PdkActionManager::class => autowire(MockPdkActionManager::class),
+    ])
+);
 
 it('calls pdk endpoints', function (string $action) {
-    $pdk = PdkFactory::create(
-        MockPdkConfig::create([PdkActionManager::class => autowire(MockPdkActionManager::class)])
-    );
-
     /** @var \MyParcelNL\Pdk\Base\PdkEndpoint $endpoint */
-    $endpoint = $pdk->get(PdkEndpoint::class);
+    $endpoint = Pdk::get(PdkEndpoint::class);
     $endpoint->call($action);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionManager $manager */
-    $manager  = $pdk->get(PdkActionManager::class);
+    $manager  = Pdk::get(PdkActionManager::class);
     $requests = $manager->getRequests();
 
     expect($requests->all())

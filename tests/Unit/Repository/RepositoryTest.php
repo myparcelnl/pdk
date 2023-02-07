@@ -10,26 +10,29 @@ use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Sdk\src\Model\Account\Account;
 use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesEachMockPdkInstance());
 
 it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = Pdk::get(ApiServiceInterface::class);
     $api->getMock()
         ->append(new $response());
 
     /** @var \MyParcelNL\Pdk\Base\Repository\ApiRepository $repository */
-    $repository = $pdk->get($repositoryClass);
+    $repository = Pdk::get($repositoryClass);
 
     expect($repository->{$method}(...array_values($args)))->toBeInstanceOf($expected);
 })->with([
@@ -71,12 +74,12 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 it('uses all methods of repository', function () {
     $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = Pdk::get(ApiServiceInterface::class);
     $api->getMock()
         ->append(new ExampleGetShopsResponse());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockRepository $repository */
-    $repository = $pdk->get(MockRepository::class);
+    $repository = Pdk::get(MockRepository::class);
     $repository->persist();
     $repository->persist();
 

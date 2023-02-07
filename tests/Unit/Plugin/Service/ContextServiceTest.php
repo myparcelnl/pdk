@@ -3,19 +3,20 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-it('gets context data', function (string $id, array $arguments) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
+usesShared(new UsesMockPdkInstance());
 
+it('gets context data', function (string $id, array $arguments) {
     /** @var \MyParcelNL\Pdk\Plugin\Service\ContextService $service */
-    $service = $pdk->get(ContextService::class);
+    $service = Pdk::get(ContextService::class);
 
     $context = $service->createContexts([$id], $arguments);
 
@@ -73,10 +74,8 @@ it('gets context data', function (string $id, array $arguments) {
 ]);
 
 it('handles invalid context keys', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Plugin\Service\ContextService $service */
-    $service    = $pdk->get(ContextService::class);
+    $service    = Pdk::get(ContextService::class);
     $contextBag = $service->createContexts(['random_word']);
 
     expect($contextBag->toArray())->toEqual([
