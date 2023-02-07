@@ -47,16 +47,6 @@
       <option name="QUOTE_TYPE" value="11" />
       <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
     </H2CodeStyleSettings>
-    <H2CodeStyleSettings version="6">
-      <option name="USE_GENERAL_STYLE" value="false" />
-      <option name="IDENTIFIER_CASE" value="1" />
-      <option name="CUSTOM_TYPE_CASE" value="0" />
-      <option name="ALIAS_CASE" value="1" />
-      <option name="QUOTED_IDENTIFIER_CASE" value="1" />
-      <option name="QUOTE_IDENTIFIER" value="1" />
-      <option name="QUOTE_TYPE" value="11" />
-      <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
-    </H2CodeStyleSettings>
     <HSQLCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
