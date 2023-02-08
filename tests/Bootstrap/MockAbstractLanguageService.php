@@ -7,14 +7,13 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 use MyParcelNL\Pdk\Language\Service\AbstractLanguageService;
 use RuntimeException;
-use function file_exists;
 
 class MockAbstractLanguageService extends AbstractLanguageService
 {
     /**
      * @var string
      */
-    private $language = 'en';
+    private $language = 'en-GB';
 
     /**
      * @param  \MyParcelNL\Pdk\Language\Repository\LanguageRepository $repository
