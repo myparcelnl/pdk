@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\LanguageService;
@@ -14,7 +15,6 @@ use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
-use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 
 /**
  * @property bool   $allowRetry
@@ -32,27 +32,26 @@ use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
  */
 class DeliveryOptionsConfig extends Model
 {
-    private const CARRIER_SETTINGS_IN_DELIVERY_OPTIONS = [
-        CarrierSettings::ALLOW_DELIVERY_OPTIONS,
-        CarrierSettings::ALLOW_EVENING_DELIVERY,
-        CarrierSettings::ALLOW_MONDAY_DELIVERY,
-        CarrierSettings::ALLOW_MORNING_DELIVERY,
-        CarrierSettings::ALLOW_ONLY_RECIPIENT,
-        CarrierSettings::ALLOW_PICKUP_LOCATIONS,
-        CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-        CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-        CarrierSettings::ALLOW_SIGNATURE,
-        CarrierSettings::DEFAULT_PACKAGE_TYPE,
-        CarrierSettings::DIGITAL_STAMP_DEFAULT_WEIGHT,
-        CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
-        CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
-        CarrierSettings::PRICE_ONLY_RECIPIENT,
-        CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
-        CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
-        CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP,
-        CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
-        CarrierSettings::PRICE_SIGNATURE,
-        CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
+    private const CONFIG_CARRIER_SETTINGS_MAP = [
+        'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
+        'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
+        'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
+        'allowMorningDelivery'         => CarrierSettings::ALLOW_MORNING_DELIVERY,
+        'allowOnlyRecipient'           => CarrierSettings::ALLOW_ONLY_RECIPIENT,
+        'allowPickupLocations'         => CarrierSettings::ALLOW_PICKUP_LOCATIONS,
+        'allowSameDayDelivery'         => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
+        'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
+        'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,
+        'featureShowDeliveryDate'      => CarrierSettings::SHOW_DELIVERY_DAY,
+        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
+        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
+        'priceOnlyRecipient'           => CarrierSettings::PRICE_ONLY_RECIPIENT,
+        'pricePackageTypeDigitalStamp' => CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
+        'pricePackageTypeMailbox'      => CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
+        'pricePickup'                  => CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP,
+        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
+        'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
+        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
     ];
 
     public    $attributes = [
@@ -119,111 +118,109 @@ class DeliveryOptionsConfig extends Model
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $pdkCart
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createAllCarrierSettings(PdkCart $cart): array
+    private function createAllCarrierSettings(PdkCart $pdkCart): array
     {
-        if ($cart->shippingMethod->disableDeliveryOptions) {
+        if (! $pdkCart->shippingMethod->hasDeliveryOptions) {
             return [];
         }
 
-        $carrierOptions      = AccountSettings::getCarrierOptions();
-        $carrierConfigs      = [];
-        $cartWeight          = $cart->physicalProperties->weight;
-        $mailboxWeight       = Settings::get('empty_mailbox_weight', CheckoutSettings::ID) + $cartWeight;
-        $packageWeight       = Settings::get('empty_package_weight', CheckoutSettings::ID) + $cartWeight;
-        $preferPackageType   = $cart->shippingMethod->preferPackageType;
-        $allowPackageTypes   = $cart->shippingMethod->allowPackageTypes;
-        $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
-        // check with the carrier schema (weights...) if the package type is allowed
-        // in de config packagetype, en per carrier dropoffdelay moet rekening houden met de cart
-        $carrierOptions->each(function (CarrierOptions $carrierOptions) use (&$carrierConfigs) {
-            if (! $carrierOptions->carrier->enabled || $carrierOptions->capabilities->isEmpty()) {
-                return;
+        $settings = [];
+
+        $carrierOptions = AccountSettings::getCarrierOptions();
+
+        foreach ($carrierOptions->all() as $carrierOption) {
+            // TODO: make sure only carriers that should be in the frontend are
+            //  shown. Now we'll get carriers like "bol.com" in the frontend.
+            //  Checking if the capabilities are empty in this crude way works,
+            //  but it's not ideal.
+            $hasNoCapabilities = empty(Arr::flatten($carrierOption->capabilities->toArrayWithoutNull()));
+
+            if (! $carrierOption->carrier->enabled || $hasNoCapabilities) {
+                continue;
             }
 
-            // todo get carrier settings from db, update with info from the products / lines
-            $settings = new CarrierSettings([
-                'carrierName'          => $carrierOptions->carrier->name,
-                'allowDeliveryOptions' => true,
-            ]);
+            $settings[$carrierOption->carrier->externalIdentifier] = $this->createCarrierSettings($carrierOption);
+        }
 
-            $carrierConfigs[$carrierOptions->carrier->name] = $this->createCarrierSettings($settings);
-        });
-
-        //        $carrierSettings = (new CarrierSettingsCollection([
-        //            new CarrierSettings([
-        //                'carrierName'          => 'postnl',
-        //                'allowDeliveryOptions' => true,
-        //            ]),
-        //        ]));
-
-        //        $carrierOptions->each(function (CarrierOptions $carrierOption) use ($carrierSettings, &$array) {
-        //            $settings = $carrierSettings->filter(function (CarrierSettings $carrierSettings) use ($carrierOption) {
-        //                return $carrierOption->carrier->name === $carrierSettings->carrierName;
-        //            });
-        //
-        //            if ($settings->isEmpty()) {
-        //                return;
-        //            }
-        //
-        //            $array[$carrierOption->carrier->name] = $this->createCarrierSettings($settings->first());
-        //        });
-
-        return $carrierConfigs;
+        return $settings;
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
+     * @param  \MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrierOptions
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(CarrierSettings $carrierSettings): array
+    private function createCarrierSettings(CarrierOptions $carrierOptions): array
     {
-        $settings                          = $carrierSettings->only(self::CARRIER_SETTINGS_IN_DELIVERY_OPTIONS);
-        $settings['allowShowDeliveryDate'] = $carrierSettings->getShowDeliveryDay();
+        //        $mailboxWeight = Settings::get('empty_mailbox_weight', CheckoutSettings::ID) + $cartWeight;
+        //        $packageWeight = Settings::get('empty_package_weight', CheckoutSettings::ID) + $cartWeight;
+        //
+        //        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
+        //        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
+        //        $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
 
-        return $settings
-            + $this->createDropOffData($carrierSettings)
-            + [
+        // check with the carrier schema (weights...) if the package type is allowed
+        // in de config packagetype, en per carrier dropoffdelay moet rekening houden met de cart
+
+        //        $carrierConfigs = [];
+        //
+        //        $cartWeight = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+        //            return $carry + $line->product->weight * $line->quantity;
+        //        }, 0);
+
+        $carrierSettings = new CarrierSettings(
+            Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->externalIdentifier))
+        );
+
+        $dropOff = $carrierSettings->dropOffPossibilities->getForDate();
+
+        $settings = array_map(static function ($key) use ($carrierSettings) {
+            return $carrierSettings->getAttribute($key);
+        }, self::CONFIG_CARRIER_SETTINGS_MAP);
+
+        return $settings + [
                 'deliveryDaysWindow' => $carrierSettings->dropOffPossibilities->deliveryDaysWindow,
                 'dropOffDelay'       => $carrierSettings->dropOffPossibilities->dropOffDelay,
+                'cutoffTime'         => $dropOff->cutoffTime ?? '17:00',
+                'cutoffTimeSameDay'  => $dropOff->sameDayCutoffTime ?? '10:00',
             ];
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
-     *
-     * @return array
-     */
-    private function createDropOffData(CarrierSettings $carrierSettings): array
-    {
-        $array = [];
-
-        $carrierSettings->dropOffPossibilities->dropOffDays->each(function (DropOffDay $dropOffDay) use (&$array) {
-            if (! $dropOffDay->dispatch) {
-                return;
-            }
-
-            $array['dropOffDays'][] = $dropOffDay->weekday;
-
-            if ($dropOffDay->cutoffTime) {
-                $key = (DropOffDay::WEEKDAY_SATURDAY === $dropOffDay->weekday)
-                    ? 'saturdayCutoffTime'
-                    : 'cutoffTime';
-
-                $array[$key] = $dropOffDay->cutoffTime;
-            }
-
-            if ($dropOffDay->sameDayCutoffTime) {
-                $array['cutoffTimeSameDay'] = $dropOffDay->sameDayCutoffTime;
-            }
-        });
-
-        return $array;
-    }
+    //    /**
+    //     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
+    //     *
+    //     * @return array
+    //     */
+    //    private function createDropOffData(CarrierSettings $carrierSettings): array
+    //    {
+    //        $array = [];
+    //
+    //        $carrierSettings->dropOffPossibilities->dropOffDays->each(function (DropOffDay $dropOffDay) use (&$array) {
+    //            if (! $dropOffDay->dispatch) {
+    //                return;
+    //            }
+    //
+    //            $array['dropOffDays'][] = $dropOffDay->weekday;
+    //
+    //            if ($dropOffDay->cutoffTime) {
+    //                $key = (DropOffDay::WEEKDAY_SATURDAY === $dropOffDay->weekday)
+    //                    ? 'saturdayCutoffTime'
+    //                    : 'cutoffTime';
+    //
+    //                $array[$key] = $dropOffDay->cutoffTime;
+    //            }
+    //
+    //            if ($dropOffDay->sameDayCutoffTime) {
+    //                $array['cutoffTimeSameDay'] = $dropOffDay->sameDayCutoffTime;
+    //            }
+    //        });
+    //
+    //        return $array;
+    //    }
 }

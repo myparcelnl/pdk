@@ -5,7 +5,7 @@
   "shopId": null,
   "accountId": null,
   "invoiceAddress": null,
-  "language": "nl-NL",
+  "language": "nl",
   "orderDate": "2023-01-01 00:00:00",
   "orderLines": [
     {

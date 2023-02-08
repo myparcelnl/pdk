@@ -9,12 +9,31 @@ use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 
 class SchemaRepository extends Repository
 {
+    /**
+     * @param  null|string $carrier
+     * @param  null|string $shippingZone
+     * @param  null|string $packageType
+     * @param  null|string $deliveryType
+     *
+     * @return string
+     */
+    public function getKey(
+        ?string $carrier = null,
+        ?string $shippingZone = null,
+        ?string $packageType = null,
+        ?string $deliveryType = null
+    ): string {
+        return implode(
+            '/',
+            [$carrier ?? '*', $shippingZone ?? '*', $packageType ?? '*', $deliveryType ?? '*']
+        );
+    }
+
     /**
      * @param  null|string $carrier
      * @param  null|string $cc
@@ -55,23 +74,14 @@ class SchemaRepository extends Repository
     }
 
     /**
-     * @param  null|string $carrier
-     * @param  null|string $shippingZone
-     * @param  null|string $packageType
-     * @param  null|string $deliveryType
+     * @param  array  $schema
+     * @param  string $path
      *
-     * @return string
+     * @return array
      */
-    public function getKey(
-        ?string $carrier = null,
-        ?string $shippingZone = null,
-        ?string $packageType = null,
-        ?string $deliveryType = null
-    ): string {
-        return implode(
-            '/',
-            [$carrier ?? '*', $shippingZone ?? '*', $packageType ?? '*', $deliveryType ?? '*']
-        );
+    public function getValidOptions(array $schema, string $path): array
+    {
+        return $this->handleOption($schema, $path, []);
     }
 
     /**
@@ -84,17 +94,6 @@ class SchemaRepository extends Repository
     public function validateOption(array $schema, string $path, $value): bool
     {
         return (bool) $this->handleOption($schema, $path, $value);
-    }
-
-    /**
-     * @param  array  $schema
-     * @param  string $path
-     *
-     * @return array the values in the enum for this option, empty array otherwise
-     */
-    public function validOptions(array $schema, string $path): array
-    {
-        return $this->handleOption($schema, $path, []);
     }
 
     /**
@@ -113,10 +112,6 @@ class SchemaRepository extends Repository
             $result = Arr::get($schema, $path);
 
             if (! $result) {
-//                DefaultLogger::warning('Schema does not contain path', [
-//                    'path'   => $path,
-//                    'schema' => Arr::get($schema, 'description') ?: 'unknown',
-//                ]);
                 return is_array($value) ? [] : false;
             }
 

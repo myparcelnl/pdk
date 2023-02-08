@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 
-abstract class OrderPropertiesValidator implements SchemaInterface
+abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOptionsValidatorInterface
 {
     private const DELIVERY_OPTIONS_KEY = 'properties.deliveryOptions.properties';
     private const SHIPMENT_OPTIONS_KEY = self::DELIVERY_OPTIONS_KEY . '.shipmentOptions.properties';
@@ -25,16 +25,25 @@ abstract class OrderPropertiesValidator implements SchemaInterface
         $this->repository = $repository;
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveAgeCheck(): bool
     {
         return $this->canHaveOption(sprintf('%s.ageCheck', self::SHIPMENT_OPTIONS_KEY));
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveDate(): bool
     {
         return $this->canHaveOption(sprintf('%s.date', self::DELIVERY_OPTIONS_KEY));
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveEveningDelivery(): bool
     {
         return $this->canHaveOption(sprintf('%s.morningDelivery', self::DELIVERY_OPTIONS_KEY));
@@ -50,36 +59,57 @@ abstract class OrderPropertiesValidator implements SchemaInterface
         return $this->canHaveOption(sprintf('%s.insurance', self::SHIPMENT_OPTIONS_KEY), $amount);
     }
 
-    public function insuranceAmounts(): array
-    {
-        return $this->repository->validOptions($this->getSchema(), sprintf('%s.insurance', self::SHIPMENT_OPTIONS_KEY));
-    }
-
+    /**
+     * @return bool
+     */
     public function canHaveLargeFormat(): bool
     {
         return $this->canHaveOption(sprintf('%s.largeFormat', self::SHIPMENT_OPTIONS_KEY));
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveMorningDelivery(): bool
     {
         return $this->canHaveOption(sprintf('%s.morningDelivery', self::DELIVERY_OPTIONS_KEY));
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveMultiCollo(): bool
     {
         return $this->canHaveOption('properties.multiCollo');
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveOnlyRecipient(): bool
     {
         return $this->canHaveOption(sprintf('%s.onlyRecipient', self::SHIPMENT_OPTIONS_KEY));
     }
 
+    /**
+     * @return bool
+     */
+    public function canHavePickup(): bool
+    {
+        return $this->canHaveOption(sprintf('%s.pickup', self::DELIVERY_OPTIONS_KEY));
+    }
+
+    /**
+     * @return bool
+     */
     public function canHaveSameDayDelivery(): bool
     {
         return $this->canHaveOption(sprintf('%s.sameDayDelivery', self::DELIVERY_OPTIONS_KEY));
     }
 
+    /**
+     * @return bool
+     */
     public function canHaveSignature(): bool
     {
         return $this->canHaveOption(sprintf('%s.signature', self::SHIPMENT_OPTIONS_KEY));
@@ -93,6 +123,25 @@ abstract class OrderPropertiesValidator implements SchemaInterface
     public function canHaveWeight(?int $weight = 10): bool
     {
         return $this->canHaveOption('properties.physicalProperties.properties.weight', $weight);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedInsuranceAmounts(): array
+    {
+        return $this->repository->getValidOptions(
+            $this->getSchema(),
+            sprintf('%s.insurance', self::SHIPMENT_OPTIONS_KEY)
+        );
+    }
+
+    public function getAllowedPackageTypes(): array
+    {
+        return $this->repository->getValidOptions(
+            $this->getSchema(),
+            self::SHIPMENT_OPTIONS_KEY . '.properties.packageType'
+        );
     }
 
     /**

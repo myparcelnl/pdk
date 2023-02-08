@@ -105,11 +105,13 @@ class Collection extends SdkCollection implements Arrayable
     /**
      * @param  null|string $class
      *
-     * @return void
+     * @return self
      */
-    public function setCast(?string $class): void
+    public function setCast(?string $class): self
     {
         $this->cast = $class;
+        $this->castItems();
+        return $this;
     }
 
     /**

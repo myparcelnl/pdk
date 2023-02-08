@@ -36,10 +36,6 @@ class Settings extends Model
         $this->casts = $this->attributes;
         parent::__construct($data);
 
-        foreach (array_keys($this->getAttributes()) as $key) {
-            $this->guarded[$key] = $this->{$key};
-        }
-
         $this->carrier->id = CarrierSettings::ID;
         $this->carrier->setCast(CarrierSettings::class);
     }

@@ -30,7 +30,7 @@
   },
   "label": {
     "id": "label",
-    "description": null,
+    "description": "description",
     "format": "A4",
     "output": "open",
     "position": 1,

@@ -34,6 +34,23 @@ class DropOffPossibilities extends Model
     ];
 
     /**
+     * @param  \DateTimeImmutable|null $date
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\DropOffDay|null
+     */
+    public function getForDate(DateTimeImmutable $date = null): ?DropOffDay
+    {
+        $dateTime = $date ?? new DateTimeImmutable('today');
+
+        return $this->dropOffDays->first(function (DropOffDay $dropOffDay) use ($dateTime) {
+            $dateMatches    = $dropOffDay->date === $dateTime;
+            $weekdayMatches = $dropOffDay->weekday === (int) $dateTime->format('N');
+
+            return $dropOffDay->dispatch && ($dateMatches || $weekdayMatches);
+        });
+    }
+
+    /**
      * @param  null|\DateTimeImmutable $date
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection

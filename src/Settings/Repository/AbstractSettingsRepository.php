@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Repository;
 
-use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Arrayable;
@@ -82,10 +81,6 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
      */
     public function storeSettings($settings): void
     {
-        if (! $settings instanceof AbstractSettingsModel && ! $settings instanceof SettingsModelCollection) {
-            throw new InvalidArgumentException('Invalid argument type');
-        }
-
         $this->store($settings->id, $settings->toStorableArray());
     }
 

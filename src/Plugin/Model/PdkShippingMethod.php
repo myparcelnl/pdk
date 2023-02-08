@@ -8,24 +8,27 @@ use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|string                             $packageType
- * @property null|\MyParcelNL\Pdk\Base\Model\Address $shippingAddress
+ * @property bool    $hasDeliveryOptions
+ * @property int     $minimumDropOffDelay
+ * @property string  $preferPackageType
+ * @property array   $allowPackageTypes
+ * @property Address $shippingAddress
  */
 class PdkShippingMethod extends Model
 {
     protected $attributes = [
-        'disableDeliveryOptions' => false,
-        'minimumDropOffDelay'    => null,
-        'preferPackageType'      => null,
-        'allowPackageTypes'      => null,
-        'shippingAddress'        => null,
+        'hasDeliveryOptions'  => true,
+        'minimumDropOffDelay' => null,
+        'preferPackageType'   => null,
+        'allowPackageTypes'   => [],
+        'shippingAddress'     => Address::class,
     ];
 
     protected $casts      = [
-        'disableDeliveryOptions' => 'bool',
-        'minimumDropOffDelay'    => 'int',
-        'preferPackageType'      => 'string',
-        'allowPackageTypes'      => 'array',
-        'shippingAddress'        => Address::class,
+        'hasDeliveryOptions'  => 'bool',
+        'minimumDropOffDelay' => 'int',
+        'preferPackageType'   => 'string',
+        'allowPackageTypes'   => 'array',
+        'shippingAddress'     => Address::class,
     ];
 }

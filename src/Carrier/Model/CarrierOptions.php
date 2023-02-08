@@ -6,25 +6,24 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection;
 
 /**
- * @property \MyParcelNL\Pdk\Carrier\Model\Carrier                            $carrier
- * @property \MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection $capabilities
- * @property \MyParcelNL\Pdk\Carrier\Collection\CarrierCapabilitiesCollection $returnCapabilities
+ * @property \MyParcelNL\Pdk\Carrier\Model\Carrier             $carrier
+ * @property \MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities $capabilities
+ * @property \MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities $returnCapabilities
  */
 class CarrierOptions extends Model
 {
     protected $attributes = [
         'carrier'            => Carrier::class,
-        'capabilities'       => CarrierCapabilitiesCollection::class,
-        'returnCapabilities' => CarrierCapabilitiesCollection::class,
+        'capabilities'       => CarrierCapabilities::class,
+        'returnCapabilities' => CarrierCapabilities::class,
     ];
 
     protected $casts      = [
         'carrier'            => Carrier::class,
-        'capabilities'       => CarrierCapabilitiesCollection::class,
-        'returnCapabilities' => CarrierCapabilitiesCollection::class,
+        'capabilities'       => CarrierCapabilities::class,
+        'returnCapabilities' => CarrierCapabilities::class,
     ];
 
     /**

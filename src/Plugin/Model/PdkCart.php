@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Model;
 
-use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
+use Exception;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
-use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 
 /**
  * @property string                                                   $externalIdentifier
@@ -27,7 +27,7 @@ class PdkCart extends Model
 {
     protected $attributes = [
         'externalIdentifier'    => null,
-        'lines'                 => null,
+        'lines'                 => PdkOrderLineCollection::class,
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
         'shipmentVat'           => 0,
@@ -37,7 +37,6 @@ class PdkCart extends Model
         'totalPrice'            => 0,
         'totalPriceAfterVat'    => 0,
         'totalVat'              => 0,
-        'physicalProperties'    => null,
         'shippingMethod'        => null,
     ];
 
@@ -53,69 +52,76 @@ class PdkCart extends Model
         'totalPrice'            => 'int',
         'totalPriceAfterVat'    => 'int',
         'totalVat'              => 'int',
-        'physicalProperties'    => PhysicalProperties::class,
         'shippingMethod'        => PdkShippingMethod::class,
     ];
 
-    public function __construct(?array $data)
+    /**
+     * @param  null|array $data
+     */
+    public function __construct(?array $data = null)
     {
         parent::__construct($data);
-        try {
-            $this->updatePropertiesFromLines();
-        } catch (InvalidCastException $e) {
-            // todo log?
-        }
+        $this->updateShippingMethod();
     }
 
     /**
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @param  mixed $value
+     *
+     * @return self
      */
-    private function updatePropertiesFromLines(): void
+    public function setShippingMethodAttribute($value): self
     {
-        $weight                 = 0.0;
-        $mailboxPercentage      = 0.0;
-        $allowedPackageTypes    = ['letter', 'digital_stamp', 'mailbox', 'package']; // todo use constants
-        $minimumDropOffDelay    = 0;
-        $disableDeliveryOptions = false;
-        foreach ($this->lines as $line) {
-            if (! $line instanceof PdkOrderLine) {
-                $line = new PdkOrderLine($line);
-            }
-            $quantity            = $line->quantity;
-            $weight              += $quantity * $line->product->weight;
-            $fitInMailbox        = (int) $line->product->settings->fitInMailbox;
-            $minimumDropOffDelay = max($minimumDropOffDelay, $line->product->settings->dropOffDelay);
-            if ($mailboxPercentage <= 100.0 && 0 !== $fitInMailbox) {
-                $mailboxPercentage += $quantity * (100.0 / $fitInMailbox);
-            }
-            foreach ($allowedPackageTypes as $index => $allowedPackageType) {
-                if ($allowedPackageType === $line->product->settings->packageType) {
-                    break;
-                }
-                unset($allowedPackageTypes[$index]);
-            }
-            if (1 === (int) $line->product->settings->disableDeliveryOptions) {
-                $disableDeliveryOptions = true;
-            }
-        }
-        if ($mailboxPercentage > 100.0 && in_array('mailbox', $allowedPackageTypes)) {
-            unset($allowedPackageTypes[array_search('mailbox', $allowedPackageTypes)]);
-        }
-        //        $this->lines->each(function (PdkOrderLine $line) { // todo use the correct pattern, not foreach
-        //        });
+        $this->attributes['shippingMethod'] = $value;
+        $this->updateShippingMethod();
+        return $this;
+    }
 
-        $attributes           = $this->shippingMethod->toArray(); // todo when the model is fixed, just update the props directly
-        $this->shippingMethod = [
-                'disableDeliveryOptions' => $disableDeliveryOptions,
-                'minimumDropOffDelay'    => $minimumDropOffDelay,
-                'allowPackageTypes'      => array_values($allowedPackageTypes), // todo use the packagetypecollection?
-                'preferPackageType'      => reset($allowedPackageTypes),
-            ] + $attributes;
-        $this->setAttribute(
-            'physicalProperties',
-            new PhysicalProperties([
-                'weight' => $weight,
-            ])
-        );
+    private function updateShippingMethod(): void
+    {
+        try {
+            $mailboxPercentage      = 0;
+            $allowedPackageTypes    = ['letter', 'digital_stamp', 'mailbox', 'package']; // todo use constants
+            $minimumDropOffDelay    = 0;
+            $disableDeliveryOptions = false;
+
+            foreach ($this->lines->all() as $line) {
+                /** @var \MyParcelNL\Pdk\Plugin\Model\PdkOrderLine $line */
+
+                $fitInMailbox = $line->product->settings->fitInMailbox;
+
+                $minimumDropOffDelay = max($minimumDropOffDelay, $line->product->settings->dropOffDelay);
+
+                if ($mailboxPercentage <= 100 && 0 !== $fitInMailbox) {
+                    $mailboxPercentage += $line * (100 / $fitInMailbox);
+                }
+
+                foreach ($allowedPackageTypes as $index => $allowedPackageType) {
+                    if ($allowedPackageType === $line->product->settings->packageType) {
+                        break;
+                    }
+                    unset($allowedPackageTypes[$index]);
+                }
+
+                if (1 === (int) $line->product->settings->disableDeliveryOptions) {
+                    $disableDeliveryOptions = true;
+                }
+            }
+
+            if ($mailboxPercentage > 100 && in_array('mailbox', $allowedPackageTypes)) {
+                unset($allowedPackageTypes[array_search('mailbox', $allowedPackageTypes)]);
+            }
+
+            $this->shippingMethod->fill(
+                [
+                    'disableDeliveryOptions' => $disableDeliveryOptions,
+                    'minimumDropOffDelay'    => $minimumDropOffDelay,
+                    'allowPackageTypes'      => array_values($allowedPackageTypes),
+                    // todo use the packagetypecollection?
+                    'preferPackageType'      => reset($allowedPackageTypes),
+                ]
+            );
+        } catch (Exception $e) {
+            DefaultLogger::error($e->getMessage(), ['exception' => $e]);
+        }
     }
 }

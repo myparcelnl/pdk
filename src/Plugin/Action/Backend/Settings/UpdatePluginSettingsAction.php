@@ -42,21 +42,9 @@ class UpdatePluginSettingsAction implements ActionInterface
             throw new InvalidArgumentException('Request body is empty');
         }
 
-        $settings = (new Settings($pluginSettings));
+        $settings = new Settings($pluginSettings);
 
         foreach (array_keys($pluginSettings) as $editedSettingsId) {
-            // if (CarrierSettings::ID === $editedSettingsId) {
-            //     /**
-            //      * @var  $carrierName     string
-            //      * @var  $carrierSettings \MyParcelNL\Pdk\Settings\Model\CarrierSettings
-            //      */
-            //     foreach ($settings->getAttribute($editedSettingsId) as $carrierName => $carrierSettings) {
-            //         $carrierSettings->setAttribute('carrierName', $carrierName);
-            //         $this->settingsRepository->storeSettings($carrierSettings);
-            //     }
-            //     continue;
-            // }
-
             $this->settingsRepository->storeSettings($settings->getAttribute($editedSettingsId));
         }
 

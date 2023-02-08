@@ -118,7 +118,7 @@ class ShipmentOptionsService
         $fromAmount = 100 * ($this->carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0);
         $grandTotal = $this->order->getOrderPriceAfterVat();
 
-        $availableInsuranceAmounts = $validator->insuranceAmounts();
+        $availableInsuranceAmounts = $validator->getAllowedInsuranceAmounts();
 
         if ($grandTotal < $fromAmount) {
             return $this->getAllowedValueNearThreshold(0, $availableInsuranceAmounts);
