@@ -94,7 +94,7 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
      */
     protected function getKeyPrefix(): string
     {
-        return 'settings.';
+        return 'settings_';
     }
 
     /**

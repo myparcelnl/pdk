@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Storage;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
 
-class MemoryCacheStorage extends AbstractStorage
+class MemoryCacheStorage implements StorageInterface
 {
     protected $data = [];
 
@@ -28,6 +28,16 @@ class MemoryCacheStorage extends AbstractStorage
     public function get(string $storageKey)
     {
         return Arr::get($this->data, $storageKey);
+    }
+
+    /**
+     * @param  string $storageKey
+     *
+     * @return bool
+     */
+    public function has(string $storageKey): bool
+    {
+        return Arr::has($this->data, $storageKey);
     }
 
     /**
