@@ -8,6 +8,7 @@ use Exception;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
  * @property string                                                   $externalIdentifier
@@ -80,7 +81,12 @@ class PdkCart extends Model
     {
         try {
             $mailboxPercentage      = 0;
-            $allowedPackageTypes    = ['letter', 'digital_stamp', 'mailbox', 'package']; // todo use constants
+            $allowedPackageTypes    = [
+                DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            ];
             $minimumDropOffDelay    = 0;
             $disableDeliveryOptions = false;
 
@@ -92,7 +98,7 @@ class PdkCart extends Model
                 $minimumDropOffDelay = max($minimumDropOffDelay, $line->product->settings->dropOffDelay);
 
                 if ($mailboxPercentage <= 100 && 0 !== $fitInMailbox) {
-                    $mailboxPercentage += $line * (100 / $fitInMailbox);
+                    $mailboxPercentage += $line->quantity * (100 / $fitInMailbox);
                 }
 
                 foreach ($allowedPackageTypes as $index => $allowedPackageType) {
@@ -107,8 +113,8 @@ class PdkCart extends Model
                 }
             }
 
-            if ($mailboxPercentage > 100 && in_array('mailbox', $allowedPackageTypes)) {
-                unset($allowedPackageTypes[array_search('mailbox', $allowedPackageTypes)]);
+            if ($mailboxPercentage > 100 && in_array(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, $allowedPackageTypes, true)) {
+                unset($allowedPackageTypes[array_search(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, $allowedPackageTypes, true)]);
             }
 
             $this->shippingMethod->fill(
