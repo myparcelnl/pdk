@@ -80,13 +80,16 @@ class PdkCart extends Model
     private function updateShippingMethod(): void
     {
         try {
-            $mailboxPercentage      = 0;
+            /**
+             * The order of the package types is important, incompatible types will be unset starting from the beginning.
+             */
             $allowedPackageTypes    = [
                 DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                 DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
                 DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                 DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
             ];
+            $mailboxPercentage      = 0.0;
             $minimumDropOffDelay    = 0;
             $disableDeliveryOptions = false;
 
@@ -97,8 +100,8 @@ class PdkCart extends Model
 
                 $minimumDropOffDelay = max($minimumDropOffDelay, $line->product->settings->dropOffDelay);
 
-                if ($mailboxPercentage <= 100 && 0 !== $fitInMailbox) {
-                    $mailboxPercentage += $line->quantity * (100 / $fitInMailbox);
+                if ($mailboxPercentage <= 100.0 && 0 !== $fitInMailbox) {
+                    $mailboxPercentage += $line->quantity * (100.0 / $fitInMailbox);
                 }
 
                 foreach ($allowedPackageTypes as $index => $allowedPackageType) {
@@ -113,19 +116,28 @@ class PdkCart extends Model
                 }
             }
 
-            if ($mailboxPercentage > 100 && in_array(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, $allowedPackageTypes, true)) {
-                unset($allowedPackageTypes[array_search(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, $allowedPackageTypes, true)]);
+            if ($mailboxPercentage > 100.0
+                && in_array(
+                    DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    $allowedPackageTypes,
+                    true
+                )) {
+                unset(
+                    $allowedPackageTypes[array_search(
+                        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        $allowedPackageTypes,
+                        true
+                    )]
+                );
             }
 
-            $this->shippingMethod->fill(
-                [
-                    'disableDeliveryOptions' => $disableDeliveryOptions,
-                    'minimumDropOffDelay'    => $minimumDropOffDelay,
-                    'allowPackageTypes'      => array_values($allowedPackageTypes),
-                    // todo use the packagetypecollection?
-                    'preferPackageType'      => reset($allowedPackageTypes),
-                ]
-            );
+            $this->shippingMethod->fill([
+                'disableDeliveryOptions' => $disableDeliveryOptions,
+                'minimumDropOffDelay'    => $minimumDropOffDelay,
+                'allowPackageTypes'      => array_values($allowedPackageTypes),
+                // todo use the shippingmethodpackagetypecollection?
+                'preferPackageType'      => reset($allowedPackageTypes),
+            ]);
         } catch (Exception $e) {
             DefaultLogger::error($e->getMessage(), ['exception' => $e]);
         }

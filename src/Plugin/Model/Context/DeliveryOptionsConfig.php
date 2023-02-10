@@ -94,7 +94,7 @@ class DeliveryOptionsConfig extends Model
             $cart = $data['cart'];
 
             $this->fill([
-                'packageType'                => $cart->shippingMethod->packageType,
+                'packageType'                => $cart->shippingMethod->preferPackageType,
                 'basePrice'                  => $cart->shipmentPrice,
                 'isUsingSplitAddressFields'  => Settings::get(
                     CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS,
