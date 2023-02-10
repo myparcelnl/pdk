@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
+use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
@@ -15,6 +16,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
+use MyParcelNL\WooCommerce\Pdk\Service\WcTaxService;
 
 /**
  * @property bool   $allowRetry
@@ -144,7 +146,10 @@ class DeliveryOptionsConfig extends Model
                 continue;
             }
 
-            $settings[$carrierOption->carrier->externalIdentifier] = $this->createCarrierSettings($carrierOption);
+            $settings[$carrierOption->carrier->externalIdentifier] = $this->createCarrierSettings(
+                $carrierOption,
+                $pdkCart
+            );
         }
 
         return $settings;
@@ -152,43 +157,51 @@ class DeliveryOptionsConfig extends Model
 
     /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrierOptions
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart         $pdkCart
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(CarrierOptions $carrierOptions): array
+    private function createCarrierSettings(CarrierOptions $carrierOptions, PdkCart $pdkCart): array
     {
+        //        $cartWeight    = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+        //            return $carry + $line->product->weight * $line->quantity;
+        //        }, 0);
         //        $mailboxWeight = Settings::get('empty_mailbox_weight', CheckoutSettings::ID) + $cartWeight;
         //        $packageWeight = Settings::get('empty_package_weight', CheckoutSettings::ID) + $cartWeight;
         //
+        //        TODO check if the preferred package type is allowed regarding the weight by this carrier
         //        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
         //        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
-        //        $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
-
-        // check with the carrier schema (weights...) if the package type is allowed
-        // in de config packagetype, en per carrier dropoffdelay moet rekening houden met de cart
-
-        //        $carrierConfigs = [];
-        //
-        //        $cartWeight = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-        //            return $carry + $line->product->weight * $line->quantity;
-        //        }, 0);
+        $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
 
         $carrierSettings = new CarrierSettings(
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->externalIdentifier))
         );
 
         $dropOff = $carrierSettings->dropOffPossibilities->getForDate();
+        $taxService = new WcTaxService();
 
-        $settings = array_map(static function ($key) use ($carrierSettings) {
-            return $carrierSettings->getAttribute($key);
+        $settings = array_map(static function ($key) use ($carrierSettings, $taxService) {
+            try {
+                $value = $carrierSettings->getAttribute($key);
+            } catch (InvalidCastException $e) {
+                return null;
+            }
+            if (0 === strpos($key, 'price')) {
+                return $taxService->getShippingDisplayPrice((float) $value);
+            }
+            return $value;
         }, self::CONFIG_CARRIER_SETTINGS_MAP);
 
         return $settings + [
-                'deliveryDaysWindow' => $carrierSettings->dropOffPossibilities->deliveryDaysWindow,
-                'dropOffDelay'       => $carrierSettings->dropOffPossibilities->dropOffDelay,
-                'cutoffTime'         => $dropOff->cutoffTime ?? '17:00',
-                'cutoffTimeSameDay'  => $dropOff->sameDayCutoffTime ?? '10:00',
+                'deliveryDaysWindow'   => $carrierSettings->dropOffPossibilities->deliveryDaysWindow,
+                'dropOffDelay'         => max(
+                    $minimumDropOffDelay,
+                    $carrierSettings->dropOffPossibilities->dropOffDelay
+                ),
+                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) && 0 === $minimumDropOffDelay,
+                'cutoffTime'           => $dropOff->cutoffTime ?? '17:00',
+                'cutoffTimeSameDay'    => $dropOff->sameDayCutoffTime ?? '10:00',
             ];
     }
 
