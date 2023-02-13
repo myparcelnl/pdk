@@ -13,10 +13,10 @@ use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
+use MyParcelNL\Pdk\Plugin\Service\TaxService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
-use MyParcelNL\WooCommerce\Pdk\Service\WcTaxService;
 
 /**
  * @property bool   $allowRetry
@@ -179,7 +179,7 @@ class DeliveryOptionsConfig extends Model
         );
 
         $dropOff = $carrierSettings->dropOffPossibilities->getForDate();
-        $taxService = new WcTaxService();
+        $taxService = Pdk::get(TaxService::class);
 
         $settings = array_map(static function ($key) use ($carrierSettings, $taxService) {
             try {
