@@ -6,5 +6,5 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 
 abstract class TaxService implements TaxServiceInterface
 {
-    abstract public function getShippingDisplayPrice(float $value): float;
+    abstract public function getShippingDisplayPrice(float $basePrice): float;
 }
