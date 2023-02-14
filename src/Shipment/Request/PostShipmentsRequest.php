@@ -208,7 +208,7 @@ class PostShipmentsRequest extends Request
                 'delivery_date' => $shipment->deliveryOptions->getDateAsString(),
                 'insurance'     => $shipmentOptions->insurance
                     ? [
-                        'amount'   => $shipmentOptions->insurance * 100,
+                        'amount'   => $shipmentOptions->insurance,
                         'currency' => 'EUR',
                     ] : null,
             ] + $options
