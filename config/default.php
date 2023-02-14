@@ -12,6 +12,8 @@ use MyParcelNL\Pdk\Base\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
+use MyParcelNL\Pdk\Frontend\Service\ScriptService;
+use MyParcelNL\Pdk\Frontend\Service\ScriptServiceInterface;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
 use MyParcelNL\Pdk\Plugin\Api\Backend\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Api\Frontend\FrontendEndpointServiceInterface;
@@ -58,10 +60,16 @@ return [
 
     'rootDir' => value(__DIR__ . '/../'),
 
+    /**
+     * CDN URL to use for frontend dependencies.
+     */
+    'baseCdnUrl' => 'https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename',
+
     ApiServiceInterface::class      => autowire(MyParcelApiService::class),
     ContextServiceInterface::class  => autowire(ContextService::class),
     CurrencyServiceInterface::class => autowire(CurrencyService::class),
     RenderServiceInterface::class   => autowire(RenderService::class),
+    ScriptServiceInterface::class   => autowire(ScriptService::class),
     StorageInterface::class         => autowire(MemoryCacheStorage::class),
     WeightServiceInterface::class   => autowire(WeightService::class),
 
