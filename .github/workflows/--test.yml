@@ -7,6 +7,8 @@ jobs:
   coverage:
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v3
+
       - name: 'Handle coverage cache'
         uses: actions/cache@v3
         id: cache-coverage
