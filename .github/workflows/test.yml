@@ -1,0 +1,25 @@
+name: '🔸 Run tests 🧪'
+
+on:
+  workflow_dispatch:
+
+  repository_dispatch:
+    types: [test-command]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.pull_request.head.ref || github.ref }}
+      - uses: ./.github/actions/test
+
+  coverage:
+    needs: test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.pull_request.head.ref || github.ref }}
+      - uses: ./.github/actions/upload-coverage

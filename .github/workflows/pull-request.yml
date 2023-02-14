@@ -11,5 +11,14 @@ concurrency:
 
 jobs:
   test:
-    uses: ./.github/workflows/--test.yml
-    secrets: inherit
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test
+
+  coverage:
+    needs: test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/upload-coverage
