@@ -30,6 +30,8 @@ use MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface;
 use MyParcelNL\Pdk\Plugin\Webhook\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Shipment\Service\DropOffService;
+use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use Psr\Log\LoggerInterface;
@@ -58,7 +60,7 @@ return [
 
     'mode' => env('PDK_MODE', Pdk::MODE_PRODUCTION),
 
-    'rootDir' => value(__DIR__ . '/../'),
+    'rootDir'    => value(__DIR__ . '/../'),
 
     /**
      * CDN URL to use for frontend dependencies.
@@ -68,6 +70,7 @@ return [
     ApiServiceInterface::class      => autowire(MyParcelApiService::class),
     ContextServiceInterface::class  => autowire(ContextService::class),
     CurrencyServiceInterface::class => autowire(CurrencyService::class),
+    DropOffServiceInterface::class  => autowire(DropOffService::class),
     RenderServiceInterface::class   => autowire(RenderService::class),
     ScriptServiceInterface::class   => autowire(ScriptService::class),
     StorageInterface::class         => autowire(MemoryCacheStorage::class),

@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Plugin\Service\TaxService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
+use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 
 /**
  * @property bool   $allowRetry
@@ -178,7 +179,11 @@ class DeliveryOptionsConfig extends Model
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->externalIdentifier))
         );
 
-        $dropOff = $carrierSettings->dropOffPossibilities->getForDate();
+        /** @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $dropOffService */
+        $dropOffService = Pdk::get(DropOffServiceInterface::class);
+        $dropOff        = $dropOffService->getForDate($carrierSettings);
+
+        /** @var TaxService $taxService */
         $taxService = Pdk::get(TaxService::class);
 
         $settings = array_map(static function ($key) use ($carrierSettings, $taxService) {

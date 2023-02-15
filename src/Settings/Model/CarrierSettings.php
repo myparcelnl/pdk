@@ -74,6 +74,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const CUTOFF_TIME                             = 'cutoffTime';
     public const CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
     public const DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
+    public const DELIVERY_DAYS_WINDOW                    = 'deliveryDaysWindow';
     public const DELIVERY_OPTIONS_CUSTOM_CSS             = 'deliveryOptionsCustomCss';
     public const DELIVERY_OPTIONS_DISPLAY                = 'deliveryOptionsDisplay';
     public const DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS = 'deliveryOptionsEnabledForBackorders';
@@ -122,6 +123,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::CUTOFF_TIME                             => null,
         self::CUTOFF_TIME_SAME_DAY                    => null,
         self::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        self::DELIVERY_DAYS_WINDOW                    => 7,
         self::DELIVERY_OPTIONS_DISPLAY                => null,
         self::DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS => false,
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 0,
