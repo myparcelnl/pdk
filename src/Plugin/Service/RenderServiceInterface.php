@@ -48,7 +48,7 @@ interface RenderServiceInterface
      * @return string
      * @noinspection PhpUnused
      */
-    public function renderOrderCard(PdkOrder $order): string;
+    public function renderOrderBox(PdkOrder $order): string;
 
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order

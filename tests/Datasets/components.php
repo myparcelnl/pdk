@@ -42,10 +42,10 @@ dataset('components', [
         'views'    => MockAbstractViewService::ALL_PDK_PAGES,
     ],
 
-    'order card' => [
+    'order box' => [
         'callback' => function () {
             return function () {
-                return RenderService::renderOrderCard(new PdkOrder(['externalIdentifier' => 'P00924872']));
+                return RenderService::renderOrderBox(new PdkOrder(['externalIdentifier' => 'P00924872']));
             };
         },
         'views'    => [MockAbstractViewService::PAGE_ORDER],

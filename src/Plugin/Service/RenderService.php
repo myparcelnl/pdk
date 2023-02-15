@@ -31,7 +31,7 @@ class RenderService implements RenderServiceInterface
     protected const COMPONENT_INIT_SCRIPT       = 'init';
     protected const COMPONENT_MODALS            = 'Modals';
     protected const COMPONENT_NOTIFICATIONS     = 'Notifications';
-    protected const COMPONENT_ORDER_CARD        = 'OrderCard';
+    protected const COMPONENT_ORDER_BOX         = 'OrderBox';
     protected const COMPONENT_ORDER_LIST_COLUMN = 'OrderListColumn';
     protected const COMPONENT_PLUGIN_SETTINGS   = 'PluginSettings';
     protected const COMPONENT_PRODUCT_SETTINGS  = 'ProductSettings';
@@ -127,9 +127,9 @@ class RenderService implements RenderServiceInterface
      * @return string
      * @noinspection PhpUnused
      */
-    public function renderOrderCard(PdkOrder $order): string
+    public function renderOrderBox(PdkOrder $order): string
     {
-        return $this->renderComponent(self::COMPONENT_ORDER_CARD, [
+        return $this->renderComponent(self::COMPONENT_ORDER_BOX, [
             Context::ID_ORDER_DATA,
         ], ['order' => (new ShipmentOptionsService($order))->calculate()]);
     }
@@ -283,7 +283,7 @@ class RenderService implements RenderServiceInterface
             case self::COMPONENT_NOTIFICATIONS:
                 return $this->viewService->hasNotifications();
 
-            case self::COMPONENT_ORDER_CARD:
+            case self::COMPONENT_ORDER_BOX:
                 return $this->viewService->isOrderPage();
 
             case self::COMPONENT_ORDER_LIST_COLUMN:

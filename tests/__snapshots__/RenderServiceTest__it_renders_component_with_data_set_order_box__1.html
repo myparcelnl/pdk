@@ -4,7 +4,7 @@
 (() => {
   var e = 'myparcel_pdk_loaded';
   var listener = function(event) {
-    event.detail.render('OrderCard', '#__ID__');
+    event.detail.render('OrderBox', '#__ID__');
     document.getElementById('__ID__-script').remove();
     document.removeEventListener(e, listener);
   };

@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Plugin\Service\RenderServiceInterface;
  * @method static string renderInitScript()
  * @method static string renderModals()
  * @method static string renderNotifications()
- * @method static string renderOrderCard(PdkOrder $order)
+ * @method static string renderOrderBox(PdkOrder $order)
  * @method static string renderOrderListColumn(PdkOrder $order)
  * @method static string renderPluginSettings()
  * @method static string renderProductSettings(PdkProduct $product)
