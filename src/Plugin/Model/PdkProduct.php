@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
  * @property null|string                                    $externalIdentifier
  * @property null|string                                    $sku
  * @property null|string                                    $ean
+ * @property null|bool                                      $isDeliverable
  * @property null|string                                    $name
  * @property null|\MyParcelNL\Pdk\Base\Model\Currency       $price
  * @property int                                            $weight
@@ -26,6 +27,7 @@ class PdkProduct extends Model
         'externalIdentifier' => null,
         'sku'                => null,
         'ean'                => null,
+        'isDeliverable'      => null,
         'name'               => null,
         'price'              => null,
         'weight'             => 0,
@@ -39,6 +41,7 @@ class PdkProduct extends Model
         'externalIdentifier' => 'string',
         'sku'                => 'string',
         'ean'                => 'string',
+        'isDeliverable'      => 'bool',
         'name'               => 'string',
         'price'              => Currency::class,
         'weight'             => 'int',

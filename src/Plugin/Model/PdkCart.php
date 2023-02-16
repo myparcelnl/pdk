@@ -92,6 +92,7 @@ class PdkCart extends Model
             $mailboxPercentage      = 0.0;
             $minimumDropOffDelay    = 0;
             $disableDeliveryOptions = false;
+            $isDeliverable          = false;
 
             foreach ($this->lines->all() as $line) {
                 /** @var \MyParcelNL\Pdk\Plugin\Model\PdkOrderLine $line */
@@ -114,6 +115,10 @@ class PdkCart extends Model
                 if (1 === (int) $line->product->settings->disableDeliveryOptions) {
                     $disableDeliveryOptions = true;
                 }
+
+                if (1 === (int) $line->product->settings->isDeliverable) {
+                    $isDeliverable = true;
+                }
             }
 
             if ($mailboxPercentage > 100.0
@@ -132,7 +137,7 @@ class PdkCart extends Model
             }
 
             $this->shippingMethod->fill([
-                'hasDeliveryOptions'  => false === $disableDeliveryOptions,
+                'hasDeliveryOptions'  => false === $disableDeliveryOptions && true === $isDeliverable,
                 'minimumDropOffDelay' => $minimumDropOffDelay,
                 'allowPackageTypes'   => array_values($allowedPackageTypes),
                 // todo use the shippingmethodpackagetypecollection?
