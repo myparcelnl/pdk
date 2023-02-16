@@ -57,9 +57,17 @@ class CarrierSettingsItemView extends AbstractSettingsView
     public function getDateFields(): array
     {
         return [
-            new InteractiveElement(CarrierSettings::SHOW_DELIVERY_DAY, Components::INPUT_TOGGLE),
+            new InteractiveElement(
+                CarrierSettings::SHOW_DELIVERY_DAY,
+                Components::INPUT_TOGGLE,
+                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+            ),
             // todo make custom element for drop-off
-            new InteractiveElement(CarrierSettings::DROP_OFF_POSSIBILITIES, Components::INPUT_SELECT),
+            new InteractiveElement(
+                CarrierSettings::DROP_OFF_POSSIBILITIES,
+                Components::INPUT_SELECT,
+                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+            ),
         ];
     }
 
