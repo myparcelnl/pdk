@@ -14,12 +14,12 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
  * @property int                                $platformId
  * @property string                             $name
  * @property bool                               $hidden
- * @property array                              $billing
- * @property array                              $deliveryAddress
- * @property array                              $generalSettings
- * @property array                              $return
- * @property array                              $shipmentOptions
- * @property array                              $trackTrace
+ * @property array<string, mixed>               $billing
+ * @property array<string, mixed>               $deliveryAddress
+ * @property array<string, mixed>               $generalSettings
+ * @property array<string, mixed>               $return
+ * @property array<string, mixed>               $shipmentOptions
+ * @property array<string, mixed>[]             $trackTrace
  * @property ShopCarrierConfigurationCollection $carrierConfigurations
  * @property CarrierOptionsCollection           $carrierOptions
  */

@@ -44,9 +44,13 @@ class AccountSettingsService
 
         $allowedCarriers = Pdk::get('allowedCarriers');
 
-        return $shop->carrierOptions->filter(function (CarrierOptions $carrierOption) use ($allowedCarriers) {
-            return $carrierOption->carrier->enabled && in_array($carrierOption->carrier->name, $allowedCarriers, true);
-        });
+        return $shop->carrierOptions
+            ->filter(function (CarrierOptions $carrierOption) use ($allowedCarriers) {
+                $isAllowed = in_array($carrierOption->carrier->name, $allowedCarriers, true);
+
+                return $isAllowed && $carrierOption->carrier->enabled;
+            })
+            ->values();
     }
 
     /**

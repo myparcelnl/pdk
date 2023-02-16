@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface;
+use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Admin\View\PrintOptionsView;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
@@ -14,22 +16,28 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 
 /**
- * @property \MyParcelNL\Pdk\Account\Model\Account   $account
- * @property \MyParcelNL\Pdk\Settings\Model\Settings $pluginSettings
- * @property PrintOptionsView                        $printOptions
+ * @property Account                  $account
+ * @property CarrierOptionsCollection $carrierOptions
+ * @property Settings                 $pluginSettings
+ * @property PrintOptionsView         $printOptionsView
+ * @property Shop                     $shop
  */
 class DynamicContext extends Model
 {
     public    $attributes = [
         'account'          => null,
+        'carriers'         => null,
         'pluginSettings'   => null,
         'printOptionsView' => null,
+        'shop'             => null,
     ];
 
     protected $casts      = [
         'account'          => Account::class,
+        'carrierOptions'   => CarrierOptionsCollection::class,
         'pluginSettings'   => Settings::class,
         'printOptionsView' => PrintOptionsView::class,
+        'shop'             => Shop::class,
     ];
 
     /**
@@ -48,9 +56,8 @@ class DynamicContext extends Model
             $this->attributes['printOptionsView'] = Pdk::get(PrintOptionsView::class);
         }
 
-        /** @var \MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface $accountRepository */
-        $accountRepository = Pdk::get(AccountRepositoryInterface::class);
-
-        $this->attributes['account'] = $accountRepository->getAccount();
+        $this->attributes['account']        = AccountSettings::getAccount();
+        $this->attributes['carrierOptions'] = AccountSettings::getCarrierOptions();
+        $this->attributes['shop']           = AccountSettings::getShop();
     }
 }
