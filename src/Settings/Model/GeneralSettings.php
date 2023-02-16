@@ -26,6 +26,7 @@ class GeneralSettings extends AbstractSettingsModel
      */
     public const API_LOGGING                  = 'apiLogging';
     public const BARCODE_IN_NOTE              = 'barcodeInNote';
+    public const BARCODE_IN_NOTE_TITLE        = 'barcodeInNoteTitle';
     public const CONCEPT_SHIPMENTS            = 'conceptShipments';
     public const EXPORT_WITH_AUTOMATIC_STATUS = 'exportWithAutomaticStatus';
     public const ORDER_MODE                   = 'orderMode';
@@ -39,6 +40,7 @@ class GeneralSettings extends AbstractSettingsModel
 
         self::API_LOGGING                  => false,
         self::BARCODE_IN_NOTE              => false,
+        self::BARCODE_IN_NOTE_TITLE        => null,
         self::CONCEPT_SHIPMENTS            => true,
         self::EXPORT_WITH_AUTOMATIC_STATUS => null,
         self::ORDER_MODE                   => false,
@@ -51,6 +53,7 @@ class GeneralSettings extends AbstractSettingsModel
     protected $casts      = [
         self::API_LOGGING                  => 'bool',
         self::BARCODE_IN_NOTE              => 'bool',
+        self::BARCODE_IN_NOTE_TITLE        => 'string',
         self::CONCEPT_SHIPMENTS            => 'bool',
         self::EXPORT_WITH_AUTOMATIC_STATUS => 'string',
         self::ORDER_MODE                   => 'bool',

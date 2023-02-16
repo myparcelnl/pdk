@@ -26,6 +26,7 @@ class OrderSettings extends AbstractSettingsModel
      * Settings in this category.
      */
     public const EMPTY_DIGITAL_STAMP_WEIGHT         = 'emptyDigitalStampWeight';
+    public const EMPTY_MAILBOX_WEIGHT               = 'emptyMailboxWeight';
     public const EMPTY_PARCEL_WEIGHT                = 'emptyParcelWeight';
     public const IGNORE_ORDER_STATUSES              = 'ignoreOrderStatuses';
     public const ORDER_STATUS_MAIL                  = 'orderStatusMail';
@@ -40,6 +41,7 @@ class OrderSettings extends AbstractSettingsModel
         'id' => self::ID,
 
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => null,
+        self::EMPTY_MAILBOX_WEIGHT               => null,
         self::EMPTY_PARCEL_WEIGHT                => null,
         self::IGNORE_ORDER_STATUSES              => null,
         self::ORDER_STATUS_MAIL                  => true,

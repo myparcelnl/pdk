@@ -28,11 +28,9 @@ class CheckoutSettings extends AbstractSettingsModel
     public const DELIVERY_OPTIONS_HEADER       = 'deliveryOptionsHeader';
     public const DELIVERY_OPTIONS_POSITION     = 'deliveryOptionsPosition';
     public const PICKUP_LOCATIONS_DEFAULT_VIEW = 'pickupLocationsDefaultView';
-    public const PRICE_TYPE                    = 'priceType';
-    public const SHOW_DELIVERY_DAY             = 'showDeliveryDay';
-    public const USE_SEPARATE_ADDRESS_FIELDS   = 'useSeparateAddressFields';
-    public const EMPTY_WEIGHT_MAILBOX          = 'emptyWeightMailbox';
-    public const EMPTY_WEIGHT_PACKAGE          = 'emptyWeightPackage';
+    public const PRICE_TYPE                  = 'priceType';
+    public const ENABLE_DELIVERY_OPTIONS     = 'enableDeliveryOptions';
+    public const USE_SEPARATE_ADDRESS_FIELDS = 'useSeparateAddressFields';
     /** Pickup location views */
     public const PICKUP_LOCATIONS_VIEW_LIST = 'list';
     public const PICKUP_LOCATIONS_VIEW_MAP  = 'map';
@@ -50,10 +48,8 @@ class CheckoutSettings extends AbstractSettingsModel
         self::DELIVERY_OPTIONS_POSITION     => null,
         self::PICKUP_LOCATIONS_DEFAULT_VIEW => null,
         self::PRICE_TYPE                    => self::DEFAULT_PRICE_TYPE,
-        self::SHOW_DELIVERY_DAY             => true,
+        self::ENABLE_DELIVERY_OPTIONS       => true,
         self::USE_SEPARATE_ADDRESS_FIELDS   => false,
-        self::EMPTY_WEIGHT_MAILBOX          => 0,
-        self::EMPTY_WEIGHT_PACKAGE          => 0,
     ];
 
     protected $casts      = [
@@ -63,9 +59,7 @@ class CheckoutSettings extends AbstractSettingsModel
         self::DELIVERY_OPTIONS_POSITION     => 'string',
         self::PICKUP_LOCATIONS_DEFAULT_VIEW => 'string',
         self::PRICE_TYPE                    => 'string',
-        self::SHOW_DELIVERY_DAY             => 'bool',
+        self::ENABLE_DELIVERY_OPTIONS       => 'bool',
         self::USE_SEPARATE_ADDRESS_FIELDS   => 'bool',
-        self::EMPTY_WEIGHT_MAILBOX          => 'int',
-        self::EMPTY_WEIGHT_PACKAGE          => 'int',
     ];
 }

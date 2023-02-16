@@ -12,9 +12,11 @@ use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
+use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Plugin\Service\TaxService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
 use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 
@@ -152,15 +154,16 @@ class DeliveryOptionsConfig extends Model
      */
     private function createCarrierSettings(CarrierOptions $carrierOptions, PdkCart $pdkCart): array
     {
-        //        $cartWeight    = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-        //            return $carry + $line->product->weight * $line->quantity;
-        //        }, 0);
-        //        $mailboxWeight = Settings::get('empty_mailbox_weight', CheckoutSettings::ID) + $cartWeight;
-        //        $packageWeight = Settings::get('empty_package_weight', CheckoutSettings::ID) + $cartWeight;
-        //
-        //        TODO check if the preferred package type is allowed regarding the weight by this carrier
-        //        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
-        //        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
+//        $cartWeight         = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+//            return $carry + $line->product->weight * $line->quantity;
+//        }, 0);
+//        $digitalStampWeight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
+//        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
+//        $packageWeight      = Settings::get(OrderSettings::EMPTY_PARCEL_WEIGHT, OrderSettings::ID) + $cartWeight;
+//
+//        //TODO check if the preferred package type is allowed regarding the weight by this carrier
+//        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
+//        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
         $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
 
         $carrierSettings = new CarrierSettings(

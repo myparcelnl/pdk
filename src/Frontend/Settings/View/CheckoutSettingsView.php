@@ -37,10 +37,7 @@ class CheckoutSettingsView extends AbstractSettingsView
                 ]
             ),
 
-            new InteractiveElement(CheckoutSettings::EMPTY_WEIGHT_MAILBOX, Components::INPUT_NUMBER),
-            new InteractiveElement(CheckoutSettings::EMPTY_WEIGHT_PACKAGE, Components::INPUT_NUMBER),
-
-            new InteractiveElement(CheckoutSettings::SHOW_DELIVERY_DAY, Components::INPUT_TOGGLE),
+            new InteractiveElement(CheckoutSettings::ENABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
             new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_HEADER, Components::INPUT_TEXT),
         ];
 
