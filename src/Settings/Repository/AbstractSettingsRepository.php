@@ -81,7 +81,15 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
      */
     public function storeSettings($settings): void
     {
-        $this->store($settings->id, $settings->toStorableArray());
+        if (! $settings instanceof SettingsModelCollection) {
+            $this->store($settings->id, $settings->toStorableArray());
+            return;
+        }
+
+        /** @var array $existing */
+        $existing = $this->get($settings->id);
+
+        $this->store($settings->id, array_replace($existing, $settings->toStorableArray()));
     }
 
     /**
