@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 class AccountSettingsService
 {
@@ -41,8 +42,10 @@ class AccountSettingsService
             return new CarrierOptionsCollection();
         }
 
-        return $shop->carrierOptions->filter(function (CarrierOptions $carrierOption) {
-            return $carrierOption->carrier->enabled;
+        $allowedCarriers = Pdk::get('allowedCarriers');
+
+        return $shop->carrierOptions->filter(function (CarrierOptions $carrierOption) use ($allowedCarriers) {
+            return $carrierOption->carrier->enabled && in_array($carrierOption->carrier->name, $allowedCarriers, true);
         });
     }
 

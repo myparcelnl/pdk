@@ -19,7 +19,7 @@ class CarrierSettingsView extends AbstractSettingsView
 
     public function __construct()
     {
-        $this->carriers = AccountSettings::getCarrierOptions()->splice(0,1);
+        $this->carriers = AccountSettings::getCarrierOptions();
     }
 
     /**

@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\LanguageService;
@@ -124,7 +123,6 @@ class DeliveryOptionsConfig extends Model
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $pdkCart
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function createAllCarrierSettings(PdkCart $pdkCart): array
     {
@@ -137,16 +135,6 @@ class DeliveryOptionsConfig extends Model
         $carrierOptions = AccountSettings::getCarrierOptions();
 
         foreach ($carrierOptions->all() as $carrierOption) {
-            // TODO: make sure only carriers that should be in the frontend are
-            //  shown. Now we'll get carriers like "bol.com" in the frontend.
-            //  Checking if the capabilities are empty in this crude way works,
-            //  but it's not ideal.
-            $hasNoCapabilities = empty(Arr::flatten($carrierOption->capabilities->toArrayWithoutNull()));
-
-            if (! $carrierOption->carrier->enabled || $hasNoCapabilities) {
-                continue;
-            }
-
             $settings[$carrierOption->carrier->externalIdentifier] = $this->createCarrierSettings(
                 $carrierOption,
                 $pdkCart

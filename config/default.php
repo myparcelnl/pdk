@@ -93,4 +93,13 @@ return [
 
     FrontendEndpointServiceInterface::class => autowire(),
     BackendEndpointServiceInterface::class  => autowire(),
+
+    'allowedCarriers' => value([
+        'bpost',
+        'dhleuroplus',
+        'dhlforyou',
+        'dhlparcelconnect',
+        'dpd',
+        'postnl',
+    ]),
 ];
