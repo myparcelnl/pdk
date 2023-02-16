@@ -132,11 +132,11 @@ class PdkCart extends Model
             }
 
             $this->shippingMethod->fill([
-                'disableDeliveryOptions' => $disableDeliveryOptions,
-                'minimumDropOffDelay'    => $minimumDropOffDelay,
-                'allowPackageTypes'      => array_values($allowedPackageTypes),
+                'hasDeliveryOptions'  => false === $disableDeliveryOptions,
+                'minimumDropOffDelay' => $minimumDropOffDelay,
+                'allowPackageTypes'   => array_values($allowedPackageTypes),
                 // todo use the shippingmethodpackagetypecollection?
-                'preferPackageType'      => reset($allowedPackageTypes),
+                'preferPackageType'   => reset($allowedPackageTypes),
             ]);
         } catch (Exception $e) {
             DefaultLogger::error($e->getMessage(), ['exception' => $e]);
