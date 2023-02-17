@@ -137,7 +137,7 @@ class PdkCart extends Model
             }
 
             $this->shippingMethod->fill([
-                'hasDeliveryOptions'  => false === $disableDeliveryOptions && true === $isDeliverable,
+                'hasDeliveryOptions'  => false === $disableDeliveryOptions,// && true === $isDeliverable, // todo make isDeliverable work
                 'minimumDropOffDelay' => $minimumDropOffDelay,
                 'allowPackageTypes'   => array_values($allowedPackageTypes),
                 // todo use the shippingmethodpackagetypecollection?
