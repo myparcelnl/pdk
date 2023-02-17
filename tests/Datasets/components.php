@@ -54,7 +54,7 @@ dataset('components', [
     'order list column' => [
         'callback' => function () {
             return function () {
-                return RenderService::renderOrderListColumn(new PdkOrder(['externalIdentifier' => 'P00924878']));
+                return RenderService::renderOrderListItem(new PdkOrder(['externalIdentifier' => 'P00924878']));
             };
         },
         'views'    => [MockAbstractViewService::PAGE_ORDER_LIST],

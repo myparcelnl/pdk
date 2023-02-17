@@ -28,13 +28,13 @@ class RenderService implements RenderServiceInterface
     /**
      * Admin components
      */
-    protected const COMPONENT_INIT_SCRIPT       = 'init';
-    protected const COMPONENT_MODALS            = 'Modals';
-    protected const COMPONENT_NOTIFICATIONS     = 'Notifications';
-    protected const COMPONENT_ORDER_BOX         = 'OrderBox';
-    protected const COMPONENT_ORDER_LIST_COLUMN = 'OrderListColumn';
-    protected const COMPONENT_PLUGIN_SETTINGS   = 'PluginSettings';
-    protected const COMPONENT_PRODUCT_SETTINGS  = 'ProductSettings';
+    protected const COMPONENT_INIT_SCRIPT      = 'init';
+    protected const COMPONENT_MODALS           = 'Modals';
+    protected const COMPONENT_NOTIFICATIONS    = 'Notifications';
+    protected const COMPONENT_ORDER_BOX        = 'OrderBox';
+    protected const COMPONENT_ORDER_LIST_ITEM  = 'OrderListItem';
+    protected const COMPONENT_PLUGIN_SETTINGS  = 'PluginSettings';
+    protected const COMPONENT_PRODUCT_SETTINGS = 'ProductSettings';
 
     /**
      * @var string
@@ -140,9 +140,9 @@ class RenderService implements RenderServiceInterface
      * @return string
      * @noinspection PhpUnused
      */
-    public function renderOrderListColumn(PdkOrder $order): string
+    public function renderOrderListItem(PdkOrder $order): string
     {
-        return $this->renderComponent(self::COMPONENT_ORDER_LIST_COLUMN, [Context::ID_ORDER_DATA], ['order' => $order]);
+        return $this->renderComponent(self::COMPONENT_ORDER_LIST_ITEM, [Context::ID_ORDER_DATA], ['order' => $order]);
     }
 
     /**
@@ -286,7 +286,7 @@ class RenderService implements RenderServiceInterface
             case self::COMPONENT_ORDER_BOX:
                 return $this->viewService->isOrderPage();
 
-            case self::COMPONENT_ORDER_LIST_COLUMN:
+            case self::COMPONENT_ORDER_LIST_ITEM:
                 return $this->viewService->isOrderListPage();
 
             case self::COMPONENT_PLUGIN_SETTINGS:

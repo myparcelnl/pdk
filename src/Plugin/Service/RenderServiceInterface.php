@@ -56,7 +56,7 @@ interface RenderServiceInterface
      * @return string
      * @noinspection PhpUnused
      */
-    public function renderOrderListColumn(PdkOrder $order): string;
+    public function renderOrderListItem(PdkOrder $order): string;
 
     /**
      * @return string
