@@ -88,89 +88,6 @@ return [
         ],
     ],
     [
-        'id'                 => Carrier::CARRIER_INSTABOX_ID,
-        'name'               => Carrier::CARRIER_INSTABOX_NAME,
-        'primary'            => 1,
-        'type'               => Carrier::TYPE_MAIN,
-        'capabilities'       => [
-            'packageTypes'           => [
-                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-            ],
-            'deliveryTypes'          => [
-                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-            ],
-            'shipmentOptions'        => [
-                'ageCheck'        => true,
-                'largeFormat'     => true,
-                'onlyRecipient'   => true,
-                'return'          => true,
-                'sameDayDelivery' => true,
-                'signature'       => true,
-            ],
-            'labelDescriptionLength' => 45,
-        ],
-        'returnCapabilities' => [],
-    ],
-    [
-        'id'                 => Carrier::CARRIER_BPOST_ID,
-        'name'               => Carrier::CARRIER_BPOST_NAME,
-        'subscriptionId'     => 10921,
-        'primary'            => 0,
-        'type'               => Carrier::TYPE_CUSTOM,
-        'capabilities'       => [
-            'packageTypes'    => [
-                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            ],
-            'deliveryTypes'   => [
-                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-            ],
-            'shipmentOptions' => [
-                'return'           => true,
-                'saturdayDelivery' => true,
-                'signature'        => true,
-                'insurance'        => [
-                    0,
-                    500,
-                ],
-            ],
-            'features'        => [
-                'dropOffAtPostalPoint'   => true,
-                'labelDescriptionLength' => 45,
-            ],
-        ],
-        'returnCapabilities' => [
-            'packageTypes'    => [
-                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            ],
-            'deliveryTypes'   => [
-                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-            ],
-            'shipmentOptions' => [
-                'largeFormat' => true,
-                'signature'   => true,
-                'insurance'   => [
-                    0,
-                    100,
-                    250,
-                    500,
-                    1000,
-                    1500,
-                    2000,
-                    2500,
-                    3000,
-                    3500,
-                    4000,
-                    4500,
-                    5000,
-                ],
-            ],
-            'features'        => [
-                'labelDescriptionLength' => 45,
-            ],
-        ],
-    ],
-    [
         'id'                 => Carrier::CARRIER_DPD_ID,
         'name'               => Carrier::CARRIER_DPD_NAME,
         'subscriptionId'     => 10932621,
@@ -209,7 +126,7 @@ return [
                 'signature'        => true,
                 'insurance'        => [
                     0,
-                    500,
+                    50000,
                 ],
             ],
             'features'        => [
@@ -219,5 +136,30 @@ return [
             ],
         ],
         'returnCapabilities' => [],
+    ],
+    [
+        'id'           => Carrier::CARRIER_DHL_EUROPLUS_ID,
+        'name'         => Carrier::CARRIER_DHL_EUROPLUS_NAME,
+        'primary'      => 1,
+        'type'         => Carrier::TYPE_MAIN,
+        'capabilities' => [
+            'packageTypes'    => [
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME
+            ],
+            'deliveryTypes'   => [
+                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+            ],
+            'shipmentOptions' => [
+                'signature' => true,
+                'insurance' => [
+                    0,
+                    50000,
+                ],
+            ],
+            'features'        => [
+                'labelDescriptionLength' => 45,
+            ],
+        ],
     ],
 ];
