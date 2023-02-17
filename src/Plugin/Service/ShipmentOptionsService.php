@@ -157,7 +157,7 @@ class ShipmentOptionsService
             return $allowedValue;
         }
 
-        return Arr::last($allowedValues);
+        return Arr::last($allowedValues) ?? 0;
     }
 
     /**
