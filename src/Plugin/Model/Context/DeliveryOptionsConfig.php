@@ -137,7 +137,13 @@ class DeliveryOptionsConfig extends Model
         $carrierOptions = AccountSettings::getCarrierOptions();
 
         foreach ($carrierOptions->all() as $carrierOption) {
-            $settings[$carrierOption->carrier->externalIdentifier] = $this->createCarrierSettings(
+            $carrierIdentifier = $carrierOption->carrier->externalIdentifier ?? $carrierOption->carrier->name;
+
+            if (! $carrierIdentifier) {
+                continue;
+            }
+
+            $settings[$carrierIdentifier] = $this->createCarrierSettings(
                 $carrierOption,
                 $pdkCart
             );
