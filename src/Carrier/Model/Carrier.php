@@ -66,6 +66,10 @@ class Carrier extends Model
      */
     public const TYPE_CUSTOM = 'custom';
     public const TYPE_MAIN   = 'main';
+    /**
+     * Special labels
+     */
+    public const LABEL_DHL_FOR_YOU_COMPLETE_ACCES = 'dhl_for_you_complete_access';
 
     protected $attributes = [
         'externalIdentifier' => null,
@@ -96,20 +100,6 @@ class Carrier extends Model
     ];
 
     /**
-     * @param  null|array $data
-     *
-     * @throws \Exception
-     */
-    public function __construct(?array $data = null)
-    {
-        parent::__construct($data);
-
-        $this->fill($this->getAllOptions());
-
-        $this->attributes['externalIdentifier'] = implode('_', array_filter([$this->name, $this->subscriptionId]));
-    }
-
-    /**
      * @return array
      */
     public function getAllOptions(): array
@@ -118,6 +108,10 @@ class Carrier extends Model
         $repository = Pdk::get(CarrierOptionsRepository::class);
 
         $options = $repository->get($this->subscriptionId ?? $this->id ?? $this->name ?? null);
+
+        if (Carrier::CARRIER_DHL_FOR_YOU_NAME === $this->name) {
+            $options['capabilities']['shipmentOptions']['sameDayDelivery'] = Carrier::LABEL_DHL_FOR_YOU_COMPLETE_ACCES === $this->label;
+        }
 
         return $options ?? [];
     }
