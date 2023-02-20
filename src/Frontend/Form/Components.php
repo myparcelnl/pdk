@@ -8,6 +8,7 @@ final class Components
 {
     public const INPUT_CHECKBOX = 'CheckboxInput';
     public const INPUT_CURRENCY = 'CurrencyInput';
+    public const INPUT_DROP_OFF = 'DropOffInput';
     public const INPUT_HIDDEN   = 'HiddenInput';
     public const INPUT_NUMBER   = 'NumberInput';
     public const INPUT_RADIO    = 'RadioInput';

@@ -65,7 +65,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             // todo make custom element for drop-off
             new InteractiveElement(
                 CarrierSettings::DROP_OFF_POSSIBILITIES,
-                Components::INPUT_SELECT,
+                Components::INPUT_DROP_OFF,
                 ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
             ),
         ];
