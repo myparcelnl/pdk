@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 
 abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOptionsValidatorInterface
 {
+    public const  WEIGHT_KEY           = 'properties.physicalProperties.properties.weight';
     private const DELIVERY_OPTIONS_KEY = 'properties.deliveryOptions.properties';
     private const SHIPMENT_OPTIONS_KEY = self::DELIVERY_OPTIONS_KEY . '.shipmentOptions.properties';
 
@@ -122,7 +123,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveWeight(?int $weight = 10): bool
     {
-        return $this->canHaveOption('properties.physicalProperties.properties.weight', $weight);
+        return $this->canHaveOption(self::WEIGHT_KEY, $weight);
     }
 
     /**

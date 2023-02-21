@@ -12,11 +12,15 @@ use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
+use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Plugin\Service\TaxService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
+use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
+use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 
 /**
  * @property bool   $allowRetry
@@ -62,7 +66,7 @@ class DeliveryOptionsConfig extends Model
         'carrierSettings'            => [],
         'currency'                   => 'EUR',
         'locale'                     => null,
-        'packageType'                => DeliveryOptionsModel::DEFAULT_PACKAGE_TYPE_NAME,
+        'packageType'                => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView' => null,
         'platform'                   => null,
         'showPriceSurcharge'         => 0,
@@ -92,9 +96,10 @@ class DeliveryOptionsConfig extends Model
         if (isset($data['cart'])) {
             /** @var \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart */
             $cart = $data['cart'];
+            [$packageType, $settings] = $this->createAllCarrierSettings($cart);
 
             $this->fill([
-                'packageType'                => $cart->shippingMethod->preferPackageType,
+                'packageType'                => $packageType,
                 'basePrice'                  => $cart->shipmentPrice,
                 'isUsingSplitAddressFields'  => Settings::get(
                     CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS,
@@ -108,7 +113,7 @@ class DeliveryOptionsConfig extends Model
                     CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
                     CheckoutSettings::ID
                 ),
-                'carrierSettings'            => $this->createAllCarrierSettings($cart),
+                'carrierSettings'            => $settings,
             ]);
 
             unset($data['cart']);
@@ -129,8 +134,7 @@ class DeliveryOptionsConfig extends Model
         }
 
         $settings = [];
-
-        $carrierOptions = AccountSettings::getCarrierOptions();
+        [$packageType, $carrierOptions] = $this->getValidCarrierOptions($pdkCart);
 
         foreach ($carrierOptions->all() as $carrierOption) {
             $settings[$carrierOption->carrier->getIdentifier()] = $this->createCarrierSettings(
@@ -139,7 +143,56 @@ class DeliveryOptionsConfig extends Model
             );
         }
 
-        return $settings;
+        return [$packageType, $settings];
+    }
+
+    private function getValidCarrierOptions(PdkCart $pdkCart): array
+    {
+        $cartWeight         = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+            return $carry + $line->product->weight * $line->quantity;
+        }, 0);
+        $digitalStampWeight = Settings::get(
+                OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
+                OrderSettings::ID
+            ) + $cartWeight;
+        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
+        $cc                 = $pdkCart->shippingMethod->shippingAddress->cc;
+        $allowPackageTypes  = $pdkCart->shippingMethod->allowPackageTypes;
+
+        filterOptionsByPackageType:
+        $packageType = reset($allowPackageTypes) ?: DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
+        switch ($packageType) {
+            case DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME:
+                $weight = 1;
+                break;
+            case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
+                $weight = $mailboxWeight;
+                break;
+            case DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME:
+                $weight = $digitalStampWeight;
+        }
+
+        $carrierOptions = AccountSettings::getCarrierOptions()
+            ->filter(function (CarrierOptions $carrierOptions) use (
+                $weight,
+                $packageType,
+                $cc
+            ) {
+                $carrier = $carrierOptions->carrier;
+                $repo    = Pdk::get(SchemaRepository::class);
+                $schema  = $repo->getOrderValidationSchema($carrier->name, $cc, $packageType);
+
+                return ($repo->validateOption($schema, OrderPropertiesValidator::WEIGHT_KEY, (int) $weight));
+            });
+
+        if ($carrierOptions->isEmpty()
+            && DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME !== array_shift(
+                $allowPackageTypes
+            )) {
+            goto filterOptionsByPackageType;
+        }
+
+        return [$packageType, $carrierOptions];
     }
 
     /**
@@ -150,16 +203,6 @@ class DeliveryOptionsConfig extends Model
      */
     private function createCarrierSettings(CarrierOptions $carrierOptions, PdkCart $pdkCart): array
     {
-        //        $cartWeight         = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-        //            return $carry + $line->product->weight * $line->quantity;
-        //        }, 0);
-        //        $digitalStampWeight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
-        //        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
-        //        $packageWeight      = Settings::get(OrderSettings::EMPTY_PARCEL_WEIGHT, OrderSettings::ID) + $cartWeight;
-        //
-        //        //TODO check if the preferred package type is allowed regarding the weight by this carrier
-        //        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
-        //        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
         $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
 
         $carrierSettings = new CarrierSettings(
