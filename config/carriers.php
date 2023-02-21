@@ -162,4 +162,55 @@ return [
             ],
         ],
     ],
+    [
+        'id'                 => Carrier::CARRIER_DHL_FOR_YOU_ID,
+        'name'               => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'primary'            => 1,
+        'type'               => Carrier::TYPE_MAIN,
+        'capabilities'       => [
+            'packageTypes'    => [
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            ],
+            'deliveryTypes'   => [
+                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+            ],
+            'shipmentOptions' => [
+                'ageCheck'        => true,
+                'onlyRecipient'   => true,
+                'return'          => true,
+                'sameDayDelivery' => true,
+                'signature'       => true,
+                'insurance'       => [
+                    0,
+                ],
+            ],
+            'features'        => [
+                'labelDescriptionLength' => 45,
+            ],
+        ],
+        'returnCapabilities' => [
+            'packageTypes'    => [
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            ],
+            'deliveryTypes'   => [
+                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+            ],
+            'shipmentOptions' => [
+                'signature'       => true,
+                'insurance'       => [
+                    0,
+                ],
+                'return'          => true,
+                'ageCheck'        => true,
+                'onlyRecipient'   => true,
+                'sameDayDelivery' => true,
+                'largeFormat'     => true,
+            ],
+            'features'        => [
+                'labelDescriptionLength' => 45,
+            ],
+        ],
+    ],
 ];
