@@ -12,11 +12,9 @@ use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Plugin\Service\TaxService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions as DeliveryOptionsModel;
 use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 
@@ -84,8 +82,6 @@ class DeliveryOptionsConfig extends Model
 
     /**
      * @param  null|array $data
-     *
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __construct(?array $data = null)
     {
@@ -137,13 +133,7 @@ class DeliveryOptionsConfig extends Model
         $carrierOptions = AccountSettings::getCarrierOptions();
 
         foreach ($carrierOptions->all() as $carrierOption) {
-            $carrierIdentifier = $carrierOption->carrier->externalIdentifier ?? $carrierOption->carrier->name;
-
-            if (! $carrierIdentifier) {
-                continue;
-            }
-
-            $settings[$carrierIdentifier] = $this->createCarrierSettings(
+            $settings[$carrierOption->carrier->getIdentifier()] = $this->createCarrierSettings(
                 $carrierOption,
                 $pdkCart
             );
@@ -173,7 +163,7 @@ class DeliveryOptionsConfig extends Model
         $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
 
         $carrierSettings = new CarrierSettings(
-            Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->externalIdentifier))
+            Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->getIdentifier()))
         );
 
         /** @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $dropOffService */

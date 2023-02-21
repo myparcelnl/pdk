@@ -115,4 +115,21 @@ class Carrier extends Model
 
         return $options ?? [];
     }
+
+    public function getIdentifier(): string
+    {
+        $identifier = $this->externalIdentifier;
+        if ($identifier) {
+            return $identifier;
+        }
+        $identifier = $this->name;
+        if ($this->subscriptionId) {
+            $identifier = "{$identifier}_{$this->subscriptionId}";
+        }
+
+        if (! $identifier) {
+            throw new \RuntimeException('No identifier found for carrier');
+        }
+        return $identifier;
+    }
 }
