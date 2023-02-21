@@ -150,16 +150,16 @@ class DeliveryOptionsConfig extends Model
      */
     private function createCarrierSettings(CarrierOptions $carrierOptions, PdkCart $pdkCart): array
     {
-//        $cartWeight         = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-//            return $carry + $line->product->weight * $line->quantity;
-//        }, 0);
-//        $digitalStampWeight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
-//        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
-//        $packageWeight      = Settings::get(OrderSettings::EMPTY_PARCEL_WEIGHT, OrderSettings::ID) + $cartWeight;
-//
-//        //TODO check if the preferred package type is allowed regarding the weight by this carrier
-//        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
-//        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
+        //        $cartWeight         = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+        //            return $carry + $line->product->weight * $line->quantity;
+        //        }, 0);
+        //        $digitalStampWeight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
+        //        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
+        //        $packageWeight      = Settings::get(OrderSettings::EMPTY_PARCEL_WEIGHT, OrderSettings::ID) + $cartWeight;
+        //
+        //        //TODO check if the preferred package type is allowed regarding the weight by this carrier
+        //        $preferPackageType   = $pdkCart->shippingMethod->preferPackageType;
+        //        $allowPackageTypes   = $pdkCart->shippingMethod->allowPackageTypes;
         $minimumDropOffDelay = $pdkCart->shippingMethod->minimumDropOffDelay;
 
         $carrierSettings = new CarrierSettings(
@@ -170,22 +170,7 @@ class DeliveryOptionsConfig extends Model
         $dropOffService = Pdk::get(DropOffServiceInterface::class);
         $dropOff        = $dropOffService->getForDate($carrierSettings);
 
-        /** @var TaxService $taxService */
-        $taxService = Pdk::get(TaxService::class);
-
-        $settings = array_map(static function ($key) use ($carrierSettings, $taxService) {
-            try {
-                $value = $carrierSettings->getAttribute($key);
-            } catch (InvalidCastException $e) {
-                return null;
-            }
-            if (0 === strpos($key, 'price')) {
-                return $taxService->getShippingDisplayPrice((float) $value);
-            }
-            return $value;
-        }, self::CONFIG_CARRIER_SETTINGS_MAP);
-
-        return $settings + [
+        return $this->getBaseSettings($carrierSettings) + [
                 'deliveryDaysWindow'   => $carrierSettings->dropOffPossibilities->deliveryDaysWindow,
                 'dropOffDelay'         => max(
                     $minimumDropOffDelay,
@@ -197,35 +182,28 @@ class DeliveryOptionsConfig extends Model
             ];
     }
 
-    //    /**
-    //     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
-    //     *
-    //     * @return array
-    //     */
-    //    private function createDropOffData(CarrierSettings $carrierSettings): array
-    //    {
-    //        $array = [];
-    //
-    //        $carrierSettings->dropOffPossibilities->dropOffDays->each(function (DropOffDay $dropOffDay) use (&$array) {
-    //            if (! $dropOffDay->dispatch) {
-    //                return;
-    //            }
-    //
-    //            $array['dropOffDays'][] = $dropOffDay->weekday;
-    //
-    //            if ($dropOffDay->cutoffTime) {
-    //                $key = (DropOffDay::WEEKDAY_SATURDAY === $dropOffDay->weekday)
-    //                    ? 'saturdayCutoffTime'
-    //                    : 'cutoffTime';
-    //
-    //                $array[$key] = $dropOffDay->cutoffTime;
-    //            }
-    //
-    //            if ($dropOffDay->sameDayCutoffTime) {
-    //                $array['cutoffTimeSameDay'] = $dropOffDay->sameDayCutoffTime;
-    //            }
-    //        });
-    //
-    //        return $array;
-    //    }
+    /**
+     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
+     *
+     * @return array
+     */
+    private function getBaseSettings(CarrierSettings $carrierSettings): array
+    {
+        /** @var TaxService $taxService */
+        $taxService = Pdk::get(TaxService::class);
+
+        return array_map(static function ($key) use ($carrierSettings, $taxService) {
+            try {
+                $value = $carrierSettings->getAttribute($key);
+            } catch (InvalidCastException $e) {
+                return null;
+            }
+
+            if (0 === strpos($key, 'price')) {
+                return $taxService->getShippingDisplayPrice((float) $value);
+            }
+
+            return $value;
+        }, self::CONFIG_CARRIER_SETTINGS_MAP);
+    }
 }
