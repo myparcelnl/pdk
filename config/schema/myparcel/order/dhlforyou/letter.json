@@ -1,0 +1,34 @@
+{
+  "description": "myparcel/order/dhlforyou/letter",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "ageCheck": {
+              "enum": [false]
+            },
+            "insurance": {
+              "enum": [0, null]
+            },
+            "largeFormat": {
+              "enum": [false]
+            },
+            "onlyRecipient": {
+              "enum": [false]
+            },
+            "return": {
+              "enum": [false]
+            },
+            "signature": {
+              "enum": [false]
+            }
+          }
+        }
+      }
+    }
+  }
+}

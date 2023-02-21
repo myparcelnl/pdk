@@ -1,0 +1,26 @@
+{
+  "description": "myparcel/order/dhlforyou/be_package_pickup",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "pickupLocation": {
+          "properties": {
+            "locationCode": {
+              "minLength": 1
+            }
+          }
+        },
+        "shipmentOptions": {
+          "properties": {
+            "onlyRecipient": {
+              "enum": [false]
+            },
+            "signature": {
+              "enum": [false]
+            }
+          }
+        }
+      }
+    }
+  }
+}
