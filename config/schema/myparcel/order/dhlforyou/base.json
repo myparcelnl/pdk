@@ -11,10 +11,14 @@
               "type": "object",
               "properties": {
                 "shipmentOptions": {
-                  "required": ["ageCheck"],
+                  "required": [
+                    "ageCheck"
+                  ],
                   "properties": {
                     "ageCheck": {
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -31,7 +35,10 @@
                 "shipmentOptions": {
                   "properties": {
                     "onlyRecipient": {
-                      "enum": [null, false]
+                      "enum": [
+                        null,
+                        false
+                      ]
                     }
                   }
                 }
@@ -50,10 +57,14 @@
               "type": "object",
               "properties": {
                 "shipmentOptions": {
-                  "required": ["onlyRecipient"],
+                  "required": [
+                    "onlyRecipient"
+                  ],
                   "properties": {
                     "onlyRecipient": {
-                      "enum": [true]
+                      "enum": [
+                        true
+                      ]
                     }
                   }
                 }
@@ -70,7 +81,10 @@
                 "shipmentOptions": {
                   "properties": {
                     "ageCheck": {
-                      "enum": [null, false]
+                      "enum": [
+                        null,
+                        false
+                      ]
                     }
                   }
                 }
@@ -85,10 +99,15 @@
         {
           "properties": {
             "deliveryOptions": {
-              "required": ["deliveryType"],
+              "required": [
+                "deliveryType"
+              ],
               "properties": {
                 "deliveryType": {
-                  "enum": ["standard", null]
+                  "enum": [
+                    "standard",
+                    null
+                  ]
                 }
               }
             }
@@ -97,7 +116,9 @@
         {
           "properties": {
             "deliveryOptions": {
-              "required": ["date"],
+              "required": [
+                "date"
+              ],
               "properties": {
                 "date": {
                   "type": "string",
@@ -114,10 +135,15 @@
         {
           "properties": {
             "deliveryOptions": {
-              "required": ["deliveryType", "pickupLocation"],
+              "required": [
+                "deliveryType",
+                "pickupLocation"
+              ],
               "properties": {
                 "deliveryType": {
-                  "enum": ["pickup"]
+                  "enum": [
+                    "pickup"
+                  ]
                 },
                 "pickupLocation": {
                   "type": "object",
@@ -130,19 +156,29 @@
                 "shipmentOptions": {
                   "properties": {
                     "onlyRecipient": {
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     },
                     "signature": {
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     },
                     "return": {
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     },
                     "ageCheck": {
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     },
                     "hideSender": {
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     }
                   }
                 }
@@ -155,7 +191,10 @@
             "deliveryOptions": {
               "properties": {
                 "deliveryType": {
-                  "enum": ["standard", null]
+                  "enum": [
+                    "standard",
+                    null
+                  ]
                 }
               }
             }
@@ -175,10 +214,19 @@
     "deliveryOptions": {
       "properties": {
         "deliveryType": {
-          "enum": ["morning", "standard", "evening", "pickup", null]
+          "enum": [
+            "standard",
+            "pickup",
+            null
+          ]
         },
         "packageType": {
-          "enum": ["digital_stamp", "letter", "mailbox", "package", null]
+          "enum": [
+            "letter",
+            "mailbox",
+            "package",
+            null
+          ]
         },
         "shipmentOptions": {
           "properties": {
@@ -186,7 +234,9 @@
               "maxLength": 50
             },
             "sameDayDelivery": {
-              "enum": [false]
+              "enum": [
+                false
+              ]
             }
           }
         }

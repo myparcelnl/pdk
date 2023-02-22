@@ -1,5 +1,5 @@
 {
-  "description": "myparcel/order/dhlforyou/nl_package",
+  "description": "myparcel/order/dhleuroplus/eu_package",
   "properties": {
     "deliveryOptions": {
       "properties": {
@@ -21,9 +21,18 @@
                 null
               ]
             },
+            "signature": {
+              "enum": [
+                true
+              ]
+            },
+            "saturdayDelivery": {
+              "enum": [
+                false
+              ]
+            },
             "hideSender": {
               "enum": [
-                true,
                 false
               ]
             }

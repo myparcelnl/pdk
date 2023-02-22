@@ -20,13 +20,11 @@
             "onlyRecipient": {
               "enum": [false]
             },
-            "signature": {
+            "return": {
               "enum": [false]
             },
-            "hideSender": {
-              "enum": [
-                false
-              ]
+            "signature": {
+              "enum": [false]
             }
           }
         }
