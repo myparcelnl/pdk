@@ -181,6 +181,82 @@ return [
             ],
         ],
         [
+            'id'           => Carrier::CARRIER_DHL_EUROPLUS_ID,
+            'name'         => Carrier::CARRIER_DHL_EUROPLUS_NAME,
+            'human'        => 'DHL Europlus',
+            'schema'       => 'order/dhleuroplus/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryService::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema'       => 'order/dhleuroplus/nl_package',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryService::CC_BE,
+                    'schema'      => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'packageType' => [
+                        [
+                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema'       => 'order/dhleuroplus/be_package',
+                        ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                            'schema' => 'order/dhleuroplus/letter',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryService::ZONE_EU,
+                    'schema'      => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'packageType' => [
+                        [
+                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema'       => 'order/dhleuroplus/eu_package',
+                        ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                            'schema' => 'order/dhleuroplus/letter',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        [
             'id'           => Carrier::CARRIER_INSTABOX_ID,
             'name'         => Carrier::CARRIER_INSTABOX_NAME,
             'human'        => 'Instabox',

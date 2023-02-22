@@ -145,7 +145,7 @@ return [
         'capabilities' => [
             'packageTypes'    => [
                 DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
             ],
             'deliveryTypes'   => [
                 DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
@@ -177,12 +177,15 @@ return [
                 DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
             ],
             'shipmentOptions' => [
-                'ageCheck'        => true,
-                'onlyRecipient'   => true,
-                'return'          => true,
-                'sameDayDelivery' => true,
-                'signature'       => true,
-                'insurance'       => [
+                'ageCheck'         => true,
+                'largeFormat'      => false,
+                'onlyRecipient'    => true,
+                'return'           => true,
+                'sameDayDelivery'  => true,
+                'signature'        => true,
+                'saturdayDelivery' => true,
+                'hideSender'       => true,
+                'insurance'        => [
                     0,
                     50000,
                     100000,
@@ -217,6 +220,45 @@ return [
                 'onlyRecipient'   => true,
                 'sameDayDelivery' => true,
                 'largeFormat'     => true,
+            ],
+            'features'        => [
+                'labelDescriptionLength' => 45,
+            ],
+        ],
+    ],
+    [
+        'id'                 => Carrier::CARRIER_DHL_FOR_YOU_ID,
+        'name'               => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'primary'            => 1,
+        'type'               => Carrier::TYPE_MAIN,
+        'capabilities'       => [
+            'packageTypes'    => [
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            ],
+            'deliveryTypes'   => [
+                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+            ],
+            'shipmentOptions' => [
+                'ageCheck'         => false,
+                'onlyRecipient'    => false,
+                'return'           => false,
+                'sameDayDelivery'  => false,
+                'signature'        => true,
+                'saturdayDelivery' => true,
+                'hideSender'       => true,
+                'insurance'        => [
+                    0,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000,
+                ],
             ],
             'features'        => [
                 'labelDescriptionLength' => 45,

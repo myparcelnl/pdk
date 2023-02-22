@@ -1,8 +1,11 @@
 {
-  "description": "myparcel/order/dhlforyou/nl_package",
+  "description": "myparcel/order/dhlforyou/be_package",
   "properties": {
     "deliveryOptions": {
       "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
         "shipmentOptions": {
           "properties": {
             "insurance": {
@@ -21,9 +24,8 @@
                 null
               ]
             },
-            "hideSender": {
+            "saturdayDelivery": {
               "enum": [
-                true,
                 false
               ]
             }

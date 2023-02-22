@@ -1,0 +1,108 @@
+{
+  "description": "myparcel/order/dhlforyou/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": [
+                "deliveryType"
+              ],
+              "properties": {
+                "deliveryType": {
+                  "enum": [
+                    "standard",
+                    null
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": [
+                "date"
+              ],
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": [
+            "standard",
+            null
+          ]
+        },
+        "packageType": {
+          "enum": [
+            "letter",
+            "package",
+            null
+          ]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "labelDescription": {
+              "maxLength": 50
+            },
+            "signature": {
+              "enum": [
+                true
+              ]
+            },
+            "saturdayDelivery": {
+              "enum": [
+                true,
+                false
+              ]
+            },
+            "insurance": {
+              "enum": [
+                0,
+                50000,
+                100000,
+                150000,
+                200000,
+                250000,
+                300000,
+                350000,
+                400000,
+                450000,
+                500000,
+                null
+              ]
+            },
+            "hideSender": {
+              "enum": [
+                true,
+                false
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

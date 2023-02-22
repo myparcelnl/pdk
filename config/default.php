@@ -58,7 +58,7 @@ return [
      */
     'userAgent' => value([]),
 
-    'apiUrl' => env('PDK_API_URL', 'https://api.myparcel.nl'),
+    'apiUrl' => env('PDK_API_URL', 'https://remote1.api.testing.myparcel.nl'),
 
     'mode' => env('PDK_MODE', Pdk::MODE_PRODUCTION),
 

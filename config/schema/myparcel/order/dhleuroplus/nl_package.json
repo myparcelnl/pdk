@@ -21,10 +21,9 @@
                 null
               ]
             },
-            "hideSender": {
+            "signature": {
               "enum": [
-                true,
-                false
+                true
               ]
             }
           }
