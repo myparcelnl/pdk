@@ -200,7 +200,14 @@ class PostShipmentsRequest extends Request
     private function getOptions(Shipment $shipment): ?array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-        $options         = array_map(static function ($item) {
+        $capabilities    = $shipment->carrier->capabilities;
+
+        if (Carrier::CARRIER_DHL_FOR_YOU_NAME === $shipment->carrier->carrier->name
+            && false === $capabilities->shipmentOptions['sameDayDelivery']) {
+            $shipmentOptions->sameDayDelivery = '1';
+        }
+
+        $options = array_map(static function ($item) {
             return is_bool($item) ? (int) $item : $item;
         }, $shipmentOptions->toSnakeCaseArray());
 
