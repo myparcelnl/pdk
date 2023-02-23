@@ -18,11 +18,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     protected $carrierOptions;
 
-    /**
-     * @var array
-     */
-    private $cachedCapabilities;
-
     public function canHaveAgeCheck(): bool
     {
         return (bool) $this->getShipmentOption(ShipmentOptions::AGE_CHECK);
@@ -105,19 +100,17 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function getSchema(): array
     {
-        if (! $this->cachedCapabilities) {
-            try {
-                $this->cachedCapabilities = $this->carrierOptions->capabilities->toArray();
-            } catch (Exception $e) {
-                DefaultLogger::warning('Could not get capabilities from carrier options', [
-                    'exception' => $e,
-                ]);
+        try {
+            $capabilities = $this->carrierOptions->capabilities->toArray();
+        } catch (Exception $e) {
+            DefaultLogger::warning('Could not get capabilities from carrier options', [
+                'exception' => $e,
+            ]);
 
-                $this->cachedCapabilities = [];
-            }
+            $capabilities = [];
         }
 
-        return $this->cachedCapabilities;
+        return $capabilities;
     }
 
     /**
