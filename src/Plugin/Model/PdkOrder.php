@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\StorableArrayable;
+use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -136,20 +137,28 @@ class PdkOrder extends Model implements StorableArrayable
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
+     * @throws \Exception
      */
     public function createShipment(array $data = []): Shipment
     {
+        $deliveryOptions = $data[0]['deliveryOptions'] ?: $this->deliveryOptions;
+
         return new Shipment(
             array_replace_recursive(
                 [
                     'customsDeclaration'  => $this->customsDeclaration,
-                    'deliveryOptions'     => $this->deliveryOptions,
+                    'deliveryOptions'     => $deliveryOptions,
                     'recipient'           => $this->recipient,
                     'sender'              => $this->sender,
                     'referenceIdentifier' => $this->externalIdentifier,
+                    'carrier'             => new CarrierOptions([
+                        'carrier' => [
+                            'name' => $deliveryOptions['carrier'],
+                        ],
+                    ]),
+                    'orderId'             => $this->externalIdentifier,
                 ],
-                $data,
-                ['orderId' => $this->externalIdentifier]
+                $data
             )
         );
     }
