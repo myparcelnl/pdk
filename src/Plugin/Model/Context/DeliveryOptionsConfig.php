@@ -125,7 +125,7 @@ class DeliveryOptionsConfig extends Model
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $pdkCart
      *
-     * @return array
+     * @return array with two elements: package type and all carrier settings
      */
     private function createAllCarrierSettings(PdkCart $pdkCart): array
     {
@@ -134,7 +134,7 @@ class DeliveryOptionsConfig extends Model
         }
 
         $settings = [];
-        [$packageType, $carrierOptions] = $this->getValidCarrierOptions($pdkCart);
+        [$packageType, $carrierOptions] = $this->getOptionsForAvailableCarriers($pdkCart);
 
         foreach ($carrierOptions->all() as $carrierOption) {
             $settings[$carrierOption->carrier->getIdentifier()] = $this->createCarrierSettings(
@@ -144,55 +144,6 @@ class DeliveryOptionsConfig extends Model
         }
 
         return [$packageType, $settings];
-    }
-
-    private function getValidCarrierOptions(PdkCart $pdkCart): array
-    {
-        $cartWeight         = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-            return $carry + $line->product->weight * $line->quantity;
-        }, 0);
-        $digitalStampWeight = Settings::get(
-                OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
-                OrderSettings::ID
-            ) + $cartWeight;
-        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
-        $cc                 = $pdkCart->shippingMethod->shippingAddress->cc;
-        $allowPackageTypes  = $pdkCart->shippingMethod->allowPackageTypes;
-
-        filterOptionsByPackageType:
-        $packageType = reset($allowPackageTypes) ?: DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
-        switch ($packageType) {
-            case DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME:
-                $weight = 1;
-                break;
-            case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
-                $weight = $mailboxWeight;
-                break;
-            case DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME:
-                $weight = $digitalStampWeight;
-        }
-
-        $carrierOptions = AccountSettings::getCarrierOptions()
-            ->filter(function (CarrierOptions $carrierOptions) use (
-                $weight,
-                $packageType,
-                $cc
-            ) {
-                $carrier = $carrierOptions->carrier;
-                $repo    = Pdk::get(SchemaRepository::class);
-                $schema  = $repo->getOrderValidationSchema($carrier->name, $cc, $packageType);
-
-                return ($repo->validateOption($schema, OrderPropertiesValidator::WEIGHT_KEY, (int) $weight));
-            });
-
-        if ($carrierOptions->isEmpty()
-            && DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME !== array_shift(
-                $allowPackageTypes
-            )) {
-            goto filterOptionsByPackageType;
-        }
-
-        return [$packageType, $carrierOptions];
     }
 
     /**
@@ -248,5 +199,76 @@ class DeliveryOptionsConfig extends Model
 
             return $value;
         }, self::CONFIG_CARRIER_SETTINGS_MAP);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $pdkCart
+     *
+     * @return array with two elements: package type and carrier options
+     */
+    private function getOptionsForAvailableCarriers(PdkCart $pdkCart): array
+    {
+        $cartWeight    = $pdkCart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+            return $carry + $line->product->weight * $line->quantity;
+        }, 0);
+        $stampWeight   = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
+        $mailboxWeight = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
+        $shippingCc    = $pdkCart->shippingMethod->shippingAddress->cc;
+        $packageTypes  = $pdkCart->shippingMethod->allowPackageTypes;
+
+        while (! isset($carrierOptions) || $carrierOptions->isEmpty()) {
+            $packageType    = array_shift($packageTypes) ?? DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
+            $carrierOptions = $this->getOptionsForCarriersByPackageTypeWeight(
+                $packageType,
+                (int) $mailboxWeight,
+                (int) $stampWeight,
+                $shippingCc
+            );
+            if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME === $packageType) {
+                break;
+            }
+        }
+
+        /** @noinspection PhpUndefinedVariableInspection as humans we know $packageType is defined */
+        return [$packageType, $carrierOptions];
+    }
+
+    /**
+     * @param  string      $packageType
+     * @param  int         $mailboxWeight
+     * @param  int         $digitalStampWeight
+     * @param  null|string $cc
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection
+     */
+    private function getOptionsForCarriersByPackageTypeWeight(
+        string  $packageType,
+        int     $mailboxWeight,
+        int     $digitalStampWeight,
+        ?string $cc
+    ): \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection {
+        switch ($packageType) {
+            case DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME:
+                $weight = 1;
+                break;
+            case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
+                $weight = $mailboxWeight;
+                break;
+            case DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME:
+                $weight = $digitalStampWeight;
+        }
+
+        return AccountSettings::getCarrierOptions()
+            ->filter(function (CarrierOptions $carrierOptions) use (
+                $weight,
+                $packageType,
+                $cc
+            ) {
+                $carrier = $carrierOptions->carrier;
+                $repo    = Pdk::get(SchemaRepository::class);
+                $schema  = $repo->getOrderValidationSchema($carrier->name, $cc, $packageType);
+
+                return ($repo->validateOption($schema, OrderPropertiesValidator::WEIGHT_KEY, $weight));
+            });
     }
 }
