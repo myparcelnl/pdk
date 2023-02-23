@@ -38,6 +38,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
  */
 class DeliveryOptionsConfig extends Model
 {
+    const         VALID_WEIGHT_FOR_PACKAGE_TYPE_PACKAGE                           = 1;
     private const CONFIG_CARRIER_SETTINGS_MAP = [
         'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
         'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
@@ -249,7 +250,7 @@ class DeliveryOptionsConfig extends Model
     ): \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection {
         switch ($packageType) {
             case DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME:
-                $weight = 1;
+                $weight = self::VALID_WEIGHT_FOR_PACKAGE_TYPE_PACKAGE;
                 break;
             case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
                 $weight = $mailboxWeight;
