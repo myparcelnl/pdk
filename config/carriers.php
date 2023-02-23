@@ -227,11 +227,11 @@ return [
         ],
     ],
     [
-        'id'                 => Carrier::CARRIER_DHL_FOR_YOU_ID,
-        'name'               => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-        'primary'            => 1,
-        'type'               => Carrier::TYPE_MAIN,
-        'capabilities'       => [
+        'id'           => Carrier::CARRIER_DHL_EUROPLUS_ID,
+        'name'         => Carrier::CARRIER_DHL_EUROPLUS_NAME,
+        'primary'      => 1,
+        'type'         => Carrier::TYPE_MAIN,
+        'capabilities' => [
             'packageTypes'    => [
                 DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
             ],
@@ -259,6 +259,68 @@ return [
                     450000,
                     500000,
                 ],
+            ],
+            'features'        => [
+                'labelDescriptionLength' => 45,
+            ],
+        ],
+    ],
+    [
+        'id'                 => Carrier::CARRIER_DHL_PARCEL_CONNECT_ID,
+        'name'               => Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
+        'primary'            => 1,
+        'type'               => Carrier::TYPE_MAIN,
+        'capabilities'       => [
+            'packageTypes'    => [
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            ],
+            'deliveryTypes'   => [
+                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+            ],
+            'shipmentOptions' => [
+                'ageCheck'         => false,
+                'onlyRecipient'    => false,
+                'return'           => false,
+                'sameDayDelivery'  => false,
+                'signature'        => true,
+                'saturdayDelivery' => false,
+                'hideSender'       => false,
+                'insurance'        => [
+                    0,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000,
+                ],
+            ],
+            'features'        => [
+                'labelDescriptionLength' => 45,
+            ],
+        ],
+        'returnCapabilities' => [
+            'packageTypes'    => [
+                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            ],
+            'deliveryTypes'   => [
+                DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+            ],
+            'shipmentOptions' => [
+                'signature'       => false,
+                'insurance'       => [
+                    50000,
+                ],
+                'return'          => false,
+                'ageCheck'        => false,
+                'onlyRecipient'   => false,
+                'sameDayDelivery' => false,
+                'largeFormat'     => false,
             ],
             'features'        => [
                 'labelDescriptionLength' => 45,
