@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  * @property string                $method
  * @property array{string, string} $parameters
  * @property string                $path
+ * @property string                $property
+ * @property string|null           $responseProperty
  */
 class Request implements RequestInterface
 {
@@ -46,16 +48,22 @@ class Request implements RequestInterface
     private $property;
 
     /**
+     * @var null|string
+     */
+    private $responseProperty;
+
+    /**
      * @param  array $config
      */
     public function __construct(array $config = [])
     {
-        $this->body       = $config['body'] ?? $this->body;
-        $this->headers    = $config['headers'] ?? $this->headers;
-        $this->method     = $config['method'] ?? $this->method;
-        $this->parameters = $config['parameters'] ?? $this->parameters;
-        $this->path       = $config['path'] ?? $this->path;
-        $this->property   = $config['property'] ?? $this->property;
+        $this->body             = $config['body'] ?? $this->body;
+        $this->headers          = $config['headers'] ?? $this->headers;
+        $this->method           = $config['method'] ?? $this->method;
+        $this->parameters       = $config['parameters'] ?? $this->parameters;
+        $this->path             = $config['path'] ?? $this->path;
+        $this->property         = $config['property'] ?? $this->property;
+        $this->responseProperty = $config['responseProperty'] ?? $this->responseProperty;
     }
 
     /**
@@ -104,6 +112,14 @@ class Request implements RequestInterface
     public function getQueryString(): string
     {
         return http_build_query($this->getParameters());
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getResponseProperty(): ?string
+    {
+        return $this->responseProperty;
     }
 
     /**
