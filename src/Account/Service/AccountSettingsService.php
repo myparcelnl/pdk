@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Service;
 
+use Exception;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface;
@@ -28,7 +29,11 @@ class AccountSettingsService
      */
     public function getAccount(): ?Account
     {
-        return $this->accountRepository->getAccount();
+        try {
+            return $this->accountRepository->getAccount();
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**
