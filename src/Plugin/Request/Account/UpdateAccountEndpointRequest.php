@@ -23,4 +23,12 @@ class UpdateAccountEndpointRequest extends AbstractEndpointRequest
     {
         return 'account_settings';
     }
+
+    /**
+     * @return string
+     */
+    public function getResponseProperty(): string
+    {
+        return 'context';
+    }
 }

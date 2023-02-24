@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Plugin\Action\ActionInterface;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,7 +77,7 @@ class UpdateAccountAction implements ActionInterface
 
         $this->updateAndSaveAccount($account);
 
-        return Actions::execute(PdkBackendActions::FETCH_CONTEXT);
+        return Actions::execute(PdkBackendActions::FETCH_CONTEXT, ['context' => Context::ID_DYNAMIC]);
     }
 
     /**

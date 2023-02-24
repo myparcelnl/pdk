@@ -25,23 +25,6 @@ class FetchContextAction implements ActionInterface
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return string[]
-     */
-    public function getContexts(Request $request): array
-    {
-        $contexts        = [];
-        $requestContexts = $request->get('contexts');
-
-        if ($requestContexts) {
-            $contexts += explode(',', $requestContexts) ?: [];
-        }
-
-        return $contexts;
-    }
-
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -50,5 +33,22 @@ class FetchContextAction implements ActionInterface
         $context = $this->contextService->createContexts($this->getContexts($request));
 
         return new JsonResponse(['context' => [$context->toArrayWithoutNull()]]);
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return string[]
+     */
+    private function getContexts(Request $request): array
+    {
+        $contexts        = [];
+        $requestContexts = $request->get('context');
+
+        if ($requestContexts) {
+            $contexts += explode(',', $requestContexts) ?: [];
+        }
+
+        return $contexts;
     }
 }
