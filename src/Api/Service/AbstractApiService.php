@@ -72,16 +72,23 @@ abstract class AbstractApiService implements ApiServiceInterface
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
 
-        DefaultLogger::debug('Received response from MyParcel', [
-            'response' => $response,
-        ]);
-
         /** @var \MyParcelNL\Pdk\Api\Response\ApiResponseInterface $responseObject */
         $responseObject = new $responseClass($response);
 
         if ($responseObject->isErrorResponse()) {
+            DefaultLogger::error('Received an error response from MyParcel', [
+                'uri'     => $uri,
+                'method'  => $method,
+                'options' => $options,
+                'code'    => $response->getStatusCode(),
+                'error'   => $responseObject->getErrors(),
+            ]);
             throw new ApiException($response);
         }
+
+        DefaultLogger::debug('Received response from MyParcel', [
+            'response' => $response,
+        ]);
 
         return $responseObject;
     }
