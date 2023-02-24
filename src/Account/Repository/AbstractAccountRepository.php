@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Repository;
 
-use Exception;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Request\GetAccountsRequest;
 use MyParcelNL\Pdk\Account\Response\GetAccountsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
 
 abstract class AbstractAccountRepository extends ApiRepository implements AccountRepositoryInterface
 {
@@ -42,15 +40,10 @@ abstract class AbstractAccountRepository extends ApiRepository implements Accoun
         }
 
         return $this->retrieve('account', function () {
-            try {
-                /** @var GetAccountsResponse $response */
-                $response = $this->api->doRequest(new GetAccountsRequest(), GetAccountsResponse::class);
+            /** @var GetAccountsResponse $response */
+            $response = $this->api->doRequest(new GetAccountsRequest(), GetAccountsResponse::class);
 
-                return $response->getAccount();
-            } catch (Exception $e) {
-                DefaultLogger::warning('Could not retrieve account', ['exception' => $e]);
-                return null;
-            }
+            return $response->getAccount();
         });
     }
 
