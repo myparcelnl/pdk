@@ -15,12 +15,13 @@ abstract class AbstractEndpointRequest extends Request implements Arrayable
     public function toArray(): array
     {
         return [
-            'body'       => $this->getBody(),
-            'headers'    => $this->getHeaders(),
-            'method'     => $this->getMethod(),
-            'parameters' => $this->getParameters(),
-            'path'       => $this->getPath(),
-            'property'   => $this->getProperty(),
+            'body'             => $this->getBody(),
+            'headers'          => $this->getHeaders(),
+            'method'           => $this->getMethod(),
+            'parameters'       => $this->getParameters(),
+            'path'             => $this->getPath(),
+            'property'         => $this->getProperty(),
+            'responseProperty' => $this->getResponseProperty(),
         ];
     }
 }
