@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Frontend\Context;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Plugin\Action\ActionInterface;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\Plugin\Context;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,6 +20,6 @@ class FetchCheckoutContextAction implements ActionInterface
      */
     public function handle(Request $request): Response
     {
-        return Actions::execute(PdkBackendActions::FETCH_CONTEXT);
+        return Actions::execute(PdkBackendActions::FETCH_CONTEXT, ['context' => Context::ID_CHECKOUT]);
     }
 }
