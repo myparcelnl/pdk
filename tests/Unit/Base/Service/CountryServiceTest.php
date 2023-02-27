@@ -124,3 +124,13 @@ it('can check if a country is in the ROW zone', function (string $country, bool 
         'isRow'   => true,
     ],
 ]);
+
+it('gets countries with translation keys', function () {
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
+    $service = Pdk::get(CountryService::class);
+    $all     = $service->getAllTranslatable();
+
+    expect(($all))->toHaveKeysAndValues([
+        'NL' => 'country_nl',
+    ]);
+});

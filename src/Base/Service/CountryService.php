@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Service;
 
+use MyParcelNL\Sdk\src\Support\Str;
+
 class CountryService
 {
     /**
@@ -569,6 +571,21 @@ class CountryService
     public function getAll(): array
     {
         return self::ALL;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllTranslatable(): array
+    {
+        $all = $this->getAll();
+
+        return array_combine(
+            $all,
+            array_map(static function (string $country) {
+                return sprintf('country_%s', Str::lower($country));
+            }, $all)
+        );
     }
 
     /**
