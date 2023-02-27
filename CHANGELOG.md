@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.35.0](https://github.com/myparcelnl/pdk/compare/v1.34.0...v1.35.0) (2023-02-27)
+
+
+### :sparkles: New Features
+
+* **country-service:** add getAllTranslatable method ([138af6b](https://github.com/myparcelnl/pdk/commit/138af6b7e9651a0f669157f5eb9464ed1d0267eb))
+
 ## [1.34.0](https://github.com/myparcelnl/pdk/compare/v1.33.0...v1.34.0) (2023-01-27)
 
 
