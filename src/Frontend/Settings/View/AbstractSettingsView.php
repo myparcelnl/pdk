@@ -104,7 +104,7 @@ abstract class AbstractSettingsView implements Arrayable
         if ($includeNone) {
             array_unshift($options, [
                 'value' => -1,
-                'label' => 'settings_none',
+                'label' => LanguageService::translate('settings_none'),
             ]);
         }
 
