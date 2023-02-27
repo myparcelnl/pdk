@@ -49,9 +49,7 @@ class UpdatePluginSettingsAction implements ActionInterface
         }
 
         return new JsonResponse([
-            'data' => [
-                'plugin_settings' => $settings->toArray(),
-            ],
+            'plugin_settings' => $settings->toArray(),
         ]);
     }
 }
