@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\PdkActions;
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -50,7 +50,7 @@ it('exports order', function () {
                     'labelAmount' => 2,
                 ],
                 'recipient'          => [
-                    'cc'         => CountryService::CC_NL,
+                    'cc'         => CountryCodes::CC_NL,
                     'street'     => 'Pietjestraat',
                     'number'     => '35',
                     'postalCode' => '2771BW',

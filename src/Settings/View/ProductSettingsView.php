@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\View;
 
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
@@ -37,7 +38,7 @@ class ProductSettingsView extends AbstractView
                 'class'   => SelectInput::class,
                 'name'    => ProductSettings::COUNTRY_OF_ORIGIN,
                 'label'   => 'settings_product_country_of_origin',
-                'options' => CountryService::ALL,
+                'options' => CountryCodes::ALL,
             ],
             [
                 'class' => TextInput::class,

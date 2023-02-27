@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Validation\Repository;
 
 use JsonSchema\Validator;
 use MyParcelNL\Pdk\Base\Repository\Repository;
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -34,8 +34,8 @@ class SchemaRepository extends Repository
                 $schema         = Config::get('schema/order');
                 $platformSchema = Config::get(sprintf('validation/%s/order', Platform::get('name')));
 
-                /** @var \MyParcelNL\Pdk\Base\Service\CountryService $countryService */
-                $countryService = Pdk::get(CountryService::class);
+                /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $countryService */
+                $countryService = Pdk::get(CountryServiceInterface::class);
 
                 $shippingZone = $cc ? $countryService->getShippingZone($cc) : null;
 

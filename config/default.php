@@ -8,6 +8,8 @@ use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Concern\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Pdk;
+use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
@@ -31,6 +33,7 @@ return [
 
     ApiServiceInterface::class      => autowire(MyParcelApiService::class),
     ContextServiceInterface::class  => autowire(ContextService::class),
+    CountryServiceInterface::class  => autowire(CountryService::class),
     CurrencyServiceInterface::class => autowire(CurrencyService::class),
     RenderServiceInterface::class   => autowire(RenderService::class),
     StorageInterface::class         => autowire(MemoryCacheStorage::class),

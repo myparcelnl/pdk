@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -69,7 +69,7 @@ it('instantiates delivery options with pickup location', function () {
         [
             'date'           => '2022-02-20 16:00:00',
             'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-            'pickupLocation' => new RetailLocation(['cc' => CountryService::CC_NL]),
+            'pickupLocation' => new RetailLocation(['cc' => CountryCodes::CC_NL]),
         ]
     );
 
@@ -78,7 +78,7 @@ it('instantiates delivery options with pickup location', function () {
         ->and($deliveryOptions->date)
         ->toBeInstanceOf(DateTimeImmutable::class)
         ->and($deliveryOptions->pickupLocation->cc)
-        ->toBe(CountryService::CC_NL)
+        ->toBe(CountryCodes::CC_NL)
         ->and($deliveryOptions->isPickup())
         ->toBeTrue();
 });

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
@@ -40,7 +40,7 @@ class ProductSettings extends Model
     protected $attributes = [
         self::ALLOW_ONLY_RECIPIENT     => false,
         self::ALLOW_SIGNATURE          => false,
-        self::COUNTRY_OF_ORIGIN        => CountryService::CC_NL,
+        self::COUNTRY_OF_ORIGIN        => CountryCodes::CC_NL,
         self::CUSTOMS_CODE             => '0',
         self::DISABLE_DELIVERY_OPTIONS => false,
         self::DROP_OFF_DELAY           => 0,

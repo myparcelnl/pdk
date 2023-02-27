@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Fulfilment\Repository;
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
@@ -95,7 +95,7 @@ it('creates a valid order collection from api data', function (array $input) {
                             [
                                 'amount'         => 1,
                                 'classification' => 5256,
-                                'country'        => CountryService::CC_BE,
+                                'country'        => CountryCodes::CC_BE,
                                 'description'    => 'Vlaamse Patatekes',
                                 'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
                                 'weight'         => 200,
@@ -103,7 +103,7 @@ it('creates a valid order collection from api data', function (array $input) {
                             [
                                 'amount'         => 1,
                                 'classification' => 9221,
-                                'country'        => CountryService::CC_FR,
+                                'country'        => CountryCodes::CC_FR,
                                 'description'    => 'Omelette du Fromage',
                                 'itemValue'      => ['amount' => 10000, 'currency' => 'EUR'],
                                 'weight'         => 350,

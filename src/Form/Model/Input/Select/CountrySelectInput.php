@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Form\Model\Input\Select;
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Form\Model\Input\SelectInput;
 
 /**
@@ -21,7 +21,7 @@ class CountrySelectInput extends SelectInput
      */
     public function __construct(?array $data = null)
     {
-        $this->attributes['options'] = CountryService::ALL;
+        $this->attributes['options'] = CountryCodes::ALL;
         $this->casts['options']      = 'array';
 
         parent::__construct($data);

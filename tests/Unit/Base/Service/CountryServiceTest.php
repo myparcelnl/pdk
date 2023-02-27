@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -11,8 +11,8 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('returns all languages', function () {
-    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
-    $service = Pdk::get(CountryService::class);
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
     $all     = $service->getAll();
 
     expect($all)
@@ -22,8 +22,8 @@ it('returns all languages', function () {
 });
 
 it('gets shipping zone for country', function (string $country, string $expectedZone) {
-    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
-    $service = Pdk::get(CountryService::class);
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
     $zone    = $service->getShippingZone($country);
 
     expect($zone)->toBe($expectedZone);
@@ -47,8 +47,8 @@ it('gets shipping zone for country', function (string $country, string $expected
 ]);
 
 it('can check if a country is an unique zone', function (string $country, bool $unique) {
-    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
-    $service = Pdk::get(CountryService::class);
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
     $result  = $service->isUnique($country);
 
     expect($result)->toBe($unique);
@@ -72,8 +72,8 @@ it('can check if a country is an unique zone', function (string $country, bool $
 ]);
 
 it('can check if a country is in the EU zone', function (string $country, bool $isEu) {
-    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
-    $service = Pdk::get(CountryService::class);
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
     $result  = $service->isEu($country);
 
     expect($result)->toBe($isEu);
@@ -97,8 +97,8 @@ it('can check if a country is in the EU zone', function (string $country, bool $
 ]);
 
 it('can check if a country is in the ROW zone', function (string $country, bool $isRow) {
-    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
-    $service = Pdk::get(CountryService::class);
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
     $result  = $service->isRow($country);
 
     expect($result)->toBe($isRow);
@@ -126,8 +126,8 @@ it('can check if a country is in the ROW zone', function (string $country, bool 
 ]);
 
 it('gets countries with translation keys', function () {
-    /** @var \MyParcelNL\Pdk\Base\Service\CountryService $service */
-    $service = Pdk::get(CountryService::class);
+    /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
     $all     = $service->getAllTranslatable();
 
     expect(($all))->toHaveKeysAndValues([

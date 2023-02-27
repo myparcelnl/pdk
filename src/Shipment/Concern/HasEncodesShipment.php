@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -44,8 +44,8 @@ trait HasEncodesShipment
      */
     private function getCustomsDeclaration(Shipment $shipment): ?array
     {
-        /** @var \MyParcelNL\Pdk\Base\Service\CountryService $countryService */
-        $countryService = Pdk::get(CountryService::class);
+        /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $countryService */
+        $countryService = Pdk::get(CountryServiceInterface::class);
         $cc             = $shipment->recipient->cc;
 
         if (! $cc || ! $countryService->isRow($cc)) {

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\Validation\Validator;
 
 use BadMethodCallException;
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -288,7 +288,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'deliveryDate' => '2022-12-12 00:00:00',
                 ],
                 'recipient'          => [
-                    'cc'         => CountryService::CC_NL,
+                    'cc'         => CountryCodes::CC_NL,
                     'street'     => 'Pietjestraat',
                     'number'     => '44',
                     'postalCode' => '2901AB',
@@ -312,7 +312,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'deliveryDate' => '2022-12-12 00:00:00',
                 ],
                 'recipient'          => [
-                    'cc'         => CountryService::CC_US,
+                    'cc'         => CountryCodes::CC_US,
                     'street'     => 'Broadway',
                     'number'     => '1',
                     'postalCode' => '12345',
@@ -335,7 +335,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'labelAmount' => 1,
                 ],
                 'recipient'          => [
-                    'cc'         => CountryService::CC_NL,
+                    'cc'         => CountryCodes::CC_NL,
                     'street'     => 'P.C. Hooftstraat',
                     'number'     => '1',
                     'postalCode' => '2243AA',
@@ -358,7 +358,7 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'labelAmount' => 1,
                 ],
                 'recipient'          => [
-                    'cc'         => CountryService::CC_NL,
+                    'cc'         => CountryCodes::CC_NL,
                     'street'     => 'P.C. Hooftstraat',
                     'number'     => '1',
                     'postalCode' => '2243AA',

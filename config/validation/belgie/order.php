@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
@@ -15,11 +15,11 @@ return [
             'schema'       => 'order/bpost/base',
             'shippingZone' => [
                 [
-                    'name' => CountryService::CC_BE,
+                    'name' => CountryCodes::CC_BE,
                     'note' => 'Is validated using base',
                 ],
                 [
-                    'name'        => CountryService::CC_NL,
+                    'name'        => CountryCodes::CC_NL,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -29,7 +29,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::ZONE_EU,
+                    'name'        => CountryCodes::ZONE_EU,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -39,7 +39,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::ZONE_ROW,
+                    'name'        => CountryCodes::ZONE_ROW,
                     'schema'      => 'customs_declaration',
                     'packageType' => [
                         [
@@ -64,7 +64,7 @@ return [
             'schema'       => 'order/postnl/base',
             'shippingZone' => [
                 [
-                    'name'        => CountryService::CC_BE,
+                    'name'        => CountryCodes::CC_BE,
                     'packageType' => [
                         [
                             'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -81,7 +81,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::CC_NL,
+                    'name'        => CountryCodes::CC_NL,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -91,7 +91,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::ZONE_EU,
+                    'name'        => CountryCodes::ZONE_EU,
                     'packageType' => [
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -101,7 +101,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::ZONE_ROW,
+                    'name'        => CountryCodes::ZONE_ROW,
                     'schema'      => 'customs_declaration',
                     'packageType' => [
                         [

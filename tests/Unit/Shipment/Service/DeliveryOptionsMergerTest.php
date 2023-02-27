@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
@@ -110,7 +110,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'ageCheck'  => null,
                 ],
                 'pickupLocation'  => [
-                    'cc'              => CountryService::CC_NL,
+                    'cc'              => CountryCodes::CC_NL,
                     'city'            => DEFAULT_CITY,
                     'locationCode'    => DEFAULT_LOCATION_CODE,
                     'locationName'    => DEFAULT_NAME,
@@ -143,7 +143,7 @@ it('merges delivery options', function ($deliveryOptions, $expectation) {
                     'signature' => false,
                 ] + $emptyShipmentOptions,
             'pickupLocation'  => [
-                    'cc'              => CountryService::CC_NL,
+                    'cc'              => CountryCodes::CC_NL,
                     'city'            => DEFAULT_CITY,
                     'locationCode'    => DEFAULT_LOCATION_CODE,
                     'locationName'    => DEFAULT_NAME,
