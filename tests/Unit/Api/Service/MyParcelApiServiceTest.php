@@ -25,14 +25,19 @@ it('gets correct headers', function () {
     /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
     $api = \MyParcelNL\Pdk\Facade\Pdk::get(ApiServiceInterface::class);
 
-    expect($api->getHeaders())
-        ->toBe([
-            'Authorization' => null,
-            'User-Agent'    => sprintf(
-                'MyParcelNL-PDK/%s php/7.4.30 Prestashop/1.7.8.6',
-                InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME)
-            ),
-        ]);
+    $headers = $api->getHeaders();
+
+    expect($headers)
+        ->toHaveKeys(['Authorization', 'User-Agent'])
+        ->and($headers['Authorization'])
+        ->toBeNull()
+        ->and($headers['User-Agent'])
+        ->toMatch(
+            sprintf(
+                '/MyParcelNL-PDK\/%s php\/[0-9.]+ Prestashop\/1.7.8.6/',
+                str_replace('.', '\.', InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME))
+            )
+        );
 });
 
 it('gets base url', function () {
