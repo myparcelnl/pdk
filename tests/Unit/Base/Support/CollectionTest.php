@@ -39,6 +39,7 @@ it('merges another collection by key', function () {
     $newCollection = new Collection([
         ['id' => 2, 'name' => 'willem'],
         ['id' => 3, 'name' => 'henk'],
+        ['id' => 5, 'name' => 'klaas'],
     ]);
 
     $merged = $collection->mergeByKey($newCollection, 'id');
@@ -49,5 +50,6 @@ it('merges another collection by key', function () {
         ['id' => 1, 'name' => 'berend'],
         ['id' => 2, 'name' => 'willem'],
         ['id' => 3, 'name' => 'henk'],
+        ['id' => 5, 'name' => 'klaas'],
     ]);
 });

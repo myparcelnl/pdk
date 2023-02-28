@@ -13,7 +13,7 @@ class ExamplePostShipmentsResponse extends ExampleJsonResponse
     {
         return [
             'data' => [
-                'shipments' => [
+                'ids' => [
                     ['id' => '123'],
                     ['id' => '456'],
                 ],

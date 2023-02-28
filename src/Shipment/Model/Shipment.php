@@ -197,8 +197,6 @@ class Shipment extends Model
      * Carrier is passed to the delivery options.
      *
      * @param  null|array $data
-     *
-     * @throws \Exception
      */
     public function __construct(?array $data = [])
     {
@@ -236,7 +234,6 @@ class Shipment extends Model
 
     /**
      * @return void
-     * @throws \Exception
      */
     private function updateCarrier(): void
     {

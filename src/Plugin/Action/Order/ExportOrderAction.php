@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Plugin\Action\Order;
 use MyParcelNL\Pdk\Base\PdkActions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
-use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,26 +31,17 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  array $parameters
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function handle(array $parameters): Response
     {
         $orders    = $this->orderRepository->getMany($parameters['orderIds']);
         $shipments = $orders->generateShipments();
-        $shipments = $this->shipmentRepository->createConcepts($shipments);
+        $concepts  = $this->shipmentRepository->createConcepts($shipments);
 
-        if (true === $parameters['print']) {
-            $shipments = $this->shipmentRepository->fetchLabelLink($shipments, LabelSettings::FORMAT_A6);
-            Pdk::execute(PdkActions::UPDATE_TRACKING_NUMBER);
-        }
-
-        $orders->updateShipments($shipments);
+        $orders->updateShipments($concepts);
 
         $this->orderRepository->updateMany($orders);
 
-        $orderIds = $orders->pluck('externalIdentifier')
-            ->toArray();
-
-        return Pdk::execute(PdkActions::GET_ORDER_DATA, ['orderIds' => $orderIds]);
+        return Pdk::execute(PdkActions::GET_ORDER_DATA, ['orderIds' => $parameters['orderIds']]);
     }
 }

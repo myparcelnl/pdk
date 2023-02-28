@@ -114,7 +114,7 @@ class PdkOrder extends Model
      */
     public function createShipment(array $data = []): Shipment
     {
-        $this->shipments->push(
+        return new Shipment(
             array_replace_recursive(
                 [
                     'deliveryOptions' => $this->deliveryOptions,
@@ -128,8 +128,6 @@ class PdkOrder extends Model
                 ['orderId' => $this->externalIdentifier]
             )
         );
-
-        return $this->shipments->last();
     }
 
     /**
