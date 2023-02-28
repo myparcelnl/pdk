@@ -7,9 +7,10 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Facade\Pdk;
+use RuntimeException;
 
 /**
- * @property null|string $externalIdentifier
+ * @property string      $externalIdentifier
  * @property null|int    $id
  * @property null|string $name
  * @property null|string $human
@@ -66,10 +67,6 @@ class Carrier extends Model
      */
     public const TYPE_CUSTOM = 'custom';
     public const TYPE_MAIN   = 'main';
-    /**
-     * Special labels
-     */
-    public const LABEL_DHL_FOR_YOU_COMPLETE_ACCES = 'dhl_for_you_complete_access';
 
     protected $attributes = [
         'externalIdentifier' => null,
@@ -109,27 +106,21 @@ class Carrier extends Model
 
         $options = $repository->get($this->subscriptionId ?? $this->id ?? $this->name ?? null);
 
-        if (Carrier::CARRIER_DHL_FOR_YOU_NAME === $this->name) {
-            $options['capabilities']['shipmentOptions']['sameDayDelivery'] = Carrier::LABEL_DHL_FOR_YOU_COMPLETE_ACCES === $this->label;
-        }
-
         return $options ?? [];
     }
 
-    public function getIdentifier(): string
+    public function getExternalIdentifierAttribute(): string
     {
-        $identifier = $this->externalIdentifier;
-        if ($identifier) {
-            return $identifier;
-        }
         $identifier = $this->name;
+
         if ($this->subscriptionId) {
-            $identifier = "{$identifier}_{$this->subscriptionId}";
+            $identifier .= "_$this->subscriptionId";
         }
 
-        if (! $identifier) {
-            throw new \RuntimeException('No identifier found for carrier');
+        if (! ($identifier)) {
+            throw new RuntimeException('No identifier found for carrier');
         }
+
         return $identifier;
     }
 }

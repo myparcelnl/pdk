@@ -275,6 +275,7 @@ class Shipment extends Model implements StorableArrayable
 
     /**
      * @return void
+     * @throws \Exception
      */
     private function updateCarrier(): void
     {

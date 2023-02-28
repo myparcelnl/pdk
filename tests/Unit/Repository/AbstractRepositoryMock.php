@@ -3,10 +3,10 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
@@ -29,12 +29,11 @@ it('handles repository', function () {
 });
 
 it('gets data from the api', function () {
-    /** @var \MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface $accountRepository */
-    $accountRepository = Pdk::get(AbstractAccountRepository::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository $accountRepository */
+    $accountRepository = Pdk::get(MockAccountRepository::class);
 
-    expect(
-        $accountRepository
-            ->getAccount()
-            ->toArray()
-    )->toBeArray();
+    $account = $accountRepository->getAccount();
+
+    /** @noinspection NullPointerExceptionInspection */
+    expect($account->toArray())->toBeArray();
 });

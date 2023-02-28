@@ -22,11 +22,12 @@ use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 class ContextService implements ContextServiceInterface
 {
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\Context\CheckoutContext
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function createCheckoutContext(PdkCart $cart): CheckoutContext
+    public function createCheckoutContext(?PdkCart $cart): CheckoutContext
     {
         return new CheckoutContext(['cart' => $cart]);
     }

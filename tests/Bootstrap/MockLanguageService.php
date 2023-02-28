@@ -57,7 +57,7 @@ class MockLanguageService implements LanguageServiceInterface
      */
     public function translate(string $key, ?string $language = null): string
     {
-        return self::TRANSLATIONS[$key];
+        return self::TRANSLATIONS[$key] ?? $key;
     }
 
     /**

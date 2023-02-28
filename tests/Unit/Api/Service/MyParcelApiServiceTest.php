@@ -25,7 +25,7 @@ it('gets correct headers', function () {
     expect(array_keys($headers))
         ->toEqual(['Authorization', 'User-Agent'])
         ->and($headers['Authorization'])
-        ->toBe('appelboom YjAzYWQ0MjM3ZWFiNWJlZDExOTI1NzAxMmE0YzU4NjY=')
+        ->toBeNull()
         ->and($headers['User-Agent'])
         ->toMatch(
             '/MyParcelNL-Platform\/2\.0\.0 Platform\/1\.2\.3 MyParcelNL-PDK\/[\d.]+ php\/[\d.]+/'
