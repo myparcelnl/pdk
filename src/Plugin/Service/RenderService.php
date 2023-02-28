@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
@@ -196,32 +197,11 @@ class RenderService implements RenderServiceInterface
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Plugin\Model\Context\ContextBag $context
-     *
-     * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function encodeContext(?ContextBag $context): string
-    {
-        return $context ? htmlspecialchars(json_encode(array_filter($context->toArray())), ENT_QUOTES, 'UTF-8') : '{}';
-    }
-
-    /**
-     * @param  string $template
-     *
-     * @return string
-     */
-    private function getTemplate(string $template): string
-    {
-        return sprintf('%ssrc/Plugin/Admin/Template/%s', Pdk::get('rootDir'), $template);
-    }
-
-    /**
      * @param  string $component
      *
      * @return bool
      */
-    private function shouldRender(string $component): bool
+    protected function shouldRender(string $component): bool
     {
         switch ($component) {
             case self::COMPONENT_INIT_SCRIPT:
@@ -240,7 +220,28 @@ class RenderService implements RenderServiceInterface
                 return $this->viewService->isOrderListPage();
 
             default:
-                return true;
+                throw new InvalidArgumentException(sprintf('Unknown component "%s"', $component));
         }
+    }
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Plugin\Model\Context\ContextBag $context
+     *
+     * @return string
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function encodeContext(?ContextBag $context): string
+    {
+        return $context ? htmlspecialchars(json_encode(array_filter($context->toArray())), ENT_QUOTES, 'UTF-8') : '{}';
+    }
+
+    /**
+     * @param  string $template
+     *
+     * @return string
+     */
+    private function getTemplate(string $template): string
+    {
+        return sprintf('%ssrc/Plugin/Admin/Template/%s', Pdk::get('rootDir'), $template);
     }
 }

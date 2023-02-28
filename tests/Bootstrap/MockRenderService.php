@@ -10,6 +10,15 @@ class MockRenderService extends RenderService
 {
     public const RENDERED_CONTENT = '(content)';
 
+    public function renderSomething(string $component): string
+    {
+        if (! $this->shouldRender($component)) {
+            return '';
+        }
+
+        return self::RENDERED_CONTENT;
+    }
+
     /**
      * Skips all rendering stuff.
      *
