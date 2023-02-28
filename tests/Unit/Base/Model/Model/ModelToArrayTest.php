@@ -3,41 +3,88 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
-use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
+namespace MyParcelNL\Pdk\Tests\Unit\Base\Model\Model;
+
+use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
+
+const MODEL_DATA = [
+    'my_value' => 1,
+    'myModel'  => [
+        'myModel' => [
+            'my_value' => null,
+        ],
+    ],
+];
 
 it('can use toArray', function () {
-    expect((new MockMutateModel())->toArray())->toEqual([
-        'myProperty' => 1,
-        'perenboom'  => 'mutated_',
-        'bloemkool'  => 'bloemkool',
+    expect((new MockNestedModel(MODEL_DATA))->toArray())->toEqual([
+        'myValue' => 1,
+        'myModel' => [
+            'myValue' => null,
+            'myModel' => [
+                'myValue' => null,
+                'myModel' => null,
+            ],
+        ],
     ]);
 });
 
 it('can use toSnakeCaseArray', function () {
-    expect((new MockMutateModel())->toSnakeCaseArray())->toEqual([
-        'my_property' => 1,
-        'perenboom'   => 'mutated_',
-        'bloemkool'   => 'bloemkool',
+    expect((new MockNestedModel(MODEL_DATA))->toSnakeCaseArray())->toEqual([
+        'my_value' => 1,
+        'my_model' => [
+            'my_value' => null,
+            'my_model' => [
+                'my_value' => null,
+                'my_model' => null,
+            ],
+        ],
     ]);
 });
 
 it('can use toKebabCaseArray', function () {
-    expect((new MockMutateModel())->toKebabCaseArray())->toEqual([
-        'my-property' => 1,
-        'perenboom'   => 'mutated_',
-        'bloemkool'   => 'bloemkool',
+    expect((new MockNestedModel(MODEL_DATA))->toKebabCaseArray())->toEqual([
+        'my-value' => 1,
+        'my-model' => [
+            'my-value' => null,
+            'my-model' => [
+                'my-value' => null,
+                'my-model' => null,
+            ],
+        ],
     ]);
 });
 
 it('can use toStudlyCaseArray', function () {
-    expect((new MockMutateModel())->toStudlyCaseArray())->toEqual([
-        'MyProperty' => 1,
-        'Perenboom'  => 'mutated_',
-        'Bloemkool'  => 'bloemkool',
+    expect(
+        (new MockNestedModel(MODEL_DATA))->toStudlyCaseArray()
+    )->toEqual([
+        'MyValue' => 1,
+        'MyModel' => [
+            'MyValue' => null,
+            'MyModel' => [
+                'MyValue' => null,
+                'MyModel' => null,
+            ],
+        ],
     ]);
 });
 
 it('can use toArrayWithoutNull', function () {
-    expect((new MockCastModel())->toArrayWithoutNull())->toEqual([]);
+    expect((new MockNestedModel(MODEL_DATA))->toArrayWithoutNull())->toEqual([
+        'myValue' => '1',
+        'myModel' => [
+            'myModel' => [],
+        ],
+    ]);
+});
+
+it('can combine case and skipping null', function () {
+    expect((new MockNestedModel(MODEL_DATA))->toArray(Arrayable::SKIP_NULL | Arrayable::CASE_KEBAB))->toEqual([
+        'my-value' => '1',
+        'my-model' => [
+            'my-model' => [],
+        ],
+    ]);
 });

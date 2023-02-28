@@ -230,8 +230,8 @@ trait HasAttributes
 
         if ($flags) {
             if ($flags & Arrayable::SKIP_NULL) {
-                return array_filter($attributes, static function ($value) {
-                    return null !== $value;
+                $attributes = array_filter($attributes, static function ($value) {
+                    return $value !== null;
                 });
             }
 
@@ -360,7 +360,7 @@ trait HasAttributes
             }
 
             if ($attributes[$key] instanceof Arrayable) {
-                $attributes[$key] = $attributes[$key]->toArray();
+                $attributes[$key] = $attributes[$key]->toArray($flags);
             }
 
             if ($flags & Arrayable::SKIP_NULL && null === $attributes[$key]) {
