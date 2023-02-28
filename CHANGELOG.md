@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.36.0](https://github.com/myparcelnl/pdk/compare/v1.35.0...v1.36.0) (2023-02-28)
+
+
+### :bug: Bug Fixes
+
+* **model:** fix flags not being passed to nested models ([#79](https://github.com/myparcelnl/pdk/issues/79)) ([2de423b](https://github.com/myparcelnl/pdk/commit/2de423b001bdfdbb9b1eba8cbcecb036726d0224))
+* **shipments:** correct merging of shipment/order ids ([#80](https://github.com/myparcelnl/pdk/issues/80)) ([ac0bd0b](https://github.com/myparcelnl/pdk/commit/ac0bd0bc6067514af6618bda4bf0578cc79a7ba3))
+
+
+### :sparkles: New Features
+
+* add view service ([#75](https://github.com/myparcelnl/pdk/issues/75)) ([c88a503](https://github.com/myparcelnl/pdk/commit/c88a503f2ed3454f085a90555211f1b603c888d0))
+* **language:** add more methods ([#85](https://github.com/myparcelnl/pdk/issues/85)) ([b499b44](https://github.com/myparcelnl/pdk/commit/b499b44fa4ce6b74346f49ea5f2f5ace4e742767))
+
 ## [1.35.0](https://github.com/myparcelnl/pdk/compare/v1.34.0...v1.35.0) (2023-02-27)
 
 
