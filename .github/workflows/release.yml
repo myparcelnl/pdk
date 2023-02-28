@@ -58,3 +58,4 @@ jobs:
           token: ${{ steps.credentials.outputs.token }}
           base: ${{ github.ref_name }}
           exclude-drafts: true
+          exclude-labels: 'dependencies'
