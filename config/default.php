@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
 use MyParcelNL\Pdk\Plugin\Service\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use Psr\Log\LoggerInterface;
@@ -44,4 +45,5 @@ return [
     EndpointActionsInterface::class   => autowire(),
     LanguageServiceInterface::class   => autowire(),
     LoggerInterface::class            => autowire(),
+    ViewServiceInterface::class       => autowire(),
 ];

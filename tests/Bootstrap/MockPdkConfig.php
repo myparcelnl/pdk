@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
 use MyParcelNL\Pdk\Plugin\Action\EndpointActionsInterface;
+use MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface;
 use MyParcelNL\Pdk\Product\Repository\AbstractProductRepository;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
@@ -51,6 +52,7 @@ class MockPdkConfig
             StorageInterface::class           => autowire(MemoryCacheStorage::class),
             AbstractSettingsRepository::class => autowire(MockSettingsRepository::class),
             AbstractProductRepository::class  => autowire(MockProductRepository::class),
+            ViewServiceInterface::class       => autowire(MockViewService::class),
         ];
     }
 }
