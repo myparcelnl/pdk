@@ -2,13 +2,8 @@ version: '3.9'
 
 services:
   php:
-    image: myparcelnl/pdk
-    build: ./
+    image: ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
     init: true
+    command: ['composer', 'update']
     volumes:
       - ./:/app
-    environment:
-      BLACKFIRE_CLIENT_ID: ${BLACKFIRE_CLIENT_ID}
-      BLACKFIRE_CLIENT_TOKEN: ${BLACKFIRE_CLIENT_TOKEN}
-      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
-      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}

@@ -13,12 +13,6 @@
     "justinrainbow/json-schema": "^5.2"
   },
   "scripts": {
-    "test": "php vendor/bin/pest",
-    "test:coverage": [
-      "@test --coverage-clover clover.xml",
-      "@test:coverage:transform"
-    ],
-    "test:coverage:transform": "sed -i 's/\\/app\\/src\\//src\\//g' clover.xml",
     "post-autoload-dump": "php helper/generate.php"
   },
   "require-dev": {
