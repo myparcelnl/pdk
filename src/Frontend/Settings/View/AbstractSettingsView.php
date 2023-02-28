@@ -16,6 +16,8 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 abstract class AbstractSettingsView implements Arrayable
 {
+    public const OPTIONS_VALUE_NONE = -1;
+
     protected $cache = [];
 
     /**
@@ -103,7 +105,7 @@ abstract class AbstractSettingsView implements Arrayable
 
         if ($includeNone) {
             array_unshift($options, [
-                'value' => -1,
+                'value' => self::OPTIONS_VALUE_NONE,
                 'label' => LanguageService::translate('settings_none'),
             ]);
         }
