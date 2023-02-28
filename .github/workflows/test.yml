@@ -1,17 +1,22 @@
-name: '🔸 Run tests 🧪'
+name: 'Run tests 🧪'
 
 on:
   workflow_dispatch:
 
   workflow_call:
-    inputs:
-      ref:
-        type: string
-        required: false
+
+  pull_request:
+    branches:
+      - main
+
+  merge_group:
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
-    name: 'Run pest tests'
     runs-on: ubuntu-22.04
     permissions:
       contents: read
@@ -24,7 +29,7 @@ jobs:
         id: cache-coverage
         with:
           path: ./clover.xml
-          key: ${{ runner.os }}-coverage-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
+          key: ${{ runner.os }}-coverage-clover-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
 
       - name: 'Handle composer cache'
         uses: actions/cache@v3
@@ -58,7 +63,7 @@ jobs:
           docker run \
             --volume $PWD:/app \
             ${{ steps.docker.outputs.image }} \
-            vendor/bin/pest --coverage-clover=clover.xml
+            composer run test:coverage
 
       - name: 'Upload coverage'
         uses: actions/upload-artifact@v3
@@ -67,7 +72,6 @@ jobs:
           path: clover.xml
 
   coverage:
-    name: 'Upload coverage'
     needs: test
     runs-on: ubuntu-22.04
     steps:
