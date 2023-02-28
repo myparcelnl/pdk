@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Plugin\Service\OrderStatusServiceInterface;
-use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 
 /**

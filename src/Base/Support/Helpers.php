@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Pdk\Base\Support\Arr;
-
 class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
 {
     /**

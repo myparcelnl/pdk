@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 
