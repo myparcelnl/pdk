@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
-use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
@@ -39,11 +38,9 @@ it('exports entire order', function (array $orders) {
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
-    $settingsRepository->set(
-        new Settings([
-            GeneralSettings::ID => [
-                GeneralSettings::ORDER_MODE => true,
-            ],
+    $settingsRepository->storeSettings(
+        new GeneralSettings([
+            GeneralSettings::ORDER_MODE => true,
         ])
     );
 

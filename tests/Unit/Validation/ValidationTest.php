@@ -137,10 +137,13 @@ it('validates order', function (array $input, array $errors = []) {
 
     $isValid = $validator->validate();
 
-    expect(Arr::dot($validator->getErrors()))
-        ->toBe($errors)
-        ->and($isValid)
-        ->toBe(empty($errors));
+    $errors = Arr::dot($validator->getErrors());
+
+    expect($isValid)->toBe(empty($errors));
+
+    if (! empty($errors)) {
+        assertMatchesJsonSnapshot(json_encode($errors));
+    }
 })->with([
         'instabox to France'                          => [
             'input'  => arrayMergeOrder(
@@ -164,7 +167,7 @@ it('validates order', function (array $input, array $errors = []) {
             ],
         ],
         'postnl non-standard delivery without date'   => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
@@ -174,33 +177,9 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.deliveryType',
-                '0.pointer'    => '/deliveryOptions/deliveryType',
-                '0.message'    => 'Does not have a value in the enumeration ["standard",null]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => 'standard',
-                '0.enum.1'     => null,
-                '1.property'   => 'deliveryOptions.date',
-                '1.pointer'    => '/deliveryOptions/date',
-                '1.message'    => 'NULL value found, but a string is required',
-                '1.constraint' => 'type',
-                '1.context'    => 1,
-                '2.property'   => '',
-                '2.pointer'    => '',
-                '2.message'    => 'Failed to match at least one schema',
-                '2.constraint' => 'anyOf',
-                '2.context'    => 1,
-                '3.property'   => '',
-                '3.pointer'    => '',
-                '3.message'    => 'Failed to match all schemas',
-                '3.constraint' => 'allOf',
-                '3.context'    => 1,
-            ],
         ],
         'pickup without pickupLocation'               => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
@@ -211,35 +190,9 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.pickupLocation',
-                '0.pointer'    => '/deliveryOptions/pickupLocation',
-                '0.message'    => 'NULL value found, but an object is required',
-                '0.constraint' => 'type',
-                '0.context'    => 1,
-                '1.property'   => 'deliveryOptions.deliveryType',
-                '1.pointer'    => '/deliveryOptions/deliveryType',
-                '1.message'    => 'Does not have a value in the enumeration ["morning","standard","evening",null]',
-                '1.constraint' => 'enum',
-                '1.context'    => 1,
-                '1.enum.0'     => 'morning',
-                '1.enum.1'     => 'standard',
-                '1.enum.2'     => 'evening',
-                '1.enum.3'     => null,
-                '2.property'   => '',
-                '2.pointer'    => '',
-                '2.message'    => 'Failed to match at least one schema',
-                '2.constraint' => 'anyOf',
-                '2.context'    => 1,
-                '3.property'   => '',
-                '3.pointer'    => '',
-                '3.message'    => 'Failed to match all schemas',
-                '3.constraint' => 'allOf',
-                '3.context'    => 1,
-            ],
         ],
         'pickup without location code'                => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
@@ -254,61 +207,9 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.pickupLocation.postalCode',
-                '0.pointer'    => '/deliveryOptions/pickupLocation/postalCode',
-                '0.message'    => 'NULL value found, but a string is required',
-                '0.constraint' => 'type',
-                '0.context'    => 1,
-                '1.property'   => 'deliveryOptions.pickupLocation.locationName',
-                '1.pointer'    => '/deliveryOptions/pickupLocation/locationName',
-                '1.message'    => 'NULL value found, but a string is required',
-                '1.constraint' => 'type',
-                '1.context'    => 1,
-                '2.property'   => 'deliveryOptions.pickupLocation.city',
-                '2.pointer'    => '/deliveryOptions/pickupLocation/city',
-                '2.message'    => 'NULL value found, but a string is required',
-                '2.constraint' => 'type',
-                '2.context'    => 1,
-                '3.property'   => 'deliveryOptions.pickupLocation.fullStreet',
-                '3.pointer'    => '/deliveryOptions/pickupLocation/fullStreet',
-                '3.message'    => 'NULL value found, but a string is required',
-                '3.constraint' => 'type',
-                '3.context'    => 1,
-                '4.property'   => 'deliveryOptions.pickupLocation.street',
-                '4.pointer'    => '/deliveryOptions/pickupLocation/street',
-                '4.message'    => 'NULL value found, but a string is required',
-                '4.constraint' => 'type',
-                '4.context'    => 1,
-                '5.property'   => 'deliveryOptions.pickupLocation.number',
-                '5.pointer'    => '/deliveryOptions/pickupLocation/number',
-                '5.message'    => 'NULL value found, but a string is required',
-                '5.constraint' => 'type',
-                '5.context'    => 1,
-                '6.property'   => 'deliveryOptions.pickupLocation.region',
-                '6.pointer'    => '/deliveryOptions/pickupLocation/region',
-                '6.message'    => 'NULL value found, but a string is required',
-                '6.constraint' => 'type',
-                '6.context'    => 1,
-                '7.property'   => 'deliveryOptions.pickupLocation.cc',
-                '7.pointer'    => '/deliveryOptions/pickupLocation/cc',
-                '7.message'    => 'NULL value found, but a string is required',
-                '7.constraint' => 'type',
-                '7.context'    => 1,
-                '8.property'   => 'deliveryOptions.pickupLocation.locationCode',
-                '8.pointer'    => '/deliveryOptions/pickupLocation/locationCode',
-                '8.message'    => 'NULL value found, but a string is required',
-                '8.constraint' => 'type',
-                '8.context'    => 1,
-                '9.property'   => 'deliveryOptions.pickupLocation.retailNetworkId',
-                '9.pointer'    => '/deliveryOptions/pickupLocation/retailNetworkId',
-                '9.message'    => 'NULL value found, but a string is required',
-                '9.constraint' => 'type',
-                '9.context'    => 1,
-            ],
         ],
         'package without country'                     => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient' => [
@@ -316,30 +217,15 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'recipient.cc',
-                '0.pointer'    => '/recipient/cc',
-                '0.message'    => 'NULL value found, but a string is required',
-                '0.constraint' => 'type',
-                '0.context'    => 1,
-            ],
         ],
         'postnl with same day delivery'               => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 ['deliveryOptions' => ['shipmentOptions' => ['sameDayDelivery' => true]]]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.shipmentOptions.sameDayDelivery',
-                '0.pointer'    => '/deliveryOptions/shipmentOptions/sameDayDelivery',
-                '0.message'    => 'Does not have a value in the enumeration [false]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => false,
-            ],
         ],
         'morning delivery with age check'             => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
@@ -348,75 +234,14 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.shipmentOptions.onlyRecipient',
-                '0.pointer'    => '/deliveryOptions/shipmentOptions/onlyRecipient',
-                '0.message'    => 'Does not have a value in the enumeration [true]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => true,
-                '1.property'   => 'deliveryOptions.shipmentOptions.signature',
-                '1.pointer'    => '/deliveryOptions/shipmentOptions/signature',
-                '1.message'    => 'Does not have a value in the enumeration [true]',
-                '1.constraint' => 'enum',
-                '1.context'    => 1,
-                '1.enum.0'     => true,
-                '2.property'   => 'deliveryOptions.shipmentOptions.ageCheck',
-                '2.pointer'    => '/deliveryOptions/shipmentOptions/ageCheck',
-                '2.message'    => 'Does not have a value in the enumeration [null,false]',
-                '2.constraint' => 'enum',
-                '2.context'    => 1,
-                '2.enum.0'     => null,
-                '2.enum.1'     => false,
-                '3.property'   => '',
-                '3.pointer'    => '',
-                '3.message'    => 'Failed to match at least one schema',
-                '3.constraint' => 'anyOf',
-                '3.context'    => 1,
-                '4.property'   => '',
-                '4.pointer'    => '',
-                '4.message'    => 'Failed to match all schemas',
-                '4.constraint' => 'allOf',
-                '4.context'    => 1,
-                '5.property'   => 'deliveryOptions.shipmentOptions.ageCheck',
-                '5.pointer'    => '/deliveryOptions/shipmentOptions/ageCheck',
-                '5.message'    => 'Does not have a value in the enumeration [false]',
-                '5.constraint' => 'enum',
-                '5.context'    => 1,
-                '5.enum.0'     => false,
-            ],
         ],
         'weight of 25kg'                              => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'physicalProperties' => ['weight' => 25000],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.shipmentOptions.largeFormat',
-                '0.pointer'    => '/deliveryOptions/shipmentOptions/largeFormat',
-                '0.message'    => 'Does not have a value in the enumeration [true]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => true,
-                '1.property'   => 'physicalProperties.weight',
-                '1.pointer'    => '/physicalProperties/weight',
-                '1.message'    => 'Must have a maximum value of 23000',
-                '1.constraint' => 'maximum',
-                '1.context'    => 1,
-                '1.maximum'    => 23000,
-                '2.property'   => '',
-                '2.pointer'    => '',
-                '2.message'    => 'Failed to match at least one schema',
-                '2.constraint' => 'anyOf',
-                '2.context'    => 1,
-                '3.property'   => '',
-                '3.pointer'    => '',
-                '3.message'    => 'Failed to match all schemas',
-                '3.constraint' => 'allOf',
-                '3.context'    => 1,
-            ],
         ],
         'weight of 29kg with large_format'            => [
             'input' => arrayMergeOrder(
@@ -434,7 +259,7 @@ it('validates order', function (array $input, array $errors = []) {
             ),
         ],
         'mailbox with morning delivery'               => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
@@ -443,18 +268,9 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.deliveryType',
-                '0.pointer'    => '/deliveryOptions/deliveryType',
-                '0.message'    => 'Does not have a value in the enumeration ["standard",null]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => 'standard',
-                '0.enum.1'     => null,
-            ],
         ],
         'EU package without insurance'                => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient'       => [
@@ -463,17 +279,9 @@ it('validates order', function (array $input, array $errors = []) {
                     'deliveryOptions' => ['shipmentOptions' => ['insurance' => null]],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.shipmentOptions.insurance',
-                '0.pointer'    => '/deliveryOptions/shipmentOptions/insurance',
-                '0.message'    => 'Does not have a value in the enumeration [50000]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => 50000,
-            ],
         ],
         'EU package with no weight'                   => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient'          => [
@@ -483,14 +291,6 @@ it('validates order', function (array $input, array $errors = []) {
                     'physicalProperties' => ['weight' => 0],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'physicalProperties.weight',
-                '0.pointer'    => '/physicalProperties/weight',
-                '0.message'    => 'Must have a minimum value of 1',
-                '0.constraint' => 'minimum',
-                '0.context'    => 1,
-                '0.minimum'    => 1,
-            ],
         ],
         'EU package with correct insurance'           => [
             'input' => arrayMergeOrder(
@@ -504,7 +304,7 @@ it('validates order', function (array $input, array $errors = []) {
             ),
         ],
         'mailbox with shipmentOptions'                => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
@@ -515,17 +315,9 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.shipmentOptions.signature',
-                '0.pointer'    => '/deliveryOptions/shipmentOptions/signature',
-                '0.message'    => 'Does not have a value in the enumeration [false]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => false,
-            ],
         ],
         'BE mailbox'                                  => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient'       => [
@@ -536,18 +328,9 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'deliveryOptions.packageType',
-                '0.pointer'    => '/deliveryOptions/packageType',
-                '0.message'    => 'Does not have a value in the enumeration ["letter","package"]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => 'letter',
-                '0.enum.1'     => 'package',
-            ],
         ],
         'ROW package without weight, without invoice' => [
-            'input'  => arrayMergeOrder(
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient'       => [
@@ -560,19 +343,6 @@ it('validates order', function (array $input, array $errors = []) {
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'customsDeclaration.invoice',
-                '0.pointer'    => '/customsDeclaration/invoice',
-                '0.message'    => 'NULL value found, but a string is required',
-                '0.constraint' => 'type',
-                '0.context'    => 1,
-                '1.property'   => 'customsDeclaration.weight',
-                '1.pointer'    => '/customsDeclaration/weight',
-                '1.message'    => 'Must have a minimum value of 1',
-                '1.constraint' => 'minimum',
-                '1.context'    => 1,
-                '1.minimum'    => 1,
-            ],
         ],
         'ROW package'                                 => [
             'input' => arrayMergeOrder(

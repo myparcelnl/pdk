@@ -1,0 +1,8 @@
+{
+  "0.property": "physicalProperties.weight",
+  "0.pointer": "/physicalProperties/weight",
+  "0.message": "Must have a minimum value of 1",
+  "0.constraint": "minimum",
+  "0.context": 1,
+  "0.minimum": 1
+}

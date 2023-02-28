@@ -4,7 +4,6 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
@@ -62,7 +61,7 @@ it('subscribes to a webhook', function () {
     );
 
     expect($response)
-        ->toBeInstanceOf(Collection::class)
+        ->toBeInstanceOf(WebhookSubscription::class)
         ->and($response->toArray())
         ->toEqual([
             'id'   => 3001518,

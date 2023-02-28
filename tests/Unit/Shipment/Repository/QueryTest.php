@@ -39,7 +39,7 @@ it('creates shipment collection from queried data', function (string $responseCl
 
     expect($response)
         ->and($shipment->deliveryOptions->carrier)
-        ->toBe($shipment->carrier->name);
+        ->toBe($shipment->carrier->carrier->name);
 
     assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
 })->with([

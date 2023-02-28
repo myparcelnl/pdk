@@ -15,7 +15,7 @@ usesShared(new UsesMockPdkInstance());
 it('sets carrier correctly', function ($carrier, string $expectedName) {
     $carrier = is_callable($carrier) ? $carrier() : $carrier;
 
-    expect((new Shipment(['carrier' => $carrier]))->carrier->name)
+    expect((new Shipment(['carrier' => $carrier]))->carrier->carrier->name)
         ->toBe($expectedName);
 })->with([
     'carrier id'      => [
