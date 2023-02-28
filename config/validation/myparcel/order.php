@@ -187,7 +187,7 @@ return [
             'schema'       => 'order/dhleuroplus/base',
             'shippingZone' => [
                 [
-                    'name'        => CountryService::CC_NL,
+                    'name'        => CountryCodes::CC_NL,
                     'packageType' => [
                         [
                             'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -197,7 +197,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::CC_BE,
+                    'name'        => CountryCodes::CC_BE,
                     'schema'      => [
                         'properties' => [
                             'deliveryOptions' => [
@@ -226,7 +226,7 @@ return [
                     ],
                 ],
                 [
-                    'name'        => CountryService::ZONE_EU,
+                    'name'        => CountryCodes::ZONE_EU,
                     'schema'      => [
                         'properties' => [
                             'deliveryOptions' => [
