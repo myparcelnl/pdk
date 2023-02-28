@@ -4,8 +4,8 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository;
-use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
+use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
@@ -72,7 +72,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 ]);
 
 it('uses all methods of repository', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
+    PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = Pdk::get(ApiServiceInterface::class);
     $api->getMock()

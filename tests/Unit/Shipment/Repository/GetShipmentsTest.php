@@ -25,7 +25,7 @@ dataset('shipments', [
 it(
     'gets shipments',
     function (array $collection, string $path) {
-        $pdk = PdkFactory::create(MockPdkConfig::create());
+        PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();

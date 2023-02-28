@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
  */
 
 it('updates shipment', function (array $collection, ?int $size, $path, $query) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
+    PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();
@@ -81,7 +81,7 @@ it('updates shipment', function (array $collection, ?int $size, $path, $query) {
 ]);
 
 it('throws error when updating collection without ids or reference ids', function () {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
+    PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();

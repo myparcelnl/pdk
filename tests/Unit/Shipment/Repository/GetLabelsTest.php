@@ -86,7 +86,7 @@ dataset('collections', [
 it(
     'downloads labels as link',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        $pdk = PdkFactory::create(MockPdkConfig::create());
+        PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
@@ -123,7 +123,7 @@ it(
 it(
     'downloads labels as pdf',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        $pdk = PdkFactory::create(MockPdkConfig::create());
+        PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
