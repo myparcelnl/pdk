@@ -3,6 +3,7 @@
     <CommandLine>
       <PhpTestInterpreterSettings>
         <option name="interpreterName" value="php" />
+        <option name="coverageEngine" value="PCov" />
       </PhpTestInterpreterSettings>
     </CommandLine>
     <option name="pestRunnerSettings">
