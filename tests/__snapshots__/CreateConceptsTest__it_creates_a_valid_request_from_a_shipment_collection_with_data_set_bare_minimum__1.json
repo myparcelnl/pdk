@@ -1,5 +1,6 @@
 [
   {
+    "carrier": 1,
     "general_settings": {
       "save_recipient_address": 0
     },
