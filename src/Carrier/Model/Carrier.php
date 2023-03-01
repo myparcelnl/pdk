@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use RuntimeException;
 
 /**
@@ -97,6 +98,24 @@ class Carrier extends Model
     ];
 
     /**
+     * @param  null|array $data
+     */
+    public function __construct(?array $data = null)
+    {
+        if (! $data || ! isset($data['name'], $data['id'])) {
+            $data['name'] = Platform::get('defaultCarrier');
+        }
+
+        if (isset($data['id'])) {
+            $data['name'] = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true);
+        } elseif (isset($data['name'])) {
+            $data['id'] = self::CARRIER_NAME_ID_MAP[$data['name']] ?? null;
+        }
+
+        parent::__construct($data);
+    }
+
+    /**
      * @return array
      */
     public function getAllOptions(): array
@@ -117,7 +136,7 @@ class Carrier extends Model
             $identifier .= "_$this->subscriptionId";
         }
 
-        if (! ($identifier)) {
+        if (! $identifier) {
             throw new RuntimeException('No identifier found for carrier');
         }
 
