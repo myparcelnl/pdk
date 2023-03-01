@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Model;
 
-use Exception;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Plugin\Service\CartCalculationServiceInterface;
 
 /**
  * @property string                                                   $externalIdentifier
@@ -38,7 +37,7 @@ class PdkCart extends Model
         'totalPrice'            => 0,
         'totalPriceAfterVat'    => 0,
         'totalVat'              => 0,
-        'shippingMethod'        => null,
+        'shippingMethod'        => [],
     ];
 
     protected $casts      = [
@@ -77,72 +76,14 @@ class PdkCart extends Model
         return $this;
     }
 
+    /**
+     * @return void
+     */
     private function updateShippingMethod(): void
     {
-        try {
-            /**
-             * The order of the package types is important, incompatible types will be unset starting from the beginning.
-             */
-            $allowedPackageTypes    = [
-                DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            ];
-            $mailboxPercentage      = 0.0;
-            $minimumDropOffDelay    = 0;
-            $disableDeliveryOptions = false;
-            $isDeliverable          = false;
+        /** @var \MyParcelNL\Pdk\Plugin\Service\CartCalculationServiceInterface $service */
+        $service = Pdk::get(CartCalculationServiceInterface::class);
 
-            foreach ($this->lines->all() as $line) {
-                /** @var \MyParcelNL\Pdk\Plugin\Model\PdkOrderLine $line */
-
-                $fitInMailbox = $line->product->settings->fitInMailbox;
-
-                $minimumDropOffDelay = max($minimumDropOffDelay, $line->product->settings->dropOffDelay);
-
-                if ($mailboxPercentage <= 100.0 && 0 !== $fitInMailbox) {
-                    $mailboxPercentage += $line->quantity * (100.0 / $fitInMailbox);
-                }
-
-                foreach ($allowedPackageTypes as $index => $allowedPackageType) {
-                    if ($allowedPackageType === $line->product->settings->packageType) {
-                        break;
-                    }
-                    unset($allowedPackageTypes[$index]);
-                }
-
-                if (1 === (int) $line->product->settings->disableDeliveryOptions) {
-                    $disableDeliveryOptions = true;
-                }
-
-                if (1 === (int) $line->product->isDeliverable) {
-                    $isDeliverable = true;
-                }
-            }
-
-            if ($mailboxPercentage > 100.0
-                && in_array(
-                    DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                    $allowedPackageTypes,
-                    true
-                )) {
-                unset(
-                    $allowedPackageTypes[array_search(
-                        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                        $allowedPackageTypes,
-                        true
-                    )]
-                );
-            }
-
-            $this->shippingMethod->fill([
-                'hasDeliveryOptions'  => false === $disableDeliveryOptions && true === $isDeliverable,
-                'minimumDropOffDelay' => $minimumDropOffDelay,
-                'allowPackageTypes'   => array_values($allowedPackageTypes),
-            ]);
-        } catch (Exception $e) {
-            DefaultLogger::error($e->getMessage(), ['exception' => $e]);
-        }
+        $this->shippingMethod = $service->calculateShippingMethod($this);
     }
 }
