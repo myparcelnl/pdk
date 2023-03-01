@@ -24,10 +24,6 @@
           "label": "settings_none"
         },
         {
-          "value": "AC",
-          "label": "AC"
-        },
-        {
           "value": "AD",
           "label": "AD"
         },
@@ -260,10 +256,6 @@
           "label": "DE"
         },
         {
-          "value": "DG",
-          "label": "DG"
-        },
-        {
           "value": "DJ",
           "label": "DJ"
         },
@@ -282,10 +274,6 @@
         {
           "value": "DZ",
           "label": "DZ"
-        },
-        {
-          "value": "EA",
-          "label": "EA"
         },
         {
           "value": "EC",
@@ -314,10 +302,6 @@
         {
           "value": "ET",
           "label": "ET"
-        },
-        {
-          "value": "EZ",
-          "label": "EZ"
         },
         {
           "value": "FI",
@@ -442,10 +426,6 @@
         {
           "value": "HU",
           "label": "HU"
-        },
-        {
-          "value": "IC",
-          "label": "IC"
         },
         {
           "value": "ID",
@@ -900,10 +880,6 @@
           "label": "SZ"
         },
         {
-          "value": "TA",
-          "label": "TA"
-        },
-        {
           "value": "TC",
           "label": "TC"
         },
@@ -1028,20 +1004,8 @@
           "label": "WS"
         },
         {
-          "value": "XC",
-          "label": "XC"
-        },
-        {
           "value": "XK",
           "label": "XK"
-        },
-        {
-          "value": "XL",
-          "label": "XL"
-        },
-        {
-          "value": "XM",
-          "label": "XM"
         },
         {
           "value": "YE",

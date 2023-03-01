@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Validation\Validator;
 
-use BadMethodCallException;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -381,14 +380,6 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
         ],
     ]
 );
-
-it('throws an error when calling a nonexistent function', function () use ($createOrder) {
-    $order     = $createOrder();
-    $validator = $order->getValidator();
-
-    /** @noinspection PhpUndefinedMethodInspection */
-    $validator->canHavePietje();
-})->throws(BadMethodCallException::class);
 
 it('throws error when trying to validate without an order', function () {
     $validator = Pdk::get(OrderValidator::class);

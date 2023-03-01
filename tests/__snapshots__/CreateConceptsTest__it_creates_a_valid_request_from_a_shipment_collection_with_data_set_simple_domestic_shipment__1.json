@@ -1,29 +1,30 @@
 [
-    {
-        "general_settings": {
-            "save_recipient_address": 0
-        },
-        "options": {
-            "package_type": 1,
-            "delivery_type": 2,
-            "delivery_date": "2022-07-10 16:00:00",
-            "insurance": {
-                "amount": 500,
-                "currency": "EUR"
-            },
-            "age_check": 1,
-            "label_description": "order 204829",
-            "only_recipient": 1
-        },
-        "physical_properties": {
-            "weight": 2000
-        },
-        "recipient": {
-            "cc": "NL",
-            "city": "Hoofddorp",
-            "postal_code": "2132JE",
-            "street": "Antareslaan 31",
-            "person": "Jaap Krekel"
-        }
+  {
+    "carrier": 1,
+    "general_settings": {
+      "save_recipient_address": 0
+    },
+    "options": {
+      "package_type": 1,
+      "delivery_type": 2,
+      "delivery_date": "2022-07-10 16:00:00",
+      "insurance": {
+        "amount": 500,
+        "currency": "EUR"
+      },
+      "age_check": 1,
+      "label_description": "order 204829",
+      "only_recipient": 1
+    },
+    "physical_properties": {
+      "weight": 2000
+    },
+    "recipient": {
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "postal_code": "2132JE",
+      "street": "Antareslaan 31",
+      "person": "Jaap Krekel"
     }
+  }
 ]

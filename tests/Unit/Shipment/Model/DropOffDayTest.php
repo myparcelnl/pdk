@@ -5,9 +5,11 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
+use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use function DI\autowire;
@@ -25,18 +27,23 @@ function createPdk(array $settingsOverrides): void
     PdkFactory::create($config);
 }
 
-it(
-    'returns correct delivery days using a specific date',
-    function (string $date, array $settingsOverrides, array $expectation) {
-        createPdk($settingsOverrides);
+it('returns correct delivery days using a specific date', function (
+    string $date,
+    array  $settingsOverrides,
+    array  $expectation
+) {
+    createPdk($settingsOverrides);
 
-        /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
-        $carrierSettings = Settings::get('carrier.0');
-        $deliveryDays    = $carrierSettings->dropOffPossibilities->getPossibleDropOffDays(new DateTimeImmutable($date));
+    /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
+    $carrierSettings = Settings::get('carrier.0');
 
-        expect(Arr::dot($deliveryDays->toArray()))->toEqual($expectation);
-    }
-)->with([
+    /** @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $service */
+    $service = Pdk::get(DropOffServiceInterface::class);
+
+    $deliveryDays = $service->getPossibleDropOffDays($carrierSettings, new DateTimeImmutable($date));
+
+    expect(Arr::dot($deliveryDays->toArray()))->toEqual($expectation);
+})->with([
     'Monday, 3 Jan 2022' => [
         'date'              => '2022-01-03 00:00:00',
         'settingsOverrides' => [

@@ -1,124 +1,124 @@
 [
-    {
-        "orderId": null,
-        "multiCollo": false,
-        "updated": null,
-        "deleted": null,
-        "id": 7,
-        "shopId": 6,
-        "referenceIdentifier": "GeheimeDingen-1",
-        "externalIdentifier": "CV515676839NL",
-        "apiKey": null,
-        "barcode": "CV515676839NL",
-        "carrier": {
-            "carrier": {
-                "externalIdentifier": null,
-                "id": null,
-                "name": null,
-                "human": null,
-                "subscriptionId": null,
-                "enabled": false,
-                "isDefault": false,
-                "label": null,
-                "optional": false,
-                "primary": false,
-                "type": null
-            }
-        },
-        "collectionContact": null,
-        "customsDeclaration": {
-            "contents": 1,
-            "invoice": "123456",
-            "items": [
-                {
-                    "amount": 1,
-                    "classification": "123456",
-                    "country": "NL",
-                    "description": "Product",
-                    "itemValue": {
-                        "amount": 1000,
-                        "currency": "EUR"
-                    },
-                    "weight": 500
-                }
-            ],
-            "weight": 3500
-        },
-        "delayed": false,
-        "delivered": false,
-        "deliveryOptions": {
-            "carrier": "postnl",
-            "date": null,
-            "labelAmount": 1,
-            "pickupLocation": null,
-            "shipmentOptions": {
-                "ageCheck": false,
-                "insurance": 20000,
-                "labelDescription": "standaard kenmerk",
-                "largeFormat": false,
-                "onlyRecipient": false,
-                "return": false,
-                "sameDayDelivery": null,
-                "signature": false
-            },
-            "deliveryType": "2",
-            "packageType": "1"
-        },
-        "dropOffPoint": null,
-        "hidden": false,
-        "isReturn": false,
-        "linkConsumerPortal": null,
-        "multiColloMainShipmentId": null,
-        "partnerTrackTraces": [],
-        "physicalProperties": {
-            "height": 20,
-            "length": 40,
-            "weight": 3500,
-            "width": 30
-        },
-        "price": {
-            "amount": 5390,
+  {
+    "orderId": null,
+    "multiCollo": false,
+    "updated": null,
+    "deleted": null,
+    "id": 7,
+    "shopId": 6,
+    "referenceIdentifier": "GeheimeDingen-1",
+    "externalIdentifier": "CV515676839NL",
+    "apiKey": null,
+    "barcode": "CV515676839NL",
+    "carrier": {
+      "carrier": {
+        "externalIdentifier": "postnl",
+        "id": 1,
+        "name": "postnl",
+        "human": null,
+        "subscriptionId": null,
+        "enabled": false,
+        "isDefault": false,
+        "label": null,
+        "optional": false,
+        "primary": false,
+        "type": null
+      }
+    },
+    "collectionContact": null,
+    "customsDeclaration": {
+      "contents": 1,
+      "invoice": "123456",
+      "items": [
+        {
+          "amount": 1,
+          "classification": "123456",
+          "country": "NL",
+          "description": "Product",
+          "itemValue": {
+            "amount": 1000,
             "currency": "EUR"
-        },
-        "recipient": {
-            "boxNumber": null,
-            "cc": "CW",
-            "city": "Willemstad",
-            "fullStreet": null,
-            "number": "12",
-            "numberSuffix": null,
-            "postalCode": null,
-            "region": null,
-            "state": null,
-            "street": "Schottegatweg Oost",
-            "streetAdditionalInfo": null,
-            "email": "meneer@groenteboer.nl",
-            "phone": "+31699335577",
-            "person": "Joep Meloen",
-            "company": "MyParcel"
-        },
-        "sender": {
-            "boxNumber": null,
-            "cc": "NL",
-            "city": "Hoofddorp",
-            "fullStreet": null,
-            "number": "31",
-            "numberSuffix": null,
-            "postalCode": "2132 JE",
-            "region": null,
-            "state": null,
-            "street": "Antareslaan",
-            "streetAdditionalInfo": null,
-            "email": "shop@geheimedingen.nl",
-            "phone": "0612345678",
-            "person": "Denzel Crocker",
-            "company": "Geheime Dingen"
-        },
-        "shipmentType": 1,
-        "status": 2,
-        "created": "2021-04-26 14:06:45",
-        "createdBy": 35159,
-        "modified": "2021-05-03 07:42:43",
-        "modifiedBy": 35159
-    }
+          },
+          "weight": 500
+        }
+      ],
+      "weight": 3500
+    },
+    "delayed": false,
+    "delivered": false,
+    "deliveryOptions": {
+      "carrier": "postnl",
+      "date": null,
+      "labelAmount": 1,
+      "pickupLocation": null,
+      "shipmentOptions": {
+        "ageCheck": false,
+        "insurance": 20000,
+        "labelDescription": "standaard kenmerk",
+        "largeFormat": false,
+        "onlyRecipient": false,
+        "return": false,
+        "sameDayDelivery": null,
+        "signature": false
+      },
+      "deliveryType": "2",
+      "packageType": "1"
+    },
+    "dropOffPoint": null,
+    "hidden": false,
+    "isReturn": false,
+    "linkConsumerPortal": null,
+    "multiColloMainShipmentId": null,
+    "partnerTrackTraces": [],
+    "physicalProperties": {
+      "height": 20,
+      "length": 40,
+      "weight": 3500,
+      "width": 30
+    },
+    "price": {
+      "amount": 5390,
+      "currency": "EUR"
+    },
+    "recipient": {
+      "boxNumber": null,
+      "cc": "CW",
+      "city": "Willemstad",
+      "fullStreet": null,
+      "number": "12",
+      "numberSuffix": null,
+      "postalCode": null,
+      "region": null,
+      "state": null,
+      "street": "Schottegatweg Oost",
+      "streetAdditionalInfo": null,
+      "email": "meneer@groenteboer.nl",
+      "phone": "+31699335577",
+      "person": "Joep Meloen",
+      "company": "MyParcel"
+    },
+    "sender": {
+      "boxNumber": null,
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "fullStreet": null,
+      "number": "31",
+      "numberSuffix": null,
+      "postalCode": "2132 JE",
+      "region": null,
+      "state": null,
+      "street": "Antareslaan",
+      "streetAdditionalInfo": null,
+      "email": "shop@geheimedingen.nl",
+      "phone": "0612345678",
+      "person": "Denzel Crocker",
+      "company": "Geheime Dingen"
+    },
+    "shipmentType": 1,
+    "status": 2,
+    "created": "2021-04-26 14:06:45",
+    "createdBy": 35159,
+    "modified": "2021-05-03 07:42:43",
+    "modifiedBy": 35159
+  }
 ]

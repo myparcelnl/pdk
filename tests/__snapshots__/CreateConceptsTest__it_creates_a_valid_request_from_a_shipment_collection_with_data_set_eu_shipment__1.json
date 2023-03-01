@@ -1,5 +1,6 @@
 [
   {
+    "carrier": 1,
     "customs_declaration": {
       "contents": 1,
       "invoice": "25",

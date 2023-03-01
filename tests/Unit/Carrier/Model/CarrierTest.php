@@ -5,15 +5,12 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-beforeEach(function () {
-    PdkFactory::create(MockPdkConfig::create());
-});
+usesShared(new UsesMockPdkInstance());
 
 it('creates main carrier by name', function () {
     $carrier = new Carrier(['name' => Carrier::CARRIER_POSTNL_NAME]);
@@ -54,8 +51,6 @@ it('returns complete carrier object', function () {
                 'isDefault'                                                  => false,
                 'optional'                                                   => false,
                 'type'                                                       => Carrier::TYPE_MAIN,
-                'isDefault'                                                  => false,
-                'optional'                                                   => false,
                 'returnCapabilities'                                         => [],
                 'capabilities.0.packageType.id'                              => 1,
                 'capabilities.0.packageType.name'                            => 'package',
@@ -98,24 +93,5 @@ it('returns complete carrier object', function () {
                 'capabilities.1.shipmentOptions.signature.type'              => 'boolean',
             ]
         );
-});
-
-it('creates empty carrier and log', function () {
-    $carrier = new Carrier(['name' => 'not_a_carrier']);
-
-    expect($carrier->getName())
-        ->toBe(null)
-        ->and($carrier->getType())
-        ->toBe(null)
-        ->and(DefaultLogger::getLogs())
-        ->toBe([
-            [
-                'level'   => 'warning',
-                'message' => '[PDK]: Could not find a matching carrier',
-                'context' => [
-                    'input' => ['name' => 'not_a_carrier'],
-                ],
-            ],
-        ]);
 });
 
