@@ -8,6 +8,9 @@ use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
 use MyParcelNL\Pdk\Base\Request\RequestInterface;
 
+/**
+ * Used to make requests to an API.
+ */
 interface ApiServiceInterface
 {
     /**

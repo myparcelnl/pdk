@@ -11,62 +11,42 @@ use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 interface RenderServiceInterface
 {
     /**
-     * This can be overridden if needed.
-     *
-     * @return string
-     */
-    public function getInitHtml(): string;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
-     *
-     * @return string
+     * Renders the delivery options component.
      */
     public function renderDeliveryOptions(PdkCart $cart): string;
 
     /**
-     * @return string
-     * @noinspection PhpUnused
+     * Renders the init script needed for all other components.
      */
     public function renderInitScript(): string;
 
     /**
-     * @return string
-     * @noinspection PhpUnused
+     * Renders the component containing all modals.
      */
     public function renderModals(): string;
 
     /**
-     * @return string
-     * @noinspection PhpUnused
+     * Renders the main notifications component.
      */
     public function renderNotifications(): string;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
-     *
-     * @return string
-     * @noinspection PhpUnused
+     * Renders a box containing a single order's options.
      */
     public function renderOrderBox(PdkOrder $order): string;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
-     *
-     * @return string
-     * @noinspection PhpUnused
+     * Renders a small version of the order box for a single order.
      */
     public function renderOrderListItem(PdkOrder $order): string;
 
     /**
-     * @return string
+     * Renders the plugin settings.
      */
     public function renderPluginSettings(): string;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
-     *
-     * @return string
+     * Renders a product's settings.
      */
     public function renderProductSettings(PdkProduct $product): string;
 }

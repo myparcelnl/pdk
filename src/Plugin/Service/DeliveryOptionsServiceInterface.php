@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
+use MyParcelNL\Pdk\Plugin\Model\PdkCart;
+
 interface DeliveryOptionsServiceInterface
 {
     /**
-     * Retrieve a key => label collection of all available positions to render the delivery options in.
-     *
-     * @return array<string, string>
+     * Create all carrier settings for the given cart. The settings are used to create the delivery options config.
      */
-    public function getPositions(): array;
+    public function createAllCarrierSettings(PdkCart $cart): array;
 }

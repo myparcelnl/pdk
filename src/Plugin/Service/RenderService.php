@@ -66,13 +66,6 @@ class RenderService implements RenderServiceInterface
         $this->viewService    = $viewService;
     }
 
-    /**
-     * @return string
-     */
-    public function getInitHtml(): string
-    {
-        return '';
-    }
 
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
