@@ -42,15 +42,15 @@ class CheckoutSettingsView extends AbstractSettingsView
             new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_HEADER, Components::INPUT_TEXT),
         ];
 
-        if (Pdk::has(DeliveryOptionsServiceInterface::class)) {
-            /** @var DeliveryOptionsServiceInterface $deliveryOptionsService */
-            $deliveryOptionsService = Pdk::get(DeliveryOptionsServiceInterface::class);
+        if (Pdk::has(CheckoutServiceInterface::class)) {
+            /** @var \MyParcelNL\Pdk\Plugin\Service\CheckoutServiceInterface $deliveryOptionsService */
+            $checkoutService = Pdk::get(CheckoutServiceInterface::class);
 
             $elements[] = new InteractiveElement(
                 CheckoutSettings::DELIVERY_OPTIONS_POSITION,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions($deliveryOptionsService->getPositions()),
+                    'options' => $this->toSelectOptions($checkoutService->getPositions()),
                 ]
             );
         }
