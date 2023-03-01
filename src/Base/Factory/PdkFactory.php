@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Base\Pdk;
 
 class PdkFactory
 {
-    private const DEFAULT_CONFIG_PATH = __DIR__ . '/../../../config/default.php';
+    private const CONFIG_PATH = __DIR__ . '/../../../config';
 
     /**
      * @param  array[]|string[] $config
@@ -41,7 +41,12 @@ class PdkFactory
     {
         $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
-        $builder->addDefinitions(self::DEFAULT_CONFIG_PATH, ...$configs);
+        $builder->addDefinitions(
+            sprintf('%s/pdk-default.php', self::CONFIG_PATH),
+            sprintf('%s/pdk-services.php', self::CONFIG_PATH),
+            sprintf('%s/pdk-template.php', self::CONFIG_PATH),
+            ...$configs
+        );
 
         return $builder->build();
     }
