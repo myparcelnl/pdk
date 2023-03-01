@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
-use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\Plugin\Service\CheckoutServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 
 /**
