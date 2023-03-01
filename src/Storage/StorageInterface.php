@@ -7,31 +7,24 @@ namespace MyParcelNL\Pdk\Storage;
 interface StorageInterface
 {
     /**
-     * @param  string $storageKey
-     *
-     * @return void
+     * Delete an item from the storage.
      */
     public function delete(string $storageKey): void;
 
     /**
-     * @param  string $storageKey
+     * Retrieve an item from the storage.
      *
      * @return mixed
      */
     public function get(string $storageKey);
 
     /**
-     * @param  string $storageKey
-     *
-     * @return bool
+     * Check if an item exists in the storage.
      */
     public function has(string $storageKey): bool;
 
     /**
-     * @param  string $storageKey
-     * @param  mixed  $item
-     *
-     * @return void
+     * Store an item in the storage.
      */
     public function set(string $storageKey, $item): void;
 }
