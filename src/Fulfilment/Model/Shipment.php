@@ -24,7 +24,7 @@ class Shipment extends Model
     public $attributes = [
         'carrier'            => null,
         'contractId'         => null,
-        'customsDeclaration' => CustomsDeclaration::class,
+        'customsDeclaration' => null,
         'options'            => ShipmentOptions::class,
         'pickup'             => null,
         'recipient'          => ContactDetails::class,

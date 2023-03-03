@@ -65,7 +65,7 @@ class PdkOrder extends Model implements StorableArrayable
          */
         'shipments'          => ShipmentCollection::class,
         'lines'              => PdkOrderLineCollection::class,
-        'customsDeclaration' => CustomsDeclaration::class,
+        'customsDeclaration' => null,
         'physicalProperties' => PhysicalProperties::class,
 
         /**
