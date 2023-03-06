@@ -54,21 +54,22 @@ abstract class AbstractApiService implements ApiServiceInterface
             'http_errors' => false,
         ];
 
-        DefaultLogger::debug('Sending request to MyParcel', [
+        $logContext = [
             'uri'     => $uri,
             'method'  => $method,
-            'options' => $options,
-        ]);
+            'headers' => $options['headers'],
+            'body'    => $options['body'] ? json_decode($options['body'], true) : null,
+        ];
+
+        DefaultLogger::debug('Sending request to MyParcel', $logContext);
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
         } catch (Throwable $e) {
-            DefaultLogger::error('Error sending request to MyParcel', [
-                'uri'     => $uri,
-                'method'  => $method,
-                'options' => $options,
-                'error'   => $e->getMessage(),
-            ]);
+            DefaultLogger::error(
+                'Error sending request to MyParcel',
+                ['error' => $e->getMessage()] + $logContext
+            );
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -76,19 +77,17 @@ abstract class AbstractApiService implements ApiServiceInterface
         $responseObject = new $responseClass($response);
 
         if ($responseObject->isErrorResponse()) {
-            DefaultLogger::error('Received an error response from MyParcel', [
-                'uri'     => $uri,
-                'method'  => $method,
-                'options' => $options,
-                'code'    => $response->getStatusCode(),
-                'error'   => $responseObject->getErrors(),
-            ]);
+            DefaultLogger::error(
+                'Received an error response from MyParcel',
+                [
+                    'code'   => $response->getStatusCode(),
+                    'errors' => $responseObject->getErrors(),
+                ] + $logContext
+            );
             throw new ApiException($response);
         }
 
-        DefaultLogger::debug('Received response from MyParcel', [
-            'response' => $response,
-        ]);
+        DefaultLogger::debug('Received response from MyParcel', compact('response'));
 
         return $responseObject;
     }
