@@ -74,12 +74,12 @@ class PostOrdersRequest extends Request
         $order->shipment->pickup    = $this->getAddress($order->shipment->pickup);
 
         return [
-            'external_identifier' => $order->externalIdentifier,
+            'external_identifier'           => $order->externalIdentifier,
             'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
-            'invoice_address' => $this->getAddress($order->invoiceAddress),
-            'order_date' => $order->orderDate ? $order->orderDate->format('Y-m-d H:i:s') : null,
-            'order_lines' => $orderLines,
-            'shipment' => $order->shipment->toSnakeCaseArray() ?: null,
+            'invoice_address'               => $this->getAddress($order->invoiceAddress),
+            'order_date'                    => $order->orderDate ? $order->orderDate->format('Y-m-d H:i:s') : null,
+            'order_lines'                   => $orderLines,
+            'shipment'                      => $order->shipment->toSnakeCaseArray() ?: null,
         ];
     }
 
