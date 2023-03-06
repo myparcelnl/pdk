@@ -221,7 +221,7 @@ class ShipmentOptionsService
             }
 
             $fromSettings = $this->carrierSettings[$carrierSetting] ?? null;
-            $fromProducts = $productSettings[$shipmentOption];
+            $fromProducts = $productSettings[$shipmentOption] ?? null;
 
             $shipmentOptions[$shipmentOption] = $this->valueProcessor(0, $fromSettings, $fromProducts);
         }
