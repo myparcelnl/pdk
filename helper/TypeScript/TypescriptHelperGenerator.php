@@ -5,75 +5,185 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Helper\TypeScript;
 
-use ArrayIterator;
-use DateTime;
-use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
+use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Str;
-use Reflector;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
+use MyParcelNL\Pdk\Plugin\Context;
+use ReflectionClass;
+use ReflectionProperty;
 
 class TypescriptHelperGenerator extends AbstractHelperGenerator
 {
-    private const SPACES_AMOUNT = 2;
-    private const CONVERT_TYPES = [
-        ArrayIterator::class     => 'unknown[]',
-        DateTime::class          => 'Record<string, unknown>',
-        DateTimeImmutable::class => 'Record<string, unknown>',
-        'array'                  => 'unknown[]',
-        'bool'                   => 'boolean',
-        'callable'               => '((...args: unknown[]) => unknown)',
-        'closure'                => '((...args: unknown[]) => unknown)',
-        'double'                 => 'number',
-        'float'                  => 'number',
-        'int'                    => 'number',
-        'integer'                => 'number',
-        'mixed'                  => 'unknown',
-        'null'                   => 'undefined',
-    ];
-    private const CONVERT_NAMES = [
-        'class'     => 'class1',
-        'case'      => 'case1',
-        'default'   => 'default1',
-        'interface' => 'interface1',
-    ];
-
-    private $tsTypeCache = [];
+    public const  UNDEFINED     = 'undefined';
+    public const  SPACES_AMOUNT = 2;
+    public const  UNKNOWN       = 'unknown';
+    private const FALLBACK_TYPE = 'Record<string, ' . self::UNKNOWN . '>';
 
     /**
-     * @param $type
-     *
-     * @return string
+     * @var \MyParcelNL\Pdk\Helper\TypeScript\TypeParser
      */
-    public function getReflectionTypeName($type): string
+    private $parser;
+
+    public function __construct()
     {
-        return array_key_exists($type->getName(), self::CONVERT_NAMES)
-            ? self::CONVERT_NAMES[$type->getName()]
-            : $type->getName();
+        $this->parser = new TypeParser();
     }
 
     /**
-     * @param  \Reflector $reflector
-     * @param  string     $default
+     * @param         $item
+     * @param  string $spaces
      *
      * @return string
      */
-    public function getReflectorName(Reflector $reflector, string $default = 'unknown'): string
+    public function createPropertiesString($item, string $spaces): string
     {
-        if (! method_exists($reflector, 'getType')) {
-            return $default;
+        $string = '';
+
+        // filter properties, removing items without the name key
+        $properties = Arr::where($item['properties'] ?? [], static function ($value, $name) {
+            return (bool) $name;
+        });
+
+        if (count($properties)) {
+            if ($item['extends']) {
+                $string .= ' & ';
+            }
+
+            $string .= '{';
+
+            foreach ($properties as $name => $types) {
+                $hasUndefined = in_array(self::UNDEFINED, $types, true);
+
+                if ($hasUndefined && count($types)) {
+                    $types = array_filter($types, static function ($item) {
+                        return self::UNDEFINED !== $item;
+                    });
+                }
+
+                $fallbackType = $hasUndefined ? [self::UNDEFINED] : [self::UNKNOWN];
+
+                $string .= sprintf(
+                    '%s%s%s: %s;',
+                    $spaces,
+                    $name,
+                    $hasUndefined ? '?' : '',
+                    implode(' | ', $types ?: $fallbackType)
+                );
+            }
+
+            $string .= PHP_EOL . str_repeat(' ', self::SPACES_AMOUNT) . '}';
+
+            return $string;
         }
 
-        $type = $reflector->getType();
-
-        if (! $type) {
-            return $default;
+        if (! $item['extends']) {
+            $string .= self::FALLBACK_TYPE;
         }
 
-        return $this->getReflectionTypeName($type);
+        return $string;
+    }
+
+    /**
+     * @param         $item
+     * @param  string $spaces
+     *
+     * @return string
+     */
+    public function createTypeString($item, string $spaces): string
+    {
+        if ($item['extends'] === $this->parser->getType('\\' . Collection::class, true)) {
+            return $item['properties']['items'][0] ?? 'unknown[]';
+        }
+
+        if ($item['extends'] === $this->parser->getType('\\' . Model::class, true)) {
+            unset($item['extends']);
+        }
+
+        $properties = $this->createPropertiesString($item, PHP_EOL . $spaces);
+
+        return ($item['extends'] ?? '') . $properties;
+    }
+
+    /**
+     * @param  null|\ReflectionClass $ref
+     * @param  string                $baseProperty
+     * @param  array                 $types
+     *
+     * @return array
+     */
+    public function getPropertyTypesRecursive(
+        ?ReflectionClass $ref,
+        string           $baseProperty,
+        array            $types = []
+    ): array {
+        $types = $types ?? [];
+
+        if ($ref && $ref->hasProperty($baseProperty)) {
+            $property = $ref->getProperty($baseProperty);
+            $type     = $property->getType();
+
+            if ($type) {
+                $tsType = $this->parser->getType($type->getName());
+
+                if (! in_array($tsType, $types, true)) {
+                    $types[] = $tsType;
+                }
+            }
+        }
+
+        return $types;
+    }
+
+    /**
+     * @return array
+     */
+    protected function gatherContent(): array
+    {
+        $items = [];
+
+        foreach ($this->data as $data) {
+            $ref       = $this->reflectionCache[$data['class']];
+            $parentRef = $ref->getParentClass() ?: null;
+
+            $parts = explode('\\', $ref->getName());
+            $group = null;
+
+            if (count($parts) > 3) {
+                $group = $parts[2] ?? null;
+            }
+
+            $item = [
+                'name'       => $this->parser->getType("\\{$ref->getName()}"),
+                'extends'    => $parentRef ? $this->parser->getType("\\{$parentRef->getName()}", true) : null,
+                'group'      => $group,
+                'properties' => [],
+            ];
+
+            foreach ($data['properties'] as $property) {
+                if ('property' !== $property['param']) {
+                    continue;
+                }
+
+                $item['properties'][$property['name']] = array_map(function (string $type) {
+                    return $this->parser->getType($type, true);
+                }, $property['types']);
+            }
+
+            foreach ($ref->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+                $baseProperty = $property->getName();
+                $types        = $this->getPropertyTypesRecursive($ref, $baseProperty);
+
+                if (! $parentRef || count($types)) {
+                    $item['properties'][$property->getName()] = $types;
+                }
+            }
+
+            $items[] = $item;
+        }
+
+        return $items;
     }
 
     /**
@@ -81,7 +191,7 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
      */
     protected function getFileName(): string
     {
-        return BASE_DIR . '/types/myparcel-pdk.d.ts';
+        return BASE_DIR . '/types/typescript/myparcel-pdk.d.ts';
     }
 
     /**
@@ -89,7 +199,12 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
      */
     protected function getWhitelistClasses(): array
     {
-        return [];
+        return [
+            Collection::class,
+            Context::class,
+            Model::class,
+            Request::class,
+        ];
     }
 
     /**
@@ -99,128 +214,54 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
     {
         fwrite(
             $this->getHandle(),
-            "// @ts-nocheck\n/* eslint-disable */\n// noinspection JSUnusedGlobalSymbols\n\nexport namespace MyParcelPdk {"
+            "// noinspection JSUnusedGlobalSymbols\n// @ts-nocheck\n/* eslint-disable */\n\n"
         );
-        $spaces = str_repeat(' ', self::SPACES_AMOUNT);
 
-        foreach ($this->data as $data) {
-            /** @var \ReflectionClass $reflectionClass */
-            $reflectionClass = $data['reflectionClass'];
-            $properties      = $data['properties'];
-            $parents         = $data['parents'];
+        $spaces  = str_repeat(' ', self::SPACES_AMOUNT);
+        $content = $this->gatherContent();
 
-            $isCollection = in_array(Collection::class, $parents, true);
-            $isModel      = in_array(Model::class, $parents, true);
-            $type         = $isCollection ? 'type' : 'interface';
-
-            sort($properties);
-
-            $modelProperties = [];
-            $data            = [];
-
-            if (! $isModel) {
-                foreach ($reflectionClass->getProperties(T_PUBLIC) as $property) {
-                    $modelProperties[] = sprintf(
-                        '%s%s: %s;',
-                        $spaces,
-                        $property->getName(),
-                        $this->getReflectorName($property)
-                    );
-                }
+        usort($content, static function (array $itemA, array $itemB) {
+            if ($itemA['group'] === $itemB['group']) {
+                return $itemA['name'] <=> $itemB['name'];
             }
 
-            foreach ($properties as $property) {
-                if ($isCollection && 'items' !== $property['name']) {
-                    continue;
-                }
+            return $itemA['group'] <=> $itemB['group'];
+        });
 
-                $baseProperty = $property['name'];
-                $types        = $property['types'];
+        $lastGroup = null;
 
-                $tsTypes = array_map(function ($string) {
-                    return $this->getTsType($string);
-                }, $types);
+        $lines = [];
 
-                sort($tsTypes);
+        foreach ($content as $index => $item) {
+            $localSpaces = $spaces;
 
-                if (in_array('undefined', $tsTypes, true) && count($tsTypes) > 1) {
-                    $tsTypes = Arr::where($tsTypes, static function (string $item) {
-                        return 'undefined' !== $item;
-                    });
-
-                    $baseProperty .= '?';
-                }
-
-                if ('interface' === $type) {
-                    $modelProperties[] = sprintf('%s%s: %s;', $spaces, $baseProperty, implode(' | ', $tsTypes));
-                } else {
-                    array_push(
-                        $data,
-                        ...array_map(static function ($type) {
-                            return str_replace('[]', '', $type);
-                        }, $tsTypes)
-                    );
-                }
+            if ($item['group']) {
+                $localSpaces = str_repeat(' ', self::SPACES_AMOUNT);
             }
 
-            if ('interface' === $type) {
-                $value = sprintf("{\n%s%s\n%s}", $spaces, implode(PHP_EOL . $spaces, $modelProperties), $spaces);
-            } else {
-                $multiple = count($data) > 1;
-                $value    = sprintf('= %s%s%s[];', $multiple ? '(' : '', implode(' | ', $data), $multiple ? ')' : '');
+            if ($item['group'] && $lastGroup !== $item['group']) {
+                $lines[]   = sprintf('export namespace %s {', $item['group']);
+                $lastGroup = $item['group'];
             }
 
-            fwrite(
-                $this->getHandle(),
-                sprintf(
-                    "\n%sexport %s %s %s\n",
-                    $spaces,
-                    $type,
-                    Utils::classBasename($reflectionClass->getName()),
-                    $value
-                )
-            );
+            $collectionType = $this->parser->getType('\\' . Collection::class);
+
+            if ($item['name'] !== $collectionType) {
+                $typeString = $this->createTypeString($item, $spaces . $localSpaces);
+
+                $lines[] = sprintf(
+                    '%sexport type %s = %s',
+                    $localSpaces,
+                    $item['name'],
+                    (trim($typeString)) . ';'
+                );
+            }
+
+            if ($item['group'] && ($content[$index + 1]['group'] !== $item['group'] || ! $content[$index + 1])) {
+                $lines[] = '}' . PHP_EOL;
+            }
         }
 
-        fwrite($this->getHandle(), "}\n");
-    }
-
-    /**
-     * @param  string $string
-     *
-     * @return string
-     */
-    private function getTsType(string $string): string
-    {
-        if (! isset($this->tsTypeCache[$string])) {
-            $result = $string;
-            $base   = $string;
-
-            if (Str::startsWith($string, '\\')) {
-                $base   = Utils::classBasename($string);
-                $result = $base;
-            }
-
-            if (array_key_exists($base, self::CONVERT_TYPES)) {
-                $result = self::CONVERT_TYPES[$base];
-            } elseif (array_key_exists(strtolower($base), self::CONVERT_TYPES)) {
-                $result = self::CONVERT_TYPES[strtolower($base)];
-            } elseif (preg_match('/array\{\s*(.+?)\s*,\s*(.+?)\s*}/', $string, $subTypes)) {
-                $type1  = $this->getTsType($subTypes[1]);
-                $type2  = $this->getTsType($subTypes[2]);
-                $result = "Record<$type1, $type2>";
-            } elseif (Str::startsWith($string, 'array<')) {
-                preg_match('/<(.+)>/', $string, $matches);
-
-                $types       = array_map([$this, 'getTsType'], explode(',', $matches[1]));
-                $typesString = implode(',', $types);
-
-                $result = "Record<$typesString>";
-            }
-
-            $this->tsTypeCache[$string] = $result;
-        }
-
-        return $this->tsTypeCache[$string];
+        fwrite($this->getHandle(), implode(PHP_EOL, $lines));
     }
 }

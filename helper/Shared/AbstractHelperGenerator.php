@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Helper\Shared;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Str;
 use Nette\Loaders\RobotLoader;
 use ReflectionClass;
@@ -19,6 +20,11 @@ abstract class AbstractHelperGenerator
      * @var array{reflectionClass: \ReflectionClass, properties: array{name: string, types: string[]}[]}[]
      */
     protected $data = [];
+
+    /**
+     * @var ReflectionClass[]
+     */
+    protected $reflectionCache = [];
 
     /**
      * @var resource
@@ -49,6 +55,7 @@ abstract class AbstractHelperGenerator
     /**
      * @return void
      * @throws \ReflectionException
+     * @throws \Throwable
      */
     public function generate(): void
     {
@@ -83,6 +90,17 @@ abstract class AbstractHelperGenerator
     }
 
     /**
+     * @param  \ReflectionClass $class
+     * @param  array            $parents
+     *
+     * @return bool
+     */
+    protected function classAllowed(ReflectionClass $class, array $parents): bool
+    {
+        return true;
+    }
+
+    /**
      * @param  string   $namespace
      * @param  string[] $types
      * @param  string[] $uses
@@ -95,6 +113,7 @@ abstract class AbstractHelperGenerator
 
         foreach ($types as $type) {
             if (Str::startsWith($type, 'array<')
+                || Str::startsWith($type, 'array{')
                 || in_array($type, ['array', 'string', 'bool', 'int', 'null'])
                 || Str::startsWith($type, '\\')) {
                 $newTypes[] = $type;
@@ -103,14 +122,12 @@ abstract class AbstractHelperGenerator
 
             $bareType = str_replace('[]', '', $type);
 
-            $match = array_filter($uses, static function (string $use) use ($bareType, $type) {
+            $match = array_filter($uses, static function (string $use) use ($bareType) {
                 $parts = explode('\\', $use);
-                return array_pop($parts) === $bareType;
+                return Arr::last($parts) === $bareType;
             });
 
-            $newType = sprintf("\\%s", $match[0] ?? "$namespace\\$type");
-
-            $newTypes[] = str_replace($bareType, $newType, $type);
+            $newTypes[] = sprintf("\\%s", Arr::first($match, null, "$namespace\\$type"));
         }
 
         return $newTypes;
@@ -125,13 +142,48 @@ abstract class AbstractHelperGenerator
     }
 
     /**
-     * @param  \ReflectionClass|\ReflectionMethod $reflection
+     * @param  array $classNames
+     * @param  array $classes
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function parseClassNames(array $classNames, array $classes): void
+    {
+        foreach (array_keys($classNames) as $class) {
+            $ref     = new ReflectionClass($class);
+            $parents = Utils::getClassParentsRecursive($class);
+
+            if (! $this->classAllowed($ref, $parents)) {
+                continue;
+            }
+
+            $whitelistClasses = $this->getWhitelistClasses();
+
+            if (count($whitelistClasses) && ! in_array($class, $whitelistClasses, true)) {
+                $relevantParents = array_intersect($parents, $whitelistClasses);
+
+                if (empty($relevantParents)) {
+                    continue;
+                }
+            }
+
+            $classes[] = ['class' => $ref, 'parents' => $parents];
+        }
+
+        $this->parseClassesPhpDocs($classes);
+    }
+
+    /**
+     * @param  \ReflectionClass|\ReflectionMethod                     $reflection
+     * @param  \ReflectionClass|\ReflectionMethod|\ReflectionProperty $commentRef
      *
      * @return array
      */
-    protected function parseDocComment($reflection): array
+    protected function parseDocComment($reflection, $commentRef = null): array
     {
-        $uses = [];
+        $commentRef = $commentRef ?? $reflection;
+        $uses       = [];
 
         if ($reflection->getFileName()) {
             $fileContents = file_get_contents($reflection->getFileName());
@@ -139,22 +191,22 @@ abstract class AbstractHelperGenerator
             preg_match_all('/^use\s+(.+);$/m', $fileContents, $uses);
         }
 
-        $comment = $reflection->getDocComment();
+        $comment = $commentRef->getDocComment();
 
         if (! $comment) {
             return [];
         }
 
-        $pattern = "#@([a-zA-Z]+)\s+([|\[\]<>{}:,\w\s\\\]*?)\s+(\\$\w+)#";
+        $pattern = "/@([A-z]+)\s+([\\\|<>\w\s{,:}\[\]]+)\s*(\\$\w+)/";
         preg_match_all($pattern, $comment, $matches);
 
         $i     = 0;
         $array = [];
 
         foreach ($matches[3] as $property) {
-            $baseProperty = str_replace('$', '', $property);
+            $baseProperty = str_replace('$', '', trim($property));
 
-            $types        = explode('|', $matches[2][$i]);
+            $types        = explode('|', trim($matches[2][$i]));
             $fqClassNames = $this->getFullyQualifiedClassNames(
                 $reflection->getNamespaceName(),
                 $types,
@@ -162,7 +214,7 @@ abstract class AbstractHelperGenerator
             );
 
             $array[] = [
-                'param' => $matches[1][$i],
+                'param' => trim($matches[1][$i]),
                 'name'  => $baseProperty,
                 'types' => $fqClassNames,
             ];
@@ -190,38 +242,31 @@ abstract class AbstractHelperGenerator
         $classNames = $loader->getIndexedClasses();
         ksort($classNames);
 
-        foreach (array_keys($classNames) as $class) {
-            $parents = Utils::getClassParentsRecursive($class);
-
-            if (count($this->getWhitelistClasses())) {
-                $relevantParents = array_intersect($parents, $this->getWhitelistClasses());
-                if (empty($relevantParents)) {
-                    continue;
-                }
-            }
-
-            $classes[] = ['name' => $class, 'parents' => $parents];
-        }
-
-        $this->parseClassesPhpDocs($classes);
+        $this->parseClassNames($classNames, $classes);
     }
 
     /**
-     * @param $classes
+     * @param  array $classes
      *
      * @return void
-     * @throws \ReflectionException
      */
-    private function parseClassesPhpDocs($classes): void
+    private function parseClassesPhpDocs(array $classes): void
     {
-        foreach ($classes as $class) {
-            $className              = $class['name'];
-            $reflectionClass        = new ReflectionClass($className);
-            $this->data[$className] = [
-                'name'            => $className,
-                'parents'         => $class['parents'],
-                'reflectionClass' => $reflectionClass,
-                'properties'      => $this->parseDocComment($reflectionClass),
+        foreach ($classes as $item) {
+            /** @var ReflectionClass $ref */
+            $ref  = $item['class'];
+            $name = $ref->getShortName();
+
+            $this->reflectionCache[$ref->getName()] = $ref;
+
+            $properties = $this->parseDocComment($ref);
+
+            $this->data[$name] = [
+                'name'            => $name,
+                'class'           => $ref->getName(),
+                'parents'         => $item['parents'],
+                'reflectionClass' => $ref,
+                'properties'      => $properties,
             ];
         }
     }

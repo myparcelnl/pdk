@@ -72,15 +72,16 @@ EOF
         foreach ($properties as $property) {
             $baseProperty       = $property['name'];
             $types              = $property['types'];
-            $typeHint           = $this->getTypeHint($types);
             $fqClassNamesString = implode('|', $types);
+            $typeHint           = $this->getTypeHint($types);
 
             if (! $isCollection) {
-                $getter = Str::camel('get_' . $baseProperty);
-                $setter = Str::camel(sprintf('set_%s_attribute', $baseProperty));
+                $strippedFqcn = preg_replace('/<.+>|\{.+}/', '', $fqClassNamesString);
+                $getter       = Str::camel('get_' . $baseProperty);
+                $setter       = Str::camel(sprintf('set_%s_attribute', $baseProperty));
 
-                $modelGetters[] = "@method $fqClassNamesString $getter()";
-                $modelSetters[] = "@method $fqClassNamesString $setter($typeHint$$baseProperty)";
+                $modelGetters[] = "@method $strippedFqcn $getter()";
+                $modelSetters[] = "@method $strippedFqcn $setter($typeHint$$baseProperty)";
             }
 
             if ($isCollection && 'items' === $baseProperty) {
@@ -102,13 +103,13 @@ EOF
     }
 
     /**
-     * @param $types
+     * @param  array $types
      *
      * @return string
      */
-    private function getTypeHint($types): string
+    private function getTypeHint(array $types): string
     {
-        $singleType = '';
+        $singleType = null;
 
         if (count($types) > 1) {
             $collectionTypes = array_values(
@@ -133,10 +134,16 @@ EOF
             if (! empty($nullTypes)) {
                 $singleType = "?$singleType";
             }
-
-            return $singleType;
         }
 
-        return "$types[0] ";
+        $singleType = (string) ($singleType ?? $types[0]);
+
+        if (Str::contains($singleType, '{')) {
+            $singleType = Str::before($singleType, '{');
+        } elseif (Str::contains($singleType, '<')) {
+            $singleType = Str::before($singleType, '<');
+        }
+
+        return $singleType . ' ';
     }
 }
