@@ -7,15 +7,9 @@
   "0.enum.0": 0,
   "0.enum.1": 5000,
   "0.enum.2": 50000,
-  "1.property": "customsDeclaration.invoice",
-  "1.pointer": "/customsDeclaration/invoice",
-  "1.message": "NULL value found, but a string is required",
+  "1.property": "customsDeclaration",
+  "1.pointer": "/customsDeclaration",
+  "1.message": "NULL value found, but an object is required",
   "1.constraint": "type",
-  "1.context": 1,
-  "2.property": "customsDeclaration.weight",
-  "2.pointer": "/customsDeclaration/weight",
-  "2.message": "Must have a minimum value of 1",
-  "2.constraint": "minimum",
-  "2.context": 1,
-  "2.minimum": 1
+  "1.context": 1
 }

@@ -7,9 +7,7 @@
       "deliveryOptions": {
         "carrier": "postnl",
         "date": null,
-        "deliveryType": "standard",
         "labelAmount": 1,
-        "packageType": "package",
         "pickupLocation": null,
         "shipmentOptions": {
           "ageCheck": null,
@@ -20,7 +18,9 @@
           "return": null,
           "sameDayDelivery": null,
           "signature": null
-        }
+        },
+        "deliveryType": "standard",
+        "packageType": "package"
       },
       "label": null,
       "billingAddress": null,
@@ -44,12 +44,7 @@
       "sender": null,
       "shipments": [],
       "lines": [],
-      "customsDeclaration": {
-        "contents": 1,
-        "invoice": null,
-        "items": [],
-        "weight": 0
-      },
+      "customsDeclaration": null,
       "physicalProperties": {
         "height": null,
         "length": null,
