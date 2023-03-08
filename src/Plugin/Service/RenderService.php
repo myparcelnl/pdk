@@ -124,7 +124,7 @@ class RenderService implements RenderServiceInterface
     {
         return $this->renderComponent(self::COMPONENT_ORDER_BOX, [
             Context::ID_ORDER_DATA,
-        ], ['order' => (new ShipmentOptionsService($order))->calculate()]);
+        ], ['order' => $order]);
     }
 
     /**

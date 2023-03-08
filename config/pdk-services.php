@@ -20,6 +20,8 @@ use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
 use MyParcelNL\Pdk\Plugin\Service\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsService;
+use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
 use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
@@ -84,4 +86,9 @@ return [
      * Calculates drop off moments.
      */
     DropOffServiceInterface::class         => autowire(DropOffService::class),
+
+    /**
+     * Calculates shipment options from defaults and product settings.
+     */
+    ShipmentOptionsServiceInterface::class => autowire(ShipmentOptionsService::class),
 ];

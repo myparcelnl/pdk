@@ -4,54 +4,52 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
-use Exception;
-use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
+use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
+use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\src\Support\Arr;
+use Throwable;
+use function array_reduce;
 
-class ShipmentOptionsService
+class ShipmentOptionsService implements ShipmentOptionsServiceInterface
 {
-    public const  SETTING_KEYS        = [
+    private const SETTING_KEYS        = [
         [
-            self::SHIPMENT_OPTION_KEY => 'ageCheck',
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::AGE_CHECK,
             self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_AGE_CHECK,
             self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_AGE_CHECK,
         ],
         [
-            self::SHIPMENT_OPTION_KEY => 'insurance',
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::INSURANCE,
             self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_INSURANCE,
             self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_INSURANCE,
         ],
         [
-            self::SHIPMENT_OPTION_KEY => 'largeFormat',
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::LARGE_FORMAT,
             self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_LARGE_FORMAT,
             self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_LARGE_FORMAT,
         ],
         [
-            self::SHIPMENT_OPTION_KEY => 'onlyRecipient',
-            self::CARRIER_SETTING_KEY => CarrierSettings::ALLOW_ONLY_RECIPIENT,
-            self::PRODUCT_SETTING_KEY => ProductSettings::ALLOW_ONLY_RECIPIENT,
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::ONLY_RECIPIENT,
+            self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_ONLY_RECIPIENT,
+            self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_ONLY_RECIPIENT,
         ],
         [
-            self::SHIPMENT_OPTION_KEY => 'return',
-            self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_RETURN_SHIPMENTS,
-            self::PRODUCT_SETTING_KEY => ProductSettings::RETURN_SHIPMENTS,
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::RETURN,
+            self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_RETURN,
+            self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_RETURN,
         ],
         [
-            self::SHIPMENT_OPTION_KEY => 'sameDayDelivery',
-            self::CARRIER_SETTING_KEY => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-        ],
-        [
-            self::SHIPMENT_OPTION_KEY => 'signature',
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::SIGNATURE,
             self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_SIGNATURE,
-            self::PRODUCT_SETTING_KEY => ProductSettings::ALLOW_SIGNATURE,
+            self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_SIGNATURE,
         ],
     ];
     private const SHIPMENT_OPTION_KEY = 'shipmentOption';
@@ -59,204 +57,156 @@ class ShipmentOptionsService
     private const PRODUCT_SETTING_KEY = 'productSetting';
 
     /**
-     * @var CarrierSettings
+     * @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface
      */
-    private $carrierSettings;
+    private $currencyService;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Model\PdkOrder
+     * @param  \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService
      */
-    private $order;
-
-    public function __construct(PdkOrder $order)
+    public function __construct(CurrencyServiceInterface $currencyService)
     {
-        $this->order           = $order;
-        $carrierName           = $order->deliveryOptions->getCarrier() ?? Platform::get('defaultCarrier');
-        $this->carrierSettings = $this->getCarrierSettings($carrierName);
+        $this->currencyService = $currencyService;
     }
 
     /**
-     * Shipment options set on the order have priority.
-     * Shipment options not set on the order, will be merged from the order lines and the carrier settings.
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
-     * @return \MyParcelNL\Pdk\Plugin\Model\PdkOrder
+     * @return void
      */
-    public function calculate(): PdkOrder
+    public function calculate(PdkOrder $order): void
     {
-        $order           = $this->order;
-        $lines           = $order->getLines();
-        $attributes      = $order->getAttributes();
-        $shipmentOptions = $order->getDeliveryOptions()
-            ->getShipmentOptions();
         try {
-            $shipmentOptionsArray = $this->mergeOrderLines($lines, $shipmentOptions->toArray());
-        } catch (InvalidCastException $e) {
-            // TODO log error?
-            return $order;
+            $order->deliveryOptions->shipmentOptions = $this->mergeOrderLines($order);
+        } catch (Throwable $e) {
+            DefaultLogger::error('Could not calculate shipment options', ['exception' => $e]);
+            return;
         }
+    }
 
-        $order->fill(
-            [
-                'deliveryOptions' => [
-                    'shipmentOptions' => $shipmentOptionsArray,
-                ],
-            ] + $attributes
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
+     *
+     * @return mixed
+     */
+    public function mergeProductSettings(PdkOrder $order)
+    {
+        return $order->lines->reduce(function (ProductSettings $acc, PdkOrderLine $line) {
+            foreach ($line->product->getAttributes() as $attribute => $value) {
+                $acc->setAttribute($attribute, $this->valueProcessor($acc->getAttribute($attribute), $value));
+            }
+
+            return $acc;
+        }, new ProductSettings());
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
+     *
+     * @return int
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function calculateInsurance(PdkOrder $order): int
+    {
+        $fromAmount = $this->currencyService->convertToCents(
+            $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
         );
 
-        return $order;
-    }
+        $threshold = 0;
 
-    private function calculateInsurance(): int
-    {
-        try {
-            $validator = $this->order->getValidator();
-        } catch (Exception $e) {
-            // todo log error?
-            return 0;
+        if ($order->orderPriceAfterVat >= $fromAmount) {
+            $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
+
+            $insuranceUpToKey = $this->getInsuranceUpToKey($order->recipient->cc);
+            $insuranceValue   = $carrierSettings[$insuranceUpToKey] ?? 0;
+
+            $threshold = min($order->orderPriceAfterVat, $this->currencyService->convertToCents($insuranceValue));
         }
 
-        $fromAmount = 100 * ($this->carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0);
-        $grandTotal = $this->order->getOrderPriceAfterVat();
+        $allowedInsuranceAmounts = $order->getValidator()
+            ->getAllowedInsuranceAmounts();
 
-        $availableInsuranceAmounts = $validator->getAllowedInsuranceAmounts();
-
-        if ($grandTotal < $fromAmount) {
-            return $this->getAllowedValueNearThreshold(0, $availableInsuranceAmounts);
-        }
-
-        $insuranceUpToKey = static function (string $cc): string {
-            if ($cc === Platform::get('localCountry')) {
-                return CarrierSettings::EXPORT_INSURANCE_UP_TO;
-            }
-
-            if ($cc === CountryCodes::CC_BE) {
-                return CarrierSettings::EXPORT_INSURANCE_UP_TO_BE;
-            }
-
-            return CarrierSettings::EXPORT_INSURANCE_UP_TO_EU;
-        };
-
-        $cc         = $this->order->recipient->cc ?? Platform::get('localCountry');
-        $upToAmount = 100 * ($this->carrierSettings[$insuranceUpToKey($cc)] ?? 0);
-
-        return $this->getAllowedValueNearThreshold(min($grandTotal, $upToAmount), $availableInsuranceAmounts);
+        return array_reduce(
+            $allowedInsuranceAmounts,
+            static function (int $acc, int $value) use ($threshold) {
+                return $value < $threshold ? $acc : $value;
+            },
+            Arr::last($allowedInsuranceAmounts, null, 0)
+        );
     }
 
     /**
-     * @param  int   $threshold
-     * @param  array $allowedValues this must be an indexed array with values sorted from low to high
-     *
-     * @return int lowest allowed value that is higher than or equal to threshold, or the highest allowed value
-     */
-    private function getAllowedValueNearThreshold(int $threshold, array $allowedValues): int
-    {
-        foreach ($allowedValues as $allowedValue) {
-            if ($allowedValue < $threshold) {
-                continue;
-            }
-            return $allowedValue;
-        }
-
-        return Arr::last($allowedValues) ?? 0;
-    }
-
-    /**
-     * @param  string $carrierName
-     *
-     * @return \MyParcelNL\Pdk\Settings\Model\CarrierSettings
-     */
-    private function getCarrierSettings(string $carrierName): CarrierSettings
-    {
-        $settings = Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierName));
-
-        return new CarrierSettings($settings);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection $lines
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
      * @return array
      */
-    private function getFromOrderLines(PdkOrderLineCollection $lines): array
+    private function getFromOrderLines(PdkOrder $order): array
     {
-        $mergedSettings = [];
+        return $order->lines->reduce(function (array $acc, PdkOrderLine $line) {
+            return array_map([$this, 'valueProcessor'], $line->product->settings->all());
+        }, []);
+    }
 
-        foreach ($lines as $line) {
-            if (! $line instanceof PdkOrderLine
-                || ! ($product = $line->getProduct())
-                || ! ($productSettings = $product->getSettings())) {
-                continue;
-            }
+    /**
+     * @param  null|string $cc
+     *
+     * @return string
+     */
+    private function getInsuranceUpToKey(?string $cc): string
+    {
+        $localCountry = Platform::get('localCountry');
 
-            try {
-                $settingsArray = $productSettings->toArray();
-            } catch (InvalidCastException $e) {
-                // TODO log error?
-                continue;
-            }
+        switch ($cc ?? $localCountry) {
+            case $localCountry:
+                return CarrierSettings::EXPORT_INSURANCE_UP_TO;
 
-            $mergedSettings = $this->mergeProductSettings($settingsArray, $mergedSettings);
+            case CountryCodes::CC_BE:
+                return CarrierSettings::EXPORT_INSURANCE_UP_TO_BE;
+
+            default:
+                return CarrierSettings::EXPORT_INSURANCE_UP_TO_EU;
         }
-        return $mergedSettings;
     }
 
     /**
      * values in $shipmentOptions have priority over calculated values from $lines
      *
-     * @param  \MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection $lines
-     * @param  array                                                    $shipmentOptions
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function mergeOrderLines(PdkOrderLineCollection $lines, array $shipmentOptions): array
+    private function mergeOrderLines(PdkOrder $order): ShipmentOptions
     {
-        $productSettings = $this->getFromOrderLines($lines);
+        $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
+        $productSettings = $this->mergeProductSettings($order);
+        $shipmentOptions = $order->deliveryOptions->shipmentOptions;
 
         foreach (self::SETTING_KEYS as $keys) {
-            $shipmentOption = $keys[self::SHIPMENT_OPTION_KEY];
-            $carrierSetting = $keys[self::CARRIER_SETTING_KEY];
+            $shipmentOptionKey = $keys[self::SHIPMENT_OPTION_KEY];
 
-            if (isset($shipmentOptions[$shipmentOption])) {
+            // If value is already set, keep it.
+            if (null !== $shipmentOptions->getAttribute($shipmentOptionKey)) {
                 continue;
             }
 
-            $fromSettings = $this->carrierSettings[$carrierSetting] ?? null;
-            $fromProducts = $productSettings[$shipmentOption] ?? null;
+            $carrierSettingKey  = $keys[self::CARRIER_SETTING_KEY];
+            $productSettingsKey = $keys[self::PRODUCT_SETTING_KEY];
 
-            $shipmentOptions[$shipmentOption] = $this->valueProcessor(0, $fromSettings, $fromProducts);
+            $shipmentOptions->setAttribute(
+                $shipmentOptionKey,
+                $this->valueProcessor(
+                    $carrierSettings[$carrierSettingKey] ?? null,
+                    $productSettings[$productSettingsKey] ?? null
+                )
+            );
         }
 
-        if (1 === $shipmentOptions['insurance']) {
-            $shipmentOptions['insurance'] = $this->calculateInsurance();
+        if (AbstractSettingsModel::TRISTATE_VALUE_ENABLED === $shipmentOptions->insurance) {
+            $shipmentOptions->insurance = $this->calculateInsurance($order);
         }
 
         return $shipmentOptions;
-    }
-
-    /**
-     * @param  array $settings
-     * @param  array $return
-     *
-     * @return array
-     */
-    private function mergeProductSettings(array $settings, array $return): array
-    {
-        foreach (self::SETTING_KEYS as $keys) {
-            $shipmentOption = $keys[self::SHIPMENT_OPTION_KEY];
-            $productSetting = $keys[self::PRODUCT_SETTING_KEY] ?? null;
-
-            switch ($shipmentOption) {
-                case 'sameDayDelivery':
-                    $productValue = 0 !== ($settings[ProductSettings::DROP_OFF_DELAY] ?? 0) ? 0 : -1;
-                    break;
-                default:
-                    $productValue = $settings[$productSetting] ?? null;
-            }
-
-            $return[$shipmentOption] = $this->valueProcessor(0, $productValue, $return[$shipmentOption] ?? null);
-        }
-
-        return $return;
     }
 
     /**
@@ -268,12 +218,11 @@ class ShipmentOptionsService
      * For strings: the last non-empty string will prevail.
      * When mixed types are given, output is not guaranteed.
      *
-     * @param $initial mixed default value that will be returned if other values are ignored.
      * @param ...$args
      *
      * @return mixed
      */
-    private function valueProcessor($initial, ...$args)
+    private function valueProcessor(...$args)
     {
         return array_reduce($args, static function ($carry, $item) {
             if (is_bool($item)) {
@@ -285,6 +234,6 @@ class ShipmentOptionsService
             }
 
             return $item ?? $carry;
-        }, $initial);
+        }, AbstractSettingsModel::TRISTATE_VALUE_DISABLED);
     }
 }
