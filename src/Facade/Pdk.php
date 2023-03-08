@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method static mixed get(string $id)
