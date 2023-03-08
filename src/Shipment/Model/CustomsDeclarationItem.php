@@ -26,6 +26,9 @@ class CustomsDeclarationItem extends Model
         'classification' => null,
         'country'        => null,
         'description'    => null,
+        /**
+         * This value must always be at least 100 cents (1 EUR).
+         */
         'itemValue'      => Currency::class,
         'weight'         => 0,
     ];
