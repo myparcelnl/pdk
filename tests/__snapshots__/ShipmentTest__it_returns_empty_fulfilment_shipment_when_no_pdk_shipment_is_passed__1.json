@@ -1,12 +1,7 @@
 {
   "carrier": 1,
   "contractId": null,
-  "customsDeclaration": {
-    "contents": 1,
-    "invoice": null,
-    "items": [],
-    "weight": 0
-  },
+  "customsDeclaration": null,
   "options": {
     "ageCheck": null,
     "collect": null,

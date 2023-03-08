@@ -8,18 +8,10 @@
     "enum": [0, 5000, 50000]
   },
   {
-    "property": "customsDeclaration.invoice",
-    "pointer": "/customsDeclaration/invoice",
-    "message": "NULL value found, but a string is required",
+    "property": "customsDeclaration",
+    "pointer": "/customsDeclaration",
+    "message": "NULL value found, but an object is required",
     "constraint": "type",
     "context": 1
-  },
-  {
-    "property": "customsDeclaration.weight",
-    "pointer": "/customsDeclaration/weight",
-    "message": "Must have a minimum value of 1",
-    "constraint": "minimum",
-    "context": 1,
-    "minimum": 1
   }
 ]
