@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
+use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -12,7 +13,7 @@ use MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
 
 /**
- * @property array{name: string}                                         $appInfo
+ * @property AppInfo                                                     $appInfo
  * @property string                                                      $baseUrl
  * @property string                                                      $bootstrapId
  * @property \MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection $endpoints
@@ -24,7 +25,7 @@ use MyParcelNL\Pdk\Plugin\Service\RenderService;
 class GlobalContext extends Model
 {
     public    $attributes = [
-        'appInfo'      => [],
+        'appInfo'      => null,
         'baseUrl'      => null,
         'bootstrapId'  => RenderService::BOOTSTRAP_CONTAINER_ID,
         'endpoints'    => EndpointRequestCollection::class,
@@ -35,7 +36,7 @@ class GlobalContext extends Model
     ];
 
     protected $casts      = [
-        'appInfo'      => 'array',
+        'appInfo'      => AppInfo::class,
         'baseUrl'      => 'string',
         'bootstrapId'  => 'string',
         'endpoints'    => EndpointRequestCollection::class,
@@ -52,7 +53,7 @@ class GlobalContext extends Model
     {
         parent::__construct($data);
 
-        $this->attributes['appInfo']      = Pdk::get('appInfo');
+        $this->attributes['appInfo']      = Pdk::getAppInfo();
         $this->attributes['mode']         = Pdk::getMode();
         $this->attributes['language']     = LanguageService::getIso2();
         $this->attributes['translations'] = LanguageService::getTranslations();
