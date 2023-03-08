@@ -7,8 +7,6 @@ namespace MyParcelNL\Pdk\Base;
 use DI\Container;
 use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
-use MyParcelNL\Pdk\Plugin\Action\PdkActionManager;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Pdk
