@@ -19,8 +19,8 @@ class MockProductRepository extends AbstractProductRepository
             'sku'      => '123',
             'weight'   => 4000,
             'settings' => [
-                ProductSettings::ALLOW_ONLY_RECIPIENT     => false,
-                ProductSettings::ALLOW_SIGNATURE          => false,
+                ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
+                ProductSettings::EXPORT_SIGNATURE         => false,
                 ProductSettings::COUNTRY_OF_ORIGIN        => 'NL',
                 ProductSettings::CUSTOMS_CODE             => '1234',
                 ProductSettings::DISABLE_DELIVERY_OPTIONS => false,
@@ -30,15 +30,15 @@ class MockProductRepository extends AbstractProductRepository
                 ProductSettings::EXPORT_LARGE_FORMAT      => false,
                 ProductSettings::FIT_IN_MAILBOX           => 0,
                 ProductSettings::PACKAGE_TYPE             => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                ProductSettings::RETURN_SHIPMENTS         => false,
+                ProductSettings::EXPORT_RETURN            => false,
             ],
         ],
         [
             'sku'      => '456',
             'weight'   => 5000,
             'settings' => [
-                ProductSettings::ALLOW_ONLY_RECIPIENT     => false,
-                ProductSettings::ALLOW_SIGNATURE          => false,
+                ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
+                ProductSettings::EXPORT_SIGNATURE         => false,
                 ProductSettings::COUNTRY_OF_ORIGIN        => 'NL',
                 ProductSettings::CUSTOMS_CODE             => '4321',
                 ProductSettings::DISABLE_DELIVERY_OPTIONS => false,
@@ -48,15 +48,15 @@ class MockProductRepository extends AbstractProductRepository
                 ProductSettings::EXPORT_LARGE_FORMAT      => false,
                 ProductSettings::FIT_IN_MAILBOX           => 0,
                 ProductSettings::PACKAGE_TYPE             => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                ProductSettings::RETURN_SHIPMENTS         => false,
+                ProductSettings::EXPORT_RETURN            => false,
             ],
         ],
         [
             'sku'      => '789',
             'weight'   => 6000,
             'settings' => [
-                ProductSettings::ALLOW_ONLY_RECIPIENT     => false,
-                ProductSettings::ALLOW_SIGNATURE          => false,
+                ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
+                ProductSettings::EXPORT_SIGNATURE         => false,
                 ProductSettings::COUNTRY_OF_ORIGIN        => 'NL',
                 ProductSettings::CUSTOMS_CODE             => '666',
                 ProductSettings::DISABLE_DELIVERY_OPTIONS => false,
@@ -66,7 +66,7 @@ class MockProductRepository extends AbstractProductRepository
                 ProductSettings::EXPORT_LARGE_FORMAT      => false,
                 ProductSettings::FIT_IN_MAILBOX           => 0,
                 ProductSettings::PACKAGE_TYPE             => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-                ProductSettings::RETURN_SHIPMENTS         => false,
+                ProductSettings::EXPORT_RETURN            => false,
             ],
         ],
     ];
@@ -82,13 +82,14 @@ class MockProductRepository extends AbstractProductRepository
     private $saved;
 
     /**
+     * @param  array                                      $products
      * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
      */
-    public function __construct(MemoryCacheStorage $storage)
+    public function __construct(array $products = self::DEFAULT_PRODUCTS, MemoryCacheStorage $storage)
     {
         parent::__construct($storage);
 
-        $this->saved    = new PdkProductCollection(self::DEFAULT_PRODUCTS);
+        $this->saved    = new PdkProductCollection($products);
         $this->products = $this->getFromStorage();
     }
 
@@ -102,13 +103,13 @@ class MockProductRepository extends AbstractProductRepository
 
     public function getProduct($identifier): PdkProduct
     {
-        $result = $this->products->where('sku', '===', $identifier)->first;
+        $product = $this->products->firstWhere('externalIdentifier', $identifier);
 
-        if (null === $result) {
-            throw new RuntimeException('No product found for identifier ' . $identifier);
+        if (! $product) {
+            throw new RuntimeException(sprintf("No product found for identifier '%s'", $identifier));
         }
 
-        return $result->first();
+        return $product;
     }
 
     /**
@@ -128,26 +129,11 @@ class MockProductRepository extends AbstractProductRepository
      */
     public function getProducts(array $identifiers = []): PdkProductCollection
     {
-        $foundProducts = [];
-
-        foreach ($identifiers as $identifier) {
-            $result = $this->getProduct($identifier);
-
-            $foundProducts[] = $result;
+        if (empty($identifiers)) {
+            return $this->products;
         }
 
-        return new PdkProductCollection($foundProducts);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
-     *
-     * @return $this
-     */
-    public function set(PdkProduct $product): self
-    {
-        $this->products[] = $product;
-        return $this;
+        return $this->products->whereIn('externalIdentifier', $identifiers);
     }
 
     /**
@@ -158,6 +144,6 @@ class MockProductRepository extends AbstractProductRepository
      */
     public function update(PdkProduct $product): void
     {
-        $this->saved[] = $product->toArray();
+        $this->saved->firstWhere('externalIdentifier', $product->externalIdentifier)->fill($product->toArray());
     }
 }

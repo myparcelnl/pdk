@@ -35,8 +35,8 @@ class ProductSettingsView extends AbstractSettingsView
     protected function getElements(): FormElementCollection
     {
         return new FormElementCollection([
-            new InteractiveElement(ProductSettings::ALLOW_ONLY_RECIPIENT, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::ALLOW_SIGNATURE, Components::INPUT_TRISTATE),
+            new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRISTATE),
+            new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRISTATE),
             new InteractiveElement(
                 ProductSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
@@ -63,7 +63,7 @@ class ProductSettingsView extends AbstractSettingsView
                     ),
                 ]
             ),
-            new InteractiveElement(ProductSettings::RETURN_SHIPMENTS, Components::INPUT_TRISTATE),
+            new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRISTATE),
         ]);
     }
 

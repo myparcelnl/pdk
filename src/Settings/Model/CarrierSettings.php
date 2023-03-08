@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
@@ -37,7 +39,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool                                $exportOnlyRecipient
  * @property bool                                $exportReturnLargeFormat
  * @property string                              $exportReturnPackageType
- * @property bool                                $exportReturnShipments
+ * @property bool                                $exportReturn
  * @property bool                                $exportSignature
  * @property int                                 $priceDeliveryTypeEvening
  * @property int                                 $priceDeliveryTypeMonday
@@ -90,9 +92,9 @@ class CarrierSettings extends AbstractSettingsModel
     public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
     public const EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
     public const EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
+    public const EXPORT_RETURN                           = 'exportReturn';
     public const EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
     public const EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
-    public const EXPORT_RETURN_SHIPMENTS                 = 'exportReturnShipments';
     public const EXPORT_SIGNATURE                        = 'exportSignature';
     public const PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
     public const PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
@@ -140,7 +142,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_ONLY_RECIPIENT                   => false,
         self::EXPORT_RETURN_LARGE_FORMAT              => false,
         self::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        self::EXPORT_RETURN_SHIPMENTS                 => false,
+        self::EXPORT_RETURN                           => false,
         self::EXPORT_SIGNATURE                        => false,
         self::PRICE_DELIVERY_TYPE_EVENING             => 0,
         self::PRICE_DELIVERY_TYPE_MONDAY              => 0,
@@ -188,7 +190,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_ONLY_RECIPIENT                   => 'bool',
         self::EXPORT_RETURN_LARGE_FORMAT              => 'bool',
         self::EXPORT_RETURN_PACKAGE_TYPE              => 'string',
-        self::EXPORT_RETURN_SHIPMENTS                 => 'bool',
+        self::EXPORT_RETURN                           => 'bool',
         self::EXPORT_SIGNATURE                        => 'bool',
         self::PRICE_DELIVERY_TYPE_EVENING             => 'int',
         self::PRICE_DELIVERY_TYPE_MONDAY              => 'int',
@@ -203,4 +205,20 @@ class CarrierSettings extends AbstractSettingsModel
         self::SHIPPING_METHOD_PACKAGE_TYPES           => ShippingMethodPackageTypeCollection::class,
         self::SHOW_DELIVERY_DAY                       => 'bool',
     ];
+
+    /**
+     * @param  string|\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     *
+     * @return self
+     */
+    public static function fromCarrier($carrier): self
+    {
+        if ($carrier instanceof Carrier) {
+            $carrier = $carrier->externalIdentifier;
+        }
+
+        $settings = Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier));
+
+        return new self($settings);
+    }
 }
