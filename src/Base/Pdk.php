@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base;
 
 use DI\Container;
+use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
+use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Plugin\Action\PdkActionManager;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class Pdk
 {
@@ -56,6 +59,26 @@ class Pdk
     public function get(string $key)
     {
         return $this->container->get($key);
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Base\Model\AppInfo
+     * @throws \MyParcelNL\Pdk\Base\Exception\PdkConfigException
+     */
+    public function getAppInfo(): AppInfo
+    {
+        try {
+            /** @var \MyParcelNL\Pdk\Base\Model\AppInfo $appInfo */
+            $appInfo = $this->get('appInfo');
+        } catch (Throwable $e) {
+            throw new PdkConfigException('The appInfo property is missing.');
+        }
+
+        if (! $appInfo instanceof AppInfo) {
+            throw new PdkConfigException('The appInfo property is not an instance of AppInfo.');
+        }
+
+        return $appInfo;
     }
 
     /**
