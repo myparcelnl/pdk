@@ -16,8 +16,7 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 abstract class AbstractSettingsView implements Arrayable
 {
-    public const OPTIONS_VALUE_NONE     = -1;
-    public const TRISTATE_VALUE_DEFAULT = -1;
+    public const OPTIONS_VALUE_NONE      = -1;
 
     protected $cache = [];
 

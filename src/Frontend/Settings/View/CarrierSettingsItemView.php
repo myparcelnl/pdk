@@ -214,7 +214,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE),
             ] : [],
 
-            [new InteractiveElement(CarrierSettings::EXPORT_RETURN_SHIPMENTS, Components::INPUT_TOGGLE)],
+            [new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE)],
 
             /**
              * Delivery Options
