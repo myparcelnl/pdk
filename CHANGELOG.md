@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.37.0](https://github.com/myparcelnl/pdk/compare/v1.36.0...v1.37.0) (2023-03-09)
+
+
+### :sparkles: New Features
+
+* add bootstrapper class and force appInfo to be set ([#88](https://github.com/myparcelnl/pdk/issues/88)) ([0d7d93b](https://github.com/myparcelnl/pdk/commit/0d7d93b55ff1c02d7982fc5767153248d54afe64))
+
 ## [1.36.0](https://github.com/myparcelnl/pdk/compare/v1.35.0...v1.36.0) (2023-02-28)
 
 
