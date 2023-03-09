@@ -4,10 +4,15 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\value;
+
+afterEach(function () {
+    Pdk::setPdkInstance(null);
+});
 
 it('works', function () {
     PdkFactory::create(MockPdkConfig::create());
@@ -36,3 +41,15 @@ it('exposes mode property', function (string $mode, bool $isDevelopment) {
         'isDevelopment' => true,
     ],
 ]);
+
+it('throws error if appInfo is missing', function () {
+    PdkFactory::create();
+
+    Pdk::getAppInfo();
+})->throws(PdkConfigException::class);
+
+it('throws error if appInfo is not an instance of AppInfo', function () {
+    PdkFactory::create(MockPdkConfig::create(['appInfo' => value('foo')]));
+
+    Pdk::getAppInfo();
+})->throws(PdkConfigException::class);

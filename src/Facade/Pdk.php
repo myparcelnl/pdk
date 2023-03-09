@@ -6,10 +6,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
+use MyParcelNL\Pdk\Base\Model\AppInfo;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method static mixed get(string $id)
+ * @method static AppInfo getAppInfo()
  * @method static string getMode()
  * @method static bool has(string $id)
  * @method static bool isDevelopment()
