@@ -10,6 +10,8 @@ use function DI\value;
  * Default config values.
  */
 return [
+    'testtttt'               => value(123),
+
     /**
      * Path to the root directory of the pdk.
      */
@@ -29,6 +31,11 @@ return [
      * CDN URL to use for frontend dependencies.
      */
     'baseCdnUrl'             => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
+
+    /**
+     * The minimum PHP version required to run the app.
+     */
+    'minimumPhpVersion'      => value('7.1'),
 
     /**
      * The version of the delivery options in the checkout.
