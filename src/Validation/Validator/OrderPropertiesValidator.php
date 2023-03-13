@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation\Validator;
 
+use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
+use MyParcelNL\Pdk\Validation\Contract\SchemaInterface;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 
 abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOptionsValidatorInterface

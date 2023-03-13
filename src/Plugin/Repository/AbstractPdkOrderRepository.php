@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Repository;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 
 abstract class AbstractPdkOrderRepository extends Repository implements PdkOrderRepositoryInterface

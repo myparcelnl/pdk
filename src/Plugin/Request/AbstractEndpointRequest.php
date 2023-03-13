@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Request;
 
-use MyParcelNL\Pdk\Base\Request\Request;
-use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 
 abstract class AbstractEndpointRequest extends Request implements Arrayable
 {

@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Frontend\Settings\View;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
-use MyParcelNL\Pdk\Plugin\Service\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 
 /**
@@ -16,12 +16,12 @@ use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 class OrderSettingsView extends AbstractSettingsView
 {
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Service\OrderStatusServiceInterface
+     * @var \MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface
      */
     private $orderStatusService;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Service\OrderStatusServiceInterface $orderStatusService
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface $orderStatusService
      */
     public function __construct(OrderStatusServiceInterface $orderStatusService)
     {

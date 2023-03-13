@@ -4,9 +4,9 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
-use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;

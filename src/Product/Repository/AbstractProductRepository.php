@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Product\Repository;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Plugin\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
+use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
 abstract class AbstractProductRepository extends Repository implements ProductRepositoryInterface

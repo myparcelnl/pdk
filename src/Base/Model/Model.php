@@ -6,9 +6,9 @@ namespace MyParcelNL\Pdk\Base\Model;
 
 use ArrayAccess;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
-use MyParcelNL\Pdk\Base\Support\Arrayable;
-use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**

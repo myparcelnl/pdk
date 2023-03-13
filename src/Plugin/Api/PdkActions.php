@@ -34,7 +34,7 @@ class PdkActions
 
         $actionClass = $this->resolveAction($request);
 
-        /** @var \MyParcelNL\Pdk\Plugin\Action\ActionInterface $action */
+        /** @var \MyParcelNL\Pdk\Plugin\Contract\ActionInterface $action */
         $action = Pdk::get($actionClass);
 
         return $action->handle($request);

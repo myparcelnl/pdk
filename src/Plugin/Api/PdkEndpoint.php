@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Api;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Exception\PdkEndpointException;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Plugin\Contract\PdkApiInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;

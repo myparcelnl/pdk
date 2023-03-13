@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Base\Support\StorableArrayable;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Sdk\src\Support\Arr;
 

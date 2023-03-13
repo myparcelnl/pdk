@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Webhook\Request;
 
-use MyParcelNL\Pdk\Base\Request\Request;
+use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 
 class PostWebhookSubscriptionsRequest extends Request

@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Plugin\Api\Frontend\FrontendEndpointServiceInterface;
+use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
@@ -60,7 +60,7 @@ class CheckoutContext extends Model
      */
     private function getSettings(): array
     {
-        /** @var \MyParcelNL\Pdk\Plugin\Api\Frontend\FrontendEndpointServiceInterface $frontendEndpointService */
+        /** @var \MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface $frontendEndpointService */
         $frontendEndpointService = Pdk::get(FrontendEndpointServiceInterface::class);
 
         // todo not everything here belongs in pdk

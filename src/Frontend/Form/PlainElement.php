@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form;
 
-use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 
 class PlainElement implements Arrayable
 {

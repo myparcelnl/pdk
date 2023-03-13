@@ -8,8 +8,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
-use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
@@ -72,7 +72,7 @@ class DeliveryOptionsConfig extends Model
      */
     public static function fromCart(PdkCart $cart): self
     {
-        /** @var \MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface $service */
+        /** @var \MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface $service */
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
         $getCheckoutSetting = static function (string $key) {

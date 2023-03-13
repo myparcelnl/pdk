@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Service;
 
 use Exception;
+use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
-use MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 class AccountSettingsService
 {
     /**
-     * @var \MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface
+     * @var \MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface
      */
     private $accountRepository;
 

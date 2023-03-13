@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Storage;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
 class MemoryCacheStorage implements StorageInterface
 {

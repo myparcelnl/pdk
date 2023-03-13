@@ -7,9 +7,9 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
-use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use function DI\autowire;
@@ -37,7 +37,7 @@ it('returns correct delivery days using a specific date', function (
     /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
     $carrierSettings = Settings::get('carrier.0');
 
-    /** @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
     $service = Pdk::get(DropOffServiceInterface::class);
 
     $deliveryDays = $service->getPossibleDropOffDays($carrierSettings, new DateTimeImmutable($date));

@@ -7,10 +7,10 @@ namespace MyParcelNL\Pdk\Tests\Unit\Settings\Repository;
 
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
-use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
@@ -42,7 +42,7 @@ usesShared(
 );
 
 it('retrieves all categories and fields', function () {
-    /** @var \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface $repository */
+    /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository */
     $repository = Pdk::get(SettingsRepositoryInterface::class);
     $settings   = $repository->all();
 
@@ -50,7 +50,7 @@ it('retrieves all categories and fields', function () {
 });
 
 it('retrieves a single setting from a category', function (string $key, $expected) {
-    /** @var \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface $repository */
+    /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository */
     $repository = Pdk::get(SettingsRepositoryInterface::class);
 
     expect($repository->get($key))->toBe($expected);

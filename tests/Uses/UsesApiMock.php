@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Uses;
 
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 class UsesApiMock implements BaseMock

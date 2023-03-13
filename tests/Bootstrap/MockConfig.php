@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Base\Config;
-use MyParcelNL\Pdk\Base\ConfigInterface;
+use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;

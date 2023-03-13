@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
+use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Model\Address;
-use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;

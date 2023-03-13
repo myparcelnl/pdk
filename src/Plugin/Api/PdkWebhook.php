@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Api;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Base\CronServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface;
+use MyParcelNL\Pdk\Plugin\Contract\PdkApiInterface;
+use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,18 +20,18 @@ use Throwable;
 class PdkWebhook implements PdkApiInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Base\CronServiceInterface
+     * @var \MyParcelNL\Pdk\Base\Contract\CronServiceInterface
      */
     protected $cronService;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface
+     * @var \MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface
      */
     protected $webhooksRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\CronServiceInterface                                $cronService
-     * @param  \MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface $webhooksRepository
+     * @param  \MyParcelNL\Pdk\Base\Contract\CronServiceInterface                     $cronService
+     * @param  \MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface $webhooksRepository
      */
     public function __construct(CronServiceInterface $cronService, PdkWebhooksRepositoryInterface $webhooksRepository)
     {

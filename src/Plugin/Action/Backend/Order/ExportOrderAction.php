@@ -12,8 +12,8 @@ use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +27,8 @@ class ExportOrderAction extends AbstractOrderAction
     private $shipmentRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository        $shipmentRepository
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository      $shipmentRepository
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,

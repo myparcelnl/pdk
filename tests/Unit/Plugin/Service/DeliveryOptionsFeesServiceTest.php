@@ -9,8 +9,8 @@ namespace MyParcelNL\Pdk\Tests\Plugin\Service;
 
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsFeesService;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;

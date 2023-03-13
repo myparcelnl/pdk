@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Request\Request;
+use MyParcelNL\Pdk\Api\Request\Request;
 
 it('creates empty request', function () {
     $request = new Request();

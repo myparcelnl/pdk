@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Repository;
 
-use MyParcelNL\Pdk\Storage\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
 class Repository
 {
     /**
-     * @var \MyParcelNL\Pdk\Storage\StorageInterface
+     * @var \MyParcelNL\Pdk\Storage\Contract\StorageInterface
      */
     protected $storage;
 
@@ -19,7 +19,7 @@ class Repository
     protected $storageHashMap = [];
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\StorageInterface $storage
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
      */
     public function __construct(StorageInterface $storage)
     {

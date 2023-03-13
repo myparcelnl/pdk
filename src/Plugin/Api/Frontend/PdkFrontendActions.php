@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Api\Frontend;
 
-use MyParcelNL\Pdk\Plugin\Api\PdkActionsInterface;
+use MyParcelNL\Pdk\Plugin\Api\Contract\PdkActionsInterface;
 
 final class PdkFrontendActions implements PdkActionsInterface
 {

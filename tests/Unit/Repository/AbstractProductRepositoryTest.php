@@ -6,7 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
-use MyParcelNL\Pdk\Product\Repository\ProductRepositoryInterface;
+use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 

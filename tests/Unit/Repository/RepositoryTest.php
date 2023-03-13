@@ -7,7 +7,7 @@ use MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;

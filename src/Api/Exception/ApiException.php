@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Exception;
 
 use Exception;
-use MyParcelNL\Pdk\Api\Response\ClientResponseInterface;
+use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 use Throwable;
 
 class ApiException extends Exception
@@ -21,7 +21,7 @@ class ApiException extends Exception
     private $requestId;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Response\ClientResponseInterface $response
+     * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
      * @param  int                                                  $code
      * @param  \Throwable|null                                      $previous
      */

@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -11,7 +11,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('calculates vat totals', function (array $input, array $expected) {
-    /** @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService */
+    /** @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService */
     $currencyService = Pdk::get(CurrencyServiceInterface::class);
     expect($currencyService->calculateVatTotals($input))->toEqual($expected);
 })->with([
@@ -104,7 +104,7 @@ it('calculates vat totals', function (array $input, array $expected) {
 ]);
 
 it('converts to cents', function ($input, int $expected) {
-    /** @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService */
+    /** @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService */
     $currencyService = Pdk::get(CurrencyServiceInterface::class);
     expect($currencyService->convertToCents($input))->toEqual($expected);
 })->with([

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Request;
 
-use MyParcelNL\Pdk\Base\Request\Request;
+use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 

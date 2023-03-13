@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 

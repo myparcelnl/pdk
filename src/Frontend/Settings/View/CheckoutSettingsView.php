@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
-use MyParcelNL\Pdk\Plugin\Service\CheckoutServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\CheckoutServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 
 /**
@@ -43,7 +43,7 @@ class CheckoutSettingsView extends AbstractSettingsView
         ];
 
         if (Pdk::has(CheckoutServiceInterface::class)) {
-            /** @var \MyParcelNL\Pdk\Plugin\Service\CheckoutServiceInterface $deliveryOptionsService */
+            /** @var \MyParcelNL\Pdk\Plugin\Contract\CheckoutServiceInterface $deliveryOptionsService */
             $checkoutService = Pdk::get(CheckoutServiceInterface::class);
 
             $elements[] = new InteractiveElement(

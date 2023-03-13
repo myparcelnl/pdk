@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
-use MyParcelNL\Pdk\Plugin\Service\CartCalculationServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface;
 
 /**
  * @property string                                                   $externalIdentifier
@@ -81,7 +81,7 @@ class PdkCart extends Model
      */
     private function updateShippingMethod(): void
     {
-        /** @var \MyParcelNL\Pdk\Plugin\Service\CartCalculationServiceInterface $service */
+        /** @var \MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface $service */
         $service = Pdk::get(CartCalculationServiceInterface::class);
 
         $this->shippingMethod = $service->calculateShippingMethod($this);

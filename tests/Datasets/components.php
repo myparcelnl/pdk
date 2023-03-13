@@ -11,8 +11,8 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
 /**
  * Defines all pdk components and the views where they should render.
  *
- * @see \MyParcelNL\Pdk\Plugin\Service\RenderServiceInterface
- * @see \MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface
+ * @see \MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface
+ * @see \MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface
  */
 dataset('components', [
     'init script' => [

@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Backend\Shipment;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\AbstractOrderAction;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,8 +20,8 @@ class FetchShipmentsAction extends AbstractOrderAction
     private $shipmentRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository        $shipmentRepository
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository      $shipmentRepository
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,

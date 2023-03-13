@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\ConfigInterface;
+use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Config;
 use function DI\autowire;

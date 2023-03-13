@@ -6,7 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Helper\TypeScript\TypeParser;
-use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection;
 
 it('converts to ts type', function ($input, $expected) {

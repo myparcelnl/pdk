@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
@@ -18,9 +18,9 @@ class MockSettingsRepository extends AbstractSettingsRepository
     private $settings;
 
     /**
-     * @param  array                                           $settings
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage      $storage
-     * @param  \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api
+     * @param  array                                            $settings
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage       $storage
+     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */

@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Action\Backend\Account;
 
+use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Plugin\Action\ActionInterface;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Plugin\Context;
+use MyParcelNL\Pdk\Plugin\Contract\ActionInterface;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
-use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpdateAccountAction implements ActionInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface
+     * @var \MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface
      */
     private $accountRepository;
 
@@ -35,13 +35,13 @@ class UpdateAccountAction implements ActionInterface
     private $carrierOptionsRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
      */
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface       $settingsRepository
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface         $accountRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface         $settingsRepository
+     * @param  \MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface           $accountRepository
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository $carrierConfigurationRepository
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository       $carrierOptionsRepository
      */

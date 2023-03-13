@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
-use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
@@ -57,12 +58,12 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     private const PRODUCT_SETTING_KEY = 'productSetting';
 
     /**
-     * @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface
+     * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
      */
     private $currencyService;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $currencyService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService
      */
     public function __construct(CurrencyServiceInterface $currencyService)
     {

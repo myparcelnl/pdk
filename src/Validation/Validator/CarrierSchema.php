@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {

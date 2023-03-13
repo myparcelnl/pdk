@@ -7,7 +7,7 @@ use DI\NotFoundException;
 use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Storage\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 

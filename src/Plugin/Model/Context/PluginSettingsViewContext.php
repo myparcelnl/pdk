@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
-use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Settings\View\CarrierSettingsView;

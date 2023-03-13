@@ -6,13 +6,14 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Collection\PdkCartFeeCollection;
+use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsFeesServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCartFee;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\src\Support\Str;
 
-class DeliveryOptionsFeesService
+class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
 {
     private const FRONTEND_SHIPMENT_OPTIONS = [
         ShipmentOptions::ONLY_RECIPIENT,

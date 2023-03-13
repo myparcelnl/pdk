@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Base\Model\Model;
 
-use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
 
 const MODEL_DATA = [

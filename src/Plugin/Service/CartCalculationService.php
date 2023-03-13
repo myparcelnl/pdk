@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Service;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;

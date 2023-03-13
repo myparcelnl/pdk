@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Repository;
 
+use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Request\GetAccountsRequest;
 use MyParcelNL\Pdk\Account\Response\GetAccountsResponse;

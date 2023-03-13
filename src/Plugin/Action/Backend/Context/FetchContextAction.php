@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Action\Backend\Context;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
-use MyParcelNL\Pdk\Plugin\Action\ActionInterface;
-use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ActionInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class FetchContextAction implements ActionInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface
+     * @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface
      */
     private $contextService;
 
