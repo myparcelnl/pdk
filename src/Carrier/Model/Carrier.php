@@ -102,7 +102,7 @@ class Carrier extends Model
      */
     public function __construct(?array $data = null)
     {
-        if (! $data || ! isset($data['name'], $data['id'])) {
+        if (! $data || (! isset($data['name']) && ! isset($data['id']))) {
             $data['name'] = Platform::get('defaultCarrier');
         }
 
@@ -133,7 +133,7 @@ class Carrier extends Model
         $identifier = $this->name;
 
         if ($this->subscriptionId) {
-            $identifier .= "_$this->subscriptionId";
+            $identifier .= ":$this->subscriptionId";
         }
 
         if (! $identifier) {
