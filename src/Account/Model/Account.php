@@ -12,29 +12,29 @@ use MyParcelNL\Pdk\Base\Support\StorableArrayable;
 /**
  * @property int                    $id
  * @property int                    $platformId
- * @property int                    $status
  * @property ContactDetails         $contactInfo
  * @property AccountGeneralSettings $generalSettings
  * @property ShopCollection         $shops
+ * @property int                    $status
  */
 class Account extends Model implements StorableArrayable
 {
     public $attributes = [
         'id'              => null,
         'platformId'      => null,
-        'status'          => null,
         'contactInfo'     => ContactDetails::class,
         'generalSettings' => AccountGeneralSettings::class,
         'shops'           => ShopCollection::class,
+        'status'          => null,
     ];
 
     public $casts      = [
         'id'              => 'int',
         'platformId'      => 'int',
-        'status'          => 'int',
         'contactInfo'     => ContactDetails::class,
         'generalSettings' => AccountGeneralSettings::class,
         'shops'           => ShopCollection::class,
+        'status'          => 'int',
     ];
 
     /**
