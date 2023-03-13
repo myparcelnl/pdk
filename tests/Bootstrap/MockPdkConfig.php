@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Account\Repository\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\ConfigInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
-use MyParcelNL\Pdk\Plugin\Action\EndpointActionsInterface;
+use MyParcelNL\Pdk\Plugin\Api\Backend\BackendEndpointServiceInterface;
+use MyParcelNL\Pdk\Plugin\Api\Frontend\FrontendEndpointServiceInterface;
+use MyParcelNL\Pdk\Plugin\Service\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface;
-use MyParcelNL\Pdk\Product\Repository\AbstractProductRepository;
-use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
+use MyParcelNL\Pdk\Product\Repository\ProductRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Storage\StorageInterface;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
@@ -58,9 +62,9 @@ class MockPdkConfig
 
             AccountRepositoryInterface::class       => autowire(MockAccountRepository::class),
             ApiServiceInterface::class              => autowire(MockApiService::class),
+            BackendEndpointServiceInterface::class  => autowire(MockBackendEndpointService::class),
             ClientAdapterInterface::class           => autowire(Guzzle7ClientAdapter::class),
             ConfigInterface::class                  => autowire(MockConfig::class),
-            BackendEndpointServiceInterface::class  => autowire(MockBackendEndpointService::class),
             FrontendEndpointServiceInterface::class => autowire(MockFrontendEndpointService::class),
             LanguageServiceInterface::class         => autowire(MockLanguageService::class),
             LoggerInterface::class                  => autowire(MockLogger::class),
@@ -68,6 +72,7 @@ class MockPdkConfig
             ProductRepositoryInterface::class       => autowire(MockProductRepository::class),
             SettingsRepositoryInterface::class      => autowire(MockSettingsRepository::class),
             StorageInterface::class                 => autowire(MemoryCacheStorage::class),
+            TaxServiceInterface::class              => autowire(MockTaxService::class),
             ViewServiceInterface::class             => autowire(MockViewService::class),
         ];
     }
