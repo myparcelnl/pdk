@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Api\Backend\BackendEndpointServiceInterface;
+use MyParcelNL\Pdk\Plugin\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
 
@@ -58,7 +58,7 @@ class GlobalContext extends Model
         $this->attributes['language']     = LanguageService::getIso2();
         $this->attributes['translations'] = LanguageService::getTranslations();
 
-        /** @var \MyParcelNL\Pdk\Plugin\Api\EndpointServiceInterface $endpointActions */
+        /** @var \MyParcelNL\Pdk\Plugin\Api\Contract\EndpointServiceInterface $endpointActions */
         $endpointActions = Pdk::get(BackendEndpointServiceInterface::class);
 
         $this->attributes['baseUrl']   = $endpointActions->getBaseUrl();

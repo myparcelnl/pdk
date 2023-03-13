@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Request;
 
-use MyParcelNL\Pdk\Base\Request\Request;
-use MyParcelNL\Pdk\Base\Service\CountryServiceInterface;
+use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -151,7 +151,7 @@ class PostShipmentsRequest extends Request
      */
     private function getCustomsDeclaration(Shipment $shipment): ?array
     {
-        /** @var \MyParcelNL\Pdk\Base\Service\CountryServiceInterface $countryService */
+        /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
         $countryService = Pdk::get(CountryServiceInterface::class);
         $cc             = $shipment->recipient->cc;
 

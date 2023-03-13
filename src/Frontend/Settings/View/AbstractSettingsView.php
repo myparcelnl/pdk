@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Base\Support\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;

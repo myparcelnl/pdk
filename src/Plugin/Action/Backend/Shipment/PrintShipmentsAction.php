@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\AbstractOrderAction;
-use MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
@@ -23,8 +23,8 @@ class PrintShipmentsAction extends AbstractOrderAction
     protected $shipmentRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository        $shipmentRepository
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository      $shipmentRepository
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,

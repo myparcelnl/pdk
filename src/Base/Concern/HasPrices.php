@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Concern;
 
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
@@ -21,7 +22,7 @@ trait HasPrices
     {
         [$priceField, $vatField, $priceAfterVatField] = $fields;
 
-        /** @var \MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface $service */
+        /** @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $service */
         $service = Pdk::get(CurrencyServiceInterface::class);
 
         $totals = $service->calculateVatTotals([

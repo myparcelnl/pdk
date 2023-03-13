@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
+use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
+
 abstract class AbstractViewService implements ViewServiceInterface
 {
     /**

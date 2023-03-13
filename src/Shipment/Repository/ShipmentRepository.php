@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
+use MyParcelNL\Pdk\Api\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
-use MyParcelNL\Pdk\Base\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Request\FetchShipmentsRequest;
@@ -30,7 +30,7 @@ class ShipmentRepository extends ApiRepository
      */
     public function createConcepts(ShipmentCollection $collection): ShipmentCollection
     {
-        /** @var \MyParcelNL\Pdk\Base\Response\PostIdsResponse $response */
+        /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
         $response = $this->api->doRequest(new PostShipmentsRequest($collection), PostIdsResponse::class);
 
         return $collection->addIds($response->getIds());
@@ -46,7 +46,7 @@ class ShipmentRepository extends ApiRepository
      */
     public function createReturnShipments(ShipmentCollection $collection): ShipmentCollection
     {
-        /** @var \MyParcelNL\Pdk\Base\Response\PostIdsResponse $response */
+        /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
         $response = $this->api->doRequest(
         // TODO: Make send_return_mail depend on plugin settings
             new PostReturnShipmentsRequest($collection, ['send_return_mail' => 1]),

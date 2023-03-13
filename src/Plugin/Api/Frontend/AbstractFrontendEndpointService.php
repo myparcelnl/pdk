@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Api\Frontend;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Config;
+use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Api\PdkEndpoints;
 
 abstract class AbstractFrontendEndpointService extends PdkEndpoints implements FrontendEndpointServiceInterface

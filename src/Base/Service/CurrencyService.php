@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Service;
 
-use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 
 class CurrencyService implements CurrencyServiceInterface
 {

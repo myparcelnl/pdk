@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Base\Concern\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 
 class WeightService implements WeightServiceInterface

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
+use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
-use MyParcelNL\Pdk\Plugin\Service\RenderServiceInterface;
 
 /**
  * @method static string renderDeliveryOptions(PdkCart $cart)

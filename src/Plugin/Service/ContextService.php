@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Context;
+use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\Context\CheckoutContext;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
 use MyParcelNL\Pdk\Plugin\Model\Context\DynamicContext;

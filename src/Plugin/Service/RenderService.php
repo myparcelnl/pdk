@@ -7,6 +7,9 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
+use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
@@ -47,18 +50,18 @@ class RenderService implements RenderServiceInterface
     private static $renderTemplate;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface
+     * @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface
      */
     protected $contextService;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface
+     * @var \MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface
      */
     private $viewService;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface $contextService
-     * @param  \MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface    $viewService
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface $contextService
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface    $viewService
      */
     public function __construct(ContextServiceInterface $contextService, ViewServiceInterface $viewService)
     {

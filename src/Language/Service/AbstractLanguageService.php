@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Language\Service;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 
 abstract class AbstractLanguageService implements LanguageServiceInterface

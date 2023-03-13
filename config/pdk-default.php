@@ -11,8 +11,6 @@ use function DI\value;
  * Default config values.
  */
 return [
-    'testtttt'                    => value(123),
-
     /**
      * Path to the root directory of the pdk.
      */

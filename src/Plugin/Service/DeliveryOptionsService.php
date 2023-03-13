@@ -7,12 +7,14 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -42,7 +44,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     ];
 
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface
+     * @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface
      */
     private $dropOffService;
 
@@ -52,14 +54,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $schemaRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface
+     * @var \MyParcelNL\Pdk\Plugin\Contract\TaxServiceInterface
      */
     private $taxService;
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $dropOffService
-     * @param  \MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface       $taxService
-     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository   $schemaRepository
+     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\TaxServiceInterface       $taxService
+     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
         DropOffServiceInterface $dropOffService,

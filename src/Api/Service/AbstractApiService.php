@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Service;
 
-use MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface;
+use MyParcelNL\Pdk\Api\Contract\ApiResponseInterface;
+use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
+use MyParcelNL\Pdk\Api\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
-use MyParcelNL\Pdk\Api\Response\ApiResponseInterface;
-use MyParcelNL\Pdk\Base\Request\RequestInterface;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use RuntimeException;
@@ -22,12 +23,12 @@ abstract class AbstractApiService implements ApiServiceInterface
     protected $baseUrl;
 
     /**
-     * @var \MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface
+     * @var \MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface
      */
     protected $clientAdapter;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Adapter\ClientAdapterInterface $clientAdapter
+     * @param  \MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface $clientAdapter
      */
     public function __construct(ClientAdapterInterface $clientAdapter)
     {
@@ -35,10 +36,10 @@ abstract class AbstractApiService implements ApiServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Request\RequestInterface $request
-     * @param  string                                        $responseClass
+     * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
+     * @param  string                                       $responseClass
      *
-     * @return \MyParcelNL\Pdk\Api\Response\ApiResponseInterface
+     * @return \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface
      * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
      */
     public function doRequest(
@@ -73,7 +74,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
 
-        /** @var \MyParcelNL\Pdk\Api\Response\ApiResponseInterface $responseObject */
+        /** @var \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface $responseObject */
         $responseObject = new $responseClass($response);
 
         if ($responseObject->isErrorResponse()) {
@@ -109,7 +110,7 @@ abstract class AbstractApiService implements ApiServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Request\RequestInterface $request
+     * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
      *
      * @return string
      */

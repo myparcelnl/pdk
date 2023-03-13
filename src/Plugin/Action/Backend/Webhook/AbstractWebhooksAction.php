@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Action\Backend\Webhook;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
-use MyParcelNL\Pdk\Plugin\Action\ActionInterface;
-use MyParcelNL\Pdk\Plugin\Webhook\PdkWebhookServiceInterface;
-use MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ActionInterface;
+use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhookServiceInterface;
+use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
@@ -16,7 +16,7 @@ use MyParcelNL\Sdk\src\Support\Str;
 abstract class AbstractWebhooksAction implements ActionInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface
+     * @var \MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface
      */
     protected $pdkWebhooksRepository;
 
@@ -26,14 +26,14 @@ abstract class AbstractWebhooksAction implements ActionInterface
     protected $repository;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Webhook\PdkWebhookServiceInterface
+     * @var \MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhookServiceInterface
      */
     protected $webhookActions;
 
     /**
-     * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository         $repository
-     * @param  \MyParcelNL\Pdk\Plugin\Webhook\Repository\PdkWebhooksRepositoryInterface $pdkWebhooksRepository
-     * @param  \MyParcelNL\Pdk\Plugin\Webhook\PdkWebhookServiceInterface                $pdkWebhookActions
+     * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository       $repository
+     * @param  \MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface $pdkWebhooksRepository
+     * @param  \MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhookServiceInterface     $pdkWebhookActions
      */
     public function __construct(
         WebhookSubscriptionRepository  $repository,

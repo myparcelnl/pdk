@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Service\ViewServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
 
 class MockViewService implements ViewServiceInterface
 {

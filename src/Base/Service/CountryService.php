@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Service;
 
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class CountryService implements CountryServiceInterface

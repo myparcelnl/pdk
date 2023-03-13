@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Api;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Plugin\Api\Contract\EndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Request\AbstractEndpointRequest;
 
 abstract class PdkEndpoints implements EndpointServiceInterface
@@ -21,7 +22,7 @@ abstract class PdkEndpoints implements EndpointServiceInterface
     protected $parameters = [];
 
     /**
-     * @return \MyParcelNL\Pdk\Base\Request\Request[]
+     * @return \MyParcelNL\Pdk\Api\Request\Request[]
      */
     public function toArray(): array
     {

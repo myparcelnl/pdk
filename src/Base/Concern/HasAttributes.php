@@ -8,8 +8,8 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
-use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -466,9 +466,8 @@ trait HasAttributes
     /**
      * Cast an attribute to a native PHP type.
      *
-     * @param  string   $key
-     * @param  mixed    $value
-     * @param  null|int $flags
+     * @param  string $key
+     * @param  mixed  $value
      *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException

@@ -7,22 +7,22 @@ namespace MyParcelNL\Pdk\Plugin\Action\Backend\Order;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Action\ActionInterface;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\Plugin\Contract\ActionInterface;
+use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface;
-use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractOrderAction implements ActionInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface
+     * @var \MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface
      */
     protected $pdkOrderRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Repository\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      */
     public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository)
     {
@@ -74,7 +74,7 @@ abstract class AbstractOrderAction implements ActionInterface
         $body       = json_decode($request->getContent(), true);
         $attributes = Utils::filterNull($body['data']['orders'][0] ?? []);
 
-        /** @var \MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsServiceInterface $shipmentOptionsService */
+        /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $shipmentOptionsService */
         $shipmentOptionsService = Pdk::get(ShipmentOptionsServiceInterface::class);
 
         return $orders->each(function (PdkOrder $pdkOrder) use ($shipmentOptionsService, $attributes) {

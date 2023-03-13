@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
@@ -15,7 +15,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('retrieves api instance', function () {
-    /** @var \MyParcelNL\Pdk\Api\Service\ApiServiceInterface $api */
+    /** @var \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api */
     $api = Pdk::get(ApiServiceInterface::class);
 
     expect($api)->toBeInstanceOf(AbstractApiService::class);

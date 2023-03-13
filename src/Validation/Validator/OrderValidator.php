@@ -8,6 +8,7 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator as JsonSchemaValidator;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
+use MyParcelNL\Pdk\Validation\Contract\ValidatorInterface;
 use RuntimeException;
 
 class OrderValidator extends OrderPropertiesValidator implements ValidatorInterface

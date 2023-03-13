@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
+use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 
 class MockLanguageService implements LanguageServiceInterface
 {

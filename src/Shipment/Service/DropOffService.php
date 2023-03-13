@@ -9,6 +9,7 @@ use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection;
+use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 
 class DropOffService implements DropOffServiceInterface

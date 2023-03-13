@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Facade\LanguageService;
-use MyParcelNL\Pdk\Language\Service\LanguageServiceInterface;
+use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function DI\autowire;

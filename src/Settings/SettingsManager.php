@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings;
 
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface;
 
 class SettingsManager
 {
     /**
-     * @var \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
      */
     protected $repository;
 
@@ -20,7 +20,7 @@ class SettingsManager
     protected $settings;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Repository\SettingsRepositoryInterface $repository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository
      */
     public function __construct(SettingsRepositoryInterface $repository)
     {

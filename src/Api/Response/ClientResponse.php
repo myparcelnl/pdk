@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
+use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
+
 class ClientResponse implements ClientResponseInterface
 {
     /**

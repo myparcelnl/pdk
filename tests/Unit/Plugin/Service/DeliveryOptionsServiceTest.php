@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Plugin\Service;
 
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
-use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -17,7 +17,7 @@ uses()->group('checkout');
 usesShared(new UsesMockPdkInstance());
 
 it('creates carrier settings', function (array $cart) {
-    /** @var DeliveryOptionsServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface $service */
     $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
     $carrierSettings = $service->createAllCarrierSettings(new PdkCart($cart));

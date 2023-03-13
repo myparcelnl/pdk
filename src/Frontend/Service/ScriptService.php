@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Service;
 
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 
 class ScriptService implements ScriptServiceInterface
 {

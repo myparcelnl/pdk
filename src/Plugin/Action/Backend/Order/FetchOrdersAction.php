@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,7 +22,7 @@ class FetchOrdersAction extends AbstractOrderAction
         $orderIds   = $this->getOrderIds($request);
         $collection = $this->pdkOrderRepository->getMany($orderIds);
 
-        /** @var \MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface $contextService */
+        /** @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface $contextService */
         $contextService = Pdk::get(ContextServiceInterface::class);
 
         return new JsonResponse([

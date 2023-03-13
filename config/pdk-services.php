@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Api\Service\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
-use MyParcelNL\Pdk\Base\Concern\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Base\Concern\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryService;
-use MyParcelNL\Pdk\Base\Service\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
+use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 use MyParcelNL\Pdk\Frontend\Service\ScriptService;
-use MyParcelNL\Pdk\Frontend\Service\ScriptServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\CartCalculationService;
-use MyParcelNL\Pdk\Plugin\Service\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\ContextService;
-use MyParcelNL\Pdk\Plugin\Service\ContextServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsService;
-use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
-use MyParcelNL\Pdk\Plugin\Service\RenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsService;
-use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsServiceInterface;
+use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
-use MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
-use MyParcelNL\Pdk\Storage\StorageInterface;
 use function DI\autowire;
 
 /**

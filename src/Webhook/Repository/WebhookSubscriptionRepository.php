@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Webhook\Repository;
 
 use BadMethodCallException;
+use MyParcelNL\Pdk\Api\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
-use MyParcelNL\Pdk\Base\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Request\DeleteWebhookSubscriptionRequest;
@@ -111,7 +111,7 @@ class WebhookSubscriptionRepository extends ApiRepository
      */
     public function subscribeMany(WebhookSubscriptionCollection $subscriptions): WebhookSubscriptionCollection
     {
-        /** @var \MyParcelNL\Pdk\Base\Response\PostIdsResponse $response */
+        /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
         $response = $this->api->doRequest(new PostWebhookSubscriptionsRequest($subscriptions), PostIdsResponse::class);
 
         return $subscriptions->addIds($response->getIds());

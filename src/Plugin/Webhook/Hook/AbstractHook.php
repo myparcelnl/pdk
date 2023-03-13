@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Webhook\Hook;
 
+use MyParcelNL\Pdk\Plugin\Webhook\Contract\HookInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractHook implements HookInterface

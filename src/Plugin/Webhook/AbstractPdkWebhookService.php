@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Webhook;
 
+use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhookServiceInterface;
+
 abstract class AbstractPdkWebhookService implements PdkWebhookServiceInterface
 {
     /**

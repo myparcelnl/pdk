@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Repository;
 
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Base\Support\Arrayable;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 

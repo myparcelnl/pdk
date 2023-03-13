@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
+use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
+
 abstract class ApiResponseWithBody extends ApiResponse
 {
     /**
@@ -12,7 +14,7 @@ abstract class ApiResponseWithBody extends ApiResponse
     private $body;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Response\ClientResponseInterface $response
+     * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
      */
     public function __construct(ClientResponseInterface $response)
     {

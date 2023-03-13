@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
+use MyParcelNL\Pdk\Api\Contract\ApiResponseInterface;
+use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,12 +17,12 @@ class ApiResponse implements ApiResponseInterface
     private $errors = [];
 
     /**
-     * @var \MyParcelNL\Pdk\Api\Response\ClientResponseInterface
+     * @var \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
      */
     private $response;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Response\ClientResponseInterface $response
+     * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
      */
     public function __construct(ClientResponseInterface $response)
     {
