@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 interface DeliveryOptionsServiceInterface
 {
     /**
-     * Create all carrier settings for the given cart. The settings are used to create the delivery options config.
+     * Creates an array with the packageType and carrierSettings key of the delivery options config.
      */
     public function createAllCarrierSettings(PdkCart $cart): array;
 }

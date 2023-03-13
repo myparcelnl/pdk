@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
@@ -43,6 +42,36 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     ];
 
     /**
+     * @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface
+     */
+    private $dropOffService;
+
+    /**
+     * @var \MyParcelNL\Pdk\Validation\Repository\SchemaRepository
+     */
+    private $schemaRepository;
+
+    /**
+     * @var \MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface
+     */
+    private $taxService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $dropOffService
+     * @param  \MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface       $taxService
+     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository   $schemaRepository
+     */
+    public function __construct(
+        DropOffServiceInterface $dropOffService,
+        TaxServiceInterface     $taxService,
+        SchemaRepository        $schemaRepository
+    ) {
+        $this->dropOffService   = $dropOffService;
+        $this->taxService       = $taxService;
+        $this->schemaRepository = $schemaRepository;
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
      *
      * @return array
@@ -54,17 +83,20 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             return [];
         }
 
-        $settings = [];
-
         [$packageType, $carrierOptions] = $this->getValidCarrierOptions($cart);
+
+        $settings = [
+            'packageType'     => $packageType,
+            'carrierSettings' => [],
+        ];
 
         /** @var CarrierOptions $carrierOption */
         foreach ($carrierOptions->all() as $carrierOption) {
-            $identifier            = $carrierOption->carrier->externalIdentifier;
-            $settings[$identifier] = $this->createCarrierSettings($carrierOption, $cart);
+            $identifier                               = $carrierOption->carrier->externalIdentifier;
+            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrierOption, $cart);
         }
 
-        return [$packageType, $settings];
+        return $settings;
     }
 
     /**
@@ -76,24 +108,23 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function createCarrierSettings(CarrierOptions $carrierOptions, PdkCart $cart): array
     {
-        $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
-
         $carrierSettings = new CarrierSettings(
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->externalIdentifier))
         );
 
-        /** @var \MyParcelNL\Pdk\Shipment\Service\DropOffServiceInterface $dropOffService */
-        $dropOffService = Pdk::get(DropOffServiceInterface::class);
+        $dropOff             = $this->dropOffService->getForDate($carrierSettings);
+        $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
-        $dropOff = $dropOffService->getForDate($carrierSettings);
-
-        return $this->getBaseSettings($carrierSettings) + [
+        return array_merge(
+            $this->getBaseSettings($carrierSettings),
+            [
                 'deliveryDaysWindow'   => $carrierSettings->deliveryDaysWindow,
                 'dropOffDelay'         => max($minimumDropOffDelay, $carrierSettings->dropOffDelay),
                 'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) && 0 === $minimumDropOffDelay,
                 'cutoffTime'           => $dropOff->cutoffTime ?? null,
                 'cutoffTimeSameDay'    => $dropOff->sameDayCutoffTime ?? null,
-            ];
+            ]
+        );
     }
 
     /**
@@ -104,14 +135,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getBaseSettings(CarrierSettings $carrierSettings): array
     {
-        /** @var \MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface $taxService */
-        $taxService = Pdk::get(TaxServiceInterface::class);
-
-        return array_map(static function ($key) use ($carrierSettings, $taxService) {
+        return array_map(function ($key) use ($carrierSettings) {
             $value = $carrierSettings->getAttribute($key);
 
             if (Str::startsWith($key, 'price')) {
-                return $taxService->getShippingDisplayPrice((float) $value);
+                return $this->taxService->getShippingDisplayPrice((float) $value);
             }
 
             return $value;
@@ -119,50 +147,68 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
+     * Filters all carrier options by the package type and weight.
+     *
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
      *
      * @return array
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
+        $packageType    = DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
+        $carrierOptions = AccountSettings::getCarrierOptions();
+
+        foreach ($cart->shippingMethod->allowPackageTypes as $allowedPackageType) {
+            $weight = $this->getWeightByPackageType($cart, $allowedPackageType);
+
+            $filteredCarrierOptions = $carrierOptions->filter(
+                function (CarrierOptions $carrierOptions) use ($cart, $weight, $allowedPackageType) {
+                    return ($this->schemaRepository->validateOption(
+                        $this->schemaRepository->getOrderValidationSchema(
+                            $carrierOptions->carrier->name,
+                            $cart->shippingMethod->shippingAddress->cc,
+                            $allowedPackageType
+                        ),
+                        OrderPropertiesValidator::WEIGHT_KEY,
+                        $weight
+                    ));
+                }
+            );
+
+            if ($filteredCarrierOptions->isNotEmpty()) {
+                $packageType    = $allowedPackageType;
+                $carrierOptions = $filteredCarrierOptions;
+                break;
+            }
+        }
+
+        return [$packageType, $carrierOptions];
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     * @param  string                               $packageType
+     *
+     * @return int
+     */
+    private function getWeightByPackageType(PdkCart $cart, string $packageType): int
+    {
         $cartWeight = $cart->lines->reduce(function (float $carry, PdkOrderLine $line) {
             return $carry + $line->product->weight * $line->quantity;
         }, 0);
 
-        $digitalStampWeight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
-        $mailboxWeight      = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
-
-        $cc                = $cart->shippingMethod->shippingAddress->cc;
-        $allowPackageTypes = $cart->shippingMethod->allowPackageTypes;
-
-        filterOptionsByPackageType:
-        $packageType = reset($allowPackageTypes) ?: DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
+        $weight = 1;
 
         switch ($packageType) {
-            case DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME:
-                $weight = 1;
-                break;
             case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
-                $weight = $mailboxWeight;
+                $weight = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
                 break;
+
             case DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME:
-                $weight = $digitalStampWeight;
+                $weight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
+                break;
         }
 
-        $carrierOptions = AccountSettings::getCarrierOptions()
-            ->filter(function (CarrierOptions $carrierOptions) use ($weight, $packageType, $cc) {
-                $carrier = $carrierOptions->carrier;
-                $repo    = Pdk::get(SchemaRepository::class);
-                $schema  = $repo->getOrderValidationSchema($carrier->name, $cc, $packageType);
-
-                return ($repo->validateOption($schema, OrderPropertiesValidator::WEIGHT_KEY, (int) $weight));
-            });
-
-        if ($carrierOptions->isEmpty()
-            && DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME !== array_shift($allowPackageTypes)) {
-            goto filterOptionsByPackageType;
-        }
-
-        return [$packageType, $carrierOptions];
+        return $weight;
     }
 }

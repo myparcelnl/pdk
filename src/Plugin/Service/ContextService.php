@@ -25,11 +25,10 @@ class ContextService implements ContextServiceInterface
      * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
      *
      * @return \MyParcelNL\Pdk\Plugin\Model\Context\CheckoutContext
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createCheckoutContext(?PdkCart $cart): CheckoutContext
     {
-        return new CheckoutContext(['cart' => $cart]);
+        return $cart ? CheckoutContext::fromCart($cart) : new CheckoutContext();
     }
 
     /**
