@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -61,24 +60,23 @@ class CheckoutContext extends Model
      */
     private function getSettings(): array
     {
-        $appInfo = Pdk::getAppInfo();
-
-        $endpointActions = Pdk::get(FrontendEndpointServiceInterface::class);
+        /** @var \MyParcelNL\Pdk\Plugin\Api\Frontend\FrontendEndpointServiceInterface $frontendEndpointService */
+        $frontendEndpointService = Pdk::get(FrontendEndpointServiceInterface::class);
 
         // todo not everything here belongs in pdk
         return [
             'allowedShippingMethods'      => [],
             'alwaysShow'                  => true,
             'disallowedShippingMethods'   => ['free_shipping', 'local_pickup'],
-            'hiddenInputName'             => $appInfo['name'] . '_delivery_options',
+            'hiddenInputName'             => sprintf('%s_delivery_options', Pdk::getAppInfo()->name),
             'isUsingSplitAddressFields'   => (int) Settings::get(
                 CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS,
                 CheckoutSettings::ID
             ),
-            'splitAddressFieldsCountries' => [CountryCodes::CC_NL, CountryCodes::CC_BE],
+            'splitAddressFieldsCountries' => Pdk::get('splitAddressFieldsCountries'),
             'actions'                     => [
-                'baseUrl'   => $endpointActions->getBaseUrl(),
-                'endpoints' => $endpointActions->toArray(),
+                'baseUrl'   => $frontendEndpointService->getBaseUrl(),
+                'endpoints' => $frontendEndpointService->toArray(),
             ],
         ];
     }

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Pdk;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use function DI\env;
 use function DI\value;
 
@@ -10,49 +11,57 @@ use function DI\value;
  * Default config values.
  */
 return [
-    'testtttt'               => value(123),
+    'testtttt'                    => value(123),
 
     /**
      * Path to the root directory of the pdk.
      */
-    'rootDir'                => value(__DIR__ . '/../'),
+    'rootDir'                     => value(__DIR__ . '/../'),
 
     /**
      * Mode to use for the PDK. Defaults to production. Set to debug to show debug messages and stack traces in exceptions.
      */
-    'mode'                   => env('PDK_MODE', Pdk::MODE_PRODUCTION),
+    'mode'                        => env('PDK_MODE', Pdk::MODE_PRODUCTION),
 
     /**
      * Url to the API.
      */
-    'apiUrl'                 => env('PDK_API_URL', 'https://api.myparcel.nl'),
+    'apiUrl'                      => env('PDK_API_URL', 'https://api.myparcel.nl'),
 
     /**
      * CDN URL to use for frontend dependencies.
      */
-    'baseCdnUrl'             => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
+    'baseCdnUrl'                  => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
 
     /**
      * The minimum PHP version required to run the app.
      */
-    'minimumPhpVersion'      => value('7.1'),
+    'minimumPhpVersion'           => value('7.1'),
 
     /**
      * The version of the delivery options in the checkout.
      *
      * @see https://github.com/myparcelnl/delivery-options/releases
      */
-    'deliveryOptionsVersion' => value('5.6.0'),
+    'deliveryOptionsVersion'      => value('5.6.0'),
 
     /**
      * Carriers that can be used and shown. Only use carriers that we tested and have a schema for, at the moment
      */
-    'allowedCarriers'        => value([
+    'allowedCarriers'             => value([
         'dhleuroplus',
         'dhlforyou',
         'dhlparcelconnect',
         'postnl',
         // todo: bpost
         // todo: dpd
+    ]),
+
+    /**
+     * Countries that support split address fields.
+     */
+    'splitAddressFieldsCountries' => value([
+        CountryCodes::CC_NL,
+        CountryCodes::CC_BE,
     ]),
 ];
