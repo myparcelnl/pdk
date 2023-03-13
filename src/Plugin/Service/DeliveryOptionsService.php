@@ -104,8 +104,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getBaseSettings(CarrierSettings $carrierSettings): array
     {
-        /** @var TaxService $taxService */
-        $taxService = Pdk::get(TaxService::class);
+        /** @var \MyParcelNL\Pdk\Plugin\Service\TaxServiceInterface $taxService */
+        $taxService = Pdk::get(TaxServiceInterface::class);
 
         return array_map(static function ($key) use ($carrierSettings, $taxService) {
             $value = $carrierSettings->getAttribute($key);
