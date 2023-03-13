@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Api\Frontend\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection;
+use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 
 /**
@@ -35,18 +36,24 @@ class CheckoutContext extends Model
     ];
 
     /**
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @param  null|array $data
      */
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
 
-        if (isset($data['cart']) && ! isset($data['config'])) {
-            $this->attributes['config'] = new DeliveryOptionsConfig(['cart' => $data['cart']]);
-        }
-
         $this->attributes['strings']  = $this->getStrings();
         $this->attributes['settings'] = $this->getSettings();
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     *
+     * @return self
+     */
+    public static function fromCart(PdkCart $cart): self
+    {
+        return new self(['config' => DeliveryOptionsConfig::fromCart($cart)]);
     }
 
     /**
@@ -69,8 +76,7 @@ class CheckoutContext extends Model
                 CheckoutSettings::ID
             ),
             'splitAddressFieldsCountries' => [CountryCodes::CC_NL, CountryCodes::CC_BE],
-
-            'actions' => [
+            'actions'                     => [
                 'baseUrl'   => $endpointActions->getBaseUrl(),
                 'endpoints' => $endpointActions->toArray(),
             ],

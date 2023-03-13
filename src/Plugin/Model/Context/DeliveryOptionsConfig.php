@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -53,7 +54,7 @@ class DeliveryOptionsConfig extends Model
     ];
 
     /**
-     * @param  null|array{cart: \MyParcelNL\Pdk\Plugin\Model\PdkCart} $data
+     * @param  null|array $data
      */
     public function __construct(?array $data = null)
     {
@@ -61,32 +62,32 @@ class DeliveryOptionsConfig extends Model
         $this->apiBaseUrl = Pdk::get('apiUrl');
         $this->platform   = Pdk::get('platform');
 
-        if (isset($data['cart'])) {
-            /** @var \MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface $service */
-            $service = Pdk::get(DeliveryOptionsServiceInterface::class);
-
-            [$packageType, $carrierSettings] = $service->createAllCarrierSettings($data['cart']);
-
-            $getCheckoutSetting = static function (string $key) {
-                return Settings::get($key, CheckoutSettings::ID);
-            };
-
-            $isUsingSplitAddressFields  = $getCheckoutSetting(CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS);
-            $priceType                  = $getCheckoutSetting(CheckoutSettings::PRICE_TYPE);
-            $pickupLocationsDefaultView = $getCheckoutSetting(CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW);
-
-            $this->fill([
-                'packageType'                => $packageType,
-                'basePrice'                  => $data['cart']->shipmentPrice,
-                'isUsingSplitAddressFields'  => $isUsingSplitAddressFields,
-                'showPriceSurcharge'         => CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType,
-                'pickupLocationsDefaultView' => $pickupLocationsDefaultView,
-                'carrierSettings'            => $carrierSettings,
-            ]);
-
-            unset($data['cart']);
-        }
-
         parent::__construct($data);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart
+     *
+     * @return self
+     */
+    public static function fromCart(PdkCart $cart): self
+    {
+        /** @var \MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsServiceInterface $service */
+        $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+        $getCheckoutSetting = static function (string $key) {
+            return Settings::get($key, CheckoutSettings::ID);
+        };
+
+        $priceType = $getCheckoutSetting(CheckoutSettings::PRICE_TYPE);
+
+        return new self(
+            array_merge($service->createAllCarrierSettings($cart), [
+                'basePrice'                  => $cart->shipmentPrice,
+                'isUsingSplitAddressFields'  => $getCheckoutSetting(CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS),
+                'pickupLocationsDefaultView' => $getCheckoutSetting(CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW),
+                'showPriceSurcharge'         => CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType,
+            ])
+        );
     }
 }

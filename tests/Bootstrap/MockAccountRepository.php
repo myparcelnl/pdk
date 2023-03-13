@@ -36,10 +36,17 @@ class MockAccountRepository extends AbstractAccountRepository
                 'carrierConfigurations' => [],
                 'carrierOptions'        => [
                     [
-                        'carrier' => ['name' => 'postnl'],
+                        'carrier' => [
+                            'name'    => 'postnl',
+                            'enabled' => true,
+                        ],
                     ],
                     [
-                        'carrier' => ['name' => 'dhlforyou', 'subscriptionId' => '8277'],
+                        'carrier' => [
+                            'name'           => 'dhlforyou',
+                            'subscriptionId' => '8277',
+                            'enabled'        => true,
+                        ],
                     ],
                 ],
             ],
