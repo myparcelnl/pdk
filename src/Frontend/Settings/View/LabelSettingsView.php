@@ -37,7 +37,7 @@ class LabelSettingsView extends AbstractSettingsView
                 LabelSettings::POSITION,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions(
+                    'options'      => $this->toSelectOptions(
                         [
                             LabelSettings::POSITION_1 => 'settings_label_position_option_1',
                             LabelSettings::POSITION_2 => 'settings_label_position_option_2',
@@ -45,6 +45,7 @@ class LabelSettingsView extends AbstractSettingsView
                             LabelSettings::POSITION_4 => 'settings_label_position_option_4',
                         ]
                     ),
+                    '$visibleWhen' => [LabelSettings::FORMAT => LabelSettings::FORMAT_A4],
                 ]
             ),
             new InteractiveElement(
