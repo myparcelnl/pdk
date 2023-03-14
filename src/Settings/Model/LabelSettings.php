@@ -29,8 +29,8 @@ class LabelSettings extends AbstractSettingsModel
     /**
      * Format options.
      */
-    public const FORMAT_A4 = 'A4';
-    public const FORMAT_A6 = 'A6';
+    public const FORMAT_A4 = 'a4';
+    public const FORMAT_A6 = 'a6';
     /**
      * Position options.
      */
