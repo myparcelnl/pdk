@@ -31,12 +31,13 @@ class PrintOptionsView extends AbstractSettingsView
                 ]),
             ]),
             new InteractiveElement(LabelSettings::POSITION, Components::INPUT_SELECT, [
-                'options' => $this->toSelectOptions([
+                'options'      => $this->toSelectOptions([
                     LabelSettings::POSITION_1 => 'settings_label_position_option_1',
                     LabelSettings::POSITION_2 => 'settings_label_position_option_2',
                     LabelSettings::POSITION_3 => 'settings_label_position_option_3',
                     LabelSettings::POSITION_4 => 'settings_label_position_option_4',
                 ]),
+                '$visibleWhen' => [LabelSettings::FORMAT => LabelSettings::FORMAT_A4],
             ]),
         ]);
     }
@@ -46,6 +47,6 @@ class PrintOptionsView extends AbstractSettingsView
      */
     protected function getSettingsId(): string
     {
-        return 'printOptions';
+        return 'print';
     }
 }
