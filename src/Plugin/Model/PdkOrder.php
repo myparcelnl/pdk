@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
@@ -22,7 +21,6 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|string                                                 $externalIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
- * @property null|\MyParcelNL\Pdk\Shipment\Model\Label                   $label
  * @property \MyParcelNL\Pdk\Plugin\Collection\PdkOrderLineCollection    $lines
  * @property \MyParcelNL\Pdk\Base\Model\ContactDetails                   $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
@@ -54,7 +52,6 @@ class PdkOrder extends Model implements StorableArrayable
         /** Plugin order id */
         'externalIdentifier' => null,
         'deliveryOptions'    => DeliveryOptions::class,
-        'label'              => null,
 
         'billingAddress'     => null,
         'recipient'          => ContactDetails::class,
@@ -94,7 +91,6 @@ class PdkOrder extends Model implements StorableArrayable
     protected $casts      = [
         'externalIdentifier' => 'string',
         'deliveryOptions'    => DeliveryOptions::class,
-        'label'              => Label::class,
 
         'billingAddress' => ContactDetails::class,
         'recipient'      => ContactDetails::class,

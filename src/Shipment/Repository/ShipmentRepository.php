@@ -61,7 +61,7 @@ class ShipmentRepository extends ApiRepository
     }
 
     /**
-     * Fetch label link from api and fill the label->link property of the collection
+     * Fetch label link from api.
      *
      * @noinspection PhpUnused
      *
@@ -69,28 +69,24 @@ class ShipmentRepository extends ApiRepository
      * @param  null|string                                            $format
      * @param  null|array                                             $position
      *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     * @noinspection PhpUnused
+     * @return string
      */
     public function fetchLabelLink(
         ShipmentCollection $collection,
         ?string            $format,
         ?array             $position = null
-    ): ShipmentCollection {
+    ): string {
         $request = new GetLabelsRequest($collection, [
             'format'    => $format,
             'positions' => $position,
         ]);
 
-        $this->retrieve($request->getUniqueKey(), function () use ($request, $collection) {
+        return $this->retrieve($request->getUniqueKey(), function () use ($request, $collection) {
             /** @var \MyParcelNL\Pdk\Shipment\Response\GetLabelsResponse $response */
             $response = $this->api->doRequest($request, GetLabelsResponse::class);
 
-            $collection->label       = $collection->label ?? new Label();
-            $collection->label->link = $this->api->getBaseUrl() . $response->getLink();
+            return $this->api->getBaseUrl() . $response->getLink();
         });
-
-        return $collection;
     }
 
     /**

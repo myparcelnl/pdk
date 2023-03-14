@@ -54,7 +54,6 @@ it('creates fulfilment order from pdk order', function (array $input) {
                     'signature'     => true,
                 ],
             ],
-            'label'                 => null,
             'lines'                 => [
                 [
                     'externalIdentifier' => 'ABC123456-1',
