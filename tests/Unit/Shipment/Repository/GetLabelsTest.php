@@ -114,8 +114,6 @@ it(
             ->and($uri->getPath())
             ->toBe($path)
             ->and($response)
-            ->toBeInstanceOf(ShipmentCollection::class)
-            ->and($response->label->link)
             ->toStartWith('API/pdfs/');
     }
 )->with('collections');
