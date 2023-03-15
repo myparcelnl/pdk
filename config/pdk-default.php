@@ -44,6 +44,11 @@ return [
     'deliveryOptionsVersion'      => value('5.6.0'),
 
     /**
+     * The default time zone to use for date and time functions.
+     */
+    'defaultTimeZone'             => value('Europe/Amsterdam'),
+
+    /**
      * Carriers that can be used and shown. Only use carriers that we tested and have a schema for, at the moment
      */
     'allowedCarriers'             => value([
