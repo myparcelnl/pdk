@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
+use DateTimeZone;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
@@ -232,10 +233,12 @@ class Shipment extends Model implements StorableArrayable
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @throws \Exception
      */
     public function toStorableArray(): array
     {
-        $this->updated = new DateTime();
+        $timeZone = new DateTimeZone('Europe/Amsterdam');
+        $this->updated = new DateTime('now', $timeZone);
 
         $attributes = $this->toArrayWithoutNull();
 
