@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Arr;
 
 /**
@@ -237,7 +238,7 @@ class Shipment extends Model implements StorableArrayable
      */
     public function toStorableArray(): array
     {
-        $timeZone = new DateTimeZone('Europe/Amsterdam');
+        $timeZone      = new DateTimeZone(Pdk::get('defaultTimeZone'));
         $this->updated = new DateTime('now', $timeZone);
 
         $attributes = $this->toArrayWithoutNull();
