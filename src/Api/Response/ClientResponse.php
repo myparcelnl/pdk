@@ -14,6 +14,11 @@ class ClientResponse implements ClientResponseInterface
     private $body;
 
     /**
+     * @var array
+     */
+    private $headers;
+
+    /**
      * @var int
      */
     private $statusCode;
@@ -21,11 +26,13 @@ class ClientResponse implements ClientResponseInterface
     /**
      * @param  null|string $body
      * @param  int         $statusCode
+     * @param  array       $headers
      */
-    public function __construct(?string $body, int $statusCode)
+    public function __construct(?string $body, int $statusCode, array $headers = [])
     {
         $this->body       = $body;
         $this->statusCode = $statusCode;
+        $this->headers    = $headers;
     }
 
     /**
@@ -34,6 +41,14 @@ class ClientResponse implements ClientResponseInterface
     public function getBody(): ?string
     {
         return $this->body;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
     }
 
     /**
