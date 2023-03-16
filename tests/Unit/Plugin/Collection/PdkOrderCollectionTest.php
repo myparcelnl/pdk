@@ -11,11 +11,12 @@ use MyParcelNL\Sdk\src\Support\Arr;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
-it('holds PdkOrders', function () {
-    $pdkOrderCollection = new PdkOrderCollection();
 
-    $pdkOrderCollection->push(['externalIdentifier' => 'abc123']);
-    $pdkOrderCollection->push(['externalIdentifier' => 'def456']);
+it('holds PdkOrders', function () {
+    $pdkOrderCollection = new PdkOrderCollection([
+        ['externalIdentifier' => 'MP-1'],
+        ['externalIdentifier' => 'MP-2'],
+    ]);
 
     expect($pdkOrderCollection->count())
         ->toBe(2)
@@ -30,10 +31,10 @@ it('holds PdkOrders', function () {
 });
 
 it('can generate a shipment on each order', function () {
-    $pdkOrderCollection = new PdkOrderCollection();
-
-    $pdkOrderCollection->push(['externalIdentifier' => 'abc123']);
-    $pdkOrderCollection->push(['externalIdentifier' => 'def456']);
+    $pdkOrderCollection = new PdkOrderCollection([
+        ['externalIdentifier' => 'MP-1'],
+        ['externalIdentifier' => 'MP-2'],
+    ]);
 
     $pdkOrderCollection->generateShipments();
     $pdkOrderCollection->generateShipments();
@@ -49,18 +50,49 @@ it('can generate a shipment on each order', function () {
 });
 
 it('gets all shipments of all orders', function () {
-    $pdkOrderCollection = new PdkOrderCollection();
+    $pdkOrderCollection = new PdkOrderCollection([
+        [
+            'externalIdentifier' => 'MP-1',
+            'shipments'          => [['id' => 100020]],
+        ],
+        [
+            'externalIdentifier' => 'MP-2',
+            'shipments'          => [['id' => 100021]],
+        ],
+    ]);
 
-    $pdkOrderCollection->push(['externalIdentifier' => 'abc123']);
-    $pdkOrderCollection->push(['externalIdentifier' => 'def456']);
+    $shipments = $pdkOrderCollection->getAllShipments();
+    $array     = $shipments->toArray();
 
-    $pdkOrderCollection->generateShipments();
+    expect($shipments)
+        ->toBeInstanceOf(ShipmentCollection::class)
+        ->and(Arr::pluck($array, 'id'))
+        ->toEqual([100020, 100021])
+        ->and(array_keys($array))
+        ->toEqual([0, 1]);
+});
 
-    expect(
-        $pdkOrderCollection->getAllShipments()
-            ->count()
-    )
-        ->toBe(2);
+it('gets shipments by shipment ids', function () {
+    $pdkOrderCollection = new PdkOrderCollection([
+        [
+            'externalIdentifier' => '🐝',
+            'shipments'          => [['id' => 29090], ['id' => 30000]],
+        ],
+        [
+            'externalIdentifier' => '🦉',
+            'shipments'          => [['id' => 30010]],
+        ],
+    ]);
+
+    $shipments = $pdkOrderCollection->getShipmentsByIds([29090, 30010]);
+    $array     = $shipments->toArray();
+
+    expect($shipments)
+        ->toBeInstanceOf(ShipmentCollection::class)
+        ->and(Arr::pluck($array, 'id'))
+        ->toEqual([29090, 30010])
+        ->and(array_keys($array))
+        ->toEqual([0, 1]);
 });
 
 it('updates order shipments by shipment ids', function () {
