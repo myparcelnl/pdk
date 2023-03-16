@@ -22,7 +22,7 @@ final class PdkBackendActions implements PdkActionsInterface
     // Shipments
     public const DELETE_SHIPMENTS = 'deleteShipments';
     public const PRINT_SHIPMENTS  = 'printShipments';
-    public const FETCH_SHIPMENTS  = 'fetchShipments';
+    public const UPDATE_SHIPMENTS = 'updateShipments';
     // Settings
     public const UPDATE_PLUGIN_SETTINGS  = 'updatePluginSettings';
     public const UPDATE_PRODUCT_SETTINGS = 'updateProductSettings';
@@ -46,7 +46,6 @@ final class PdkBackendActions implements PdkActionsInterface
             self::EXPORT_RETURN,
             self::FETCH_CONTEXT,
             self::FETCH_ORDERS,
-            self::FETCH_SHIPMENTS,
             self::FETCH_WEBHOOKS,
             self::PRINT_ORDERS,
             self::PRINT_SHIPMENTS,
@@ -54,6 +53,7 @@ final class PdkBackendActions implements PdkActionsInterface
             self::UPDATE_ORDERS,
             self::UPDATE_PLUGIN_SETTINGS,
             self::UPDATE_PRODUCT_SETTINGS,
+            self::UPDATE_SHIPMENTS,
         ];
     }
 }

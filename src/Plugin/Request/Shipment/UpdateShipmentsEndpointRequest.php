@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Request\Shipment;
 
 use MyParcelNL\Pdk\Plugin\Request\AbstractEndpointRequest;
 
-class FetchShipmentsEndpointRequest extends AbstractEndpointRequest
+class UpdateShipmentsEndpointRequest extends AbstractEndpointRequest
 {
     /**
      * @return string
@@ -21,6 +21,6 @@ class FetchShipmentsEndpointRequest extends AbstractEndpointRequest
      */
     public function getProperty(): string
     {
-        return 'orders';
+        return 'shipments';
     }
 }

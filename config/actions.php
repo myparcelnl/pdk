@@ -12,8 +12,8 @@ use MyParcelNL\Pdk\Plugin\Action\Backend\Settings\UpdatePluginSettingsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Settings\UpdateProductSettingsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\DeleteShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\ExportReturnAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\FetchShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\PrintShipmentsAction;
+use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\UpdateShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\CreateWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\DeleteWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\FetchWebhooksAction;
@@ -30,8 +30,8 @@ use MyParcelNL\Pdk\Plugin\Request\Settings\UpdatePluginSettingsEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Settings\UpdateProductSettingsEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Shipment\DeleteShipmentsEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Shipment\ExportReturnEndpointRequest;
-use MyParcelNL\Pdk\Plugin\Request\Shipment\FetchShipmentsEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Shipment\PrintShipmentsEndpointRequest;
+use MyParcelNL\Pdk\Plugin\Request\Shipment\UpdateShipmentsEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Webhook\CreateWebhooksEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Webhook\DeleteWebhooksEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Webhook\FetchWebhooksEndpointRequest;
@@ -93,9 +93,9 @@ return [
         /**
          * Get new shipments data from the API.
          */
-        PdkBackendActions::FETCH_SHIPMENTS         => [
-            'request' => FetchShipmentsEndpointRequest::class,
-            'action'  => FetchShipmentsAction::class,
+        PdkBackendActions::UPDATE_SHIPMENTS => [
+            'request' => UpdateShipmentsEndpointRequest::class,
+            'action'  => UpdateShipmentsAction::class,
         ],
 
         /**
