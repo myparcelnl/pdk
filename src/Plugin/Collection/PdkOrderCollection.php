@@ -46,7 +46,7 @@ class PdkOrderCollection extends Collection
                 $shipment->orderId = $order->externalIdentifier;
             });
 
-            $acc->push(...$order->shipments);
+            $acc->push(...$order->shipments->where('deleted', null));
             return $acc;
         }, new ShipmentCollection());
 
