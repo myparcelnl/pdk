@@ -20,6 +20,7 @@ class PdkOrderCollection extends Collection
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \Exception
      */
     public function generateShipments(array $data = []): ShipmentCollection
     {
@@ -39,7 +40,8 @@ class PdkOrderCollection extends Collection
      */
     public function getAllShipments(): ShipmentCollection
     {
-        return $this->reduce(function (ShipmentCollection $acc, PdkOrder $order) {
+        /** @var ShipmentCollection $collection */
+        $collection = $this->reduce(function (ShipmentCollection $acc, PdkOrder $order) {
             $order->shipments->each(function (Shipment $shipment) use ($order) {
                 $shipment->orderId = $order->externalIdentifier;
             });
@@ -47,6 +49,8 @@ class PdkOrderCollection extends Collection
             $acc->push(...$order->shipments);
             return $acc;
         }, new ShipmentCollection());
+
+        return $collection->values();
     }
 
     /**
@@ -68,6 +72,18 @@ class PdkOrderCollection extends Collection
 
                 return $collection;
             }, new ShipmentCollection());
+    }
+
+    /**
+     * @param  int|int[] $shipmentIds
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    public function getShipmentsByIds($shipmentIds): ShipmentCollection
+    {
+        return $this->getAllShipments()
+            ->whereIn('id', is_array($shipmentIds) ? $shipmentIds : func_get_args())
+            ->values();
     }
 
     /**

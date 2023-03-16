@@ -11,8 +11,11 @@ class GetLabelsAsPdfRequest extends GetLabelsRequest
      */
     public function getHeaders(): array
     {
-        return [
-                'accept' => 'application/pdf',
-            ] + parent::getHeaders();
+        return array_replace(
+            parent::getHeaders(),
+            [
+                'Accept' => 'application/pdf',
+            ]
+        );
     }
 }

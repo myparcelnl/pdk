@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 use MyParcelNL\Pdk\Api\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Model\Label;
 use MyParcelNL\Pdk\Shipment\Request\FetchShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsAsPdfRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
@@ -105,21 +104,18 @@ class ShipmentRepository extends ApiRepository
         ShipmentCollection $collection,
         ?string            $format,
         ?array             $position = null
-    ): ShipmentCollection {
+    ): string {
         $request = new GetLabelsAsPdfRequest($collection, [
             'format'    => $format,
             'positions' => $position,
         ]);
 
-        $this->retrieve($request->getUniqueKey(), function () use ($request, $collection) {
+        return $this->retrieve($request->getUniqueKey(), function () use ($request) {
             /** @var \MyParcelNL\Pdk\Shipment\Response\GetLabelsPdfResponse $response */
             $response = $this->api->doRequest($request, GetLabelsPdfResponse::class);
 
-            $collection->label      = $collection->label ?? new Label();
-            $collection->label->pdf = $response->getPdf();
+            return $response->getPdf();
         });
-
-        return $collection;
     }
 
     /**
