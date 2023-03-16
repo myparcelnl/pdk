@@ -50,6 +50,7 @@ class ExportReturnAction extends AbstractOrderAction
         $orderIds = $orders->pluck('externalIdentifier')
             ->toArray();
 
+        // todo only return shipments that are created
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, ['orderIds' => $orderIds]);
     }
 }
