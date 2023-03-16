@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Action\Backend\Shipment;
 
 use DateTime;
-use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\AbstractOrderAction;
-use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -34,7 +32,7 @@ class DeleteShipmentsAction extends AbstractOrderAction
 
         $this->pdkOrderRepository->updateMany($orders);
 
-        return Actions::execute(PdkBackendActions::FETCH_ORDERS);
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
