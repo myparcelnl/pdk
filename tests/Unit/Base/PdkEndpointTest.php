@@ -15,8 +15,8 @@ use MyParcelNL\Pdk\Plugin\Action\Backend\Settings\UpdatePluginSettingsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Settings\UpdateProductSettingsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\DeleteShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\ExportReturnAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\FetchShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\PrintShipmentsAction;
+use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\UpdateShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\CreateWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\DeleteWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\FetchWebhooksAction;
@@ -42,7 +42,7 @@ usesShared(
         ExportReturnAction::class          => autowire(MockAction::class),
         FetchContextAction::class          => autowire(MockAction::class),
         FetchOrdersAction::class           => autowire(MockAction::class),
-        FetchShipmentsAction::class        => autowire(MockAction::class),
+        UpdateShipmentsAction::class       => autowire(MockAction::class),
         FetchWebhooksAction::class         => autowire(MockAction::class),
         PrintOrdersAction::class           => autowire(MockAction::class),
         PrintShipmentsAction::class        => autowire(MockAction::class),
