@@ -45,8 +45,11 @@ class ShipmentCollection extends Collection implements StorableArrayable
      */
     public function toStorableArray(): array
     {
-        return $this->map(function (Shipment $shipment) {
-            return $shipment->toStorableArray();
-        })->toArray();
+        return $this
+            ->where('deleted', null)
+            ->map(function (Shipment $shipment) {
+                return $shipment->toStorableArray();
+            })
+            ->toArray();
     }
 }
