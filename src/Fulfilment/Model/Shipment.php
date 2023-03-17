@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
 
@@ -28,6 +29,8 @@ class Shipment extends Model
         'options'            => ShipmentOptions::class,
         'pickup'             => null,
         'recipient'          => ContactDetails::class,
+        'physicalProperties' => PhysicalProperties::class,
+        'dropOffPoint'       => null,
     ];
 
     public $casts      = [
@@ -37,6 +40,8 @@ class Shipment extends Model
         'options'            => ShipmentOptions::class,
         'pickup'             => RetailLocation::class,
         'recipient'          => ContactDetails::class,
+        'physicalProperties' => PhysicalProperties::class,
+        'dropOffPoint'       => RetailLocation::class,
     ];
 
     /**
@@ -71,6 +76,12 @@ class Shipment extends Model
             'options'            => $options,
             'pickup'             => $pdkShipment->deliveryOptions->pickupLocation,
             'recipient'          => $pdkShipment->recipient,
+            'dropOffPoint'       => $pdkShipment->dropOffPoint,
+            'physicalProperties' => [
+                'height' => $pdkShipment->physicalProperties->height ?? 0,
+                'width'  => $pdkShipment->physicalProperties->width ?? 0,
+                'length' => $pdkShipment->physicalProperties->length ?? 0,
+            ],
         ]);
     }
 }
