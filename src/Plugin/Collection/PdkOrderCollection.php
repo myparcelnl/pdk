@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -32,6 +33,13 @@ class PdkOrderCollection extends Collection
             if ($order->getValidator()
                 ->getErrors()) {
                 // todo: add notification
+                DefaultLogger::error(
+                    'Validation errors',
+                    compact(
+                        $order->getValidator()
+                            ->getErrors()
+                    )
+                );
             }
 
             $newShipment = $order->createShipment($data);
