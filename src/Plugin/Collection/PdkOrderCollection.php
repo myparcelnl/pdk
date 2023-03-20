@@ -27,6 +27,13 @@ class PdkOrderCollection extends Collection
         $newShipments = new ShipmentCollection();
 
         $this->each(function (PdkOrder $order) use ($newShipments, $data) {
+            $order->getValidator()
+                ->validate();
+            if ($order->getValidator()
+                ->getErrors()) {
+                // todo: add notification
+            }
+
             $newShipment = $order->createShipment($data);
             $newShipments->push($newShipment);
             $order->shipments->push($newShipment);
