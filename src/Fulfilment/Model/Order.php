@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 
 /**
  * Order for use with fulfilment API.
@@ -19,6 +20,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
  * @property null|string                                               $fulfilmentPartnerIdentifier
  * @property null|int                                                  $shopId
  * @property null|int                                                  $accountId
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation        $dropOffPoint
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails            $invoiceAddress
  * @property null|string                                               $language
  * @property null|\DateTime                                            $orderDate
@@ -40,6 +42,7 @@ class Order extends Model
         'fulfilmentPartnerIdentifier' => null,
         'shopId'                      => null,
         'accountId'                   => null,
+        'dropOffPoint'                => null,
         'invoiceAddress'              => null,
         'language'                    => null,
         'orderDate'                   => null,
@@ -60,6 +63,7 @@ class Order extends Model
         'fulfilmentPartnerIdentifier' => 'string',
         'shopId'                      => 'int',
         'accountId'                   => 'int',
+        'dropOffPoint'                => RetailLocation::class,
         'invoiceAddress'              => ContactDetails::class,
         'language'                    => 'string',
         'orderDate'                   => 'datetime',
@@ -79,6 +83,7 @@ class Order extends Model
      *
      * @return static
      * @noinspection PhpUnused
+     * @throws \Exception
      */
     public static function fromPdkOrder(?PdkOrder $pdkOrder): self
     {

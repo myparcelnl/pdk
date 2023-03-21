@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
  * @property \MyParcelNL\Pdk\Fulfilment\Model\ShipmentOptions  $options
  * @property \MyParcelNL\Pdk\Shipment\Model\RetailLocation     $pickup
  * @property \MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
+ * @property \MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
  */
 class Shipment extends Model
 {
