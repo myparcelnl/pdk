@@ -103,6 +103,11 @@ class ExportOrderAction extends AbstractOrderAction
     {
         $data      = json_decode($request->getContent(), true);
         $shipments = $orders->generateShipments($data['data']['orders'] ?? []);
+
+        if ($shipments->isEmpty()) {
+            return $orders;
+        }
+
         $concepts  = $this->shipmentRepository->createConcepts($shipments);
 
         $orders->updateShipments($concepts);
