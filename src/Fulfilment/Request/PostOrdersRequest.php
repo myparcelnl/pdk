@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
+use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 
 class PostOrdersRequest extends Request
 {
@@ -66,12 +67,11 @@ class PostOrdersRequest extends Request
     private function encodeOrder(Order $order): array
     {
         $orderLines = $order->orderLines->reduce(function (array $carry, OrderLine $orderLine) {
-            $carry[] = $orderLine->toSnakeCaseArray();
+            $orderLineArray = $orderLine->toSnakeCaseArray();
+            unset($orderLineArray['vat']);
+            $carry[] = $orderLineArray;
             return $carry;
         }, []);
-
-        $order->shipment->recipient = $this->getAddress($order->shipment->recipient);
-        $order->shipment->pickup    = $this->getAddress($order->shipment->pickup);
 
         return [
             'external_identifier'           => $order->externalIdentifier,
@@ -79,7 +79,7 @@ class PostOrdersRequest extends Request
             'invoice_address'               => $this->getAddress($order->invoiceAddress),
             'order_date'                    => $order->orderDate ? $order->orderDate->format('Y-m-d H:i:s') : null,
             'order_lines'                   => $orderLines,
-            'shipment'                      => $order->shipment->toSnakeCaseArray() ?: null,
+            'shipment'                      => $this->getShipment($order),
         ];
     }
 
@@ -108,5 +108,21 @@ class PostOrdersRequest extends Request
             },
             []
         );
+    }
+
+    /**
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function getShipment(Order $order): ?array
+    {
+        $shipment               = $order->shipment;
+        $shipment->recipient    = $this->getAddress($shipment->recipient);
+        $shipment->pickup       = $this->getAddress($shipment->pickup);
+        $shipment->options->insurance = ['amount' => $shipment->options->insurance, 'currency' => 'EUR'];
+        $shipment->options      = array_map(static function ($item) {
+            return is_bool($item) ? (int) $item : $item;
+        }, $shipment->options->toSnakeCaseArray());
+
+        return $shipment->toSnakeCaseArray() ?: null;
     }
 }

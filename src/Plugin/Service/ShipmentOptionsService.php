@@ -124,8 +124,10 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             $threshold = min($order->orderPriceAfterVat, $this->currencyService->convertToCents($insuranceValue));
         }
 
-        $allowedInsuranceAmounts = $order->getValidator()
-            ->getAllowedInsuranceAmounts();
+        $allowedInsuranceAmounts = array_filter($order->getValidator()
+            ->getAllowedInsuranceAmounts(), static function ($item) {
+            return null !== $item;
+        });
 
         return array_reduce(
             $allowedInsuranceAmounts,

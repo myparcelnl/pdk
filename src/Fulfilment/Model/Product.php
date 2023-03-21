@@ -65,10 +65,14 @@ class Product extends Model
         }
 
         return new self([
-            'sku'    => $product->sku,
-            'ean'    => $product->ean,
-            'name'   => $product->name,
-            'weight' => $product->weight,
+            'sku'                => $product->sku,
+            'ean'                => $product->ean,
+            'name'               => $product->name,
+            'weight'             => $product->weight,
+            'width'              => $product->width,
+            'length'             => $product->length,
+            'height'             => $product->height,
+            'externalIdentifier' => $product->externalIdentifier,
         ]);
     }
 }
