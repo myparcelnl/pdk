@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
+use Exception;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
@@ -19,11 +20,11 @@ use Throwable;
 
 class RenderService implements RenderServiceInterface
 {
+    public const  BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-boot';
     /**
      * Ids and events
      */
     public const  BOOTSTRAP_RENDER_EVENT = 'myparcel_pdk_loaded';
-    public const  BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-boot';
     /**
      * Delivery options
      */
@@ -40,6 +41,11 @@ class RenderService implements RenderServiceInterface
     protected const COMPONENT_PRODUCT_SETTINGS = 'ProductSettings';
 
     /**
+     * @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface
+     */
+    protected $contextService;
+
+    /**
      * @var string
      */
     private static $jsInitTemplate;
@@ -48,11 +54,6 @@ class RenderService implements RenderServiceInterface
      * @var string
      */
     private static $renderTemplate;
-
-    /**
-     * @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface
-     */
-    protected $contextService;
 
     /**
      * @var \MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface
@@ -68,7 +69,6 @@ class RenderService implements RenderServiceInterface
         $this->contextService = $contextService;
         $this->viewService    = $viewService;
     }
-
 
     /**
      * @param  \MyParcelNL\Pdk\Plugin\Model\PdkCart $cart

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
+use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,9 @@ class FetchOrdersAction extends AbstractOrderAction
 
         /** @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface $contextService */
         $contextService = Pdk::get(ContextServiceInterface::class);
+
+        // tODO remove
+        Notifications::add('test', 'warning');
 
         return new JsonResponse([
             'orders' => $contextService
