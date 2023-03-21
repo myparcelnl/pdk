@@ -15,14 +15,14 @@ class NotificationManager
             'category' => 'general',
             'id'       => md5($message),
             'level'    => $level,
-            'message'  => $message,
+            'content'  => $message,
         ];
     }
 
     public function addMany(array $notifications): void
     {
         foreach ($notifications as $notification) {
-            $this->add($notification['message'], $notification['level']);
+            $this->add($notification['content'], $notification['level']);
         }
     }
 
