@@ -56,6 +56,7 @@ class DynamicContext extends Model
             $this->attributes['printOptionsView'] = Pdk::get(PrintOptionsView::class);
         }
 
+        $haha                               = AccountSettings::getAccount();
         $this->attributes['account']        = AccountSettings::getAccount();
         $this->attributes['carrierOptions'] = AccountSettings::getCarrierOptions();
         $this->attributes['shop']           = AccountSettings::getShop();

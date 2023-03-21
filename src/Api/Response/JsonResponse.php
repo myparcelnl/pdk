@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Response;
 
+use MyParcelNL\Pdk\Facade\Notifications;
 use Symfony\Component\HttpFoundation\Response;
 
 class JsonResponse extends Response
@@ -15,6 +16,10 @@ class JsonResponse extends Response
      */
     public function __construct(array $data = [], int $status = 200, array $headers = [])
     {
+        if (Notifications::has()) {
+            if (isset($data['notifications'])) Notifications::addMany($data['notifications']);
+            $data['notifications'] = Notifications::get();
+        }
         parent::__construct(json_encode(['data' => $data]), $status, ['Content-Type' => 'application/json'] + $headers);
     }
 }
