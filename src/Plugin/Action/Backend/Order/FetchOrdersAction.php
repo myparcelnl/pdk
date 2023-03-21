@@ -26,9 +26,6 @@ class FetchOrdersAction extends AbstractOrderAction
         /** @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface $contextService */
         $contextService = Pdk::get(ContextServiceInterface::class);
 
-        // tODO remove
-        Notifications::add('test', 'warning');
-
         return new JsonResponse([
             'orders' => $contextService
                 ->createOrderDataContext($collection)

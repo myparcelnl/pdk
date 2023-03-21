@@ -8,9 +8,10 @@ use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Plugin\NotificationManager;
 
 /**
- * @method static mixed get()
  * @method static void add(string $message, string $level = 'info')
  * @method static void addMany(array $notifications)
+ * @method static mixed get()
+ * @method static bool has()
  * @implements \MyParcelNL\Pdk\Plugin\NotificationManager
  */
 class Notifications extends Facade

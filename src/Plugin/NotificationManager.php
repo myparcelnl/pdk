@@ -13,9 +13,9 @@ class NotificationManager
     {
         $this->notifications[] = [
             'category' => 'general',
+            'content'  => $message,
             'id'       => md5($message),
             'level'    => $level,
-            'content'  => $message,
         ];
     }
 
