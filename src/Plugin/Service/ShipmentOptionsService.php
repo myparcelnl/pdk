@@ -129,13 +129,15 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             return null !== $item;
         });
 
-        return array_reduce(
-            $allowedInsuranceAmounts,
-            static function (int $acc, int $value) use ($threshold) {
-                return $value < $threshold ? $acc : $value;
-            },
-            Arr::last($allowedInsuranceAmounts, null, 0)
-        );
+        $insuranceAmount = 0;
+
+        foreach ($allowedInsuranceAmounts as $i => $iValue) {
+            if ($iValue < $threshold) {
+                $insuranceAmount = $allowedInsuranceAmounts[$i + 1];
+            }
+        }
+
+        return $insuranceAmount;
     }
 
     /**
