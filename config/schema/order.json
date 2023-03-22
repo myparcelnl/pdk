@@ -7,8 +7,7 @@
     "physicalProperties": {
       "properties": {
         "weight": {
-          "type": ["integer"],
-          "minimum": 1
+          "type": ["integer"]
         }
       }
     },

@@ -60,6 +60,7 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  \Symfony\Component\HttpFoundation\Request            $request
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection
+     * @throws \Exception
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
@@ -98,6 +99,7 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  \Symfony\Component\HttpFoundation\Request            $request
      *
      * @return \MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection
+     * @throws \Exception
      */
     protected function exportShipments(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
