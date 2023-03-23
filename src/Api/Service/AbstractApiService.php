@@ -46,13 +46,14 @@ abstract class AbstractApiService implements ApiServiceInterface
         RequestInterface $request,
         string           $responseClass = ApiResponse::class
     ): ApiResponseInterface {
-        $uri    = $this->buildUri($request);
-        $method = $request->getMethod();
+        $uri      = $this->buildUri($request);
+        $method   = $request->getMethod();
+        $errorKey = false === strpos(get_class($this->clientAdapter), 'Guzzle5Client') ? 'http_errors' : 'exceptions';
 
         $options = [
-            'headers'     => $request->getHeaders() + $this->getHeaders(),
-            'body'        => $request->getBody(),
-            'http_errors' => false,
+            'headers' => $request->getHeaders() + $this->getHeaders(),
+            'body'    => $request->getBody(),
+            $errorKey => false,
         ];
 
         $logContext = [
