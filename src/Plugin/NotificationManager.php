@@ -15,7 +15,7 @@ class NotificationManager
             'category' => 'general',
             'content'  => $message,
             'id'       => md5($message),
-            'level'    => $level,
+            'variant'  => $level,
         ];
     }
 
