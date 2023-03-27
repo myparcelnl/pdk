@@ -9,8 +9,6 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
- * @property int<-1, 1> $exportOnlyRecipient
- * @property int<-1, 1> $exportSignature
  * @property string     $countryOfOrigin
  * @property string     $customsCode
  * @property int<-1, 1> $disableDeliveryOptions
@@ -18,6 +16,9 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int<-1, 1> $exportAgeCheck
  * @property int<-1, 1> $exportInsurance
  * @property int<-1, 1> $exportLargeFormat
+ * @property int<-1, 1> $exportOnlyRecipient
+ * @property int<-1, 1> $exportSignature
+ * @property int        $fitInDigitalStamp
  * @property int        $fitInMailbox
  * @property string     $packageType
  * @property int<-1, 1> $returnShipments
@@ -35,6 +36,7 @@ class ProductSettings extends AbstractSettingsModel
     public const EXPORT_ONLY_RECIPIENT    = 'exportOnlyRecipient';
     public const EXPORT_RETURN            = 'exportReturn';
     public const EXPORT_SIGNATURE         = 'exportSignature';
+    public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
     public const FIT_IN_MAILBOX           = 'fitInMailbox';
     public const PACKAGE_TYPE             = 'packageType';
 
@@ -51,6 +53,7 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_ONLY_RECIPIENT    => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
         self::EXPORT_RETURN            => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
         self::EXPORT_SIGNATURE         => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
+        self::FIT_IN_DIGITAL_STAMP     => 0,
         self::FIT_IN_MAILBOX           => 0,
         self::PACKAGE_TYPE             => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
     ];
@@ -66,6 +69,7 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_ONLY_RECIPIENT    => 'int',
         self::EXPORT_RETURN            => 'int',
         self::EXPORT_SIGNATURE         => 'int',
+        self::FIT_IN_DIGITAL_STAMP     => 'int',
         self::FIT_IN_MAILBOX           => 'int',
         self::PACKAGE_TYPE             => 'string',
     ];

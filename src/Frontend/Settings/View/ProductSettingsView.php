@@ -48,21 +48,20 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(ProductSettings::EXPORT_AGE_CHECK, Components::INPUT_TRISTATE),
             new InteractiveElement(ProductSettings::EXPORT_INSURANCE, Components::INPUT_TRISTATE),
             new InteractiveElement(ProductSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER),
             new InteractiveElement(
                 ProductSettings::PACKAGE_TYPE,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions(
-                        [
-                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => 'package_type_package',
-                            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 'package_type_mailbox',
-                            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME        => 'package_type_letter',
-                            DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 'package_type_digital_stamp',
-                        ]
-                    ),
+                    'options' => $this->toSelectOptions([
+                        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => 'package_type_package',
+                        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 'package_type_mailbox',
+                        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 'package_type_digital_stamp',
+                        DeliveryOptions::PACKAGE_TYPE_LETTER_NAME        => 'package_type_letter',
+                    ]),
                 ]
             ),
+            new InteractiveElement(ProductSettings::FIT_IN_DIGITAL_STAMP, Components::INPUT_NUMBER),
+            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER),
             new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRISTATE),
         ]);
     }
