@@ -19,7 +19,6 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int    $basePrice
  * @property array  $carrierSettings
  * @property string $currency
- * @property bool   $isUsingSplitAddressFields
  * @property string $locale
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
@@ -62,6 +61,14 @@ class DeliveryOptionsConfig extends Model
         $this->apiBaseUrl = Pdk::get('apiUrl');
         $this->platform   = Pdk::get('platform');
 
+        $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
+
+        $this->showPriceSurcharge         = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
+        $this->pickupLocationsDefaultView = Settings::get(
+            CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
+            CheckoutSettings::ID
+        );
+
         parent::__construct($data);
     }
 
@@ -75,19 +82,13 @@ class DeliveryOptionsConfig extends Model
         /** @var \MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface $service */
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
-        $getCheckoutSetting = static function (string $key) {
-            return Settings::get($key, CheckoutSettings::ID);
-        };
-
-        $priceType = $getCheckoutSetting(CheckoutSettings::PRICE_TYPE);
-
         return new self(
-            array_merge($service->createAllCarrierSettings($cart), [
-                'basePrice'                  => $cart->shipmentPrice,
-                'isUsingSplitAddressFields'  => $getCheckoutSetting(CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS),
-                'pickupLocationsDefaultView' => $getCheckoutSetting(CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW),
-                'showPriceSurcharge'         => CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType,
-            ])
+            array_merge(
+                $service->createAllCarrierSettings($cart),
+                [
+                    'basePrice' => $cart->shipmentPrice,
+                ]
+            )
         );
     }
 }

@@ -69,7 +69,7 @@ class CheckoutContext extends Model
             'alwaysShow'                  => true,
             'disallowedShippingMethods'   => ['free_shipping', 'local_pickup'],
             'hiddenInputName'             => sprintf('%s_delivery_options', Pdk::getAppInfo()->name),
-            'isUsingSplitAddressFields'   => (int) Settings::get(
+            'useSeparateAddressFields'    => (bool) Settings::get(
                 CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS,
                 CheckoutSettings::ID
             ),
