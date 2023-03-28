@@ -41,7 +41,7 @@ return [
      *
      * @see https://github.com/myparcelnl/delivery-options/releases
      */
-    'deliveryOptionsVersion'      => value('5.6.0'),
+    'deliveryOptionsVersion'      => value('5.7.1'),
 
     /**
      * The default time zone to use for date and time functions.
