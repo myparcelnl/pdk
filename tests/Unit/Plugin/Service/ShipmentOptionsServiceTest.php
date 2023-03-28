@@ -190,11 +190,14 @@ it('prioritizes override over product settings and defaults', function (array $o
     expectShipmentOptionToEqual($order, [$option[KEY_SHIPMENT_OPTION] => $option[KEY_DISABLED_VALUE]]);
 })->with('shipment options');
 
-it('calculates insurance', function (int $insurance, int $result) {
-    mockPdk([], [
+it('calculates insurance', function (int $insuranceFrom, int $insuranceUpTo, int $orderTotal, int $result) {
+    mockPdk([
+        CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT => $insuranceFrom,
+        CarrierSettings::EXPORT_INSURANCE_UP_TO       => $insuranceUpTo,
+    ], [
         [
             'externalIdentifier' => 'PDK-1',
-            'settings'           => [ProductSettings::EXPORT_INSURANCE => 1],
+            'price'              => ['currency' => 'EUR', 'amount' => $orderTotal],
         ],
     ]);
 
@@ -204,9 +207,10 @@ it('calculates insurance', function (int $insurance, int $result) {
     $order = new PdkOrder([
         'deliveryOptions' => [
             'carrier'         => CARRIER,
-            'shipmentOptions' => ['insurance' => $insurance],
+            'shipmentOptions' => ['insurance' => 1],
         ],
-        'lines'           => [['product' => $productRepository->getProduct('PDK-1')]],
+        'lines'           => [['price' => $orderTotal, 'product' => $productRepository->getProduct('PDK-1')]],
+        'recipient'       => ['cc' => 'NL'],
     ]);
 
     /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $service */
@@ -215,19 +219,18 @@ it('calculates insurance', function (int $insurance, int $result) {
 
     expect($order->deliveryOptions->shipmentOptions->insurance)->toBe($result);
 })->with([
-    [4000, 4000],
-    [4001, 4001],
-    [5050, 5050],
-    [100, 100],
-    [0, 0],
-    [-1, 0],
-    [-100, 0],
-    [100000, 100000],
-    [100001, 100000],
-    [100500, 100500],
-    [1000000, 100000],
-    [1000001, 100000],
-    [1000500, 100000],
+    [0, 5000, 4481, 10000],
+    [0, 5000, 0, 0],
+    [0, 5000, -1, 0],
+    [0, 5000, -100, 0],
+    [0, 5000, 1, 10000],
+    [0, 5000, 15050, 25000],
+    [0, 5000, 100000, 100000],
+    [0, 5000, 100001, 150000],
+    [0, 5000, 100500, 150000],
+    [0, 5000, 1000000, 500000],
+    [0, 5000, 1000001, 500000],
+    [0, 5000, 1000500, 500000],
 ]);
 
 it('merges product settings', function (array $input, array $results) {

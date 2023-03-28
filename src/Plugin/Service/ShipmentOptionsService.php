@@ -15,7 +15,6 @@ use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Sdk\src\Support\Arr;
 use Throwable;
 use function array_reduce;
 
@@ -112,44 +111,33 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         $fromAmount = $this->currencyService->convertToCents(
             $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
         );
+        $orderAmount = $order->orderPriceAfterVat;
 
-        $threshold = 0;
-
-        if ($order->orderPriceAfterVat >= $fromAmount) {
-            $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
-
-            $insuranceUpToKey = $this->getInsuranceUpToKey($order->recipient->cc);
-            $insuranceValue   = $carrierSettings[$insuranceUpToKey] ?? 0;
-
-            $threshold = min($order->orderPriceAfterVat, $this->currencyService->convertToCents($insuranceValue));
+        if ($orderAmount < $fromAmount) {
+            return 0;
         }
+        $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
-        $allowedInsuranceAmounts = array_filter($order->getValidator()
-            ->getAllowedInsuranceAmounts(), static function ($item) {
-            return null !== $item;
-        });
+        $insuranceUpToKey  = $this->getInsuranceUpToKey($order->recipient->cc);
+        $maxInsuranceValue = $this->currencyService->convertToCents($carrierSettings[$insuranceUpToKey] ?? 0);
 
-        $insuranceAmount = 0;
+        $gaga = array_reduce(
+            $order->getValidator()
+                ->getAllowedInsuranceAmounts(),
+            static function (int $acc, ?int $value) use (&$cocked){
+                if (!$cocked && isset($value) && $value >= $acc) {
+                    $cocked = true;
+                    $acc = $value;
+                }
+                return $acc;
+            },
+            $orderAmount
+        );
 
-        foreach ($allowedInsuranceAmounts as $i => $iValue) {
-            if ($iValue < $threshold) {
-                $insuranceAmount = $allowedInsuranceAmounts[$i + 1];
-            }
-        }
-
-        return $insuranceAmount;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
-     *
-     * @return array
-     */
-    private function getFromOrderLines(PdkOrder $order): array
-    {
-        return $order->lines->reduce(function (array $acc, PdkOrderLine $line) {
-            return array_map([$this, 'valueProcessor'], $line->product->settings->all());
-        }, []);
+        return min(
+            $gaga,
+            $maxInsuranceValue
+        );
     }
 
     /**
