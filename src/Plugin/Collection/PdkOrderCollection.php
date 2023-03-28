@@ -28,13 +28,17 @@ class PdkOrderCollection extends Collection
         $newShipments = new ShipmentCollection();
 
         $this->each(function (PdkOrder $order) use ($newShipments, $data) {
-            if (! $order->getValidator()
-                ->validate()) {
-                array_map(static function ($error) {
-                    Notifications::add("{$error['property']}: {$error['message']}", 'error');
-                },
-                    $order->getValidator()
-                        ->getErrors());
+            $validator = $order->getValidator();
+
+            if (! $validator->validate()) {
+                Notifications::add(
+                    "Failed to export order $order->externalIdentifier",
+                    array_map(static function (array $error) {
+                        return sprintf("%s: %s", $error['property'], $error['message']);
+                    }, $validator->getErrors()),
+                    'error'
+                );
+
                 return;
             }
 

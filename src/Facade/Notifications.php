@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Pdk\Plugin\NotificationManager;
+use MyParcelNL\Pdk\Plugin\Notification\NotificationManager;
 
 /**
- * @method static void add(string $message, string $level = 'info')
+ * @method static void add(string $title, $content, string $level = 'info')
  * @method static void addMany(array $notifications)
- * @method static mixed get()
- * @method static bool has()
- * @implements \MyParcelNL\Pdk\Plugin\NotificationManager
+ * @method static mixed all()
+ * @method static bool isNotEmpty()
+ * @method static bool isEmpty()
+ * @implements \MyParcelNL\Pdk\Plugin\Notification\NotificationManager
  */
 class Notifications extends Facade
 {
