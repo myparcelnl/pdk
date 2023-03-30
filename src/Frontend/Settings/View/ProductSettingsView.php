@@ -60,7 +60,6 @@ class ProductSettingsView extends AbstractSettingsView
                     ]),
                 ]
             ),
-            new InteractiveElement(ProductSettings::FIT_IN_DIGITAL_STAMP, Components::INPUT_NUMBER),
             new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER),
             new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRISTATE),
         ]);
