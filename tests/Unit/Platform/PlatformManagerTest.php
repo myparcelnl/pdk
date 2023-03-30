@@ -12,10 +12,18 @@ it('gets all platform data', function () {
 
     expect(Platform::all())
         ->toBe([
-            'name'           => 'myparcel',
-            'human'          => 'MyParcel',
-            'localCountry'   => 'NL',
-            'defaultCarrier' => 'postnl',
+            'name'             => 'myparcel',
+            'human'            => 'MyParcel',
+            'localCountry'     => 'NL',
+            'defaultCarrier'   => 'postnl',
+            'defaultCarrierId' => 1,
+            'settings'         => [
+                'defaults' => [
+                    'checkout' => [
+                        'pickupLocationsDefaultView' => 'list',
+                    ],
+                ],
+            ],
         ]);
 });
 

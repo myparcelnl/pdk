@@ -52,14 +52,14 @@ it('exports order to shipment', function ($orders) {
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
-    expect($response)
+   expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($responseOrders)
         ->toHaveLength(count($orders))
         // Each shipment should have an ID
         ->and($responseShipments)->each->toHaveLength(1)
         // Each shipment should have an ID
-        ->and(Arr::pluck($responseShipments, 'id'))->each->toBeInt()
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt()
         ->and($response->getStatusCode())
         ->toBe(200);
 })->with('pdkOrdersDomestic');

@@ -32,13 +32,13 @@ it('holds PdkOrders', function () {
 
 it('can generate a shipment on each order', function () {
     $pdkOrderCollection = new PdkOrderCollection([
-        ['externalIdentifier' => 'MP-1'],
-        ['externalIdentifier' => 'MP-2'],
+        new PdkOrder(['externalIdentifier' => 'MP-1', 'recipient' => ['cc' => 'NL']]),
+        new PdkOrder(['externalIdentifier' => 'MP-2', 'recipient' => ['cc' => 'NL']]),
     ]);
 
     $pdkOrderCollection->generateShipments();
     $pdkOrderCollection->generateShipments();
-
+    //$notifications = \MyParcelNL\Pdk\Facade\Notifications::all();
     expect($pdkOrderCollection->count())
         ->toBe(2)
         ->and(

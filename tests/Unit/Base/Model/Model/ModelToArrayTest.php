@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
 const MODEL_DATA = [
     'my_value' => 1,
     'myModel'  => [
+        'myValue' => null,
         'myModel' => [
             'my_value' => null,
         ],
@@ -82,7 +83,7 @@ it('can use toArrayWithoutNull', function () {
 
 it('can combine case and skipping null', function () {
     expect((new MockNestedModel(MODEL_DATA))->toArray(Arrayable::SKIP_NULL | Arrayable::CASE_KEBAB))->toEqual([
-        'my-value' => '1',
+        'my-value' => 1,
         'my-model' => [
             'my-model' => [],
         ],

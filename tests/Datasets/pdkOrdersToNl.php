@@ -22,7 +22,7 @@ dataset('pdkOrdersDomestic', [
                 ],
                 'deliveryOptions'    => [
                     'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                    'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+                    'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                     'shipmentOptions' => [
                         'signature' => true,
                     ],
@@ -60,7 +60,7 @@ dataset('pdkOrdersDomestic', [
                 ],
                 'deliveryOptions'    => [
                     'carrier'      => Carrier::CARRIER_POSTNL_NAME,
-                    'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+                    'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 ],
             ]),
         ];

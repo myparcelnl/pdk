@@ -66,11 +66,8 @@ it('prints order', function () {
         ->and($content)
         ->toEqual([
             'data' => [
-                'links' => [
-                    'shipment_labels' => [
-                        'href' => 'https://api.myparcel.nl/shipment_labels?ids=30321,30322',
-                        'type' => 'application/pdf',
-                    ],
+                'pdfs' => [
+                    'data' => 'eyJkYXRhIjp7ImlkcyI6W3siaWQiOjMwMzIxLCJyZWZlcmVuY2VfaWRlbnRpZmllciI6IjI2MyJ9LHsiaWQiOjMwMzIyLCJyZWZlcmVuY2VfaWRlbnRpZmllciI6IjI2NCJ9XX19'
                 ],
             ],
         ])

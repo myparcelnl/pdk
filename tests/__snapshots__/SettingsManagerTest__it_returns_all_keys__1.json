@@ -33,7 +33,7 @@
     "label": {
         "id": "label",
         "description": "description",
-        "format": "A4",
+        "format": "a4",
         "output": "open",
         "position": 1,
         "prompt": false

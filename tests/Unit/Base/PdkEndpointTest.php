@@ -122,7 +122,7 @@ it('shows stack trace in development mode', function () {
 it('throws exception when using the wrong context', function (string $action) {
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
-    $response = $endpoint->call($action, PdkEndpoint::CONTEXT_FRONTEND);
+    $response = $endpoint->call($action, PdkEndpoint::CONTEXT_BACKEND);
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -138,4 +138,4 @@ it('throws exception when using the wrong context', function (string $action) {
                 ],
             ],
         ]);
-})->with('backendActions');
+})->with('frontendActions');

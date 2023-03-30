@@ -26,14 +26,16 @@ usesShared(
 );
 
 it('saves settings', function (array $data) {
-    $request = new Request(['action' => PdkBackendActions::UPDATE_PLUGIN_SETTINGS], [], [], [], [], [], [
+    $content = json_encode([
+        'data' => [
             'plugin_settings' => [
                 'general' => [
                     'order_mode' => $data['order_mode'],
                 ],
             ],
-        ]
-    );
+        ],
+    ]);
+    $request = new Request(['action' => PdkBackendActions::UPDATE_PLUGIN_SETTINGS], [], [], [], [], [], $content);
 
     $response = Actions::execute($request);
 
@@ -43,15 +45,15 @@ it('saves settings', function (array $data) {
 
     $content = json_decode($response->getContent(), true);
 
-    $responseOrders    = $content['data']['orders'];
-    $responseShipments = Arr::pluck($responseOrders, 'shipments');
-
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and(Arr::dot($content))
-        ->and($responseOrders)
-        ->toHaveLength(count($orders))
-        ->and($responseShipments)->each->toHaveLength(0)
+        ->toHaveKeysAndValues([
+            'data.plugin_settings.general.orderMode' => $data['order_mode'],
+        ])
         ->and($response->getStatusCode())
         ->toBe(200);
-})->with('pdkOrdersDomestic');
+})->with([
+    [['order_mode' => false]],
+    [['order_mode' => true]],
+]);
