@@ -1,110 +1,116 @@
 [
-  {
-    "uuid": "123",
-    "externalIdentifier": null,
-    "fulfilmentPartnerIdentifier": null,
-    "shopId": null,
-    "accountId": null,
-    "invoiceAddress": null,
-    "language": null,
-    "orderDate": "2022-08-22 00:00:00",
-    "orderLines": [
-      {
-        "uuid": "1234",
-        "quantity": 1,
-        "price": 250,
-        "vat": 10,
-        "priceAfterVat": 260,
-        "product": {
-          "uuid": "12345",
-          "sku": "018234",
-          "ean": "018234",
-          "externalIdentifier": "018234",
-          "name": "Paarse stofzuiger",
-          "description": "Een paars object waarmee stof opgezogen kan worden",
-          "width": 0,
-          "length": 0,
-          "height": 0,
-          "weight": 3500
-        }
-      }
-    ],
-    "shipment": {
-      "carrier": 1,
-      "contractId": null,
-      "customsDeclaration": {
-        "contents": 1,
-        "invoice": "25",
-        "items": [
-          {
-            "amount": 1,
-            "classification": "5256",
-            "country": "BE",
-            "description": "Vlaamse Patatekes",
-            "itemValue": {
-              "amount": 5000,
-              "currency": "EUR"
-            },
-            "weight": 200
-          },
-          {
-            "amount": 1,
-            "classification": "9221",
-            "country": "FR",
-            "description": "Omelette du Fromage",
-            "itemValue": {
-              "amount": 10000,
-              "currency": "EUR"
-            },
-            "weight": 350
-          }
+    {
+        "uuid": "123",
+        "externalIdentifier": null,
+        "fulfilmentPartnerIdentifier": null,
+        "shopId": null,
+        "accountId": null,
+        "dropOffPoint": null,
+        "invoiceAddress": null,
+        "language": null,
+        "orderDate": "2022-08-22 00:00:00",
+        "orderLines": [
+            {
+                "uuid": "1234",
+                "quantity": 1,
+                "price": 250,
+                "vat": 10,
+                "priceAfterVat": 260,
+                "product": {
+                    "uuid": "12345",
+                    "sku": "018234",
+                    "ean": "018234",
+                    "externalIdentifier": "018234",
+                    "name": "Paarse stofzuiger",
+                    "description": "Een paars object waarmee stof opgezogen kan worden",
+                    "width": 0,
+                    "length": 0,
+                    "height": 0,
+                    "weight": 3500
+                }
+            }
         ],
-        "weight": 550
-      },
-      "options": {
-        "ageCheck": null,
-        "collect": null,
-        "cooledDelivery": null,
-        "deliveryDate": null,
-        "deliveryType": null,
-        "dropOffAtPostalPoint": null,
-        "extraAssurance": null,
-        "hideSender": null,
-        "insurance": null,
-        "labelDescription": null,
-        "largeFormat": null,
-        "onlyRecipient": null,
-        "packageType": null,
-        "return": null,
-        "sameDayDelivery": null,
-        "saturdayDelivery": null,
-        "signature": null
-      },
-      "pickup": null,
-      "recipient": {
-        "boxNumber": null,
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "fullStreet": null,
-        "number": null,
-        "numberSuffix": null,
-        "postalCode": "2132JE",
-        "region": null,
-        "state": null,
-        "street": "Antareslaan 31",
-        "streetAdditionalInfo": null,
-        "email": null,
-        "phone": null,
-        "person": "Jaap Krekel",
-        "company": null
-      }
-    },
-    "status": null,
-    "type": null,
-    "price": 260,
-    "vat": 0,
-    "priceAfterVat": 0,
-    "createdAt": null,
-    "updatedAt": null
-  }
+        "shipment": {
+            "carrier": 1,
+            "contractId": null,
+            "customsDeclaration": {
+                "contents": 1,
+                "invoice": "25",
+                "items": [
+                    {
+                        "amount": 1,
+                        "classification": "5256",
+                        "country": "BE",
+                        "description": "Vlaamse Patatekes",
+                        "itemValue": {
+                            "amount": 5000,
+                            "currency": "EUR"
+                        },
+                        "weight": 200
+                    },
+                    {
+                        "amount": 1,
+                        "classification": "9221",
+                        "country": "FR",
+                        "description": "Omelette du Fromage",
+                        "itemValue": {
+                            "amount": 10000,
+                            "currency": "EUR"
+                        },
+                        "weight": 350
+                    }
+                ],
+                "weight": 550
+            },
+            "options": {
+                "ageCheck": null,
+                "collect": null,
+                "cooledDelivery": null,
+                "deliveryDate": null,
+                "deliveryType": null,
+                "hideSender": null,
+                "insurance": 1,
+                "labelDescription": "",
+                "largeFormat": null,
+                "onlyRecipient": null,
+                "packageType": null,
+                "return": null,
+                "sameDayDelivery": null,
+                "saturdayDelivery": null,
+                "signature": null
+            },
+            "pickup": null,
+            "recipient": {
+                "boxNumber": null,
+                "cc": "NL",
+                "city": "Hoofddorp",
+                "fullStreet": null,
+                "number": null,
+                "numberSuffix": null,
+                "postalCode": "2132JE",
+                "region": null,
+                "state": null,
+                "street": "Antareslaan 31",
+                "streetAdditionalInfo": null,
+                "email": null,
+                "phone": null,
+                "person": "Jaap Krekel",
+                "company": null
+            },
+            "physicalProperties": {
+                "height": null,
+                "length": null,
+                "weight": 3500,
+                "width": null
+            },
+            "dropOffPoint": null
+        },
+        "status": null,
+        "type": null,
+        "price": 260,
+        "vat": 0,
+        "priceAfterVat": 0,
+        "createdAt": null,
+        "updatedAt": null
+    }
 ]

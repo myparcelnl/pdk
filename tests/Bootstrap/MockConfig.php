@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 class MockConfig implements ConfigInterface
 {
     public const  ID_CUSTOM_SUBSCRIPTION_BPOST = 10921;
-    public const  ID_CUSTOM_SUBSCRIPTION_DPD   = 10932621;
+    public const  ID_CUSTOM_SUBSCRIPTION_DPD   = 10932623;
     private const CONFIG                       = [
         'carriers' => [
             [

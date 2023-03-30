@@ -90,7 +90,7 @@ return [
     [
         'id'                 => Carrier::CARRIER_DPD_ID,
         'name'               => Carrier::CARRIER_DPD_NAME,
-        'subscriptionId'     => 10932621,
+        'subscriptionId'     => 10932623,
         'primary'            => 0,
         'type'               => Carrier::TYPE_CUSTOM,
         'capabilities'       => [
