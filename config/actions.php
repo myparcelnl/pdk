@@ -37,7 +37,15 @@ use MyParcelNL\Pdk\Plugin\Request\Webhook\DeleteWebhooksEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Webhook\FetchWebhooksEndpointRequest;
 
 return [
-    'shared' => [],
+    'shared' => [
+        /**
+         * Fetch context
+         */
+        PdkBackendActions::FETCH_CONTEXT => [
+            'request' => FetchContextEndpointRequest::class,
+            'action'  => FetchContextAction::class,
+        ],
+    ],
 
     'frontend' => [
         /**
@@ -93,7 +101,7 @@ return [
         /**
          * Get new shipments data from the API.
          */
-        PdkBackendActions::UPDATE_SHIPMENTS => [
+        PdkBackendActions::UPDATE_SHIPMENTS        => [
             'request' => UpdateShipmentsEndpointRequest::class,
             'action'  => UpdateShipmentsAction::class,
         ],
@@ -160,14 +168,6 @@ return [
         PdkBackendActions::FETCH_WEBHOOKS          => [
             'request' => FetchWebhooksEndpointRequest::class,
             'action'  => FetchWebhooksAction::class,
-        ],
-
-        /**
-         * Fetch context
-         */
-        PdkBackendActions::FETCH_CONTEXT           => [
-            'request' => FetchContextEndpointRequest::class,
-            'action'  => FetchContextAction::class,
         ],
     ],
 ];
