@@ -231,6 +231,9 @@ it('calculates insurance', function (int $insuranceFrom, int $insuranceUpTo, int
     [0, 5000, 1000000, 500000],
     [0, 5000, 1000001, 500000],
     [0, 5000, 1000500, 500000],
+    [100, 5000, 5000, 0],
+    [0, 3000, 310000, 300000],
+    [0, 3000, 5000, 10000],
 ]);
 
 it('merges product settings', function (array $input, array $results) {

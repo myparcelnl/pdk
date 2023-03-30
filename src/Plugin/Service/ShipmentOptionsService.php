@@ -108,6 +108,8 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
      */
     private function calculateInsurance(PdkOrder $order): int
     {
+        $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
+
         $fromAmount = $this->currencyService->convertToCents(
             $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
         );
@@ -116,7 +118,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         if ($orderAmount < $fromAmount) {
             return 0;
         }
-        $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($order->recipient->cc);
         $maxInsuranceValue = $this->currencyService->convertToCents($carrierSettings[$insuranceUpToKey] ?? 0);
