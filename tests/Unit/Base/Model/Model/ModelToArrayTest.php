@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
 const MODEL_DATA = [
     'my_value' => 1,
     'myModel'  => [
-        'myValue' => null,
         'myModel' => [
             'my_value' => null,
         ],
@@ -19,8 +18,8 @@ const MODEL_DATA = [
 ];
 
 it('can use toArray', function () {
-    expect((new MockNestedModel(MODEL_DATA))->toArray())->toEqual([
-        'myValue' => 1,
+    expect((new MockNestedModel(MODEL_DATA))->toArray())->toBe([
+        'myValue' => '1',
         'myModel' => [
             'myValue' => null,
             'myModel' => [
@@ -32,8 +31,8 @@ it('can use toArray', function () {
 });
 
 it('can use toSnakeCaseArray', function () {
-    expect((new MockNestedModel(MODEL_DATA))->toSnakeCaseArray())->toEqual([
-        'my_value' => 1,
+    expect((new MockNestedModel(MODEL_DATA))->toSnakeCaseArray())->toBe([
+        'my_value' => '1',
         'my_model' => [
             'my_value' => null,
             'my_model' => [
@@ -45,8 +44,8 @@ it('can use toSnakeCaseArray', function () {
 });
 
 it('can use toKebabCaseArray', function () {
-    expect((new MockNestedModel(MODEL_DATA))->toKebabCaseArray())->toEqual([
-        'my-value' => 1,
+    expect((new MockNestedModel(MODEL_DATA))->toKebabCaseArray())->toBe([
+        'my-value' => '1',
         'my-model' => [
             'my-value' => null,
             'my-model' => [
@@ -60,8 +59,8 @@ it('can use toKebabCaseArray', function () {
 it('can use toStudlyCaseArray', function () {
     expect(
         (new MockNestedModel(MODEL_DATA))->toStudlyCaseArray()
-    )->toEqual([
-        'MyValue' => 1,
+    )->toBe([
+        'MyValue' => '1',
         'MyModel' => [
             'MyValue' => null,
             'MyModel' => [
@@ -73,7 +72,7 @@ it('can use toStudlyCaseArray', function () {
 });
 
 it('can use toArrayWithoutNull', function () {
-    expect((new MockNestedModel(MODEL_DATA))->toArrayWithoutNull())->toEqual([
+    expect((new MockNestedModel(MODEL_DATA))->toArrayWithoutNull())->toBe([
         'myValue' => '1',
         'myModel' => [
             'myModel' => [],
@@ -82,8 +81,8 @@ it('can use toArrayWithoutNull', function () {
 });
 
 it('can combine case and skipping null', function () {
-    expect((new MockNestedModel(MODEL_DATA))->toArray(Arrayable::SKIP_NULL | Arrayable::CASE_KEBAB))->toEqual([
-        'my-value' => 1,
+    expect((new MockNestedModel(MODEL_DATA))->toArray(Arrayable::SKIP_NULL | Arrayable::CASE_KEBAB))->toBe([
+        'my-value' => '1',
         'my-model' => [
             'my-model' => [],
         ],
