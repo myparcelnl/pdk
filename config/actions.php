@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Plugin\Action\Backend\Account\UpdateAccountAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Context\FetchContextAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\FetchOrdersAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\PrintOrdersAction;
@@ -18,8 +17,11 @@ use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\CreateWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\DeleteWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\FetchWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Frontend\Context\FetchCheckoutContextAction;
+use MyParcelNL\Pdk\Plugin\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Plugin\Api\Frontend\PdkFrontendActions;
+use MyParcelNL\Pdk\Plugin\Api\PdkEndpoint;
+use MyParcelNL\Pdk\Plugin\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Plugin\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Orders\ExportOrdersEndpointRequest;
@@ -37,17 +39,17 @@ use MyParcelNL\Pdk\Plugin\Request\Webhook\DeleteWebhooksEndpointRequest;
 use MyParcelNL\Pdk\Plugin\Request\Webhook\FetchWebhooksEndpointRequest;
 
 return [
-    'shared' => [
+    PdkEndpoint::CONTEXT_SHARED => [
         /**
          * Fetch context
          */
-        PdkBackendActions::FETCH_CONTEXT => [
+        PdkSharedActions::FETCH_CONTEXT => [
             'request' => FetchContextEndpointRequest::class,
             'action'  => FetchContextAction::class,
         ],
     ],
 
-    'frontend' => [
+    PdkEndpoint::CONTEXT_FRONTEND => [
         /**
          * Get checkout context
          */
@@ -57,7 +59,7 @@ return [
         ],
     ],
 
-    'backend' => [
+    PdkEndpoint::CONTEXT_BACKEND => [
         /**
          * Update account.
          */

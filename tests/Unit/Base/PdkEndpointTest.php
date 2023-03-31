@@ -6,7 +6,6 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Account\UpdateAccountAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Context\FetchContextAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\FetchOrdersAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\PrintOrdersAction;
@@ -20,12 +19,15 @@ use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\UpdateShipmentsAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\CreateWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\DeleteWebhooksAction;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\FetchWebhooksAction;
+use MyParcelNL\Pdk\Plugin\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Plugin\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\Plugin\Api\PdkEndpoint;
+use MyParcelNL\Pdk\Plugin\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 use function DI\value;
@@ -54,11 +56,11 @@ usesShared(
 );
 
 dataset('backendActions', function () {
-    return (new PdkBackendActions())->getActions();
+    return (new PdkBackendActions(new PdkSharedActions()))->getActions();
 });
 
 dataset('frontendActions', function () {
-    return (new PdkFrontendActions())->getActions();
+    return (new PdkFrontendActions(new PdkSharedActions()))->getActions();
 });
 
 function testEndpoint(string $action, string $context): void
@@ -122,7 +124,12 @@ it('shows stack trace in development mode', function () {
 it('throws exception when using the wrong context', function (string $action) {
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
-    $response = $endpoint->call($action, PdkEndpoint::CONTEXT_BACKEND);
+    $response = $endpoint->call($action, PdkEndpoint::CONTEXT_FRONTEND);
+
+    if (in_array($action, (new PdkSharedActions())->getActions())) {
+        expect($response->getStatusCode())->toBe(Response::HTTP_OK);
+        return;
+    }
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -138,4 +145,4 @@ it('throws exception when using the wrong context', function (string $action) {
                 ],
             ],
         ]);
-})->with('frontendActions');
+})->with('backendActions');
