@@ -5,11 +5,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Model\Context;
 
+use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -18,13 +25,18 @@ usesShared(
     new UsesMockPdkInstance([
         ProductRepositoryInterface::class => autowire(MockProductRepository::class)->constructor([
             ['externalIdentifier' => 'PDK-1', 'isDeliverable' => true],
-            ['externalIdentifier' => 'PDK-2', 'isDeliverable' => true],
+            ['externalIdentifier' => 'PDK-2', 'isDeliverable' => true, 'exportSignature' => true],
         ]),
     ])
 );
 
 it('can be instantiated', function () {
     $config = new DeliveryOptionsConfig();
+
+    $pickupLocationsDefaultView = Settings::get(
+        CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
+        CheckoutSettings::ID
+    );
 
     expect($config)
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
@@ -37,9 +49,9 @@ it('can be instantiated', function () {
             'currency'                   => 'EUR',
             'locale'                     => 'nl-NL',
             'packageType'                => 'package',
-            'pickupLocationsDefaultView' => null,
+            'pickupLocationsDefaultView' => $pickupLocationsDefaultView,
             'platform'                   => 'myparcel',
-            'showPriceSurcharge'         => 0,
+            'showPriceSurcharge'         => false,
         ]);
 });
 

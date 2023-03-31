@@ -37,7 +37,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView' => null,
         'platform'                   => null,
-        'showPriceSurcharge'         => 0,
+        'showPriceSurcharge'         => false,
     ];
 
     protected $casts      = [
