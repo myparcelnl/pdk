@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Plugin\Action\Backend\Context;
+namespace MyParcelNL\Pdk\Plugin\Action\Shared\Context;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\Plugin\Contract\ActionInterface;
