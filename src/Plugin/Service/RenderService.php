@@ -285,7 +285,7 @@ class RenderService implements RenderServiceInterface
                 return $this->viewService->isCheckoutPage();
 
             default:
-                return true;
+                throw new \InvalidArgumentException('Unknown component: ' . $component);
         }
     }
 

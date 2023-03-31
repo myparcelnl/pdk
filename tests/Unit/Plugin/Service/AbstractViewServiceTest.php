@@ -6,26 +6,23 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Plugin\Service;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\RenderService;
 use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRenderService;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('frontend');
 
-beforeEach(function () {
-    PdkFactory::create(
-        MockPdkConfig::create([
-                RenderServiceInterface::class => autowire(MockRenderService::class),
-                ViewServiceInterface::class   => autowire(MockAbstractViewService::class),
-            ]
-        )
-    );
-});
+usesShared(
+    new UsesMockPdkInstance([
+        RenderServiceInterface::class => autowire(MockRenderService::class),
+        ViewServiceInterface::class   => autowire(MockAbstractViewService::class),
+    ])
+);
 
 it('renders component on correct pages', function (callable $callback, array $views, string $page) {
     global $currentPage;

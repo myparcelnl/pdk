@@ -30,7 +30,10 @@ dataset('components', [
                 return RenderService::renderModals();
             };
         },
-        'views'    => MockAbstractViewService::ALL_PDK_PAGES,
+        'views'    => [
+            MockAbstractViewService::PAGE_ORDER_LIST,
+            MockAbstractViewService::PAGE_ORDER,
+        ],
     ],
 
     'notifications' => [

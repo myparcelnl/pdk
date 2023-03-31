@@ -177,6 +177,7 @@ it('updates order shipments by order ids', function () {
             ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
             ['orderId' => '🐸', 'id' => 40000, 'status' => 7],
             ['orderId' => '🐷', 'id' => 30020, 'status' => 7],
+            ['orderId' => '🐸', 'id' => 30010, 'status' => 3],
         ])
     );
 
@@ -190,7 +191,7 @@ it('updates order shipments by order ids', function () {
     expect($shipments)->toBe([
         ['orderId' => '🐰', 'id' => 29090, 'status' => 1],
         ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
-        ['orderId' => '🐸', 'id' => 30010, 'status' => 1],
+        ['orderId' => '🐸', 'id' => 30010, 'status' => 3],
         ['orderId' => '🐸', 'id' => 40000, 'status' => 7],
         ['orderId' => '🐷', 'id' => 30020, 'status' => 7],
         ['orderId' => '🦊', 'id' => 30070, 'status' => 1],
