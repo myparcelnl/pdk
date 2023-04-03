@@ -42,7 +42,7 @@ class CheckoutSettingsView extends AbstractSettingsView
                 CheckoutSettings::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK, Components::INPUT_TOGGLE
             ),
             new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_HEADER, Components::INPUT_TEXT),
-            new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_CUSTOM_CSS, Components::INPUT_TEXTAREA),
+            new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_CUSTOM_CSS, Components::INPUT_CODE_EDITOR),
         ];
 
         if (Pdk::has(CheckoutServiceInterface::class)) {
