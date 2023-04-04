@@ -173,10 +173,6 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
             return [];
         }
 
-        if (is_array($value)) {
-            return $value;
-        }
-
         return array_reduce((array) $value, static function (array $acc, string $item) {
             $ids = explode(';', $item);
             array_push($acc, ...$ids);

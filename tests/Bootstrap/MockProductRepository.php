@@ -16,9 +16,9 @@ class MockProductRepository extends AbstractProductRepository
 {
     private const DEFAULT_PRODUCTS = [
         [
-            'sku'      => '123',
-            'weight'   => 4000,
-            'settings' => [
+            'externalIdentifier' => '123',
+            'weight'             => 4000,
+            'settings'           => [
                 ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
                 ProductSettings::EXPORT_SIGNATURE         => false,
                 ProductSettings::COUNTRY_OF_ORIGIN        => 'NL',
@@ -144,6 +144,7 @@ class MockProductRepository extends AbstractProductRepository
      */
     public function update(PdkProduct $product): void
     {
-        $this->saved->firstWhere('externalIdentifier', $product->externalIdentifier)->fill($product->toArray());
+        $this->saved->firstWhere('externalIdentifier', $product->externalIdentifier)
+            ->fill($product->toArray());
     }
 }

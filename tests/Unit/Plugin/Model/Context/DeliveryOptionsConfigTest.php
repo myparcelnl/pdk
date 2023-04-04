@@ -8,15 +8,13 @@ namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Model\Context;
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -81,58 +79,7 @@ it('can be instantiated from a cart', function () {
         ->toEqual([
             'allowRetry'                 => false,
             'basePrice'                  => 695,
-            'carrierSettings'            => [
-                'postnl'     => [
-                    'allowDeliveryOptions'         => false,
-                    'allowEveningDelivery'         => false,
-                    'allowMondayDelivery'          => false,
-                    'allowMorningDelivery'         => false,
-                    'allowOnlyRecipient'           => false,
-                    'allowPickupLocations'         => false,
-                    'allowSameDayDelivery'         => false,
-                    'allowSaturdayDelivery'        => false,
-                    'allowSignature'               => false,
-                    'featureShowDeliveryDate'      => true,
-                    'priceEveningDelivery'         => 0,
-                    'priceMorningDelivery'         => 0,
-                    'priceOnlyRecipient'           => 0,
-                    'pricePackageTypeDigitalStamp' => 0,
-                    'pricePackageTypeMailbox'      => 0,
-                    'pricePickup'                  => 0,
-                    'priceSameDayDelivery'         => 0,
-                    'priceSignature'               => 0,
-                    'priceStandardDelivery'        => 0,
-                    'deliveryDaysWindow'           => 7,
-                    'dropOffDelay'                 => 0,
-                    'cutoffTime'                   => null,
-                    'cutoffTimeSameDay'            => null,
-                ],
-                'dhlforyou:8277' => [
-                    'allowDeliveryOptions'         => false,
-                    'allowEveningDelivery'         => false,
-                    'allowMondayDelivery'          => false,
-                    'allowMorningDelivery'         => false,
-                    'allowOnlyRecipient'           => false,
-                    'allowPickupLocations'         => false,
-                    'allowSameDayDelivery'         => false,
-                    'allowSaturdayDelivery'        => false,
-                    'allowSignature'               => false,
-                    'featureShowDeliveryDate'      => true,
-                    'priceEveningDelivery'         => 0,
-                    'priceMorningDelivery'         => 0,
-                    'priceOnlyRecipient'           => 0,
-                    'pricePackageTypeDigitalStamp' => 0,
-                    'pricePackageTypeMailbox'      => 0,
-                    'pricePickup'                  => 0,
-                    'priceSameDayDelivery'         => 0,
-                    'priceSignature'               => 0,
-                    'priceStandardDelivery'        => 0,
-                    'deliveryDaysWindow'           => 7,
-                    'dropOffDelay'                 => 0,
-                    'cutoffTime'                   => null,
-                    'cutoffTimeSameDay'            => null,
-                ],
-            ],
+            'carrierSettings'            => [],
             'currency'                   => 'EUR',
             'locale'                     => 'nl-NL',
             'packageType'                => 'package',

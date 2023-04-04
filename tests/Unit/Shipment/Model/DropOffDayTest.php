@@ -7,12 +7,16 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use function DI\autowire;
+use const MyParcelNL\Pdk\Helper\Plugin\Service\CARRIER;
 
 function createPdk(array $settingsOverrides): void
 {
@@ -26,16 +30,26 @@ function createPdk(array $settingsOverrides): void
 
     PdkFactory::create($config);
 }
+function mockPdk(array $carrierSettings = []): void
+{
+    PdkFactory::create(
+        MockPdkConfig::create([
+            SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor(
+                [CarrierSettings::ID => ['0' => $carrierSettings]]
+            ),
+        ])
+    );
+}
 
 it('returns correct delivery days using a specific date', function (
     string $date,
     array  $settingsOverrides,
     array  $expectation
 ) {
-    createPdk($settingsOverrides);
+    mockPdk($settingsOverrides);
 
     /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
-    $carrierSettings = Settings::get('carrier.0');
+    $carrierSettings = Settings::get('carrier')->get('0');
 
     /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
     $service = Pdk::get(DropOffServiceInterface::class);
@@ -47,7 +61,7 @@ it('returns correct delivery days using a specific date', function (
     'Monday, 3 Jan 2022' => [
         'date'              => '2022-01-03 00:00:00',
         'settingsOverrides' => [
-            'carrier.0.dropOffPossibilities.deliveryDaysWindow' => 3,
+            'deliveryDaysWindow' => 3,
         ],
         'expectation'       => [
             '0.cutoffTime'        => '17:00',

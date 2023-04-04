@@ -3,7 +3,9 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository;
+use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
@@ -15,12 +17,10 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Sdk\src\Model\Account\Account;
-use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
-use MyParcelNL\Sdk\src\Model\Account\Shop;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesEachMockPdkInstance());
@@ -38,7 +38,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 })->with([
     [
         ExampleGetAccountsResponse::class,
-        AbstractAccountRepository::class,
+        MockAccountRepository::class,
         Account::class,
         'getAccount',
     ],
@@ -58,7 +58,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
     [
         ExampleGetCarrierConfigurationResponse::class,
         ShopCarrierConfigurationRepository::class,
-        CarrierConfiguration::class,
+        ShopCarrierConfiguration::class,
         'getCarrierConfiguration',
         ['shopId' => 3, 'carrier' => 'postnl'],
     ],

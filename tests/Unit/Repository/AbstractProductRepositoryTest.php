@@ -11,9 +11,9 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 const EXAMPLE_PRODUCT = [
-    'sku'      => '123',
-    'weight'   => 4000,
-    'settings' => [],
+    'externalIdentifier' => '123',
+    'weight'             => 4000,
+    'settings'           => [],
 ];
 
 beforeEach(function () {
@@ -29,20 +29,27 @@ it('has correct default values', function () {
         ->toEqual([
             'ean'                             => null,
             'name'                            => null,
-            'settings.allowOnlyRecipient'     => false,
-            'settings.allowSignature'         => false,
             'settings.countryOfOrigin'        => 'NL',
-            'settings.customsCode'            => '0',
-            'settings.disableDeliveryOptions' => false,
+            'settings.customsCode'            => '0000',
+            'settings.disableDeliveryOptions' => -1,
             'settings.dropOffDelay'           => 0,
-            'settings.exportAgeCheck'         => false,
-            'settings.exportInsurance'        => false,
-            'settings.exportLargeFormat'      => false,
+            'settings.exportAgeCheck'         => -1,
+            'settings.exportInsurance'        => -1,
+            'settings.exportLargeFormat'      => -1,
             'settings.fitInMailbox'           => 0,
             'settings.packageType'            => 'package',
-            'settings.returnShipments'        => false,
-            'sku'                             => '123',
+            'externalIdentifier'              => '123',
             'weight'                          => 4000,
+            'sku'                             => null,
+            'isDeliverable'                   => null,
+            'price'                           => null,
+            'length'                          => 0,
+            'width'                           => 0,
+            'height'                          => 0,
+            'settings.id'                     => 'product',
+            'settings.exportOnlyRecipient'    => -1,
+            'settings.exportReturn'           => -1,
+            'settings.exportSignature'        => -1,
         ]);
 });
 
