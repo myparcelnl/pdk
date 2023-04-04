@@ -45,7 +45,7 @@
         },
         {
             "name": "deliveryOptionsCustomCss",
-            "$component": "TextareaInput",
+            "$component": "CodeEditor",
             "label": "settings_checkout_delivery_options_custom_css",
             "description": "settings_checkout_delivery_options_custom_css_description"
         }
