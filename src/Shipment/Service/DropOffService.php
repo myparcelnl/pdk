@@ -50,13 +50,13 @@ class DropOffService implements DropOffServiceInterface
         $day            = 0;
         $items          = 0;
 
-        if ($settings->dropOffDays->isNotEmpty()) {
+        if ($settings->dropOffPossibilities->dropOffDays->isNotEmpty()) {
             do {
                 $dropOffDate = $fromDate->modify("+$day day");
                 $weekday     = (int) $dropOffDate->format('w');
 
                 /** @var DropOffDay $matchingDay */
-                $matchingDay = $settings->dropOffDays->firstWhere('weekday', $weekday);
+                $matchingDay = $settings->dropOffPossibilities->dropOffDays->firstWhere('weekday', $weekday);
                 $deviation   = $deviatedDays->firstWhere('date', '==', $dropOffDate);
 
                 $matchingDayArray = Utils::mergeArraysIgnoringNull(

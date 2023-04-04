@@ -14,9 +14,9 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class PdkCartFee extends Model
 {
     public    $attributes = [
-        'id'          => 'string',
-        'translation' => 'string',
-        'amount'      => 'float',
+        'id'          => null,
+        'translation' => null,
+        'amount'      => null,
     ];
 
     protected $casts      = [

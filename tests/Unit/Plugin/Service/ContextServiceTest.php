@@ -80,8 +80,11 @@ it('handles invalid context keys', function () {
     $contextBag = $service->createContexts(['random_word']);
 
     expect($contextBag->toArray())->toEqual([
-        'global'          => null,
-        'orderData'       => null,
-        'deliveryOptions' => null,
+        'global'              => null,
+        'orderData'           => null,
+        'dynamic'             => null,
+        'pluginSettingsView'  => null,
+        'productSettingsView' => null,
+        'checkout'            => null,
     ]);
 });

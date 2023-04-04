@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration;
+use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
 
 class ShopCarrierConfigurationRepository extends ApiRepository
 {
@@ -17,10 +17,10 @@ class ShopCarrierConfigurationRepository extends ApiRepository
      * @param  int    $shopId
      * @param  string $carrier
      *
-     * @return \MyParcelNL\Sdk\src\Model\Account\CarrierConfiguration
+     * @return \MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration
      * @noinspection PhpUnused
      */
-    public function getCarrierConfiguration(int $shopId, string $carrier): CarrierConfiguration
+    public function getCarrierConfiguration(int $shopId, string $carrier): ShopCarrierConfiguration
     {
         return $this->retrieve("shop_carrier_configuration_$carrier", function () use ($carrier, $shopId) {
             /** @var \MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponse $response */

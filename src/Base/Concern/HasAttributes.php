@@ -334,6 +334,7 @@ trait HasAttributes
      */
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
+        $koekje = $this->getCasts();
         foreach ($this->getCasts() as $key => $value) {
             $originalKey = $this->convertAttributeCase($key);
             $key         = $this->convertAttributeCase($key, $flags);

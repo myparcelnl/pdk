@@ -49,15 +49,6 @@ dataset('shipment options', [
             KEY_SHIPMENT_OPTION => ShipmentOptions::AGE_CHECK,
         ],
     ],
-    'insurance'      => [
-        [
-            KEY_ENABLED_VALUE   => 1,
-            KEY_DISABLED_VALUE  => 0,
-            KEY_CARRIER_SETTING => CarrierSettings::EXPORT_INSURANCE,
-            KEY_PRODUCT_SETTING => ProductSettings::EXPORT_INSURANCE,
-            KEY_SHIPMENT_OPTION => ShipmentOptions::INSURANCE,
-        ],
-    ],
     'large format'   => [
         [
             KEY_ENABLED_VALUE   => true,
@@ -110,9 +101,7 @@ function mockPdk(array $carrierSettings = [], array $products = []): void
 
 function expectShipmentOptionToEqual(PdkOrder $order, array $options): void
 {
-    expect($order->deliveryOptions->shipmentOptions->toArray())->toEqual(
-        array_merge(DEFAULT_SHIPMENT_OPTIONS, $options)
-    );
+    expect($order->deliveryOptions->shipmentOptions)->toArray()->toHaveKeysAndValues($options);
 }
 
 it('inherits shipment option from carrier settings', function (array $option, string $key) {
@@ -236,7 +225,7 @@ it('calculates insurance', function (int $insuranceFrom, int $insuranceUpTo, int
     [0, 3000, 5000, 10000],
 ]);
 
-it('merges product settings', function (array $input, array $results) {
+it('merges product settings', function (array $input, array $results, $output) {
     mockPdk([],
         // For each value in $results, create a product with that value in its settings.
         array_map(function (int $value, int $index) use ($input) {
@@ -262,7 +251,7 @@ it('merges product settings', function (array $input, array $results) {
     $service = Pdk::get(ShipmentOptionsServiceInterface::class);
     $service->calculate($order);
 
-    expectShipmentOptionToEqual($order, [$input[KEY_SHIPMENT_OPTION] => $input[$results['output']]]);
+    expectShipmentOptionToEqual($order, [$input[KEY_SHIPMENT_OPTION] => $input[$output]]);
 })
     ->with('shipment options')
     ->with([

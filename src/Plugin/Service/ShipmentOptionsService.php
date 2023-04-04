@@ -92,7 +92,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     public function mergeProductSettings(PdkOrder $order)
     {
         return $order->lines->reduce(function (ProductSettings $acc, PdkOrderLine $line) {
-            foreach ($line->product->getAttributes() as $attribute => $value) {
+            foreach ($line->product->settings->getAttributes() as $attribute => $value) {
                 $acc->setAttribute($attribute, $this->valueProcessor($acc->getAttribute($attribute), $value));
             }
 
@@ -187,13 +187,18 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             $carrierSettingKey  = $keys[self::CARRIER_SETTING_KEY];
             $productSettingsKey = $keys[self::PRODUCT_SETTING_KEY];
 
-            $shipmentOptions->setAttribute(
-                $shipmentOptionKey,
-                $this->valueProcessor(
-                    $carrierSettings[$carrierSettingKey] ?? null,
-                    $productSettings[$productSettingsKey] ?? null
-                )
-            );
+            $p = $productSettings[$productSettingsKey];
+            $c = $carrierSettings[$carrierSettingKey];
+
+            // use productsettings when set and not default
+            if (isset($productSettings[$productSettingsKey]) && AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== $productSettings[$productSettingsKey]) {
+                $shipmentOptions->setAttribute($shipmentOptionKey, $productSettings[$productSettingsKey]);
+            } else {
+                $shipmentOptions->setAttribute(
+                    $shipmentOptionKey,
+                    $carrierSettings[$carrierSettingKey] ?? $productSettings[$productSettingsKey] ?? null
+                );
+            }
         }
 
         if (AbstractSettingsModel::TRISTATE_VALUE_ENABLED === $shipmentOptions->insurance) {
