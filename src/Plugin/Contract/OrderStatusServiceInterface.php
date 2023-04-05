@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Plugin\Contract;
 interface OrderStatusServiceInterface
 {
     /**
-     * Retrieve a key => label collection of all available order statuses.
+     * Retrieve a key => translated label collection of all available order statuses.
      *
      * @return array<string, string>
      */
