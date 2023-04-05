@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
-use Exception;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
@@ -41,11 +41,6 @@ class RenderService implements RenderServiceInterface
     protected const COMPONENT_PRODUCT_SETTINGS = 'ProductSettings';
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface
-     */
-    protected $contextService;
-
-    /**
      * @var string
      */
     private static $jsInitTemplate;
@@ -54,6 +49,11 @@ class RenderService implements RenderServiceInterface
      * @var string
      */
     private static $renderTemplate;
+
+    /**
+     * @var \MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface
+     */
+    protected $contextService;
 
     /**
      * @var \MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface
@@ -242,11 +242,17 @@ class RenderService implements RenderServiceInterface
 
             return strtr($template, $templateParameters + ['__CONTEXT__' => $this->encodeContext($context)]);
         } catch (Throwable $e) {
-            DefaultLogger::error($e->getMessage(), [
-                    'exception' => $e,
-                    'template'  => $template,
-                    'contexts'  => $contexts,
-                ]
+            DefaultLogger::error(
+                $e->getMessage(),
+                array_merge([
+                    'trace' => $e->getTraceAsString(),
+                ],
+                    compact(
+                        'template',
+                        'contexts',
+                        'templateParameters',
+                        'contextArguments'
+                    ))
             );
             return '';
         }
@@ -285,7 +291,7 @@ class RenderService implements RenderServiceInterface
                 return $this->viewService->isCheckoutPage();
 
             default:
-                throw new \InvalidArgumentException('Unknown component: ' . $component);
+                throw new InvalidArgumentException("Unknown component: $component");
         }
     }
 
