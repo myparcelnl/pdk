@@ -105,17 +105,15 @@ class Carrier extends Model
      */
     public function __construct(?array $data = null)
     {
-        $carriers = (new Collection(Config::get('carriers')));
+        $carriers = new Collection(Config::get('carriers'));
 
-        if (isset($data['subscriptionId'])) {
+        if ($data['subscriptionId']) {
             $data = $carriers
                 ->where('subscriptionId', $data['subscriptionId'])
                 ->first();
-        } elseif (isset($data['id'])) {
+        } elseif ($data['id']) {
             $data['name'] = self::CARRIER_NAME_ID_MAP[$data['id']] ?? null;
-        }
-
-        if (! $data['name']) {
+        } elseif (! $data['name']) {
             $data['name'] = Platform::get('defaultCarrier');
         }
 
