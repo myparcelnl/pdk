@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Carrier\Repository\CarrierOptionsRepository;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
-use RuntimeException;
 
 /**
  * @property string      $externalIdentifier
@@ -83,7 +82,7 @@ class Carrier extends Model
         'optional'           => false,
         'primary'            => false,
         'type'               => null,
-        'capabilities' => null,
+        'capabilities'       => null,
     ];
 
     protected $casts      = [
@@ -98,7 +97,7 @@ class Carrier extends Model
         'optional'           => 'bool',
         'primary'            => 'bool',
         'type'               => 'string',
-        'capabilities' => CarrierCapabilities::class,
+        'capabilities'       => CarrierCapabilities::class,
     ];
 
     /**
@@ -109,9 +108,11 @@ class Carrier extends Model
         $carriers = (new Collection(Config::get('carriers')));
 
         if (isset($data['subscriptionId'])) {
-            $data = $carriers->where('subscriptionId', $data['subscriptionId'])->first();
+            $data = $carriers
+                ->where('subscriptionId', $data['subscriptionId'])
+                ->first();
         } elseif (isset($data['id'])) {
-            $data['name'] = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true);
+            $data['name'] = self::CARRIER_NAME_ID_MAP[$data['id']] ?? null;
         }
 
         if (! $data['name']) {
@@ -119,7 +120,10 @@ class Carrier extends Model
         }
 
         if (! isset($data['subscriptionId'])) {
-            $data = $carriers->whereIn('name', $data['name'])->whereIn('type', Carrier::TYPE_MAIN)->first();
+            $data = $carriers
+                ->whereIn('name', $data['name'])
+                ->whereIn('type', Carrier::TYPE_MAIN)
+                ->first() ?? $data;
         }
 
         parent::__construct($data);
@@ -146,10 +150,6 @@ class Carrier extends Model
             $identifier .= ":$this->subscriptionId";
         }
 
-        if (! $identifier) {
-            throw new RuntimeException('No identifier found for carrier');
-        }
-
-        return $identifier;
+        return $identifier ?: '?';
     }
 }
