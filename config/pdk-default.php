@@ -60,15 +60,6 @@ return [
         // todo: dpd
     ]),
 
-    'allowedCarrierIds'           => value([
-        1,
-        9,
-        10,
-        11,
-        // todo: bpost
-        // todo: dpd
-    ]),
-
     /**
      * Countries that support split address fields.
      */
