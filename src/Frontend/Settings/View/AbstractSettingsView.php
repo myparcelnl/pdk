@@ -16,7 +16,7 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 abstract class AbstractSettingsView implements Arrayable
 {
-    public const OPTIONS_VALUE_NONE      = -1;
+    public const OPTIONS_VALUE_NONE = -1;
 
     protected $cache = [];
 
@@ -89,24 +89,27 @@ abstract class AbstractSettingsView implements Arrayable
     /**
      * @param  array $array
      * @param  bool  $includeNone
+     * @param  bool  $plainLabels
      *
      * @return array
      */
-    protected function toSelectOptions(array $array, bool $includeNone = false): array
+    protected function toSelectOptions(array $array, bool $includeNone = false, bool $plainLabels = false): array
     {
         $associativeArray = (Arr::isAssoc($array) ? $array : array_combine($array, $array)) ?? [];
 
-        $options = array_map(static function ($value, $key) {
+        $options = array_map(static function ($value, $key) use ($plainLabels) {
+            $labelKey = $plainLabels ? 'plainLabel' : 'label';
+
             return [
-                'value' => $key,
-                'label' => $value,
+                'value'   => $key,
+                $labelKey => $value,
             ];
         }, $associativeArray, array_keys($associativeArray));
 
         if ($includeNone) {
             array_unshift($options, [
-                'value' => self::OPTIONS_VALUE_NONE,
-                'label' => LanguageService::translate('settings_none'),
+                'value'      => self::OPTIONS_VALUE_NONE,
+                'plainLabel' => LanguageService::translate('settings_none'),
             ]);
         }
 

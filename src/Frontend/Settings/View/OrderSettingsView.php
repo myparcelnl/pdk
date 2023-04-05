@@ -33,7 +33,7 @@ class OrderSettingsView extends AbstractSettingsView
      */
     protected function getElements(): FormElementCollection
     {
-        $orderStatuses = $this->toSelectOptions($this->orderStatusService->all(), true);
+        $orderStatuses = $this->toSelectOptions($this->orderStatusService->all(), true, true);
 
         return new FormElementCollection([
             new InteractiveElement(
