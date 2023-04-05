@@ -297,9 +297,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function getPackageTypeFields(): array
     {
         $allowedPackageTypes = $this->carrierSchema->getAllowedPackageTypes();
-        $fields              = [
+
+        $fields = [
             $this->createDeliveryOptionsField(CarrierSettings::DEFAULT_PACKAGE_TYPE, Components::INPUT_SELECT, [
-                'options' => $allowedPackageTypes,
+                'options' => $this->toSelectOptions(
+                    array_map(static function (string $packageTypeName) {
+                        return "package_type_$packageTypeName";
+                    }, $allowedPackageTypes)
+                ),
             ]),
         ];
 
