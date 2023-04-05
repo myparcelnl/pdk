@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
@@ -15,6 +15,16 @@ use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
  */
 class CustomsSettingsView extends AbstractSettingsView
 {
+    /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
+
+    public function __construct(CountryServiceInterface $countryService)
+    {
+        $this->countryService = $countryService;
+    }
+
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
@@ -30,7 +40,7 @@ class CustomsSettingsView extends AbstractSettingsView
             new InteractiveElement(
                 CustomsSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
-                ['options' => $this->toSelectOptions(CountryCodes::ALL)]
+                ['options' => $this->toSelectOptions($this->countryService->getAllTranslatable(), true)]
             ),
         ]);
     }
