@@ -114,7 +114,7 @@ class Carrier extends Model
                     ?? $data['id']
                     ?? $data['name']
                     ?? Platform::get('defaultCarrier')
-                )
+                ) ?? []
             )
         );
     }
