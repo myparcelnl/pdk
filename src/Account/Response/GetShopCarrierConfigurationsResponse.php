@@ -37,7 +37,7 @@ class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
                 $carrier = new Carrier(['id' => $configuration['carrier_id']]);
 
                 return ($configuration['configuration'] ?? []) + [
-                        'carrier' => $carrier->externalIdentifier,
+                        'carrier' => $carrier->id,
                     ];
             }, $configurations)
         ));
