@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierOptionsRepository;
-use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 
@@ -67,8 +65,8 @@ class Carrier extends Model
     /**
      * Types
      */
-    public const TYPE_CUSTOM = 'custom';
-    public const TYPE_MAIN   = 'main';
+    public const  TYPE_CUSTOM = 'custom';
+    public const  TYPE_MAIN   = 'main';
 
     protected $attributes = [
         'externalIdentifier' => null,
@@ -105,26 +103,20 @@ class Carrier extends Model
      */
     public function __construct(?array $data = null)
     {
-        $carriers = new Collection(Config::get('carriers'));
+        /** @var CarrierOptionsRepository $repository */
+        $repository = Pdk::get(CarrierOptionsRepository::class);
 
-        if ($data['subscriptionId']) {
-            $data = $carriers
-                ->where('subscriptionId', $data['subscriptionId'])
-                ->first();
-        } elseif ($data['id']) {
-            $data['name'] = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true);
-        } elseif (! $data['name']) {
-            $data['name'] = Platform::get('defaultCarrier');
-        }
-
-        if (! isset($data['subscriptionId'])) {
-            $data = $carriers
-                ->whereIn('name', $data['name'])
-                ->whereIn('type', Carrier::TYPE_MAIN)
-                ->first() ?? $data;
-        }
-
-        parent::__construct($data);
+        parent::__construct(
+            array_merge(
+                $data ?? [],
+                $repository->get(
+                    $data['subscriptionId']
+                    ?? $data['id']
+                    ?? $data['name']
+                    ?? Platform::get('defaultCarrier')
+                )
+            )
+        );
     }
 
     /**

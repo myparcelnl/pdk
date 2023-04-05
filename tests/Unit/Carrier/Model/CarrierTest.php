@@ -1,7 +1,5 @@
 <?php
-/** @noinspection PhpUndefinedMethodInspection */
-
-/** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
+/** @noinspection PhpUndefinedMethodInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
@@ -37,6 +35,15 @@ it('creates custom carrier by subscriptionId', function () {
         ->toBe(Carrier::CARRIER_DPD_NAME)
         ->and($carrier->getType())
         ->toBe(Carrier::TYPE_CUSTOM);
+});
+
+it('creates default carrier', function () {
+    $carrier = new Carrier();
+
+    expect($carrier->getName())
+        ->toBe(Carrier::CARRIER_POSTNL_NAME)
+        ->and($carrier->getType())
+        ->toBe(Carrier::TYPE_MAIN);
 });
 
 it('returns complete carrier object', function () {

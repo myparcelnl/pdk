@@ -29,7 +29,7 @@ class CarrierOptionsRepository extends Repository
         return $this->retrieve("carrier_options_$identifier", function () use ($identifier, $carrierConfig) {
             foreach (self::ORDERED_CARRIER_GETTER as $key => $type) {
                 $createdCarrier = Arr::first($carrierConfig, static function ($carrier) use ($key, $identifier, $type) {
-                    return ($identifier === ($carrier[$key] ?? null) && $type === ($carrier['type'] ?? null));
+                    return $identifier === ($carrier[$key] ?? null) && $type === ($carrier['type'] ?? null);
                 });
 
                 if ($createdCarrier) {
