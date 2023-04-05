@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Api;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Plugin\Api\Contract\EndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Request\AbstractEndpointRequest;
 
@@ -37,5 +39,16 @@ abstract class PdkEndpoints implements EndpointServiceInterface
                 ]);
             })
             ->toArray();
+    }
+
+    protected function getActionsByScope(string $scope): Collection
+    {
+        $actions = Config::get(sprintf('actions.%s', $scope));
+
+        if (empty($actions)) {
+            return new Collection();
+        }
+
+        return new Collection($actions);
     }
 }

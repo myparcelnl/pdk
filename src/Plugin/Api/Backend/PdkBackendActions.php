@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Api\Backend;
 
-use MyParcelNL\Pdk\Plugin\Api\Contract\PdkActionsInterface;
-use MyParcelNL\Pdk\Plugin\Api\Shared\PdkSharedActions;
-
-final class PdkBackendActions implements PdkActionsInterface
+final class PdkBackendActions
 {
     // Account
     public const UPDATE_ACCOUNT = 'updateAccount';
@@ -31,36 +28,4 @@ final class PdkBackendActions implements PdkActionsInterface
     public const FETCH_WEBHOOKS  = 'fetchWebhooks';
     // Optional actions
     public const UPDATE_TRACKING_NUMBER = 'updateTrackingNumber';
-
-    /**
-     * @var \MyParcelNL\Pdk\Plugin\Api\Shared\PdkSharedActions
-     */
-    private $sharedActions;
-
-    public function __construct(PdkSharedActions $sharedActions) {
-        $this->sharedActions = $sharedActions;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getActions(): array
-    {
-        return $this->sharedActions->getActions() + [
-                self::CREATE_WEBHOOKS,
-                self::DELETE_SHIPMENTS,
-                self::DELETE_WEBHOOKS,
-                self::EXPORT_ORDERS,
-                self::EXPORT_RETURN,
-                self::FETCH_ORDERS,
-                self::FETCH_WEBHOOKS,
-                self::PRINT_ORDERS,
-                self::PRINT_SHIPMENTS,
-                self::UPDATE_ACCOUNT,
-                self::UPDATE_ORDERS,
-                self::UPDATE_PLUGIN_SETTINGS,
-                self::UPDATE_PRODUCT_SETTINGS,
-                self::UPDATE_SHIPMENTS,
-        ];
-    }
 }
