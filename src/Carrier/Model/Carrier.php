@@ -112,7 +112,7 @@ class Carrier extends Model
                 ->where('subscriptionId', $data['subscriptionId'])
                 ->first();
         } elseif ($data['id']) {
-            $data['name'] = self::CARRIER_NAME_ID_MAP[$data['id']] ?? null;
+            $data['name'] = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true);
         } elseif (! $data['name']) {
             $data['name'] = Platform::get('defaultCarrier');
         }
