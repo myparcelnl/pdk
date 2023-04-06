@@ -19,13 +19,20 @@ class PlainElement implements Arrayable
     public $props;
 
     /**
-     * @param  string $component
-     * @param  array  $props
+     * @var null|string
      */
-    public function __construct(string $component, array $props = [])
+    private $content;
+
+    /**
+     * @param  string      $component
+     * @param  null|array  $props
+     * @param  null|string $content
+     */
+    public function __construct(string $component, ?array $props = [], string $content = null)
     {
-        $this->props     = $props;
+        $this->props     = $props ?? [];
         $this->component = $component;
+        $this->content   = $content;
     }
 
     /**
@@ -33,8 +40,10 @@ class PlainElement implements Arrayable
      */
     public function toArray(): array
     {
-        return [
-                '$component' => $this->component,
-            ] + $this->props;
+        return array_merge([
+            '$component' => $this->component,
+            '$slot'      => $this->content,
+            '$wrapper'   => false,
+        ], $this->props);
     }
 }
