@@ -24,4 +24,11 @@ interface CurrencyServiceInterface
      * @return int
      */
     public function convertToCents($amount): int;
+
+    /**
+     * @param  int $amount - amount in cents
+     *
+     * @return string
+     */
+    public function format(int $amount): string;
 }
