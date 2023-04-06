@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Plugin\Service;
 
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\DefaultLogger;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Action\EndpointActionsInterface;
 use MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection;
@@ -15,7 +16,6 @@ use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
 use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsContext;
 use MyParcelNL\Pdk\Plugin\Model\Context\GlobalContext;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Base\Support\Arr;
 
 class ContextService implements ContextServiceInterface
 {
@@ -59,7 +59,7 @@ class ContextService implements ContextServiceInterface
         return new GlobalContext([
             'baseUrl'        => $endpointActions->getBaseUrl(),
             'endpoints'      => $endpointActions->toArray(),
-            'translations'   => LanguageService::getTranslations(),
+            'translations'   => Language::getTranslations(),
             // @todo Expose plugin settings to frontend here
             'pluginSettings' => [],
         ]);
