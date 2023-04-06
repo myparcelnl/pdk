@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
-use MyParcelNL\Pdk\Frontend\Form\PlainElement;
+use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
@@ -184,7 +184,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             /**
              * Default exports
              */
-            [new PlainElement('Heading', ['$slot' => 'settings_carrier_export'])],
+            [new SettingsDivider('settings_carrier_export')],
 
             $this->carrierSchema->canHaveInsurance() ? [
                 new InteractiveElement(CarrierSettings::EXPORT_INSURANCE, Components::INPUT_TOGGLE),
@@ -219,24 +219,27 @@ class CarrierSettingsItemView extends AbstractSettingsView
             /**
              * Delivery Options
              */
-            [
-                new PlainElement('Heading', ['$slot' => 'settings_carrier_delivery_options']),
+            [new SettingsDivider('settings_carrier_delivery_options')],
 
-                new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
-
-                $this->createDeliveryOptionsField(CarrierSettings::ALLOW_MONDAY_DELIVERY, Components::INPUT_TOGGLE),
-                $this->createDeliveryOptionsField(CarrierSettings::ALLOW_SATURDAY_DELIVERY, Components::INPUT_TOGGLE),
-            ],
+            [new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE)],
 
             $this->getPackageTypeFields(),
+            $this->carrierSchema->canHaveDate() ? $this->getDateFields() : [],
 
-            $this->carrierSchema->canHavePickup() ? $this->getPickupFields() : [],
-            $this->carrierSchema->canHaveSignature() ? $this->getSignatureFields() : [],
-            $this->carrierSchema->canHaveOnlyRecipient() ? $this->getOnlyRecipientFields() : [],
+            [new SettingsDivider('settings_carrier_delivery_moments')],
+
+            [$this->createDeliveryOptionsField(CarrierSettings::ALLOW_MONDAY_DELIVERY, Components::INPUT_TOGGLE)],
+            [$this->createDeliveryOptionsField(CarrierSettings::ALLOW_SATURDAY_DELIVERY, Components::INPUT_TOGGLE)],
             $this->carrierSchema->canHaveMorningDelivery() ? $this->getMorningDeliveryFields() : [],
             $this->carrierSchema->canHaveEveningDelivery() ? $this->getEveningDeliveryFields() : [],
             $this->carrierSchema->canHaveSameDayDelivery() ? $this->getSameDayDeliveryFields() : [],
-            $this->carrierSchema->canHaveDate() ? $this->getDateFields() : [],
+
+            $this->carrierSchema->canHavePickup() ? $this->getPickupFields() : [],
+
+            [new SettingsDivider('settings_carrier_shipment_options')],
+
+            $this->carrierSchema->canHaveSignature() ? $this->getSignatureFields() : [],
+            $this->carrierSchema->canHaveOnlyRecipient() ? $this->getOnlyRecipientFields() : [],
         ], 1);
     }
 

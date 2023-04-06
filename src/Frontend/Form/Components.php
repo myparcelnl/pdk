@@ -6,6 +6,10 @@ namespace MyParcelNL\Pdk\Frontend\Form;
 
 final class Components
 {
+    // Plain elements
+    public const HEADING          = 'Heading';
+    public const SETTINGS_DIVIDER = 'SettingsDivider';
+    // Interactive elements
     public const INPUT_CHECKBOX       = 'CheckboxInput';
     public const INPUT_CHECKBOX_GROUP = 'CheckboxGroup';
     public const INPUT_CODE_EDITOR    = 'CodeEditor';
