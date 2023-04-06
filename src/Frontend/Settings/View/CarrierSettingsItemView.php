@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -33,6 +33,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
     protected $carrierSchema;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
+     */
+    private $currencyService;
+
+    /**
      * @var array
      */
     private $elements = [];
@@ -42,7 +47,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     public function __construct(CarrierOptions $carrierOptions)
     {
-        $this->carrierOptions = $carrierOptions;
+        $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
+        $this->carrierOptions  = $carrierOptions;
 
         /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
         $schema = Pdk::get(CarrierSchema::class);
@@ -175,6 +181,35 @@ class CarrierSettingsItemView extends AbstractSettingsView
     }
 
     /**
+     * @param  string $name
+     *
+     * @return null|\MyParcelNL\Pdk\Frontend\Form\InteractiveElement
+     */
+    private function createInsuranceElement(string $name): ?InteractiveElement
+    {
+        $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
+
+        if (count($insuranceAmounts)) {
+            $options = array_map(function (int $amount) {
+                return $this->currencyService->format($this->currencyService->convertToCents($amount));
+            }, array_combine($insuranceAmounts, $insuranceAmounts));
+
+            return new InteractiveElement(
+                $name,
+                Components::INPUT_SELECT,
+                [
+                    'options' => $this->toSelectOptions($options, false, true),
+                    '$visibleWhen' => [
+                        CarrierSettings::EXPORT_INSURANCE => true,
+                    ],
+                ]
+            );
+        }
+
+        return null;
+    }
+
+    /**
      * @return void
      */
     private function gatherElements(): array
@@ -192,9 +227,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     Components::INPUT_NUMBER,
                     ['$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true]]
                 ),
-                $this->getInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO, CountryCodes::CC_NL),
-                $this->getInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_BE, CountryCodes::CC_BE),
-                $this->getInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_EU, CountryCodes::CC_FR),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_BE),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_EU),
             ] : [],
 
             $this->carrierSchema->canHaveAgeCheck() ? [
@@ -248,36 +283,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function getFormattedCarrierName(): string
     {
         return Str::snake(str_replace('.', '_', $this->carrierOptions->carrier->name));
-    }
-
-    /**
-     * @param  string $name
-     * @param  string $cc
-     *
-     * @return null|\MyParcelNL\Pdk\Frontend\Form\InteractiveElement
-     */
-    private function getInsuranceElement(string $name, string $cc): ?InteractiveElement
-    {
-        $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
-
-        if (count($insuranceAmounts)) {
-            $options = array_map(static function ($option) {
-                return $option / 100;
-            }, $insuranceAmounts);
-
-            return new InteractiveElement(
-                $name,
-                Components::INPUT_SELECT,
-                [
-                    'options' => $this->toSelectOptions($options),
-                    '$visibleWhen' => [
-                        CarrierSettings::EXPORT_INSURANCE => true,
-                    ],
-                ]
-            );
-        }
-
-        return null;
     }
 
     private function getOnlyRecipientFields(): array

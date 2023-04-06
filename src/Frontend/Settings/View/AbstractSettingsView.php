@@ -21,16 +21,6 @@ abstract class AbstractSettingsView implements Arrayable
     protected $cache = [];
 
     /**
-     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
-     */
-    abstract protected function getElements(): ?FormElementCollection;
-
-    /**
-     * @return string
-     */
-    abstract protected function getSettingsId(): string;
-
-    /**
      * @return string
      */
     public function getDescription(): string
@@ -79,12 +69,22 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
+     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     */
+    abstract protected function getElements(): ?FormElementCollection;
+
+    /**
      * @return string
      */
     protected function getLabelPrefix(): string
     {
         return $this->getSettingsId();
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getSettingsId(): string;
 
     /**
      * @param  array $array
@@ -108,8 +108,8 @@ abstract class AbstractSettingsView implements Arrayable
 
         if ($includeNone) {
             array_unshift($options, [
-                'value'      => self::OPTIONS_VALUE_NONE,
-                'plainLabel' => LanguageService::translate('settings_none'),
+                'value' => self::OPTIONS_VALUE_NONE,
+                'label' => 'settings_none',
             ]);
         }
 
