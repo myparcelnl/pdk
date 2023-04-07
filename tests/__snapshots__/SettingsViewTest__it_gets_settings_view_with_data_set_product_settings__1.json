@@ -6,18 +6,24 @@
         {
             "name": "exportOnlyRecipient",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_export_only_recipient",
             "description": "settings_product_export_only_recipient_description"
         },
         {
             "name": "exportSignature",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_export_signature",
             "description": "settings_product_export_signature_description"
         },
         {
             "name": "countryOfOrigin",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -25,1007 +31,1007 @@
                 },
                 {
                     "value": "AD",
-                    "label": "AD"
+                    "label": "country_ad"
                 },
                 {
                     "value": "AE",
-                    "label": "AE"
+                    "label": "country_ae"
                 },
                 {
                     "value": "AF",
-                    "label": "AF"
+                    "label": "country_af"
                 },
                 {
                     "value": "AG",
-                    "label": "AG"
+                    "label": "country_ag"
                 },
                 {
                     "value": "AI",
-                    "label": "AI"
+                    "label": "country_ai"
                 },
                 {
                     "value": "AL",
-                    "label": "AL"
+                    "label": "country_al"
                 },
                 {
                     "value": "AM",
-                    "label": "AM"
+                    "label": "country_am"
                 },
                 {
                     "value": "AN",
-                    "label": "AN"
+                    "label": "country_an"
                 },
                 {
                     "value": "AO",
-                    "label": "AO"
+                    "label": "country_ao"
                 },
                 {
                     "value": "AQ",
-                    "label": "AQ"
+                    "label": "country_aq"
                 },
                 {
                     "value": "AR",
-                    "label": "AR"
+                    "label": "country_ar"
                 },
                 {
                     "value": "AS",
-                    "label": "AS"
+                    "label": "country_as"
                 },
                 {
                     "value": "AT",
-                    "label": "AT"
+                    "label": "country_at"
                 },
                 {
                     "value": "AU",
-                    "label": "AU"
+                    "label": "country_au"
                 },
                 {
                     "value": "AW",
-                    "label": "AW"
+                    "label": "country_aw"
                 },
                 {
                     "value": "AX",
-                    "label": "AX"
+                    "label": "country_ax"
                 },
                 {
                     "value": "AZ",
-                    "label": "AZ"
+                    "label": "country_az"
                 },
                 {
                     "value": "BA",
-                    "label": "BA"
+                    "label": "country_ba"
                 },
                 {
                     "value": "BB",
-                    "label": "BB"
+                    "label": "country_bb"
                 },
                 {
                     "value": "BD",
-                    "label": "BD"
+                    "label": "country_bd"
                 },
                 {
                     "value": "BE",
-                    "label": "BE"
+                    "label": "country_be"
                 },
                 {
                     "value": "BF",
-                    "label": "BF"
+                    "label": "country_bf"
                 },
                 {
                     "value": "BG",
-                    "label": "BG"
+                    "label": "country_bg"
                 },
                 {
                     "value": "BH",
-                    "label": "BH"
+                    "label": "country_bh"
                 },
                 {
                     "value": "BI",
-                    "label": "BI"
+                    "label": "country_bi"
                 },
                 {
                     "value": "BJ",
-                    "label": "BJ"
+                    "label": "country_bj"
                 },
                 {
                     "value": "BL",
-                    "label": "BL"
+                    "label": "country_bl"
                 },
                 {
                     "value": "BM",
-                    "label": "BM"
+                    "label": "country_bm"
                 },
                 {
                     "value": "BN",
-                    "label": "BN"
+                    "label": "country_bn"
                 },
                 {
                     "value": "BO",
-                    "label": "BO"
+                    "label": "country_bo"
                 },
                 {
                     "value": "BQ",
-                    "label": "BQ"
+                    "label": "country_bq"
                 },
                 {
                     "value": "BR",
-                    "label": "BR"
+                    "label": "country_br"
                 },
                 {
                     "value": "BS",
-                    "label": "BS"
+                    "label": "country_bs"
                 },
                 {
                     "value": "BT",
-                    "label": "BT"
+                    "label": "country_bt"
                 },
                 {
                     "value": "BV",
-                    "label": "BV"
+                    "label": "country_bv"
                 },
                 {
                     "value": "BW",
-                    "label": "BW"
+                    "label": "country_bw"
                 },
                 {
                     "value": "BY",
-                    "label": "BY"
+                    "label": "country_by"
                 },
                 {
                     "value": "BZ",
-                    "label": "BZ"
+                    "label": "country_bz"
                 },
                 {
                     "value": "CA",
-                    "label": "CA"
+                    "label": "country_ca"
                 },
                 {
                     "value": "CC",
-                    "label": "CC"
+                    "label": "country_cc"
                 },
                 {
                     "value": "CD",
-                    "label": "CD"
+                    "label": "country_cd"
                 },
                 {
                     "value": "CF",
-                    "label": "CF"
+                    "label": "country_cf"
                 },
                 {
                     "value": "CG",
-                    "label": "CG"
+                    "label": "country_cg"
                 },
                 {
                     "value": "CH",
-                    "label": "CH"
+                    "label": "country_ch"
                 },
                 {
                     "value": "CI",
-                    "label": "CI"
+                    "label": "country_ci"
                 },
                 {
                     "value": "CK",
-                    "label": "CK"
+                    "label": "country_ck"
                 },
                 {
                     "value": "CL",
-                    "label": "CL"
+                    "label": "country_cl"
                 },
                 {
                     "value": "CM",
-                    "label": "CM"
+                    "label": "country_cm"
                 },
                 {
                     "value": "CN",
-                    "label": "CN"
+                    "label": "country_cn"
                 },
                 {
                     "value": "CO",
-                    "label": "CO"
+                    "label": "country_co"
                 },
                 {
                     "value": "CR",
-                    "label": "CR"
+                    "label": "country_cr"
                 },
                 {
                     "value": "CU",
-                    "label": "CU"
+                    "label": "country_cu"
                 },
                 {
                     "value": "CV",
-                    "label": "CV"
+                    "label": "country_cv"
                 },
                 {
                     "value": "CW",
-                    "label": "CW"
+                    "label": "country_cw"
                 },
                 {
                     "value": "CX",
-                    "label": "CX"
+                    "label": "country_cx"
                 },
                 {
                     "value": "CY",
-                    "label": "CY"
+                    "label": "country_cy"
                 },
                 {
                     "value": "CZ",
-                    "label": "CZ"
+                    "label": "country_cz"
                 },
                 {
                     "value": "DE",
-                    "label": "DE"
+                    "label": "country_de"
                 },
                 {
                     "value": "DJ",
-                    "label": "DJ"
+                    "label": "country_dj"
                 },
                 {
                     "value": "DK",
-                    "label": "DK"
+                    "label": "country_dk"
                 },
                 {
                     "value": "DM",
-                    "label": "DM"
+                    "label": "country_dm"
                 },
                 {
                     "value": "DO",
-                    "label": "DO"
+                    "label": "country_do"
                 },
                 {
                     "value": "DZ",
-                    "label": "DZ"
+                    "label": "country_dz"
                 },
                 {
                     "value": "EC",
-                    "label": "EC"
+                    "label": "country_ec"
                 },
                 {
                     "value": "EE",
-                    "label": "EE"
+                    "label": "country_ee"
                 },
                 {
                     "value": "EG",
-                    "label": "EG"
+                    "label": "country_eg"
                 },
                 {
                     "value": "EH",
-                    "label": "EH"
+                    "label": "country_eh"
                 },
                 {
                     "value": "ER",
-                    "label": "ER"
+                    "label": "country_er"
                 },
                 {
                     "value": "ES",
-                    "label": "ES"
+                    "label": "country_es"
                 },
                 {
                     "value": "ET",
-                    "label": "ET"
+                    "label": "country_et"
                 },
                 {
                     "value": "FI",
-                    "label": "FI"
+                    "label": "country_fi"
                 },
                 {
                     "value": "FJ",
-                    "label": "FJ"
+                    "label": "country_fj"
                 },
                 {
                     "value": "FK",
-                    "label": "FK"
+                    "label": "country_fk"
                 },
                 {
                     "value": "FM",
-                    "label": "FM"
+                    "label": "country_fm"
                 },
                 {
                     "value": "FO",
-                    "label": "FO"
+                    "label": "country_fo"
                 },
                 {
                     "value": "FR",
-                    "label": "FR"
+                    "label": "country_fr"
                 },
                 {
                     "value": "GA",
-                    "label": "GA"
+                    "label": "country_ga"
                 },
                 {
                     "value": "GB",
-                    "label": "GB"
+                    "label": "country_gb"
                 },
                 {
                     "value": "GD",
-                    "label": "GD"
+                    "label": "country_gd"
                 },
                 {
                     "value": "GE",
-                    "label": "GE"
+                    "label": "country_ge"
                 },
                 {
                     "value": "GF",
-                    "label": "GF"
+                    "label": "country_gf"
                 },
                 {
                     "value": "GG",
-                    "label": "GG"
+                    "label": "country_gg"
                 },
                 {
                     "value": "GH",
-                    "label": "GH"
+                    "label": "country_gh"
                 },
                 {
                     "value": "GI",
-                    "label": "GI"
+                    "label": "country_gi"
                 },
                 {
                     "value": "GL",
-                    "label": "GL"
+                    "label": "country_gl"
                 },
                 {
                     "value": "GM",
-                    "label": "GM"
+                    "label": "country_gm"
                 },
                 {
                     "value": "GN",
-                    "label": "GN"
+                    "label": "country_gn"
                 },
                 {
                     "value": "GP",
-                    "label": "GP"
+                    "label": "country_gp"
                 },
                 {
                     "value": "GQ",
-                    "label": "GQ"
+                    "label": "country_gq"
                 },
                 {
                     "value": "GR",
-                    "label": "GR"
+                    "label": "country_gr"
                 },
                 {
                     "value": "GS",
-                    "label": "GS"
+                    "label": "country_gs"
                 },
                 {
                     "value": "GT",
-                    "label": "GT"
+                    "label": "country_gt"
                 },
                 {
                     "value": "GU",
-                    "label": "GU"
+                    "label": "country_gu"
                 },
                 {
                     "value": "GW",
-                    "label": "GW"
+                    "label": "country_gw"
                 },
                 {
                     "value": "GY",
-                    "label": "GY"
+                    "label": "country_gy"
                 },
                 {
                     "value": "HK",
-                    "label": "HK"
+                    "label": "country_hk"
                 },
                 {
                     "value": "HM",
-                    "label": "HM"
+                    "label": "country_hm"
                 },
                 {
                     "value": "HN",
-                    "label": "HN"
+                    "label": "country_hn"
                 },
                 {
                     "value": "HR",
-                    "label": "HR"
+                    "label": "country_hr"
                 },
                 {
                     "value": "HT",
-                    "label": "HT"
+                    "label": "country_ht"
                 },
                 {
                     "value": "HU",
-                    "label": "HU"
+                    "label": "country_hu"
                 },
                 {
                     "value": "ID",
-                    "label": "ID"
+                    "label": "country_id"
                 },
                 {
                     "value": "IE",
-                    "label": "IE"
+                    "label": "country_ie"
                 },
                 {
                     "value": "IL",
-                    "label": "IL"
+                    "label": "country_il"
                 },
                 {
                     "value": "IM",
-                    "label": "IM"
+                    "label": "country_im"
                 },
                 {
                     "value": "IN",
-                    "label": "IN"
+                    "label": "country_in"
                 },
                 {
                     "value": "IO",
-                    "label": "IO"
+                    "label": "country_io"
                 },
                 {
                     "value": "IQ",
-                    "label": "IQ"
+                    "label": "country_iq"
                 },
                 {
                     "value": "IR",
-                    "label": "IR"
+                    "label": "country_ir"
                 },
                 {
                     "value": "IS",
-                    "label": "IS"
+                    "label": "country_is"
                 },
                 {
                     "value": "IT",
-                    "label": "IT"
+                    "label": "country_it"
                 },
                 {
                     "value": "JE",
-                    "label": "JE"
+                    "label": "country_je"
                 },
                 {
                     "value": "JM",
-                    "label": "JM"
+                    "label": "country_jm"
                 },
                 {
                     "value": "JO",
-                    "label": "JO"
+                    "label": "country_jo"
                 },
                 {
                     "value": "JP",
-                    "label": "JP"
+                    "label": "country_jp"
                 },
                 {
                     "value": "KE",
-                    "label": "KE"
+                    "label": "country_ke"
                 },
                 {
                     "value": "KG",
-                    "label": "KG"
+                    "label": "country_kg"
                 },
                 {
                     "value": "KH",
-                    "label": "KH"
+                    "label": "country_kh"
                 },
                 {
                     "value": "KI",
-                    "label": "KI"
+                    "label": "country_ki"
                 },
                 {
                     "value": "KM",
-                    "label": "KM"
+                    "label": "country_km"
                 },
                 {
                     "value": "KN",
-                    "label": "KN"
+                    "label": "country_kn"
                 },
                 {
                     "value": "KP",
-                    "label": "KP"
+                    "label": "country_kp"
                 },
                 {
                     "value": "KR",
-                    "label": "KR"
+                    "label": "country_kr"
                 },
                 {
                     "value": "KW",
-                    "label": "KW"
+                    "label": "country_kw"
                 },
                 {
                     "value": "KY",
-                    "label": "KY"
+                    "label": "country_ky"
                 },
                 {
                     "value": "KZ",
-                    "label": "KZ"
+                    "label": "country_kz"
                 },
                 {
                     "value": "LA",
-                    "label": "LA"
+                    "label": "country_la"
                 },
                 {
                     "value": "LB",
-                    "label": "LB"
+                    "label": "country_lb"
                 },
                 {
                     "value": "LC",
-                    "label": "LC"
+                    "label": "country_lc"
                 },
                 {
                     "value": "LI",
-                    "label": "LI"
+                    "label": "country_li"
                 },
                 {
                     "value": "LK",
-                    "label": "LK"
+                    "label": "country_lk"
                 },
                 {
                     "value": "LR",
-                    "label": "LR"
+                    "label": "country_lr"
                 },
                 {
                     "value": "LS",
-                    "label": "LS"
+                    "label": "country_ls"
                 },
                 {
                     "value": "LT",
-                    "label": "LT"
+                    "label": "country_lt"
                 },
                 {
                     "value": "LU",
-                    "label": "LU"
+                    "label": "country_lu"
                 },
                 {
                     "value": "LV",
-                    "label": "LV"
+                    "label": "country_lv"
                 },
                 {
                     "value": "LY",
-                    "label": "LY"
+                    "label": "country_ly"
                 },
                 {
                     "value": "MA",
-                    "label": "MA"
+                    "label": "country_ma"
                 },
                 {
                     "value": "MC",
-                    "label": "MC"
+                    "label": "country_mc"
                 },
                 {
                     "value": "MD",
-                    "label": "MD"
+                    "label": "country_md"
                 },
                 {
                     "value": "ME",
-                    "label": "ME"
+                    "label": "country_me"
                 },
                 {
                     "value": "MF",
-                    "label": "MF"
+                    "label": "country_mf"
                 },
                 {
                     "value": "MG",
-                    "label": "MG"
+                    "label": "country_mg"
                 },
                 {
                     "value": "MH",
-                    "label": "MH"
+                    "label": "country_mh"
                 },
                 {
                     "value": "MK",
-                    "label": "MK"
+                    "label": "country_mk"
                 },
                 {
                     "value": "ML",
-                    "label": "ML"
+                    "label": "country_ml"
                 },
                 {
                     "value": "MM",
-                    "label": "MM"
+                    "label": "country_mm"
                 },
                 {
                     "value": "MN",
-                    "label": "MN"
+                    "label": "country_mn"
                 },
                 {
                     "value": "MO",
-                    "label": "MO"
+                    "label": "country_mo"
                 },
                 {
                     "value": "MP",
-                    "label": "MP"
+                    "label": "country_mp"
                 },
                 {
                     "value": "MQ",
-                    "label": "MQ"
+                    "label": "country_mq"
                 },
                 {
                     "value": "MR",
-                    "label": "MR"
+                    "label": "country_mr"
                 },
                 {
                     "value": "MS",
-                    "label": "MS"
+                    "label": "country_ms"
                 },
                 {
                     "value": "MT",
-                    "label": "MT"
+                    "label": "country_mt"
                 },
                 {
                     "value": "MU",
-                    "label": "MU"
+                    "label": "country_mu"
                 },
                 {
                     "value": "MV",
-                    "label": "MV"
+                    "label": "country_mv"
                 },
                 {
                     "value": "MW",
-                    "label": "MW"
+                    "label": "country_mw"
                 },
                 {
                     "value": "MX",
-                    "label": "MX"
+                    "label": "country_mx"
                 },
                 {
                     "value": "MY",
-                    "label": "MY"
+                    "label": "country_my"
                 },
                 {
                     "value": "MZ",
-                    "label": "MZ"
+                    "label": "country_mz"
                 },
                 {
                     "value": "NA",
-                    "label": "NA"
+                    "label": "country_na"
                 },
                 {
                     "value": "NC",
-                    "label": "NC"
+                    "label": "country_nc"
                 },
                 {
                     "value": "NE",
-                    "label": "NE"
+                    "label": "country_ne"
                 },
                 {
                     "value": "NF",
-                    "label": "NF"
+                    "label": "country_nf"
                 },
                 {
                     "value": "NG",
-                    "label": "NG"
+                    "label": "country_ng"
                 },
                 {
                     "value": "NI",
-                    "label": "NI"
+                    "label": "country_ni"
                 },
                 {
                     "value": "NL",
-                    "label": "NL"
+                    "label": "country_nl"
                 },
                 {
                     "value": "NO",
-                    "label": "NO"
+                    "label": "country_no"
                 },
                 {
                     "value": "NP",
-                    "label": "NP"
+                    "label": "country_np"
                 },
                 {
                     "value": "NR",
-                    "label": "NR"
+                    "label": "country_nr"
                 },
                 {
                     "value": "NU",
-                    "label": "NU"
+                    "label": "country_nu"
                 },
                 {
                     "value": "NZ",
-                    "label": "NZ"
+                    "label": "country_nz"
                 },
                 {
                     "value": "OM",
-                    "label": "OM"
+                    "label": "country_om"
                 },
                 {
                     "value": "PA",
-                    "label": "PA"
+                    "label": "country_pa"
                 },
                 {
                     "value": "PE",
-                    "label": "PE"
+                    "label": "country_pe"
                 },
                 {
                     "value": "PF",
-                    "label": "PF"
+                    "label": "country_pf"
                 },
                 {
                     "value": "PG",
-                    "label": "PG"
+                    "label": "country_pg"
                 },
                 {
                     "value": "PH",
-                    "label": "PH"
+                    "label": "country_ph"
                 },
                 {
                     "value": "PK",
-                    "label": "PK"
+                    "label": "country_pk"
                 },
                 {
                     "value": "PL",
-                    "label": "PL"
+                    "label": "country_pl"
                 },
                 {
                     "value": "PM",
-                    "label": "PM"
+                    "label": "country_pm"
                 },
                 {
                     "value": "PN",
-                    "label": "PN"
+                    "label": "country_pn"
                 },
                 {
                     "value": "PR",
-                    "label": "PR"
+                    "label": "country_pr"
                 },
                 {
                     "value": "PS",
-                    "label": "PS"
+                    "label": "country_ps"
                 },
                 {
                     "value": "PT",
-                    "label": "PT"
+                    "label": "country_pt"
                 },
                 {
                     "value": "PW",
-                    "label": "PW"
+                    "label": "country_pw"
                 },
                 {
                     "value": "PY",
-                    "label": "PY"
+                    "label": "country_py"
                 },
                 {
                     "value": "QA",
-                    "label": "QA"
+                    "label": "country_qa"
                 },
                 {
                     "value": "RE",
-                    "label": "RE"
+                    "label": "country_re"
                 },
                 {
                     "value": "RO",
-                    "label": "RO"
+                    "label": "country_ro"
                 },
                 {
                     "value": "RS",
-                    "label": "RS"
+                    "label": "country_rs"
                 },
                 {
                     "value": "RU",
-                    "label": "RU"
+                    "label": "country_ru"
                 },
                 {
                     "value": "RW",
-                    "label": "RW"
+                    "label": "country_rw"
                 },
                 {
                     "value": "SA",
-                    "label": "SA"
+                    "label": "country_sa"
                 },
                 {
                     "value": "SB",
-                    "label": "SB"
+                    "label": "country_sb"
                 },
                 {
                     "value": "SC",
-                    "label": "SC"
+                    "label": "country_sc"
                 },
                 {
                     "value": "SD",
-                    "label": "SD"
+                    "label": "country_sd"
                 },
                 {
                     "value": "SE",
-                    "label": "SE"
+                    "label": "country_se"
                 },
                 {
                     "value": "SG",
-                    "label": "SG"
+                    "label": "country_sg"
                 },
                 {
                     "value": "SH",
-                    "label": "SH"
+                    "label": "country_sh"
                 },
                 {
                     "value": "SI",
-                    "label": "SI"
+                    "label": "country_si"
                 },
                 {
                     "value": "SJ",
-                    "label": "SJ"
+                    "label": "country_sj"
                 },
                 {
                     "value": "SK",
-                    "label": "SK"
+                    "label": "country_sk"
                 },
                 {
                     "value": "SL",
-                    "label": "SL"
+                    "label": "country_sl"
                 },
                 {
                     "value": "SM",
-                    "label": "SM"
+                    "label": "country_sm"
                 },
                 {
                     "value": "SN",
-                    "label": "SN"
+                    "label": "country_sn"
                 },
                 {
                     "value": "SO",
-                    "label": "SO"
+                    "label": "country_so"
                 },
                 {
                     "value": "SR",
-                    "label": "SR"
+                    "label": "country_sr"
                 },
                 {
                     "value": "SS",
-                    "label": "SS"
+                    "label": "country_ss"
                 },
                 {
                     "value": "ST",
-                    "label": "ST"
+                    "label": "country_st"
                 },
                 {
                     "value": "SV",
-                    "label": "SV"
+                    "label": "country_sv"
                 },
                 {
                     "value": "SX",
-                    "label": "SX"
+                    "label": "country_sx"
                 },
                 {
                     "value": "SY",
-                    "label": "SY"
+                    "label": "country_sy"
                 },
                 {
                     "value": "SZ",
-                    "label": "SZ"
+                    "label": "country_sz"
                 },
                 {
                     "value": "TC",
-                    "label": "TC"
+                    "label": "country_tc"
                 },
                 {
                     "value": "TD",
-                    "label": "TD"
+                    "label": "country_td"
                 },
                 {
                     "value": "TF",
-                    "label": "TF"
+                    "label": "country_tf"
                 },
                 {
                     "value": "TG",
-                    "label": "TG"
+                    "label": "country_tg"
                 },
                 {
                     "value": "TH",
-                    "label": "TH"
+                    "label": "country_th"
                 },
                 {
                     "value": "TJ",
-                    "label": "TJ"
+                    "label": "country_tj"
                 },
                 {
                     "value": "TK",
-                    "label": "TK"
+                    "label": "country_tk"
                 },
                 {
                     "value": "TL",
-                    "label": "TL"
+                    "label": "country_tl"
                 },
                 {
                     "value": "TM",
-                    "label": "TM"
+                    "label": "country_tm"
                 },
                 {
                     "value": "TN",
-                    "label": "TN"
+                    "label": "country_tn"
                 },
                 {
                     "value": "TO",
-                    "label": "TO"
+                    "label": "country_to"
                 },
                 {
                     "value": "TR",
-                    "label": "TR"
+                    "label": "country_tr"
                 },
                 {
                     "value": "TT",
-                    "label": "TT"
+                    "label": "country_tt"
                 },
                 {
                     "value": "TV",
-                    "label": "TV"
+                    "label": "country_tv"
                 },
                 {
                     "value": "TW",
-                    "label": "TW"
+                    "label": "country_tw"
                 },
                 {
                     "value": "TZ",
-                    "label": "TZ"
+                    "label": "country_tz"
                 },
                 {
                     "value": "UA",
-                    "label": "UA"
+                    "label": "country_ua"
                 },
                 {
                     "value": "UG",
-                    "label": "UG"
+                    "label": "country_ug"
                 },
                 {
                     "value": "UM",
-                    "label": "UM"
+                    "label": "country_um"
                 },
                 {
                     "value": "US",
-                    "label": "US"
+                    "label": "country_us"
                 },
                 {
                     "value": "UY",
-                    "label": "UY"
+                    "label": "country_uy"
                 },
                 {
                     "value": "UZ",
-                    "label": "UZ"
+                    "label": "country_uz"
                 },
                 {
                     "value": "VA",
-                    "label": "VA"
+                    "label": "country_va"
                 },
                 {
                     "value": "VC",
-                    "label": "VC"
+                    "label": "country_vc"
                 },
                 {
                     "value": "VE",
-                    "label": "VE"
+                    "label": "country_ve"
                 },
                 {
                     "value": "VG",
-                    "label": "VG"
+                    "label": "country_vg"
                 },
                 {
                     "value": "VI",
-                    "label": "VI"
+                    "label": "country_vi"
                 },
                 {
                     "value": "VN",
-                    "label": "VN"
+                    "label": "country_vn"
                 },
                 {
                     "value": "VU",
-                    "label": "VU"
+                    "label": "country_vu"
                 },
                 {
                     "value": "WF",
-                    "label": "WF"
+                    "label": "country_wf"
                 },
                 {
                     "value": "WS",
-                    "label": "WS"
+                    "label": "country_ws"
                 },
                 {
                     "value": "XK",
-                    "label": "XK"
+                    "label": "country_xk"
                 },
                 {
                     "value": "YE",
-                    "label": "YE"
+                    "label": "country_ye"
                 },
                 {
                     "value": "YT",
-                    "label": "YT"
+                    "label": "country_yt"
                 },
                 {
                     "value": "ZA",
-                    "label": "ZA"
+                    "label": "country_za"
                 },
                 {
                     "value": "ZM",
-                    "label": "ZM"
+                    "label": "country_zm"
                 },
                 {
                     "value": "ZW",
-                    "label": "ZW"
+                    "label": "country_zw"
                 }
             ],
             "label": "settings_product_country_of_origin",
@@ -1034,42 +1040,56 @@
         {
             "name": "customsCode",
             "$component": "TextInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_customs_code",
             "description": "settings_product_customs_code_description"
         },
         {
             "name": "disableDeliveryOptions",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_disable_delivery_options",
             "description": "settings_product_disable_delivery_options_description"
         },
         {
             "name": "dropOffDelay",
             "$component": "NumberInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_drop_off_delay",
             "description": "settings_product_drop_off_delay_description"
         },
         {
             "name": "exportAgeCheck",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_export_age_check",
             "description": "settings_product_export_age_check_description"
         },
         {
             "name": "exportInsurance",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_export_insurance",
             "description": "settings_product_export_insurance_description"
         },
         {
             "name": "exportLargeFormat",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_export_large_format",
             "description": "settings_product_export_large_format_description"
         },
         {
             "name": "packageType",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": "package",
@@ -1094,12 +1114,16 @@
         {
             "name": "fitInMailbox",
             "$component": "NumberInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_fit_in_mailbox",
             "description": "settings_product_fit_in_mailbox_description"
         },
         {
             "name": "exportReturn",
             "$component": "TristateInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_product_export_return",
             "description": "settings_product_export_return_description"
         }

@@ -6,6 +6,8 @@
         {
             "name": "statusOnLabelCreate",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -13,27 +15,27 @@
                 },
                 {
                     "value": "pending",
-                    "label": "Pending"
+                    "plainLabel": "Pending"
                 },
                 {
                     "value": "paid",
-                    "label": "Paid"
+                    "plainLabel": "Paid"
                 },
                 {
                     "value": "shipped",
-                    "label": "Shipped"
+                    "plainLabel": "Shipped"
                 },
                 {
                     "value": "completed",
-                    "label": "Completed"
+                    "plainLabel": "Completed"
                 },
                 {
                     "value": "cancelled",
-                    "label": "Cancelled"
+                    "plainLabel": "Cancelled"
                 },
                 {
                     "value": "refunded",
-                    "label": "Refunded"
+                    "plainLabel": "Refunded"
                 }
             ],
             "label": "settings_order_status_on_label_create",
@@ -42,6 +44,8 @@
         {
             "name": "statusWhenLabelScanned",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -49,27 +53,27 @@
                 },
                 {
                     "value": "pending",
-                    "label": "Pending"
+                    "plainLabel": "Pending"
                 },
                 {
                     "value": "paid",
-                    "label": "Paid"
+                    "plainLabel": "Paid"
                 },
                 {
                     "value": "shipped",
-                    "label": "Shipped"
+                    "plainLabel": "Shipped"
                 },
                 {
                     "value": "completed",
-                    "label": "Completed"
+                    "plainLabel": "Completed"
                 },
                 {
                     "value": "cancelled",
-                    "label": "Cancelled"
+                    "plainLabel": "Cancelled"
                 },
                 {
                     "value": "refunded",
-                    "label": "Refunded"
+                    "plainLabel": "Refunded"
                 }
             ],
             "label": "settings_order_status_when_label_scanned",
@@ -78,6 +82,8 @@
         {
             "name": "statusWhenDelivered",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -85,27 +91,27 @@
                 },
                 {
                     "value": "pending",
-                    "label": "Pending"
+                    "plainLabel": "Pending"
                 },
                 {
                     "value": "paid",
-                    "label": "Paid"
+                    "plainLabel": "Paid"
                 },
                 {
                     "value": "shipped",
-                    "label": "Shipped"
+                    "plainLabel": "Shipped"
                 },
                 {
                     "value": "completed",
-                    "label": "Completed"
+                    "plainLabel": "Completed"
                 },
                 {
                     "value": "cancelled",
-                    "label": "Cancelled"
+                    "plainLabel": "Cancelled"
                 },
                 {
                     "value": "refunded",
-                    "label": "Refunded"
+                    "plainLabel": "Refunded"
                 }
             ],
             "label": "settings_order_status_when_delivered",
@@ -114,6 +120,8 @@
         {
             "name": "ignoreOrderStatuses",
             "$component": "CheckboxInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -121,27 +129,27 @@
                 },
                 {
                     "value": "pending",
-                    "label": "Pending"
+                    "plainLabel": "Pending"
                 },
                 {
                     "value": "paid",
-                    "label": "Paid"
+                    "plainLabel": "Paid"
                 },
                 {
                     "value": "shipped",
-                    "label": "Shipped"
+                    "plainLabel": "Shipped"
                 },
                 {
                     "value": "completed",
-                    "label": "Completed"
+                    "plainLabel": "Completed"
                 },
                 {
                     "value": "cancelled",
-                    "label": "Cancelled"
+                    "plainLabel": "Cancelled"
                 },
                 {
                     "value": "refunded",
-                    "label": "Refunded"
+                    "plainLabel": "Refunded"
                 }
             ],
             "label": "settings_order_ignore_order_statuses",
@@ -150,12 +158,16 @@
         {
             "name": "orderStatusMail",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_order_order_status_mail",
             "description": "settings_order_order_status_mail_description"
         },
         {
             "name": "sendNotificationAfter",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [],
             "label": "settings_order_send_notification_after",
             "description": "settings_order_send_notification_after_description"
@@ -163,30 +175,40 @@
         {
             "name": "sendOrderStateForDigitalStamp",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_order_send_order_state_for_digital_stamp",
             "description": "settings_order_send_order_state_for_digital_stamp_description"
         },
         {
             "name": "saveCustomerAddress",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_order_save_customer_address",
             "description": "settings_order_save_customer_address_description"
         },
         {
             "name": "emptyParcelWeight",
             "$component": "NumberInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_order_empty_parcel_weight",
             "description": "settings_order_empty_parcel_weight_description"
         },
         {
             "name": "emptyMailboxWeight",
             "$component": "NumberInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_order_empty_mailbox_weight",
             "description": "settings_order_empty_mailbox_weight_description"
         },
         {
             "name": "emptyDigitalStampWeight",
             "$component": "NumberInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_order_empty_digital_stamp_weight",
             "description": "settings_order_empty_digital_stamp_weight_description"
         }

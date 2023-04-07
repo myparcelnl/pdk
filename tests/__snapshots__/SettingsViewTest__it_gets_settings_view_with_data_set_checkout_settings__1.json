@@ -6,12 +6,16 @@
         {
             "name": "useSeparateAddressFields",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_checkout_use_separate_address_fields",
             "description": "settings_checkout_use_separate_address_fields_description"
         },
         {
             "name": "priceType",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": "included",
@@ -28,24 +32,32 @@
         {
             "name": "enableDeliveryOptions",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_checkout_enable_delivery_options",
             "description": "settings_checkout_enable_delivery_options_description"
         },
         {
             "name": "enableDeliveryOptionsWhenNotInStock",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_checkout_enable_delivery_options_when_not_in_stock",
             "description": "settings_checkout_enable_delivery_options_when_not_in_stock_description"
         },
         {
             "name": "deliveryOptionsHeader",
             "$component": "TextInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_checkout_delivery_options_header",
             "description": "settings_checkout_delivery_options_header_description"
         },
         {
             "name": "deliveryOptionsCustomCss",
             "$component": "CodeEditor",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_checkout_delivery_options_custom_css",
             "description": "settings_checkout_delivery_options_custom_css_description"
         }
