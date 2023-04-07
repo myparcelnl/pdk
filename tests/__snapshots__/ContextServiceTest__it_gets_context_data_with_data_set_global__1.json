@@ -163,6 +163,17 @@
                 "path": "",
                 "property": "webhooks",
                 "responseProperty": null
+            },
+            "fetchContext": {
+                "body": null,
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchContext"
+                },
+                "path": "",
+                "property": "context",
+                "responseProperty": null
             }
         },
         "event": "myparcel_pdk_loaded",

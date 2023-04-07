@@ -6,12 +6,16 @@
         {
             "name": "description",
             "$component": "TextInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_label_description",
             "description": "settings_label_description_description"
         },
         {
             "name": "format",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": "a4",
@@ -28,6 +32,8 @@
         {
             "name": "position",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": 1,
@@ -55,6 +61,8 @@
         {
             "name": "output",
             "$component": "SelectInput",
+            "$slot": null,
+            "$wrapper": null,
             "options": [
                 {
                     "value": "open",
@@ -71,6 +79,8 @@
         {
             "name": "prompt",
             "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
             "label": "settings_label_prompt",
             "description": "settings_label_prompt_description"
         }
