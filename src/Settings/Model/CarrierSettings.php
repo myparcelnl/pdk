@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string                              $cutoffTime
  * @property string                              $cutoffTimeSameDay
  * @property string                              $defaultPackageType
+ * @property int                                 $deliveryDaysWindow
  * @property string                              $deliveryOptionsCustomCss
  * @property string                              $deliveryOptionsDisplay
  * @property bool                                $deliveryOptionsEnabledForBackorders
