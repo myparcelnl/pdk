@@ -25,7 +25,7 @@ class GetLabelsResponse extends ApiResponseWithBody
     {
         $parsedBody      = json_decode($this->getBody(), true);
         $responseKey     = array_key_exists('pdf', $parsedBody['data']) ? 'pdf' : 'pdfs';
-        $this->labelLink = $responseKey === 'pdf' ? $parsedBody['data'][$responseKey]['url']
+        $this->labelLink = $responseKey === 'pdfs' ? $parsedBody['data'][$responseKey]['url']
             : $parsedBody['data'][$responseKey][0]['url'];
     }
 }
