@@ -144,8 +144,6 @@ it(
             ->and($uri->getPath())
             ->toBe($path)
             ->and($response)
-            ->toBeInstanceOf(ShipmentCollection::class)
-            ->and($response->label->pdf)
             ->toStartWith('%PDF-1.6');
     }
 )->with('collections');
