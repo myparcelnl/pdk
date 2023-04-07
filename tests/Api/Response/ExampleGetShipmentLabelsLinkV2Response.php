@@ -10,7 +10,7 @@ class ExampleGetShipmentLabelsLinkV2Response extends ExampleJsonResponse
     {
         return [
             'data' => [
-                'pdfs' => [
+                'pdf' => [
                     [
                         'url' => '/pdfs/label_hash',
                     ],
