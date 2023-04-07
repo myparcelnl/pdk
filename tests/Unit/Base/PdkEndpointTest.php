@@ -27,7 +27,6 @@ use MyParcelNL\Pdk\Plugin\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 use function DI\value;
@@ -35,32 +34,52 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('endpoints');
 
+$pdkConfig = [
+    CreateWebhooksAction::class        => autowire(MockAction::class),
+    DeleteShipmentsAction::class       => autowire(MockAction::class),
+    DeleteWebhooksAction::class        => autowire(MockAction::class),
+    ExportOrderAction::class           => autowire(MockAction::class),
+    ExportReturnAction::class          => autowire(MockAction::class),
+    FetchContextAction::class          => autowire(MockAction::class),
+    FetchOrdersAction::class           => autowire(MockAction::class),
+    UpdateShipmentsAction::class       => autowire(MockAction::class),
+    FetchWebhooksAction::class         => autowire(MockAction::class),
+    PrintOrdersAction::class           => autowire(MockAction::class),
+    PrintShipmentsAction::class        => autowire(MockAction::class),
+    UpdateAccountAction::class         => autowire(MockAction::class),
+    UpdateOrderAction::class           => autowire(MockAction::class),
+    UpdatePluginSettingsAction::class  => autowire(MockAction::class),
+    UpdateProductSettingsAction::class => autowire(MockAction::class),
+];
 usesShared(
-    new UsesEachMockPdkInstance([
-        CreateWebhooksAction::class        => autowire(MockAction::class),
-        DeleteShipmentsAction::class       => autowire(MockAction::class),
-        DeleteWebhooksAction::class        => autowire(MockAction::class),
-        ExportOrderAction::class           => autowire(MockAction::class),
-        ExportReturnAction::class          => autowire(MockAction::class),
-        FetchContextAction::class          => autowire(MockAction::class),
-        FetchOrdersAction::class           => autowire(MockAction::class),
-        UpdateShipmentsAction::class       => autowire(MockAction::class),
-        FetchWebhooksAction::class         => autowire(MockAction::class),
-        PrintOrdersAction::class           => autowire(MockAction::class),
-        PrintShipmentsAction::class        => autowire(MockAction::class),
-        UpdateAccountAction::class         => autowire(MockAction::class),
-        UpdateOrderAction::class           => autowire(MockAction::class),
-        UpdatePluginSettingsAction::class  => autowire(MockAction::class),
-        UpdateProductSettingsAction::class => autowire(MockAction::class),
-    ])
+    new UsesEachMockPdkInstance($pdkConfig)
 );
 
 dataset('backendActions', function () {
-    return (new PdkBackendActions(new PdkSharedActions()))->getActions();
+    return [
+        PdkBackendActions::UPDATE_ACCOUNT,
+        PdkBackendActions::EXPORT_ORDERS,
+        PdkBackendActions::FETCH_ORDERS,
+        PdkBackendActions::PRINT_ORDERS,
+        PdkBackendActions::UPDATE_ORDERS,
+        PdkBackendActions::EXPORT_RETURN,
+        PdkBackendActions::DELETE_SHIPMENTS,
+        PdkBackendActions::PRINT_SHIPMENTS,
+        PdkBackendActions::UPDATE_SHIPMENTS,
+        PdkBackendActions::UPDATE_PLUGIN_SETTINGS,
+        PdkBackendActions::UPDATE_PRODUCT_SETTINGS,
+        PdkBackendActions::CREATE_WEBHOOKS,
+        PdkBackendActions::DELETE_WEBHOOKS,
+        PdkBackendActions::FETCH_WEBHOOKS,
+        PdkSharedActions::FETCH_CONTEXT,
+    ];
 });
 
 dataset('frontendActions', function () {
-    return (new PdkFrontendActions(new PdkSharedActions()))->getActions();
+    return [
+        PdkFrontendActions::FETCH_CHECKOUT_CONTEXT,
+        PdkSharedActions::FETCH_CONTEXT,
+    ];
 });
 
 function testEndpoint(string $action, string $context): void
@@ -75,17 +94,15 @@ function testEndpoint(string $action, string $context): void
         ->toBe(['data' => ['success' => true]]);
 }
 
-it('calls pdk backend endpoints', function (string $action, string $context) {
-    testEndpoint($action, $context);
+it('calls pdk backend endpoints', function (string $action) {
+    testEndpoint($action, PdkEndpoint::CONTEXT_BACKEND);
 })
-    ->with('backendActions')
-    ->with([PdkEndpoint::CONTEXT_BACKEND]);
+    ->with('backendActions');
 
-it('calls pdk frontend endpoints', function (string $action, string $context) {
-    testEndpoint($action, $context);
+it('calls pdk frontend endpoints', function (string $action) {
+    testEndpoint($action, PdkEndpoint::CONTEXT_FRONTEND);
 })
-    ->with('frontendActions')
-    ->with([PdkEndpoint::CONTEXT_FRONTEND]);
+    ->with('frontendActions');
 
 it('returns error response on nonexistent action', function () {
     /** @var PdkEndpoint $endpoint */
@@ -126,7 +143,7 @@ it('throws exception when using the wrong context', function (string $action) {
     $endpoint = Pdk::get(PdkEndpoint::class);
     $response = $endpoint->call($action, PdkEndpoint::CONTEXT_FRONTEND);
 
-    if (in_array($action, (new PdkSharedActions())->getActions())) {
+    if (PdkSharedActions::FETCH_CONTEXT === $action) {
         expect($response->getStatusCode())->toBe(Response::HTTP_OK);
         return;
     }
