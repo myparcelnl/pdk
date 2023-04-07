@@ -48,15 +48,15 @@ it('subscribes to a webhook', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = Pdk::get(ApiServiceInterface::class);
     $api->getMock()
-        ->append(new ExamplePostIdsResponse(['id' => 3001518]));
+        ->append(new ExamplePostIdsResponse([['id' => 3001518]]));
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
 
     $response = $repository->subscribe(
         new WebhookSubscription([
-            'url'   => 'https://example.com/webhook',
-            'event' => WebhookSubscription::SHIPMENT_LABEL_CREATED,
+            'url'  => 'https://example.com/webhook',
+            'hook' => WebhookSubscription::SHIPMENT_LABEL_CREATED,
         ])
     );
 
@@ -74,7 +74,7 @@ it('subscribes to a webhook using a shorthand method', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = Pdk::get(ApiServiceInterface::class);
     $api->getMock()
-        ->append(new ExamplePostIdsResponse(['id' => 5731310]));
+        ->append(new ExamplePostIdsResponse([['id' => 5731310]]));
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
