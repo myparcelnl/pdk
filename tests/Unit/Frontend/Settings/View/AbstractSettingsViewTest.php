@@ -84,12 +84,16 @@ it('can render a settings view', function (array $data) {
                     [
                         'name'        => 'interactive-test',
                         '$component'  => 'test',
+                        '$slot'       => null,
+                        '$wrapper'    => null,
                         'prop'        => 'value',
                         'label'       => 'settings_test_interactive-test',
                         'description' => 'settings_test_interactive-test_description',
                     ],
                     [
                         '$component' => 'plain-test',
+                        '$slot'       => null,
+                        '$wrapper'    => false,
                         'prop'       => 'value',
                     ],
                 ],
