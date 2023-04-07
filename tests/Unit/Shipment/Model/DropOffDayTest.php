@@ -7,38 +7,87 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use function DI\autowire;
-use const MyParcelNL\Pdk\Helper\Plugin\Service\CARRIER;
 
+const DROP_OFF_DAYS = [
+    '0' => [
+        'cutoffTime'        => '17:00',
+        'date'              => '2022-01-03 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 1,
+    ],
+    '1' => [
+        'cutoffTime'        => '15:00',
+        'date'              => '2022-01-04 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 2,
+    ],
+    '2' => [
+        'cutoffTime'        => '17:00',
+        'date'              => '2022-01-05 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 3,
+    ],
+    '3' => [
+        'cutoffTime'        => '15:00',
+        'date'              => '2022-01-06 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 4,
+    ],
+    '4' => [
+        'cutoffTime'        => '17:00',
+        'date'              => '2022-01-07 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 5,
+    ],
+    '5' => [
+        'cutoffTime'        => '15:30',
+        'date'              => '2022-01-08 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 6,
+    ],
+    '7' => [
+        'cutoffTime'        => '17:00',
+        'date'              => '2022-01-10 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 1,
+    ],
+    '8' => [
+        'cutoffTime'        => '17:00',
+        'date'              => '2022-01-11 00:00:00',
+        'dispatch'          => true,
+        'sameDayCutoffTime' => '10:00',
+        'weekday'           => 2,
+    ],
+];
 function createPdk(array $settingsOverrides): void
 {
     $config = MockPdkConfig::create([
         SettingsRepositoryInterface::class => autowire(
             MockSettingsRepository::class
         )->constructor(
-            $settingsOverrides
+            [
+                CarrierSettings::ID => [
+                    '0' => $settingsOverrides,
+                ],
+            ]
         ),
     ]);
 
     PdkFactory::create($config);
-}
-function mockPdk(array $carrierSettings = []): void
-{
-    PdkFactory::create(
-        MockPdkConfig::create([
-            SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor(
-                [CarrierSettings::ID => ['0' => $carrierSettings]]
-            ),
-        ])
-    );
 }
 
 it('returns correct delivery days using a specific date', function (
@@ -46,10 +95,11 @@ it('returns correct delivery days using a specific date', function (
     array  $settingsOverrides,
     array  $expectation
 ) {
-    mockPdk($settingsOverrides);
+    createPdk($settingsOverrides);
 
     /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
-    $carrierSettings = Settings::get('carrier')->get('0');
+    $carrierSettings = Settings::get('carrier')
+        ->get('0');
 
     /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
     $service = Pdk::get(DropOffServiceInterface::class);
@@ -61,13 +111,16 @@ it('returns correct delivery days using a specific date', function (
     'Monday, 3 Jan 2022' => [
         'date'              => '2022-01-03 00:00:00',
         'settingsOverrides' => [
-            'deliveryDaysWindow' => 3,
+            'deliveryDaysWindow'   => 3,
+            'dropOffPossibilities' => [
+                'dropOffDays' => DROP_OFF_DAYS,
+            ],
         ],
         'expectation'       => [
             '0.cutoffTime'        => '17:00',
             '0.date'              => '2022-01-03 00:00:00',
             '0.dispatch'          => true,
-            '0.sameDayCutoffTime' => null,
+            '0.sameDayCutoffTime' => '10:00',
             '0.weekday'           => 1,
             '1.cutoffTime'        => '15:00',
             '1.date'              => '2022-01-04 00:00:00',
@@ -77,7 +130,7 @@ it('returns correct delivery days using a specific date', function (
             '2.cutoffTime'        => '17:00',
             '2.date'              => '2022-01-05 00:00:00',
             '2.dispatch'          => true,
-            '2.sameDayCutoffTime' => null,
+            '2.sameDayCutoffTime' => '10:00',
             '2.weekday'           => 3,
         ],
     ],
@@ -85,30 +138,33 @@ it('returns correct delivery days using a specific date', function (
     'Monday, 3 Jan 2022 and deviations' => [
         'date'              => '2022-01-03 00:00:00',
         'settingsOverrides' => [
-            'carrier.0.dropOffPossibilities.dropOffDaysDeviations' => [
-                [
-                    'cutoffTime'        => '20:00',
-                    'date'              => '2022-01-04 00:00:00',
-                    'dispatch'          => null,
-                    'sameDayCutoffTime' => '09:30',
-                ],
-                [
-                    'cutoffTime'        => null,
-                    'date'              => '2022-01-05 00:00:00',
-                    'dispatch'          => false,
-                    'sameDayCutoffTime' => null,
-                ],
-                [
-                    'cutoffTime'        => null,
-                    'date'              => '2022-01-07 00:00:00',
-                    'dispatch'          => null,
-                    'sameDayCutoffTime' => '08:00',
-                ],
-                [
-                    'cutoffTime'        => null,
-                    'date'              => '2022-01-11 00:00:00',
-                    'dispatch'          => null,
-                    'sameDayCutoffTime' => '09:30',
+            'dropOffPossibilities' => [
+                'dropOffDays'           => DROP_OFF_DAYS,
+                'dropOffDaysDeviations' => [
+                    [
+                        'cutoffTime'        => '20:00',
+                        'date'              => '2022-01-04 00:00:00',
+                        'dispatch'          => null,
+                        'sameDayCutoffTime' => '09:30',
+                    ],
+                    [
+                        'cutoffTime'        => null,
+                        'date'              => '2022-01-05 00:00:00',
+                        'dispatch'          => false,
+                        'sameDayCutoffTime' => null,
+                    ],
+                    [
+                        'cutoffTime'        => null,
+                        'date'              => '2022-01-07 00:00:00',
+                        'dispatch'          => null,
+                        'sameDayCutoffTime' => '08:00',
+                    ],
+                    [
+                        'cutoffTime'        => null,
+                        'date'              => '2022-01-11 00:00:00',
+                        'dispatch'          => null,
+                        'sameDayCutoffTime' => '09:30',
+                    ],
                 ],
             ],
         ],
@@ -116,7 +172,7 @@ it('returns correct delivery days using a specific date', function (
             '0.cutoffTime'        => '17:00',
             '0.date'              => '2022-01-03 00:00:00',
             '0.dispatch'          => true,
-            '0.sameDayCutoffTime' => null,
+            '0.sameDayCutoffTime' => '10:00',
             '0.weekday'           => DropOffDay::WEEKDAY_MONDAY,
 
             '1.cutoffTime'        => '20:00', // deviation
@@ -150,7 +206,7 @@ it('returns correct delivery days using a specific date', function (
             '5.cutoffTime'        => '17:00',
             '5.date'              => '2022-01-10 00:00:00',
             '5.dispatch'          => true,
-            '5.sameDayCutoffTime' => null,
+            '5.sameDayCutoffTime' => '10:00',
             '5.weekday'           => DropOffDay::WEEKDAY_MONDAY,
 
             '6.cutoffTime'        => '15:00',
@@ -165,14 +221,14 @@ it('returns correct delivery days using a specific date', function (
 
 $dataset = [
     'deliveryDaysWindow 0' => [
-        'settingsOverrides' => ['carrier.0.dropOffPossibilities.deliveryDaysWindow' => 1],
+        'settingsOverrides' => ['deliveryDaysWindow' => 1, 'dropOffPossibilities' => ['dropOffDays' => DROP_OFF_DAYS]],
         'amountOfItems'     => 1,
     ],
 ];
 
 for ($i = 1; $i < 14; $i++) {
     $dataset["deliveryDaysWindow $i"] = [
-        'settingsOverrides' => ['carrier.0.dropOffPossibilities.deliveryDaysWindow' => $i],
+        'settingsOverrides' => ['deliveryDaysWindow' => $i, 'dropOffPossibilities' => ['dropOffDays' => DROP_OFF_DAYS]],
         'amountOfItems'     => $i,
     ];
 }
@@ -183,8 +239,13 @@ it('returns correct amount of delivery days', function (array $settingsOverrides
     createPdk($settingsOverrides);
 
     /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
-    $carrierSettings = Settings::get('carrier.0');
-    $deliveryDays    = $carrierSettings->dropOffPossibilities->getPossibleDropOffDays();
+    $carrierSettings = Settings::get('carrier')
+        ->get('0');
+
+    /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
+    $service = Pdk::get(DropOffServiceInterface::class);
+
+    $deliveryDays = $service->getPossibleDropOffDays($carrierSettings, new DateTimeImmutable('2022-01-03 00:00:00'));
 
     expect($deliveryDays->toArray())->toHaveLength($amountOfItems);
 })->with('deliveryDaysAmountDataset');
