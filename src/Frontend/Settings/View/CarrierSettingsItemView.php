@@ -191,7 +191,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         if (count($insuranceAmounts)) {
             $options = array_map(function (int $amount) {
-                return $this->currencyService->format($this->currencyService->convertToCents($amount));
+                return $this->currencyService->format($amount);
             }, array_combine($insuranceAmounts, $insuranceAmounts));
 
             return new InteractiveElement(
