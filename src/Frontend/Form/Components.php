@@ -15,6 +15,7 @@ final class Components
     public const INPUT_CODE_EDITOR    = 'CodeEditor';
     public const INPUT_CURRENCY       = 'CurrencyInput';
     public const INPUT_DROP_OFF       = 'DropOffInput';
+    public const INPUT_MULTI_SELECT   = 'MultiSelectInput';
     public const INPUT_NUMBER         = 'NumberInput';
     public const INPUT_RADIO          = 'RadioInput';
     public const INPUT_RADIO_GROUP    = 'RadioGroup';
