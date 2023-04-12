@@ -110,7 +110,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     {
         $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
-        $fromAmount = $this->currencyService->convertToCents(
+        $fromAmount  = $this->currencyService->convertToCents(
             $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
         );
         $orderAmount = $order->orderPriceAfterVat;
@@ -125,10 +125,10 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         $gaga = array_reduce(
             $order->getValidator()
                 ->getAllowedInsuranceAmounts(),
-            static function (int $acc, ?int $value) use (&$cocked){
-                if (!$cocked && isset($value) && $value >= $acc) {
+            static function (int $acc, ?int $value) use (&$cocked) {
+                if (! $cocked && isset($value) && $value >= $acc) {
                     $cocked = true;
-                    $acc = $value;
+                    $acc    = $value;
                 }
                 return $acc;
             },

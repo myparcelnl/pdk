@@ -22,6 +22,16 @@ abstract class AbstractSettingsView implements Arrayable
 
     protected $cache = [];
 
+    /**
+     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     */
+    abstract protected function createElements(): ?FormElementCollection;
+
+    /**
+     * @return string
+     */
+    abstract protected function getSettingsId(): string;
+
     public function getChildren(): ?array
     {
         if (! array_key_exists('children', $this->cache)) {
@@ -108,11 +118,6 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
-     */
-    abstract protected function createElements(): ?FormElementCollection;
-
-    /**
      * @param  string ...$keys
      *
      * @return string
@@ -182,11 +187,6 @@ abstract class AbstractSettingsView implements Arrayable
     {
         return Str::snake(sprintf('%s_%s_%s', self::KEY_PREFIX, $this->getSettingsId(), $name));
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getSettingsId(): string;
 
     /**
      * @param  array $array

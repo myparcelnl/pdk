@@ -20,6 +20,6 @@ interface ApiServiceInterface
      */
     public function doRequest(
         RequestInterface $request,
-        string                                       $responseClass = ApiResponse::class
+        string           $responseClass = ApiResponse::class
     ): ApiResponseInterface;
 }

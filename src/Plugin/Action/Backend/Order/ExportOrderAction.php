@@ -110,7 +110,7 @@ class ExportOrderAction extends AbstractOrderAction
             return $orders;
         }
 
-        $concepts  = $this->shipmentRepository->createConcepts($shipments);
+        $concepts = $this->shipmentRepository->createConcepts($shipments);
 
         $orders->updateShipments($concepts);
 

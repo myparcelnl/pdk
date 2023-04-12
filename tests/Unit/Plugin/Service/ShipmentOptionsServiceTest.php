@@ -101,7 +101,9 @@ function mockPdk(array $carrierSettings = [], array $products = []): void
 
 function expectShipmentOptionToEqual(PdkOrder $order, array $options): void
 {
-    expect($order->deliveryOptions->shipmentOptions)->toArray()->toHaveKeysAndValues($options);
+    expect($order->deliveryOptions->shipmentOptions)
+        ->toArray()
+        ->toHaveKeysAndValues($options);
 }
 
 it('inherits shipment option from carrier settings', function (array $option, string $key) {

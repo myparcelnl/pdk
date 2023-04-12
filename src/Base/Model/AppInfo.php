@@ -13,7 +13,7 @@ namespace MyParcelNL\Pdk\Base\Model;
  */
 class AppInfo extends Model
 {
-    public $attributes = [
+    public    $attributes = [
         'name'    => null,
         'title'   => null,
         'version' => null,
@@ -21,7 +21,7 @@ class AppInfo extends Model
         'url'     => null,
     ];
 
-    protected $casts = [
+    protected $casts      = [
         'name'    => 'string',
         'title'   => 'string',
         'version' => 'string',

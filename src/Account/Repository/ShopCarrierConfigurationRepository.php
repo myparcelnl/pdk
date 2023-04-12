@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Repository;
 
+use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
 use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationRequest;
 use MyParcelNL\Pdk\Account\Request\GetShopCarrierConfigurationsRequest;
 use MyParcelNL\Pdk\Account\Response\GetShopCarrierConfigurationsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
 
 class ShopCarrierConfigurationRepository extends ApiRepository
 {

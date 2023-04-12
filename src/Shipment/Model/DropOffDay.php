@@ -25,6 +25,15 @@ class DropOffDay extends Model
     public const WEEKDAY_FRIDAY    = 5;
     public const WEEKDAY_SATURDAY  = 6;
     public const WEEKDAY_SUNDAY    = 0;
+    public const WEEKDAYS          = [
+        self::WEEKDAY_MONDAY,
+        self::WEEKDAY_TUESDAY,
+        self::WEEKDAY_WEDNESDAY,
+        self::WEEKDAY_THURSDAY,
+        self::WEEKDAY_FRIDAY,
+        self::WEEKDAY_SATURDAY,
+        self::WEEKDAY_SUNDAY,
+    ];
 
     protected $attributes = [
         'cutoffTime'        => null,

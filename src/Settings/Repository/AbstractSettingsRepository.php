@@ -15,6 +15,21 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 abstract class AbstractSettingsRepository extends ApiRepository implements SettingsRepositoryInterface
 {
     /**
+     * @param  string $namespace
+     *
+     * @return array|\MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel
+     */
+    abstract public function getGroup(string $namespace);
+
+    /**
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return void
+     */
+    abstract protected function store(string $key, $value): void;
+
+    /**
      * @return \MyParcelNL\Pdk\Settings\Model\Settings
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -60,13 +75,6 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
     }
 
     /**
-     * @param  string $namespace
-     *
-     * @return array|\MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel
-     */
-    abstract public function getGroup(string $namespace);
-
-    /**
      * @param  AbstractSettingsModel|SettingsModelCollection $settings
      *
      * @return void
@@ -93,14 +101,6 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
     {
         return 'settings_';
     }
-
-    /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    abstract protected function store(string $key, $value): void;
 
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\Settings                     $settings

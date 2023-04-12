@@ -52,7 +52,7 @@ it('exports order to shipment', function ($orders) {
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
-   expect($response)
+    expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($responseOrders)
         ->toHaveLength(count($orders))

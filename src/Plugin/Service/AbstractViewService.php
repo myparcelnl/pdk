@@ -29,6 +29,8 @@ abstract class AbstractViewService implements ViewServiceInterface
      */
     public function isAnyPdkPage(): bool
     {
-        return $this->isOrderListPage() || $this->isOrderPage() || $this->isProductPage() || $this->isPluginSettingsPage();
+        return $this->isOrderListPage() || $this->isOrderPage()
+            || $this->isProductPage()
+            || $this->isPluginSettingsPage();
     }
 }
