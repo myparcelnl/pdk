@@ -1,5 +1,6 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection */
+
+/** @noinspection StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection,AutoloadingIssuesInspection */
 
 declare(strict_types=1);
 
