@@ -16,7 +16,7 @@ class PdkEndpoint implements PdkApiInterface
 {
     public const CONTEXT_BACKEND  = 'backend';
     public const CONTEXT_FRONTEND = 'frontend';
-    public const CONTEXT_SHARED = 'shared';
+    public const CONTEXT_SHARED   = 'shared';
     public const CONTEXTS         = [
         self::CONTEXT_BACKEND,
         self::CONTEXT_FRONTEND,

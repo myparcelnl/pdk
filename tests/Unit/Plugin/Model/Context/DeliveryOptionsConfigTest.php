@@ -5,15 +5,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Model\Context;
 
-use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
@@ -80,7 +77,7 @@ it('can be instantiated from a cart', function () {
             'allowRetry'                 => false,
             'basePrice'                  => 695,
             'carrierSettings'            => [
-                'postnl' => [
+                'postnl'         => [
                     'allowDeliveryOptions'         => false,
                     'allowEveningDelivery'         => false,
                     'allowMondayDelivery'          => false,

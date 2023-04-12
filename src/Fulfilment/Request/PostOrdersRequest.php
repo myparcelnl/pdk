@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
-use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 
 class PostOrdersRequest extends Request
 {
@@ -115,11 +114,11 @@ class PostOrdersRequest extends Request
      */
     private function getShipment(Order $order): ?array
     {
-        $shipment               = $order->shipment;
-        $shipment->recipient    = $this->getAddress($shipment->recipient);
-        $shipment->pickup       = $this->getAddress($shipment->pickup);
+        $shipment                     = $order->shipment;
+        $shipment->recipient          = $this->getAddress($shipment->recipient);
+        $shipment->pickup             = $this->getAddress($shipment->pickup);
         $shipment->options->insurance = ['amount' => $shipment->options->insurance, 'currency' => 'EUR'];
-        $shipment->options      = array_map(static function ($item) {
+        $shipment->options            = array_map(static function ($item) {
             return is_bool($item) ? (int) $item : $item;
         }, $shipment->options->toSnakeCaseArray());
 

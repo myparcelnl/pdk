@@ -92,8 +92,8 @@ it('can render a settings view', function (array $data) {
                     ],
                     [
                         '$component' => 'plain-test',
-                        '$slot'       => null,
-                        '$wrapper'    => false,
+                        '$slot'      => null,
+                        '$wrapper'   => false,
                         'prop'       => 'value',
                     ],
                 ],

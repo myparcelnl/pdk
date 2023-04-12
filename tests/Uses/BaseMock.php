@@ -12,5 +12,4 @@ namespace MyParcelNL\Pdk\Tests\Uses;
  */
 interface BaseMock
 {
-
 }

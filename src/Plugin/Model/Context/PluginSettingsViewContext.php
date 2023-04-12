@@ -46,8 +46,7 @@ class PluginSettingsViewContext implements Arrayable
      */
     public function __construct()
     {
-        if (AccountSettings::getAccount()){
-
+        if (AccountSettings::getAccount()) {
         }
 
         foreach (self::ID_VIEW_MAP as $id => $viewClass) {

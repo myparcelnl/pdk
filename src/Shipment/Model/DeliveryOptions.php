@@ -57,14 +57,14 @@ class DeliveryOptions extends Model
     /**
      * @var array
      */
-    public const DELIVERY_TYPES_NAMES_IDS_MAP    = [
+    public const DELIVERY_TYPES_NAMES_IDS_MAP = [
         self::DELIVERY_TYPE_MORNING_NAME  => self::DELIVERY_TYPE_MORNING_ID,
         self::DELIVERY_TYPE_STANDARD_NAME => self::DELIVERY_TYPE_STANDARD_ID,
         self::DELIVERY_TYPE_EVENING_NAME  => self::DELIVERY_TYPE_EVENING_ID,
         self::DELIVERY_TYPE_PICKUP_NAME   => self::DELIVERY_TYPE_PICKUP_ID,
     ];
-    public const DEFAULT_DELIVERY_TYPE_ID        = self::DELIVERY_TYPE_STANDARD_ID;
-    public const DEFAULT_DELIVERY_TYPE_NAME      = self::DELIVERY_TYPE_STANDARD_NAME;
+    public const DEFAULT_DELIVERY_TYPE_ID     = self::DELIVERY_TYPE_STANDARD_ID;
+    public const DEFAULT_DELIVERY_TYPE_NAME   = self::DELIVERY_TYPE_STANDARD_NAME;
     /**
      * Package types
      */
