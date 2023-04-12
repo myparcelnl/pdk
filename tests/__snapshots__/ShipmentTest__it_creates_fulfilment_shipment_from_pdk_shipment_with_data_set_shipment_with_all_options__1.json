@@ -1,79 +1,81 @@
 {
-  "carrier": 1,
-  "contractId": null,
-  "customsDeclaration": {
-    "contents": 0,
-    "invoice": "ABC123456",
-    "items": [
-      {
-        "amount": 10,
-        "classification": "12345",
-        "country": "NL",
-        "description": "A word",
-        "itemValue": {
-          "amount": 100,
-          "currency": "EUR"
-        },
-        "weight": 100
-      }
-    ],
-    "weight": 1000
-  },
-  "options": {
-    "ageCheck": null,
-    "collect": null,
-    "cooledDelivery": null,
-    "deliveryDate": null,
-    "deliveryType": 2,
-    "hideSender": null,
-    "insurance": null,
-    "labelDescription": "",
-    "largeFormat": null,
-    "onlyRecipient": null,
-    "packageType": 1,
-    "return": null,
-    "sameDayDelivery": null,
-    "saturdayDelivery": null,
-    "signature": null
-  },
-  "pickup": {
-    "boxNumber": null,
-    "cc": null,
-    "city": null,
-    "fullStreet": null,
-    "number": null,
-    "numberSuffix": null,
-    "postalCode": null,
-    "region": null,
-    "state": null,
-    "street": null,
-    "streetAdditionalInfo": null,
-    "locationCode": "34653",
-    "locationName": null,
-    "retailNetworkId": null
-  },
-  "recipient": {
-    "boxNumber": null,
-    "cc": "NL",
-    "city": "Hoofddorp",
-    "fullStreet": "Antareslaan 31",
-    "number": "31",
-    "numberSuffix": null,
-    "postalCode": "2132JE",
-    "region": null,
-    "state": null,
-    "street": "Antareslaan",
-    "streetAdditionalInfo": null,
-    "email": "test@myparcel.nl",
-    "phone": "0612345678",
-    "person": "Felicia Parcel",
-    "company": "MyParcel"
-  },
-  "physicalProperties": {
-    "height": 0,
-    "length": 0,
-    "weight": 0,
-    "width": 0
-  },
-  "dropOffPoint": null
+    "carrier": 1,
+    "contractId": null,
+    "customsDeclaration": {
+        "contents": 0,
+        "invoice": "ABC123456",
+        "items": [
+            {
+                "amount": 10,
+                "classification": "12345",
+                "country": "NL",
+                "description": "A word",
+                "itemValue": {
+                    "amount": 100,
+                    "currency": "EUR"
+                },
+                "weight": 100
+            }
+        ],
+        "weight": 1000
+    },
+    "options": {
+        "ageCheck": null,
+        "collect": null,
+        "cooledDelivery": null,
+        "deliveryDate": null,
+        "deliveryType": 2,
+        "hideSender": null,
+        "insurance": null,
+        "labelDescription": "",
+        "largeFormat": null,
+        "onlyRecipient": null,
+        "packageType": 1,
+        "return": null,
+        "sameDayDelivery": null,
+        "saturdayDelivery": null,
+        "signature": null
+    },
+    "pickup": {
+        "boxNumber": null,
+        "cc": null,
+        "city": null,
+        "fullStreet": null,
+        "number": null,
+        "numberSuffix": null,
+        "postalCode": null,
+        "region": null,
+        "state": null,
+        "street": null,
+        "streetAdditionalInfo": null,
+        "locationCode": "34653",
+        "locationName": null,
+        "retailNetworkId": null
+    },
+    "recipient": {
+        "boxNumber": null,
+        "cc": "NL",
+        "city": "Hoofddorp",
+        "fullStreet": "Antareslaan 31",
+        "number": "31",
+        "numberSuffix": null,
+        "postalCode": "2132JE",
+        "region": null,
+        "state": null,
+        "street": "Antareslaan",
+        "streetAdditionalInfo": null,
+        "email": "test@myparcel.nl",
+        "phone": "0612345678",
+        "person": "Felicia Parcel",
+        "company": "MyParcel",
+        "eori": null,
+        "vat": null
+    },
+    "physicalProperties": {
+        "height": 0,
+        "length": 0,
+        "weight": 0,
+        "width": 0
+    },
+    "dropOffPoint": null
 }
