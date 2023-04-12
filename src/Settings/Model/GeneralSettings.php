@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
 /**
  * @property bool        $apiLogging
  * @property bool        $barcodeInNote
+ * @property null|string $barcodeInNoteTitle
  * @property bool        $conceptShipments
  * @property null|string $exportWithAutomaticStatus
  * @property bool        $orderMode
