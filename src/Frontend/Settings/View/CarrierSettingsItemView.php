@@ -58,77 +58,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
     }
 
     /**
-     * @return array
-     */
-    public function getDateFields(): array
-    {
-        return [
-            new InteractiveElement(
-                CarrierSettings::SHOW_DELIVERY_DAY,
-                Components::INPUT_TOGGLE,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
-            ),
-            new InteractiveElement(
-                CarrierSettings::DROP_OFF_POSSIBILITIES,
-                Components::INPUT_DROP_OFF,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
-            ),
-        ];
-    }
-
-    /**
      * @return string
      */
     public function getDescription(): string
     {
         return $this->createLabel('view', $this->getSettingsId(), 'description');
-    }
-
-    /**
-     * @return array
-     */
-    public function getEveningDeliveryFields(): array
-    {
-        return [
-            new InteractiveElement(
-                CarrierSettings::ALLOW_EVENING_DELIVERY, Components::INPUT_TOGGLE,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
-            ),
-            new InteractiveElement(
-                CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
-                Components::INPUT_CURRENCY,
-                [
-                    '$visibleWhen' => [
-                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                        CarrierSettings::ALLOW_EVENING_DELIVERY => true,
-                    ],
-                ]
-            ),
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getMorningDeliveryFields(): array
-    {
-        return [
-            new InteractiveElement(
-                CarrierSettings::ALLOW_MORNING_DELIVERY, Components::INPUT_TOGGLE,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
-            ),
-
-            new InteractiveElement(
-                CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
-                Components::INPUT_CURRENCY,
-                [
-                    '$visibleWhen' => [
-                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                        CarrierSettings::ALLOW_MORNING_DELIVERY => true,
-                    ],
-                ]
-            ),
-        ];
     }
 
     /**
@@ -142,7 +76,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): FormElementCollection
+    protected function createElements(): FormElementCollection
     {
         if (empty($this->elements)) {
             $this->elements = $this->gatherElements();
@@ -198,10 +132,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 $name,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions($options, false, true),
-                    '$visibleWhen' => [
-                        CarrierSettings::EXPORT_INSURANCE => true,
-                    ],
+                    '$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true],
+                    'options'      => $this->toSelectOptions($options, false, true),
                 ]
             );
         }
@@ -278,11 +210,77 @@ class CarrierSettingsItemView extends AbstractSettingsView
     }
 
     /**
+     * @return array
+     */
+    private function getDateFields(): array
+    {
+        return [
+            new InteractiveElement(
+                CarrierSettings::SHOW_DELIVERY_DAY,
+                Components::INPUT_TOGGLE,
+                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+            ),
+            new InteractiveElement(
+                CarrierSettings::DROP_OFF_POSSIBILITIES,
+                Components::INPUT_DROP_OFF,
+                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+            ),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getEveningDeliveryFields(): array
+    {
+        return [
+            new InteractiveElement(
+                CarrierSettings::ALLOW_EVENING_DELIVERY, Components::INPUT_TOGGLE,
+                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+            ),
+            new InteractiveElement(
+                CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
+                Components::INPUT_CURRENCY,
+                [
+                    '$visibleWhen' => [
+                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+                        CarrierSettings::ALLOW_EVENING_DELIVERY => true,
+                    ],
+                ]
+            ),
+        ];
+    }
+
+    /**
      * @return string
      */
     private function getFormattedCarrierName(): string
     {
         return Str::snake(str_replace('.', '_', $this->carrierOptions->carrier->name));
+    }
+
+    /**
+     * @return array
+     */
+    private function getMorningDeliveryFields(): array
+    {
+        return [
+            new InteractiveElement(
+                CarrierSettings::ALLOW_MORNING_DELIVERY, Components::INPUT_TOGGLE,
+                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+            ),
+
+            new InteractiveElement(
+                CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
+                Components::INPUT_CURRENCY,
+                [
+                    '$visibleWhen' => [
+                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+                        CarrierSettings::ALLOW_MORNING_DELIVERY => true,
+                    ],
+                ]
+            ),
+        ];
     }
 
     private function getOnlyRecipientFields(): array
@@ -307,11 +305,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         $fields = [
             $this->createDeliveryOptionsField(CarrierSettings::DEFAULT_PACKAGE_TYPE, Components::INPUT_SELECT, [
-                'options' => $this->toSelectOptions(
-                    array_map(static function (string $packageTypeName) {
-                        return "package_type_$packageTypeName";
-                    }, $allowedPackageTypes)
-                ),
+                'options' => $this->createPackageTypeOptions($allowedPackageTypes),
             ]),
         ];
 

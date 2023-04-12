@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Support\Collection;
-
 /**
- * @property int|null           $emptyDigitalStampWeight
- * @property int|null           $emptyParcelWeight
- * @property string|null        $ignoreOrderStatuses
- * @property bool               $orderStatusMail
- * @property bool               $saveCustomerAddress
- * @property string|null        $sendNotificationAfter
- * @property bool               $sendOrderStateForDigitalStamps
- * @property string|null        $statusOnLabelCreate
- * @property string|null        $statusWhenDelivered
- * @property string|null        $statusWhenLabelScanned
- * @property Collection<string> $enabledPackageTypes
+ * @property int|null    $emptyDigitalStampWeight
+ * @property int|null    $emptyParcelWeight
+ * @property string|null $ignoreOrderStatuses
+ * @property bool        $orderStatusMail
+ * @property bool        $saveCustomerAddress
+ * @property string|null $sendNotificationAfter
+ * @property bool        $sendOrderStateForDigitalStamps
+ * @property string|null $statusOnLabelCreate
+ * @property string|null $statusWhenDelivered
+ * @property string|null $statusWhenLabelScanned
  */
 class OrderSettings extends AbstractSettingsModel
 {
@@ -31,7 +28,6 @@ class OrderSettings extends AbstractSettingsModel
     public const EMPTY_DIGITAL_STAMP_WEIGHT         = 'emptyDigitalStampWeight';
     public const EMPTY_MAILBOX_WEIGHT               = 'emptyMailboxWeight';
     public const EMPTY_PARCEL_WEIGHT                = 'emptyParcelWeight';
-    public const ENABLED_PACKAGE_TYPES              = 'enabledPackageTypes';
     public const IGNORE_ORDER_STATUSES              = 'ignoreOrderStatuses';
     public const ORDER_STATUS_MAIL                  = 'orderStatusMail';
     public const SAVE_CUSTOMER_ADDRESS              = 'saveCustomerAddress';
@@ -47,7 +43,6 @@ class OrderSettings extends AbstractSettingsModel
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => null,
         self::EMPTY_MAILBOX_WEIGHT               => null,
         self::EMPTY_PARCEL_WEIGHT                => null,
-        self::ENABLED_PACKAGE_TYPES              => Collection::class,
         self::IGNORE_ORDER_STATUSES              => null,
         self::ORDER_STATUS_MAIL                  => true,
         self::SAVE_CUSTOMER_ADDRESS              => false,
@@ -61,7 +56,6 @@ class OrderSettings extends AbstractSettingsModel
     protected $casts      = [
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => 'int',
         self::EMPTY_PARCEL_WEIGHT                => 'int',
-        self::ENABLED_PACKAGE_TYPES              => Collection::class,
         self::IGNORE_ORDER_STATUSES              => 'string',
         self::ORDER_STATUS_MAIL                  => 'bool',
         self::SAVE_CUSTOMER_ADDRESS              => 'bool',

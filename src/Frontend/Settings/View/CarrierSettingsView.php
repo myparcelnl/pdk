@@ -26,7 +26,7 @@ class CarrierSettingsView extends AbstractSettingsView
      * @return \MyParcelNL\Pdk\Base\Support\Collection
      * @throws \Exception
      */
-    protected function getChildren(): ?Collection
+    protected function createChildren(): ?Collection
     {
         $array = [];
 
@@ -41,7 +41,7 @@ class CarrierSettingsView extends AbstractSettingsView
     /**
      * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): ?FormElementCollection
+    protected function createElements(): ?FormElementCollection
     {
         return null;
     }
