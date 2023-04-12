@@ -3,7 +3,8 @@
     <option name="AUTODETECT_INDENTS" value="false" />
     <option name="OTHER_INDENT_OPTIONS">
       <value>
-        <option name="USE_TAB_CHARACTER" value="true" />
+        <option name="INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
       </value>
     </option>
     <option name="LINE_SEPARATOR" value="&#10;" />
@@ -105,9 +106,10 @@
       <option name="MIN_LINES_AROUND_HEADER" value="0" />
       <option name="MIN_LINES_AROUND_BLOCK_ELEMENTS" value="0" />
       <option name="MIN_LINES_BETWEEN_PARAGRAPHS" value="0" />
+      <option name="WRAP_TEXT_IF_LONG" value="false" />
+      <option name="WRAP_TEXT_INSIDE_BLOCKQUOTES" value="false" />
     </Markdown>
     <MySQLCodeStyleSettings version="6">
-      <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -181,12 +183,13 @@
       <option name="KEEP_SINGLE_LINE_BLOCKS" value="true" />
     </ScssCodeStyleSettings>
     <SqlCodeStyleSettings version="6">
+      <option name="KEYWORD_CASE" value="2" />
       <option name="IDENTIFIER_CASE" value="1" />
-      <option name="CUSTOM_TYPE_CASE" value="0" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
       <option name="ALIAS_CASE" value="1" />
       <option name="QUOTED_IDENTIFIER_CASE" value="1" />
-      <option name="QUOTE_IDENTIFIER" value="1" />
-      <option name="QUOTE_TYPE" value="11" />
+      <option name="QUOTE_TYPE" value="31" />
       <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="IMP_DECLARE_ALIGN_TYPE" value="false" />
       <option name="IMP_DECLARE_ALIGN_EQ" value="false" />
@@ -210,20 +213,20 @@
       <option name="PREFER_AS_TYPE_CAST" value="true" />
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="FORCE_QUOTE_STYlE" value="true" />
-      <option name="PREFER_EXPLICIT_TYPES_VARS_FIELDS" value="true" />
       <option name="PREFER_EXPLICIT_TYPES_FUNCTION_RETURNS" value="true" />
       <option name="PREFER_EXPLICIT_TYPES_FUNCTION_EXPRESSION_RETURNS" value="true" />
       <option name="ENFORCE_TRAILING_COMMA" value="WhenMultiline" />
       <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
       <option name="USE_CHAINED_CALLS_GROUP_INDENTS" value="true" />
       <option name="IMPORT_SORT_MEMBERS" value="false" />
+      <option name="USE_PATH_MAPPING" value="DIFFERENT_PATHS" />
     </TypeScriptCodeStyleSettings>
+    <VueCodeStyleSettings>
+      <option name="UNIFORM_INDENT" value="false" />
+    </VueCodeStyleSettings>
     <XML>
       <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
     </XML>
-    <editorconfig>
-      <option name="ENABLED" value="false" />
-    </editorconfig>
     <codeStyleSettings language="Blade">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
@@ -1275,8 +1278,8 @@
       <option name="SPACE_WITHIN_BRACKETS" value="true" />
       <option name="SPACE_WITHIN_BRACES" value="true" />
       <indentOptions>
-        <option name="INDENT_SIZE" value="4" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JavaScript">
@@ -1390,9 +1393,12 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="Markdown">
-      <option name="RIGHT_MARGIN" value="80" />
+      <option name="RIGHT_MARGIN" value="999" />
+      <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="MySQL">
@@ -1543,6 +1549,20 @@
           <section>
             <rule>
               <match>
+                <TRAIT>true</TRAIT>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <INTERFACE>true</INTERFACE>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
                 <AND>
                   <FIELD>true</FIELD>
                   <STATIC>true</STATIC>
@@ -1557,7 +1577,6 @@
               <match>
                 <AND>
                   <FIELD>true</FIELD>
-                  <STATIC>false</STATIC>
                   <visibility />
                 </AND>
               </match>
@@ -1575,18 +1594,6 @@
             <rule>
               <match>
                 <AND>
-                  <ABSTRACT>true</ABSTRACT>
-                  <METHOD>true</METHOD>
-                  <static />
-                </AND>
-              </match>
-              <order>BY_NAME</order>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
                   <METHOD>true</METHOD>
                   <STATIC>true</STATIC>
                   <visibility />
@@ -1599,12 +1606,30 @@
             <rule>
               <match>
                 <AND>
+                  <ABSTRACT>true</ABSTRACT>
                   <METHOD>true</METHOD>
-                  <STATIC>false</STATIC>
                   <visibility />
                 </AND>
               </match>
               <order>BY_NAME</order>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <AND>
+                  <METHOD>true</METHOD>
+                  <visibility />
+                </AND>
+              </match>
+              <order>BY_NAME</order>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <CLASS>true</CLASS>
+              </match>
             </rule>
           </section>
         </rules>
@@ -2626,6 +2651,8 @@
       </arrangement>
     </codeStyleSettings>
     <codeStyleSettings language="SQL">
+      <option name="KEEP_LINE_BREAKS" value="false" />
+      <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="2" />
