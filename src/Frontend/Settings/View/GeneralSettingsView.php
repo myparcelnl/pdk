@@ -17,7 +17,7 @@ class GeneralSettingsView extends AbstractSettingsView
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): FormElementCollection
+    protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
             new InteractiveElement(GeneralSettings::API_LOGGING, Components::INPUT_TOGGLE),

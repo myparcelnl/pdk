@@ -34,12 +34,12 @@ final class MockSettingsView extends AbstractSettingsView
         return 'test';
     }
 
-    protected function getChildren(): ?Collection
+    protected function createChildren(): ?Collection
     {
         return $this->children;
     }
 
-    protected function getElements(): ?FormElementCollection
+    protected function createElements(): ?FormElementCollection
     {
         return $this->elements;
     }

@@ -9,6 +9,8 @@ use MyParcelNL\Pdk\Plugin\Model\PdkShippingMethod;
 
 interface PdkShippingMethodRepositoryInterface
 {
+    public function all(): PdkShippingMethodCollection;
+
     public function get($input): PdkShippingMethod;
 
     public function getMany($input): PdkShippingMethodCollection;

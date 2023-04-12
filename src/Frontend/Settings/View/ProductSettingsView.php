@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
 use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
+use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -32,35 +33,55 @@ class ProductSettingsView extends AbstractSettingsView
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): FormElementCollection
+    protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
-            new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRISTATE),
+            new InteractiveElement(
+                ProductSettings::PACKAGE_TYPE,
+                Components::INPUT_SELECT,
+                ['options' => $this->createPackageTypeOptions()]
+            ),
+
+            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER, ['min' => 0]),
+
+            /**
+             * Delivery options.
+             */
+            new SettingsDivider($this->getSettingKey('delivery_options')),
+            new InteractiveElement(
+                ProductSettings::DROP_OFF_DELAY,
+                Components::INPUT_NUMBER,
+                [
+                    'min' => Pdk::get('dropOffDelayMinimum'),
+                    'max' => Pdk::get('dropOffDelayMaximum'),
+                ]
+            ),
+            new InteractiveElement(ProductSettings::DISABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
+
+            /**
+             * Customs options.
+             */
+            new SettingsDivider($this->getSettingKey('customs_options')),
             new InteractiveElement(
                 ProductSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
                 ['options' => $this->toSelectOptions($this->countryService->getAllTranslatable(), true)]
             ),
-            new InteractiveElement(ProductSettings::CUSTOMS_CODE, Components::INPUT_TEXT),
-            new InteractiveElement(ProductSettings::DISABLE_DELIVERY_OPTIONS, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::DROP_OFF_DELAY, Components::INPUT_NUMBER),
+            new InteractiveElement(
+                ProductSettings::CUSTOMS_CODE,
+                Components::INPUT_TEXT,
+                ['maxlength' => Pdk::get('customsCodeMaxLength')]
+            ),
+
+            /**
+             * Export options.
+             */
+            new SettingsDivider($this->getSettingKey('export_options')),
             new InteractiveElement(ProductSettings::EXPORT_AGE_CHECK, Components::INPUT_TRISTATE),
             new InteractiveElement(ProductSettings::EXPORT_INSURANCE, Components::INPUT_TRISTATE),
             new InteractiveElement(ProductSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TRISTATE),
-            new InteractiveElement(
-                ProductSettings::PACKAGE_TYPE,
-                Components::INPUT_SELECT,
-                [
-                    'options' => $this->toSelectOptions([
-                        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => 'package_type_package',
-                        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 'package_type_mailbox',
-                        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 'package_type_digital_stamp',
-                        DeliveryOptions::PACKAGE_TYPE_LETTER_NAME        => 'package_type_letter',
-                    ]),
-                ]
-            ),
-            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER),
+            new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRISTATE),
+            new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRISTATE),
             new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRISTATE),
         ]);
     }

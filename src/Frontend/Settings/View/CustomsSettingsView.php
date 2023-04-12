@@ -28,7 +28,7 @@ class CustomsSettingsView extends AbstractSettingsView
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): FormElementCollection
+    protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
             new InteractiveElement(

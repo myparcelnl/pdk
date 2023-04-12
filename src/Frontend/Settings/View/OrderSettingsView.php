@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -32,27 +31,11 @@ class OrderSettingsView extends AbstractSettingsView
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): FormElementCollection
+    protected function createElements(): FormElementCollection
     {
         $orderStatuses = $this->toSelectOptions($this->orderStatusService->all(), true, true);
-        $packageTypes  = $this->toSelectOptions(
-            array_combine(
-                DeliveryOptions::PACKAGE_TYPES_NAMES,
-                array_map(
-                    static function (string $packageTypeName): string {
-                        return "package_type_$packageTypeName";
-                    },
-                    DeliveryOptions::PACKAGE_TYPES_NAMES
-                )
-            )
-        );
 
         return new FormElementCollection([
-            new InteractiveElement(
-                OrderSettings::ENABLED_PACKAGE_TYPES,
-                Components::INPUT_MULTI_SELECT,
-                ['options' => $packageTypes]
-            ),
             new InteractiveElement(
                 OrderSettings::STATUS_ON_LABEL_CREATE,
                 Components::INPUT_SELECT,
@@ -78,10 +61,8 @@ class OrderSettingsView extends AbstractSettingsView
                 OrderSettings::SEND_NOTIFICATION_AFTER,
                 Components::INPUT_SELECT,
                 [
+                    '$visibleWhen' => [OrderSettings::ORDER_STATUS_MAIL => true],
                     'options'      => $orderStatuses,
-                    '$visibleWhen' => [
-                        OrderSettings::ORDER_STATUS_MAIL => true,
-                    ],
                 ]
             ),
             new InteractiveElement(OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMP, Components::INPUT_TOGGLE),

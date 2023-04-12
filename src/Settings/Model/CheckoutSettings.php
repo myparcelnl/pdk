@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
+use MyParcelNL\Pdk\Base\Support\Collection;
+
 /**
- * @property string $deliveryOptionsCustomCss
- * @property bool   $deliveryOptionsDisplay
- * @property string $deliveryOptionsHeader
- * @property string $deliveryOptionsPosition
- * @property string $pickupLocationsDefaultView
- * @property string $priceType
- * @property bool   $showDeliveryDay
- * @property bool   $useSeparateAddressFields
+ * @property \MyParcelNL\Pdk\Base\Support\Collection $allowedShippingMethods
+ * @property string                                  $deliveryOptionsCustomCss
+ * @property bool                                    $deliveryOptionsDisplay
+ * @property string                                  $deliveryOptionsHeader
+ * @property string                                  $deliveryOptionsPosition
+ * @property string                                  $pickupLocationsDefaultView
+ * @property string                                  $priceType
+ * @property bool                                    $showDeliveryDay
+ * @property bool                                    $useSeparateAddressFields
  */
 class CheckoutSettings extends AbstractSettingsModel
 {
@@ -23,6 +26,7 @@ class CheckoutSettings extends AbstractSettingsModel
     /**
      * Settings in this category.
      */
+    public const ALLOWED_SHIPPING_METHODS                  = 'allowedShippingMethods';
     public const DELIVERY_OPTIONS_CUSTOM_CSS               = 'deliveryOptionsCustomCss';
     public const DELIVERY_OPTIONS_DISPLAY                  = 'deliveryOptionsDisplay';
     public const DELIVERY_OPTIONS_HEADER                   = 'deliveryOptionsHeader';
@@ -43,6 +47,7 @@ class CheckoutSettings extends AbstractSettingsModel
     protected $attributes = [
         'id' => self::ID,
 
+        self::ALLOWED_SHIPPING_METHODS                  => [],
         self::DELIVERY_OPTIONS_CUSTOM_CSS               => null,
         self::DELIVERY_OPTIONS_DISPLAY                  => false,
         self::DELIVERY_OPTIONS_HEADER                   => null,
@@ -55,6 +60,7 @@ class CheckoutSettings extends AbstractSettingsModel
     ];
 
     protected $casts      = [
+        self::ALLOWED_SHIPPING_METHODS                  => Collection::class,
         self::DELIVERY_OPTIONS_CUSTOM_CSS               => 'string',
         self::DELIVERY_OPTIONS_DISPLAY                  => 'bool',
         self::DELIVERY_OPTIONS_HEADER                   => 'string',

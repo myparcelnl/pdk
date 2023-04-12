@@ -17,7 +17,7 @@ class LabelSettingsView extends AbstractSettingsView
     /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function getElements(): FormElementCollection
+    protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
             new InteractiveElement(LabelSettings::DESCRIPTION, Components::INPUT_TEXT),
@@ -25,39 +25,33 @@ class LabelSettingsView extends AbstractSettingsView
                 LabelSettings::FORMAT,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions(
-                        [
-                            LabelSettings::FORMAT_A4 => 'settings_label_format_option_a4',
-                            LabelSettings::FORMAT_A6 => 'settings_label_format_option_a6',
-                        ]
-                    ),
+                    'options' => $this->createSelectOptions(LabelSettings::FORMAT, [
+                        LabelSettings::FORMAT_A4,
+                        LabelSettings::FORMAT_A6,
+                    ]),
                 ]
             ),
             new InteractiveElement(
                 LabelSettings::POSITION,
                 Components::INPUT_SELECT,
                 [
-                    'options'      => $this->toSelectOptions(
-                        [
-                            LabelSettings::POSITION_1 => 'settings_label_position_option_1',
-                            LabelSettings::POSITION_2 => 'settings_label_position_option_2',
-                            LabelSettings::POSITION_3 => 'settings_label_position_option_3',
-                            LabelSettings::POSITION_4 => 'settings_label_position_option_4',
-                        ]
-                    ),
                     '$visibleWhen' => [LabelSettings::FORMAT => LabelSettings::FORMAT_A4],
+                    'options'      => $this->createSelectOptions(LabelSettings::POSITION, [
+                        LabelSettings::POSITION_1,
+                        LabelSettings::POSITION_2,
+                        LabelSettings::POSITION_3,
+                        LabelSettings::POSITION_4,
+                    ]),
                 ]
             ),
             new InteractiveElement(
                 LabelSettings::OUTPUT,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions(
-                        [
-                            LabelSettings::OUTPUT_OPEN     => 'settings_label_output_option_open',
-                            LabelSettings::OUTPUT_DOWNLOAD => 'settings_label_output_option_download',
-                        ]
-                    ),
+                    'option' => $this->createSelectOptions(LabelSettings::OUTPUT, [
+                        LabelSettings::OUTPUT_OPEN,
+                        LabelSettings::OUTPUT_DOWNLOAD,
+                    ]),
                 ]
             ),
             new InteractiveElement(LabelSettings::PROMPT, Components::INPUT_TOGGLE),
