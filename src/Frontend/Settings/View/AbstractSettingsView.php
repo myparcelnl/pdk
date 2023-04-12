@@ -159,7 +159,7 @@ abstract class AbstractSettingsView implements Arrayable
             array_combine(
                 array_values($options),
                 array_map(function ($option) use ($settingsKey) {
-                    return $this->createOptionLabel($settingsKey, $option);
+                    return $this->createOptionLabel($settingsKey, (string) $option);
                 }, $options)
             )
         );
