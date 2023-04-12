@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@myparcel/prettier-config": "^1.1.0",
-    "@myparcel/semantic-release-config": "^4.2.3",
+    "@myparcel/semantic-release-config": "^5.0.0",
     "husky": "^8.0.3",
     "is-ci": "^3.0.1",
     "lint-staged": "^13.1.1",
