@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use function DI\env;
+use function DI\factory;
 use function DI\value;
 
 /**
@@ -67,6 +69,14 @@ return [
         CountryCodes::CC_NL,
         CountryCodes::CC_BE,
     ]),
+
+    /**
+     * The name of the hidden input in the checkout where delivery options are stored.
+     */
+
+    'checkoutHiddenInputName' => factory(function () {
+        return sprintf('%s_checkout_data', PdkFacade::getAppInfo()->name);
+    }),
 
     /**
      * Settings
