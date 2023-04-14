@@ -94,6 +94,10 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
         }
 
         return array_map(function ($value) use ($language) {
+            if (null === $value) {
+                return null;
+            }
+
             return is_array($value)
                 ? $this->translateArray($value, $language)
                 : $this->translate($value, $language);
