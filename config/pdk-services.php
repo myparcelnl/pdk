@@ -17,6 +17,10 @@ use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
+use MyParcelNL\Pdk\Plugin\Installer\Contract\InstallerServiceInterface;
+use MyParcelNL\Pdk\Plugin\Installer\Contract\MigrationServiceInterface;
+use MyParcelNL\Pdk\Plugin\Installer\InstallerService;
+use MyParcelNL\Pdk\Plugin\Installer\MigrationService;
 use MyParcelNL\Pdk\Plugin\Service\CartCalculationService;
 use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsService;
@@ -91,4 +95,14 @@ return [
      * Calculates shipment options from defaults and product settings.
      */
     ShipmentOptionsServiceInterface::class => autowire(ShipmentOptionsService::class),
+
+    /**
+     * Handles migrations.
+     */
+    MigrationServiceInterface::class       => autowire(MigrationService::class),
+
+    /**
+     * Handles installation.
+     */
+    InstallerServiceInterface::class       => autowire(InstallerService::class),
 ];

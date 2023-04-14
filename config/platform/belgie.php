@@ -13,11 +13,9 @@ return [
     'defaultCarrier'   => Carrier::CARRIER_BPOST_NAME,
     'defaultCarrierId' => Carrier::CARRIER_BPOST_ID,
 
-    'settings' => [
-        'defaults' => [
-            CheckoutSettings::ID => [
-                CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW => CheckoutSettings::PICKUP_LOCATIONS_VIEW_MAP,
-            ],
+    'defaultSettings' => [
+        CheckoutSettings::ID => [
+            CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW => CheckoutSettings::PICKUP_LOCATIONS_VIEW_MAP,
         ],
     ],
 ];

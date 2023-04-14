@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings;
 
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
@@ -49,5 +51,14 @@ class SettingsManager
         }
 
         return $this->repository->get($key);
+    }
+
+    /**
+     * @return array
+     * @noinspection PhpUnused
+     */
+    public function getDefaults(): array
+    {
+        return array_replace_recursive(Platform::get('defaultSettings') ?? [], Pdk::get('defaultSettings') ?? []);
     }
 }

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Repository;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Repository\ApiRepository;
+use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
-abstract class AbstractSettingsRepository extends ApiRepository implements SettingsRepositoryInterface
+abstract class AbstractSettingsRepository extends Repository implements SettingsRepositoryInterface
 {
     /**
      * @param  string $namespace
@@ -27,15 +27,14 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
      *
      * @return void
      */
-    abstract protected function store(string $key, $value): void;
+    abstract public function store(string $key, $value): void;
 
     /**
      * @return \MyParcelNL\Pdk\Settings\Model\Settings
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function all(): Settings
     {
-        return $this->retrieve('all', function () {
+        return $this->retrieveAll(function () {
             $settings = new Settings();
 
             foreach ($settings->getAttributes() as $settingsId => $settingsModelOrCollection) {
@@ -72,6 +71,19 @@ abstract class AbstractSettingsRepository extends ApiRepository implements Setti
         }
 
         return Arr::get($group, implode('.', $parts));
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
+     *
+     * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function storeAllSettings(Settings $settings): void
+    {
+        foreach (array_keys($settings->getAttributes()) as $attribute) {
+            $this->storeSettings($settings->getAttribute($attribute));
+        }
     }
 
     /**

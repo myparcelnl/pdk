@@ -82,6 +82,40 @@ return [
      * Settings
      */
 
+    'defaultSettings' => value([]),
+
+    'settingKeyPrefix' => factory(function () {
+        return sprintf('%s_', PdkFacade::getAppInfo()->name);
+    }),
+
+    'createSettingsKey' => factory(function () {
+        return static function (string $key) {
+            return sprintf('%s%s', PdkFacade::get('settingKeyPrefix'), $key);
+        };
+    }),
+
+    /** Settings key where the installed version of the plugin is saved. */
+
+    'settingKeyVersion' => factory(function () {
+        return PdkFacade::get('createSettingsKey')('version');
+    }),
+
+    /** Settings key where webhooks are saved */
+
+    'settingKeyWebhooks' => factory(function () {
+        return PdkFacade::get('createSettingsKey')('webhooks');
+    }),
+
+    /** Settings key where the hashed webhook url is saved */
+
+    'settingKeyWebhookHash' => factory(function () {
+        return PdkFacade::get('createSettingsKey')('webhook_hash');
+    }),
+
+    'settingKeyInstalledVersion' => factory(function () {
+        return PdkFacade::get('createSettingsKey')('installed_version');
+    }),
+
     'dropOffDelayMinimum' => value(0),
     'dropOffDelayMaximum' => value(14),
 

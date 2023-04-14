@@ -63,8 +63,9 @@ class Repository
             $this->storage->set($fullKey, $data);
         }
 
-        $var = $this->storage->get($fullKey);
-        return is_object($var) ? clone $var : $var;
+        $value = $this->storage->get($fullKey);
+
+        return is_object($value) ? clone $value : $value;
     }
 
     /**
@@ -76,6 +77,7 @@ class Repository
     public function save(string $key, $data)
     {
         $this->storage->set($this->getKeyPrefix() . $key, $data);
+        $this->storage->delete($this->getKeyPrefix() . $this->getAllStorageKey());
 
         return $data;
     }
@@ -97,8 +99,26 @@ class Repository
     /**
      * @return string
      */
+    protected function getAllStorageKey(): string
+    {
+        return 'all';
+    }
+
+    /**
+     * @return string
+     */
     protected function getKeyPrefix(): string
     {
         return '';
+    }
+
+    /**
+     * @param  callable $callback
+     *
+     * @return mixed
+     */
+    protected function retrieveAll(callable $callback)
+    {
+        return $this->retrieve($this->getAllStorageKey(), $callback);
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 
@@ -18,17 +16,16 @@ class MockSettingsRepository extends AbstractSettingsRepository
     private $settings;
 
     /**
-     * @param  array                                            $settings
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage       $storage
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api
+     * @param  array                                      $settings
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(array $settings = [], MemoryCacheStorage $storage, ApiServiceInterface $api)
+    public function __construct(array $settings = [], MemoryCacheStorage $storage)
     {
-        $this->settings = new Settings($settings);
+        $this->settings = $settings;
 
-        parent::__construct($storage, $api);
+        parent::__construct($storage);
     }
 
     /**
@@ -46,14 +43,10 @@ class MockSettingsRepository extends AbstractSettingsRepository
      * @param  mixed  $value
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    protected function store(string $key, $value): void
+    public function store(string $key, $value): void
     {
-        $array = $this->settings->toArray();
-
-        Arr::set($array, $key, $value);
-
-        $this->settings = new Settings($array);
+        Arr::set($this->settings, $key, $value);
+        $this->save($key, $value);
     }
 }

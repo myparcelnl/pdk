@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Settings\SettingsManager;
  * @method static mixed get(string $key, string $namespace = null)
  * @method static \MyParcelNL\Pdk\Settings\Model\Settings all()
  * @method static void persist()
+ * @method static array getDefaults()
  * @implements \MyParcelNL\Pdk\Settings\SettingsManager
  */
 class Settings extends Facade

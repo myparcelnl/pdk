@@ -25,6 +25,18 @@ interface SettingsRepositoryInterface
     public function get(string $key);
 
     /**
+     * Store a single setting's value in your platform by a dot separated setting identifier.
+     */
+    public function store(string $key, $value): void;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
+     *
+     * @return void
+     */
+    public function storeAllSettings(Settings $settings): void;
+
+    /**
      * @param  SettingsModelCollection|AbstractSettingsModel $settings
      *
      * @return void
