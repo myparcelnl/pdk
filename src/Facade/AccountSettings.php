@@ -14,6 +14,8 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
  * @method static null|Account getAccount()
  * @method static CarrierOptionsCollection getCarrierOptions()
  * @method static null|Shop getShop()
+ * @method static bool hasCarrier(string $name)
+ * @method static bool hasTaxFields()
  * @implements \MyParcelNL\Pdk\Account\Service\AccountSettingsService
  */
 class AccountSettings extends Facade

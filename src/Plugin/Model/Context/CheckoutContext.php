@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -127,12 +128,13 @@ class CheckoutContext extends Model
         return [
             'actions'                     => $this->getActions(),
             'allowedShippingMethods'      => $this->getAllowedShippingMethods(),
-            'hiddenInputName'             => Pdk::get('checkoutHiddenInputName'),
-            'splitAddressFieldsCountries' => Pdk::get('splitAddressFieldsCountries'),
-            'useSeparateAddressFields'    => (bool) Settings::get(
-                CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS,
+            'carriersWithTaxFields'       => AccountSettings::hasTaxFields() ? Pdk::get('carriersWithTaxFields') : [],
+            'hasDeliveryOptions'          => Settings::get(
+                CheckoutSettings::ENABLE_DELIVERY_OPTIONS,
                 CheckoutSettings::ID
             ),
+            'hiddenInputName'             => Pdk::get('checkoutHiddenInputName'),
+            'splitAddressFieldsCountries' => Pdk::get('splitAddressFieldsCountries'),
         ];
     }
 

@@ -8,6 +8,7 @@ use Exception;
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -66,5 +67,30 @@ class AccountSettingsService
         $account = $this->getAccount();
 
         return $account ? $account->shops->first() : null;
+    }
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function hasTaxFields(): bool
+    {
+        return (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
+            ->contains(function (string $carrier) {
+                return $this->hasCarrier($carrier);
+            });
+    }
+
+    /**
+     * @param  string $carrierName
+     *
+     * @return bool
+     */
+    protected function hasCarrier(string $carrierName): bool
+    {
+        return $this->getCarrierOptions()
+            ->contains(function (CarrierOptions $carrierOption) use ($carrierName) {
+                return $carrierOption->carrier->name === $carrierName;
+            });
     }
 }
