@@ -126,16 +126,24 @@ class CheckoutContext extends Model
     private function getSettings(): array
     {
         return [
+            /** General */
             'actions'                            => $this->getActions(),
+
+            /** Delivery options */
             'allowedShippingMethods'             => $this->getAllowedShippingMethods(),
-            'carriersWithTaxFields'              => AccountSettings::hasTaxFields() ? Pdk::get('carriersWithTaxFields')
-                : [],
-            'countriesWithSeparateAddressFields' => Pdk::get('countriesWithSeparateAddressFields'),
             'hasDeliveryOptions'                 => Settings::get(
                 CheckoutSettings::ENABLE_DELIVERY_OPTIONS,
                 CheckoutSettings::ID
             ),
             'hiddenInputName'                    => Pdk::get('checkoutHiddenInputName'),
+
+            /** Separate address fields */
+            'countriesWithSeparateAddressFields' => Pdk::get('countriesWithSeparateAddressFields'),
+
+            /** Tax fields */
+            'carriersWithTaxFields'              => AccountSettings::hasTaxFields()
+                ? Pdk::get('carriersWithTaxFields')
+                : [],
         ];
     }
 
