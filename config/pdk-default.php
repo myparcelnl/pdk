@@ -67,9 +67,9 @@ return [
     ]),
 
     /**
-     * Countries that support split address fields.
+     * Countries that support separate address fields.
      */
-    'splitAddressFieldsCountries' => value([
+    'countriesWithSeparateAddressFields' => value([
         CountryCodes::CC_NL,
         CountryCodes::CC_BE,
     ]),

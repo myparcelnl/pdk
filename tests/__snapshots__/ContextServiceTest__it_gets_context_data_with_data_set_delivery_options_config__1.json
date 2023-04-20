@@ -42,7 +42,7 @@
       "disallowedShippingMethods": ["free_shipping", "local_pickup"],
       "hiddenInputName": "pest_delivery_options",
       "useSeparateAddressFields": false,
-      "splitAddressFieldsCountries": ["NL", "BE"],
+      "countriesWithSeparateAddressFields": ["NL", "BE"],
       "actions": {
         "baseUrl": "FRONTEND_URL",
         "endpoints": {
