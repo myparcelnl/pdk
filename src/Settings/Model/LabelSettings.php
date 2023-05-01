@@ -9,7 +9,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @property null|string $description
  * @property string      $format
  * @property string      $output
- * @property int         $position
+ * @property int[]       $position
  * @property bool        $prompt
  */
 class LabelSettings extends AbstractSettingsModel
@@ -47,7 +47,7 @@ class LabelSettings extends AbstractSettingsModel
      * Default values.
      */
     public const DEFAULT_FORMAT   = self::FORMAT_A4;
-    public const DEFAULT_POSITION = self::POSITION_1;
+    public const DEFAULT_POSITION = [self::POSITION_1, self::POSITION_2, self::POSITION_3, self::POSITION_4];
     public const DEFAULT_OUTPUT   = self::OUTPUT_OPEN;
 
     protected $attributes = [
@@ -64,7 +64,7 @@ class LabelSettings extends AbstractSettingsModel
         self::DESCRIPTION => 'string',
         self::FORMAT      => 'string',
         self::OUTPUT      => 'string',
-        self::POSITION    => 'int',
+        self::POSITION    => 'array',
         self::PROMPT      => 'bool',
     ];
 }

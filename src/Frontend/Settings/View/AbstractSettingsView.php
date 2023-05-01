@@ -17,8 +17,12 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 abstract class AbstractSettingsView implements Arrayable
 {
-    public const  OPTIONS_VALUE_NONE = -1;
-    private const KEY_PREFIX         = 'settings';
+    public const  OPTIONS_VALUE_NONE       = -1;
+    private const CACHE_KEY_CHILDREN       = 'children';
+    private const CACHE_KEY_CHILDREN_ARRAY = 'children_array';
+    private const CACHE_KEY_ELEMENTS       = 'elements';
+    private const CACHE_KEY_ELEMENTS_ARRAY = 'elements_array';
+    private const KEY_PREFIX               = 'settings';
 
     protected $cache = [];
 
@@ -32,19 +36,12 @@ abstract class AbstractSettingsView implements Arrayable
      */
     abstract protected function getSettingsId(): string;
 
-    public function getChildren(): ?array
+    /**
+     * @return null|\MyParcelNL\Pdk\Base\Support\Collection
+     */
+    public function getChildren(): ?Collection
     {
-        if (! array_key_exists('children', $this->cache)) {
-            $children = $this->createChildren();
-
-            if ($children) {
-                $this->cache['children'] = $children->toArray();
-            } else {
-                $this->cache['children'] = null;
-            }
-        }
-
-        return $this->cache['children'];
+        return $this->cacheValue(self::CACHE_KEY_CHILDREN, [$this, 'createChildren']);
     }
 
     /**
@@ -56,35 +53,15 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @return null|array
+     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection|PlainElement[]
      */
-    public function getElements(): ?array
+    public function getElements(): ?FormElementCollection
     {
-        if (! array_key_exists('elements', $this->cache)) {
+        return $this->cacheValue(self::CACHE_KEY_ELEMENTS, function (): ?FormElementCollection {
             $elements = $this->createElements();
 
-            if ($elements) {
-                $this->cache['elements'] = $elements->map(function (PlainElement $element) {
-                    if ($element instanceof InteractiveElement) {
-                        $label       = $this->createLabel($this->getLabelPrefix(), $element->name);
-                        $description = "{$label}_description";
-
-                        $element->props['label'] = $label;
-
-                        if (LanguageService::hasTranslation($description)) {
-                            $element->props['description'] = $description;
-                        }
-                    }
-
-                    return $element->toArray();
-                })
-                    ->toArray();
-            } else {
-                $this->cache['elements'] = null;
-            }
-        }
-
-        return $this->cache['elements'];
+            return $elements ? $this->updateElements($elements) : null;
+        });
     }
 
     /**
@@ -104,8 +81,8 @@ abstract class AbstractSettingsView implements Arrayable
             'id'          => $this->getSettingsId(),
             'title'       => $this->getTitle(),
             'description' => $this->getDescription(),
-            'elements'    => $this->getElements(),
-            'children'    => $this->getChildren(),
+            'elements'    => $this->cacheToArray(self::CACHE_KEY_ELEMENTS_ARRAY, [$this, 'getElements']),
+            'children'    => $this->cacheToArray(self::CACHE_KEY_CHILDREN_ARRAY, [$this, 'getChildren']),
         ];
     }
 
@@ -219,6 +196,29 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
+     * @param  \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection $elements
+     *
+     * @return mixed|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     */
+    protected function updateElements(FormElementCollection $elements)
+    {
+        return $elements->map(function (PlainElement $element): PlainElement {
+            if ($element instanceof InteractiveElement) {
+                $label       = $this->createLabel($this->getLabelPrefix(), $element->name);
+                $description = "{$label}_description";
+
+                $element->props['label'] = $label;
+
+                if (LanguageService::hasTranslation($description)) {
+                    $element->props['description'] = $description;
+                }
+            }
+
+            return $element;
+        });
+    }
+
+    /**
      * @param  array $item
      */
     protected function validate(array $item): void
@@ -230,5 +230,37 @@ abstract class AbstractSettingsView implements Arrayable
         if (! isset($item['name'], $item['class'])) {
             throw new InvalidArgumentException(sprintf('Fields "name" and "class" are required in %s', $item['class']));
         }
+    }
+
+    /**
+     * @param  string   $key
+     * @param  callable $closure
+     *
+     * @return void
+     */
+    private function cacheToArray(string $key, callable $closure): ?array
+    {
+        return $this->cacheValue($key, function () use ($closure): ?array {
+            $data = $closure();
+
+            return $data ? $data->toArray() : null;
+        });
+    }
+
+    /**
+     * @param  string   $key
+     * @param  callable $closure
+     *
+     * @return mixed
+     */
+    private function cacheValue(string $key, callable $closure)
+    {
+        $resolvedKey = sprintf('%s.%s', static::class, $key);
+
+        if (! array_key_exists($resolvedKey, $this->cache)) {
+            $this->cache[$resolvedKey] = $closure();
+        }
+
+        return $this->cache[$resolvedKey];
     }
 }

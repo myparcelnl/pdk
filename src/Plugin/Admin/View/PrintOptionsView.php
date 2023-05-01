@@ -18,19 +18,19 @@ class PrintOptionsView extends AbstractSettingsView
     protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
-            new InteractiveElement(LabelSettings::OUTPUT, Components::INPUT_SELECT, [
+            new InteractiveElement(LabelSettings::OUTPUT, Components::INPUT_RADIO_GROUP, [
                 'options' => $this->createSelectOptions(LabelSettings::OUTPUT, [
                     LabelSettings::OUTPUT_OPEN,
                     LabelSettings::OUTPUT_DOWNLOAD,
                 ]),
             ]),
-            new InteractiveElement(LabelSettings::FORMAT, Components::INPUT_SELECT, [
+            new InteractiveElement(LabelSettings::FORMAT, Components::INPUT_RADIO_GROUP, [
                 'options' => $this->createSelectOptions(LabelSettings::FORMAT, [
                     LabelSettings::FORMAT_A4,
                     LabelSettings::FORMAT_A6,
                 ]),
             ]),
-            new InteractiveElement(LabelSettings::POSITION, Components::INPUT_SELECT, [
+            new InteractiveElement(LabelSettings::POSITION, Components::INPUT_MULTI_SELECT, [
                 '$visibleWhen' => [LabelSettings::FORMAT => LabelSettings::FORMAT_A4],
                 'options'      => $this->createSelectOptions(LabelSettings::POSITION, [
                     LabelSettings::POSITION_1,
