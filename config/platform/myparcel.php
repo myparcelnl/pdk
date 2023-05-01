@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 return [
     'name'             => 'myparcel',
     'human'            => 'MyParcel',
+    'backofficeUrl'    => 'https://backoffice.myparcel.nl',
     'localCountry'     => CountryCodes::CC_NL,
     'defaultCarrier'   => Carrier::CARRIER_POSTNL_NAME,
     'defaultCarrierId' => Carrier::CARRIER_POSTNL_ID,
