@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Action\Backend\Shipment;
 
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Action\Backend\Order\AbstractOrderAction;
 use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
@@ -41,7 +42,7 @@ class PrintShipmentsAction extends AbstractOrderAction
     {
         $format    = strtoupper($this->getLabelOption($request, LabelSettings::FORMAT));
         $output    = $this->getLabelOption($request, LabelSettings::OUTPUT);
-        $positions = $this->getLabelOption($request, LabelSettings::POSITION);
+        $positions = Utils::toArray($this->getLabelOption($request, LabelSettings::POSITION));
 
         $orderIds    = $this->getOrderIds($request);
         $orders      = $this->pdkOrderRepository->getMany($orderIds);
