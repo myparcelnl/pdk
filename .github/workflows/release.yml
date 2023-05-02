@@ -41,6 +41,7 @@ jobs:
       - uses: myparcelnl/actions/semantic-release@v3
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
+          write-summary: true
 
   rebase-prs:
     needs: release
