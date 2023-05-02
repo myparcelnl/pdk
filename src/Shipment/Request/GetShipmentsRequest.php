@@ -27,6 +27,16 @@ class GetShipmentsRequest extends Request
      */
     public function getPath(): string
     {
-        return '/shipments/' . implode(';', $this->ids);
+        return sprintf('/shipments/%s', implode(';', $this->ids));
+    }
+
+    /**
+     * @return int[]
+     */
+    protected function getParameters(): array
+    {
+        return parent::getParameters() + [
+                'link_consumer_portal' => 1,
+            ];
     }
 }
