@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Frontend\Settings\View;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
+use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Plugin\Admin\View\PrintOptionsView;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
@@ -33,6 +34,8 @@ class LabelSettingsView extends AbstractSettingsView
         $fields = [
             new InteractiveElement(LabelSettings::DESCRIPTION, Components::INPUT_TEXT),
             new InteractiveElement(LabelSettings::PROMPT, Components::INPUT_TOGGLE),
+
+            new SettingsDivider($this->getSettingKey('defaults'))
         ];
 
         $elements = $this->printOptionsView->getElements();
