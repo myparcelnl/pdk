@@ -38,6 +38,8 @@ class LabelSettingsView extends AbstractSettingsView
         $elements = $this->printOptionsView->getElements();
 
         if ($elements) {
+            $elements = $this->updateElements($elements);
+
             foreach ($elements->all() as $element) {
                 /** @var \MyParcelNL\Pdk\Frontend\Form\PlainElement $element */
                 $fields[] = $element;
