@@ -120,14 +120,14 @@ class DeliveryOptions extends Model
 
     public function __construct(?array $data = null)
     {
-        if ($data[self::DELIVERY_TYPE]) {
+        if (isset($data[self::DELIVERY_TYPE])) {
             $data[self::DELIVERY_TYPE] = Utils::convertToName(
                 $data[self::DELIVERY_TYPE],
                 self::DELIVERY_TYPES_NAMES_IDS_MAP
             );
         }
 
-        if ($data[self::PACKAGE_TYPE]) {
+        if (isset($data[self::PACKAGE_TYPE])) {
             $data[self::PACKAGE_TYPE] = Utils::convertToName(
                 $data[self::PACKAGE_TYPE],
                 self::PACKAGE_TYPES_NAMES_IDS_MAP
