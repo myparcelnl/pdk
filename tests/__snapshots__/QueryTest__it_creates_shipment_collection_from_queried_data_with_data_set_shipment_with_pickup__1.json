@@ -77,8 +77,8 @@
       "sameDayDelivery": false,
       "signature": true
     },
-    "deliveryType": "4",
-    "packageType": "1"
+    "deliveryType": "pickup",
+    "packageType": "package"
   },
   "dropOffPoint": null,
   "hidden": false,

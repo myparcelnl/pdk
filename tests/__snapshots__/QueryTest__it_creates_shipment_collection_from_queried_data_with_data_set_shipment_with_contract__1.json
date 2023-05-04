@@ -62,8 +62,8 @@
       "sameDayDelivery": null,
       "signature": null
     },
-    "deliveryType": "2",
-    "packageType": "1"
+    "deliveryType": "standard",
+    "packageType": "package"
   },
   "dropOffPoint": null,
   "hidden": false,

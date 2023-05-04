@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Platform;
 
 /**
@@ -119,8 +120,23 @@ class DeliveryOptions extends Model
 
     public function __construct(?array $data = null)
     {
+        if ($data[self::DELIVERY_TYPE]) {
+            $data[self::DELIVERY_TYPE] = Utils::convertToName(
+                $data[self::DELIVERY_TYPE],
+                self::DELIVERY_TYPES_NAMES_IDS_MAP
+            );
+        }
+
+        if ($data[self::PACKAGE_TYPE]) {
+            $data[self::PACKAGE_TYPE] = Utils::convertToName(
+                $data[self::PACKAGE_TYPE],
+                self::PACKAGE_TYPES_NAMES_IDS_MAP
+            );
+        }
+
+        $data['carrier'] = $data['carrier'] ?? Platform::get('defaultCarrier');
+
         parent::__construct($data);
-        $this->attributes['carrier'] = $this->attributes['carrier'] ?? Platform::get('defaultCarrier');
     }
 
     /**
@@ -138,9 +154,7 @@ class DeliveryOptions extends Model
      */
     public function getDeliveryTypeId(): ?int
     {
-        return $this->deliveryType && array_key_exists($this->deliveryType, self::DELIVERY_TYPES_NAMES_IDS_MAP)
-            ? self::DELIVERY_TYPES_NAMES_IDS_MAP[$this->deliveryType]
-            : null;
+        return Utils::convertToId($this->deliveryType, self::DELIVERY_TYPES_NAMES_IDS_MAP);
     }
 
     /**
@@ -149,9 +163,7 @@ class DeliveryOptions extends Model
      */
     public function getPackageTypeId(): ?int
     {
-        return $this->packageType && array_key_exists($this->packageType, self::PACKAGE_TYPES_NAMES_IDS_MAP)
-            ? self::PACKAGE_TYPES_NAMES_IDS_MAP[$this->packageType]
-            : null;
+        return Utils::convertToId($this->packageType, self::PACKAGE_TYPES_NAMES_IDS_MAP);
     }
 
     /**

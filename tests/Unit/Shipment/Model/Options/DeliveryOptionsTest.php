@@ -83,3 +83,27 @@ it('instantiates delivery options with pickup location', function () {
         ->and($deliveryOptions->isPickup())
         ->toBeTrue();
 });
+
+it('converts input package type to name', function (string $name, int $id) {
+    $deliveryOptions = new DeliveryOptions(['packageType' => $id]);
+
+    expect($deliveryOptions->packageType)->toBe($name);
+})->with('packageTypeNamesToIds');
+
+it('can get package type as id', function (string $name, int $id) {
+    $deliveryOptions = new DeliveryOptions(['packageType' => $name]);
+
+    expect($deliveryOptions->getPackageTypeId())->toBe($id);
+})->with('packageTypeNamesToIds');
+
+it('converts input delivery type to name', function (string $name, int $id) {
+    $deliveryOptions = new DeliveryOptions(['deliveryType' => $id]);
+
+    expect($deliveryOptions->deliveryType)->toBe($name);
+})->with('deliveryTypeNamesToIds');
+
+it('can get delivery type as id', function (string $name, int $id) {
+    $deliveryOptions = new DeliveryOptions(['deliveryType' => $name]);
+
+    expect($deliveryOptions->getDeliveryTypeId())->toBe($id);
+})->with('deliveryTypeNamesToIds');

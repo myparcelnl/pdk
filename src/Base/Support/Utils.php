@@ -86,6 +86,36 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
+     * @param  string|int $name
+     * @param  array      $namesToIdsMap
+     *
+     * @return null|int
+     */
+    public static function convertToId($name, array $namesToIdsMap): ?int
+    {
+        if (is_numeric($name) && in_array((int) $name, $namesToIdsMap, true)) {
+            return (int) $name;
+        }
+
+        return $namesToIdsMap[$name] ?? null;
+    }
+
+    /**
+     * @param  string|int $id
+     * @param  array      $namesToIdsMap
+     *
+     * @return null|string
+     */
+    public static function convertToName($id, array $namesToIdsMap): ?string
+    {
+        if (! is_numeric($id) && array_key_exists($id, $namesToIdsMap)) {
+            return $id;
+        }
+
+        return array_search((int) $id, $namesToIdsMap, true) ?: null;
+    }
+
+    /**
      * @param  array $array
      *
      * @return array

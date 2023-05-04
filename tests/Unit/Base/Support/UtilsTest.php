@@ -24,3 +24,50 @@ it('changes case of array keys', function ($case, $expectation) {
     'to camelCase'  => ['camel', ['snakeCase' => 1, 'camelCase' => 2, 'studlyCase' => 3]],
     'to StudlyCase' => ['studly', ['SnakeCase' => 1, 'CamelCase' => 2, 'StudlyCase' => 3]],
 ]);
+
+it('converts id to name', function ($input, $output) {
+    $map = [
+        'aardappel' => 1,
+        'bloemkool' => 2,
+        'wortel'    => 3,
+    ];
+
+    expect(Utils::convertToName($input, $map))->toBe($output);
+})->with([
+    [1, 'aardappel'],
+    [2, 'bloemkool'],
+    [3, 'wortel'],
+    ['1', 'aardappel'],
+    ['2', 'bloemkool'],
+    ['3', 'wortel'],
+    ['aardappel', 'aardappel'],
+    ['bloemkool', 'bloemkool'],
+    ['wortel', 'wortel'],
+    ['appel', null],
+    [4, null],
+    ['4', null],
+    [null, null],
+]);
+
+it('converts name to id', function ($input, $output) {
+    $map = [
+        'appel'  => 1,
+        'banaan' => 2,
+        'peer'   => 3,
+    ];
+
+    expect(Utils::convertToId($input, $map))->toBe($output);
+})->with([
+    ['appel', 1],
+    ['banaan', 2],
+    ['peer', 3],
+    [1, 1],
+    [2, 2],
+    [3, 3],
+    ['1', 1],
+    ['2', 2],
+    ['3', 3],
+    ['aardappel', null],
+    [4, null],
+    ['4', null],
+]);
