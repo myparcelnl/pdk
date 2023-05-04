@@ -179,6 +179,19 @@
     "event": "myparcel_pdk_loaded",
     "language": "nl",
     "mode": "production",
+    "platform": {
+      "name": "myparcel",
+      "human": "MyParcel",
+      "backofficeUrl": "https://backoffice.myparcel.nl",
+      "localCountry": "NL",
+      "defaultCarrier": "postnl",
+      "defaultCarrierId": 1,
+      "defaultSettings": {
+        "checkout": {
+          "pickupLocationsDefaultView": "list"
+        }
+      }
+    },
     "translations": {
       "apple_tree": "Appelboom"
     }

@@ -35,7 +35,7 @@
     "description": "description",
     "format": "a4",
     "output": "open",
-    "position": 1,
+    "position": [1, 2, 3, 4],
     "prompt": false
   },
   "customs": {
@@ -51,7 +51,7 @@
     "deliveryOptionsDisplay": false,
     "deliveryOptionsHeader": null,
     "deliveryOptionsPosition": null,
-    "pickupLocationsDefaultView": "list",
+    "pickupLocationsDefaultView": null,
     "priceType": "included",
     "enableDeliveryOptions": true,
     "enableDeliveryOptionsWhenNotInStock": true,
