@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\LanguageService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection;
-use MyParcelNL\Pdk\Plugin\Contract\PdkShippingMethodRepositoryInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 
@@ -106,21 +104,6 @@ class CheckoutContext extends Model
     }
 
     /**
-     * @return array
-     */
-    private function getAllowedShippingMethods(): array
-    {
-        /** @var \MyParcelNL\Pdk\Plugin\Contract\PdkShippingMethodRepositoryInterface $shippingMethodRepository */
-        $shippingMethodRepository = Pdk::get(PdkShippingMethodRepositoryInterface::class);
-
-        $shippingMethods = $shippingMethodRepository
-            ->all()
-            ->toArray();
-
-        return Arr::pluck($shippingMethods, 'id');
-    }
-
-    /**
      * @return void
      */
     private function getSettings(): array
@@ -130,7 +113,10 @@ class CheckoutContext extends Model
             'actions'                            => $this->getActions(),
 
             /** Delivery options */
-            'allowedShippingMethods'             => $this->getAllowedShippingMethods(),
+            'allowedShippingMethods'             => Settings::get(
+                CheckoutSettings::ALLOWED_SHIPPING_METHODS,
+                CheckoutSettings::ID
+            ),
             'hasDeliveryOptions'                 => Settings::get(
                 CheckoutSettings::ENABLE_DELIVERY_OPTIONS,
                 CheckoutSettings::ID
