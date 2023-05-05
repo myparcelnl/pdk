@@ -9,10 +9,10 @@ use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
-use MyParcelNL\Pdk\Plugin\Contract\CheckoutServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\PdkShippingMethodRepositoryInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\WooCommerce\Facade\Filter;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -46,9 +46,16 @@ class CheckoutSettingsView extends AbstractSettingsView
         $elements = [
             new InteractiveElement(CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS, Components::INPUT_TOGGLE),
 
-            new InteractiveElement(CheckoutSettings::ENABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
-
             new SettingsDivider($this->getSettingKey('delivery_options'), null, $deliveryOptionsVisibleProp),
+            new InteractiveElement(CheckoutSettings::ENABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
+            new InteractiveElement(
+                CheckoutSettings::DELIVERY_OPTIONS_POSITION, Components::INPUT_SELECT, [
+                    'options' => $this->createSelectOptions(
+                        CheckoutSettings::DELIVERY_OPTIONS_POSITION,
+                        Filter::apply('deliveryOptionsPositions', Pdk::get('deliveryOptionsPositions'))
+                    ),
+                ] + $deliveryOptionsVisibleProp
+            ),
             new InteractiveElement(
                 CheckoutSettings::ALLOWED_SHIPPING_METHODS,
                 Components::INPUT_MULTI_SELECT,
@@ -80,17 +87,6 @@ class CheckoutSettingsView extends AbstractSettingsView
                 $deliveryOptionsVisibleProp
             ),
         ];
-
-        if (Pdk::has(CheckoutServiceInterface::class)) {
-            /** @var \MyParcelNL\Pdk\Plugin\Contract\CheckoutServiceInterface $deliveryOptionsService */
-            $checkoutService = Pdk::get(CheckoutServiceInterface::class);
-
-            $elements[] = new InteractiveElement(
-                CheckoutSettings::DELIVERY_OPTIONS_POSITION,
-                Components::INPUT_SELECT,
-                $deliveryOptionsVisibleProp + ['options' => $this->toSelectOptions($checkoutService->getPositions())]
-            );
-        }
 
         return new FormElementCollection($elements);
     }

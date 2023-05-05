@@ -30,7 +30,7 @@ class FetchContextAction implements ActionInterface
      */
     public function handle(Request $request): Response
     {
-        $context = $this->contextService->createContexts($this->getContexts($request));
+        $context = $this->contextService->createContexts($this->getContexts($request), $request->query->all());
 
         return new JsonResponse(['context' => [$context->toArrayWithoutNull()]]);
     }
