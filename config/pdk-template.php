@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Plugin\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\CheckoutServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\PdkCartRepositoryInterface;
 use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
@@ -134,6 +135,14 @@ return [
      */
 
     LoggerInterface::class => autowire(),
+
+    /**
+     * Gets checkout data.
+     *
+     * @note Required for using the checkout.
+     */
+
+    CheckoutServiceInterface::class => autowire(),
 
     /**
      * Exposes frontend api url and endpoints.
