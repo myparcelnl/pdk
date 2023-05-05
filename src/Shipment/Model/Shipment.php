@@ -201,7 +201,7 @@ class Shipment extends Model implements StorableArrayable
      *
      * @param  null|array $data
      */
-    public function __construct(?array $data = [])
+    public function __construct(?array $data = null)
     {
         parent::__construct($data);
         $this->updateCarrier();

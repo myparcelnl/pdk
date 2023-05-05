@@ -25,7 +25,7 @@ class ContactDetails extends Address
     /**
      * @param  null|array $data
      */
-    public function __construct(?array $data = [])
+    public function __construct(?array $data = null)
     {
         $this->attributes['email']   = null;
         $this->attributes['phone']   = null;

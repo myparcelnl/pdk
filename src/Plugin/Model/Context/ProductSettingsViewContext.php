@@ -31,7 +31,7 @@ class ProductSettingsViewContext extends Model
     /**
      * @param  null|array $data
      */
-    public function __construct(?array $data = [])
+    public function __construct(?array $data = null)
     {
         parent::__construct($data);
 
