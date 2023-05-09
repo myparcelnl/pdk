@@ -85,7 +85,7 @@ class UpdateAccountAction implements ActionInterface
      *
      * @return void
      */
-    public function updateAndSaveAccount(?Account $account): void
+    protected function updateAndSaveAccount(?Account $account): void
     {
         if ($account) {
             $shop                  = $account->shops->first();
