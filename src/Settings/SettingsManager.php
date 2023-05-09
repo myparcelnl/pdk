@@ -50,7 +50,7 @@ class SettingsManager
             $key = sprintf('%s.%s', $namespace, $key);
         }
 
-        return $this->repository->get($key);
+        return $this->repository->get(Pdk::get('createSettingsKey')($key));
     }
 
     /**
