@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
-use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
@@ -50,7 +50,7 @@ class CheckoutSettingsView extends AbstractSettingsView
                 CheckoutSettings::DELIVERY_OPTIONS_POSITION, Components::INPUT_SELECT, [
                     'options' => $this->createSelectOptions(
                         CheckoutSettings::DELIVERY_OPTIONS_POSITION,
-                        Settings::get(CheckoutSettings::DELIVERY_OPTIONS_POSITION, CheckoutSettings::ID)
+                        Pdk::get('deliveryOptionsPositions')
                     ),
                 ] + $deliveryOptionsVisibleProp
             ),
