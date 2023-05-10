@@ -6,10 +6,11 @@ namespace MyParcelNL\Pdk\Settings;
 
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
-class SettingsManager
+class SettingsManager implements SettingsManagerInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface

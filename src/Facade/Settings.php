@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Pdk\Settings\SettingsManager;
+use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 
 /**
  * @method static mixed get(string $key, string $namespace = null)
@@ -18,6 +18,6 @@ class Settings extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return SettingsManager::class;
+        return SettingsManagerInterface::class;
     }
 }

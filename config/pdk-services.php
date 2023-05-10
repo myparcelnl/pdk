@@ -26,6 +26,8 @@ use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\Plugin\Service\RenderService;
 use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsService;
+use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
+use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
@@ -105,4 +107,9 @@ return [
      * Handles installation.
      */
     InstallerServiceInterface::class       => autowire(InstallerService::class),
+
+    /**
+     * Handles retrieving settings.
+     */
+    SettingsManagerInterface::class        => autowire(SettingsManager::class),
 ];
