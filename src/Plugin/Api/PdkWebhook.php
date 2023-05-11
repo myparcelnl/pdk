@@ -64,7 +64,7 @@ class PdkWebhook implements PdkApiInterface
     public function processWebhook(Request $request): void
     {
         $requiredPath = parse_url($this->webhooksRepository->getHashedUrl(), PHP_URL_PATH);
-        $logContext   = ['request' => $request->toArray()];
+        $logContext   = ['request' => get_object_vars($request)];
 
         if ($request->getRequestUri() !== $requiredPath) {
             DefaultLogger::error('Webhook received with invalid url', $logContext);
