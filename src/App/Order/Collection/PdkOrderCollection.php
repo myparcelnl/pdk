@@ -155,10 +155,7 @@ class PdkOrderCollection extends Collection
     {
         $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
 
-        $mergedShipments = $order->shipments->mergeByKey($byOrderId, 'id');
-        $order->label    = $shipments->label;
-
-        return $mergedShipments;
+        return $order->shipments->mergeByKey($byOrderId, 'id');
     }
 }
 
