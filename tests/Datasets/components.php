@@ -3,16 +3,16 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Facade\Frontend;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
 
 /**
  * Defines all pdk components and the views where they should render.
  *
- * @see \MyParcelNL\Pdk\Plugin\Contract\FrontendRenderServiceInterface
- * @see \MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface
+ * @see \MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface
+ * @see \MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface
  */
 dataset('components', [
     'init script' => [

@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Plugin\Service;
 
+use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
+use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface;
-use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -80,7 +80,7 @@ uses()->group('checkout');
 usesShared(new UsesMockPdkInstance());
 
 it('calculates mailbox percentage', function (array $lines, float $expected) {
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
     $percentage = $service->calculateMailboxPercentage(new PdkCart(['lines' => $lines]));
@@ -102,7 +102,7 @@ it('calculates mailbox percentage', function (array $lines, float $expected) {
 ]);
 
 it('calculates allowed package types', function (array $lines, array $result) {
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
     $allowedPackageTypes = $service->calculateAllowedPackageTypes(new PdkCart(['lines' => $lines]));

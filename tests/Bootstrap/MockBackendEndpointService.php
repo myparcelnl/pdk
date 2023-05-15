@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Api\Backend\AbstractPdkBackendEndpointService;
+use MyParcelNL\Pdk\App\Api\Backend\AbstractPdkBackendEndpointService;
 
 class MockBackendEndpointService extends AbstractPdkBackendEndpointService
 {

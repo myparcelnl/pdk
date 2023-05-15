@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 
 class MockOrderStatusService implements OrderStatusServiceInterface
 {

@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
+use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
+use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
+use MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface;
+use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
+use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
+use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Plugin\Api\Contract\BackendEndpointServiceInterface;
-use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\CheckoutServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\PdkCartRepositoryInterface;
-use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
-use MyParcelNL\Pdk\Plugin\Contract\PdkShippingMethodRepositoryInterface;
-use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
-use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhookServiceInterface;
-use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
@@ -59,7 +58,7 @@ return [
     /**
      * Handles conversion of your app's order data to PDK order data.
      *
-     * @see \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository
+     * @see \MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderRepository
      */
 
     PdkOrderRepositoryInterface::class => autowire(),
@@ -68,7 +67,7 @@ return [
      * Handles webhook data being saved and retrieved in your app.
      *
      * @note Required for plugin settings.
-     * @see  \MyParcelNL\Pdk\Plugin\Webhook\Repository\AbstractPdkWebhooksRepository
+     * @see  \MyParcelNL\Pdk\App\Webhook\Repository\AbstractPdkWebhooksRepository
      */
 
     PdkWebhooksRepositoryInterface::class => autowire(),
@@ -86,7 +85,7 @@ return [
      * Handles conversion of your app's cart data to PDK cart data.
      *
      * @note Required for using the checkout.
-     * @see  \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkCartRepository
+     * @see  \MyParcelNL\Pdk\App\Cart\Repository\AbstractPdkCartRepository
      */
 
     PdkCartRepositoryInterface::class => autowire(),
@@ -95,7 +94,7 @@ return [
      * Handles conversion of your app's shipping method data to PDK shipping method data.
      *
      * @note Required for using the checkout.
-     * @see  \MyParcelNL\Pdk\Plugin\Repository\AbstractPdkShippingMethodRepository
+     * @see  \MyParcelNL\Pdk\App\ShippingMethod\Repository\AbstractPdkShippingMethodRepository
      */
 
     PdkShippingMethodRepositoryInterface::class => autowire(),
@@ -137,18 +136,10 @@ return [
     LoggerInterface::class => autowire(),
 
     /**
-     * Gets checkout data.
-     *
-     * @note Required for using the checkout.
-     */
-
-    CheckoutServiceInterface::class => autowire(),
-
-    /**
      * Exposes frontend api url and endpoints.
      *
      * @note Required to use the checkout.
-     * @see  \MyParcelNL\Pdk\Plugin\Api\Frontend\AbstractFrontendEndpointService
+     * @see  \MyParcelNL\Pdk\App\Api\Frontend\AbstractFrontendEndpointService
      */
 
     FrontendEndpointServiceInterface::class => autowire(),
@@ -165,7 +156,7 @@ return [
      * Defines the url and endpoints for webhooks.
      *
      * @note Required for plugin settings. TODO: Remove this requirement.
-     * @see  \MyParcelNL\Pdk\Plugin\Webhook\AbstractPdkWebhookService
+     * @see  \MyParcelNL\Pdk\App\Webhook\Service\AbstractPdkWebhookService
      */
 
     PdkWebhookServiceInterface::class => autowire(),
@@ -174,7 +165,7 @@ return [
      * Handles views in your application, like detecting pages. The FrontendRenderService uses this service to determine where it should render components.
      *
      * @note Required for the admin frontend.
-     * @see  \MyParcelNL\Pdk\Plugin\Service\AbstractViewService
+     * @see  \MyParcelNL\Pdk\Frontend\Service\AbstractViewService
      */
 
     ViewServiceInterface::class => autowire(),
@@ -183,7 +174,7 @@ return [
      * Exposes backend api url and endpoints.
      *
      * @note Required for the admin frontend.
-     * @see  \MyParcelNL\Pdk\Plugin\Api\Backend\AbstractPdkBackendEndpointService
+     * @see  \MyParcelNL\Pdk\App\Api\Backend\AbstractPdkBackendEndpointService
      */
 
     BackendEndpointServiceInterface::class => autowire(),

@@ -5,18 +5,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Helper\Plugin\Service;
 
+use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
-use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use function DI\autowire;
 
@@ -91,8 +91,8 @@ function mockPdk(array $carrierSettings = [], array $products = []): void
 {
     PdkFactory::create(
         MockPdkConfig::create([
-            ProductRepositoryInterface::class  => autowire(MockProductRepository::class)->constructor($products),
-            SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor(
+            PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor($products),
+            SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor(
                 [CarrierSettings::ID => [CARRIER => $carrierSettings]]
             ),
         ])
@@ -111,7 +111,7 @@ it('inherits shipment option from carrier settings', function (array $option, st
 
     $order = new PdkOrder(['deliveryOptions' => ['carrier' => CARRIER]]);
 
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
     $service = Pdk::get(ShipmentOptionsServiceInterface::class);
     $service->calculate($order);
 
@@ -133,8 +133,8 @@ it('prioritizes product settings of any order line over defaults', function (arr
         ]
     );
 
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository $productRepository */
-    $productRepository = Pdk::get(ProductRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */
+    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
     $order = new PdkOrder([
         'deliveryOptions' => ['carrier' => CARRIER],
@@ -144,7 +144,7 @@ it('prioritizes product settings of any order line over defaults', function (arr
         ],
     ]);
 
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
     $service = Pdk::get(ShipmentOptionsServiceInterface::class);
     $service->calculate($order);
 
@@ -163,8 +163,8 @@ it('prioritizes override over product settings and defaults', function (array $o
         ]
     );
 
-    /** @var \MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface $productRepository */
-    $productRepository = Pdk::get(ProductRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository */
+    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
     $order = new PdkOrder([
         'deliveryOptions' => [
@@ -174,7 +174,7 @@ it('prioritizes override over product settings and defaults', function (array $o
         'lines'           => [['product' => $productRepository->getProduct('PDK-1')]],
     ]);
 
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
     $service = Pdk::get(ShipmentOptionsServiceInterface::class);
     $service->calculate($order);
 
@@ -192,8 +192,8 @@ it('calculates insurance', function (int $insuranceFrom, int $insuranceUpTo, int
         ],
     ]);
 
-    /** @var \MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface $productRepository */
-    $productRepository = Pdk::get(ProductRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository */
+    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
     $order = new PdkOrder([
         'deliveryOptions' => [
@@ -204,7 +204,7 @@ it('calculates insurance', function (int $insuranceFrom, int $insuranceUpTo, int
         'recipient'       => ['cc' => 'NL'],
     ]);
 
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
     $service = Pdk::get(ShipmentOptionsServiceInterface::class);
     $service->calculate($order);
 
@@ -237,8 +237,8 @@ it('merges product settings', function (array $input, array $results, $output) {
             ];
         }, $results, array_keys($results)));
 
-    /** @var \MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface $productRepository */
-    $productRepository = Pdk::get(ProductRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository */
+    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
     // Create a list of order lines containing one of each product.
     $lines = array_map(function (PdkProduct $product) {
@@ -249,7 +249,7 @@ it('merges product settings', function (array $input, array $results, $output) {
 
     $order = new PdkOrder(['deliveryOptions' => ['carrier' => CARRIER], 'lines' => $lines]);
 
-    /** @var \MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface $service */
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
     $service = Pdk::get(ShipmentOptionsServiceInterface::class);
     $service->calculate($order);
 

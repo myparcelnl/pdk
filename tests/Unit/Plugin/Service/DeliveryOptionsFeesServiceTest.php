@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Plugin\Service;
 
+use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsFeesService;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsFeesService;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Facade;
 
+use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Pdk\Plugin\Contract\FrontendRenderServiceInterface;
-use MyParcelNL\Pdk\Plugin\Model\PdkCart;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
+use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 
 /**
  * @method static string renderDeliveryOptions(PdkCart $cart)

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 
 /**
@@ -79,7 +79,7 @@ class Order extends Model
     ];
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkOrder $pdkOrder
+     * @param  null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder $pdkOrder
      *
      * @return static
      * @noinspection PhpUnused

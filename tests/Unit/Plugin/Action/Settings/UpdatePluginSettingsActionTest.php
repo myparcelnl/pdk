@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Action\Settings;
 
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use RuntimeException;

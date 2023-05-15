@@ -6,8 +6,8 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator as JsonSchemaValidator;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Validation\Contract\ValidatorInterface;
 use RuntimeException;
 
@@ -19,7 +19,7 @@ class OrderValidator extends OrderPropertiesValidator implements ValidatorInterf
     private $errors;
 
     /**
-     * @var \MyParcelNL\Pdk\Plugin\Model\PdkOrder
+     * @var \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
     private $order;
 
@@ -56,7 +56,7 @@ class OrderValidator extends OrderPropertiesValidator implements ValidatorInterf
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
      * @return self
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
@@ -85,7 +85,7 @@ class OrderValidator extends OrderPropertiesValidator implements ValidatorInterf
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder $order
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
      * @return void
      */

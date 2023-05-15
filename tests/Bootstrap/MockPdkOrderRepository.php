@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
-use MyParcelNL\Pdk\Plugin\Repository\AbstractPdkOrderRepository;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderRepository;
 
 class MockPdkOrderRepository extends AbstractPdkOrderRepository
 {
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkOrder ...$orders
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder ...$orders
      *
      * @return void
      */
@@ -24,7 +24,7 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
     /**
      * @param  int|string $input
      *
-     * @return \MyParcelNL\Pdk\Plugin\Model\PdkOrder
+     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
     public function get($input): PdkOrder
     {

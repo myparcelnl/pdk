@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Service\FrontendRenderService;
+use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 
 class MockFrontendRenderService extends FrontendRenderService
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Facade;
 
+use MyParcelNL\Pdk\App\Api\PdkActions;
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Pdk\Plugin\Api\PdkActions;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

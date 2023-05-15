@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Service\AbstractViewService;
+use MyParcelNL\Pdk\Frontend\Service\AbstractViewService;
 
 class MockAbstractViewService extends AbstractViewService
 {

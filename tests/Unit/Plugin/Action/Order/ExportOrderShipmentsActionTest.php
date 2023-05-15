@@ -6,12 +6,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Action\Order;
 
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
-use MyParcelNL\Pdk\Plugin\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;

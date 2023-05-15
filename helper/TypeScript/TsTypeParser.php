@@ -7,8 +7,8 @@ namespace MyParcelNL\Pdk\Helper\TypeScript;
 use ArrayIterator;
 use DateTime;
 use DateTimeImmutable;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Helper\Shared\Concern\UsesCache;
-use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class TsTypeParser

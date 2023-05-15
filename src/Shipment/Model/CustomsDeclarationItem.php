@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 
 /**
  * @property int                                 $amount
@@ -45,8 +45,8 @@ class CustomsDeclarationItem extends Model
     ];
 
     /**
-     * @param  \MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
-     * @param  array                                   $additionalFields
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
+     * @param  array                                      $additionalFields
      *
      * @return static
      */

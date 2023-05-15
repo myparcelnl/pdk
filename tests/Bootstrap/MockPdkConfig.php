@@ -8,16 +8,16 @@ use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
+use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
+use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
+use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Plugin\Api\Contract\BackendEndpointServiceInterface;
-use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\OrderStatusServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\TaxServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
-use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
@@ -66,10 +66,10 @@ class MockPdkConfig
             ClientAdapterInterface::class           => autowire(Guzzle7ClientAdapter::class),
             ConfigInterface::class                  => autowire(MockConfig::class),
             FrontendEndpointServiceInterface::class => autowire(MockFrontendEndpointService::class),
-            LanguageServiceInterface::class         => autowire(MockLanguageService::class),
+            LanguageServiceInterface::class         => autowire(MockLanguage::class),
             LoggerInterface::class                  => autowire(MockLogger::class),
             OrderStatusServiceInterface::class      => autowire(MockOrderStatusService::class),
-            ProductRepositoryInterface::class       => autowire(MockProductRepository::class),
+            PdkProductRepositoryInterface::class    => autowire(MockPdkProductRepository::class),
             SettingsRepositoryInterface::class      => autowire(MockSettingsRepository::class),
             StorageInterface::class                 => autowire(MemoryCacheStorage::class),
             TaxServiceInterface::class              => autowire(MockTaxService::class),

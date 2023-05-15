@@ -3,10 +3,10 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
-use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
@@ -54,8 +54,8 @@ it('has correct default values', function () {
 });
 
 it('updates product settings', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository $repository */
-    $repository = $this->pdk->get(ProductRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $repository */
+    $repository = $this->pdk->get(PdkProductRepositoryInterface::class);
 
     $product = $repository->getProduct('123');
 

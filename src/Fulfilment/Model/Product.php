@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 
 /**
  * @property null|string $uuid
@@ -54,7 +54,7 @@ class Product extends Model
     ];
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Plugin\Model\PdkProduct $product
+     * @param  null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
      *
      * @return static
      */

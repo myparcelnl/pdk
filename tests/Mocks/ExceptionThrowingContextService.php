@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Mocks;
 
-use MyParcelNL\Pdk\Plugin\Service\ContextService;
+use MyParcelNL\Pdk\Context\Service\ContextService;
 use RuntimeException;
 
 class ExceptionThrowingContextService extends ContextService

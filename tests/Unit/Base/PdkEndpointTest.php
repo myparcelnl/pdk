@@ -3,27 +3,27 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
+use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdatePluginSettingsAction;
+use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdateProductSettingsAction;
+use MyParcelNL\Pdk\App\Action\Backend\Shipment\DeleteShipmentsAction;
+use MyParcelNL\Pdk\App\Action\Backend\Shipment\ExportReturnAction;
+use MyParcelNL\Pdk\App\Action\Backend\Shipment\PrintShipmentsAction;
+use MyParcelNL\Pdk\App\Action\Backend\Shipment\UpdateShipmentsAction;
+use MyParcelNL\Pdk\App\Action\Backend\Webhook\CreateWebhooksAction;
+use MyParcelNL\Pdk\App\Action\Backend\Webhook\DeleteWebhooksAction;
+use MyParcelNL\Pdk\App\Action\Backend\Webhook\FetchWebhooksAction;
+use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
+use MyParcelNL\Pdk\App\Api\PdkEndpoint;
+use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Account\UpdateAccountAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Order\ExportOrderAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Order\FetchOrdersAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Order\PrintOrdersAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Order\UpdateOrderAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Settings\UpdatePluginSettingsAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Settings\UpdateProductSettingsAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\DeleteShipmentsAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\ExportReturnAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\PrintShipmentsAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Shipment\UpdateShipmentsAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\CreateWebhooksAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\DeleteWebhooksAction;
-use MyParcelNL\Pdk\Plugin\Action\Backend\Webhook\FetchWebhooksAction;
-use MyParcelNL\Pdk\Plugin\Action\Shared\Context\FetchContextAction;
-use MyParcelNL\Pdk\Plugin\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\Plugin\Api\Frontend\PdkFrontendActions;
-use MyParcelNL\Pdk\Plugin\Api\PdkEndpoint;
-use MyParcelNL\Pdk\Plugin\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
@@ -84,7 +84,7 @@ dataset('frontendActions', function () {
 
 function testEndpoint(string $action, string $context): void
 {
-    /** @var \MyParcelNL\Pdk\Plugin\Api\PdkEndpoint $endpoint */
+    /** @var \MyParcelNL\Pdk\App\Api\PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
     $response = $endpoint->call($action, $context);
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Installer\Contract\MigrationServiceInterface;
+use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 
 class MockMigrationService implements MigrationServiceInterface
 {

@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Admin\Service;
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
+use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Mocks\ExceptionThrowingContextService;
 use function DI\autowire;

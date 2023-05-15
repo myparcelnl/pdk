@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Service\AbstractTaxService;
+use MyParcelNL\Pdk\App\Tax\Service\AbstractTaxService;
 
 class MockTaxService extends AbstractTaxService
 {

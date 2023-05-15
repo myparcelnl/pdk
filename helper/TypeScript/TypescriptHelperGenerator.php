@@ -9,9 +9,9 @@ use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
 use MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection;
-use MyParcelNL\Pdk\Plugin\Context;
 use ReflectionClass;
 
 class TypescriptHelperGenerator extends AbstractHelperGenerator

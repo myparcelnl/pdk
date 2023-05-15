@@ -6,10 +6,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Plugin\Installer;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Plugin\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService;

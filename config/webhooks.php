@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Plugin\Webhook\Hook\OrderStatusChangeWebhook;
-use MyParcelNL\Pdk\Plugin\Webhook\Hook\ShipmentLabelCreatedWebhook;
-use MyParcelNL\Pdk\Plugin\Webhook\Hook\ShipmentStatusChangeWebhook;
-use MyParcelNL\Pdk\Plugin\Webhook\Hook\ShopCarrierAccessibilityUpdatedWebhook;
-use MyParcelNL\Pdk\Plugin\Webhook\Hook\ShopCarrierConfigurationUpdatedWebhook;
-use MyParcelNL\Pdk\Plugin\Webhook\Hook\ShopUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\OrderStatusChangeWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShipmentLabelCreatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShipmentStatusChangeWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShopCarrierAccessibilityUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShopCarrierConfigurationUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShopUpdatedWebhook;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 
 return [

@@ -5,20 +5,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Model\Context;
 
+use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
+use MyParcelNL\Pdk\Context\Model\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Plugin\Model\Context\DeliveryOptionsConfig;
-use MyParcelNL\Pdk\Plugin\Model\PdkCart;
-use MyParcelNL\Pdk\Product\Contract\ProductRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        ProductRepositoryInterface::class => autowire(MockProductRepository::class)->constructor([
+        PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor([
             ['externalIdentifier' => 'PDK-1', 'isDeliverable' => true],
             ['externalIdentifier' => 'PDK-2', 'isDeliverable' => true, 'exportSignature' => true],
         ]),
@@ -51,8 +51,8 @@ it('can be instantiated', function () {
 });
 
 it('can be instantiated from a cart', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockProductRepository $productRepository */
-    $productRepository = Pdk::get(ProductRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */
+    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
     $cart = new PdkCart([
         'shipmentPrice' => 695,
