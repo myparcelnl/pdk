@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 
 /**
- * @method static mixed get(string $key, string $namespace = null)
+ * @method static mixed get(string $key, string $namespace = null, $default = null)
  * @method static \MyParcelNL\Pdk\Settings\Model\Settings all()
  * @method static void persist()
  * @method static array getDefaults()

@@ -145,7 +145,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
             ],
         ],
         'path'        => 'API/shipments/1',
-        'query'       => '',
+        'query'       => 'link_consumer_portal=1',
         'contentType' => 'application/vnd.return_shipment+json;charset=utf-8',
     ],
 ]);

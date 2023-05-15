@@ -1,0 +1,8 @@
+name: myparcel
+human: MyParcel
+backofficeUrl: 'https://backoffice.myparcel.nl'
+localCountry: NL
+defaultCarrier: postnl
+defaultCarrierId: 1
+defaultSettings:
+    checkout: { pickupLocationsDefaultView: list }

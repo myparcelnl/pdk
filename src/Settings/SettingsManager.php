@@ -42,16 +42,17 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * @param  string      $key
      * @param  null|string $namespace
+     * @param  mixed       $default
      *
      * @return mixed
      */
-    public function get(string $key, ?string $namespace = null)
+    public function get(string $key, ?string $namespace = null, $default = null)
     {
         if ($namespace) {
             $key = sprintf('%s.%s', $namespace, $key);
         }
 
-        return $this->repository->get(Pdk::get('createSettingsKey')($key));
+        return $this->repository->get(Pdk::get('createSettingsKey')($key)) ?? $default;
     }
 
     /**

@@ -16,10 +16,11 @@ interface SettingsManagerInterface
     /**
      * @param  string      $key
      * @param  null|string $namespace
+     * @param  mixed       $default
      *
      * @return mixed
      */
-    public function get(string $key, ?string $namespace = null);
+    public function get(string $key, ?string $namespace = null, $default = null);
 
     /**
      * @return array

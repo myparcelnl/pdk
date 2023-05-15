@@ -108,6 +108,16 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     }
 
     /**
+     * @param  string $input
+     *
+     * @return string
+     */
+    protected function createSettingsKey(string $input): string
+    {
+        return Pdk::get('createSettingsKey')($input);
+    }
+
+    /**
      * @return string
      */
     protected function getKeyPrefix(): string
@@ -166,15 +176,5 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
         $settings->setAttribute($id, $model->fill($attributes));
 
         return $settings;
-    }
-
-    /**
-     * @param  string $input
-     *
-     * @return string
-     */
-    private function createSettingsKey(string $input): string
-    {
-        return Pdk::get('createSettingsKey')($input);
     }
 }

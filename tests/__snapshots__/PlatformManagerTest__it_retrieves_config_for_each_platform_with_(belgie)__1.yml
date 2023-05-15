@@ -1,0 +1,8 @@
+name: belgie
+human: SendMyParcel
+backofficeUrl: 'https://backoffice.sendmyparcel.be'
+localCountry: BE
+defaultCarrier: bpost
+defaultCarrierId: 2
+defaultSettings:
+    checkout: { pickupLocationsDefaultView: map }

@@ -6,13 +6,14 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        LanguageServiceInterface::class => autowire(MockAbstractLanguage::class),
+        LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
     ])
 );
 

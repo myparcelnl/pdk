@@ -131,7 +131,7 @@ it('can be instantiated from a cart', function () {
             'currency'                   => 'EUR',
             'locale'                     => 'nl-NL',
             'packageType'                => 'package',
-            'pickupLocationsDefaultView' => 'list',
+            'pickupLocationsDefaultView' => null,
             'platform'                   => 'myparcel',
             'showPriceSurcharge'         => false,
             'apiBaseUrl'                 => 'https://api.myparcel.nl',

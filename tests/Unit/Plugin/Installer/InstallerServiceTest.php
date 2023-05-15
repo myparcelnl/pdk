@@ -44,24 +44,25 @@ it('performs a fresh install of the app, filling default values from platform an
     /** @var SettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+    $createSettingsKey   = Pdk::get('createSettingsKey');
 
     // Remove the installed version from the settings:
     $settingsRepository->store($installedVersionKey, null);
 
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual(null)
-        ->and($settingsRepository->get('checkout.deliveryOptionsHeader'))
+        ->and($settingsRepository->get($createSettingsKey('checkout.deliveryOptionsHeader')))
         ->toBe(null)
-        ->and($settingsRepository->get('checkout.pickupLocationsDefaultView'))
+        ->and($settingsRepository->get($createSettingsKey('checkout.pickupLocationsDefaultView')))
         ->toBe(null);
 
     Installer::install();
 
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual('1.2.0')
-        ->and($settingsRepository->get('checkout.deliveryOptionsHeader'))
+        ->and($settingsRepository->get($createSettingsKey('checkout.deliveryOptionsHeader')))
         ->toBe('default')
-        ->and($settingsRepository->get('checkout.pickupLocationsDefaultView'))
+        ->and($settingsRepository->get($createSettingsKey('checkout.pickupLocationsDefaultView')))
         ->toBe('map');
 });
 
@@ -69,15 +70,16 @@ it('upgrades app to new version', function () {
     /** @var SettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+    $createSettingsKey   = Pdk::get('createSettingsKey');
 
     // Set the installed version to 1.1.0:
     $settingsRepository->store($installedVersionKey, '1.1.0');
 
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual('1.1.0')
-        ->and($settingsRepository->get('label.description'))
+        ->and($settingsRepository->get($createSettingsKey('label.description')))
         ->toBe(null)
-        ->and($settingsRepository->get('account.apiKey'))
+        ->and($settingsRepository->get($createSettingsKey('account.apiKey')))
         ->toBe(null);
 
     Installer::install();
@@ -96,10 +98,11 @@ it('runs down migrations on uninstall', function () {
     /** @var SettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+    $createSettingsKey   = Pdk::get('createSettingsKey');
 
     // Set the installed version to 1.1.0:
     $settingsRepository->store($installedVersionKey, '1.1.0');
-    $settingsRepository->store('account.apiKey', '12345');
+    $settingsRepository->store($createSettingsKey('account.apiKey'), '12345');
 
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual('1.1.0');
@@ -109,9 +112,9 @@ it('runs down migrations on uninstall', function () {
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual(null)
         // Expect 1.1.0 migration to have run
-        ->and($settingsRepository->get('label.description'))
+        ->and($settingsRepository->get($createSettingsKey('label.description')))
         ->toBe('old-description')
         // Expect 1.2.0 migration to not have run
-        ->and($settingsRepository->get('account.apiKey'))
+        ->and($settingsRepository->get($createSettingsKey('account.apiKey')))
         ->toBe('12345');
 });

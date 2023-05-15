@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
@@ -24,7 +25,7 @@ class MockMigration110 implements MigrationInterface
 
     public function down(): void
     {
-        $this->settingsRepository->store(self::SETTING_KEY, 'old-description');
+        $this->settingsRepository->store($this->getSettingKey(), 'old-description');
     }
 
     public function getVersion(): string
@@ -34,6 +35,14 @@ class MockMigration110 implements MigrationInterface
 
     public function up(): void
     {
-        $this->settingsRepository->store(self::SETTING_KEY, 'new-description');
+        $this->settingsRepository->store($this->getSettingKey(), 'new-description');
+    }
+
+    /**
+     * @return string
+     */
+    private function getSettingKey(): string
+    {
+        return Pdk::get('createSettingsKey')(self::SETTING_KEY);
     }
 }

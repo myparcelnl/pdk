@@ -34,15 +34,9 @@
       "postalCode": "delivery_options_postal_code",
       "saturdayDeliveryTitle": "delivery_options_saturday_delivery_title",
       "signatureTitle": "delivery_options_signature_title",
-      "headerDeliveryOptions": null
+      "headerDeliveryOptions": ""
     },
     "settings": {
-      "allowedShippingMethods": [],
-      "alwaysShow": true,
-      "disallowedShippingMethods": ["free_shipping", "local_pickup"],
-      "hiddenInputName": "pest_delivery_options",
-      "useSeparateAddressFields": false,
-      "countriesWithSeparateAddressFields": ["NL", "BE"],
       "actions": {
         "baseUrl": "FRONTEND_URL",
         "endpoints": {
@@ -69,7 +63,12 @@
             "responseProperty": null
           }
         }
-      }
+      },
+      "allowedShippingMethods": null,
+      "hasDeliveryOptions": null,
+      "hiddenInputName": "pest_checkout_data",
+      "countriesWithSeparateAddressFields": ["NL", "BE"],
+      "carriersWithTaxFields": []
     },
     "endpoints": []
   }

@@ -40,9 +40,11 @@ class PrintShipmentsAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        $format    = strtoupper($this->getLabelOption($request, LabelSettings::FORMAT));
-        $output    = $this->getLabelOption($request, LabelSettings::OUTPUT);
-        $positions = Utils::toArray($this->getLabelOption($request, LabelSettings::POSITION));
+        $format    = strtoupper($this->getLabelOption($request, LabelSettings::FORMAT, LabelSettings::DEFAULT_FORMAT));
+        $output    = $this->getLabelOption($request, LabelSettings::OUTPUT, LabelSettings::DEFAULT_OUTPUT);
+        $positions = Utils::toArray(
+            $this->getLabelOption($request, LabelSettings::POSITION, LabelSettings::DEFAULT_POSITION)
+        );
 
         $orderIds    = $this->getOrderIds($request);
         $orders      = $this->pdkOrderRepository->getMany($orderIds);
@@ -101,11 +103,12 @@ class PrintShipmentsAction extends AbstractOrderAction
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      * @param  string                                    $name
+     * @param  mixed                                     $default
      *
      * @return mixed
      */
-    private function getLabelOption(Request $request, string $name)
+    private function getLabelOption(Request $request, string $name, $default = null)
     {
-        return $request->get($name, Settings::get($name, LabelSettings::ID));
+        return $request->get($name, Settings::get($name, LabelSettings::ID, $default));
     }
 }

@@ -5,13 +5,14 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesEachMockPdkInstance([
-            LanguageServiceInterface::class => autowire(MockAbstractLanguage::class),
+            LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
         ]
     )
 );

@@ -6,26 +6,20 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use function DI\value;
+use function Spatie\Snapshots\assertMatchesSnapshot;
 
-it('gets all platform data', function () {
-    PdkFactory::create(MockPdkConfig::create());
+it('retrieves config for each platform', function (string $platform) {
+    PdkFactory::create(
+        MockPdkConfig::create([
+            'platform' => value($platform),
+        ])
+    );
 
-    expect(Platform::all())
-        ->toBe([
-            'name'             => 'myparcel',
-            'human'            => 'MyParcel',
-            'localCountry'     => 'NL',
-            'defaultCarrier'   => 'postnl',
-            'defaultCarrierId' => 1,
-            'settings'         => [
-                'defaults' => [
-                    'checkout' => [
-                        'pickupLocationsDefaultView' => 'list',
-                    ],
-                ],
-            ],
-        ]);
-});
+    $defaults = Platform::all();
+
+    assertMatchesSnapshot($defaults);
+})->with('platforms');
 
 it('gets specific keys from platform data', function () {
     PdkFactory::create(MockPdkConfig::create(['platform' => \MyParcelNL\Pdk\Account\Platform::FLESPAKKET_NAME]));

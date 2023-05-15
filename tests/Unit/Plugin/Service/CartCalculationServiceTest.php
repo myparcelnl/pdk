@@ -146,9 +146,12 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
+            'id'                  => null,
+            'name'                => null,
+            'isEnabled'           => true,
+            'allowPackageTypes'   => [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME],
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => 0,
-            'allowPackageTypes'   => [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME],
         ],
     ],
 
@@ -173,6 +176,9 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
+            'id'                  => null,
+            'name'                => null,
+            'isEnabled'           => true,
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => 2,
             'allowPackageTypes'   => [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME],
@@ -192,6 +198,9 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
+            'id'                  => null,
+            'name'                => null,
+            'isEnabled'           => true,
             'hasDeliveryOptions'  => false,
             'minimumDropOffDelay' => 0,
             'allowPackageTypes'   => [],

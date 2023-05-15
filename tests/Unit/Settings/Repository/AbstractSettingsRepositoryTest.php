@@ -51,9 +51,10 @@ it('retrieves all categories and fields', function () {
 
 it('retrieves a single setting from a category', function (string $key, $expected) {
     /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository */
-    $repository = Pdk::get(SettingsRepositoryInterface::class);
+    $repository        = Pdk::get(SettingsRepositoryInterface::class);
+    $createSettingsKey = Pdk::get('createSettingsKey');
 
-    expect($repository->get($key))->toBe($expected);
+    expect($repository->get($createSettingsKey($key)))->toBe($expected);
 })->with([
     'api key'            => ['account.apiKey', '1234567890'],
     'postnl cutoff time' => ['carrier.postnl.cutoffTime', '17:00'],
@@ -61,7 +62,8 @@ it('retrieves a single setting from a category', function (string $key, $expecte
 
 it('updates settings', function () {
     /** @var MockSettingsRepository $repository */
-    $repository = Pdk::get(SettingsRepositoryInterface::class);
+    $repository        = Pdk::get(SettingsRepositoryInterface::class);
+    $createSettingsKey = Pdk::get('createSettingsKey');
 
     $newLabelSettings = new LabelSettings([
         LabelSettings::DESCRIPTION => 'new custom text',
@@ -69,8 +71,7 @@ it('updates settings', function () {
 
     $repository->storeSettings($newLabelSettings);
 
-    /** @var LabelSettings $storedLabelSettings */
-    $storedLabelSettings = $repository->get(LabelSettings::ID);
+    $storedLabelSettings = new LabelSettings($repository->get($createSettingsKey(LabelSettings::ID)));
     expect($storedLabelSettings->description)->toBe('new custom text');
 });
 
@@ -87,7 +88,13 @@ it('gets a single setting through the settings facade by namespace', function ()
 });
 
 it('gets a settings group through the settings facade', function () {
-    $account = Settings::get(AccountSettings::ID);
+    $account = new AccountSettings(Settings::get(AccountSettings::ID));
 
-    expect($account)->toBeInstanceOf(AccountSettings::class);
+    expect($account)
+        ->toBeInstanceOf(AccountSettings::class)
+        ->and($account->toArray())
+        ->toEqual([
+            'id'     => AccountSettings::ID,
+            'apiKey' => '1234567890',
+        ]);
 });

@@ -3,17 +3,13 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use function DI\autowire;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
 const DROP_OFF_DAYS = [
     '0' => [
@@ -73,33 +69,15 @@ const DROP_OFF_DAYS = [
         'weekday'           => 2,
     ],
 ];
-function createPdk(array $settingsOverrides): void
-{
-    $config = MockPdkConfig::create([
-        SettingsRepositoryInterface::class => autowire(
-            MockSettingsRepository::class
-        )->constructor(
-            [
-                CarrierSettings::ID => [
-                    '0' => $settingsOverrides,
-                ],
-            ]
-        ),
-    ]);
 
-    PdkFactory::create($config);
-}
+usesShared(new UsesMockPdkInstance());
 
 it('returns correct delivery days using a specific date', function (
     string $date,
     array  $settingsOverrides,
     array  $expectation
 ) {
-    createPdk($settingsOverrides);
-
-    /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
-    $carrierSettings = Settings::get('carrier')
-        ->get('0');
+    $carrierSettings = (new CarrierSettings($settingsOverrides));
 
     /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
     $service = Pdk::get(DropOffServiceInterface::class);
@@ -236,11 +214,7 @@ for ($i = 1; $i < 14; $i++) {
 dataset('deliveryDaysAmountDataset', $dataset);
 
 it('returns correct amount of delivery days', function (array $settingsOverrides, int $amountOfItems) {
-    createPdk($settingsOverrides);
-
-    /** @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings */
-    $carrierSettings = Settings::get('carrier')
-        ->get('0');
+    $carrierSettings = new CarrierSettings($settingsOverrides);
 
     /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
     $service = Pdk::get(DropOffServiceInterface::class);
