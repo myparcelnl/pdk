@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
-use MyParcelNL\Pdk\App\Admin\View\PrintOptionsView;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
@@ -17,7 +16,7 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 class LabelSettingsView extends AbstractSettingsView
 {
     /**
-     * @var \MyParcelNL\Pdk\App\Admin\View\PrintOptionsView
+     * @var \MyParcelNL\Pdk\Frontend\View\PrintOptionsView
      */
     private $printOptionsView;
 

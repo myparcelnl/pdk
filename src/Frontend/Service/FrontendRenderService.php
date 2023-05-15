@@ -302,6 +302,6 @@ class FrontendRenderService implements FrontendRenderServiceInterface
      */
     private function getTemplate(string $template): string
     {
-        return sprintf('%ssrc/Plugin/Frontend/Template/%s', Pdk::get('rootDir'), $template);
+        return sprintf('%ssrc/Frontend/Template/%s', Pdk::get('rootDir'), $template);
     }
 }
