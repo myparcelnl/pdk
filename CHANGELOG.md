@@ -3,6 +3,147 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/myparcelnl/pdk/compare/v1.37.0...v2.0.0) (2023-05-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* move classes to clearer namespaces
+* **facade:** add final modifier to all facades
+* **facade:** rename Facade RenderService to Frontend
+* **facade:** rename RenderServiceInterface to FrontendRenderServiceInterface
+* **facade:** rename Facade DefaultLogger to Logger
+* **facade:** rename Facade LanguageService to Language
+* moves interfaces to different namespaces
+
+### :zap: Performance Improvements
+
+* **shipments:** do not fetch orders on deleting shipments ([ca01f9d](https://github.com/myparcelnl/pdk/commit/ca01f9daa0526ffb6f11b6d445753d7fe819fcca))
+* **shipments:** do not return deleted shipments in order data context ([96e5ffc](https://github.com/myparcelnl/pdk/commit/96e5ffca9a1164656841a9505fe45f015cd6c3dd))
+
+
+### :sparkles: New Features
+
+* **actions:** pass request query parameters to ContextService::createContexts() ([4e8fcf5](https://github.com/myparcelnl/pdk/commit/4e8fcf5d97ebc037ef0ea957a6dd912dd7084329))
+* add bootstrapper class and force appInfo to be set ([2688e34](https://github.com/myparcelnl/pdk/commit/2688e34738830e6a3736edef8be1d6700bee02ec))
+* add default minimum php version to config ([26934e0](https://github.com/myparcelnl/pdk/commit/26934e0712f998dfe36ce6aa4f860e206077f7b1))
+* add extra properties to fulfilment shipment ([f366828](https://github.com/myparcelnl/pdk/commit/f366828a431e04a6117afcbb3c60776b64655092))
+* add installer facade ([4ca8349](https://github.com/myparcelnl/pdk/commit/4ca83490f9473a659e2018ddfcb55c09d813a629))
+* add responseProperty to requests ([2cb2e5e](https://github.com/myparcelnl/pdk/commit/2cb2e5efeca9966fd5c75bb54d8ab6d0e1914b8b))
+* **admin:** add platform data to global context ([8441fdb](https://github.com/myparcelnl/pdk/commit/8441fdb36b7d8c2ce4d0d8ba622f87ba7ab356a4))
+* can send notifications from backend to frontend ([f253774](https://github.com/myparcelnl/pdk/commit/f253774d0939e88fcfd1d682eb85491912fab37d))
+* **capabilities:** add dhlparcelconnect ([83802b3](https://github.com/myparcelnl/pdk/commit/83802b353cd85187500c5e0b3ff6f5d503af4a6c))
+* **currency:** add format method ([660f892](https://github.com/myparcelnl/pdk/commit/660f892dd614de9c265b123bb411d1f402dbd20d))
+* improve settings views ([3e33e53](https://github.com/myparcelnl/pdk/commit/3e33e53b84fc965cb6bd62b4f88ddc16a74f2784))
+* make container values more granular ([f2bc19d](https://github.com/myparcelnl/pdk/commit/f2bc19dc46741b42d44a55a54d390165f70e4317))
+* pdk frontend ([19c5276](https://github.com/myparcelnl/pdk/commit/19c5276bf7c0017e37daaddf77ee8fb0703779f2))
+* **product:** add fit in digital stamp ([d6f971c](https://github.com/myparcelnl/pdk/commit/d6f971ca838a3cd36c12bd45c449dae0ea53efaf))
+* **response:** allow passing headers ([15f19e4](https://github.com/myparcelnl/pdk/commit/15f19e4c59f3776ff68a7b8e97fa00097f038a79))
+* send notification when order validation fails during export ([6d9cd5f](https://github.com/myparcelnl/pdk/commit/6d9cd5f74c3c85f7da61efd046c1b00bf1cf18c6))
+* send notifications from backend wip ([f70e122](https://github.com/myparcelnl/pdk/commit/f70e122ec948d25710b7755beafcfa8ac621f2d1))
+* send notifications from backend wip ([30f6948](https://github.com/myparcelnl/pdk/commit/30f6948a2e998c730afa5bd410eb054d745bf562))
+* **settings:** add divider to label settings view ([ba56f53](https://github.com/myparcelnl/pdk/commit/ba56f533834300f21819607db0a73e46c2493c20))
+* **settings:** add input for enabled package types ([c8b46f8](https://github.com/myparcelnl/pdk/commit/c8b46f85726fd3715e084d69bd3875db0360ba77))
+* **validation:** add dhleuroplus ([fd37d0f](https://github.com/myparcelnl/pdk/commit/fd37d0f07ecd803c618d3a5f852d479e2ccfb61a))
+
+
+* **facade:** add final modifier to all facades ([051d78e](https://github.com/myparcelnl/pdk/commit/051d78ed67164327643546a3ad4ec0abe375b2ca))
+* **facade:** rename DefaultLogger to Logger ([5fab918](https://github.com/myparcelnl/pdk/commit/5fab9187879e63e37b4bd65db06ad5c1ced2381c))
+* **facade:** rename LanguageService to Language ([6d797a4](https://github.com/myparcelnl/pdk/commit/6d797a4a71bb801fe9c24fdfc8f404f7e6edf6ab))
+* **facade:** rename RenderService to Frontend ([f4577d4](https://github.com/myparcelnl/pdk/commit/f4577d45171fd47d6983a76498a3efaf1a7e47ed))
+* move classes to clearer namespaces ([43901d7](https://github.com/myparcelnl/pdk/commit/43901d7dc98c33ddf0510bba1309bb62ba7817ac))
+* normalize interfaces ([7ec8b22](https://github.com/myparcelnl/pdk/commit/7ec8b22190eba524ad8d54a154020bbb156b72d2))
+
+
+### :bug: Bug Fixes
+
+* **actions:** allow passing cart in FetchCheckoutContext ([82c059f](https://github.com/myparcelnl/pdk/commit/82c059f5dd6da14b9fd2d585d6a3ccdd38779ed8))
+* **actions:** allow passing cart in FetchCheckoutContext ([b431e2e](https://github.com/myparcelnl/pdk/commit/b431e2e53561a194190b215019e7f77a47af1d1b))
+* **actions:** rename fetch shipments to update shipments ([b517b7a](https://github.com/myparcelnl/pdk/commit/b517b7a69f877f6d11735a76eb5d9b99aff97d6b))
+* add allowed carrier ids ([52df8b0](https://github.com/myparcelnl/pdk/commit/52df8b0c21c50c6193fcb19da236854696d265a6))
+* add codeEditor ([83c560e](https://github.com/myparcelnl/pdk/commit/83c560ec1c9ac30b3b8170ac139c4c18c3149b50))
+* add custom css to checkoutsettings ([8da2629](https://github.com/myparcelnl/pdk/commit/8da26294e7b45f481e22eb0d3265e5abc65b6e24))
+* add deliveryDaysWindow to carrier settings attributes ([5857126](https://github.com/myparcelnl/pdk/commit/5857126eff9fedb92114e291fec2ddf6664eb56a))
+* add logger to shipment validation ([d3207a4](https://github.com/myparcelnl/pdk/commit/d3207a47360d32700181d26dff08ef29ce120a53))
+* allow empty values in shipment options ([d9a43ae](https://github.com/myparcelnl/pdk/commit/d9a43ae8bdfd30d1d1c644516a102a9caff0642b))
+* allow export of fulfilment order ([4f8c2ac](https://github.com/myparcelnl/pdk/commit/4f8c2ac787657a8bf9714a5cf21c730f2a751639))
+* allow fetchcontext action to be used on frontend and backend ([e1bc671](https://github.com/myparcelnl/pdk/commit/e1bc67151704b602dc388708343bd5b7d3390964))
+* allow guzzle 5 client ([fd81828](https://github.com/myparcelnl/pdk/commit/fd818280786cf99b106152686b70cd437fdbc089))
+* **api:** remove error option ([9a1dde5](https://github.com/myparcelnl/pdk/commit/9a1dde5912a44bbdf187d0b82f0b0a454766f7c0))
+* **carrier:** fix array_merge null notice ([fc1fe3a](https://github.com/myparcelnl/pdk/commit/fc1fe3a4ef2cbfea42fb0a6167b66ed2c0020f93))
+* **carrier:** fix finding carrier again ([3674401](https://github.com/myparcelnl/pdk/commit/36744018d00901eafe2287ea46830b4bc4ce868b))
+* **carrier:** fix finding name matching id ([b14b603](https://github.com/myparcelnl/pdk/commit/b14b6032f2f109636102265fbc887c1c238aaeba))
+* **carrier:** use default carrier if none was passed ([43555ac](https://github.com/myparcelnl/pdk/commit/43555ac9172d0983a16cd274a3a89b89f896c850))
+* **carrier:** use name OR id if already present ([04a93d3](https://github.com/myparcelnl/pdk/commit/04a93d30b87068613377dd3c156490dec356ae89))
+* change api back to live api ([1ad82be](https://github.com/myparcelnl/pdk/commit/1ad82be221aac42841a70c36fb59eb4338fc2426))
+* **checkout:** get correct data in checkout context ([cfca342](https://github.com/myparcelnl/pdk/commit/cfca3426607823bfc330c4e639d02bfdfd5b1278))
+* **checkout:** pass tax fields data ([3631bf6](https://github.com/myparcelnl/pdk/commit/3631bf6a4a7a4113e0d45922bcf0638e05201739))
+* **checkout:** return allowed package types correctly ([534c3e2](https://github.com/myparcelnl/pdk/commit/534c3e2fed4408b8473935843a0f5945d2357c2b))
+* **checkout:** update delivery options config ([323694c](https://github.com/myparcelnl/pdk/commit/323694c77dfac8c3932b6c2d851bc513ef227b22))
+* construct carrier completely ([c5ca852](https://github.com/myparcelnl/pdk/commit/c5ca8527389a3281efdd282ac3881f9369818b2e))
+* correct confusing carrier settings names ([be3dde4](https://github.com/myparcelnl/pdk/commit/be3dde472a854d77420ed5351b44b2314717adc1))
+* delivery options config test ([1e17b96](https://github.com/myparcelnl/pdk/commit/1e17b9667027b14da3b3fe416e4a4efda049918b))
+* **delivery-options:** convert package and delivery types correctly ([ded621a](https://github.com/myparcelnl/pdk/commit/ded621a2e0ceec6044c33d2d1c06733a1bf43514))
+* **delivery-options:** fix error when data is null ([3812478](https://github.com/myparcelnl/pdk/commit/3812478211645a95fb9a008bb6c0d01f8d7e6ac5))
+* **delivery-options:** fix same day delivery option ([219befc](https://github.com/myparcelnl/pdk/commit/219befcdb96e579de137e3c8a6f278bb7fefd337))
+* **endpoints:** fix merging of backend/frontend and shared endpoints ([95ff264](https://github.com/myparcelnl/pdk/commit/95ff2649379ae87fcd2988fc5c89b8c4a6b005e3))
+* export same-day delivery for dhl for you ([d86c7f6](https://github.com/myparcelnl/pdk/commit/d86c7f6093a6b006a8870fe7ddb0afe954c84469))
+* **facade:** fix incorrect reference to installer service interface ([46227e6](https://github.com/myparcelnl/pdk/commit/46227e6afd23a52cbfe295cdad5af68199a920d5))
+* fix error in carrier ([65a5aeb](https://github.com/myparcelnl/pdk/commit/65a5aeb0c956490136b370043abe29eea7e0c014))
+* fix insurance always ending up to be 5000 ([7cc92a6](https://github.com/myparcelnl/pdk/commit/7cc92a6130c61e9dd320dc13cf69686c3385e103))
+* fix labels on large bulk print ([39cb78e](https://github.com/myparcelnl/pdk/commit/39cb78e4992b809c608f9e01f337f6b81aea11a7))
+* fix labels on large bulk print ([99d5a10](https://github.com/myparcelnl/pdk/commit/99d5a106d976dbcb55b9f55dd8f8a3bd1e33d300))
+* fix print options modal ([92d8991](https://github.com/myparcelnl/pdk/commit/92d8991d5ecd644eb46d711d76664b8dcfd11a33))
+* fix request body for return shipments ([4b02231](https://github.com/myparcelnl/pdk/commit/4b022314a79e070a39e87a3d7a2da561ea3eac2a))
+* fix tests (wip) ([bf79da6](https://github.com/myparcelnl/pdk/commit/bf79da6361800572ad909b778e7ba5d155d070ce))
+* get carrier id for configuration ([7169c36](https://github.com/myparcelnl/pdk/commit/7169c36dfffe5c723f5467de99d4d0f3d1219707))
+* get default time zone from config ([e4ede42](https://github.com/myparcelnl/pdk/commit/e4ede42cc86d645a8d2517b1f195d268546370bf))
+* handle fetching account better ([6cda097](https://github.com/myparcelnl/pdk/commit/6cda0971759b97dbe330f85d0edf78bfe54b82e1))
+* implement shared actions correctly ([07396d4](https://github.com/myparcelnl/pdk/commit/07396d498a7b6636b709f587d46d7ed32f5d950d))
+* improve carrier logic ([6078838](https://github.com/myparcelnl/pdk/commit/6078838c5f297f4f29603d966cdf5b7db0781b18))
+* **language:** allow null when translating arrays ([95d974d](https://github.com/myparcelnl/pdk/commit/95d974dcbd9d63753610535a4a5a9b3d782e4dc5))
+* leave out caching of capabilities ([400e33e](https://github.com/myparcelnl/pdk/commit/400e33e4d010a37394de951fb1ff3aa571878d16))
+* **model:** fix changing case of attributes ([9a1f56f](https://github.com/myparcelnl/pdk/commit/9a1f56fe2d45fc0ac2583ba7988861599e114196))
+* **model:** improve casting logic ([699cec0](https://github.com/myparcelnl/pdk/commit/699cec01ee645fbaf4f90d610a12832faed3942f))
+* **orders:** fix customs declaration error when exporting orders ([435a444](https://github.com/myparcelnl/pdk/commit/435a444bb93f66258f7978ffd7cd1f1ab824bc64))
+* **orders:** fix printing orders and shipments ([6b1647b](https://github.com/myparcelnl/pdk/commit/6b1647be1c1a233ed6986bf469b72742238c0d56))
+* **orders:** hard delete shipments ([7088cef](https://github.com/myparcelnl/pdk/commit/7088cef7b8a96beb40a612fcd313286be3b58377))
+* **orders:** ignore deleted shipments ([3af9f69](https://github.com/myparcelnl/pdk/commit/3af9f6986ac6a29f4652624de2db43754b8c129a))
+* prevent undefined key error ([2e0f915](https://github.com/myparcelnl/pdk/commit/2e0f9151a7cf9979f8887a65b9a73e58c2d72445))
+* **print:** fix error on positions parameter ([b58fab7](https://github.com/myparcelnl/pdk/commit/b58fab78fb654078d073f28d509b17f1b7a075d2))
+* **productsettings:** remove separate fit in digital stamp use package type ([f6d733d](https://github.com/myparcelnl/pdk/commit/f6d733df61a0d103c816fc0f5b0062e0071b18f4))
+* remove allowed carrier ids ([aa8d842](https://github.com/myparcelnl/pdk/commit/aa8d842b64742d3719f4866bc18728c7a45f967d))
+* remove extra data attribute from update plugin settings response ([57c71e5](https://github.com/myparcelnl/pdk/commit/57c71e5cd7923cf73b0c8b4c672457a10e5f2b31))
+* remove pdf option from print shipments ([5a86c7d](https://github.com/myparcelnl/pdk/commit/5a86c7dc30fe8e1d758632c7164a2282e34659ea))
+* **repository:** always retrieve full setting key ([7d9a492](https://github.com/myparcelnl/pdk/commit/7d9a492f523f2c4141206e3bfd240246628ac19c))
+* return correct insurance value ([ffbd419](https://github.com/myparcelnl/pdk/commit/ffbd419da65e09df95580715b389ba18916077fa))
+* return correct insurance value ([1d2d955](https://github.com/myparcelnl/pdk/commit/1d2d955f2e4212623e6997dbe7c8c3f38230c711))
+* set samedaydelivery true for non-pilot customers ([410fc03](https://github.com/myparcelnl/pdk/commit/410fc035720577626d3a57288f9ab22846a7fd49))
+* **settings:** change a4/a6 values to lowercase ([d2b760d](https://github.com/myparcelnl/pdk/commit/d2b760da0f46b38efe6c37b5f7b18a36877bf800))
+* **settings:** correct shared print settings labels ([377db04](https://github.com/myparcelnl/pdk/commit/377db04be4ecb41940174628f45b6832c199f4f3))
+* **settings:** fix insurance formatting and translations ([2885501](https://github.com/myparcelnl/pdk/commit/28855018c46bf0cbe25d056925bffa3eac39028b))
+* **settings:** fix missing select options in default package type ([0d35372](https://github.com/myparcelnl/pdk/commit/0d353728bfad44b919eef6357495068b2a4cf102))
+* **settings:** fix position input ([0957f40](https://github.com/myparcelnl/pdk/commit/0957f4004b757f14946d0e820ed3f725dc497cf6))
+* **settings:** fix type error ([24c9c57](https://github.com/myparcelnl/pdk/commit/24c9c5790971dd4450958a50dbb288c3e2f8d926))
+* **settings:** get delivery options positions correctly ([9b8f05b](https://github.com/myparcelnl/pdk/commit/9b8f05b71b398f16a6cc75e49eed09afbf0d0d47))
+* **settings:** improve form elements ([d4c0e5a](https://github.com/myparcelnl/pdk/commit/d4c0e5ab723be271a0192869ba64f96f63dd1d72))
+* **settings:** only show label position when format is a4 ([3625b7d](https://github.com/myparcelnl/pdk/commit/3625b7d75a04d214cd35ba8b1e31ca53713f3dd1))
+* **settings:** remove extra conversion to cents ([6e62437](https://github.com/myparcelnl/pdk/commit/6e6243790c0bae3b351caa30daadad46a4935c13))
+* **settings:** translate country select in customs settings ([988b383](https://github.com/myparcelnl/pdk/commit/988b383028d4f957541ac63cd7a1688543ee372b))
+* **settings:** translate country select in product settings ([e215bc0](https://github.com/myparcelnl/pdk/commit/e215bc0c140aab5f8a62cac61c5f14562e5bd609))
+* **settings:** translate order statuses in order settings ([08831d3](https://github.com/myparcelnl/pdk/commit/08831d36a6c93dcf8ea872e7254ddd36240f7fb9))
+* **shipments:** fetch consumer portal link with shipments ([94e3c89](https://github.com/myparcelnl/pdk/commit/94e3c892caeb10336361aba8c3ecfecf73fc1635))
+* **shipments:** fix label position ([8d3ec42](https://github.com/myparcelnl/pdk/commit/8d3ec42d1da4a5351b69392d8087122f2089dd4e))
+* **shipments:** only change updated if it was null ([8a4170b](https://github.com/myparcelnl/pdk/commit/8a4170b1a860b6328396c0717dafb93d6593e978))
+* **translations:** translate "none" option in selects ([1579849](https://github.com/myparcelnl/pdk/commit/1579849633c901415d64979da1c2957c497ea669))
+* update country codes ([5f1704c](https://github.com/myparcelnl/pdk/commit/5f1704c28d42ba96c4a50ea38310d562603cf4eb))
+* update delivery options ([647ac09](https://github.com/myparcelnl/pdk/commit/647ac0975a515b03dbc721e6acf0b352b124ef94))
+* update requests that return context ([efac645](https://github.com/myparcelnl/pdk/commit/efac6457836821c1d7c194bb64bd031b11db2dd2))
+* use correct timezone for updated shipments ([94f6f93](https://github.com/myparcelnl/pdk/commit/94f6f9378cd5b9d8780d5a0e433d993fb7014e2c))
+* **utils:** fix cache keys in cache function not always being unique ([6834498](https://github.com/myparcelnl/pdk/commit/68344988d3022230c0679c44061b317fe108b7cd))
+* validate export shipments ([57495b1](https://github.com/myparcelnl/pdk/commit/57495b1ae81a887a67a9880a24f343dbb6e816fa))
+* **webhook:** allow log context for symfony below 5.2 ([55b7142](https://github.com/myparcelnl/pdk/commit/55b7142707a84a68a6c59475388076132dfa5fa3))
+
 ## [1.37.0](https://github.com/myparcelnl/pdk/compare/v1.36.0...v1.37.0) (2023-03-09)
 
 
