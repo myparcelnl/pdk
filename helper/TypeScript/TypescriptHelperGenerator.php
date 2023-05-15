@@ -5,30 +5,35 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Helper\TypeScript;
 
+use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Request\Request;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
+use MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection;
 use MyParcelNL\Pdk\Plugin\Context;
 use ReflectionClass;
-use ReflectionProperty;
 
 class TypescriptHelperGenerator extends AbstractHelperGenerator
 {
     public const  UNDEFINED     = 'undefined';
     public const  SPACES_AMOUNT = 2;
     public const  UNKNOWN       = 'unknown';
+    private const FILE_NAME     = BASE_DIR . '/types/typescript/myparcel-pdk.d.ts';
     private const FALLBACK_TYPE = 'Record<string, ' . self::UNKNOWN . '>';
 
     /**
-     * @var \MyParcelNL\Pdk\Helper\TypeScript\TypeParser
+     * @var \MyParcelNL\Pdk\Helper\TypeScript\TsTypeParser
      */
     private $parser;
 
-    public function __construct()
+    /**
+     * @param  \MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection $definitions
+     */
+    public function __construct(ClassDefinitionCollection $definitions)
     {
-        $this->parser = new TypeParser();
+        parent::__construct($definitions);
+        $this->parser = new TsTypeParser();
     }
 
     /**
@@ -143,11 +148,10 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
     {
         $items = [];
 
-        foreach ($this->data as $data) {
-            $ref       = $this->reflectionCache[$data['class']];
-            $parentRef = $ref->getParentClass() ?: null;
+        foreach ($this->definitions->all() as $definition) {
+            $parentRef = $definition->ref->getParentClass() ?: null;
 
-            $parts = explode('\\', $ref->getName());
+            $parts = explode('\\', $definition->ref->getName());
             $group = null;
 
             if (count($parts) > 3) {
@@ -155,13 +159,13 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
             }
 
             $item = [
-                'name'       => $this->parser->getType("\\{$ref->getName()}"),
+                'name'       => $this->parser->getType("\\{$definition->ref->getName()}"),
                 'extends'    => $parentRef ? $this->parser->getType("\\{$parentRef->getName()}", true) : null,
                 'group'      => $group,
                 'properties' => [],
             ];
 
-            foreach ($data['properties'] as $property) {
+            foreach ($definition->properties->all() as $property) {
                 if ('property' !== $property['param']) {
                     continue;
                 }
@@ -171,9 +175,9 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
                 }, $property['types']);
             }
 
-            foreach ($ref->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            foreach ($definition->properties->all() as $property) {
                 $baseProperty = $property->getName();
-                $types        = $this->getPropertyTypesRecursive($ref, $baseProperty);
+                $types        = $this->getPropertyTypesRecursive($definition->ref, $baseProperty);
 
                 if (! $parentRef || count($types)) {
                     $item['properties'][$property->getName()] = $types;
@@ -187,36 +191,11 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
     }
 
     /**
-     * @return string
-     */
-    protected function getFileName(): string
-    {
-        return BASE_DIR . '/types/typescript/myparcel-pdk.d.ts';
-    }
-
-    /**
-     * @return array|string[]
-     */
-    protected function getWhitelistClasses(): array
-    {
-        return [
-            Collection::class,
-            Context::class,
-            Model::class,
-            Request::class,
-        ];
-    }
-
-    /**
      * @return void
      */
-    protected function write(): void
+    protected function generate(): void
     {
-        fwrite(
-            $this->getHandle(),
-            "// noinspection JSUnusedGlobalSymbols\n// @ts-nocheck\n/* eslint-disable */\n\n"
-        );
-
+        $handle  = $this->getHandle(self::FILE_NAME);
         $spaces  = str_repeat(' ', self::SPACES_AMOUNT);
         $content = $this->gatherContent();
 
@@ -262,6 +241,23 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
             }
         }
 
-        fwrite($this->getHandle(), implode(PHP_EOL, $lines));
+        $this->write(
+            $handle,
+            "// noinspection JSUnusedGlobalSymbols\n// @ts-nocheck\n/* eslint-disable */\n" . implode(PHP_EOL, $lines)
+        );
+        $this->close($handle, self::FILE_NAME);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getAllowedClasses(): array
+    {
+        return [
+            Collection::class,
+            Context::class,
+            Model::class,
+            Request::class,
+        ];
     }
 }

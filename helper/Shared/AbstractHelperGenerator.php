@@ -5,269 +5,138 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Helper\Shared;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Str;
-use Nette\Loaders\RobotLoader;
-use ReflectionClass;
+use MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection;
+use MyParcelNL\Pdk\Helper\Shared\Concern\HasLogging;
+use MyParcelNL\Pdk\Helper\Shared\Model\ClassDefinition;
+use MyParcelNL\Pdk\Helper\Shared\Service\ParsesPhpDocs;
 use RuntimeException;
 
 abstract class AbstractHelperGenerator
 {
-    /**
-     * @var array{reflectionClass: \ReflectionClass, properties: array{name: string, types: string[]}[]}[]
-     */
-    protected $data = [];
+    use HasLogging;
+    use ParsesPhpDocs;
 
     /**
-     * @var ReflectionClass[]
+     * @var \MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection
      */
-    protected $reflectionCache = [];
+    protected $definitions;
 
     /**
-     * @var resource
+     * @var array<string,resource>
      */
-    private $handle;
+    private $handles;
 
     /**
-     * @return string
+     * @param  \MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection $definitions
      */
-    abstract protected function getFileName(): string;
-
-    /**
-     * @return void
-     */
-    abstract protected function write(): void;
-
-    /**
-     * @return void
-     */
-    public function close(): void
+    public function __construct(ClassDefinitionCollection $definitions)
     {
-        if ($this->handle) {
-            fclose($this->handle);
-            $this->handle = null;
-        }
+        $this->definitions = $definitions
+            ->filter(function (ClassDefinition $definition): bool {
+                return $this->classAllowed($definition);
+            });
     }
 
     /**
      * @return void
-     * @throws \ReflectionException
-     * @throws \Throwable
      */
-    public function generate(): void
-    {
-        echo '    Generating helper ' . static::class . PHP_EOL;
-        $this->parseSource();
-
-        $this->write();
-
-        $this->close();
-
-        $path = realpath($this->getFileName());
-        echo " ✅  Wrote to $path" . PHP_EOL;
-    }
+    abstract protected function generate(): void;
 
     /**
      * @return resource
      */
-    public function getHandle()
+    public function getHandle(string $filename)
     {
-        if (! $this->handle) {
-            $outputFile = $this->getFileName();
-            $directory  = dirname($outputFile);
+        if (! $this->handles[$filename]) {
+            $directory = dirname($filename);
 
-            if (! is_dir($directory) && ! mkdir($concurrentDirectory = $directory) && ! is_dir($concurrentDirectory)) {
+            if (! is_dir($directory)
+                && ! mkdir($concurrentDirectory = $directory, 0755, true)
+                && ! is_dir($concurrentDirectory)) {
                 throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
 
-            $this->handle = fopen($outputFile, 'wb+');
+            $this->handles[$filename] = fopen($filename, 'wb+');
         }
 
-        return $this->handle;
+        return $this->handles[$filename];
     }
 
     /**
-     * @param  \ReflectionClass $class
-     * @param  array            $parents
+     * @return void
+     */
+    public function run(): void
+    {
+        $time          = $this->getTime();
+        $classBasename = Utils::classBasename(static::class);
+
+        $this->log('🧬', sprintf('Running %s...', $classBasename));
+
+        $this->generate();
+
+        $this->log('🏁', sprintf('Finished running %s in %s', $classBasename, $this->printTimeSince($time)));
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Helper\Shared\Model\ClassDefinition $definition
      *
      * @return bool
      */
-    protected function classAllowed(ReflectionClass $class, array $parents): bool
+    protected function classAllowed(ClassDefinition $definition): bool
     {
-        return true;
+        $whitelist = $this->getAllowedClasses();
+
+        if (count($whitelist) === 0) {
+            return true;
+        }
+
+        return (bool) Arr::first($whitelist, static function (string $class) use ($definition): bool {
+            return $definition->isSubclassOf($class);
+        });
     }
 
     /**
-     * @param  string   $namespace
-     * @param  string[] $types
-     * @param  string[] $uses
+     * @param  resource $handle
+     * @param  string   $filename
      *
-     * @return array
+     * @return void
      */
-    protected function getFullyQualifiedClassNames(string $namespace, array $types, array $uses): array
+    protected function close($handle, string $filename): void
     {
-        $newTypes = [];
-
-        foreach ($types as $type) {
-            if (Str::startsWith($type, 'array<')
-                || Str::startsWith($type, 'array{')
-                || in_array($type, ['array', 'string', 'bool', 'int', 'null'])
-                || Str::startsWith($type, '\\')) {
-                $newTypes[] = $type;
-                continue;
-            }
-
-            $bareType = str_replace('[]', '', $type);
-
-            $match = array_filter($uses, static function (string $use) use ($bareType) {
-                $parts = explode('\\', $use);
-                return Arr::last($parts) === $bareType;
-            });
-
-            $newTypes[] = sprintf("\\%s", Arr::first($match, null, "$namespace\\$type"));
-        }
-
-        return $newTypes;
+        fclose($handle);
+        $path = realpath($filename);
+        $this->log('✏️', "Wrote to $path");
     }
 
     /**
      * @return string[]
      */
-    protected function getWhitelistClasses(): array
+    protected function getAllowedClasses(): array
     {
-        return [Model::class, Collection::class];
+        return [];
     }
 
     /**
-     * @param  array $classNames
-     * @param  array $classes
-     *
-     * @return void
-     * @throws \ReflectionException
-     */
-    protected function parseClassNames(array $classNames, array $classes): void
-    {
-        foreach (array_keys($classNames) as $class) {
-            $ref     = new ReflectionClass($class);
-            $parents = Utils::getClassParentsRecursive($class);
-
-            if (! $this->classAllowed($ref, $parents)) {
-                continue;
-            }
-
-            $whitelistClasses = $this->getWhitelistClasses();
-
-            if (count($whitelistClasses) && ! in_array($class, $whitelistClasses, true)) {
-                $relevantParents = array_intersect($parents, $whitelistClasses);
-
-                if (empty($relevantParents)) {
-                    continue;
-                }
-            }
-
-            $classes[] = ['class' => $ref, 'parents' => $parents];
-        }
-
-        $this->parseClassesPhpDocs($classes);
-    }
-
-    /**
-     * @param  \ReflectionClass|\ReflectionMethod                     $reflection
-     * @param  \ReflectionClass|\ReflectionMethod|\ReflectionProperty $commentRef
-     *
-     * @return array
-     */
-    protected function parseDocComment($reflection, $commentRef = null): array
-    {
-        $commentRef = $commentRef ?? $reflection;
-        $uses       = [];
-
-        if ($reflection->getFileName()) {
-            $fileContents = file_get_contents($reflection->getFileName());
-
-            preg_match_all('/^use\s+(.+);$/m', $fileContents, $uses);
-        }
-
-        $comment = $commentRef->getDocComment();
-
-        if (! $comment) {
-            return [];
-        }
-
-        $pattern = "/@([A-z]+)\s+([\\\|<>\w\s{,:}\[\]]+)\s*(\\$\w+)/";
-        preg_match_all($pattern, $comment, $matches);
-
-        $i     = 0;
-        $array = [];
-
-        foreach ($matches[3] as $property) {
-            $baseProperty = str_replace('$', '', trim($property));
-
-            $types        = explode('|', trim($matches[2][$i]));
-            $fqClassNames = $this->getFullyQualifiedClassNames(
-                $reflection->getNamespaceName(),
-                $types,
-                $uses[1]
-            );
-
-            $array[] = [
-                'param' => trim($matches[1][$i]),
-                'name'  => $baseProperty,
-                'types' => $fqClassNames,
-            ];
-
-            $i++;
-        }
-
-        return $array;
-    }
-
-    /**
-     * @return void
-     * @throws \ReflectionException
-     */
-    protected function parseSource(): void
-    {
-        $loader = new RobotLoader();
-        $loader->addDirectory(BASE_DIR . '/src');
-
-        // Scans directories for classes / interfaces / traits
-        $loader->rebuild();
-
-        $classes = [];
-
-        $classNames = $loader->getIndexedClasses();
-        ksort($classNames);
-
-        $this->parseClassNames($classNames, $classes);
-    }
-
-    /**
-     * @param  array $classes
+     * @param  resource $handle
+     * @param  string   $content
      *
      * @return void
      */
-    private function parseClassesPhpDocs(array $classes): void
+    protected function write($handle, string $content): void
     {
-        foreach ($classes as $item) {
-            /** @var ReflectionClass $ref */
-            $ref  = $item['class'];
-            $name = $ref->getShortName();
+        fwrite($handle, $content);
+    }
 
-            $this->reflectionCache[$ref->getName()] = $ref;
-
-            $properties = $this->parseDocComment($ref);
-
-            $this->data[$name] = [
-                'name'            => $name,
-                'class'           => $ref->getName(),
-                'parents'         => $item['parents'],
-                'reflectionClass' => $ref,
-                'properties'      => $properties,
-            ];
-        }
+    /**
+     * @param  resource $handle
+     * @param  array    $lines
+     *
+     * @return void
+     */
+    protected function writeLines($handle, array $lines): void
+    {
+        $this->write($handle, implode(PHP_EOL, $lines) . PHP_EOL);
     }
 }

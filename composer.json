@@ -1,47 +1,49 @@
 {
-    "name": "myparcelnl/pdk",
-    "version": "1.37.0",
-    "description": "MyParcel Plugin Development Kit",
-    "type": "library",
-    "homepage": "https://myparcel.nl",
-    "license": "MIT",
-    "require": {
-        "myparcelnl/sdk": ">= 7",
-        "php": ">=7.1.0",
-        "php-di/php-di": ">= 6",
-        "symfony/http-foundation": ">= 2 || >= 3 || >= 4 || >= 5",
-        "justinrainbow/json-schema": "^5.2"
-    },
-    "scripts": {
-        "post-autoload-dump": "php helper/generate.php"
-    },
-    "require-dev": {
-        "guzzlehttp/guzzle": "^7.5",
-        "myparcelnl/devtools": ">= 1",
-        "nette/robot-loader": ">= 3",
-        "pestphp/pest": ">= 1",
-        "spatie/pest-plugin-snapshots": ">= 1"
-    },
-    "autoload": {
-        "psr-4": {
-            "MyParcelNL\\Pdk\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "MyParcelNL\\Pdk\\Tests\\": "tests/",
-            "MyParcelNL\\Pdk\\Helper\\": "helper/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Edie Lemoine",
-            "email": "edie@myparcel.nl"
-        }
-    ],
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
+  "name": "myparcelnl/pdk",
+  "version": "1.37.0",
+  "description": "MyParcel Plugin Development Kit",
+  "type": "library",
+  "homepage": "https://myparcel.nl",
+  "license": "MIT",
+  "require": {
+    "myparcelnl/sdk": ">= 7",
+    "php": ">=7.1.0",
+    "php-di/php-di": ">= 6",
+    "symfony/http-foundation": ">= 2 || >= 3 || >= 4 || >= 5",
+    "justinrainbow/json-schema": "^5.2",
+    "phpstan/phpdoc-parser": "^1.20",
+    "phpdocumentor/reflection-docblock": "^5"
+  },
+  "scripts": {
+    "post-autoload-dump": "php helper/generate.php php"
+  },
+  "require-dev": {
+    "guzzlehttp/guzzle": "^7.5",
+    "myparcelnl/devtools": ">= 1",
+    "nette/robot-loader": ">= 3",
+    "pestphp/pest": ">= 1",
+    "spatie/pest-plugin-snapshots": ">= 1"
+  },
+  "autoload": {
+    "psr-4": {
+      "MyParcelNL\\Pdk\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MyParcelNL\\Pdk\\Tests\\": "tests/",
+      "MyParcelNL\\Pdk\\Helper\\": "helper/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Edie Lemoine",
+      "email": "edie@myparcel.nl"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
 }

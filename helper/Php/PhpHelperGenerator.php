@@ -5,138 +5,154 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Helper\Php;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Helper\Shared\AbstractHelperGenerator;
+use MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection;
+use MyParcelNL\Pdk\Helper\Shared\Collection\TypeCollection;
+use MyParcelNL\Pdk\Helper\Shared\Model\ClassDefinition;
+use MyParcelNL\Pdk\Helper\Shared\Service\PhpTypeParser;
 use MyParcelNL\Sdk\src\Support\Str;
+use Symfony\Component\PropertyInfo\Type;
 
 final class PhpHelperGenerator extends AbstractHelperGenerator
 {
-    protected function getFileName(): string
+    protected const FILE_NAME = BASE_DIR . '/types/pdk_ide_helper.php';
+
+    /**
+     * @var \MyParcelNL\Pdk\Helper\Shared\Service\PhpTypeParser
+     */
+    private $typeParser;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Helper\Shared\Collection\ClassDefinitionCollection $definitions
+     */
+    public function __construct(ClassDefinitionCollection $definitions)
     {
-        return BASE_DIR . '/types/pdk_ide_helper.php';
+        parent::__construct($definitions);
+
+        $this->typeParser = new PhpTypeParser();
     }
 
     /**
      * @return void
-     * @throws \ReflectionException
      */
-    protected function write(): void
+    protected function generate(): void
     {
-        fwrite($this->getHandle(), '<?php /** @noinspection ALL */' . str_repeat(PHP_EOL, 2));
+        $handle = $this->getHandle(self::FILE_NAME);
 
-        foreach ($this->data as $data) {
-            $ref        = $data['reflectionClass'];
-            $properties = $data['properties'];
-            $parents    = $data['parents'];
+        $lines = [
+            '<?php /** @noinspection ALL */',
+            '',
+        ];
 
-            [$modelGetters, $modelSetters, $modelProperties] = $this->getModelProperties($parents, $properties);
+        foreach ($this->definitions->all() as $definition) {
+            [$modelGetters, $modelSetters, $modelProperties] = $this->getModelProperties($definition);
 
-            $propertyList = sprintf(
-                ' * %s',
-                implode(
-                    PHP_EOL . ' * ',
-                    array_merge($modelProperties, $modelGetters, $modelSetters)
-                )
-            );
+            $lines[] = "namespace {$definition->ref->getNamespaceName()};";
+            $lines[] = '';
+            $lines[] = '/**';
 
-            fwrite(
-                $this->getHandle(),
-                <<<EOF
+            foreach (array_merge($modelProperties, $modelGetters, $modelSetters) as $property) {
+                $lines[] = " * $property";
+            }
 
-namespace {$ref->getNamespaceName()};
-
-/**
-$propertyList
- */
-class {$ref->getShortName()} { }
-
-EOF
-            );
+            $lines[] = ' */';
+            $lines[] = "class {$definition->ref->getShortName()} { }";
+            $lines[] = '';
         }
+
+        $this->writeLines($handle, $lines);
+        $this->close($handle, self::FILE_NAME);
     }
 
     /**
-     * @param  array $parents
-     * @param  array $properties
+     * @return string[]
+     */
+    protected function getAllowedClasses(): array
+    {
+        return [/*Model::class,*/ Collection::class];
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Helper\Shared\Model\ClassDefinition $definition
      *
      * @return array[]
      */
-    private function getModelProperties(array $parents, array $properties): array
+    private function getModelProperties(ClassDefinition $definition): array
     {
-        $isCollection = in_array(Collection::class, $parents, true);
+        $isCollection = $definition->isSubclassOf(Collection::class);
 
         $modelGetters    = [];
         $modelSetters    = [];
         $modelProperties = [];
 
-        foreach ($properties as $property) {
-            $baseProperty       = $property['name'];
-            $types              = $property['types'];
-            $fqClassNamesString = implode('|', $types);
-            $typeHint           = $this->getTypeHint($types);
+        /** @var \MyParcelNL\Pdk\Helper\Shared\Model\ClassProperty $property */
+        foreach ($definition->properties->all() as $property) {
+            $propertyName = $property->name;
+
+            $fqClassNamesString = implode('|', $property->types->getNames());
+            $typeHint           = $this->getTypeHint($property->types);
 
             if (! $isCollection) {
                 $strippedFqcn = preg_replace('/<.+>|\{.+}/', '', $fqClassNamesString);
-                $getter       = Str::camel('get_' . $baseProperty);
-                $setter       = Str::camel(sprintf('set_%s_attribute', $baseProperty));
+                $getter       = Str::camel("get_$propertyName");
+                $setter       = Str::camel(sprintf('set_%s_attribute', $propertyName));
 
                 $modelGetters[] = "@method $strippedFqcn $getter()";
-                $modelSetters[] = "@method $strippedFqcn $setter($typeHint$$baseProperty)";
+                $modelSetters[] = "@method $strippedFqcn $setter($typeHint\$$propertyName)";
             }
 
-            if ($isCollection && 'items' === $baseProperty) {
-                $singleTypeHint = str_replace('[]', '', $typeHint);
+            if ($isCollection) {
+                if ('items' === $propertyName) {
+                    $singleTypeHint = str_replace('[]', '', $typeHint);
 
-                $modelGetters[] = "@method {$typeHint}all()";
-                $modelGetters[] = "@method {$typeHint}filter(callable \$callback = null)";
-                $modelGetters[] = "@method {$singleTypeHint}first(callable \$callback = null)";
-                $modelGetters[] = "@method {$singleTypeHint}firstWhere(string \$key, mixed \$operator, mixed \$value = null)";
-                $modelGetters[] = '@method mixed map(callable $callback = null)';
-                $modelGetters[] = "@method {$singleTypeHint}pop()";
-                $modelGetters[] = "@method {$singleTypeHint}shift()";
+                    $modelProperties[] = trim("@property $fqClassNamesString $$propertyName");
+                    $modelGetters[]    = "@method {$typeHint}all()";
+                    $modelGetters[]    = "@method {$typeHint}filter(callable \$callback = null)";
+                    $modelGetters[]    = "@method {$singleTypeHint}first(callable \$callback = null)";
+                    $modelGetters[]    = "@method {$singleTypeHint}firstWhere(string \$key, mixed \$operator, mixed \$value = null)";
+                    $modelGetters[]    = '@method mixed map(callable $callback = null)';
+                    $modelGetters[]    = "@method {$singleTypeHint}pop()";
+
+                    $modelGetters[] = "@method {$singleTypeHint}shift()";
+                }
+            } else {
+                $modelProperties[] = trim("@property $fqClassNamesString $$propertyName");
             }
-
-            $modelProperties[] = "@property $fqClassNamesString $$baseProperty";
         }
 
         return [$modelGetters, $modelSetters, $modelProperties];
     }
 
     /**
-     * @param  array $types
+     * @param  \MyParcelNL\Pdk\Helper\Shared\Collection\TypeCollection $types
      *
      * @return string
      */
-    private function getTypeHint(array $types): string
+    private function getTypeHint(TypeCollection $types): string
     {
         $singleType = null;
 
-        if (count($types) > 1) {
-            $collectionTypes = array_values(
-                array_filter($types, static function ($type) {
-                    return class_exists($type)
-                        && in_array(
-                            Collection::class,
-                            Utils::getClassParentsRecursive($type),
-                            true
-                        );
-                })
-            );
-
-            $nullTypes = array_filter($types, static function ($type) {
-                return 'null' === $type;
+        if ($types->count() > 1) {
+            $collectionTypes = $types->filter(function (Type $type) {
+                return $this->typeParser->extendsCollection($type);
             });
 
-            if (! empty($collectionTypes)) {
-                $singleType = "$collectionTypes[0] ";
+            $nullTypes = $types->filter(static function (Type $type) {
+                return $type->isNullable();
+            });
+
+            if ($collectionTypes->isNotEmpty()) {
+                /** @var Type $type */
+                $type       = $collectionTypes->first();
+                $singleType = sprintf("%s ", $this->typeParser->getTypeAsString($type));
             }
 
-            if (! empty($nullTypes)) {
+            if ($nullTypes->isNotEmpty()) {
                 $singleType = "?$singleType";
             }
         }
 
-        $singleType = (string) ($singleType ?? $types[0]);
+        $singleType = $singleType ?? $this->typeParser->getTypeAsString($types->first());
 
         if (Str::contains($singleType, '{')) {
             $singleType = Str::before($singleType, '{');
