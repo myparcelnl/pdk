@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
  * @method static array getDefaults()
  * @implements \MyParcelNL\Pdk\Settings\SettingsManager
  */
-class Settings extends Facade
+final class Settings extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

@@ -17,7 +17,7 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
  * @method static bool isProduction()
  * @implements \MyParcelNL\Pdk\Base\Pdk
  */
-class Pdk extends Facade
+final class Pdk extends Facade
 {
     /**
      * @return string

@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Plugin\Notification\NotificationManager;
  * @method static bool isEmpty()
  * @implements \MyParcelNL\Pdk\Plugin\Notification\NotificationManager
  */
-class Notifications extends Facade
+final class Notifications extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

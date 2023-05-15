@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method static Response execute($action, array $parameters = [])
  * @implements PdkActions
  */
-class Actions extends Facade
+final class Actions extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

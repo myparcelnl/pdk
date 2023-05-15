@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
  * @method static bool hasTaxFields()
  * @implements \MyParcelNL\Pdk\Account\Service\AccountSettingsService
  */
-class AccountSettings extends Facade
+final class AccountSettings extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

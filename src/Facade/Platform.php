@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Platform\PlatformManager;
  * @method static mixed get(string $key)
  * @implements \MyParcelNL\Pdk\Platform\PlatformManager
  */
-class Platform extends Facade
+final class Platform extends Facade
 {
     /**
      * @return string

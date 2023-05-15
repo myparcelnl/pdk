@@ -21,7 +21,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
  * @method static string renderProductSettings(PdkProduct $product)
  * @implements FrontendRenderServiceInterface
  */
-class Frontend extends Facade
+final class Frontend extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
