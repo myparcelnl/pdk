@@ -117,8 +117,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $dropOff             = $this->dropOffService->getForDate($carrierSettings);
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
+        $settings = $this->getBaseSettings($carrierSettings);
+
         return array_merge(
-            $this->getBaseSettings($carrierSettings),
+            $settings,
             [
                 'deliveryDaysWindow'   => $carrierSettings->deliveryDaysWindow,
                 'dropOffDelay'         => max($minimumDropOffDelay, $carrierSettings->dropOffDelay),
