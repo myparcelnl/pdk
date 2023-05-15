@@ -146,7 +146,10 @@ class Model implements Arrayable, ArrayAccess
     public function fill(array $attributes): self
     {
         foreach ($attributes as $key => $value) {
-            if (is_string($value) && class_exists($value) && Str::contains($value, '\\')) {
+            if (is_string($value)
+                && class_exists($value)
+                && $this->isClassCastable($key)
+                && Str::contains($value, '\\')) {
                 $value = new $value();
             }
 

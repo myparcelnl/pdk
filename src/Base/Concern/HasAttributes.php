@@ -334,7 +334,6 @@ trait HasAttributes
      */
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
-        $koekje = $this->getCasts();
         foreach ($this->getCasts() as $key => $value) {
             $originalKey = $this->convertAttributeCase($key);
             $key         = $this->convertAttributeCase($key, $flags);
@@ -559,9 +558,9 @@ trait HasAttributes
      *
      * @param  string $key
      *
-     * @return string
+     * @return null|string
      */
-    protected function getCastType(string $key): string
+    protected function getCastType(string $key): ?string
     {
         return $this->getCasts()[$this->convertAttributeCase($key)];
     }
@@ -666,9 +665,9 @@ trait HasAttributes
      */
     protected function isClassCastable(string $key): bool
     {
-        $castType = $this->parseCasterClass($this->getCasts()[$key]);
+        $castType = $this->parseCasterClass($this->getCastType($key));
 
-        if (in_array($castType, self::$primitiveCastTypes)) {
+        if (! $castType || in_array($castType, self::$primitiveCastTypes)) {
             return false;
         }
 
@@ -724,15 +723,15 @@ trait HasAttributes
     /**
      * Parse the given caster class, removing any arguments.
      *
-     * @param  string $class
+     * @param  null|string $class
      *
      * @return string
      */
-    protected function parseCasterClass(string $class): string
+    protected function parseCasterClass(?string $class): ?string
     {
-        return ! Str::contains($class, ':')
-            ? $class
-            : explode(':', $class, 2)[0];
+        return Str::contains($class ?? '', ':')
+            ? explode(':', $class, 2)[0]
+            : $class;
     }
 
     /**
