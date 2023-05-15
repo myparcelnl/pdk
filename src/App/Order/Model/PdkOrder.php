@@ -191,7 +191,7 @@ class PdkOrder extends Model implements StorableArrayable
     /**
      * @param  mixed $deliveryOptions
      *
-     * @return $this
+     * @return self
      * @noinspection PhpUnused
      */
     protected function setDeliveryOptionsAttribute($deliveryOptions): self
@@ -204,7 +204,7 @@ class PdkOrder extends Model implements StorableArrayable
     /**
      * @param  mixed $orderLines
      *
-     * @return $this
+     * @return self
      * @noinspection PhpUnused
      */
     protected function setLinesAttribute($orderLines): self
@@ -217,7 +217,7 @@ class PdkOrder extends Model implements StorableArrayable
     /**
      * @param  mixed $shipments
      *
-     * @return \MyParcelNL\Pdk\App\Model\PdkOrder
+     * @return self
      * @noinspection PhpUnused
      */
     protected function setShipmentsAttribute($shipments): self
