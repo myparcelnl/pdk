@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Plugin\Api\Contract\BackendEndpointServiceInterface;
@@ -59,8 +59,8 @@ class GlobalContext extends Model
 
         $this->attributes['appInfo']      = Pdk::getAppInfo();
         $this->attributes['mode']         = Pdk::getMode();
-        $this->attributes['language']     = LanguageService::getIso2();
-        $this->attributes['translations'] = LanguageService::getTranslations();
+        $this->attributes['language']     = Language::getIso2();
+        $this->attributes['translations'] = Language::getTranslations();
 
         /** @var \MyParcelNL\Pdk\Plugin\Api\Contract\EndpointServiceInterface $endpointActions */
         $endpointActions = Pdk::get(BackendEndpointServiceInterface::class);

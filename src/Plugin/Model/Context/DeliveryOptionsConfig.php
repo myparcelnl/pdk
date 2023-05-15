@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
@@ -57,7 +57,7 @@ class DeliveryOptionsConfig extends Model
      */
     public function __construct(?array $data = null)
     {
-        $this->locale     = LanguageService::getLanguage();
+        $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
         $this->platform   = Pdk::get('platform');
 

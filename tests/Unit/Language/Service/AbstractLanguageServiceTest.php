@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
@@ -25,42 +25,42 @@ dataset('languages', [
 ]);
 
 it('gets current language', function () {
-    expect(LanguageService::getLanguage())->toBe('en-GB');
+    expect(Language::getLanguage())->toBe('en-GB');
 });
 
 it('loads translations from file', function (?string $language) {
-    expect(LanguageService::getTranslations($language))->toBeArray();
+    expect(Language::getTranslations($language))->toBeArray();
 })->with('languages');
 
 it('translates strings in current language', function (?string $language, string $translation) {
     if ($language) {
-        LanguageService::setLanguage($language);
+        Language::setLanguage($language);
     }
 
-    expect(LanguageService::translate('send_help'))->toBe($translation);
+    expect(Language::translate('send_help'))->toBe($translation);
 })->with('languages');
 
 it('translates strings in given language', function (?string $language, string $translation) {
-    expect(LanguageService::translate('send_help', $language))->toBe($translation);
+    expect(Language::translate('send_help', $language))->toBe($translation);
 })->with('languages');
 
 it('ignores missing strings', function () {
-    expect(LanguageService::translate('help_is_coming'))->toBe('help_is_coming');
+    expect(Language::translate('help_is_coming'))->toBe('help_is_coming');
 });
 
 it('checks if a translation exists', function () {
-    expect(LanguageService::hasTranslation('send_help'))
+    expect(Language::hasTranslation('send_help'))
         ->toBeTrue()
-        ->and(LanguageService::hasTranslation('help_is_coming'))
+        ->and(Language::hasTranslation('help_is_coming'))
         ->toBeFalse();
 });
 
 it('converts to iso2 language code', function (?string $language, string $translation, string $iso2) {
-    expect(LanguageService::getIso2($language))->toBe($iso2);
+    expect(Language::getIso2($language))->toBe($iso2);
 })->with('languages');
 
 it('translates indexed arrays', function () {
-    $result = LanguageService::translateArray(['send_help', 'help_is_coming']);
+    $result = Language::translateArray(['send_help', 'help_is_coming']);
     expect($result)
         ->toBeArray()
         ->and($result)
@@ -71,7 +71,7 @@ it('translates indexed arrays', function () {
 });
 
 it('translates associative arrays', function () {
-    $result = LanguageService::translateArray([
+    $result = Language::translateArray([
         'string_1' => 'send_help',
         'string_2' => 'help_is_coming',
         'string_3' => 'i_am_trapped',
@@ -88,7 +88,7 @@ it('translates associative arrays', function () {
 });
 
 it('translates nested associative arrays', function () {
-    $result = LanguageService::translateArray([
+    $result = Language::translateArray([
         'string_1'  => 'send_help',
         'string_2'  => 'help_is_coming',
         'send_help' => [

@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Model\Context;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Plugin\Api\Contract\FrontendEndpointServiceInterface;
@@ -140,7 +140,7 @@ class CheckoutContext extends Model
     {
         $header = Settings::get(CheckoutSettings::ID, CheckoutSettings::DELIVERY_OPTIONS_HEADER);
 
-        return LanguageService::translateArray(
+        return Language::translateArray(
             array_merge(
                 self::TRANSLATION_MAP,
                 [

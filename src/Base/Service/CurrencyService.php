@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 
 class CurrencyService implements CurrencyServiceInterface
 {
@@ -60,7 +60,7 @@ class CurrencyService implements CurrencyServiceInterface
     public function format(int $amount): string
     {
         $currencySymbol = '€';
-        $iso2           = LanguageService::getIso2();
+        $iso2           = Language::getIso2();
 
         if ($iso2 === 'nl') {
             return sprintf('%s %s', $currencySymbol, number_format($amount / 100, 2, ',', '.'));

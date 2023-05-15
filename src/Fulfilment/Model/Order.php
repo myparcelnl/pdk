@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrderLine;
@@ -99,7 +99,7 @@ class Order extends Model
                 'fulfilmentPartnerIdentifier' => null,
                 'deliveryOptions'             => $pdkOrder->deliveryOptions,
                 'invoiceAddress'              => $pdkOrder->billingAddress ?? null,
-                'language'                    => LanguageService::getIso2(),
+                'language'                    => Language::getIso2(),
                 'orderDate'                   => $pdkOrder->orderDate,
                 'orderLines'                  => $pdkOrder->lines
                     ->map(function (PdkOrderLine $pdkOrderLine) {

@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
  * @method static string hasTranslation(string $string, string $language = null)
  * @implements \MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface
  */
-class LanguageService extends Facade
+class Language extends Facade
 {
     /**
      * @return string

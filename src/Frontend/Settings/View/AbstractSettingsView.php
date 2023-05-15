@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Frontend\Settings\View;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Facade\LanguageService;
+use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
@@ -209,7 +209,7 @@ abstract class AbstractSettingsView implements Arrayable
 
                 $element->props['label'] = $label;
 
-                if (LanguageService::hasTranslation($description)) {
+                if (Language::hasTranslation($description)) {
                     $element->props['description'] = $description;
                 }
             }
