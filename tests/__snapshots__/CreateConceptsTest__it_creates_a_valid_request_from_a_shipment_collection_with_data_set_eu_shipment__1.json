@@ -7,7 +7,7 @@
       "items": [
         {
           "amount": 1,
-          "classification": 9609,
+          "classification": "9609",
           "country": "NL",
           "description": "trendy pencil",
           "item_value": {
@@ -18,7 +18,7 @@
         },
         {
           "amount": 1,
-          "classification": 40169200,
+          "classification": "40169200",
           "country": "NL",
           "description": "beautiful eraser",
           "item_value": {
@@ -27,7 +27,8 @@
           },
           "weight": 350
         }
-      ]
+      ],
+      "weight": 550
     },
     "general_settings": {
       "save_recipient_address": 0
