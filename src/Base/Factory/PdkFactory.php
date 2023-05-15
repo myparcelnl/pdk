@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Base\Factory;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Pdk;
 
@@ -16,15 +17,13 @@ class PdkFactory
     /**
      * @param  array[]|string[] $config
      *
-     * @return \MyParcelNL\Pdk\Base\Pdk
+     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface
      * @throws \Exception
      */
-    public static function create(...$config): Pdk
+    public static function create(...$config): PdkInterface
     {
         $container = self::setupContainer(...$config);
         $pdk       = new Pdk($container);
-
-        $container->set(Pdk::class, $pdk);
 
         Facade::setPdkInstance($pdk);
 
