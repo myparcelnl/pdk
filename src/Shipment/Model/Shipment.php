@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Arr;
@@ -200,33 +199,13 @@ class Shipment extends Model implements StorableArrayable
      * Carrier is passed to the delivery options.
      *
      * @param  null|array $data
+     *
+     * @throws \Exception
      */
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
         $this->updateCarrier();
-    }
-
-    /**
-     * @return string
-     */
-    public function getTrackTraceLink(): string
-    {
-        if (CountryCodes::CC_NL === $this->recipient->cc) {
-            return sprintf(
-                'https://myparcel.me/track-trace/%s/%s/%s',
-                $this->barcode,
-                $this->recipient->postalCode,
-                $this->recipient->cc
-            );
-        }
-
-        return sprintf(
-            'https://www.internationalparceltracking.com/Main.aspx#/track/%s/%s/%s',
-            $this->barcode,
-            $this->recipient->cc,
-            $this->recipient->postalCode
-        );
     }
 
     /**
