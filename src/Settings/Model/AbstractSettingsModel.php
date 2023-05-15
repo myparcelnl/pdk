@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Platform;
 
 /**
@@ -31,7 +31,7 @@ abstract class AbstractSettingsModel extends Model implements StorableArrayable
         parent::__construct($data);
 
         if (! $this->id) {
-            DefaultLogger::error('Settings model must have an id.', ['class' => static::class]);
+            Logger::error('Settings model must have an id.', ['class' => static::class]);
         }
 
         $this->setPlatformDefaults();

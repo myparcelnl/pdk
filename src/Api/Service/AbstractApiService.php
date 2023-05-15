@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use RuntimeException;
 use Throwable;
@@ -61,12 +61,12 @@ abstract class AbstractApiService implements ApiServiceInterface
             'body'    => $options['body'] ? json_decode($options['body'], true) : null,
         ];
 
-        DefaultLogger::debug('Sending request to MyParcel', $logContext);
+        Logger::debug('Sending request to MyParcel', $logContext);
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
         } catch (Throwable $e) {
-            DefaultLogger::error(
+            Logger::error(
                 'Error sending request to MyParcel',
                 ['error' => $e->getMessage()] + $logContext
             );
@@ -77,7 +77,7 @@ abstract class AbstractApiService implements ApiServiceInterface
         $responseObject = new $responseClass($response);
 
         if ($responseObject->isErrorResponse()) {
-            DefaultLogger::error(
+            Logger::error(
                 'Received an error response from MyParcel',
                 [
                     'code'   => $response->getStatusCode(),
@@ -87,7 +87,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             throw new ApiException($response);
         }
 
-        DefaultLogger::debug('Received response from MyParcel', compact('response'));
+        Logger::debug('Received response from MyParcel', compact('response'));
 
         return $responseObject;
     }

@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Plugin\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
@@ -79,7 +79,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         try {
             $order->deliveryOptions->shipmentOptions = $this->mergeOrderLines($order);
         } catch (Throwable $e) {
-            DefaultLogger::error('Could not calculate shipment options', ['exception' => $e]);
+            Logger::error('Could not calculate shipment options', ['exception' => $e]);
             return;
         }
     }

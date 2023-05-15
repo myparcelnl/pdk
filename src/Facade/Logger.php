@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
  * @method static void warning($message, array $context = [])
  * @implements \Psr\Log\LoggerInterface
  */
-class DefaultLogger extends Facade
+class Logger extends Facade
 {
     /**
      * @return string

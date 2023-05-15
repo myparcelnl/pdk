@@ -4,15 +4,15 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 it('logs logs', function (string $level, string $message, array $context = []) {
     PdkFactory::create(MockPdkConfig::create());
 
-    DefaultLogger::{$level}($message, $context);
+    Logger::{$level}($message, $context);
 
-    expect(DefaultLogger::getLogs())->toBe([
+    expect(Logger::getLogs())->toBe([
         [
             'level'   => $level,
             'message' => "[PDK]: $message",

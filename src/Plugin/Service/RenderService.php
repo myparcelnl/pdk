@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Service;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
@@ -242,7 +242,7 @@ class RenderService implements RenderServiceInterface
 
             return strtr($template, $templateParameters + ['__CONTEXT__' => $this->encodeContext($context)]);
         } catch (Throwable $e) {
-            DefaultLogger::error(
+            Logger::error(
                 $e->getMessage(),
                 array_merge([
                     'trace' => $e->getTraceAsString(),

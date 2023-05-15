@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 use Exception;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
@@ -104,7 +104,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         try {
             $capabilities = $this->carrierOptions->capabilities->toArray();
         } catch (Exception $e) {
-            DefaultLogger::warning('Could not get capabilities from carrier options', [
+            Logger::warning('Could not get capabilities from carrier options', [
                 'exception' => $e,
             ]);
 

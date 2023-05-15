@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Contract\PdkApiInterface;
 use MyParcelNL\Pdk\Plugin\Webhook\Contract\PdkWebhooksRepositoryInterface;
@@ -67,26 +67,26 @@ class PdkWebhook implements PdkApiInterface
         $logContext   = ['request' => get_object_vars($request)];
 
         if ($request->getRequestUri() !== $requiredPath) {
-            DefaultLogger::error('Webhook received with invalid url', $logContext);
+            Logger::error('Webhook received with invalid url', $logContext);
             return;
         }
 
-        DefaultLogger::debug('Webhook received', $logContext);
+        Logger::debug('Webhook received', $logContext);
 
         foreach ($this->getHooks($request) as $hook) {
             try {
                 $hook = $this->resolveHook($hook['event'] ?? null);
 
                 if (! $hook->validate($request)) {
-                    DefaultLogger::debug('Webhook skipped', $logContext);
+                    Logger::debug('Webhook skipped', $logContext);
                     continue;
                 }
 
                 $hook->handle($request);
 
-                DefaultLogger::debug('Webhook processed', $logContext);
+                Logger::debug('Webhook processed', $logContext);
             } catch (Throwable $exception) {
-                DefaultLogger::error('Webhook failed', $logContext);
+                Logger::error('Webhook failed', $logContext);
             }
         }
     }

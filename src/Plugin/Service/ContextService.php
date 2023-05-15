@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Plugin\Service;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\DefaultLogger;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Plugin\Collection\OrderDataContextCollection;
 use MyParcelNL\Pdk\Plugin\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Plugin\Context;
@@ -129,7 +129,7 @@ class ContextService implements ContextServiceInterface
                 return $this->createCheckoutContext($data['cart'] ?? null);
         }
 
-        DefaultLogger::alert('Invalid context key passed.', compact('contextId', 'data'));
+        Logger::alert('Invalid context key passed.', compact('contextId', 'data'));
         return null;
     }
 }
