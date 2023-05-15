@@ -18,11 +18,6 @@ class Collection extends SdkCollection implements Arrayable
     protected $cast;
 
     /**
-     * @var array
-     */
-    private $classCastCache = [];
-
-    /**
      * @param  mixed $items
      */
     public function __construct($items = [])
