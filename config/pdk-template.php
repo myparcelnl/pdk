@@ -171,7 +171,7 @@ return [
     PdkWebhookServiceInterface::class => autowire(),
 
     /**
-     * Handles views in your application, like detecting pages. The RenderService uses this service to determine where it should render components.
+     * Handles views in your application, like detecting pages. The FrontendRenderService uses this service to determine where it should render components.
      *
      * @note Required for the admin frontend.
      * @see  \MyParcelNL\Pdk\Plugin\Service\AbstractViewService

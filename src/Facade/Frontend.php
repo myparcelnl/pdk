@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
@@ -19,12 +19,12 @@ use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
  * @method static string renderOrderListItem(PdkOrder $order)
  * @method static string renderPluginSettings()
  * @method static string renderProductSettings(PdkProduct $product)
- * @implements RenderServiceInterface
+ * @implements FrontendRenderServiceInterface
  */
-class RenderService extends Facade
+class Frontend extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return RenderServiceInterface::class;
+        return FrontendRenderServiceInterface::class;
     }
 }

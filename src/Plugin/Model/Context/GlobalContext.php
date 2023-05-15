@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Plugin\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\Plugin\Collection\EndpointRequestCollection;
-use MyParcelNL\Pdk\Plugin\Service\RenderService;
+use MyParcelNL\Pdk\Plugin\Service\FrontendRenderService;
 
 /**
  * @property AppInfo                   $appInfo
@@ -29,9 +29,9 @@ class GlobalContext extends Model
     public    $attributes = [
         'appInfo'      => null,
         'baseUrl'      => null,
-        'bootstrapId'  => RenderService::BOOTSTRAP_CONTAINER_ID,
+        'bootstrapId'  => FrontendRenderService::BOOTSTRAP_CONTAINER_ID,
         'endpoints'    => EndpointRequestCollection::class,
-        'event'        => RenderService::BOOTSTRAP_RENDER_EVENT,
+        'event'        => FrontendRenderService::BOOTSTRAP_RENDER_EVENT,
         'language'     => null,
         'mode'         => null,
         'platform'     => [],

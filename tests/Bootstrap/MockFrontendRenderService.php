@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Plugin\Service\RenderService;
+use MyParcelNL\Pdk\Plugin\Service\FrontendRenderService;
 
-class MockRenderService extends RenderService
+class MockFrontendRenderService extends FrontendRenderService
 {
     public const RENDERED_CONTENT = '(content)';
 

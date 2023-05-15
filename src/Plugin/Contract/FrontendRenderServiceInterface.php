@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkCart;
 use MyParcelNL\Pdk\Plugin\Model\PdkOrder;
 use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 
-interface RenderServiceInterface
+interface FrontendRenderServiceInterface
 {
     /**
      * Renders the delivery options component.

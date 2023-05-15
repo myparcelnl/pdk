@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Plugin\Context;
 use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Plugin\Model\Context\ContextBag;
 use MyParcelNL\Pdk\Plugin\Model\PdkCart;
@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\Plugin\Model\PdkProduct;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
-class RenderService implements RenderServiceInterface
+class FrontendRenderService implements FrontendRenderServiceInterface
 {
     public const  BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-boot';
     /**
@@ -30,7 +30,7 @@ class RenderService implements RenderServiceInterface
      */
     protected const COMPONENT_DELIVERY_OPTIONS = 'DeliveryOptions';
     /**
-     * Admin components
+     * Frontend components
      */
     protected const COMPONENT_INIT_SCRIPT      = 'init';
     protected const COMPONENT_MODALS           = 'Modals';
@@ -302,6 +302,6 @@ class RenderService implements RenderServiceInterface
      */
     private function getTemplate(string $template): string
     {
-        return sprintf('%ssrc/Plugin/Admin/Template/%s', Pdk::get('rootDir'), $template);
+        return sprintf('%ssrc/Plugin/Frontend/Template/%s', Pdk::get('rootDir'), $template);
     }
 }

@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Frontend\Service\ScriptService;
 use MyParcelNL\Pdk\Plugin\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\DeliveryOptionsServiceInterface;
-use MyParcelNL\Pdk\Plugin\Contract\RenderServiceInterface;
+use MyParcelNL\Pdk\Plugin\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Plugin\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\Plugin\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\Plugin\Installer\Contract\MigrationServiceInterface;
@@ -24,7 +24,7 @@ use MyParcelNL\Pdk\Plugin\Installer\MigrationService;
 use MyParcelNL\Pdk\Plugin\Service\CartCalculationService;
 use MyParcelNL\Pdk\Plugin\Service\ContextService;
 use MyParcelNL\Pdk\Plugin\Service\DeliveryOptionsService;
-use MyParcelNL\Pdk\Plugin\Service\RenderService;
+use MyParcelNL\Pdk\Plugin\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Plugin\Service\ShipmentOptionsService;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\SettingsManager;
@@ -51,7 +51,7 @@ return [
     /**
      * Used to render parts of the admin frontend.
      */
-    RenderServiceInterface::class          => autowire(RenderService::class),
+    FrontendRenderServiceInterface::class  => autowire(FrontendRenderService::class),
 
     /**
      * Provides context for the admin frontend.
