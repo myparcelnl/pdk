@@ -368,7 +368,7 @@ trait HasAttributes
             }
 
             if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
-                $attributes = Utils::changeArrayKeysCase($this->attributes, $this->getFlagCase($flags));
+                $attributes = Utils::changeArrayKeysCase($attributes, $this->getFlagCase($flags));
             }
         }
 
