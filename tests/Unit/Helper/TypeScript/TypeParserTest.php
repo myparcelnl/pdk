@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Helper\TypeScript\TypeParser;
+use MyParcelNL\Pdk\Helper\TypeScript\TsTypeParser;
 use MyParcelNL\Pdk\Plugin\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection;
 
 it('converts to ts type', function ($input, $expected) {
-    $class = new TypeParser();
+    $class = new TsTypeParser();
 
     expect($class->getType($input))->toEqual($expected);
 })
@@ -35,7 +35,7 @@ it('converts to ts type', function ($input, $expected) {
     ->skip();
 
 it('converts to ts type as reference', function ($input, $expected) {
-    $class = new TypeParser();
+    $class = new TsTypeParser();
 
     expect($class->getType($input, true))->toEqual($expected);
 })

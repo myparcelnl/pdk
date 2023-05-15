@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Helper\Shared\Concern;
 
 use MyParcelNL\Pdk\Helper\Storage\CacheFileStorage;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
-use MyParcelNL\Pdk\Storage\StorageInterface;
 
 trait UsesCache
 {
@@ -45,7 +45,7 @@ trait UsesCache
     /**
      * @param  string $driverName
      *
-     * @return \MyParcelNL\Pdk\Storage\StorageInterface
+     * @return \MyParcelNL\Pdk\Storage\Contract\StorageInterface
      */
     private function getDriver(string $driverName): StorageInterface
     {
