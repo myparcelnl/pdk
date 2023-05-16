@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Context\Context;
 
 /**
@@ -30,14 +29,16 @@ class OrderDataContext extends PdkOrder
      */
     public function toArray(?int $flags = null): array
     {
-        $array = parent::toArray($flags);
+        if ($this->cloned) {
+            return parent::toArray($flags);
+        }
 
-        return array_replace($array, [
-            'shipments' => array_values(
-                Arr::where($array['shipments'], static function (array $shipment) {
-                    return ! $shipment['deleted'];
-                })
-            ),
-        ]);
+        $clone = clone $this;
+
+        $clone->shipments = $clone->shipments
+            ->filterNotDeleted()
+            ->values();
+
+        return $clone->toArray($flags);
     }
 }

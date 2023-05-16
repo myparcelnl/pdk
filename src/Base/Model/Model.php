@@ -31,6 +31,11 @@ class Model implements Arrayable, ArrayAccess
     /**
      * @var bool
      */
+    protected $cloned = false;
+
+    /**
+     * @var bool
+     */
     protected $initialized = false;
 
     /**
@@ -97,6 +102,14 @@ class Model implements Arrayable, ArrayAccess
         }
 
         return $this;
+    }
+
+    /**
+     * @return void
+     */
+    public function __clone()
+    {
+        $this->cloned = true;
     }
 
     /**
