@@ -11,8 +11,10 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use Throwable;
@@ -20,6 +22,8 @@ use function array_reduce;
 
 class ShipmentOptionsService implements ShipmentOptionsServiceInterface
 {
+    private const CARRIER_SETTING_KEY = 'carrierSetting';
+    private const PRODUCT_SETTING_KEY = 'productSetting';
     private const SETTING_KEYS        = [
         [
             self::SHIPMENT_OPTION_KEY => ShipmentOptions::AGE_CHECK,
@@ -53,8 +57,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         ],
     ];
     private const SHIPMENT_OPTION_KEY = 'shipmentOption';
-    private const CARRIER_SETTING_KEY = 'carrierSetting';
-    private const PRODUCT_SETTING_KEY = 'productSetting';
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
@@ -110,10 +112,11 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     {
         $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
-        $fromAmount  = $this->currencyService->convertToCents(
+        $fromAmount      = $this->currencyService->convertToCents(
             $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
         );
-        $orderAmount = $order->orderPriceAfterVat;
+        $insuranceFactor = Settings::get(CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR, CheckoutSettings::ID) ?? 1;
+        $orderAmount     = $insuranceFactor * $order->orderPriceAfterVat;
 
         if ($orderAmount < $fromAmount) {
             return 0;
@@ -187,10 +190,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             $carrierSettingKey  = $keys[self::CARRIER_SETTING_KEY];
             $productSettingsKey = $keys[self::PRODUCT_SETTING_KEY];
 
-            $p = $productSettings[$productSettingsKey];
-            $c = $carrierSettings[$carrierSettingKey];
-
-            // use productsettings when set and not default
             if (isset($productSettings[$productSettingsKey]) && AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== $productSettings[$productSettingsKey]) {
                 $shipmentOptions->setAttribute($shipmentOptionKey, $productSettings[$productSettingsKey]);
             } else {
@@ -211,11 +210,11 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     /**
      * Returns the value that should be used for the shipment option.
      * Arguments will be processed in order, so the last one is most important.
-     * Special values are -1 (tristate default) and null, which will be ignored.
-     * For booleans: true will prevail over false. valueProcessor returns the value as int (1 for true, 0 for false).
+     * For booleans: true will prevail over false. valueProcessor returns the value as int.
      * For integers: higher values prevail. Strings will be converted to integers, when numeric.
      * For strings: the last non-empty string will prevail.
      * When mixed types are given, output is not guaranteed.
+     * Special values are -1 (tristate default) and null.
      *
      * @param ...$args
      *
@@ -233,6 +232,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             }
 
             return $item ?? $carry;
-        }, AbstractSettingsModel::TRISTATE_VALUE_DISABLED);
+        }, AbstractSettingsModel::TRISTATE_VALUE_DEFAULT);
     }
 }
