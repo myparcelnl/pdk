@@ -42,6 +42,7 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     public function handle(Request $request): Response
     {
