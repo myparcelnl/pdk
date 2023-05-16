@@ -14,11 +14,6 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 class ShipmentCollection extends Collection implements StorableArrayable
 {
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Model\Label
-     */
-    public $label;
-
-    /**
      * @var class-string
      */
     protected $cast = Shipment::class;
