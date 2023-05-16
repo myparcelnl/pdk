@@ -35,13 +35,7 @@ class GetShipmentsResponse extends ApiResponseWithBody
         $parsedBody = json_decode($this->getBody(), true);
         $shipments  = $parsedBody['data']['shipments'] ?? [];
 
-        $shipmentData = [];
-
-        foreach ($shipments as $shipment) {
-            $shipmentData[] = $this->decodeShipment($shipment);
-        }
-
-        $this->shipments = (new ShipmentCollection($shipmentData));
+        $this->shipments = new ShipmentCollection(array_map([$this, 'decodeShipment'], $shipments));
     }
 
     /**

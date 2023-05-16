@@ -36,12 +36,20 @@ class ShipmentCollection extends Collection implements StorableArrayable
     }
 
     /**
+     * @return self
+     */
+    public function filterNotDeleted(): self
+    {
+        return $this->where('deleted', null);
+    }
+
+    /**
      * @return void
      */
     public function toStorableArray(): array
     {
         return $this
-            ->where('deleted', null)
+            ->filterNotDeleted()
             ->map(function (Shipment $shipment) {
                 return $shipment->toStorableArray();
             })
