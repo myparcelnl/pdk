@@ -21,7 +21,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|string                                            $orderId
  * @property null|string                                            $referenceIdentifier
  * @property null|string                                            $externalIdentifier
- * @property null|string                                            $apiKey
  * @property null|string                                            $barcode
  * @property null|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions      $carrier
  * @property null|string                                            $collectionContact
@@ -92,7 +91,6 @@ class Shipment extends Model implements StorableArrayable
         'shopId'                   => null,
         'referenceIdentifier'      => null,
         'externalIdentifier'       => null,
-        'apiKey'                   => null,
         'barcode'                  => null,
         'carrier'                  => null,
         'collectionContact'        => null,
@@ -166,7 +164,6 @@ class Shipment extends Model implements StorableArrayable
         'orderId'                  => 'string',
         'referenceIdentifier'      => 'string',
         'externalIdentifier'       => 'string',
-        'apiKey'                   => 'string',
         'barcode'                  => 'string',
         'carrier'                  => CarrierOptions::class,
         'collectionContact'        => 'string',
