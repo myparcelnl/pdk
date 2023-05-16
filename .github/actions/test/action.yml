@@ -1,11 +1,6 @@
 name: 'Run tests'
 description: 'Run Pest tests and upload coverage'
 
-inputs:
-  codacy-token:
-    description: 'Codacy API token'
-    required: true
-
 runs:
   using: composite
   steps:
@@ -32,8 +27,3 @@ runs:
 
     - uses: codecov/codecov-action@v3
       continue-on-error: true
-
-    - uses: codacy/codacy-coverage-reporter-action@v1
-      continue-on-error: true
-      with:
-        api-token: ${{ inputs.codacy-token }}
