@@ -6,6 +6,7 @@ composer.lock
 clover.xml
 pdk_ide_helper.php
 
+/.cache/
 /types/
 /coverage/
 /node_modules/

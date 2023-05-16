@@ -1,0 +1,26 @@
+name: 'Setup'
+description: ''
+
+runs:
+  using: composite
+  steps:
+    - name: 'Handle composer cache'
+      uses: actions/cache@v3
+      with:
+        path: $HOME/.composer
+        key: composer-${{ hashFiles('**/composer.json') }}
+        restore-keys: |
+          composer-
+
+    - uses: myparcelnl/actions/pull-docker-image@v3
+      with:
+        image: ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
+
+    - name: 'Install composer dependencies'
+      shell: bash
+      run: |
+        docker compose run \
+          --volume $HOME/.composer:/root/.composer \
+          --env COMPOSER_CACHE_DIR=/root/.composer \
+          php \
+          composer install --no-progress --no-scripts --no-plugins

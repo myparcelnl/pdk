@@ -1,0 +1,23 @@
+name: 'Run merge group checks ⚙️'
+
+on:
+  merge_group:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/test
+        with:
+          codacy-token: ${{ secrets.CODACY_API_TOKEN }}
+
+  quality:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/rector
+        with:
+          dry-run: true
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
