@@ -46,6 +46,9 @@ class CheckoutSettings extends AbstractSettingsModel
     public const PRICE_TYPE_EXCLUDED = 'excluded';
     public const PRICE_TYPE_INCLUDED = 'included';
 
+    public const FACTOR_ONE  = 1;
+    public const FACTOR_STEP = .01;
+
     protected $attributes = [
         'id' => self::ID,
 

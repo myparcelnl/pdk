@@ -115,7 +115,10 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         $fromAmount      = $this->currencyService->convertToCents(
             $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
         );
-        $insuranceFactor = Settings::get(CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR, CheckoutSettings::ID) ?? 1;
+        $insuranceFactor = Settings::get(
+            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR,
+            CheckoutSettings::ID
+        ) ?? CheckoutSettings::FACTOR_ONE;
         $orderAmount     = $insuranceFactor * $order->orderPriceAfterVat;
 
         if ($orderAmount < $fromAmount) {

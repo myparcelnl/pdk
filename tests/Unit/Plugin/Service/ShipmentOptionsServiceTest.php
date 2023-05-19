@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
@@ -87,13 +88,16 @@ dataset('shipment options', [
     ],
 ]);
 
-function mockPdk(array $carrierSettings = [], array $products = []): void
+function mockPdk(array $carrierSettings = [], array $products = [], array $checkoutSettings = []): void
 {
     PdkFactory::create(
         MockPdkConfig::create([
             PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor($products),
             SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor(
-                [CarrierSettings::ID => [CARRIER => $carrierSettings]]
+                [
+                    CarrierSettings::ID  => [CARRIER => $carrierSettings],
+                    CheckoutSettings::ID => $checkoutSettings,
+                ]
             ),
         ])
     );
@@ -181,50 +185,56 @@ it('prioritizes override over product settings and defaults', function (array $o
     expectShipmentOptionToEqual($order, [$option[KEY_SHIPMENT_OPTION] => $option[KEY_DISABLED_VALUE]]);
 })->with('shipment options');
 
-it('calculates insurance', function (int $insuranceFrom, int $insuranceUpTo, int $orderTotal, int $result) {
-    mockPdk([
-        CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT => $insuranceFrom,
-        CarrierSettings::EXPORT_INSURANCE_UP_TO       => $insuranceUpTo,
-    ], [
-        [
-            'externalIdentifier' => 'PDK-1',
-            'price'              => ['currency' => 'EUR', 'amount' => $orderTotal],
-        ],
-    ]);
+it(
+    'calculates insurance',
+    function (int $insuranceFrom, int $insuranceUpTo, int $orderTotal, float $factor, int $result) {
+        mockPdk([
+            CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT => $insuranceFrom,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO       => $insuranceUpTo,
+        ], [
+            [
+                'externalIdentifier' => 'PDK-1',
+                'price'              => ['currency' => 'EUR', 'amount' => $orderTotal],
+            ],
+        ], [
+            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR => $factor,
+        ]);
 
-    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository */
-    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository */
+        $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
-    $order = new PdkOrder([
-        'deliveryOptions' => [
-            'carrier'         => CARRIER,
-            'shipmentOptions' => ['insurance' => 1],
-        ],
-        'lines'           => [['price' => $orderTotal, 'product' => $productRepository->getProduct('PDK-1')]],
-        'recipient'       => ['cc' => 'NL'],
-    ]);
+        $order = new PdkOrder([
+            'deliveryOptions' => [
+                'carrier'         => CARRIER,
+                'shipmentOptions' => ['insurance' => 1],
+            ],
+            'lines'           => [['price' => $orderTotal, 'product' => $productRepository->getProduct('PDK-1')]],
+            'recipient'       => ['cc' => 'NL'],
+        ]);
 
-    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
-    $service = Pdk::get(ShipmentOptionsServiceInterface::class);
-    $service->calculate($order);
+        /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
+        $service = Pdk::get(ShipmentOptionsServiceInterface::class);
+        $service->calculate($order);
 
-    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe($result);
-})->with([
-    [0, 5000, 4481, 10000],
-    [0, 5000, 0, 0],
-    [0, 5000, -1, 0],
-    [0, 5000, -100, 0],
-    [0, 5000, 1, 10000],
-    [0, 5000, 15050, 25000],
-    [0, 5000, 100000, 100000],
-    [0, 5000, 100001, 150000],
-    [0, 5000, 100500, 150000],
-    [0, 5000, 1000000, 500000],
-    [0, 5000, 1000001, 500000],
-    [0, 5000, 1000500, 500000],
-    [100, 5000, 5000, 0],
-    [0, 3000, 310000, 300000],
-    [0, 3000, 5000, 10000],
+        expect($order->deliveryOptions->shipmentOptions->insurance)->toBe($result);
+    }
+)->with([
+    [0, 5000, 4481, 1, 10000],
+    [0, 5000, 0, 1, 0],
+    [0, 5000, -1, 1, 0],
+    [0, 5000, -100, 1, 0],
+    [0, 5000, 1, 1, 10000],
+    [0, 5000, 15050, 1, 25000],
+    [0, 5000, 100000, 1, 100000],
+    [0, 5000, 100001, 1, 150000],
+    [0, 5000, 100500, 1, 150000],
+    [0, 5000, 1000000, 1, 500000],
+    [0, 5000, 1000001, 1, 500000],
+    [0, 5000, 1000500, 1, 500000],
+    [100, 5000, 5000, 1, 0],
+    [0, 3000, 310000, 1, 300000],
+    [0, 3000, 5000, 1, 10000],
+    [0, 5000, 31000, .5, 25000],
 ]);
 
 it('merges product settings', function (array $input, array $results, $output) {

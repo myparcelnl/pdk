@@ -77,7 +77,11 @@ class CheckoutSettingsView extends AbstractSettingsView
             new InteractiveElement(
                 CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR,
                 Components::INPUT_NUMBER,
-                $deliveryOptionsVisibleProp
+                $deliveryOptionsVisibleProp + [
+                    'min' => 0,
+                    'step' => CheckoutSettings::FACTOR_STEP,
+                    'max' => CheckoutSettings::FACTOR_ONE,
+                ]
             ),
             new InteractiveElement(
                 CheckoutSettings::DELIVERY_OPTIONS_HEADER,
