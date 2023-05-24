@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -199,15 +198,6 @@ class PostShipmentsRequest extends Request
     private function getOptions(Shipment $shipment): ?array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-
-        if (Carrier::CARRIER_DHL_FOR_YOU_NAME === $shipment->carrier->carrier->name) {
-            $carrierOptions = AccountSettings::getCarrierOptions()
-                ->firstWhere('carrier.name', $shipment->carrier->carrier->name);
-
-            if ($carrierOptions->carrier->label !== 'dhl_for_you_complete_access') {
-                $shipmentOptions->sameDayDelivery = '1';
-            }
-        }
 
         $options = array_map(static function ($item) {
             return is_bool($item) ? (int) $item : $item;
