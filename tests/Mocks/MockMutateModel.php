@@ -8,10 +8,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
 
 class MockMutateModel extends Model
 {
-    use MockInitTrait;
-
     protected $attributes = [
-        'myProperty' => null,
+        'myProperty' => 1,
         'perenboom'  => null,
         'bloemkool'  => null,
     ];

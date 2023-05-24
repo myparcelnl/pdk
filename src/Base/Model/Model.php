@@ -19,24 +19,9 @@ class Model implements Arrayable, ArrayAccess
     use HasAttributes;
 
     /**
-     * @var array
-     */
-    protected static $booted;
-
-    /**
-     * @var array
-     */
-    protected static $traitInitializers = [];
-
-    /**
      * @var bool
      */
     protected $cloned = false;
-
-    /**
-     * @var bool
-     */
-    protected $initialized = false;
 
     /**
      * @param  null|array $data
@@ -46,37 +31,9 @@ class Model implements Arrayable, ArrayAccess
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
 
-        $this->bootIfNotBooted();
-        $this->initializeTraits();
-
         $data = Arr::only(Utils::changeArrayKeysCase($data ?? []), array_keys($this->attributes));
 
         $this->fill($data + $this->attributes);
-    }
-
-    /**
-     * Boot all bootable traits on the model.
-     *
-     * @return void
-     */
-    protected static function bootTraits(): void
-    {
-        $class = static::class;
-
-        static::$traitInitializers[$class] = [];
-
-        foreach (Utils::getClassParentsRecursive($class) as $trait) {
-            $classBasename = Utils::classBasename($trait);
-            $method        = "initialize$classBasename";
-
-            if (method_exists($class, $method)) {
-                static::$traitInitializers[$class][] = $method;
-
-                static::$traitInitializers[$class] = array_unique(
-                    static::$traitInitializers[$class]
-                );
-            }
-        }
     }
 
     /**
@@ -279,32 +236,5 @@ class Model implements Arrayable, ArrayAccess
     public function toStudlyCaseArray(): array
     {
         return $this->attributesToArray(Arrayable::CASE_STUDLY);
-    }
-
-    /**
-     * Check if the model needs to be booted and if so, do it.
-     *
-     * @return void
-     */
-    protected function bootIfNotBooted(): void
-    {
-        if (isset(static::$booted[static::class])) {
-            return;
-        }
-
-        static::$booted[static::class] = true;
-        static::bootTraits();
-    }
-
-    /**
-     * Initialize any initializable traits on the model.
-     *
-     * @return void
-     */
-    protected function initializeTraits(): void
-    {
-        foreach (static::$traitInitializers[static::class] as $method) {
-            $this->{$method}();
-        }
     }
 }
