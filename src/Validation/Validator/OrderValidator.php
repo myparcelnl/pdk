@@ -49,7 +49,7 @@ class OrderValidator extends OrderPropertiesValidator implements ValidatorInterf
 
         return $this->repository->getOrderValidationSchema(
             $deliveryOptions->carrier ?? Platform::get('defaultCarrier'),
-            $this->order->recipient->cc ?? null,
+            $this->order->shippingAddress->cc ?? null,
             $deliveryOptions->packageType,
             $deliveryOptions->deliveryType
         );

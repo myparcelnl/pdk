@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Base\Model;
 use ArrayAccess;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 
@@ -31,9 +30,9 @@ class Model implements Arrayable, ArrayAccess
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
 
-        $data = Arr::only(Utils::changeArrayKeysCase($data ?? []), array_keys($this->attributes));
+        $convertedData = Utils::changeArrayKeysCase($data ?? []);
 
-        $this->fill($data + $this->attributes);
+        $this->fill($convertedData + $this->attributes);
     }
 
     /**
@@ -115,18 +114,16 @@ class Model implements Arrayable, ArrayAccess
      */
     public function fill(array $attributes): self
     {
-        foreach ($attributes as $key => $value) {
+        foreach ($this->normalizeAttributes($attributes) as $key => $value) {
+            if (! array_key_exists($key, $this->attributes)) {
+                continue;
+            }
+
             if (is_string($value)
                 && class_exists($value)
                 && $this->isClassCastable($key)
                 && Str::contains($value, '\\')) {
                 $value = new $value();
-            }
-
-            $key = $this->convertAttributeCase($key);
-
-            if (! array_key_exists($key, $this->attributes)) {
-                continue;
             }
 
             if (null !== $this->attributes[$key] && null === $value) {
@@ -236,5 +233,28 @@ class Model implements Arrayable, ArrayAccess
     public function toStudlyCaseArray(): array
     {
         return $this->attributesToArray(Arrayable::CASE_STUDLY);
+    }
+
+    /**
+     * @param  array $attributes
+     *
+     * @return array
+     */
+    private function normalizeAttributes(array $attributes): array
+    {
+        $normalizedAttributes = [];
+
+        foreach ($attributes as $initialKey => $value) {
+            $caseKey = $this->convertAttributeCase($initialKey);
+            $key     = $this->convertDeprecatedKey($caseKey);
+
+            if (array_key_exists($key, $normalizedAttributes)) {
+                continue;
+            }
+
+            $normalizedAttributes[$key] = $value;
+        }
+
+        return $normalizedAttributes;
     }
 }

@@ -13,12 +13,12 @@ dataset('pdkOrdersDomestic', [
         return [
             new PdkOrder([
                 'externalIdentifier' => '247',
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'          => 'NL',
                     'city'        => 'Hoofddorp',
                     'person'      => 'Felicia Parcel',
                     'postal_code' => '2132 JE',
-                    'full_street' => 'Antareslaan 31',
+                    'address1'    => 'Antareslaan 31',
                 ],
                 'deliveryOptions'    => [
                     'carrier'         => Carrier::CARRIER_POSTNL_NAME,
@@ -40,10 +40,9 @@ dataset('pdkOrdersDomestic', [
                     'packageType' => 'package',
                     'labelAmount' => 2,
                 ],
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'         => CountryCodes::CC_NL,
-                    'street'     => 'Pietjestraat',
-                    'number'     => '35',
+                    'address1'   => 'Pietjestraat 35',
                     'postalCode' => '2771BW',
                     'city'       => 'Bikinibroek',
                 ],
@@ -51,12 +50,12 @@ dataset('pdkOrdersDomestic', [
 
             new PdkOrder([
                 'externalIdentifier' => '247',
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'          => 'NL',
                     'city'        => 'Hoofddorp',
                     'person'      => 'Felicia Parcel',
                     'postal_code' => '2132 JE',
-                    'full_street' => 'Antareslaan 31',
+                    'address1'    => 'Antareslaan 31',
                 ],
                 'deliveryOptions'    => [
                     'carrier'      => Carrier::CARRIER_POSTNL_NAME,

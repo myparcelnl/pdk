@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 
@@ -119,15 +120,11 @@ class Collection extends SdkCollection implements Arrayable
             return;
         }
 
-        $noItemsToCast = $this->every(function ($item) {
-            return is_a($item, $this->cast);
+        $itemsToCast = Arr::where($this->items, function ($item) {
+            return ! is_a($item, $this->cast);
         });
 
-        if ($noItemsToCast) {
-            return;
-        }
-
-        foreach ($this->items as $key => $item) {
+        foreach ($itemsToCast as $key => $item) {
             try {
                 $this->items[$key] = Utils::cast($this->cast, $item);
             } catch (Throwable $e) {

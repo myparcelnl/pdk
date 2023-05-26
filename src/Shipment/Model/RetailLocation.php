@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
-use MyParcelNL\Pdk\Base\Model\Address;
+use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
  * @property string|null $locationCode
@@ -20,23 +20,35 @@ use MyParcelNL\Pdk\Base\Model\Address;
  * @property null|string $state
  * @property null|string $street
  */
-class RetailLocation extends Address
+class RetailLocation extends Model
 {
-    /**
-     * @param  null|array $data
-     */
-    public function __construct(?array $data = null)
-    {
-        $this->attributes['locationCode']    = null;
-        $this->attributes['locationName']    = null;
-        $this->attributes['retailNetworkId'] = null;
+    protected $attributes = [
+        'locationCode'    => null,
+        'locationName'    => null,
+        'retailNetworkId' => null,
+        'boxNumber'       => null,
+        'cc'              => null,
+        'city'            => null,
+        'number'          => null,
+        'numberSuffix'    => null,
+        'postalCode'      => null,
+        'region'          => null,
+        'state'           => null,
+        'street'          => null,
+    ];
 
-        $this->casts['locationCode']    = 'string';
-        $this->casts['locationName']    = 'string';
-        $this->casts['retailNetworkId'] = 'string';
-
-        parent::__construct($data);
-
-        unset($this->fullStreet, $this->streetAdditionalInfo);
-    }
+    protected $casts      = [
+        'locationCode'    => 'string',
+        'locationName'    => 'string',
+        'retailNetworkId' => 'string',
+        'boxNumber'       => 'string',
+        'cc'              => 'string',
+        'city'            => 'string',
+        'number'          => 'string',
+        'numberSuffix'    => 'string',
+        'postalCode'      => 'string',
+        'region'          => 'string',
+        'state'           => 'string',
+        'street'          => 'string',
+    ];
 }

@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Base\Model;
+namespace MyParcelNL\Pdk\App\Order\Model;
+
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
 
 /**
+ * @property string|null $eoriNumber
+ * @property string|null $vatNumber
  * @property null|string $company
  * @property null|string $email
  * @property null|string $person
@@ -18,22 +22,18 @@ namespace MyParcelNL\Pdk\Base\Model;
  * @property null|string $region
  * @property null|string $state
  */
-class ContactDetails extends Address
+class ShippingAddress extends ContactDetails
 {
     /**
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
     {
-        $this->attributes['email']   = null;
-        $this->attributes['phone']   = null;
-        $this->attributes['person']  = null;
-        $this->attributes['company'] = null;
+        $this->attributes['eoriNumber'] = null;
+        $this->attributes['vatNumber']  = null;
 
-        $this->casts['email']   = 'string';
-        $this->casts['phone']   = 'string';
-        $this->casts['person']  = 'string';
-        $this->casts['company'] = 'string';
+        $this->casts['eoriNumber'] = 'string';
+        $this->casts['vatNumber']  = 'string';
 
         parent::__construct($data);
     }

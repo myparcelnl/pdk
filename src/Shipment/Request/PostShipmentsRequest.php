@@ -94,9 +94,7 @@ class PostShipmentsRequest extends Request
             ],
             'options'              => $this->getOptions($shipment),
             'physical_properties'  => ['weight' => $this->getWeight($shipment)],
-            'pickup'               => $shipment->deliveryOptions->pickupLocation
-                ? ['location_code' => $shipment->deliveryOptions->pickupLocation->locationCode]
-                : null,
+            'pickup'               => $this->getPickupLocation($shipment),
             'recipient'            => $this->getRecipient($shipment),
             'reference_identifier' => $shipment->referenceIdentifier,
             'status'               => $shipment->status,
@@ -232,19 +230,57 @@ class PostShipmentsRequest extends Request
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
+     * @return null|array
+     */
+    private function getPickupLocation(Shipment $shipment): ?array
+    {
+        if (! $shipment->deliveryOptions->isPickup()) {
+            return null;
+        }
+
+        $address = $shipment->deliveryOptions->pickupLocation;
+
+        return Utils::filterNull([
+            'location_code'     => $address->locationCode,
+            'location_name'     => $address->locationName,
+            'retail_network_id' => $address->retailNetworkId,
+            'cc'                => $address->cc,
+            'street'            => $address->street,
+            'number'            => $address->number,
+            'number_suffix'     => $address->numberSuffix,
+            'box_number'        => $address->boxNumber,
+            'postal_code'       => $address->postalCode,
+            'city'              => $address->city,
+            'region'            => $address->region,
+            'state'             => $address->state,
+        ]);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getRecipient(Shipment $shipment): array
     {
-        $recipient = Utils::filterNull($shipment->recipient->toSnakeCaseArray());
+        $recipient = $shipment->recipient;
 
-        if ($recipient['full_street']) {
-            $recipient['street'] = $recipient['full_street'];
-            unset($recipient['full_street'], $recipient['number'], $recipient['number_suffix']);
-        }
-
-        return $recipient;
+        return Utils::filterNull([
+            'area'                   => $recipient->area,
+            'cc'                     => $recipient->cc,
+            'city'                   => $recipient->city,
+            'company'                => $recipient->company,
+            'email'                  => $recipient->email,
+            'person'                 => $recipient->person,
+            'phone'                  => $recipient->phone,
+            'postal_code'            => $recipient->postalCode,
+            'region'                 => $recipient->region,
+            'state'                  => $recipient->state,
+            'street'                 => $recipient->address1,
+            'street_additional_info' => $recipient->address2,
+            'eori_number'            => $recipient->eoriNumber,
+            'vat_number'             => $recipient->vatNumber,
+        ]);
     }
 
     /**

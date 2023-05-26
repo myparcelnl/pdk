@@ -1,7 +1,7 @@
 [
   {
-    "property": "recipient.cc",
-    "pointer": "/recipient/cc",
+    "property": "shippingAddress.cc",
+    "pointer": "/shippingAddress/cc",
     "message": "NULL value found, but a string is required",
     "constraint": "type",
     "context": 1

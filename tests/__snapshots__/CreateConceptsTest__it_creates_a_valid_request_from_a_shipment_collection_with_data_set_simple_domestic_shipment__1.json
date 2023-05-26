@@ -22,9 +22,8 @@
     "recipient": {
       "cc": "NL",
       "city": "Hoofddorp",
-      "postal_code": "2132JE",
-      "street": "Antareslaan 31",
-      "person": "Jaap Krekel"
+      "person": "Jaap Krekel",
+      "postal_code": "2132JE"
     }
   }
 ]

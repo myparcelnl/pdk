@@ -2,7 +2,7 @@
   "description": "/order",
   "type": "object",
   "additionalItems": false,
-  "required": ["physicalProperties", "recipient", "deliveryOptions"],
+  "required": ["physicalProperties", "shippingAddress", "deliveryOptions"],
   "properties": {
     "physicalProperties": {
       "properties": {
@@ -11,7 +11,7 @@
         }
       }
     },
-    "recipient": {
+    "shippingAddress": {
       "type": "object",
       "required": ["cc"],
       "properties": {

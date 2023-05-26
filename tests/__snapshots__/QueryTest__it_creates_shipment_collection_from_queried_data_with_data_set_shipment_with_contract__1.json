@@ -1,144 +1,117 @@
 {
-    "orderId": null,
-    "multiCollo": true,
-    "updated": null,
-    "deleted": null,
-    "id": 23001,
-    "shopId": 67890,
-    "referenceIdentifier": "my-multicollo-set",
-    "externalIdentifier": "3SMYPA060119130",
-    "barcode": "3SMYPA123456789",
+  "orderId": null,
+  "multiCollo": true,
+  "updated": null,
+  "deleted": null,
+  "id": 23001,
+  "shopId": 67890,
+  "referenceIdentifier": "my-multicollo-set",
+  "externalIdentifier": "3SMYPA060119130",
+  "barcode": "3SMYPA123456789",
+  "carrier": {
     "carrier": {
-        "carrier": {
-            "externalIdentifier": "postnl",
-            "id": 1,
-            "name": "postnl",
-            "human": null,
-            "subscriptionId": null,
-            "enabled": false,
-            "isDefault": false,
-            "label": null,
-            "optional": false,
-            "primary": true,
-            "type": "main",
-            "capabilities": {
-                "deliveryTypes": [
-                    "morning",
-                    "standard",
-                    "evening",
-                    "pickup"
-                ],
-                "features": {
-                    "labelDescriptionLength": 45
-                },
-                "packageTypes": [
-                    "package",
-                    "mailbox",
-                    "letter",
-                    "digital_stamp"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": true,
-                    "largeFormat": true,
-                    "onlyRecipient": true,
-                    "return": true,
-                    "sameDayDelivery": true,
-                    "signature": true,
-                    "insurance": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                }
-            }
-        }
-    },
-    "collectionContact": null,
-    "customsDeclaration": null,
-    "delayed": false,
-    "delivered": false,
-    "deliveryOptions": {
-        "carrier": "postnl",
-        "date": null,
-        "labelAmount": 1,
-        "pickupLocation": null,
-        "shipmentOptions": {
-            "ageCheck": null,
-            "insurance": 0,
-            "labelDescription": null,
-            "largeFormat": null,
-            "onlyRecipient": null,
-            "return": null,
-            "sameDayDelivery": null,
-            "signature": null
+      "externalIdentifier": "postnl",
+      "id": 1,
+      "name": "postnl",
+      "human": null,
+      "subscriptionId": null,
+      "enabled": false,
+      "isDefault": false,
+      "label": null,
+      "optional": false,
+      "primary": true,
+      "type": "main",
+      "capabilities": {
+        "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45
         },
-        "deliveryType": "standard",
-        "packageType": "package"
+        "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "largeFormat": true,
+          "onlyRecipient": true,
+          "return": true,
+          "sameDayDelivery": true,
+          "signature": true,
+          "insurance": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000,
+            350000, 400000, 450000, 500000
+          ]
+        }
+      }
+    }
+  },
+  "collectionContact": null,
+  "customsDeclaration": null,
+  "delayed": false,
+  "delivered": false,
+  "deliveryOptions": {
+    "carrier": "postnl",
+    "date": null,
+    "labelAmount": 1,
+    "pickupLocation": null,
+    "shipmentOptions": {
+      "ageCheck": null,
+      "insurance": 0,
+      "labelDescription": null,
+      "largeFormat": null,
+      "onlyRecipient": null,
+      "return": null,
+      "sameDayDelivery": null,
+      "signature": null
     },
-    "dropOffPoint": null,
-    "hidden": false,
-    "isReturn": false,
-    "linkConsumerPortal": "https:\/\/demo.myparcel.me\/track-trace\/demo",
-    "multiColloMainShipmentId": "23001",
-    "partnerTrackTraces": [],
-    "physicalProperties": {
-        "height": null,
-        "length": null,
-        "weight": 0,
-        "width": null
-    },
-    "price": {
-        "amount": 625,
-        "currency": "EUR"
-    },
-    "recipient": {
-        "boxNumber": null,
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "fullStreet": null,
-        "number": "31",
-        "numberSuffix": null,
-        "postalCode": "2132JE",
-        "region": null,
-        "state": null,
-        "street": "Antareslaan",
-        "streetAdditionalInfo": null,
-        "email": null,
-        "phone": null,
-        "person": "Jaap Krekel",
-        "company": null
-    },
-    "sender": {
-        "boxNumber": null,
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "fullStreet": null,
-        "number": "31",
-        "numberSuffix": null,
-        "postalCode": "2132 JE",
-        "region": null,
-        "state": null,
-        "street": "Antareslaan",
-        "streetAdditionalInfo": null,
-        "email": "spam@myparcel.nl",
-        "phone": "0612345678",
-        "person": "Bye Felicia",
-        "company": "MyParcel"
-    },
-    "shipmentType": 3,
-    "status": 2,
-    "created": "2022-07-25 15:16:31",
-    "createdBy": 145,
-    "modified": "2022-07-25 15:16:31",
-    "modifiedBy": 145
+    "deliveryType": "standard",
+    "packageType": "package"
+  },
+  "dropOffPoint": null,
+  "hidden": false,
+  "isReturn": false,
+  "linkConsumerPortal": "https://demo.myparcel.me/track-trace/demo",
+  "multiColloMainShipmentId": "23001",
+  "partnerTrackTraces": [],
+  "physicalProperties": {
+    "height": null,
+    "length": null,
+    "weight": 0,
+    "width": null
+  },
+  "price": {
+    "amount": 625,
+    "currency": "EUR"
+  },
+  "recipient": {
+    "address1": "Antareslaan 31",
+    "address2": null,
+    "area": null,
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132JE",
+    "region": null,
+    "state": null,
+    "email": null,
+    "phone": null,
+    "person": "Jaap Krekel",
+    "company": null
+  },
+  "sender": {
+    "address1": "Antareslaan 31",
+    "address2": null,
+    "area": null,
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132 JE",
+    "region": null,
+    "state": null,
+    "email": "spam@myparcel.nl",
+    "phone": "0612345678",
+    "person": "Bye Felicia",
+    "company": "MyParcel"
+  },
+  "shipmentType": 3,
+  "status": 2,
+  "created": "2022-07-25 15:16:31",
+  "createdBy": 145,
+  "modified": "2022-07-25 15:16:31",
+  "modifiedBy": 145
 }

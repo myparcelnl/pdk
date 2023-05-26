@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
@@ -52,7 +53,7 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         foreach ($array as $key => $value) {
             $key = (string) $key;
 
-            if (is_object($value) && method_exists($value, 'toArray')) {
+            if ($value instanceof Arrayable) {
                 $value = $value->toArray();
             }
 
