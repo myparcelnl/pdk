@@ -94,6 +94,9 @@
             "$visibleWhen": {
                 "enableDeliveryOptions": true
             },
+            "min": 0,
+            "step": 0.01,
+            "max": 1,
             "label": "settings_checkout_export_insurance_price_factor",
             "description": "settings_checkout_export_insurance_price_factor_description"
         },
