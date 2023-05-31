@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/myparcelnl/pdk/compare/v2.0.0...v2.1.0) (2023-05-31)
+
+
+### :sparkles: New Features
+
+* allow the pdk class to be overridden ([#96](https://github.com/myparcelnl/pdk/issues/96)) ([32a7263](https://github.com/myparcelnl/pdk/commit/32a7263dc22d06213c05cb3df7092db581051a02))
+
+
+### :bug: Bug Fixes
+
+* **checkout:** fix delivery options header not showing up ([#99](https://github.com/myparcelnl/pdk/issues/99)) ([7af0537](https://github.com/myparcelnl/pdk/commit/7af053781d220206817dfa8abcdf3dd3d752581e))
+* correct address fields ([#101](https://github.com/myparcelnl/pdk/issues/101)) ([3fed974](https://github.com/myparcelnl/pdk/commit/3fed974f6ed2a1690fc23d2e61c4723d8877a83f))
+
 ## [2.0.0](https://github.com/myparcelnl/pdk/compare/v1.37.0...v2.0.0) (2023-05-15)
 
 
