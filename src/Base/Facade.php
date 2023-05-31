@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base;
 
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 
 abstract class Facade
 {
     /**
-     * @var \MyParcelNL\Pdk\Base\Pdk
+     * @var \MyParcelNL\Pdk\Base\Concern\PdkInterface
      */
     protected static $pdk;
 
@@ -31,11 +32,11 @@ abstract class Facade
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Base\Pdk $pdk
+     * @param  null|\MyParcelNL\Pdk\Base\Concern\PdkInterface $pdk
      *
      * @return void
      */
-    public static function setPdkInstance(?Pdk $pdk): void
+    public static function setPdkInstance(?PdkInterface $pdk): void
     {
         self::$pdk = $pdk;
     }

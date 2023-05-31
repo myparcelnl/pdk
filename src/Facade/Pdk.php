@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Facade;
 
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 
@@ -15,7 +16,7 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
  * @method static bool has(string $id)
  * @method static bool isDevelopment()
  * @method static bool isProduction()
- * @implements \MyParcelNL\Pdk\Base\Pdk
+ * @implements \MyParcelNL\Pdk\Base\Concern\PdkInterface
  */
 final class Pdk extends Facade
 {
@@ -24,6 +25,6 @@ final class Pdk extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return \MyParcelNL\Pdk\Base\Pdk::class;
+        return PdkInterface::class;
     }
 }

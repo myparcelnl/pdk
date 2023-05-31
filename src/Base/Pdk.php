@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base;
 
 use DI\Container;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use Throwable;
 
-class Pdk
+class Pdk implements PdkInterface
 {
     public const PACKAGE_NAME     = 'myparcelnl/pdk';
     public const MODE_DEVELOPMENT = 'development';

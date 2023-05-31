@@ -16,9 +16,11 @@ use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Service\InstallerService;
 use MyParcelNL\Pdk\App\Installer\Service\MigrationService;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
@@ -40,6 +42,11 @@ use function DI\autowire;
  * Pre-defined services.
  */
 return [
+    /**
+     * The main entry point for the PDK DI container.
+     */
+    PdkInterface::class                        => autowire(Pdk::class),
+
     /**
      * Used to make requests to the MyParcel API.
      */
