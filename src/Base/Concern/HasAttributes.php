@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
@@ -57,6 +58,13 @@ trait HasAttributes
      * @var string
      */
     protected $dateFormats = ['Y-m-d H:i:s', 'Y-m-d', DateTime::ATOM];
+
+    /**
+     * List of deprecated attributes and their replacements.
+     *
+     * @var array<string, string>
+     */
+    protected $deprecated = [];
 
     /**
      * @var array
@@ -303,7 +311,7 @@ trait HasAttributes
      */
     public function setAttribute(string $key, $value): self
     {
-        $key = $this->convertAttributeCase($key);
+        $key = $this->convertDeprecatedKey($this->convertAttributeCase($key));
 
         if ($this->isGuarded($key)) {
             return $this;
@@ -529,6 +537,24 @@ trait HasAttributes
     }
 
     /**
+     * @param  string $key
+     *
+     * @return string
+     */
+    protected function convertDeprecatedKey(string $key): string
+    {
+        if (! $this->isDeprecated($key)) {
+            return $key;
+        }
+
+        $newKey = $this->deprecated[$key];
+
+        $this->logDeprecationWarning($key, $newKey);
+
+        return $newKey;
+    }
+
+    /**
      * Get an attribute from the $attributes array.
      *
      * @param  string $key
@@ -683,13 +709,33 @@ trait HasAttributes
      *
      * @return bool
      */
+    protected function isDeprecated(string $key): bool
+    {
+        return array_key_exists($key, $this->deprecated);
+    }
+
+    /**
+     * @param  string $key
+     *
+     * @return bool
+     */
     protected function isGuarded(string $key): bool
     {
-        if (array_key_exists($key, $this->guarded)) {
-            return true;
-        }
+        return array_key_exists($key, $this->guarded);
+    }
 
-        return false;
+    /**
+     * @param  string $key
+     * @param  string $newKey
+     *
+     * @return void
+     */
+    protected function logDeprecationWarning(string $key, string $newKey): void
+    {
+        Logger::warning(
+            "[DEPRECATION] Attribute '$key' is deprecated. Use '$newKey' instead.",
+            ['class' => static::class]
+        );
     }
 
     /**

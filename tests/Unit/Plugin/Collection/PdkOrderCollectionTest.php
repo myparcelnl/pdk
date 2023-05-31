@@ -38,7 +38,7 @@ it('can generate a shipment on each order', function () {
 
     $pdkOrderCollection->generateShipments();
     $pdkOrderCollection->generateShipments();
-    //$notifications = \MyParcelNL\Pdk\Facade\Notifications::all();
+
     expect($pdkOrderCollection->count())
         ->toBe(2)
         ->and(

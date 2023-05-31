@@ -1,44 +1,68 @@
 <?php
-/** @noinspection StaticClosureCanBeUsedInspection,PhpUndefinedFieldInspection */
+/** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Tests\Unit\Base\Model;
+
 use MyParcelNL\Pdk\Base\Model\Address;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-it('initializes be address', function () {
-    $address = new Address([
-        'boxNumber'  => 'a',
-        'cc'         => CountryCodes::CC_BE,
-        'number'     => 16,
-        'postalCode' => '2000',
-        'street'     => 'Adriaan Brouwerstraat',
-        'city'       => 'Antwerpen',
-    ]);
+usesShared(new UsesMockPdkInstance());
 
-    expect($address->number)->toBe('16');
-});
+it('correctly transforms deprecated fields', function (array $input, array $output) {
+    $address = new Address($input);
 
-it('sets from full street without country', function () {
-    new Address([
-        'postalCode' => '2132JE',
-        'fullStreet' => 'Antareslaan 31a',
-        'city'       => 'Hoofddorp',
-    ]);
-})->throws(InvalidArgumentException::class);
+    expect(Utils::filterNull($address->toArray()))->toBe($output);
+})->with([
+    'full_street'            => [
+        'input'  => [
+            'full_street' => 'street 123 b',
+        ],
+        'output' => [
+            'address1' => 'street 123 b',
+        ],
+    ],
+    'street_additional_info' => [
+        'input'  => [
+            'street_additional_info' => '2F',
+        ],
+        'output' => [
+            'address2' => '2F',
+        ],
+    ],
 
-it('sets from full street', function () {
-    $address = new Address([
-        'cc'         => CountryCodes::CC_NL,
-        'postalCode' => '2132JE',
-        'fullStreet' => 'Antareslaan 31a',
-        'city'       => 'Hoofddorp',
-    ]);
+    'street and number' => [
+        'input'  => [
+            'street' => 'street',
+            'number' => '123',
+        ],
+        'output' => [
+            'address1' => 'street 123',
+        ],
+    ],
 
-    expect($address->number)
-        ->toBe('31')
-        ->and($address->street)
-        ->toBe('Antareslaan')
-        ->and($address->numberSuffix)
-        ->toBe('a');
-});
+    'street, number and number_suffix' => [
+        'input'  => [
+            'street'        => 'street',
+            'number'        => '123',
+            'number_suffix' => 'b',
+        ],
+        'output' => [
+            'address1' => 'street 123 b',
+        ],
+    ],
+
+    'street, number and box_number' => [
+        'input'  => [
+            'street'     => 'street',
+            'number'     => '123',
+            'box_number' => 'b',
+        ],
+        'output' => [
+            'address1' => 'street 123 b',
+        ],
+    ],
+]);

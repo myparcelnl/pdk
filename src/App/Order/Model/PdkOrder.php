@@ -22,9 +22,9 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
- * @property \MyParcelNL\Pdk\Base\Model\ContactDetails                   $recipient
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $sender
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
+ * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
@@ -53,9 +53,9 @@ class PdkOrder extends Model implements StorableArrayable
         'externalIdentifier' => null,
         'deliveryOptions'    => DeliveryOptions::class,
 
+        'senderAddress'      => null,
         'billingAddress'     => null,
-        'recipient'          => ContactDetails::class,
-        'sender'             => null,
+        'shippingAddress'    => ShippingAddress::class,
 
         /**
          * Order shipments. Applicable when NOT using order mode.
@@ -92,9 +92,9 @@ class PdkOrder extends Model implements StorableArrayable
         'externalIdentifier' => 'string',
         'deliveryOptions'    => DeliveryOptions::class,
 
-        'billingAddress' => ContactDetails::class,
-        'recipient'      => ContactDetails::class,
-        'sender'         => ContactDetails::class,
+        'billingAddress'  => ContactDetails::class,
+        'shippingAddress' => ShippingAddress::class,
+        'senderAddress'   => ContactDetails::class,
 
         'shipments'          => ShipmentCollection::class,
         'customsDeclaration' => CustomsDeclaration::class,
@@ -112,6 +112,12 @@ class PdkOrder extends Model implements StorableArrayable
         'totalPrice'            => 'int',
         'totalVat'              => 'int',
         'totalPriceAfterVat'    => 'int',
+    ];
+
+    // TODO: v3.0.0 stop supporting deprecated attributes
+    protected $deprecated = [
+        'recipient' => 'shippingAddress',
+        'sender'    => 'senderAddress',
     ];
 
     /**
@@ -144,8 +150,8 @@ class PdkOrder extends Model implements StorableArrayable
                 [
                     'customsDeclaration'  => $this->customsDeclaration,
                     'deliveryOptions'     => $deliveryOptions,
-                    'recipient'           => $this->recipient,
-                    'sender'              => $this->sender,
+                    'recipient'           => $this->shippingAddress,
+                    'sender'              => $this->senderAddress,
                     'referenceIdentifier' => $this->externalIdentifier,
                     'carrier'             => new CarrierOptions([
                         'carrier' => [
@@ -236,8 +242,8 @@ class PdkOrder extends Model implements StorableArrayable
             $shipment->orderId            = $this->externalIdentifier;
             $shipment->customsDeclaration = $this->customsDeclaration;
             $shipment->deliveryOptions    = $this->deliveryOptions;
-            $shipment->recipient          = $this->recipient;
-            $shipment->sender             = $this->sender;
+            $shipment->recipient          = $this->shippingAddress;
+            $shipment->sender             = $this->senderAddress;
         });
     }
 

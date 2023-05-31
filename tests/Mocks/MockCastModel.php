@@ -9,4 +9,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class MockCastModel extends Model
 {
     protected $attributes = ['property' => null];
+
+    protected $deprecated = [
+        'broccoli' => 'property',
+    ];
 }

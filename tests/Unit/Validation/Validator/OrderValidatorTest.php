@@ -45,25 +45,23 @@ function arrayMergeOrder(array ...$arrays): array
 
 $defaultOrderData = [
     'externalIdentifier' => '1',
-    'recipient'          => [
+    'shippingAddress'    => [
         'cc'         => 'NL',
         'city'       => 'Hoofddorp',
         'postalCode' => '2132JE',
-        'street'     => 'Antareslaan 31',
-        'number'     => '31',
         'person'     => 'Mike Parcel',
         'email'      => 'test@myparcel.nl',
         'phone'      => '0619438574',
+        'address1'   => 'Antareslaan 31',
     ],
-    'sender'             => [
+    'senderAddress'      => [
         'cc'         => 'NL',
         'city'       => 'Hoofddorp',
         'postalCode' => '2132JE',
-        'street'     => 'Antareslaan 31',
-        'number'     => '31',
         'person'     => 'Mike Parcel',
         'email'      => 'test@myparcel.nl',
         'phone'      => '0619438574',
+        'address1'   => 'Antareslaan 31',
     ],
     'deliveryOptions'    => [
         'date'         => '2022-02-02',
@@ -110,7 +108,7 @@ it('validates order', function (array $order) use ($createOrder) {
 })->with([
         'instabox to France'                          => [
             'order' => [
-                'recipient'       => [
+                'shippingAddress' => [
                     'cc' => 'FR',
                 ],
                 'deliveryOptions' => [
@@ -154,7 +152,7 @@ it('validates order', function (array $order) use ($createOrder) {
         'package without country'                     => [
             'order' => (
             [
-                'recipient' => [
+                'shippingAddress' => [
                     'cc' => null,
                 ],
             ]
@@ -196,20 +194,20 @@ it('validates order', function (array $order) use ($createOrder) {
         ],
         'EU package without insurance'                => [
             'order' => [
-                'recipient'       => ['cc' => 'FR'],
+                'shippingAddress' => ['cc' => 'FR'],
                 'deliveryOptions' => ['shipmentOptions' => ['insurance' => null]],
             ],
         ],
         'EU package with no weight'                   => [
             'order' => [
-                'recipient'          => ['cc' => 'FR'],
+                'shippingAddress'    => ['cc' => 'FR'],
                 'deliveryOptions'    => ['shipmentOptions' => ['insurance' => 50000]],
                 'physicalProperties' => ['weight' => 0],
             ],
         ],
         'EU package with correct insurance'           => [
             'order' => [
-                'recipient'       => ['cc' => 'FR'],
+                'shippingAddress' => ['cc' => 'FR'],
                 'deliveryOptions' => ['shipmentOptions' => ['insurance' => 50000]],
             ],
         ],
@@ -225,7 +223,7 @@ it('validates order', function (array $order) use ($createOrder) {
         ],
         'BE mailbox'                                  => [
             'order' => [
-                'recipient'       => [
+                'shippingAddress' => [
                     'cc' => 'BE',
                 ],
                 'deliveryOptions' => [
@@ -235,7 +233,7 @@ it('validates order', function (array $order) use ($createOrder) {
         ],
         'ROW package without weight, without invoice' => [
             'order' => [
-                'recipient'       => [
+                'shippingAddress' => [
                     'cc' => 'US',
                 ],
                 'deliveryOptions' => [
@@ -247,7 +245,7 @@ it('validates order', function (array $order) use ($createOrder) {
         ],
         'ROW package'                                 => [
             'order' => [
-                'recipient'          => ['cc' => 'US'],
+                'shippingAddress'    => ['cc' => 'US'],
                 'customsDeclaration' => [
                     'invoice' => '1',
                     'items'   => [
@@ -286,12 +284,11 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'labelAmount'  => 2,
                     'deliveryDate' => '2022-12-12 00:00:00',
                 ],
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'         => CountryCodes::CC_NL,
-                    'street'     => 'Pietjestraat',
-                    'number'     => '44',
                     'postalCode' => '2901AB',
                     'city'       => 'Amstelveen',
+                    'address1'   => 'Pietjestraat 44',
                 ],
             ],
             'method' => 'canHaveDate',
@@ -310,12 +307,11 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'labelAmount'  => 2,
                     'deliveryDate' => '2022-12-12 00:00:00',
                 ],
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'         => CountryCodes::CC_US,
-                    'street'     => 'Broadway',
-                    'number'     => '1',
                     'postalCode' => '12345',
                     'city'       => 'New York',
+                    'address1'   => 'Broadway 1',
                 ],
             ],
             'method' => 'canHaveWeight',
@@ -333,12 +329,11 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'packageType' => 'mailbox',
                     'labelAmount' => 1,
                 ],
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'         => CountryCodes::CC_NL,
-                    'street'     => 'P.C. Hooftstraat',
-                    'number'     => '1',
                     'postalCode' => '2243AA',
                     'city'       => 'Amsterdam',
+                    'address1'   => 'P.C. Hooftstraat 1',
                 ],
             ],
             'method' => 'canHaveWeight',
@@ -356,12 +351,11 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
                     'packageType' => 'mailbox',
                     'labelAmount' => 1,
                 ],
-                'recipient'          => [
+                'shippingAddress'    => [
                     'cc'         => CountryCodes::CC_NL,
-                    'street'     => 'P.C. Hooftstraat',
-                    'number'     => '1',
                     'postalCode' => '2243AA',
                     'city'       => 'Amsterdam',
+                    'address1'   => 'P.C. Hooftstraat 1',
                 ],
             ],
             'method' => 'canHaveWeight',

@@ -82,7 +82,7 @@ it('creates fulfilment order from pdk order', function (array $input) {
                 'phone'      => '0612356789',
                 'cc'         => 'NL',
                 'city'       => 'Hoofddorp',
-                'fullStreet' => 'Antareslaan 31',
+                'address1'   => 'Antareslaan 31',
                 'postalCode' => '2132JE',
                 'region'     => 'Noord-Holland',
                 'state'      => 'Noord-Holland',

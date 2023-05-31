@@ -119,7 +119,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             return 0;
         }
 
-        $insuranceUpToKey  = $this->getInsuranceUpToKey($order->recipient->cc);
+        $insuranceUpToKey  = $this->getInsuranceUpToKey($order->shippingAddress->cc);
         $maxInsuranceValue = $this->currencyService->convertToCents($carrierSettings[$insuranceUpToKey] ?? 0);
 
         $gaga = array_reduce(

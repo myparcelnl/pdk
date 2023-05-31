@@ -8,12 +8,25 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Context\Context;
 
 /**
- * @property string                                                 $externalIdentifier
- * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
- * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions         $deliveryOptions
- * @property \MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $sender
- * @property \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property null|string                                                 $externalIdentifier
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
+ * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
+ * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
+ * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
+ * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property null|\DateTimeImmutable                                     $orderDate
+ * @property bool                                                        $exported
+ * @property int                                                         $shipmentPrice
+ * @property int                                                         $shipmentPriceAfterVat
+ * @property int                                                         $shipmentVat
+ * @property int                                                         $orderPrice
+ * @property int                                                         $orderPriceAfterVat
+ * @property int                                                         $orderVat
+ * @property int                                                         $totalPrice
+ * @property int                                                         $totalPriceAfterVat
+ * @property int                                                         $totalVat
  */
 class OrderDataContext extends PdkOrder
 {

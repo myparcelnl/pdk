@@ -54,7 +54,7 @@ it('creates fulfilment shipment from pdk shipment', function (array $input) {
             'recipient'          => [
                 'cc'         => 'NL',
                 'city'       => 'Hoofddorp',
-                'fullStreet' => 'Antareslaan 31',
+                'address1'   => 'Antareslaan 31',
                 'postalCode' => '2132JE',
                 'company'    => 'MyParcel',
                 'email'      => 'test@myparcel.nl',

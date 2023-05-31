@@ -25,16 +25,15 @@ const DEFAULT_INPUT_RECIPIENT = [
     'city'       => 'Hoofddorp',
     'person'     => 'Jaap Krekel',
     'postalCode' => '2132JE',
-    'street'     => 'Antareslaan 31',
+    'address1'   => 'Antareslaan 31',
 ];
 
 const DEFAULT_INPUT_SENDER = [
     'cc'         => 'NL',
     'city'       => 'Amsterdam',
-    'number'     => '2',
     'person'     => 'Willem Wever',
     'postalCode' => '4164ZF',
-    'street'     => 'Werf',
+    'address1'   => 'Werf 2',
 ];
 
 it('creates a valid order collection from api data', function (array $input) {
@@ -304,15 +303,14 @@ it('creates order', function ($input, $path, $query) {
                     'city'       => 'Hoofddorp',
                     'person'     => 'Jaap Krekel',
                     'postalCode' => '2132JE',
-                    'fullStreet' => 'Antareslaan 31',
+                    'address1'   => 'Antareslaan 31',
                 ],
                 'sender'             => [
                     'cc'         => 'NL',
                     'city'       => 'Amsterdam',
-                    'number'     => '2',
                     'person'     => 'Willem Wever',
                     'postalCode' => '4164ZF',
-                    'street'     => 'Werf',
+                    'address1'   => 'Werf 2',
                 ],
             ],
             'shopId'         => null,
