@@ -105,7 +105,7 @@ class ExportOrderAction extends AbstractOrderAction
     protected function exportShipments(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
         $data      = json_decode($request->getContent(), true);
-        $shipments = $orders->generateShipments($data['data']['orders'] ?? []);
+        $shipments = $orders->generateShipments($data['data']['orders'][0] ?? []);
 
         if ($shipments->isEmpty()) {
             return $orders;

@@ -18,7 +18,7 @@ class PdkOrderCollection extends Collection
     protected $cast = PdkOrder::class;
 
     /**
-     * @param  array $data
+     * @param  array $data Data to pass into each created shipment.
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @throws \Exception
