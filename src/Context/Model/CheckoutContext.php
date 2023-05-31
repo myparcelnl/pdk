@@ -138,15 +138,14 @@ class CheckoutContext extends Model
      */
     private function getStrings(): array
     {
-        $header = Settings::get(CheckoutSettings::ID, CheckoutSettings::DELIVERY_OPTIONS_HEADER, '');
-
-        return Language::translateArray(
-            array_merge(
-                self::TRANSLATION_MAP,
-                [
-                    'headerDeliveryOptions' => $header,
-                ]
-            )
+        return array_merge(
+            Language::translateArray(self::TRANSLATION_MAP),
+            [
+                'headerDeliveryOptions' => Settings::get(
+                    CheckoutSettings::DELIVERY_OPTIONS_HEADER,
+                    CheckoutSettings::ID
+                ),
+            ]
         );
     }
 }
