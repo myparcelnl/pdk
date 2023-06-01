@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/myparcelnl/pdk/compare/v2.2.1...v2.2.2) (2023-06-01)
+
+
+### :bug: Bug Fixes
+
+* **tests:** include tests/Bootstrap in published package ([258f8c5](https://github.com/myparcelnl/pdk/commit/258f8c5c6d58e72ddb5b7a53ab8ae99b14c56305))
+
 ## [2.2.1](https://github.com/myparcelnl/pdk/compare/v2.2.0...v2.2.1) (2023-06-01)
 
 
