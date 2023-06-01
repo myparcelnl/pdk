@@ -143,7 +143,7 @@ class PdkOrder extends Model implements StorableArrayable
      */
     public function createShipment(array $data = []): Shipment
     {
-        $deliveryOptions = $data[0]['deliveryOptions'] ?? $this->deliveryOptions;
+        $deliveryOptions = $data['deliveryOptions'] ?? $this->deliveryOptions;
 
         return new Shipment(
             array_replace_recursive(
