@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.0](https://github.com/myparcelnl/pdk/compare/v2.1.0...v2.2.0) (2023-06-01)
+
+
+### :sparkles: New Features
+
+* **shipments:** allow same day delivery for all dhl shipments ([#100](https://github.com/myparcelnl/pdk/issues/100)) ([bcbb463](https://github.com/myparcelnl/pdk/commit/bcbb4636cba0092150e04f3cf3ce5b1fadb577d3))
+
+
+### :bug: Bug Fixes
+
+* **shipments:** fix error when exporting order to shipments ([#102](https://github.com/myparcelnl/pdk/issues/102)) ([279be05](https://github.com/myparcelnl/pdk/commit/279be05f2b5ff7e1d44f3092a952d44277e5f1bb))
+
 ## [2.1.0](https://github.com/myparcelnl/pdk/compare/v2.0.0...v2.1.0) (2023-05-31)
 
 
