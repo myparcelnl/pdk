@@ -19,7 +19,7 @@ class Pdk implements PdkInterface
     /**
      * @var \DI\Container
      */
-    private $container;
+    protected $container;
 
     /**
      * @throws \Exception

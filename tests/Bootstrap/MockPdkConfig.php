@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
@@ -73,6 +74,7 @@ class MockPdkConfig
             LoggerInterface::class                      => autowire(MockLogger::class),
             OrderStatusServiceInterface::class          => autowire(MockOrderStatusService::class),
             PdkCartRepositoryInterface::class           => autowire(MockPdkCartRepository::class),
+            PdkInterface::class                         => autowire(MockPdk::class),
             PdkOrderRepositoryInterface::class          => autowire(MockPdkOrderRepository::class),
             PdkProductRepositoryInterface::class        => autowire(MockPdkProductRepository::class),
             PdkShippingMethodRepositoryInterface::class => autowire(MockPdkShippingMethodRepository::class),
