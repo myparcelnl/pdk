@@ -11,8 +11,10 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use Throwable;
@@ -20,6 +22,8 @@ use function array_reduce;
 
 class ShipmentOptionsService implements ShipmentOptionsServiceInterface
 {
+    private const CARRIER_SETTING_KEY = 'carrierSetting';
+    private const PRODUCT_SETTING_KEY = 'productSetting';
     private const SETTING_KEYS        = [
         [
             self::SHIPMENT_OPTION_KEY => ShipmentOptions::AGE_CHECK,
@@ -53,8 +57,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
         ],
     ];
     private const SHIPMENT_OPTION_KEY = 'shipmentOption';
-    private const CARRIER_SETTING_KEY = 'carrierSetting';
-    private const PRODUCT_SETTING_KEY = 'productSetting';
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
@@ -110,34 +112,34 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     {
         $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
-        $fromAmount  = $this->currencyService->convertToCents(
-            $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
-        );
-        $orderAmount = $order->orderPriceAfterVat;
+        $orderAmount = (int) ceil($this->getInsuranceFactor() * $order->orderPriceAfterVat);
+        $fromAmount  = $this->currencyService->convertToCents($carrierSettings->exportInsuranceFromAmount);
 
         if ($orderAmount < $fromAmount) {
             return 0;
         }
 
+        $allowedInsuranceAmounts = $order
+            ->getValidator()
+            ->getAllowedInsuranceAmounts();
+
         $insuranceUpToKey  = $this->getInsuranceUpToKey($order->shippingAddress->cc);
         $maxInsuranceValue = $this->currencyService->convertToCents($carrierSettings[$insuranceUpToKey] ?? 0);
 
-        $gaga = array_reduce(
-            $order->getValidator()
-                ->getAllowedInsuranceAmounts(),
-            static function (int $acc, ?int $value) use (&$cocked) {
-                if (! $cocked && isset($value) && $value >= $acc) {
-                    $cocked = true;
-                    $acc    = $value;
-                }
-                return $acc;
-            },
-            $orderAmount
-        );
-
         return min(
-            $gaga,
+            $this->getMinimumInsuranceAmount($allowedInsuranceAmounts, $orderAmount),
             $maxInsuranceValue
+        );
+    }
+
+    /**
+     * @return float
+     */
+    private function getInsuranceFactor(): float
+    {
+        return Settings::get(
+            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR,
+            CheckoutSettings::ID
         );
     }
 
@@ -160,6 +162,25 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             default:
                 return CarrierSettings::EXPORT_INSURANCE_UP_TO_EU;
         }
+    }
+
+    /**
+     * @param  int[] $insuranceAmount
+     * @param  int   $orderAmount
+     *
+     * @return void
+     */
+    private function getMinimumInsuranceAmount(array $insuranceAmount, int $orderAmount): int
+    {
+        foreach ($insuranceAmount as $allowedInsuranceAmount) {
+            if ($allowedInsuranceAmount < $orderAmount) {
+                continue;
+            }
+
+            return $allowedInsuranceAmount;
+        }
+
+        return $orderAmount;
     }
 
     /**
@@ -187,10 +208,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             $carrierSettingKey  = $keys[self::CARRIER_SETTING_KEY];
             $productSettingsKey = $keys[self::PRODUCT_SETTING_KEY];
 
-            $p = $productSettings[$productSettingsKey];
-            $c = $carrierSettings[$carrierSettingKey];
-
-            // use productsettings when set and not default
             if (isset($productSettings[$productSettingsKey]) && AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== $productSettings[$productSettingsKey]) {
                 $shipmentOptions->setAttribute($shipmentOptionKey, $productSettings[$productSettingsKey]);
             } else {

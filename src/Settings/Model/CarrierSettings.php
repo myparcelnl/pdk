@@ -34,7 +34,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property DropOffPossibilities                $dropOffPossibilities
  * @property bool                                $exportAgeCheck
  * @property bool                                $exportInsurance
- * @property int                                 $exportInsuranceAmount
+ * @property int                                 $exportInsuranceFromAmount
  * @property int                                 $exportInsuranceUpTo
  * @property bool                                $exportLargeFormat
  * @property bool                                $exportOnlyRecipient
