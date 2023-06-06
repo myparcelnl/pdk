@@ -112,38 +112,34 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     {
         $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
-        $fromAmount      = $this->currencyService->convertToCents(
-            $carrierSettings[CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT] ?? 0
-        );
-        $insuranceFactor = Settings::get(
-            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR,
-            CheckoutSettings::ID
-        ) ?? CheckoutSettings::FACTOR_ONE;
-        $orderAmount     = $insuranceFactor * $order->orderPriceAfterVat;
+        $orderAmount = (int) ceil($this->getInsuranceFactor() * $order->orderPriceAfterVat);
+        $fromAmount  = $this->currencyService->convertToCents($carrierSettings->exportInsuranceFromAmount);
 
         if ($orderAmount < $fromAmount) {
             return 0;
         }
 
+        $allowedInsuranceAmounts = $order
+            ->getValidator()
+            ->getAllowedInsuranceAmounts();
+
         $insuranceUpToKey  = $this->getInsuranceUpToKey($order->shippingAddress->cc);
         $maxInsuranceValue = $this->currencyService->convertToCents($carrierSettings[$insuranceUpToKey] ?? 0);
 
-        $gaga = array_reduce(
-            $order->getValidator()
-                ->getAllowedInsuranceAmounts(),
-            static function (int $acc, ?int $value) use (&$cocked) {
-                if (! $cocked && isset($value) && $value >= $acc) {
-                    $cocked = true;
-                    $acc    = $value;
-                }
-                return $acc;
-            },
-            $orderAmount
-        );
-
         return min(
-            $gaga,
+            $this->getMinimumInsuranceAmount($allowedInsuranceAmounts, $orderAmount),
             $maxInsuranceValue
+        );
+    }
+
+    /**
+     * @return float
+     */
+    private function getInsuranceFactor(): float
+    {
+        return Settings::get(
+            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR,
+            CheckoutSettings::ID
         );
     }
 
@@ -166,6 +162,25 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             default:
                 return CarrierSettings::EXPORT_INSURANCE_UP_TO_EU;
         }
+    }
+
+    /**
+     * @param  int[] $insuranceAmount
+     * @param  int   $orderAmount
+     *
+     * @return void
+     */
+    private function getMinimumInsuranceAmount(array $insuranceAmount, int $orderAmount): int
+    {
+        foreach ($insuranceAmount as $allowedInsuranceAmount) {
+            if ($allowedInsuranceAmount < $orderAmount) {
+                continue;
+            }
+
+            return $allowedInsuranceAmount;
+        }
+
+        return $orderAmount;
     }
 
     /**
@@ -213,11 +228,11 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     /**
      * Returns the value that should be used for the shipment option.
      * Arguments will be processed in order, so the last one is most important.
-     * For booleans: true will prevail over false. valueProcessor returns the value as int.
+     * Special values are -1 (tristate default) and null, which will be ignored.
+     * For booleans: true will prevail over false. valueProcessor returns the value as int (1 for true, 0 for false).
      * For integers: higher values prevail. Strings will be converted to integers, when numeric.
      * For strings: the last non-empty string will prevail.
      * When mixed types are given, output is not guaranteed.
-     * Special values are -1 (tristate default) and null.
      *
      * @param ...$args
      *
@@ -235,6 +250,6 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             }
 
             return $item ?? $carry;
-        }, AbstractSettingsModel::TRISTATE_VALUE_DEFAULT);
+        }, AbstractSettingsModel::TRISTATE_VALUE_DISABLED);
     }
 }
