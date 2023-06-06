@@ -15,16 +15,6 @@ class CreateWebhooksAction extends AbstractWebhooksAction
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return string[]
-     */
-    public function getRequestHooks(Request $request): array
-    {
-        return explode(',', $request->get('hooks', [])) ?: [];
-    }
-
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request): Response
@@ -32,17 +22,27 @@ class CreateWebhooksAction extends AbstractWebhooksAction
         $url   = $this->getWebhookUrl($request);
         $hooks = $this->getRequestHooks($request);
 
-        $collection = (new WebhookSubscriptionCollection(
+        $collection = new WebhookSubscriptionCollection(
             array_map(static function (string $hook) use ($url) {
                 return compact('hook', 'url');
             }, $hooks)
-        ));
+        );
 
         $result = $this->repository->subscribeMany($collection);
 
         $this->pdkWebhooksRepository->store($result);
 
         return Actions::execute(PdkBackendActions::FETCH_WEBHOOKS);
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return string[]
+     */
+    private function getRequestHooks(Request $request): array
+    {
+        return explode(',', $request->get('hooks', [])) ?: [];
     }
 
     /**
