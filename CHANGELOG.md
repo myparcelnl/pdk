@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.0](https://github.com/myparcelnl/pdk/compare/v2.2.2...v2.3.0) (2023-06-06)
+
+
+### :sparkles: New Features
+
+* **settings:** add calculation by factor option to insurance ([#98](https://github.com/myparcelnl/pdk/issues/98)) ([b176554](https://github.com/myparcelnl/pdk/commit/b176554d9aa2cdf028d0eb4669328208093fa394))
+
 ## [2.2.2](https://github.com/myparcelnl/pdk/compare/v2.2.1...v2.2.2) (2023-06-01)
 
 
