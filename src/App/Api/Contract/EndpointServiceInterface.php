@@ -10,12 +10,12 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 interface EndpointServiceInterface extends Arrayable
 {
     /**
-     * @return string
+     * The base url of the API.
      */
     public function getBaseUrl(): string;
 
     /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
+     * All available endpoints.
      */
     public function getEndpoints(): Collection;
 }

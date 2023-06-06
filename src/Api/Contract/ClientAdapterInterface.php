@@ -7,11 +7,9 @@ namespace MyParcelNL\Pdk\Api\Contract;
 interface ClientAdapterInterface
 {
     /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
+     * Execute a request.
      *
-     * @return \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
+     * @see \MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter for an example implementation.
      */
     public function doRequest(string $httpMethod, string $uri, array $options = []): ClientResponseInterface;
 }

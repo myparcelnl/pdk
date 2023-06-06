@@ -7,42 +7,57 @@ namespace MyParcelNL\Pdk\Frontend\Contract;
 interface ViewServiceInterface
 {
     /**
-     * @return bool
+     * Whether the current page should have PDK modals.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderModals()
      */
     public function hasModals(): bool;
 
     /**
-     * @return bool
+     * Whether the current page should have PDK notifications.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderNotifications()
      */
     public function hasNotifications(): bool;
 
     /**
-     * @return bool
+     * Whether the current page is a page that renders a PDK component. This is used to determine whether the PDK
+     * stylesheets and scripts should be loaded.
      */
     public function isAnyPdkPage(): bool;
 
     /**
-     * @return bool
+     * True if the current page is the frontend checkout page.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderDeliveryOptions()
      */
     public function isCheckoutPage(): bool;
 
     /**
-     * @return bool
+     * True if the current page is the order list page.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderOrderListItem()
      */
     public function isOrderListPage(): bool;
 
     /**
-     * @return bool
+     * True if the current page is the order page.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderOrderBox()
      */
     public function isOrderPage(): bool;
 
     /**
-     * @return bool
+     * True if the current page is the plugin settings page.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderPluginSettings()
      */
     public function isPluginSettingsPage(): bool;
 
     /**
-     * @return bool
+     * True if the current page is the product page.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderProductSettings()
      */
     public function isProductPage(): bool;
 }

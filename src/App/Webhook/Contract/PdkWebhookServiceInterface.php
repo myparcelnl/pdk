@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Webhook\Contract;
 
+/**
+ * @see \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface
+ */
 interface PdkWebhookServiceInterface
 {
     /**
-     * Generate a full url for a webhook.
+     * Generate a hashed url for webhook callbacks.
      */
     public function createUrl(): string;
 

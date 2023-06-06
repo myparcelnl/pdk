@@ -140,6 +140,7 @@ return [
      *
      * @note Required to use the checkout.
      * @see  \MyParcelNL\Pdk\App\Api\Frontend\AbstractFrontendEndpointService
+     * @see  \MyParcelNL\Pdk\App\Api\Contract\EndpointServiceInterface
      */
 
     FrontendEndpointServiceInterface::class => autowire(),
@@ -175,6 +176,7 @@ return [
      *
      * @note Required for the admin frontend.
      * @see  \MyParcelNL\Pdk\App\Api\Backend\AbstractPdkBackendEndpointService
+     * @see  \MyParcelNL\Pdk\App\Api\Contract\EndpointServiceInterface
      */
 
     BackendEndpointServiceInterface::class => autowire(),
