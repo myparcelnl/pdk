@@ -13,7 +13,7 @@ abstract class AbstractUsesMockPdkInstance implements BaseMock
     /**
      * @var array
      */
-    private $config;
+    protected $config;
 
     /**
      * @param  array $config
