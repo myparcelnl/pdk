@@ -245,7 +245,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
             Logger::error(
                 $e->getMessage(),
                 array_merge([
-                    'trace' => $e->getTraceAsString(),
+                    'trace' => $e->getTrace(),
                 ],
                     compact(
                         'template',
