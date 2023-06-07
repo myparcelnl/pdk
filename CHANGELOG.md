@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.0](https://github.com/myparcelnl/pdk/compare/v2.3.0...v2.4.0) (2023-06-07)
+
+
+### :sparkles: New Features
+
+* **country:** add isLocalCountry method ([ba519bf](https://github.com/myparcelnl/pdk/commit/ba519bf3dc549e5d109b2e75528c4c9c3b0c36c7))
+
+
+### :bug: Bug Fixes
+
+* **settings:** improve settings views ([9857b7f](https://github.com/myparcelnl/pdk/commit/9857b7fc9b60c36aa575c59c2899aeb3f83a4099))
+
 ## [2.3.0](https://github.com/myparcelnl/pdk/compare/v2.2.2...v2.3.0) (2023-06-06)
 
 
