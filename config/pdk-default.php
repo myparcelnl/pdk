@@ -31,18 +31,6 @@ return [
     'baseCdnUrl'               => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
 
     /**
-     * The minimum PHP version required to run the app.
-     */
-    'minimumPhpVersion'        => value('7.1'),
-
-    /**
-     * The version of the delivery options in the checkout.
-     *
-     * @see https://github.com/myparcelnl/delivery-options/releases
-     */
-    'deliveryOptionsVersion'   => value('5.7.1'),
-
-    /**
      * The default time zone to use for date and time functions.
      */
     'defaultTimeZone'          => value('Europe/Amsterdam'),
