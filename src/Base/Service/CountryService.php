@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class CountryService implements CountryServiceInterface
@@ -58,6 +59,16 @@ class CountryService implements CountryServiceInterface
     public function isEu(string $country): bool
     {
         return CountryCodes::ZONE_EU === $this->getShippingZone($country);
+    }
+
+    /**
+     * @param  string $country
+     *
+     * @return bool
+     */
+    public function isLocalCountry(string $country): bool
+    {
+        return Platform::get('localCountry') === $country;
     }
 
     /**

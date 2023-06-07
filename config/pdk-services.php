@@ -30,6 +30,8 @@ use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Frontend\Service\ScriptService;
+use MyParcelNL\Pdk\Platform\PlatformManager;
+use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
@@ -101,6 +103,11 @@ return [
      * Handles migrations.
      */
     MigrationServiceInterface::class           => autowire(MigrationService::class),
+
+    /**
+     * Handles platform specific logic.
+     */
+    PlatformManagerInterface::class            => autowire(PlatformManager::class),
 
     /**
      * Handles CDN urls.

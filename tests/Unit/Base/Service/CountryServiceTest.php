@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -68,6 +70,48 @@ it('can check if a country is an unique zone', function (string $country, bool $
     'US' => [
         'country' => 'US',
         'unique'  => false,
+    ],
+]);
+
+it('can check if a country is the local country', function (string $platform, string $country, bool $isLocal) {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
+    $pdk = Pdk::get(PdkInterface::class);
+
+    $previousPlatform = $pdk->get('platform');
+    $pdk->set('platform', $platform);
+
+    /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $service */
+    $service = Pdk::get(CountryServiceInterface::class);
+    $result  = $service->isLocalCountry($country);
+
+    expect($result)->toBe($isLocal);
+
+    $pdk->set('platform', $previousPlatform);
+})->with([
+    'myparcelnl, check NL' => [
+        'platform' => Platform::MYPARCEL_NAME,
+        'country'  => 'NL',
+        'isLocal'  => true,
+    ],
+    'myparcelnl, check BE' => [
+        'platform' => Platform::MYPARCEL_NAME,
+        'country'  => 'BE',
+        'isLocal'  => false,
+    ],
+    'myparcelnl, check DE' => [
+        'platform' => Platform::MYPARCEL_NAME,
+        'country'  => 'DE',
+        'isLocal'  => false,
+    ],
+    'myparcelbe, check BE' => [
+        'platform' => Platform::SENDMYPARCEL_NAME,
+        'country'  => 'BE',
+        'isLocal'  => true,
+    ],
+    'myparcelbe, check NL' => [
+        'platform' => Platform::SENDMYPARCEL_NAME,
+        'country'  => 'NL',
+        'isLocal'  => false,
     ],
 ]);
 
