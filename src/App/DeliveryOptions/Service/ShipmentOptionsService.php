@@ -7,18 +7,15 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use Throwable;
-use function array_reduce;
 
 class ShipmentOptionsService implements ShipmentOptionsServiceInterface
 {
@@ -59,15 +56,22 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     private const SHIPMENT_OPTION_KEY = 'shipmentOption';
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
+
+    /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
      */
     private $currencyService;
 
     /**
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface  $countryService
      */
-    public function __construct(CurrencyServiceInterface $currencyService)
+    public function __construct(CurrencyServiceInterface $currencyService, CountryServiceInterface $countryService)
     {
+        $this->countryService  = $countryService;
         $this->currencyService = $currencyService;
     }
 
@@ -112,7 +116,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     {
         $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
-        $orderAmount = (int) ceil($this->getInsuranceFactor() * $order->orderPriceAfterVat);
+        $orderAmount = (int) ceil($carrierSettings->exportInsurancePriceFactor * $order->orderPriceAfterVat);
         $fromAmount  = $this->currencyService->convertToCents($carrierSettings->exportInsuranceFromAmount);
 
         if ($orderAmount < $fromAmount) {
@@ -133,35 +137,27 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     }
 
     /**
-     * @return float
-     */
-    private function getInsuranceFactor(): float
-    {
-        return Settings::get(
-            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR,
-            CheckoutSettings::ID
-        );
-    }
-
-    /**
      * @param  null|string $cc
      *
      * @return string
      */
     private function getInsuranceUpToKey(?string $cc): string
     {
-        $localCountry = Platform::get('localCountry');
+        $country = $cc ?? Platform::get('localCountry');
 
-        switch ($cc ?? $localCountry) {
-            case $localCountry:
-                return CarrierSettings::EXPORT_INSURANCE_UP_TO;
-
-            case CountryCodes::CC_BE:
-                return CarrierSettings::EXPORT_INSURANCE_UP_TO_BE;
-
-            default:
-                return CarrierSettings::EXPORT_INSURANCE_UP_TO_EU;
+        if ($this->countryService->isLocalCountry($country)) {
+            return CarrierSettings::EXPORT_INSURANCE_UP_TO;
         }
+
+        if ($this->countryService->isUnique($country)) {
+            return CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE;
+        }
+
+        if ($this->countryService->isEu($country)) {
+            return CarrierSettings::EXPORT_INSURANCE_UP_TO_EU;
+        }
+
+        return CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW;
     }
 
     /**

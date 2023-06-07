@@ -52,8 +52,10 @@ class ProductSettingsView extends AbstractSettingsView
                 ProductSettings::DROP_OFF_DELAY,
                 Components::INPUT_NUMBER,
                 [
-                    'min' => Pdk::get('dropOffDelayMinimum'),
-                    'max' => Pdk::get('dropOffDelayMaximum'),
+                    '$attributes' => [
+                        'min' => Pdk::get('dropOffDelayMinimum'),
+                        'max' => Pdk::get('dropOffDelayMaximum'),
+                    ],
                 ]
             ),
             new InteractiveElement(ProductSettings::DISABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
@@ -70,7 +72,7 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(
                 ProductSettings::CUSTOMS_CODE,
                 Components::INPUT_TEXT,
-                ['maxlength' => Pdk::get('customsCodeMaxLength')]
+                ['$attributes' => ['maxlength' => Pdk::get('customsCodeMaxLength')]]
             ),
 
             /**

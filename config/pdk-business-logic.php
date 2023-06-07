@@ -12,10 +12,15 @@ return [
      * API
      */
 
+    // Shipments
     'customsCodeMaxLength'  => value(10),
     'dropOffDelayMaximum'   => value(14),
     'dropOffDelayMinimum'   => value(0),
     'numberSuffixMaxLength' => value(6),
+
+    // Delivery options
+    'deliveryDaysWindowMin' => value(0),
+    'deliveryDaysWindowMax' => value(14),
 
     /**
      * PDK

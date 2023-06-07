@@ -10,6 +10,8 @@ interface DeliveryOptionsValidatorInterface
 
     public function canHaveDate(): bool;
 
+    public function canHaveDirectReturn(): bool;
+
     public function canHaveEveningDelivery(): bool;
 
     public function canHaveInsurance(?int $amount): bool;

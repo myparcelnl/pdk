@@ -60,7 +60,6 @@
         "priceType": "included",
         "enableDeliveryOptions": true,
         "enableDeliveryOptionsWhenNotInStock": true,
-        "exportInsurancePriceFactor": 1,
         "useSeparateAddressFields": false
     },
     "carrier": {

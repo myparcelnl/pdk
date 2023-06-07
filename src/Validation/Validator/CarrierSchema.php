@@ -29,6 +29,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return true;
     }
 
+    public function canHaveDirectReturn(): bool
+    {
+        return (bool) $this->getShipmentOption(ShipmentOptions::RETURN);
+    }
+
     public function canHaveEveningDelivery(): bool
     {
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME);

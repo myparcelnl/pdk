@@ -189,15 +189,14 @@ it(
     'calculates insurance',
     function (int $insuranceFrom, int $insuranceUpTo, int $orderTotal, float $factor, int $result) {
         mockPdk([
-            CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT => $insuranceFrom,
-            CarrierSettings::EXPORT_INSURANCE_UP_TO       => $insuranceUpTo,
+            CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT  => $insuranceFrom,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO        => $insuranceUpTo,
+            CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => $factor,
         ], [
             [
                 'externalIdentifier' => 'PDK-1',
                 'price'              => ['currency' => 'EUR', 'amount' => $orderTotal],
             ],
-        ], [
-            CheckoutSettings::EXPORT_INSURANCE_PRICE_FACTOR => $factor,
         ]);
 
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository */

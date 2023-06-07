@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property bool                                    $deliveryOptionsDisplay
  * @property string                                  $deliveryOptionsHeader
  * @property string                                  $deliveryOptionsPosition
- * @property float                                   $exportInsurancePriceFactor
  * @property string                                  $pickupLocationsDefaultView
  * @property string                                  $priceType
  * @property bool                                    $showDeliveryDay
@@ -36,7 +35,6 @@ class CheckoutSettings extends AbstractSettingsModel
     public const PRICE_TYPE                                = 'priceType';
     public const ENABLE_DELIVERY_OPTIONS                   = 'enableDeliveryOptions';
     public const ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK = 'enableDeliveryOptionsWhenNotInStock';
-    public const EXPORT_INSURANCE_PRICE_FACTOR             = 'exportInsurancePriceFactor';
     public const USE_SEPARATE_ADDRESS_FIELDS               = 'useSeparateAddressFields';
     /** Pickup location views */
     public const PICKUP_LOCATIONS_VIEW_LIST = 'list';
@@ -58,7 +56,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::PRICE_TYPE                                => self::DEFAULT_PRICE_TYPE,
         self::ENABLE_DELIVERY_OPTIONS                   => true,
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
-        self::EXPORT_INSURANCE_PRICE_FACTOR             => 1.0,
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
     ];
 
@@ -72,7 +69,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::PRICE_TYPE                                => 'string',
         self::ENABLE_DELIVERY_OPTIONS                   => 'bool',
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => 'bool',
-        self::EXPORT_INSURANCE_PRICE_FACTOR             => 'float',
         self::USE_SEPARATE_ADDRESS_FIELDS               => 'bool',
     ];
 }

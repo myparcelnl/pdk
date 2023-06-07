@@ -148,7 +148,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         return Arr::flatten([
             /**
-             * Default exports
+             * Export settings for regular shipments.
              */
             [new SettingsDivider('settings_carrier_export')],
 
@@ -160,8 +160,21 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     ['$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true]]
                 ),
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO),
-                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_BE),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE),
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_EU),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW),
+                new InteractiveElement(
+                    CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR,
+                    Components::INPUT_NUMBER,
+                    [
+                        '$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true],
+                        '$attributes'  => [
+                            'min' => Pdk::get('insuranceFactorMin'),
+                            'step' => Pdk::get('insuranceFactorStep'),
+                            'max' => Pdk::get('insuranceFactorMax'),
+                        ],
+                    ]
+                ),
             ] : [],
 
             $this->carrierSchema->canHaveAgeCheck() ? [
@@ -180,19 +193,52 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE),
             ] : [],
 
-            [new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE)],
+            $this->carrierSchema->canHaveDirectReturn() ? [
+                new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE),
+            ] : [],
+
+            /**
+             * Export settings for return shipments.
+             */
+            $this->getReturnsFields(),
 
             /**
              * Delivery Options
              */
             [new SettingsDivider('settings_carrier_delivery_options')],
 
-            [new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE)],
+            [
+                new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
+                $this->createDeliveryOptionsField(CarrierSettings::DELIVERY_DAYS_WINDOW, Components::INPUT_NUMBER, [
+                    '$attributes' => [
+                        'min' => Pdk::get('deliveryDaysWindowMin'),
+                        'max' => Pdk::get('deliveryDaysWindowMax'),
+                    ],
+                ]),
+                $this->createDeliveryOptionsField(CarrierSettings::DROP_OFF_DELAY, Components::INPUT_NUMBER),
+            ],
+
+            $this->createDeliveryOptionsField(
+                CarrierSettings::DROP_OFF_POSSIBILITIES,
+                Components::INPUT_DROP_OFF
+            ),
+
+            $this->carrierSchema->canHaveDate() ? [
+                $this->createDeliveryOptionsField(
+                    CarrierSettings::SHOW_DELIVERY_DAY,
+                    Components::INPUT_TOGGLE
+                ),
+            ] : [],
 
             $this->getPackageTypeFields(),
-            $this->carrierSchema->canHaveDate() ? $this->getDateFields() : [],
 
-            [new SettingsDivider('settings_carrier_delivery_moments')],
+            [
+                new SettingsDivider(
+                    'settings_carrier_delivery_moments',
+                    null,
+                    ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+                ),
+            ],
 
             [$this->createDeliveryOptionsField(CarrierSettings::ALLOW_MONDAY_DELIVERY, Components::INPUT_TOGGLE)],
             [$this->createDeliveryOptionsField(CarrierSettings::ALLOW_SATURDAY_DELIVERY, Components::INPUT_TOGGLE)],
@@ -202,30 +248,17 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
             $this->carrierSchema->canHavePickup() ? $this->getPickupFields() : [],
 
-            [new SettingsDivider('settings_carrier_shipment_options')],
+            [
+                new SettingsDivider(
+                    'settings_carrier_shipment_options',
+                    null,
+                    ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
+                ),
+            ],
 
             $this->carrierSchema->canHaveSignature() ? $this->getSignatureFields() : [],
             $this->carrierSchema->canHaveOnlyRecipient() ? $this->getOnlyRecipientFields() : [],
         ], 1);
-    }
-
-    /**
-     * @return array
-     */
-    private function getDateFields(): array
-    {
-        return [
-            new InteractiveElement(
-                CarrierSettings::SHOW_DELIVERY_DAY,
-                Components::INPUT_TOGGLE,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
-            ),
-            new InteractiveElement(
-                CarrierSettings::DROP_OFF_POSSIBILITIES,
-                Components::INPUT_DROP_OFF,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_DELIVERY_OPTIONS => true]]
-            ),
-        ];
     }
 
     /**
@@ -347,17 +380,58 @@ class CarrierSettingsItemView extends AbstractSettingsView
     /**
      * @return array
      */
+    private function getReturnsFields(): array
+    {
+        $hasPackageTypeOptions = count($this->carrierSchema->getAllowedPackageTypes()) > 1;
+        $canHaveLargeFormat    = $this->carrierSchema->canHaveLargeFormat();
+
+        if (! $hasPackageTypeOptions && ! $canHaveLargeFormat) {
+            return [];
+        }
+
+        $fields = [new SettingsDivider('settings_carrier_export_returns')];
+
+        if ($hasPackageTypeOptions) {
+            $fields[] = new InteractiveElement(
+                CarrierSettings::EXPORT_RETURN_PACKAGE_TYPE,
+                Components::INPUT_SELECT,
+                [
+                    'options' => $this->createPackageTypeOptions($this->carrierSchema->getAllowedPackageTypes()),
+                ]
+            );
+        }
+
+        if ($canHaveLargeFormat) {
+            $fields[] = new InteractiveElement(
+                CarrierSettings::EXPORT_RETURN_LARGE_FORMAT,
+                Components::INPUT_TOGGLE
+            );
+        }
+
+        return $fields;
+    }
+
+    /**
+     * @return array
+     */
     private function getSameDayDeliveryFields(): array
     {
+        $sameDayEnabled = ['$visibleWhen' => [CarrierSettings::ALLOW_SAME_DAY_DELIVERY => true]];
+
         return [
             $this->createDeliveryOptionsField(
                 CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
                 Components::INPUT_TOGGLE
             ),
             $this->createDeliveryOptionsField(
+                CarrierSettings::CUTOFF_TIME_SAME_DAY,
+                Components::INPUT_TIME,
+                $sameDayEnabled
+            ),
+            $this->createDeliveryOptionsField(
                 CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
                 Components::INPUT_CURRENCY,
-                ['$visibleWhen' => [CarrierSettings::ALLOW_SAME_DAY_DELIVERY => true]]
+                $sameDayEnabled
             ),
         ];
     }
