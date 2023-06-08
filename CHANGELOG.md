@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.1](https://github.com/myparcelnl/pdk/compare/v2.4.0...v2.4.1) (2023-06-08)
+
+
+### :bug: Bug Fixes
+
+* **actions:** improve update account action ([#105](https://github.com/myparcelnl/pdk/issues/105)) ([c5c00e2](https://github.com/myparcelnl/pdk/commit/c5c00e21efefad17089b13c2bb16a370a0bb9151))
+
 ## [2.4.0](https://github.com/myparcelnl/pdk/compare/v2.3.0...v2.4.0) (2023-06-07)
 
 
