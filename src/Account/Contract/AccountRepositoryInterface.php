@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Contract;
 
-use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 
-interface AccountRepositoryInterface
+/**
+ * @deprecated Will be removed in v3.0.0. Use PdkAccountRepositoryInterface instead.
+ */
+interface AccountRepositoryInterface extends PdkAccountRepositoryInterface
 {
-    /**
-     * Retrieve the account belonging to the API key in Settings.
-     */
-    public function getAccount(bool $force = false): ?Account;
-
-    /**
-     * Store account in your platform. If account is null, delete its data.
-     */
-    public function store(?Account $account): ?Account;
 }

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface;
@@ -53,7 +53,7 @@ return [
      * @see \MyParcelNL\Pdk\Account\Repository\AbstractAccountRepository
      */
 
-    AccountRepositoryInterface::class => autowire(),
+    PdkAccountRepositoryInterface::class => autowire(),
 
     /**
      * Handles conversion of your app's order data to PDK order data.

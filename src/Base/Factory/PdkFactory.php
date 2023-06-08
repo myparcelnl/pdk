@@ -41,13 +41,13 @@ class PdkFactory
         $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
         $builder->addDefinitions(
-            sprintf('%s/pdk-business-logic.php', self::CONFIG_PATH),
             sprintf('%s/pdk-default.php', self::CONFIG_PATH),
+            sprintf('%s/pdk-template.php', self::CONFIG_PATH),
+            sprintf('%s/pdk-business-logic.php', self::CONFIG_PATH),
             sprintf('%s/pdk-dependencies.php', self::CONFIG_PATH),
             sprintf('%s/pdk-fields.php', self::CONFIG_PATH),
             sprintf('%s/pdk-services.php', self::CONFIG_PATH),
             sprintf('%s/pdk-settings.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-template.php', self::CONFIG_PATH),
             ...$configs
         );
 

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Service;
 
-use Exception;
-use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
@@ -16,13 +15,16 @@ use MyParcelNL\Pdk\Facade\Pdk;
 class AccountSettingsService
 {
     /**
-     * @var \MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface
+     * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
-    private $accountRepository;
+    private $pdkAccountRepository;
 
-    public function __construct(AccountRepositoryInterface $accountRepository)
+    /**
+     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $pdkAccountRepository
+     */
+    public function __construct(PdkAccountRepositoryInterface $pdkAccountRepository)
     {
-        $this->accountRepository = $accountRepository;
+        $this->pdkAccountRepository = $pdkAccountRepository;
     }
 
     /**
@@ -30,11 +32,7 @@ class AccountSettingsService
      */
     public function getAccount(): ?Account
     {
-        try {
-            return $this->accountRepository->getAccount();
-        } catch (Exception $e) {
-            return null;
-        }
+        return $this->pdkAccountRepository->getAccount();
     }
 
     /**
@@ -71,14 +69,23 @@ class AccountSettingsService
 
     /**
      * @return bool
+     */
+    public function hasAccount(): bool
+    {
+        return $this->getAccount() !== null;
+    }
+
+    /**
+     * @return bool
      * @noinspection PhpUnused
      */
     public function hasTaxFields(): bool
     {
-        return (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
-            ->contains(function (string $carrier) {
-                return $this->hasCarrier($carrier);
-            });
+        return $this->hasAccount()
+            && (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
+                ->contains(function (string $carrier) {
+                    return $this->hasCarrier($carrier);
+                });
     }
 
     /**
@@ -88,9 +95,10 @@ class AccountSettingsService
      */
     protected function hasCarrier(string $carrierName): bool
     {
-        return $this->getCarrierOptions()
-            ->contains(function (CarrierOptions $carrierOption) use ($carrierName) {
-                return $carrierOption->carrier->name === $carrierName;
-            });
+        return $this->hasAccount()
+            && $this->getCarrierOptions()
+                ->contains(function (CarrierOptions $carrierOption) use ($carrierName) {
+                    return $carrierOption->carrier->name === $carrierName;
+                });
     }
 }

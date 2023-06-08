@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -29,11 +30,16 @@ it('handles repository', function () {
 });
 
 it('gets data from the api', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api = Pdk::get(ApiServiceInterface::class);
+
+    $api->getMock()
+        ->append(new ExampleGetAccountsResponse());
+
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository $accountRepository */
     $accountRepository = Pdk::get(MockAccountRepository::class);
 
     $account = $accountRepository->getAccount();
 
-    /** @noinspection NullPointerExceptionInspection */
     expect($account->toArray())->toBeArray();
 });
