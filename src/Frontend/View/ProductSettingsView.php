@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
@@ -18,14 +18,14 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 class ProductSettingsView extends AbstractSettingsView
 {
     /**
-     * @var \MyParcelNL\Pdk\Base\Service\CountryService
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
      */
     private $countryService;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Service\CountryService $countryService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService
      */
-    public function __construct(CountryService $countryService)
+    public function __construct(CountryServiceInterface $countryService)
     {
         $this->countryService = $countryService;
     }
