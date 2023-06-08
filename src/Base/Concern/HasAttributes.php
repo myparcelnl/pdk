@@ -845,7 +845,12 @@ trait HasAttributes
      */
     private function getCastModel(string $key, $value)
     {
-        $class     = $this->getCasts()[$key];
+        $class = $this->getCasts()[$key];
+
+        if (is_a($value, $class)) {
+            return $value;
+        }
+
         $arguments = null;
 
         if ($class !== $value) {
