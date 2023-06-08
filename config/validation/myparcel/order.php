@@ -131,9 +131,9 @@ return [
                     'name'        => CountryCodes::CC_NL,
                     'packageType' => [
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/dhlforyou/nl_package',
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/dhlforyou/nl_package',
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
@@ -190,9 +190,9 @@ return [
                     'name'        => CountryCodes::CC_NL,
                     'packageType' => [
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/dhleuroplus/nl_package',
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/dhleuroplus/nl_package',
                         ],
                     ],
                 ],
@@ -214,9 +214,9 @@ return [
                     ],
                     'packageType' => [
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/dhleuroplus/be_package',
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/dhleuroplus/be_package',
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
@@ -243,9 +243,9 @@ return [
                     ],
                     'packageType' => [
                         [
-                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/dhleuroplus/eu_package',
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/dhleuroplus/eu_package',
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
