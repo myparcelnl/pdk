@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.2](https://github.com/myparcelnl/pdk/compare/v2.4.1...v2.4.2) (2023-06-08)
+
+
+### :bug: Bug Fixes
+
+* **views:** correct di reference to country service ([59bef78](https://github.com/myparcelnl/pdk/commit/59bef786b56cdc606f1afbfe8e2e4ee4a8ead691))
+
 ## [2.4.1](https://github.com/myparcelnl/pdk/compare/v2.4.0...v2.4.1) (2023-06-08)
 
 
