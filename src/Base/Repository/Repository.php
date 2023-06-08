@@ -47,17 +47,17 @@ class Repository
     }
 
     /**
-     * @param  string   $key
-     * @param  callable $callback
-     * @param  bool     $force
+     * @param  string        $key
+     * @param  null|callable $callback
+     * @param  bool          $force
      *
      * @return mixed
      */
-    public function retrieve(string $key, callable $callback, bool $force = false)
+    public function retrieve(string $key, ?callable $callback = null, bool $force = false)
     {
         $fullKey = $this->getKeyPrefix() . $key;
 
-        if ($force || ! $this->storage->has($fullKey)) {
+        if ($callback !== null && ($force || ! $this->storage->has($fullKey))) {
             $data = $callback();
 
             $this->storage->set($fullKey, $data);

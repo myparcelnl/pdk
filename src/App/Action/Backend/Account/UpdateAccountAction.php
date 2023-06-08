@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Account;
 
-use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Context\Context;
@@ -20,11 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 class UpdateAccountAction implements ActionInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface
-     */
-    private $accountRepository;
-
-    /**
      * @var \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository
      */
     private $carrierConfigurationRepository;
@@ -35,26 +30,31 @@ class UpdateAccountAction implements ActionInterface
     private $carrierOptionsRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
-    private $settingsRepository;
+    private $pdkAccountRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface         $settingsRepository
-     * @param  \MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface           $accountRepository
+     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     */
+    private $pdkSettingsRepository;
+
+    /**
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository $carrierConfigurationRepository
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository       $carrierOptionsRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface         $pdkSettingsRepository
+     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface    $pdkAccountRepository
      */
     public function __construct(
-        SettingsRepositoryInterface        $settingsRepository,
-        AccountRepositoryInterface         $accountRepository,
         ShopCarrierConfigurationRepository $carrierConfigurationRepository,
-        ShopCarrierOptionsRepository       $carrierOptionsRepository
+        ShopCarrierOptionsRepository       $carrierOptionsRepository,
+        SettingsRepositoryInterface        $pdkSettingsRepository,
+        PdkAccountRepositoryInterface      $pdkAccountRepository
     ) {
-        $this->settingsRepository             = $settingsRepository;
-        $this->accountRepository              = $accountRepository;
         $this->carrierConfigurationRepository = $carrierConfigurationRepository;
         $this->carrierOptionsRepository       = $carrierOptionsRepository;
+        $this->pdkSettingsRepository          = $pdkSettingsRepository;
+        $this->pdkAccountRepository           = $pdkAccountRepository;
     }
 
     /**
@@ -67,35 +67,58 @@ class UpdateAccountAction implements ActionInterface
         $body     = json_decode($request->getContent(), true);
         $settings = $body['data']['account_settings'] ?? [];
 
-        $accountSettings = new AccountSettings($settings);
+        $accountSettings = $this->updateAccountSettings($settings);
 
-        $this->settingsRepository->storeSettings($accountSettings);
-
-        $account = $accountSettings->apiKey
-            ? $this->accountRepository->getAccount(true)
-            : null;
-
-        $this->updateAndSaveAccount($account);
+        $this->updateAndSaveAccount($accountSettings);
 
         return Actions::execute(PdkSharedActions::FETCH_CONTEXT, ['context' => Context::ID_DYNAMIC]);
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Account\Model\Account $account
+     * @param  \MyParcelNL\Pdk\Account\Model\Account $account
      *
      * @return void
      */
-    protected function updateAndSaveAccount(?Account $account): void
+    protected function fillAccount(Account $account): void
     {
-        if ($account) {
-            $shop                  = $account->shops->first();
-            $carrierConfigurations = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
-            $carrierOptions        = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
+        $shop = $account->shops->first();
 
-            $shop->carrierConfigurations = $carrierConfigurations->toArray();
-            $shop->carrierOptions        = $carrierOptions->toArray();
+        $carrierConfigurations       = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
+        $shop->carrierConfigurations = $carrierConfigurations->toArray();
+
+        $carrierOptions       = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
+        $shop->carrierOptions = $carrierOptions->toArray();
+    }
+
+    /**
+     * @param $settings
+     *
+     * @return \MyParcelNL\Pdk\Settings\Model\AccountSettings
+     */
+    protected function updateAccountSettings($settings): AccountSettings
+    {
+        $accountSettings = new AccountSettings($settings);
+
+        $this->pdkSettingsRepository->storeSettings($accountSettings);
+
+        return $accountSettings;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Settings\Model\AccountSettings $accountSettings
+     *
+     * @return void
+     */
+    protected function updateAndSaveAccount(AccountSettings $accountSettings): void
+    {
+        $foundAccount = $accountSettings->apiKey
+            ? $this->pdkAccountRepository->getAccount(true)
+            : null;
+
+        if ($foundAccount) {
+            $this->fillAccount($foundAccount);
         }
 
-        $this->accountRepository->store($account);
+        $this->pdkAccountRepository->store($foundAccount);
     }
 }

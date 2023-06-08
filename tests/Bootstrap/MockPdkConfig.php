@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface;
@@ -64,7 +64,6 @@ class MockPdkConfig
 
             'platform' => value(Platform::MYPARCEL_NAME),
 
-            AccountRepositoryInterface::class           => autowire(MockAccountRepository::class),
             ApiServiceInterface::class                  => autowire(MockApiService::class),
             BackendEndpointServiceInterface::class      => autowire(MockBackendEndpointService::class),
             ClientAdapterInterface::class               => autowire(Guzzle7ClientAdapter::class),
@@ -73,6 +72,7 @@ class MockPdkConfig
             LanguageServiceInterface::class             => autowire(MockLanguageService::class),
             LoggerInterface::class                      => autowire(MockLogger::class),
             OrderStatusServiceInterface::class          => autowire(MockOrderStatusService::class),
+            PdkAccountRepositoryInterface::class        => autowire(MockPdkAccountRepository::class),
             PdkCartRepositoryInterface::class           => autowire(MockPdkCartRepository::class),
             PdkInterface::class                         => autowire(MockPdk::class),
             PdkOrderRepositoryInterface::class          => autowire(MockPdkOrderRepository::class),

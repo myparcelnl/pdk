@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Service\CartCalculationService;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsFeesServiceInterface;
@@ -39,6 +41,7 @@ use MyParcelNL\Pdk\Shipment\Service\DropOffService;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use function DI\autowire;
+use function DI\factory;
 
 /**
  * Pre-defined services.
@@ -133,4 +136,11 @@ return [
      * Handles weight calculations and unit conversions.
      */
     WeightServiceInterface::class              => autowire(WeightService::class),
+
+    /**
+     * @todo remove in v3.0.0
+     */
+    PdkAccountRepositoryInterface::class       => factory(function () {
+        return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
+    }),
 ];

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\App\Account\Repository\AbstractPdkAccountRepository;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
-final class MockAccountRepository extends AccountRepository
+final class MockPdkAccountRepository extends AbstractPdkAccountRepository
 {
     private const DEFAULT_DATA = [
         'id'              => '21000',
@@ -52,15 +54,25 @@ final class MockAccountRepository extends AccountRepository
     ];
 
     /**
+     * @var string
+     */
+    private $invalidApiKey;
+
+    /**
      * @var \MyParcelNL\Pdk\Account\Model\Account|null
      */
     private $storedAccount;
 
-    /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
-
-    public function __construct(array $data = [], StorageInterface $storage, ApiServiceInterface $api)
+    /**
+     * @param  array                                                $data
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface    $storage
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository
+     *
+     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     */
+    public function __construct(array $data = [], StorageInterface $storage, AccountRepository $accountRepository)
     {
-        parent::__construct($storage, $api);
+        parent::__construct($storage, $accountRepository);
         $this->storedAccount = $data === null ? null : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
     }
 
@@ -73,9 +85,37 @@ final class MockAccountRepository extends AccountRepository
     }
 
     /**
+     * @param  null|string $apiKey
+     *
+     * @return bool
+     */
+    public function isInvalidApiKey(?string $apiKey): bool
+    {
+        return $this->invalidApiKey === $apiKey;
+    }
+
+    /**
+     * @param  string $apiKey
+     *
+     * @return void
+     */
+    public function markApiKeyAsInvalid(string $apiKey): void
+    {
+        $this->invalidApiKey = $apiKey;
+    }
+
+    /**
+     * @return void
+     */
+    public function markApiKeyAsValid(): void
+    {
+        $this->invalidApiKey = null;
+    }
+
+    /**
      * @param  null|\MyParcelNL\Pdk\Account\Model\Account $account
      *
-     * @return null|\MyParcelNL\Pdk\Account\Model\Account
+     * @return void
      */
     public function store(?Account $account): ?Account
     {
