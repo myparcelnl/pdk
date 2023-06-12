@@ -98,7 +98,7 @@ class ContextService implements ContextServiceInterface
      */
     public function createProductSettingsViewContext(?PdkProduct $product): ProductSettingsViewContext
     {
-        return new ProductSettingsViewContext(['product' => $product]);
+        return new ProductSettingsViewContext(['product' => $product, 'values' => $product->settings->toArray()]);
     }
 
     /**
