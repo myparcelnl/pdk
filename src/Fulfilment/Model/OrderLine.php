@@ -27,6 +27,7 @@ class OrderLine extends Model
         'quantity'      => 1,
         'price'         => 0,
         'vat'           => 0,
+        'vatRate'       => null,
         'priceAfterVat' => 0,
         'product'       => null,
     ];
@@ -36,6 +37,7 @@ class OrderLine extends Model
         'quantity'      => 'int',
         'price'         => 'int',
         'vat'           => 'int',
+        'vatRate'       => 'string',
         'priceAfterVat' => 'int',
         'product'       => Product::class,
     ];
