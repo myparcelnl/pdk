@@ -37,6 +37,7 @@ class ContextService implements ContextServiceInterface
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Context\Model\ContextBag
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createContexts(array $contexts, array $data = []): ContextBag
     {
@@ -95,6 +96,7 @@ class ContextService implements ContextServiceInterface
      * @param  null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
      *
      * @return \MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createProductSettingsViewContext(?PdkProduct $product): ProductSettingsViewContext
     {
@@ -106,6 +108,7 @@ class ContextService implements ContextServiceInterface
      * @param  array  $data
      *
      * @return null|GlobalContext|DynamicContext|OrderDataContextCollection|PluginSettingsViewContext|ProductSettingsViewContext|CheckoutContext
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function resolveContext(string $contextId, array $data = [])
     {
