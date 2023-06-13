@@ -22,6 +22,8 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
+ * @property string                                                      $invoiceId
+ * @property null|\DateTimeImmutable                                     $invoiceDate
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
@@ -34,6 +36,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property int                                                         $orderPrice
  * @property int                                                         $orderPriceAfterVat
  * @property int                                                         $orderVat
+ * @property string                                                      $paymentMethod
  * @property int                                                         $totalPrice
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
@@ -63,6 +66,8 @@ class PdkOrder extends Model implements StorableArrayable
         'shipments'          => ShipmentCollection::class,
         'lines'              => PdkOrderLineCollection::class,
         'customsDeclaration' => null,
+        'invoiceId'          => null,
+        'invoiceDate'        => null,
         'physicalProperties' => PhysicalProperties::class,
 
         /**
@@ -75,6 +80,7 @@ class PdkOrder extends Model implements StorableArrayable
          */
         'exported'           => false,
 
+        'paymentMethod'         => null,
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
         'shipmentVat'           => 0,
@@ -100,9 +106,12 @@ class PdkOrder extends Model implements StorableArrayable
         'customsDeclaration' => CustomsDeclaration::class,
         'physicalProperties' => PhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
+        'invoiceId'          => 'string',
+        'invoiceDate'        => 'datetime',
 
         'orderDate'             => 'datetime',
         'exported'              => 'bool',
+        'paymentMethod'         => 'string',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
         'shipmentVat'           => 'int',

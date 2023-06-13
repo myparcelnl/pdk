@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property int                                             $quantity
  * @property int                                             $price
  * @property int                                             $vat
+ * @property string                                          $vatRate
  * @property int                                             $priceAfterVat
  * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
  */
@@ -22,6 +23,7 @@ class PdkOrderLine extends Model
         'quantity'      => 1,
         'price'         => 0,
         'vat'           => 0,
+        'vatRate'       => null,
         'priceAfterVat' => 0,
         'product'       => null,
     ];
@@ -30,6 +32,7 @@ class PdkOrderLine extends Model
         'quantity'      => 'int',
         'price'         => 'int',
         'vat'           => 'int',
+        'vatRate'       => 'string',
         'priceAfterVat' => 'int',
         'product'       => PdkProduct::class,
     ];

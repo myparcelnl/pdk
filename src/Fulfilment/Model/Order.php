@@ -22,6 +22,8 @@ use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
  * @property null|int                                                  $accountId
  * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation        $dropOffPoint
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails            $invoiceAddress
+ * @property null|string                                               $invoiceId
+ * @property null|\DateTimeImmutable                                   $invoiceDate
  * @property null|string                                               $language
  * @property null|\DateTime                                            $orderDate
  * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
@@ -65,6 +67,9 @@ class Order extends Model
         'accountId'                   => 'int',
         'dropOffPoint'                => RetailLocation::class,
         'invoiceAddress'              => ContactDetails::class,
+        'invoiceId'                   => 'string',
+        'invoiceDate'                 => 'datetime',
+        'paymentMethod'               => 'string',
         'language'                    => 'string',
         'orderDate'                   => 'datetime',
         'orderLines'                  => OrderLineCollection::class,
