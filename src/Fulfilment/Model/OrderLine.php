@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property int                                           $quantity
  * @property int                                           $price
  * @property int                                           $vat
+ * @property float                                         $vatPercentage
  * @property int                                           $priceAfterVat
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Product $product
  * @property string                                        $instructions
@@ -27,7 +28,7 @@ class OrderLine extends Model
         'quantity'      => 1,
         'price'         => 0,
         'vat'           => 0,
-        'vatRate'       => null,
+        'vatPercentage' => null,
         'priceAfterVat' => 0,
         'product'       => null,
     ];
@@ -37,7 +38,7 @@ class OrderLine extends Model
         'quantity'      => 'int',
         'price'         => 'int',
         'vat'           => 'int',
-        'vatRate'       => 'string',
+        'vatPercentage' => 'float',
         'priceAfterVat' => 'int',
         'product'       => Product::class,
     ];
