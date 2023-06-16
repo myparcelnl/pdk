@@ -117,11 +117,13 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function createPackageTypeOptions(array $packageTypes = DeliveryOptions::PACKAGE_TYPES_NAMES): array
     {
-        return $this->toSelectOptions(
-            array_map(static function (string $packageTypeName) {
-                return "package_type_$packageTypeName";
-            }, $packageTypes)
-        );
+        $array = [];
+
+        foreach ($packageTypes as $packageType) {
+            $array[$packageType] = 'package_type_' . $packageType;
+        }
+
+        return $this->toSelectOptions($array);
     }
 
     /**
