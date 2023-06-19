@@ -37,7 +37,6 @@ class ContextService implements ContextServiceInterface
      * @param  array $data
      *
      * @return \MyParcelNL\Pdk\Context\Model\ContextBag
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createContexts(array $contexts, array $data = []): ContextBag
     {
