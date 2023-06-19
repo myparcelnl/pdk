@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
-use MyParcelNL\Pdk\Base\Service\CountryService;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
@@ -18,11 +18,23 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 class ProductSettingsView extends AbstractSettingsView
 {
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService
+     */
+    public function __construct(CountryServiceInterface $countryService)
+    {
+        $this->countryService = $countryService;
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
     protected function createElements(): FormElementCollection
     {
-        $countryService = Pdk::get(CountryService::class);
         return new FormElementCollection([
             new InteractiveElement(
                 ProductSettings::PACKAGE_TYPE,
@@ -55,7 +67,7 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(
                 ProductSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
-                ['options' => $this->toSelectOptions($countryService->getAllTranslatable(), true)]
+                ['options' => $this->toSelectOptions($this->countryService->getAllTranslatable(), true)]
             ),
             new InteractiveElement(
                 ProductSettings::CUSTOMS_CODE,
