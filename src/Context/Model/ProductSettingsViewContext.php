@@ -45,11 +45,13 @@ class ProductSettingsViewContext extends Model
      */
     public function setProductAttribute($product): self
     {
-        if ($product instanceof PdkProduct) {
-            $settings                    = $product->getSettings();
-            $this->attributes['values']  = $settings->toArray();
-            $this->attributes['product'] = $product;
+        if (! $product instanceof PdkProduct) {
+            $product = new PdkProduct($product);
         }
+
+        $settings                    = $product->getSettings();
+        $this->attributes['values']  = $settings->toArray();
+        $this->attributes['product'] = $product;
 
         return $this;
     }
