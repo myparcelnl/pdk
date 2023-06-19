@@ -34,9 +34,9 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
             ],
         ],
         [
-            'sku'      => '456',
-            'weight'   => 5000,
-            'settings' => [
+            'externalIdentifier' => '456',
+            'weight'             => 5000,
+            'settings'           => [
                 ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
                 ProductSettings::EXPORT_SIGNATURE         => false,
                 ProductSettings::COUNTRY_OF_ORIGIN        => 'NL',
@@ -52,9 +52,9 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
             ],
         ],
         [
-            'sku'      => '789',
-            'weight'   => 6000,
-            'settings' => [
+            'externalIdentifier' => '789',
+            'weight'             => 6000,
+            'settings'           => [
                 ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
                 ProductSettings::EXPORT_SIGNATURE         => false,
                 ProductSettings::COUNTRY_OF_ORIGIN        => 'NL',
