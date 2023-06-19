@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.0](https://github.com/myparcelnl/pdk/compare/v2.4.2...v2.5.0) (2023-06-19)
+
+
+### :bug: Bug Fixes
+
+* **settings:** fix product settings being unable to render  ([#104](https://github.com/myparcelnl/pdk/issues/104)) ([94b475b](https://github.com/myparcelnl/pdk/commit/94b475b6bc3fd6075dbc161e8efe419332bf8db8))
+
+
+### :sparkles: New Features
+
+* **actions:** add update product settings action ([#106](https://github.com/myparcelnl/pdk/issues/106)) ([1302c1b](https://github.com/myparcelnl/pdk/commit/1302c1b5cb982121f575c22a4d3cf2ab5f903ac5))
+
 ## [2.4.2](https://github.com/myparcelnl/pdk/compare/v2.4.1...v2.4.2) (2023-06-08)
 
 
