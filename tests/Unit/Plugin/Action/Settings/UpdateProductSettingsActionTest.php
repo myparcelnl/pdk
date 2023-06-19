@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Tests\Unit\Plugin\Action\Settings;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,4 +62,21 @@ it('saves settings', function (string $productId, array $settings) {
         ],
     ],
 
+    'changes all options for 789' => [
+        '789',
+        [
+            ProductSettings::EXPORT_ONLY_RECIPIENT    => true,
+            ProductSettings::EXPORT_SIGNATURE         => true,
+            ProductSettings::COUNTRY_OF_ORIGIN        => 'DE',
+            ProductSettings::CUSTOMS_CODE             => '388',
+            ProductSettings::DISABLE_DELIVERY_OPTIONS => true,
+            ProductSettings::DROP_OFF_DELAY           => 2,
+            ProductSettings::EXPORT_AGE_CHECK         => true,
+            ProductSettings::EXPORT_INSURANCE         => true,
+            ProductSettings::EXPORT_LARGE_FORMAT      => true,
+            ProductSettings::FIT_IN_MAILBOX           => 10,
+            ProductSettings::PACKAGE_TYPE             => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            ProductSettings::EXPORT_RETURN            => true,
+        ],
+    ],
 ]);
