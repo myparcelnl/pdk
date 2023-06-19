@@ -27,6 +27,16 @@ abstract class AbstractSettingsView implements Arrayable
     protected $cache = [];
 
     /**
+     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     */
+    abstract protected function createElements(): ?FormElementCollection;
+
+    /**
+     * @return string
+     */
+    abstract protected function getSettingsId(): string;
+
+    /**
      * @return null|\MyParcelNL\Pdk\Base\Support\Collection
      */
     public function getChildren(): ?Collection
@@ -77,17 +87,12 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Frontend\Settings\View\AbstractSettingsView[]
+     * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Frontend\View\AbstractSettingsView[]
      */
     protected function createChildren(): ?Collection
     {
         return null;
     }
-
-    /**
-     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
-     */
-    abstract protected function createElements(): ?FormElementCollection;
 
     /**
      * @param  string ...$keys
@@ -117,13 +122,14 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function createPackageTypeOptions(array $packageTypes = DeliveryOptions::PACKAGE_TYPES_NAMES): array
     {
-        $array = [];
-
-        foreach ($packageTypes as $packageType) {
-            $array[$packageType] = 'package_type_' . $packageType;
-        }
-
-        return $this->toSelectOptions($array);
+        return $this->toSelectOptions(
+            array_combine(
+                array_values($packageTypes),
+                array_map(static function ($packageType) {
+                    return sprintf('package_type_%s', $packageType);
+                }, $packageTypes)
+            )
+        );
     }
 
     /**
@@ -161,11 +167,6 @@ abstract class AbstractSettingsView implements Arrayable
     {
         return Str::snake(sprintf('%s_%s_%s', self::KEY_PREFIX, $this->getSettingsId(), $name));
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getSettingsId(): string;
 
     /**
      * @param  array $array
