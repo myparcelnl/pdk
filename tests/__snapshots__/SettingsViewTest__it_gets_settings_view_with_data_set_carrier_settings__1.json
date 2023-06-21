@@ -367,19 +367,19 @@
                     "$wrapper": null,
                     "options": [
                         {
-                            "value": "package_type_package",
+                            "value": "package",
                             "label": "package_type_package"
                         },
                         {
-                            "value": "package_type_mailbox",
+                            "value": "mailbox",
                             "label": "package_type_mailbox"
                         },
                         {
-                            "value": "package_type_letter",
+                            "value": "letter",
                             "label": "package_type_letter"
                         },
                         {
-                            "value": "package_type_digital_stamp",
+                            "value": "digital_stamp",
                             "label": "package_type_digital_stamp"
                         }
                     ],
@@ -468,19 +468,19 @@
                     },
                     "options": [
                         {
-                            "value": "package_type_package",
+                            "value": "package",
                             "label": "package_type_package"
                         },
                         {
-                            "value": "package_type_mailbox",
+                            "value": "mailbox",
                             "label": "package_type_mailbox"
                         },
                         {
-                            "value": "package_type_letter",
+                            "value": "letter",
                             "label": "package_type_letter"
                         },
                         {
-                            "value": "package_type_digital_stamp",
+                            "value": "digital_stamp",
                             "label": "package_type_digital_stamp"
                         }
                     ],
