@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
+use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+
 class ExampleGetShipmentsResponseWithDropOffPoint extends ExampleJsonResponse
 {
     /**
@@ -109,9 +112,9 @@ class ExampleGetShipmentsResponseWithDropOffPoint extends ExampleJsonResponse
                         'external_provider'            => null,
                         'external_provider_id'         => null,
                         'payment_status'               => 'unpaid',
-                        'carrier_id'                   => 5,
+                        'carrier_id'                   => Carrier::CARRIER_DHL_FOR_YOU_ID,
                         'contract_id'                  => null,
-                        'platform_id'                  => 1,
+                        'platform_id'                  => Platform::MYPARCEL_ID,
                         'origin'                       => 'backoffice_shipment_form',
                         'user_agent'                   => 'ShipmentForm/',
                         'secondary_shipments'          => [],
