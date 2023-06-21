@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/myparcelnl/pdk/compare/v2.5.0...v2.5.1) (2023-06-21)
+
+
+### :bug: Bug Fixes
+
+* **settings:** fix incorrect values in package type selects ([#107](https://github.com/myparcelnl/pdk/issues/107)) ([120c576](https://github.com/myparcelnl/pdk/commit/120c576e1cfe34adfe933143bfbb95ad9d5e741d))
+* **shipments:** fix carrier reverting to default on exporting ([#108](https://github.com/myparcelnl/pdk/issues/108)) ([24352ee](https://github.com/myparcelnl/pdk/commit/24352ee3b47041df71ba2503b369d70ad40099bf))
+
 ## [2.5.0](https://github.com/myparcelnl/pdk/compare/v2.4.2...v2.5.0) (2023-06-19)
 
 
