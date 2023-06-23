@@ -36,12 +36,12 @@ class ProductSettingsViewContext extends Model
         parent::__construct($data);
 
         $this->attributes['view'] = Pdk::get(ProductSettingsView::class);
+
+        $this->getValuesFromProduct();
     }
 
     /**
      * @param  mixed $product
-     *
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function setProductAttribute($product): self
     {
@@ -49,10 +49,19 @@ class ProductSettingsViewContext extends Model
             $product = new PdkProduct($product);
         }
 
-        $settings                    = $product->getSettings();
-        $this->attributes['values']  = $settings->toArray();
         $this->attributes['product'] = $product;
 
         return $this;
+    }
+
+    /**
+     * @return void
+     */
+    private function getValuesFromProduct(): void
+    {
+        if ($this->attributes['product']) {
+            $this->values = $this->attributes['product']->getSettings()
+                ->toArray();
+        }
     }
 }
