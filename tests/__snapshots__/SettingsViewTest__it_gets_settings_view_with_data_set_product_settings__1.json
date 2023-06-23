@@ -1,6 +1,7 @@
 {
     "id": "product",
     "title": "settings_view_product_title",
+    "titleSuffix": null,
     "description": "settings_view_product_description",
     "elements": [
         {

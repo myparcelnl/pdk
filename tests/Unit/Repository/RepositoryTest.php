@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
+use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
@@ -17,7 +18,6 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
@@ -38,7 +38,7 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 })->with([
     [
         ExampleGetAccountsResponse::class,
-        MockAccountRepository::class,
+        AccountRepository::class,
         Account::class,
         'getAccount',
     ],

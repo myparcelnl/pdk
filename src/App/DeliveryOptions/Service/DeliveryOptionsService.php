@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -85,33 +85,32 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             return [];
         }
 
-        [$packageType, $carrierOptions] = $this->getValidCarrierOptions($cart);
+        [$packageType, $carriers] = $this->getValidCarrierOptions($cart);
 
         $settings = [
             'packageType'     => $packageType,
             'carrierSettings' => [],
         ];
 
-        /** @var CarrierOptions $carrierOption */
-        foreach ($carrierOptions->all() as $carrierOption) {
-            $identifier                               = $carrierOption->carrier->externalIdentifier;
-            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrierOption, $cart);
+        foreach ($carriers->all() as $carrier) {
+            $identifier                               = $carrier->externalIdentifier;
+            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart);
         }
 
         return $settings;
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrierOptions
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart       $cart
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(CarrierOptions $carrierOptions, PdkCart $cart): array
+    private function createCarrierSettings(Carrier $carrier, PdkCart $cart): array
     {
         $carrierSettings = new CarrierSettings(
-            Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrierOptions->carrier->externalIdentifier))
+            Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
         );
 
         $dropOff             = $this->dropOffService->getForDate($carrierSettings);
@@ -155,38 +154,46 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return array
+     * @return array<string, \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection>
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        $packageType    = DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
-        $carrierOptions = AccountSettings::getCarrierOptions();
+        $packageType     = DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
+        $carriers        = AccountSettings::getCarriers();
+        $carrierSettings = Settings::get(CarrierSettings::ID);
 
         foreach ($cart->shippingMethod->allowPackageTypes as $allowedPackageType) {
             $weight = $this->getWeightByPackageType($cart, $allowedPackageType);
 
-            $filteredCarrierOptions = $carrierOptions->filter(
-                function (CarrierOptions $carrierOptions) use ($cart, $weight, $allowedPackageType) {
-                    return ($this->schemaRepository->validateOption(
-                        $this->schemaRepository->getOrderValidationSchema(
-                            $carrierOptions->carrier->name,
-                            $cart->shippingMethod->shippingAddress->cc,
-                            $allowedPackageType
-                        ),
-                        OrderPropertiesValidator::WEIGHT_KEY,
-                        $weight
-                    ));
-                }
-            );
+            $filteredCarrierOptions = $carriers
+                ->filter(
+                    function (Carrier $carrier) use ($cart, $weight, $allowedPackageType, $carrierSettings): bool {
+                        $hasDeliveryOptions = $carrierSettings[$carrier->externalIdentifier][CarrierSettings::ALLOW_DELIVERY_OPTIONS] ?? false;
+
+                        if (! $hasDeliveryOptions) {
+                            return false;
+                        }
+
+                        return ($this->schemaRepository->validateOption(
+                            $this->schemaRepository->getOrderValidationSchema(
+                                $carrier->name,
+                                $cart->shippingMethod->shippingAddress->cc,
+                                $allowedPackageType
+                            ),
+                            OrderPropertiesValidator::WEIGHT_KEY,
+                            $weight
+                        ));
+                    }
+                );
 
             if ($filteredCarrierOptions->isNotEmpty()) {
-                $packageType    = $allowedPackageType;
-                $carrierOptions = $filteredCarrierOptions;
+                $packageType = $allowedPackageType;
+                $carriers    = $filteredCarrierOptions;
                 break;
             }
         }
 
-        return [$packageType, $carrierOptions];
+        return [$packageType, $carriers];
     }
 
     /**

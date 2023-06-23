@@ -34,19 +34,15 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
                 'shipmentOptions'       => [],
                 'trackTrace'            => [],
                 'carrierConfigurations' => [],
-                'carrierOptions'        => [
+                'carriers'              => [
                     [
-                        'carrier' => [
-                            'name'    => 'postnl',
-                            'enabled' => true,
-                        ],
+                        'name'    => 'postnl',
+                        'enabled' => true,
                     ],
                     [
-                        'carrier' => [
-                            'name'           => 'dhlforyou',
-                            'subscriptionId' => '8277',
-                            'enabled'        => true,
-                        ],
+                        'name'           => 'dhlforyou',
+                        'subscriptionId' => '8277',
+                        'enabled'        => true,
                     ],
                 ],
             ],

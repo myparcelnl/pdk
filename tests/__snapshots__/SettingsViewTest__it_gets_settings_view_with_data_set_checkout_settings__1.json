@@ -1,6 +1,7 @@
 {
     "id": "checkout",
     "title": "settings_view_checkout_title",
+    "titleSuffix": null,
     "description": "settings_view_checkout_description",
     "elements": [
         {

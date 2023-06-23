@@ -5,37 +5,12 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
-it('sets carrier correctly', function ($carrier, string $expectedName) {
-    $carrier = is_callable($carrier) ? $carrier() : $carrier;
-
-    expect((new Shipment(['carrier' => ['carrier' => $carrier]]))->carrier->carrier->name)
-        ->toBe($expectedName);
-})->with([
-    'carrier name'    => [
-        'carrier'      => ['name' => Carrier::CARRIER_DHL_FOR_YOU_NAME],
-        'expectedName' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-    ],
-    'carrier id'      => [
-        'carrier'      => ['id' => Carrier::CARRIER_DHL_FOR_YOU_ID],
-        'expectedName' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-    ],
-    'subscription id' => [
-        'carrier'      => ['subscriptionId' => MockConfig::ID_CUSTOM_SUBSCRIPTION_DPD],
-        'expectedName' => Carrier::CARRIER_DPD_NAME,
-    ],
-    'carrier class'   => [
-        'carrier'      => function () { return new Carrier(['name' => Carrier::CARRIER_DHL_FOR_YOU_NAME]); },
-        'expectedName' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-    ],
-]);
 
 it('can hold and expose data', function () {
     $shipment = new Shipment([
@@ -46,7 +21,7 @@ it('can hold and expose data', function () {
     ]);
 
     expect($shipment->getCarrier())
-        ->toBeInstanceOf(CarrierOptions::class)
+        ->toBeInstanceOf(Carrier::class)
         ->and($shipment->getRecipient())
         ->toBeInstanceOf(Address::class)
         ->and($shipment->getSender())
@@ -55,9 +30,9 @@ it('can hold and expose data', function () {
         ->toBeInstanceOf(DeliveryOptions::class);
 });
 
-it('passes carrier to delivery options', function () {
+it('passes carrier to delivery options', function (string $carrierName) {
     $shipment = new Shipment([
-        'carrier'         => new Carrier(['name' => Carrier::CARRIER_POSTNL_NAME]),
+        'carrier'         => new Carrier(['name' => $carrierName]),
         'deliveryOptions' => new DeliveryOptions([
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
             'shipmentOptions' => [
@@ -66,6 +41,6 @@ it('passes carrier to delivery options', function () {
         ]),
     ]);
 
-    $deliveryOptions = $shipment->getDeliveryOptions();
-    expect($deliveryOptions ? $deliveryOptions->getCarrier() : null)->toEqual(Carrier::CARRIER_POSTNL_NAME);
-});
+    $deliveryOptions = $shipment->deliveryOptions;
+    expect($deliveryOptions ? $deliveryOptions->carrier->name : null)->toEqual($carrierName);
+})->with('carrierNames');

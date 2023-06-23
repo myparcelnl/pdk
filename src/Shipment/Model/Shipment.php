@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
@@ -23,7 +23,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|string                                            $referenceIdentifier
  * @property null|string                                            $externalIdentifier
  * @property null|string                                            $barcode
- * @property null|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions      $carrier
+ * @property null|\MyParcelNL\Pdk\Carrier\Model\Carrier             $carrier
  * @property null|string                                            $collectionContact
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property bool                                                   $delayed
@@ -166,7 +166,7 @@ class Shipment extends Model implements StorableArrayable
         'referenceIdentifier'      => 'string',
         'externalIdentifier'       => 'string',
         'barcode'                  => 'string',
-        'carrier'                  => CarrierOptions::class,
+        'carrier'                  => Carrier::class,
         'collectionContact'        => 'string',
         'customsDeclaration'       => CustomsDeclaration::class,
         'delayed'                  => 'bool',
@@ -229,7 +229,7 @@ class Shipment extends Model implements StorableArrayable
     }
 
     /**
-     * @param  int|string|\MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrier
+     * @param  int|string|Carrier $carrier
      *
      * @return $this
      * @throws \Exception
@@ -268,13 +268,9 @@ class Shipment extends Model implements StorableArrayable
         }
 
         if ($this->carrier) {
-            $this->attributes['deliveryOptions']['carrier'] = $this->carrier->carrier->name;
+            $this->attributes['deliveryOptions']['carrier'] = $this->carrier;
         } elseif ($this->deliveryOptions->carrier) {
-            $this->attributes['carrier'] = new CarrierOptions([
-                'carrier' => [
-                    'name' => $this->deliveryOptions->carrier,
-                ],
-            ]);
+            $this->attributes['carrier'] = $this->deliveryOptions->carrier;
         }
     }
 }

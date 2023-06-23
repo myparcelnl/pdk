@@ -16,6 +16,21 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 abstract class AbstractSettingsRepository extends Repository implements SettingsRepositoryInterface
 {
     /**
+     * @param  string $namespace
+     *
+     * @return array|\MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel
+     */
+    abstract public function getGroup(string $namespace);
+
+    /**
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return void
+     */
+    abstract public function store(string $key, $value): void;
+
+    /**
      * @return \MyParcelNL\Pdk\Settings\Model\Settings
      */
     public function all(): Settings
@@ -58,21 +73,6 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
 
         return Arr::get($group, implode('.', $parts));
     }
-
-    /**
-     * @param  string $namespace
-     *
-     * @return array|\MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel
-     */
-    abstract public function getGroup(string $namespace);
-
-    /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    abstract public function store(string $key, $value): void;
 
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings

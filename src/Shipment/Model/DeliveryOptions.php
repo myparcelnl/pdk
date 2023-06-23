@@ -8,16 +8,16 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use DateTime;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
- * @property null|string                                        $carrier
- * @property null|\DateTime                                     $date
- * @property null|string                                        $deliveryType
- * @property int                                                $labelAmount
- * @property null|string                                        $packageType
- * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation $pickupLocation
- * @property \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions     $shipmentOptions
+ * @property Carrier             $carrier
+ * @property null|DateTime       $date
+ * @property null|string         $deliveryType
+ * @property int                 $labelAmount
+ * @property null|string         $packageType
+ * @property null|RetailLocation $pickupLocation
+ * @property ShipmentOptions     $shipmentOptions
  */
 class DeliveryOptions extends Model
 {
@@ -99,7 +99,7 @@ class DeliveryOptions extends Model
     public const DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
 
     protected $attributes = [
-        'carrier'           => null,
+        'carrier'           => Carrier::class,
         'date'              => null,
         'labelAmount'       => 1,
         'pickupLocation'    => null,
@@ -109,7 +109,7 @@ class DeliveryOptions extends Model
     ];
 
     protected $casts      = [
-        'carrier'           => 'string',
+        'carrier'           => Carrier::class,
         'date'              => DateTime::class,
         'labelAmount'       => 'int',
         'pickupLocation'    => RetailLocation::class,
@@ -134,7 +134,9 @@ class DeliveryOptions extends Model
             );
         }
 
-        $data['carrier'] = $data['carrier'] ?? Platform::get('defaultCarrier');
+        if (isset($data['carrier']) && is_string($data['carrier'])) {
+            $data['carrier'] = ['name' => $data['carrier']];
+        }
 
         parent::__construct($data);
     }

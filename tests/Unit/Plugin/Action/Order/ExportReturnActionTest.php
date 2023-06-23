@@ -90,19 +90,16 @@ it('exports return', function () {
         ->toBeInstanceOf(Response::class)
         ->and(Arr::dot($content))
         ->toHaveKeysAndValues([
-            /**
-             * 245
-             */
             'data.orders.0.externalIdentifier'           => '701',
-            'data.orders.0.deliveryOptions.carrier'      => Carrier::CARRIER_POSTNL_NAME,
+            'data.orders.0.deliveryOptions.carrier.name' => Carrier::CARRIER_POSTNL_NAME,
             'data.orders.0.deliveryOptions.labelAmount'  => 1,
             'data.orders.0.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
             'data.orders.1.externalIdentifier'           => '247',
-            'data.orders.1.deliveryOptions.carrier'      => Carrier::CARRIER_POSTNL_NAME,
+            'data.orders.1.deliveryOptions.carrier.name' => Carrier::CARRIER_POSTNL_NAME,
             'data.orders.1.deliveryOptions.deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
             'data.orders.1.deliveryOptions.labelAmount'  => 1,
             'data.orders.1.deliveryOptions.packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
         ])
         ->and($response->getStatusCode())
         ->toBe(200);
-})->with('pdkOrdersDomestic');
+});

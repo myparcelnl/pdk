@@ -9,21 +9,40 @@
     "externalIdentifier": null,
     "barcode": "",
     "carrier": {
+        "externalIdentifier": "postnl",
+        "id": 1,
+        "name": "postnl",
+        "human": "PostNL",
+        "subscriptionId": null,
+        "enabled": false,
+        "isDefault": true,
+        "label": null,
+        "optional": false,
+        "primary": false,
+        "type": "main"
+    },
+    "collectionContact": null,
+    "customsDeclaration": null,
+    "delayed": false,
+    "delivered": false,
+    "deliveryOptions": {
         "carrier": {
-            "externalIdentifier": "dhlforyou",
-            "id": 9,
-            "name": "dhlforyou",
-            "human": null,
+            "externalIdentifier": "postnl",
+            "id": 1,
+            "name": "postnl",
+            "human": "PostNL",
             "subscriptionId": null,
             "enabled": false,
-            "isDefault": false,
+            "isDefault": true,
             "label": null,
             "optional": false,
-            "primary": true,
+            "primary": false,
             "type": "main",
             "capabilities": {
                 "deliveryTypes": [
+                    "morning",
                     "standard",
+                    "evening",
                     "pickup"
                 ],
                 "features": {
@@ -31,19 +50,21 @@
                 },
                 "packageTypes": [
                     "package",
-                    "mailbox"
+                    "mailbox",
+                    "letter",
+                    "digital_stamp"
                 ],
                 "shipmentOptions": {
                     "ageCheck": true,
-                    "largeFormat": false,
+                    "largeFormat": true,
                     "onlyRecipient": true,
                     "return": true,
                     "sameDayDelivery": true,
                     "signature": true,
-                    "saturdayDelivery": true,
-                    "hideSender": true,
                     "insurance": [
                         0,
+                        10000,
+                        25000,
                         50000,
                         100000,
                         150000,
@@ -56,15 +77,42 @@
                         500000
                     ]
                 }
+            },
+            "returnCapabilities": {
+                "deliveryTypes": [
+                    "standard"
+                ],
+                "features": {
+                    "labelDescriptionLength": 45
+                },
+                "packageTypes": [
+                    "package"
+                ],
+                "shipmentOptions": {
+                    "signature": true,
+                    "insurance": [
+                        0,
+                        10000,
+                        25000,
+                        50000,
+                        100000,
+                        150000,
+                        200000,
+                        250000,
+                        300000,
+                        350000,
+                        400000,
+                        450000,
+                        500000
+                    ],
+                    "return": true,
+                    "ageCheck": true,
+                    "onlyRecipient": true,
+                    "sameDayDelivery": true,
+                    "largeFormat": true
+                }
             }
-        }
-    },
-    "collectionContact": null,
-    "customsDeclaration": null,
-    "delayed": false,
-    "delivered": false,
-    "deliveryOptions": {
-        "carrier": "dhlforyou",
+        },
         "date": null,
         "labelAmount": 1,
         "pickupLocation": null,

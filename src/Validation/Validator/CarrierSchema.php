@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 
 use Exception;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -15,9 +15,9 @@ use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Carrier\Model\CarrierOptions
+     * @var \MyParcelNL\Pdk\Carrier\Model\Carrier
      */
-    protected $carrierOptions;
+    protected $carrier;
 
     public function canHaveAgeCheck(): bool
     {
@@ -107,7 +107,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function getSchema(): array
     {
         try {
-            $capabilities = $this->carrierOptions->capabilities->toArray();
+            $capabilities = $this->carrier->capabilities->toArray();
         } catch (Exception $e) {
             Logger::warning('Could not get capabilities from carrier options', [
                 'exception' => $e,
@@ -120,14 +120,13 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Carrier\Model\CarrierOptions $carrier
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
      * @return self
-     * @noinspection PhpUnused
      */
-    public function setCarrierOptions(CarrierOptions $carrier): self
+    public function setCarrier(Carrier $carrier): self
     {
-        $this->carrierOptions = $carrier;
+        $this->carrier = $carrier;
         return $this;
     }
 

@@ -8,11 +8,12 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Base\Facade;
-use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 
 /**
  * @method static null|Account getAccount()
- * @method static CarrierOptionsCollection getCarrierOptions()
+ * @method static CarrierCollection getCarrierOptions()
+ * @method static CarrierCollection getCarriers()
  * @method static null|Shop getShop()
  * @method static bool hasCarrier(string $name)
  * @method static bool hasTaxFields()

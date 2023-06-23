@@ -31,7 +31,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
         $translation     = Str::snake("delivery_options_{$identifier}_title");
         $priceSettingKey = implode('.', [
             CarrierSettings::ID,
-            $deliveryOptions->carrier,
+            $deliveryOptions->carrier->externalIdentifier,
             Str::camel("price_$identifier"),
         ]);
 

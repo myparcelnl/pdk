@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 
 class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
 {
@@ -171,7 +170,7 @@ class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
                                 'external_identifier'          => '3SMYPA637827684',
                                 'delayed'                      => false,
                                 'delivered'                    => false,
-                                'contract_id'                  => MockConfig::ID_CUSTOM_SUBSCRIPTION_DPD,
+                                'contract_id'                  => 10932623,
                             ],
                         ],
                         'collection_contact'           => null,
@@ -179,7 +178,7 @@ class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
                         'external_identifier'          => '3SMYPA060119130',
                         'delayed'                      => false,
                         'delivered'                    => false,
-                        'contract_id'                  => MockConfig::ID_CUSTOM_SUBSCRIPTION_DPD,
+                        'contract_id'                  => 10932623,
                         'link_consumer_portal'         => 'https://demo.myparcel.me/track-trace/demo',
                         'partner_tracktraces'          => [],
                     ],

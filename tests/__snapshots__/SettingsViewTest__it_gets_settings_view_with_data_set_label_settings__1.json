@@ -1,97 +1,98 @@
 {
-  "id": "label",
-  "title": "settings_view_label_title",
-  "description": "settings_view_label_description",
-  "elements": [
-    {
-      "name": "description",
-      "$component": "TextInput",
-      "$slot": null,
-      "$wrapper": null,
-      "label": "settings_label_description",
-      "description": "settings_label_description_description"
-    },
-    {
-      "name": "prompt",
-      "$component": "ToggleInput",
-      "$slot": null,
-      "$wrapper": null,
-      "label": "settings_label_prompt",
-      "description": "settings_label_prompt_description"
-    },
-    {
-      "$component": "SettingsDivider",
-      "$slot": null,
-      "$wrapper": false,
-      "content": "settings_label_defaults_description",
-      "heading": "settings_label_defaults_title",
-      "level": 2
-    },
-    {
-      "name": "output",
-      "$component": "RadioGroup",
-      "$slot": null,
-      "$wrapper": null,
-      "options": [
+    "id": "label",
+    "title": "settings_view_label_title",
+    "titleSuffix": null,
+    "description": "settings_view_label_description",
+    "elements": [
         {
-          "value": "open",
-          "label": "settings_print_output_option_open"
+            "name": "description",
+            "$component": "TextInput",
+            "$slot": null,
+            "$wrapper": null,
+            "label": "settings_label_description",
+            "description": "settings_label_description_description"
         },
         {
-          "value": "download",
-          "label": "settings_print_output_option_download"
+            "name": "prompt",
+            "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
+            "label": "settings_label_prompt",
+            "description": "settings_label_prompt_description"
+        },
+        {
+            "$component": "SettingsDivider",
+            "$slot": null,
+            "$wrapper": false,
+            "content": "settings_label_defaults_description",
+            "heading": "settings_label_defaults_title",
+            "level": 2
+        },
+        {
+            "name": "output",
+            "$component": "RadioGroup",
+            "$slot": null,
+            "$wrapper": null,
+            "options": [
+                {
+                    "value": "open",
+                    "label": "settings_print_output_option_open"
+                },
+                {
+                    "value": "download",
+                    "label": "settings_print_output_option_download"
+                }
+            ],
+            "label": "settings_label_output",
+            "description": "settings_label_output_description"
+        },
+        {
+            "name": "format",
+            "$component": "RadioGroup",
+            "$slot": null,
+            "$wrapper": null,
+            "options": [
+                {
+                    "value": "a4",
+                    "label": "settings_print_format_option_a4"
+                },
+                {
+                    "value": "a6",
+                    "label": "settings_print_format_option_a6"
+                }
+            ],
+            "label": "settings_label_format",
+            "description": "settings_label_format_description"
+        },
+        {
+            "name": "position",
+            "$component": "MultiSelectInput",
+            "$slot": null,
+            "$wrapper": null,
+            "$visibleWhen": {
+                "format": "a4"
+            },
+            "options": [
+                {
+                    "value": 1,
+                    "label": "settings_print_position_option_1"
+                },
+                {
+                    "value": 2,
+                    "label": "settings_print_position_option_2"
+                },
+                {
+                    "value": 3,
+                    "label": "settings_print_position_option_3"
+                },
+                {
+                    "value": 4,
+                    "label": "settings_print_position_option_4"
+                }
+            ],
+            "label": "settings_label_position",
+            "description": "settings_label_position_description"
         }
-      ],
-      "label": "settings_label_output",
-      "description": "settings_label_output_description"
-    },
-    {
-      "name": "format",
-      "$component": "RadioGroup",
-      "$slot": null,
-      "$wrapper": null,
-      "options": [
-        {
-          "value": "a4",
-          "label": "settings_print_format_option_a4"
-        },
-        {
-          "value": "a6",
-          "label": "settings_print_format_option_a6"
-        }
-      ],
-      "label": "settings_label_format",
-      "description": "settings_label_format_description"
-    },
-    {
-      "name": "position",
-      "$component": "MultiSelectInput",
-      "$slot": null,
-      "$wrapper": null,
-      "$visibleWhen": {
-        "format": "a4"
-      },
-      "options": [
-        {
-          "value": 1,
-          "label": "settings_print_position_option_1"
-        },
-        {
-          "value": 2,
-          "label": "settings_print_position_option_2"
-        },
-        {
-          "value": 3,
-          "label": "settings_print_position_option_3"
-        },
-        {
-          "value": 4,
-          "label": "settings_print_position_option_4"
-        }
-      ],
-      "label": "settings_label_position",
-      "description": "settings_label_position_description"
-    }
-  ],
-  "children": null
+    ],
+    "children": null
 }

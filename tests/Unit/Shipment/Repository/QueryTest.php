@@ -38,8 +38,8 @@ it('creates shipment collection from queried data', function (string $responseCl
     $arrayWithoutCapabilities = Arr::except($array, ['carrier.capabilities', 'carrier.returnCapabilities']);
 
     expect($response)
-        ->and($shipment->deliveryOptions->carrier)
-        ->toBe($shipment->carrier->carrier->name);
+        ->and($shipment->deliveryOptions->carrier->externalIdentifier)
+        ->toBe($shipment->carrier->externalIdentifier);
 
     assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
 })->with([

@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -80,13 +79,9 @@ class PostShipmentsRequest extends Request
      */
     protected function encodeShipment(Shipment $shipment): array
     {
-        $customsDeclaration = $this->getCustomsDeclaration($shipment);
-        $carrierId          = $shipment->carrier->carrier->id
-            ?: Carrier::CARRIER_NAME_ID_MAP[$shipment->carrier->carrier->name];
-
         return [
-            'carrier'              => $carrierId,
-            'customs_declaration'  => $customsDeclaration,
+            'carrier'              => $shipment->carrier->id,
+            'customs_declaration'  => $this->getCustomsDeclaration($shipment),
             'drop_off_point'       => $this->getDropOffPoint($shipment),
             'general_settings'     => [
                 'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
