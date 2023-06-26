@@ -6,15 +6,16 @@ namespace MyParcelNL\Pdk\App\Cart\Contract;
 
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 
 interface CartCalculationServiceInterface
 {
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection
      */
-    public function calculateAllowedPackageTypes(PdkCart $cart): array;
+    public function calculateAllowedPackageTypes(PdkCart $cart): PackageTypeCollection;
 
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart

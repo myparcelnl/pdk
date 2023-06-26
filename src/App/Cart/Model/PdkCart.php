@@ -6,22 +6,23 @@ namespace MyParcelNL\Pdk\App\Cart\Model;
 
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
+use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
- * @property string                                                      $externalIdentifier
- * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
- * @property int                                                         $shipmentPrice
- * @property int                                                         $shipmentPriceAfterVat
- * @property int                                                         $shipmentVat
- * @property int                                                         $orderPrice
- * @property int                                                         $orderPriceAfterVat
- * @property int                                                         $orderVat
- * @property int                                                         $totalPrice
- * @property int                                                         $totalPriceAfterVat
- * @property int                                                         $totalVat
- * @property \MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod  $shippingMethod
+ * @property string                 $externalIdentifier
+ * @property PdkOrderLineCollection $lines
+ * @property int                    $shipmentPrice
+ * @property int                    $shipmentPriceAfterVat
+ * @property int                    $shipmentVat
+ * @property int                    $orderPrice
+ * @property int                    $orderPriceAfterVat
+ * @property int                    $orderVat
+ * @property int                    $totalPrice
+ * @property int                    $totalPriceAfterVat
+ * @property int                    $totalVat
+ * @property PdkShippingMethod      $shippingMethod
  */
 class PdkCart extends Model
 {
@@ -65,9 +66,10 @@ class PdkCart extends Model
     }
 
     /**
-     * @param  mixed $value
+     * @param  array|PdkShippingMethod $value
      *
      * @return self
+     * @noinspection PhpUnused
      */
     public function setShippingMethodAttribute($value): self
     {

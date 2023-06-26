@@ -7,37 +7,38 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection
      */
-    public function calculateAllowedPackageTypes(PdkCart $cart): array
+    public function calculateAllowedPackageTypes(PdkCart $cart): PackageTypeCollection
     {
-        return (new Collection(DeliveryOptions::PACKAGE_TYPES_NAMES))
-            ->filter(function ($packageType) use ($cart) {
-                $lineHasPackageType = $cart->lines->containsStrict('product.settings.packageType', $packageType);
+        return PackageTypeCollection::fromAll()
+            ->sortBySize(true)
+            ->filter(function (PackageType $packageType) use ($cart) {
+                $lineHasPackageType = $cart->lines->containsStrict('product.settings.packageType', $packageType->name);
 
-                if ($lineHasPackageType && DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageType) {
+                if ($lineHasPackageType && DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageType->name) {
                     return $this->calculateMailboxPercentage($cart) <= 100.0;
                 }
 
-                return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageType || $lineHasPackageType;
-            })
-            ->all();
+                return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageType->name || $lineHasPackageType;
+            });
     }
 
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return mixed
+     * @return float
      */
-    public function calculateMailboxPercentage(PdkCart $cart)
+    public function calculateMailboxPercentage(PdkCart $cart): float
     {
         if (! $cart->lines->every('product.settings.fitInMailbox', '>', 0)) {
             return INF;
@@ -61,7 +62,7 @@ class CartCalculationService implements CartCalculationServiceInterface
 
         if ($hasDeliveryOptions) {
             $shippingMethod->minimumDropOffDelay = $cart->lines->max('product.settings.dropOffDelay');
-            $shippingMethod->allowPackageTypes   = $this->calculateAllowedPackageTypes($cart);
+            $shippingMethod->allowedPackageTypes = $this->calculateAllowedPackageTypes($cart);
         }
 
         return $shippingMethod;

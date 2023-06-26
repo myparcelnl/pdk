@@ -6,22 +6,23 @@ namespace MyParcelNL\Pdk\App\ShippingMethod\Model;
 
 use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 
 /**
- * @property string  $id
- * @property string  $name
- * @property bool    $isEnabled
- * @property bool    $hasDeliveryOptions
- * @property int     $minimumDropOffDelay
- * @property array   $allowPackageTypes
- * @property Address $shippingAddress
+ * @property string                $id
+ * @property string                $name
+ * @property bool                  $isEnabled
+ * @property bool                  $hasDeliveryOptions
+ * @property int                   $minimumDropOffDelay
+ * @property PackageTypeCollection $allowedPackageTypes
+ * @property Address               $shippingAddress
  */
 class PdkShippingMethod extends Model
 {
     protected $attributes = [
         'id'                  => null,
         'name'                => null,
-        'allowPackageTypes'   => [],
+        'allowedPackageTypes' => PackageTypeCollection::class,
         'hasDeliveryOptions'  => true,
         'isEnabled'           => true,
         'minimumDropOffDelay' => null,
@@ -31,10 +32,14 @@ class PdkShippingMethod extends Model
     protected $casts      = [
         'id'                  => 'string',
         'name'                => 'string',
-        'allowPackageTypes'   => 'array',
+        'allowedPackageTypes' => PackageTypeCollection::class,
         'hasDeliveryOptions'  => 'bool',
         'isEnabled'           => 'bool',
         'minimumDropOffDelay' => 'int',
         'shippingAddress'     => Address::class,
+    ];
+
+    protected $deprecated = [
+        'allowPackageTypes' => 'allowedPackageTypes',
     ];
 }

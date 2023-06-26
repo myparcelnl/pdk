@@ -1,5 +1,5 @@
 {
-    "packageType": "package",
+    "packageType": "mailbox",
     "carrierSettings": {
         "postnl": {
             "allowDeliveryOptions": true,
@@ -22,7 +22,7 @@
             "priceSignature": 0,
             "priceStandardDelivery": 0,
             "deliveryDaysWindow": 7,
-            "dropOffDelay": 1,
+            "dropOffDelay": 0,
             "cutoffTime": null,
             "cutoffTimeSameDay": null
         }

@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -15,13 +16,19 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    private const CONFIG_CARRIER_SETTINGS_MAP = [
+    const         PACKAGE_TYPE_EMPTY_WEIGHT_MAP = [
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => OrderSettings::EMPTY_PARCEL_WEIGHT,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => OrderSettings::EMPTY_MAILBOX_WEIGHT,
+        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
+    ];
+    private const CONFIG_CARRIER_SETTINGS_MAP   = [
         'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
         'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
         'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
@@ -59,17 +66,25 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $taxService;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface
+     */
+    private $weightService;
+
+    /**
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
+     * @param  \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface      $weightService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
         DropOffServiceInterface $dropOffService,
         TaxServiceInterface     $taxService,
+        WeightServiceInterface  $weightService,
         SchemaRepository        $schemaRepository
     ) {
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
+        $this->weightService    = $weightService;
         $this->schemaRepository = $schemaRepository;
     }
 
@@ -158,17 +173,16 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        $packageType     = DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
-        $carriers        = AccountSettings::getCarriers();
+        $allCarriers     = AccountSettings::getCarriers();
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
-        foreach ($cart->shippingMethod->allowPackageTypes as $allowedPackageType) {
-            $weight = $this->getWeightByPackageType($cart, $allowedPackageType);
+        foreach ($cart->shippingMethod->allowedPackageTypes->all() as $packageType) {
+            $weight = $this->getWeightByPackageType($cart, $packageType);
 
-            $filteredCarrierOptions = $carriers
+            $filteredCarriers = $allCarriers
                 ->filter(
-                    function (Carrier $carrier) use ($cart, $weight, $allowedPackageType, $carrierSettings): bool {
-                        $hasDeliveryOptions = $carrierSettings[$carrier->externalIdentifier][CarrierSettings::ALLOW_DELIVERY_OPTIONS] ?? false;
+                    function (Carrier $carrier) use ($cart, $weight, $packageType, $carrierSettings): bool {
+                        $hasDeliveryOptions = $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
 
                         if (! $hasDeliveryOptions) {
                             return false;
@@ -178,7 +192,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             $this->schemaRepository->getOrderValidationSchema(
                                 $carrier->name,
                                 $cart->shippingMethod->shippingAddress->cc,
-                                $allowedPackageType
+                                // TODO: support full package type class instead of string
+                                $packageType->name
                             ),
                             OrderPropertiesValidator::WEIGHT_KEY,
                             $weight
@@ -186,40 +201,34 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     }
                 );
 
-            if ($filteredCarrierOptions->isNotEmpty()) {
-                $packageType = $allowedPackageType;
-                $carriers    = $filteredCarrierOptions;
-                break;
+            if ($filteredCarriers->isNotEmpty()) {
+                return [$packageType->name, $filteredCarriers];
             }
         }
 
-        return [$packageType, $carriers];
+        return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     * @param  string                                 $packageType
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart     $cart
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
      *
      * @return int
      */
-    private function getWeightByPackageType(PdkCart $cart, string $packageType): int
+    private function getWeightByPackageType(PdkCart $cart, PackageType $packageType): int
     {
-        $cartWeight = $cart->lines->reduce(function (float $carry, PdkOrderLine $line) {
+        $cartWeight = (int) $cart->lines->reduce(function (float $carry, PdkOrderLine $line) {
             return $carry + $line->product->weight * $line->quantity;
         }, 0);
 
-        $weight = 1;
+        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
 
-        switch ($packageType) {
-            case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
-                $weight = Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID) + $cartWeight;
-                break;
-
-            case DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME:
-                $weight = Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID) + $cartWeight;
-                break;
+        if (! $emptyWeightSetting) {
+            return $cartWeight ?: 1;
         }
 
-        return $weight;
+        $emptyWeight = Settings::get($emptyWeightSetting, OrderSettings::ID) ?: 0.1;
+
+        return $this->weightService->convertToGrams($emptyWeight, WeightServiceInterface::UNIT_KILOGRAMS) + $cartWeight;
     }
 }
