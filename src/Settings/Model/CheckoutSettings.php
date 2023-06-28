@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 /**
  * @property \MyParcelNL\Pdk\Base\Support\Collection $allowedShippingMethods
  * @property string                                  $deliveryOptionsCustomCss
- * @property bool                                    $deliveryOptionsDisplay
  * @property string                                  $deliveryOptionsHeader
  * @property string                                  $deliveryOptionsPosition
  * @property string                                  $pickupLocationsDefaultView
@@ -28,7 +27,6 @@ class CheckoutSettings extends AbstractSettingsModel
      */
     public const ALLOWED_SHIPPING_METHODS                  = 'allowedShippingMethods';
     public const DELIVERY_OPTIONS_CUSTOM_CSS               = 'deliveryOptionsCustomCss';
-    public const DELIVERY_OPTIONS_DISPLAY                  = 'deliveryOptionsDisplay';
     public const DELIVERY_OPTIONS_HEADER                   = 'deliveryOptionsHeader';
     public const DELIVERY_OPTIONS_POSITION                 = 'deliveryOptionsPosition';
     public const PICKUP_LOCATIONS_DEFAULT_VIEW             = 'pickupLocationsDefaultView';
@@ -49,7 +47,6 @@ class CheckoutSettings extends AbstractSettingsModel
 
         self::ALLOWED_SHIPPING_METHODS                  => [],
         self::DELIVERY_OPTIONS_CUSTOM_CSS               => null,
-        self::DELIVERY_OPTIONS_DISPLAY                  => false,
         self::DELIVERY_OPTIONS_HEADER                   => null,
         self::DELIVERY_OPTIONS_POSITION                 => null,
         self::PICKUP_LOCATIONS_DEFAULT_VIEW             => null,
@@ -62,7 +59,6 @@ class CheckoutSettings extends AbstractSettingsModel
     protected $casts      = [
         self::ALLOWED_SHIPPING_METHODS                  => Collection::class,
         self::DELIVERY_OPTIONS_CUSTOM_CSS               => 'string',
-        self::DELIVERY_OPTIONS_DISPLAY                  => 'bool',
         self::DELIVERY_OPTIONS_HEADER                   => 'string',
         self::DELIVERY_OPTIONS_POSITION                 => 'string',
         self::PICKUP_LOCATIONS_DEFAULT_VIEW             => 'string',

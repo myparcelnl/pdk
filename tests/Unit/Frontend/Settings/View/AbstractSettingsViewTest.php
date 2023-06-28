@@ -63,6 +63,7 @@ it('can render a settings view', function (array $data) {
             'result'   => [
                 'id'          => 'test',
                 'title'       => 'settings_view_test_title',
+                'titleSuffix' => null,
                 'description' => 'settings_view_test_description',
                 'elements'    => null,
                 'children'    => null,
@@ -80,6 +81,7 @@ it('can render a settings view', function (array $data) {
             'result'   => [
                 'id'          => 'test',
                 'title'       => 'settings_view_test_title',
+                'titleSuffix' => null,
                 'description' => 'settings_view_test_description',
                 'elements'    => [
                     [
@@ -118,6 +120,7 @@ it('can render a settings view', function (array $data) {
             'result'   => [
                 'id'          => 'test',
                 'title'       => 'settings_view_test_title',
+                'titleSuffix' => null,
                 'description' => 'settings_view_test_description',
                 'elements'    => null,
                 'children'    => [

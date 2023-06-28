@@ -580,6 +580,14 @@ trait HasAttributes
     }
 
     /**
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function getCastAttribute(string $string)
+    {
+        return $this->castAttribute($string, $this->attributes[$string]);
+    }
+
+    /**
      * Get the type of cast for a model attribute.
      *
      * @param  string $key
@@ -815,7 +823,7 @@ trait HasAttributes
     protected function transformModelValue(string $key, $value)
     {
         if ($this->hasGetMutator($key)) {
-            return $this->mutateAttribute($key, $value);
+            $value = $this->mutateAttribute($key, $value);
         }
 
         if ($this->hasCast($key)) {

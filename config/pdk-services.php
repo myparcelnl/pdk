@@ -19,6 +19,8 @@ use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Service\InstallerService;
 use MyParcelNL\Pdk\App\Installer\Service\MigrationService;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
+use MyParcelNL\Pdk\Base\Config;
+use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
@@ -26,6 +28,8 @@ use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Service\ContextService;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
@@ -58,9 +62,19 @@ return [
     ApiServiceInterface::class                 => autowire(MyParcelApiService::class),
 
     /**
+     * Retrieves carriers from the config.
+     */
+    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
+
+    /**
      * Does calculations on carts.
      */
     CartCalculationServiceInterface::class     => autowire(CartCalculationService::class),
+
+    /**
+     * Reads config files.
+     */
+    ConfigInterface::class                     => autowire(Config::class),
 
     /**
      * Provides context for the admin frontend.

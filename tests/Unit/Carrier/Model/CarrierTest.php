@@ -3,92 +3,116 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Tests\Unit\Carrier\Model;
+
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+
+const DHL_FOR_YOU_CUSTOM_IDENTIFIER = Carrier::CARRIER_DHL_FOR_YOU_NAME . ':' . MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU;
 
 usesShared(new UsesMockPdkInstance());
 
-it('creates main carrier by name', function () {
-    $carrier = new Carrier(['name' => Carrier::CARRIER_POSTNL_NAME]);
+it('creates default carrier for platform', function (string $platform) {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $mockPdk */
+    $mockPdk = Pdk::get(PdkInterface::class);
 
-    expect($carrier->getName())
-        ->toBe(Carrier::CARRIER_POSTNL_NAME)
-        ->and($carrier->getType())
-        ->toBe(Carrier::TYPE_MAIN);
-});
+    $oldPlatform = $mockPdk->get('platform');
+    $mockPdk->set('platform', $platform);
 
-it('creates main carrier by carrierId', function () {
-    $carrier = new Carrier(['id' => Carrier::CARRIER_BPOST_ID]);
-
-    expect($carrier->getName())
-        ->toBe(Carrier::CARRIER_BPOST_NAME)
-        ->and($carrier->getType())
-        ->toBe(Carrier::TYPE_MAIN);
-});
-
-it('creates custom carrier by subscriptionId', function () {
-    $carrier = new Carrier(['subscriptionId' => 10932623]);
-
-    expect($carrier->getName())
-        ->toBe(Carrier::CARRIER_DPD_NAME)
-        ->and($carrier->getType())
-        ->toBe(Carrier::TYPE_CUSTOM);
-});
-
-it('creates default carrier', function () {
     $carrier = new Carrier();
 
-    expect($carrier->getName())
-        ->toBe(Carrier::CARRIER_POSTNL_NAME)
-        ->and($carrier->getType())
-        ->toBe(Carrier::TYPE_MAIN);
-});
+    assertMatchesJsonSnapshot(
+        json_encode(Arr::except($carrier->toArrayWithoutNull(), ['capabilities', 'returnCapabilities']))
+    );
 
-it('returns complete carrier object', function () {
-    $carrier = new Carrier(['id' => Carrier::CARRIER_POSTNL_ID]);
+    $mockPdk->set('platform', $oldPlatform);
+})->with('platforms');
 
-    expect(array_filter(Arr::dot($carrier->toArray()), function ($item) { return null !== $item; }))
-        ->toEqual(
-            [
-                'id'                                           => Carrier::CARRIER_POSTNL_ID,
-                'name'                                         => Carrier::CARRIER_POSTNL_NAME,
-                'primary'                                      => true,
-                'isDefault'                                    => false,
-                'optional'                                     => false,
-                'type'                                         => Carrier::TYPE_MAIN,
-                'externalIdentifier'                           => 'postnl',
-                'enabled'                                      => false,
-                'capabilities.deliveryTypes.0'                 => 'morning',
-                'capabilities.deliveryTypes.1'                 => 'standard',
-                'capabilities.deliveryTypes.2'                 => 'evening',
-                'capabilities.deliveryTypes.3'                 => 'pickup',
-                'capabilities.features.labelDescriptionLength' => 45,
-                'capabilities.packageTypes.0'                  => 'package',
-                'capabilities.packageTypes.1'                  => 'mailbox',
-                'capabilities.packageTypes.2'                  => 'letter',
-                'capabilities.packageTypes.3'                  => 'digital_stamp',
-                'capabilities.shipmentOptions.ageCheck'        => true,
-                'capabilities.shipmentOptions.largeFormat'     => true,
-                'capabilities.shipmentOptions.onlyRecipient'   => true,
-                'capabilities.shipmentOptions.return'          => true,
-                'capabilities.shipmentOptions.sameDayDelivery' => true,
-                'capabilities.shipmentOptions.signature'       => true,
-                'capabilities.shipmentOptions.insurance.0'     => 0,
-                'capabilities.shipmentOptions.insurance.1'     => 10000,
-                'capabilities.shipmentOptions.insurance.2'     => 25000,
-                'capabilities.shipmentOptions.insurance.3'     => 50000,
-                'capabilities.shipmentOptions.insurance.4'     => 100000,
-                'capabilities.shipmentOptions.insurance.5'     => 150000,
-                'capabilities.shipmentOptions.insurance.6'     => 200000,
-                'capabilities.shipmentOptions.insurance.7'     => 250000,
-                'capabilities.shipmentOptions.insurance.8'     => 300000,
-                'capabilities.shipmentOptions.insurance.9'     => 350000,
-                'capabilities.shipmentOptions.insurance.10'    => 400000,
-                'capabilities.shipmentOptions.insurance.11'    => 450000,
-                'capabilities.shipmentOptions.insurance.12'    => 500000,
-            ]
-        );
-});
+it('instantiates carrier', function (string $carrierName) {
+    $carrier = new Carrier(['name' => $carrierName]);
 
+    assertMatchesJsonSnapshot(json_encode($carrier));
+})->with('carrierNames');
+
+it('generates external identifier', function (array $input, string $identifier) {
+    $carrier = new Carrier($input);
+
+    expect($carrier->externalIdentifier)
+        ->toBe($identifier)
+        ->and($carrier->type)
+        ->toBe(isset($input['subscriptionId']) ? Carrier::TYPE_CUSTOM : Carrier::TYPE_MAIN);
+})->with([
+    'id' => [
+        'input'      => ['id' => Carrier::CARRIER_DHL_FOR_YOU_ID],
+        'identifier' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+    ],
+
+    'name' => [
+        'input'      => ['name' => Carrier::CARRIER_DHL_FOR_YOU_NAME],
+        'identifier' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+    ],
+
+    'subscriptionId' => [
+        'input'      => ['subscriptionId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU],
+        'identifier' => DHL_FOR_YOU_CUSTOM_IDENTIFIER,
+    ],
+
+    'name and subscriptionId' => [
+        'input'      => [
+            'name'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+            'subscriptionId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
+        ],
+        'identifier' => DHL_FOR_YOU_CUSTOM_IDENTIFIER,
+    ],
+]);
+
+it('generates the same data with either name or id', function (array $values, array $keys) {
+    $carrierA = new Carrier(Arr::only($values, $keys[0]));
+    $carrierB = new Carrier(Arr::only($values, $keys[1]));
+
+    $arrayA = $carrierA->toArrayWithoutNull();
+    $arrayB = $carrierB->toArrayWithoutNull();
+
+    expect($arrayA)
+        ->not()
+        ->toBeEmpty()
+        ->and($arrayA)
+        ->toEqual($arrayB);
+})
+    ->with(
+        array_reduce(Carrier::CARRIER_NAME_ID_MAP, function (array $carry, int $id) {
+            $name           = array_flip(Carrier::CARRIER_NAME_ID_MAP)[$id];
+            $subscriptionId = 124230;
+
+            $carry[$name] = [
+                [
+                    'id'                 => $id,
+                    'name'               => $name,
+                    'subscriptionId'     => $subscriptionId,
+                    'externalIdentifier' => "$name:$subscriptionId",
+                ],
+            ];
+
+            return $carry;
+        }, [])
+    )
+    ->with([
+        'id and name'                 => [[['id'], ['name']]],
+        'id, name and subscriptionId' => [[['id', 'subscriptionId'], ['name', 'subscriptionId']]],
+        'external identifier'         => [[['externalIdentifier'], ['externalIdentifier']]],
+    ]);
+
+it('instantiates carrier from external identifier', function (string $identifier) {
+    $carrier = new Carrier(['externalIdentifier' => $identifier]);
+
+    assertMatchesJsonSnapshot(json_encode($carrier->toArrayWithoutNull()));
+})->with([
+    'subscription carrier' => [DHL_FOR_YOU_CUSTOM_IDENTIFIER],
+    'default carrier'      => [Carrier::CARRIER_DHL_FOR_YOU_NAME],
+]);

@@ -5,22 +5,24 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Carrier\Repository\CarrierOptionsRepository;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 
 /**
- * @property string      $externalIdentifier
- * @property null|int    $id
- * @property null|string $name
- * @property null|string $human
- * @property null|int    $subscriptionId
- * @property bool        $enabled
- * @property bool        $primary
- * @property bool        $isDefault
- * @property bool        $optional
- * @property null|string $label
- * @property null|string $type
+ * @property string                   $externalIdentifier
+ * @property null|int                 $id
+ * @property null|string              $name
+ * @property null|string              $human
+ * @property null|int                 $subscriptionId
+ * @property bool                     $enabled
+ * @property bool                     $primary
+ * @property bool                     $isDefault
+ * @property bool                     $optional
+ * @property null|string              $label
+ * @property null|string              $type
+ * @property null|CarrierCapabilities $capabilities
+ * @property null|CarrierCapabilities $returnCapabilities
  */
 class Carrier extends Model
 {
@@ -75,12 +77,13 @@ class Carrier extends Model
         'human'              => null,
         'subscriptionId'     => null,
         'enabled'            => false,
-        'isDefault'          => false,
+        'isDefault'          => true,
         'label'              => null,
         'optional'           => false,
         'primary'            => false,
-        'type'               => null,
+        'type'               => self::TYPE_MAIN,
         'capabilities'       => null,
+        'returnCapabilities' => null,
     ];
 
     protected $casts      = [
@@ -88,7 +91,7 @@ class Carrier extends Model
         'id'                 => 'int',
         'name'               => 'string',
         'human'              => 'string',
-        'subscriptionId'     => 'int',
+        'subscriptionId'     => 'string',
         'enabled'            => 'bool',
         'isDefault'          => 'bool',
         'label'              => 'string',
@@ -96,6 +99,7 @@ class Carrier extends Model
         'primary'            => 'bool',
         'type'               => 'string',
         'capabilities'       => CarrierCapabilities::class,
+        'returnCapabilities' => CarrierCapabilities::class,
     ];
 
     /**
@@ -103,35 +107,31 @@ class Carrier extends Model
      */
     public function __construct(?array $data = null)
     {
-        /** @var CarrierOptionsRepository $repository */
-        $repository = Pdk::get(CarrierOptionsRepository::class);
+        /** @var CarrierRepositoryInterface $repository */
+        $repository = Pdk::get(CarrierRepositoryInterface::class);
 
-        parent::__construct(
-            array_merge(
-                $data ?? [],
-                $repository->get(
-                    $data['subscriptionId']
-                    ?? $data['id']
-                    ?? $data['name']
-                    ?? Platform::get('defaultCarrier')
-                ) ?? []
-            )
-        );
+        if (isset($data['externalIdentifier']) && (! isset($data['name'], $data['id']))) {
+            [$name, $subscriptionId] = explode(':', $data['externalIdentifier']);
+
+            $data['name']           = $name;
+            $data['subscriptionId'] = $subscriptionId;
+        }
+
+        if (! isset($data['name'], $data['id'])) {
+            $foundCarrier = $repository->get([
+                'subscriptionId' => $data['subscriptionId'] ?? null,
+                'id'             => $data['id'] ?? null,
+                'name'           => $data['name'] ?? Platform::get('defaultCarrier'),
+            ]);
+        }
+
+        parent::__construct(array_merge($foundCarrier ?? [], $data ?? []));
     }
 
     /**
-     * @return array
+     * @return string
+     * @noinspection PhpUnused
      */
-    public function getAllOptions(): array
-    {
-        /** @var \MyParcelNL\Pdk\Carrier\Repository\CarrierOptionsRepository $repository */
-        $repository = Pdk::get(CarrierOptionsRepository::class);
-
-        $options = $repository->get($this->subscriptionId ?? $this->id ?? $this->name ?? null);
-
-        return $options ?? [];
-    }
-
     public function getExternalIdentifierAttribute(): string
     {
         $identifier = $this->name;
@@ -141,5 +141,23 @@ class Carrier extends Model
         }
 
         return $identifier ?: '?';
+    }
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function getIsDefaultAttribute(): bool
+    {
+        return self::TYPE_MAIN === $this->type;
+    }
+
+    /**
+     * @return string
+     * @noinspection PhpUnused
+     */
+    public function getTypeAttribute(): string
+    {
+        return $this->attributes['type'] ?? ($this->attributes['subscriptionId'] ? self::TYPE_CUSTOM : self::TYPE_MAIN);
     }
 }

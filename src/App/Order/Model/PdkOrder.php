@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -153,11 +152,7 @@ class PdkOrder extends Model implements StorableArrayable
                     'recipient'           => $this->shippingAddress,
                     'sender'              => $this->senderAddress,
                     'referenceIdentifier' => $this->externalIdentifier,
-                    'carrier'             => new CarrierOptions([
-                        'carrier' => [
-                            'name' => $deliveryOptions['carrier'],
-                        ],
-                    ]),
+                    'carrier'             => $deliveryOptions->carrier,
                     'orderId'             => $this->externalIdentifier,
                     'dropOffPoint'        => null,
                 ],
@@ -240,10 +235,10 @@ class PdkOrder extends Model implements StorableArrayable
     {
         $this->shipments->each(function (Shipment $shipment) {
             $shipment->orderId            = $this->externalIdentifier;
-            $shipment->customsDeclaration = $this->customsDeclaration;
-            $shipment->deliveryOptions    = $this->deliveryOptions;
-            $shipment->recipient          = $this->shippingAddress;
-            $shipment->sender             = $this->senderAddress;
+            $shipment->customsDeclaration = $shipment->customsDeclaration ?? $this->customsDeclaration;
+            $shipment->deliveryOptions    = $shipment->deliveryOptions ?? $this->deliveryOptions;
+            $shipment->recipient          = $shipment->recipient ?? $this->shippingAddress;
+            $shipment->sender             = $shipment->sender ?? $this->senderAddress;
         });
     }
 

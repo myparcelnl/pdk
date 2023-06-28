@@ -3,11 +3,11 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\src\Model\Account\Shop;
@@ -36,8 +36,8 @@ it('gets data from the api', function () {
     $api->getMock()
         ->append(new ExampleGetAccountsResponse());
 
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAccountRepository $accountRepository */
-    $accountRepository = Pdk::get(MockAccountRepository::class);
+    /** @var \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository */
+    $accountRepository = Pdk::get(AccountRepository::class);
 
     $account = $accountRepository->getAccount();
 

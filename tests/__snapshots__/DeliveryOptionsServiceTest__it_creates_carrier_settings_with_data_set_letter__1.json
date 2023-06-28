@@ -1,0 +1,30 @@
+{
+    "packageType": "letter",
+    "carrierSettings": {
+        "postnl": {
+            "allowDeliveryOptions": true,
+            "allowEveningDelivery": false,
+            "allowMondayDelivery": false,
+            "allowMorningDelivery": false,
+            "allowOnlyRecipient": false,
+            "allowPickupLocations": false,
+            "allowSameDayDelivery": false,
+            "allowSaturdayDelivery": false,
+            "allowSignature": false,
+            "featureShowDeliveryDate": true,
+            "priceEveningDelivery": 0,
+            "priceMorningDelivery": 0,
+            "priceOnlyRecipient": 0,
+            "pricePackageTypeDigitalStamp": 0,
+            "pricePackageTypeMailbox": 0,
+            "pricePickup": 0,
+            "priceSameDayDelivery": 0,
+            "priceSignature": 0,
+            "priceStandardDelivery": 0,
+            "deliveryDaysWindow": 7,
+            "dropOffDelay": 0,
+            "cutoffTime": null,
+            "cutoffTimeSameDay": null
+        }
+    }
+}

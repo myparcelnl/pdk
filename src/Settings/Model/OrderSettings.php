@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 /**
- * @property int|null    $emptyDigitalStampWeight
- * @property int|null    $emptyParcelWeight
- * @property string|null $ignoreOrderStatuses
+ * @property int         $emptyDigitalStampWeight
+ * @property int         $emptyMailboxWeight
+ * @property int         $emptyParcelWeight
  * @property bool        $orderStatusMail
  * @property bool        $saveCustomerAddress
  * @property string|null $sendNotificationAfter
@@ -28,7 +28,6 @@ class OrderSettings extends AbstractSettingsModel
     public const EMPTY_DIGITAL_STAMP_WEIGHT         = 'emptyDigitalStampWeight';
     public const EMPTY_MAILBOX_WEIGHT               = 'emptyMailboxWeight';
     public const EMPTY_PARCEL_WEIGHT                = 'emptyParcelWeight';
-    public const IGNORE_ORDER_STATUSES              = 'ignoreOrderStatuses';
     public const ORDER_STATUS_MAIL                  = 'orderStatusMail';
     public const SAVE_CUSTOMER_ADDRESS              = 'saveCustomerAddress';
     public const SEND_NOTIFICATION_AFTER            = 'sendNotificationAfter';
@@ -40,10 +39,9 @@ class OrderSettings extends AbstractSettingsModel
     protected $attributes = [
         'id' => self::ID,
 
-        self::EMPTY_DIGITAL_STAMP_WEIGHT         => null,
-        self::EMPTY_MAILBOX_WEIGHT               => null,
-        self::EMPTY_PARCEL_WEIGHT                => null,
-        self::IGNORE_ORDER_STATUSES              => null,
+        self::EMPTY_DIGITAL_STAMP_WEIGHT         => 0,
+        self::EMPTY_MAILBOX_WEIGHT               => 0,
+        self::EMPTY_PARCEL_WEIGHT                => 0,
         self::ORDER_STATUS_MAIL                  => true,
         self::SAVE_CUSTOMER_ADDRESS              => false,
         self::SEND_NOTIFICATION_AFTER            => null,
@@ -55,8 +53,8 @@ class OrderSettings extends AbstractSettingsModel
 
     protected $casts      = [
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => 'int',
+        self::EMPTY_MAILBOX_WEIGHT               => 'int',
         self::EMPTY_PARCEL_WEIGHT                => 'int',
-        self::IGNORE_ORDER_STATUSES              => 'string',
         self::ORDER_STATUS_MAIL                  => 'bool',
         self::SAVE_CUSTOMER_ADDRESS              => 'bool',
         self::SEND_NOTIFICATION_AFTER            => 'string',

@@ -73,6 +73,14 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
+     * @return null|string
+     */
+    public function getTitleSuffix(): ?string
+    {
+        return null;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -80,10 +88,26 @@ abstract class AbstractSettingsView implements Arrayable
         return [
             'id'          => $this->getSettingsId(),
             'title'       => $this->getTitle(),
+            'titleSuffix' => $this->getTitleSuffix(),
             'description' => $this->getDescription(),
             'elements'    => $this->cacheToArray(self::CACHE_KEY_ELEMENTS_ARRAY, [$this, 'getElements']),
             'children'    => $this->cacheToArray(self::CACHE_KEY_CHILDREN_ARRAY, [$this, 'getChildren']),
         ];
+    }
+
+    /**
+     * @param  array $options
+     *
+     * @return array
+     */
+    protected function addNoneOption(array $options): array
+    {
+        array_unshift($options, [
+            'value' => self::OPTIONS_VALUE_NONE,
+            'label' => sprintf('%s_none', self::KEY_PREFIX),
+        ]);
+
+        return $options;
     }
 
     /**
@@ -151,6 +175,25 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
+     * @param  PlainElement[]|PlainElement[][] $elements
+     * @param  null|callable                   $callback
+     *
+     * @return array
+     */
+    protected function flattenElements(array $elements, ?callable $callback = null): array
+    {
+        return array_reduce($elements, function (array $carry, $element) use ($callback) {
+            if (is_array($element)) {
+                return array_merge($carry, $this->flattenElements($element, $callback));
+            }
+
+            $carry[] = $callback ? $callback($element) : $element;
+
+            return $carry;
+        }, []);
+    }
+
+    /**
      * @return string
      */
     protected function getLabelPrefix(): string
@@ -189,10 +232,7 @@ abstract class AbstractSettingsView implements Arrayable
         }, $associativeArray, array_keys($associativeArray));
 
         if ($includeNone) {
-            array_unshift($options, [
-                'value' => self::OPTIONS_VALUE_NONE,
-                'label' => sprintf('%s_none', self::KEY_PREFIX),
-            ]);
+            $options = $this->addNoneOption($options);
         }
 
         return $options;
@@ -233,6 +273,21 @@ abstract class AbstractSettingsView implements Arrayable
         if (! isset($item['name'], $item['class'])) {
             throw new InvalidArgumentException(sprintf('Fields "name" and "class" are required in %s', $item['class']));
         }
+    }
+
+    /**
+     * @param  array                       $props
+     * @param  PlainElement[]|PlainElement ...$fields
+     *
+     * @return array
+     */
+    protected function withProps(array $props, ...$fields): array
+    {
+        return $this->flattenElements($fields, static function (PlainElement $field) use ($props) {
+            $field->props = array_replace_recursive($field->props, $props);
+
+            return $field;
+        });
     }
 
     /**

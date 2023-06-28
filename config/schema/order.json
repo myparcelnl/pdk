@@ -26,7 +26,18 @@
       "additionalProperties": false,
       "properties": {
         "carrier": {
-          "type": "string"
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "subscriptionId": {
+              "type": ["string", "null"]
+            }
+          }
         },
         "date": {
           "type": ["string", "null"],

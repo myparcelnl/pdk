@@ -8,8 +8,8 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 class AccountSettingsService
@@ -36,23 +36,32 @@ class AccountSettingsService
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierOptionsCollection
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     * @deprecated use getCarriers()
      */
-    public function getCarrierOptions(): CarrierOptionsCollection
+    public function getCarrierOptions(): CarrierCollection
+    {
+        return $this->getCarriers();
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    public function getCarriers(): CarrierCollection
     {
         $shop = $this->getShop();
 
-        if (! $shop || ! $shop->carrierOptions) {
-            return new CarrierOptionsCollection();
+        if (! $shop || ! $shop->carriers) {
+            return new CarrierCollection();
         }
 
         $allowedCarriers = Pdk::get('allowedCarriers');
 
-        return $shop->carrierOptions
-            ->filter(function (CarrierOptions $carrierOption) use ($allowedCarriers) {
-                $isAllowed = in_array($carrierOption->carrier->name, $allowedCarriers, true);
+        return $shop->carriers
+            ->filter(function (Carrier $carrier) use ($allowedCarriers) {
+                $isAllowed = in_array($carrier->name, $allowedCarriers, true);
 
-                return $isAllowed && $carrierOption->carrier->enabled;
+                return $isAllowed && $carrier->enabled && $carrier->capabilities;
             })
             ->values();
     }
@@ -96,9 +105,9 @@ class AccountSettingsService
     protected function hasCarrier(string $carrierName): bool
     {
         return $this->hasAccount()
-            && $this->getCarrierOptions()
-                ->contains(function (CarrierOptions $carrierOption) use ($carrierName) {
-                    return $carrierOption->carrier->name === $carrierName;
+            && $this->getCarriers()
+                ->contains(function (Carrier $carrier) use ($carrierName) {
+                    return $carrier->name === $carrierName;
                 });
     }
 }

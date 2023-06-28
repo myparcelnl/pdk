@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Account\Response;
 
 use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
 {
@@ -34,10 +33,8 @@ class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
 
         $this->configurations = (new ShopCarrierConfigurationCollection(
             array_map(static function (array $configuration) {
-                $carrier = new Carrier(['id' => $configuration['carrier_id']]);
-
                 return ($configuration['configuration'] ?? []) + [
-                        'carrier' => $carrier->id,
+                        'carrier' => $configuration['carrier_id'],
                     ];
             }, $configurations)
         ));

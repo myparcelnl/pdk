@@ -23,6 +23,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string               $defaultPackageType
  * @property int                  $deliveryDaysWindow
  * @property string               $deliveryOptionsCustomCss
+ * @property bool                 $deliveryOptionsEnabled
  * @property bool                 $deliveryOptionsEnabledForBackorders
  * @property int                  $digitalStampDefaultWeight
  * @property int                  $dropOffDelay
@@ -32,9 +33,9 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                  $exportInsuranceFromAmount
  * @property float                $exportInsurancePriceFactor
  * @property int                  $exportInsuranceUpTo
- * @property int                  $exportInsuranceUpToUnique
  * @property int                  $exportInsuranceUpToEu
  * @property int                  $exportInsuranceUpToRow
+ * @property int                  $exportInsuranceUpToUnique
  * @property bool                 $exportLargeFormat
  * @property bool                 $exportOnlyRecipient
  * @property bool                 $exportReturn
@@ -46,6 +47,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property float                $priceDeliveryTypeMorning
  * @property float                $priceDeliveryTypePickup
  * @property float                $priceDeliveryTypeSameDay
+ * @property float                $priceDeliveryTypeSaturday
  * @property float                $priceDeliveryTypeStandard
  * @property float                $priceOnlyRecipient
  * @property float                $pricePackageTypeDigitalStamp
@@ -76,6 +78,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
     public const DELIVERY_DAYS_WINDOW                    = 'deliveryDaysWindow';
     public const DELIVERY_OPTIONS_CUSTOM_CSS             = 'deliveryOptionsCustomCss';
+    public const DELIVERY_OPTIONS_ENABLED                = 'deliveryOptionsEnabled';
     public const DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS = 'deliveryOptionsEnabledForBackorders';
     public const DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
     public const DROP_OFF_DELAY                          = 'dropOffDelay';
@@ -85,9 +88,9 @@ class CarrierSettings extends AbstractSettingsModel
     public const EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
     public const EXPORT_INSURANCE_PRICE_FACTOR           = 'exportInsurancePriceFactor';
     public const EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
-    public const EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
     public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
     public const EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
+    public const EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
     public const EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
     public const EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
     public const EXPORT_RETURN                           = 'exportReturn';
@@ -99,6 +102,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
     public const PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
     public const PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
+    public const PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
     public const PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
     public const PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
     public const PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
@@ -123,6 +127,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::CUTOFF_TIME_SAME_DAY                    => '10:00',
         self::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         self::DELIVERY_DAYS_WINDOW                    => 7,
+        self::DELIVERY_OPTIONS_ENABLED                => false,
         self::DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS => false,
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 0,
         self::DROP_OFF_DELAY                          => 0,
@@ -132,9 +137,9 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
         self::EXPORT_INSURANCE_PRICE_FACTOR           => 1.0,
         self::EXPORT_INSURANCE_UP_TO                  => 0,
-        self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
         self::EXPORT_INSURANCE_UP_TO_EU               => 0,
         self::EXPORT_INSURANCE_UP_TO_ROW              => 0,
+        self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
         self::EXPORT_LARGE_FORMAT                     => false,
         self::EXPORT_ONLY_RECIPIENT                   => false,
         self::EXPORT_RETURN                           => false,
@@ -146,6 +151,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_DELIVERY_TYPE_MORNING             => 0,
         self::PRICE_DELIVERY_TYPE_PICKUP              => 0,
         self::PRICE_DELIVERY_TYPE_SAME_DAY            => 0,
+        self::PRICE_DELIVERY_TYPE_SATURDAY            => 0,
         self::PRICE_DELIVERY_TYPE_STANDARD            => 0,
         self::PRICE_ONLY_RECIPIENT                    => 0,
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
@@ -171,6 +177,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::DEFAULT_PACKAGE_TYPE                    => 'string',
         self::DELIVERY_DAYS_WINDOW                    => 'int',
         self::DELIVERY_OPTIONS_CUSTOM_CSS             => 'string',
+        self::DELIVERY_OPTIONS_ENABLED                => 'bool',
         self::DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS => 'bool',
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 'int',
         self::DROP_OFF_DELAY                          => 'int',
@@ -180,9 +187,9 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 'int',
         self::EXPORT_INSURANCE_PRICE_FACTOR           => 'float',
         self::EXPORT_INSURANCE_UP_TO                  => 'int',
-        self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 'int',
         self::EXPORT_INSURANCE_UP_TO_EU               => 'int',
         self::EXPORT_INSURANCE_UP_TO_ROW              => 'int',
+        self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 'int',
         self::EXPORT_LARGE_FORMAT                     => 'bool',
         self::EXPORT_ONLY_RECIPIENT                   => 'bool',
         self::EXPORT_RETURN                           => 'bool',
@@ -194,6 +201,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_DELIVERY_TYPE_MORNING             => 'float',
         self::PRICE_DELIVERY_TYPE_PICKUP              => 'float',
         self::PRICE_DELIVERY_TYPE_SAME_DAY            => 'float',
+        self::PRICE_DELIVERY_TYPE_SATURDAY            => 'float',
         self::PRICE_DELIVERY_TYPE_STANDARD            => 'float',
         self::PRICE_ONLY_RECIPIENT                    => 'float',
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 'float',

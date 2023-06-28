@@ -90,7 +90,6 @@ class PostReturnShipmentsRequest extends Request
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeReturnShipments(): array
     {
@@ -98,7 +97,7 @@ class PostReturnShipmentsRequest extends Request
             return [
                 'parent'               => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
-                'carrier'              => $shipment->carrier->carrier->id,
+                'carrier'              => $shipment->carrier->id,
                 'email'                => $shipment->recipient->email,
                 'name'                 => $shipment->recipient->person,
                 'options'              => $this->encodeReturnOptions($shipment),

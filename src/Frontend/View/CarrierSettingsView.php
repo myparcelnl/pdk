@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Model\CarrierOptions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -19,7 +19,7 @@ class CarrierSettingsView extends AbstractSettingsView
 
     public function __construct()
     {
-        $this->carriers = AccountSettings::getCarrierOptions();
+        $this->carriers = AccountSettings::getCarriers();
     }
 
     /**
@@ -30,9 +30,9 @@ class CarrierSettingsView extends AbstractSettingsView
     {
         $array = [];
 
-        $this->carriers->each(static function (CarrierOptions $carrierOptions) use (&$array) {
-            $view    = new CarrierSettingsItemView($carrierOptions);
-            $array[] = ['id' => $carrierOptions->carrier->name] + $view->toArray();
+        $this->carriers->each(static function (Carrier $carrier) use (&$array) {
+            $view    = new CarrierSettingsItemView($carrier);
+            $array[] = ['id' => $carrier->externalIdentifier] + $view->toArray();
         });
 
         return new Collection($array);

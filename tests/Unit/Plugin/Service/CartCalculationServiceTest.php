@@ -107,11 +107,11 @@ it('calculates allowed package types', function (array $lines, array $result) {
 
     $allowedPackageTypes = $service->calculateAllowedPackageTypes(new PdkCart(['lines' => $lines]));
 
-    expect($allowedPackageTypes)->toEqual($result);
+    expect(Arr::pluck($allowedPackageTypes->toArray(), 'name'))->toEqual($result);
 })->with([
     'fits in mailbox'                  => [
         'lines'  => LINES_FITS_IN_MAILBOX,
-        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME, DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME],
+        'result' => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'one item does not fit in mailbox' => [
         'lines'  => LINES_DONT_FIT_MAILBOX,
@@ -149,7 +149,12 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'id'                  => null,
             'name'                => null,
             'isEnabled'           => true,
-            'allowPackageTypes'   => [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME],
+            'allowedPackageTypes' => [
+                [
+                    'name' => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+                    'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
+                ],
+            ],
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => 0,
         ],
@@ -181,7 +186,12 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'isEnabled'           => true,
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => 2,
-            'allowPackageTypes'   => [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME],
+            'allowedPackageTypes' => [
+                [
+                    'name' => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+                    'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
+                ],
+            ],
         ],
     ],
 
@@ -203,7 +213,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'isEnabled'           => true,
             'hasDeliveryOptions'  => false,
             'minimumDropOffDelay' => 0,
-            'allowPackageTypes'   => [],
+            'allowedPackageTypes' => [],
         ],
     ],
 ]);
