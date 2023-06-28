@@ -91,7 +91,7 @@ class Carrier extends Model
         'id'                 => 'int',
         'name'               => 'string',
         'human'              => 'string',
-        'subscriptionId'     => 'int',
+        'subscriptionId'     => 'string',
         'enabled'            => 'bool',
         'isDefault'          => 'bool',
         'label'              => 'string',
@@ -109,6 +109,13 @@ class Carrier extends Model
     {
         /** @var CarrierRepositoryInterface $repository */
         $repository = Pdk::get(CarrierRepositoryInterface::class);
+
+        if (isset($data['externalIdentifier']) && (! isset($data['name'], $data['id']))) {
+            [$name, $subscriptionId] = explode(':', $data['externalIdentifier']);
+
+            $data['name']           = $name;
+            $data['subscriptionId'] = $subscriptionId;
+        }
 
         if (! isset($data['name'], $data['id'])) {
             $foundCarrier = $repository->get([

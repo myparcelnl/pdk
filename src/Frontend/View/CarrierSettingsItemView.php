@@ -81,7 +81,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             return null;
         }
 
-        return $this->createLabel('carrier_type', $this->carrier->type);
+        return sprintf('%s_type_%s', $this->getLabelPrefix(), $this->carrier->type);
     }
 
     /**

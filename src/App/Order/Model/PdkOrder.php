@@ -235,10 +235,10 @@ class PdkOrder extends Model implements StorableArrayable
     {
         $this->shipments->each(function (Shipment $shipment) {
             $shipment->orderId            = $this->externalIdentifier;
-            $shipment->customsDeclaration = $this->customsDeclaration;
-            $shipment->deliveryOptions    = $this->deliveryOptions;
-            $shipment->recipient          = $this->shippingAddress;
-            $shipment->sender             = $this->senderAddress;
+            $shipment->customsDeclaration = $shipment->customsDeclaration ?? $this->customsDeclaration;
+            $shipment->deliveryOptions    = $shipment->deliveryOptions ?? $this->deliveryOptions;
+            $shipment->recipient          = $shipment->recipient ?? $this->shippingAddress;
+            $shipment->sender             = $shipment->sender ?? $this->senderAddress;
         });
     }
 

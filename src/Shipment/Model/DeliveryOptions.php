@@ -135,7 +135,7 @@ class DeliveryOptions extends Model
         }
 
         if (isset($data['carrier']) && is_string($data['carrier'])) {
-            $data['carrier'] = ['name' => $data['carrier']];
+            $data['carrier'] = ['externalIdentifier' => $data['carrier']];
         }
 
         parent::__construct($data);

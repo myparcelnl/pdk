@@ -96,6 +96,21 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
+     * @param  array $options
+     *
+     * @return array
+     */
+    protected function addNoneOption(array $options): array
+    {
+        array_unshift($options, [
+            'value' => self::OPTIONS_VALUE_NONE,
+            'label' => sprintf('%s_none', self::KEY_PREFIX),
+        ]);
+
+        return $options;
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Frontend\View\AbstractSettingsView[]
      */
     protected function createChildren(): ?Collection
@@ -217,10 +232,7 @@ abstract class AbstractSettingsView implements Arrayable
         }, $associativeArray, array_keys($associativeArray));
 
         if ($includeNone) {
-            array_unshift($options, [
-                'value' => self::OPTIONS_VALUE_NONE,
-                'label' => sprintf('%s_none', self::KEY_PREFIX),
-            ]);
+            $options = $this->addNoneOption($options);
         }
 
         return $options;

@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
-use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -23,7 +22,7 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    const         PACKAGE_TYPE_EMPTY_WEIGHT_MAP = [
+    private const PACKAGE_TYPE_EMPTY_WEIGHT_MAP = [
         DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => OrderSettings::EMPTY_PARCEL_WEIGHT,
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => OrderSettings::EMPTY_MAILBOX_WEIGHT,
         DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
@@ -66,25 +65,17 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $taxService;
 
     /**
-     * @var \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface
-     */
-    private $weightService;
-
-    /**
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
-     * @param  \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface      $weightService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
         DropOffServiceInterface $dropOffService,
         TaxServiceInterface     $taxService,
-        WeightServiceInterface  $weightService,
         SchemaRepository        $schemaRepository
     ) {
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
-        $this->weightService    = $weightService;
         $this->schemaRepository = $schemaRepository;
     }
 
@@ -188,7 +179,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             return false;
                         }
 
-                        return ($this->schemaRepository->validateOption(
+                        return $this->schemaRepository->validateOption(
                             $this->schemaRepository->getOrderValidationSchema(
                                 $carrier->name,
                                 $cart->shippingMethod->shippingAddress->cc,
@@ -197,7 +188,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             ),
                             OrderPropertiesValidator::WEIGHT_KEY,
                             $weight
-                        ));
+                        );
                     }
                 );
 
@@ -221,14 +212,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             return $carry + $line->product->weight * $line->quantity;
         }, 0);
 
+        $fullWeight = $cartWeight;
+
         $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
 
-        if (! $emptyWeightSetting) {
-            return $cartWeight ?: 1;
+        if ($emptyWeightSetting) {
+            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
         }
 
-        $emptyWeight = Settings::get($emptyWeightSetting, OrderSettings::ID) ?: 0.1;
-
-        return $this->weightService->convertToGrams($emptyWeight, WeightServiceInterface::UNIT_KILOGRAMS) + $cartWeight;
+        return $fullWeight ?: 1;
     }
 }

@@ -5,6 +5,22 @@
     "description": "settings_view_order_description",
     "elements": [
         {
+            "name": "saveCustomerAddress",
+            "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
+            "label": "settings_order_save_customer_address",
+            "description": "settings_order_save_customer_address_description"
+        },
+        {
+            "$component": "SettingsDivider",
+            "$slot": null,
+            "$wrapper": false,
+            "content": "settings_order_status_description",
+            "heading": "settings_order_status_title",
+            "level": 2
+        },
+        {
             "name": "statusOnLabelCreate",
             "$component": "SelectInput",
             "$slot": null,
@@ -119,44 +135,6 @@
             "description": "settings_order_status_when_delivered_description"
         },
         {
-            "name": "ignoreOrderStatuses",
-            "$component": "CheckboxInput",
-            "$slot": null,
-            "$wrapper": null,
-            "options": [
-                {
-                    "value": -1,
-                    "label": "settings_none"
-                },
-                {
-                    "value": "pending",
-                    "plainLabel": "Pending"
-                },
-                {
-                    "value": "paid",
-                    "plainLabel": "Paid"
-                },
-                {
-                    "value": "shipped",
-                    "plainLabel": "Shipped"
-                },
-                {
-                    "value": "completed",
-                    "plainLabel": "Completed"
-                },
-                {
-                    "value": "cancelled",
-                    "plainLabel": "Cancelled"
-                },
-                {
-                    "value": "refunded",
-                    "plainLabel": "Refunded"
-                }
-            ],
-            "label": "settings_order_ignore_order_statuses",
-            "description": "settings_order_ignore_order_statuses_description"
-        },
-        {
             "name": "orderStatusMail",
             "$component": "ToggleInput",
             "$slot": null,
@@ -214,12 +192,12 @@
             "description": "settings_order_send_order_state_for_digital_stamp_description"
         },
         {
-            "name": "saveCustomerAddress",
-            "$component": "ToggleInput",
+            "$component": "SettingsDivider",
             "$slot": null,
-            "$wrapper": null,
-            "label": "settings_order_save_customer_address",
-            "description": "settings_order_save_customer_address_description"
+            "$wrapper": false,
+            "content": "settings_order_weight_description",
+            "heading": "settings_order_weight_title",
+            "level": 2
         },
         {
             "name": "emptyParcelWeight",

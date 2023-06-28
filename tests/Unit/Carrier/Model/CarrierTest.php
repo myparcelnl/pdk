@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Tests\Unit\Carrier\Model;
+
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -11,6 +13,8 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+
+const DHL_FOR_YOU_CUSTOM_IDENTIFIER = Carrier::CARRIER_DHL_FOR_YOU_NAME . ':' . MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -56,7 +60,7 @@ it('generates external identifier', function (array $input, string $identifier) 
 
     'subscriptionId' => [
         'input'      => ['subscriptionId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU],
-        'identifier' => sprintf('%s:%s', Carrier::CARRIER_DHL_FOR_YOU_NAME, MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU),
+        'identifier' => DHL_FOR_YOU_CUSTOM_IDENTIFIER,
     ],
 
     'name and subscriptionId' => [
@@ -64,7 +68,7 @@ it('generates external identifier', function (array $input, string $identifier) 
             'name'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
             'subscriptionId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
         ],
-        'identifier' => sprintf('%s:%s', Carrier::CARRIER_DHL_FOR_YOU_NAME, MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU),
+        'identifier' => DHL_FOR_YOU_CUSTOM_IDENTIFIER,
     ],
 ]);
 
@@ -83,13 +87,15 @@ it('generates the same data with either name or id', function (array $values, ar
 })
     ->with(
         array_reduce(Carrier::CARRIER_NAME_ID_MAP, function (array $carry, int $id) {
-            $name = array_flip(Carrier::CARRIER_NAME_ID_MAP)[$id];
+            $name           = array_flip(Carrier::CARRIER_NAME_ID_MAP)[$id];
+            $subscriptionId = 124230;
 
             $carry[$name] = [
                 [
-                    'id'             => $id,
-                    'name'           => $name,
-                    'subscriptionId' => 124230,
+                    'id'                 => $id,
+                    'name'               => $name,
+                    'subscriptionId'     => $subscriptionId,
+                    'externalIdentifier' => "$name:$subscriptionId",
                 ],
             ];
 
@@ -99,4 +105,14 @@ it('generates the same data with either name or id', function (array $values, ar
     ->with([
         'id and name'                 => [[['id'], ['name']]],
         'id, name and subscriptionId' => [[['id', 'subscriptionId'], ['name', 'subscriptionId']]],
+        'external identifier'         => [[['externalIdentifier'], ['externalIdentifier']]],
     ]);
+
+it('instantiates carrier from external identifier', function (string $identifier) {
+    $carrier = new Carrier(['externalIdentifier' => $identifier]);
+
+    assertMatchesJsonSnapshot(json_encode($carrier->toArrayWithoutNull()));
+})->with([
+    'subscription carrier' => [DHL_FOR_YOU_CUSTOM_IDENTIFIER],
+    'default carrier'      => [Carrier::CARRIER_DHL_FOR_YOU_NAME],
+]);
