@@ -9,10 +9,10 @@ interface InstallerServiceInterface
     /**
      * Install the app, or upgrade it if it is already installed.
      */
-    public function install(): void;
+    public function install(...$args): void;
 
     /**
      * Uninstall the app.
      */
-    public function uninstall(): void;
+    public function uninstall(...$args): void;
 }
