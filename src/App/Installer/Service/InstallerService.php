@@ -57,7 +57,7 @@ class InstallerService implements InstallerServiceInterface
             $this->migrateUp($currentVersion);
         }
 
-        $this->settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), $currentVersion);
+        $this->updateInstalledVersion($currentVersion);
     }
 
     /**
@@ -72,7 +72,7 @@ class InstallerService implements InstallerServiceInterface
         if ($installedVersion) {
             $this->executeUninstallation(...$args);
             $this->migrateDown();
-            $this->settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), null);
+            $this->updateInstalledVersion(null);
         }
     }
 
@@ -142,6 +142,16 @@ class InstallerService implements InstallerServiceInterface
         $settings = new Settings(SettingsFacade::getDefaults());
 
         $this->settingsRepository->storeAllSettings($settings);
+    }
+
+    /**
+     * @param  null|string $version
+     *
+     * @return void
+     */
+    protected function updateInstalledVersion(?string $version): void
+    {
+        $this->settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), $version);
     }
 
     /**
