@@ -6,14 +6,18 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Plugin\Installer;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockInstallerService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use Psr\Log\LoggerInterface;
 use function DI\autowire;
 use function DI\factory;
 use function DI\value;
@@ -29,6 +33,7 @@ usesShared(
             ]);
         }),
 
+        InstallerServiceInterface::class => autowire(MockInstallerService::class),
         MigrationServiceInterface::class => autowire(MockMigrationService::class),
 
         'defaultSettings' => value([
@@ -118,3 +123,32 @@ it('runs down migrations on uninstall', function () {
         ->and($settingsRepository->get($createSettingsKey('account.apiKey')))
         ->toBe('12345');
 });
+
+it('passes through arbitrary arguments', function ($_, array $result) {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+
+    expect(Arr::last($logger->getLogs()))->toBe($result);
+})->with([
+    'install' => [
+        'method' => function () {
+            Installer::install('appelboom', 12345);
+        },
+        'result' => [
+            'level'   => 'debug',
+            'message' => '[PDK]: install arguments',
+            'context' => ['appelboom', 12345],
+        ],
+    ],
+
+    'uninstall' => [
+        'method' => function () {
+            Installer::uninstall(12, 'peer');
+        },
+        'result' => [
+            'level'   => 'debug',
+            'message' => '[PDK]: uninstall arguments',
+            'context' => [12, 'peer'],
+        ],
+    ],
+]);

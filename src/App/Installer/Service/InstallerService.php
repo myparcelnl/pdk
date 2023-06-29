@@ -38,9 +38,11 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
+     * @param  mixed ...$args
+     *
      * @return void
      */
-    public function install(): void
+    public function install(...$args): void
     {
         $installedVersion = $this->getInstalledVersion();
         $currentVersion   = Pdk::getAppInfo()->version;
@@ -50,7 +52,7 @@ class InstallerService implements InstallerServiceInterface
         }
 
         if (! $installedVersion) {
-            $this->executeInstallation();
+            $this->executeInstallation(...$args);
         } else {
             $this->migrateUp($currentVersion);
         }
@@ -59,24 +61,38 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
+     * @param  mixed ...$args
+     *
      * @return void
      */
-    public function uninstall(): void
+    public function uninstall(...$args): void
     {
         $installedVersion = $this->getInstalledVersion();
 
         if ($installedVersion) {
+            $this->executeUninstallation(...$args);
             $this->migrateDown();
             $this->settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), null);
         }
     }
 
     /**
+     * @param  mixed ...$args
+     *
      * @return void
      */
-    protected function executeInstallation(): void
+    protected function executeInstallation(...$args): void
     {
         $this->setDefaultSettings();
+    }
+
+    /**
+     * @param  array $args
+     *
+     * @return void
+     */
+    protected function executeUninstallation(...$args): void
+    {
     }
 
     /**

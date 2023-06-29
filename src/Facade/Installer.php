@@ -8,8 +8,8 @@ use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\Base\Facade;
 
 /**
- * @method static void install()
- * @method static void uninstall()
+ * @method static void install(...$args)
+ * @method static void uninstall(...$args)
  * @implements InstallerServiceInterface
  */
 final class Installer extends Facade
