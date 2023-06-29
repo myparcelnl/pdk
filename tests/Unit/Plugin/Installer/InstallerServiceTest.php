@@ -152,3 +152,39 @@ it('passes through arbitrary arguments', function ($_, array $result) {
         ],
     ],
 ]);
+
+it('does not install if version is equal', function () {
+    /** @var SettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+    $createSettingsKey   = Pdk::get('createSettingsKey');
+
+    // Set the installed version to 1.2.0:
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($createSettingsKey('label.description'), 'description');
+
+    Installer::install();
+
+    expect($settingsRepository->get($installedVersionKey))
+        ->toEqual('1.2.0')
+        ->and($settingsRepository->get($createSettingsKey('label.description')))
+        ->toBe('description');
+});
+
+it('does not uninstall if is not installed', function () {
+    /** @var SettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+    $createSettingsKey   = Pdk::get('createSettingsKey');
+
+    // Set the installed version to null:
+    $settingsRepository->store($installedVersionKey, null);
+    $settingsRepository->store($createSettingsKey('label.description'), 'description');
+
+    Installer::uninstall();
+
+    expect($settingsRepository->get($installedVersionKey))
+        ->toEqual(null)
+        ->and($settingsRepository->get($createSettingsKey('label.description')))
+        ->toBe('description');
+});
