@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.0](https://github.com/myparcelnl/pdk/compare/v2.5.2...v2.6.0) (2023-06-29)
+
+
+### :sparkles: New Features
+
+* **installer:** allow passing arbitrary arguments to install and uninstall methods ([#112](https://github.com/myparcelnl/pdk/issues/112)) ([b91fbb3](https://github.com/myparcelnl/pdk/commit/b91fbb3535886c7741ec6674a1c0c23266331142))
+
 ## [2.5.2](https://github.com/myparcelnl/pdk/compare/v2.5.1...v2.5.2) (2023-06-28)
 
 
