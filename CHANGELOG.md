@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.1](https://github.com/myparcelnl/pdk/compare/v2.6.0...v2.6.1) (2023-06-29)
+
+
+### :bug: Bug Fixes
+
+* **installer:** move logic that updates installed version into an overridable method ([8dc3342](https://github.com/myparcelnl/pdk/commit/8dc3342f6e4bbdeb5614fe3dd5e05775896be76f))
+
 ## [2.6.0](https://github.com/myparcelnl/pdk/compare/v2.5.2...v2.6.0) (2023-06-29)
 
 
