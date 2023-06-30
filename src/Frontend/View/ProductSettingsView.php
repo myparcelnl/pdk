@@ -79,12 +79,12 @@ class ProductSettingsView extends AbstractSettingsView
              * Export options.
              */
             new SettingsDivider($this->getSettingKey('export_options')),
-            new InteractiveElement(ProductSettings::EXPORT_AGE_CHECK, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::EXPORT_INSURANCE, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRISTATE),
-            new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRISTATE),
+            new InteractiveElement(ProductSettings::EXPORT_AGE_CHECK, Components::INPUT_TRI_STATE),
+            new InteractiveElement(ProductSettings::EXPORT_INSURANCE, Components::INPUT_TRI_STATE),
+            new InteractiveElement(ProductSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TRI_STATE),
+            new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRI_STATE),
+            new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRI_STATE),
+            new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRI_STATE),
         ]);
     }
 

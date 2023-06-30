@@ -24,5 +24,5 @@ final class Components
     public const INPUT_TEXTAREA       = 'TextArea';
     public const INPUT_TIME           = 'TimeInput';
     public const INPUT_TOGGLE         = 'ToggleInput';
-    public const INPUT_TRISTATE       = 'TristateInput';
+    public const INPUT_TRI_STATE      = 'TriStateInput';
 }
