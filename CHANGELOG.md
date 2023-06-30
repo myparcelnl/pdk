@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.2](https://github.com/myparcelnl/pdk/compare/v2.6.1...v2.6.2) (2023-06-30)
+
+
+### :bug: Bug Fixes
+
+* **product-settings:** fix product settings view not showing ([#109](https://github.com/myparcelnl/pdk/issues/109)) ([c420fd0](https://github.com/myparcelnl/pdk/commit/c420fd0ad28432a19eda673034afc5780f062635))
+
 ## [2.6.1](https://github.com/myparcelnl/pdk/compare/v2.6.0...v2.6.1) (2023-06-29)
 
 
