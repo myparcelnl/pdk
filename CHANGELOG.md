@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.3](https://github.com/myparcelnl/pdk/compare/v2.6.2...v2.6.3) (2023-07-03)
+
+
+### :bug: Bug Fixes
+
+* **views:** rename tristate to tri-state ([f8ae8c4](https://github.com/myparcelnl/pdk/commit/f8ae8c46807014f8cbb0bcb0c03f739c42d3a61c))
+
 ## [2.6.2](https://github.com/myparcelnl/pdk/compare/v2.6.1...v2.6.2) (2023-06-30)
 
 
