@@ -31,11 +31,15 @@ it('casts attributes to primitives', function ($property, $assertion) {
 
     expect($model[$property])->{$assertion}();
 })->with([
-    'String to int'   => ['stringInt', 'toBeInt'],
-    'String to bool'  => ['stringBool', 'toBeBool'],
-    'Int to string'   => ['intString', 'toBeString'],
-    'Int to float'    => ['intFloat', 'toBeFloat'],
-    'String to float' => ['stringFloat', 'toBeFloat'],
+    'String to int'        => ['stringInt', 'toBeInt'],
+    'String true to int'   => ['stringTrueInt', 'toBeInt'],
+    'String false to int'  => ['stringFalseInt', 'toBeInt'],
+    'String to bool'       => ['stringBool', 'toBeBool'],
+    'String true to bool'  => ['stringTrueBool', 'toBeBool'],
+    'String false to bool' => ['stringFalseBool', 'toBeBool'],
+    'Int to string'        => ['intString', 'toBeString'],
+    'Int to float'         => ['intFloat', 'toBeFloat'],
+    'String to float'      => ['stringFloat', 'toBeFloat'],
 ]);
 
 it('casts everything properly to array', function () {

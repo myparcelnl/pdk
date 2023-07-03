@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 class MockCastingModel extends Model
 {
     protected $attributes = [
-        'collection'     => [
+        'collection'        => [
             [
                 'value' => 1,
             ],
@@ -19,36 +19,44 @@ class MockCastingModel extends Model
                 'value' => 2,
             ],
         ],
-        'object'         => ['property' => 'hello'],
-        'date'           => '2022-01-10',
-        'datetime'       => '2022-01-10 14:03:00',
-        'date_from_arr'  => [
+        'object'            => ['property' => 'hello'],
+        'date'              => '2022-01-10',
+        'datetime'          => '2022-01-10 14:03:00',
+        'date_from_arr'     => [
             'date'          => '2022-12-25 17:02:32.000000',
             'timezone_type' => 3,
             'timezone'      => 'Europe/Amsterdam',
         ],
-        'timestamp'      => '2022-01-10 14:03:00',
-        'string_int'     => '4',
-        'string_bool'    => 'true',
-        'int_string'     => 1234,
-        'int_float'      => 2,
-        'string_float'   => '2',
-        'without_a_cast' => 'whatever',
-        'null'           => null,
+        'timestamp'         => '2022-01-10 14:03:00',
+        'string_bool'       => 'true',
+        'string_false_bool' => 'false',
+        'string_false_int'  => 'false',
+        'string_int'        => '4',
+        'string_true_bool'  => 'true',
+        'string_true_int'   => 'true',
+        'int_string'        => 1234,
+        'int_float'         => 2,
+        'string_float'      => '2',
+        'without_a_cast'    => 'whatever',
+        'null'              => null,
     ];
 
     protected $casts      = [
-        'collection'    => Collection::class,
-        'object'        => MockCastModel::class,
-        'date'          => 'date',
-        'datetime'      => 'datetime',
-        'date_from_arr' => DateTime::class,
-        'timestamp'     => 'timestamp',
-        'string_int'    => 'int',
-        'string_bool'   => 'bool',
-        'int_string'    => 'string',
-        'int_float'     => 'float',
-        'string_float'  => 'float',
-        'null'          => 'string',
+        'collection'        => Collection::class,
+        'object'            => MockCastModel::class,
+        'date'              => 'date',
+        'datetime'          => 'datetime',
+        'date_from_arr'     => DateTime::class,
+        'timestamp'         => 'timestamp',
+        'string_bool'       => 'bool',
+        'string_false_bool' => 'bool',
+        'string_false_int'  => 'int',
+        'string_int'        => 'int',
+        'string_true_bool'  => 'bool',
+        'string_true_int'   => 'int',
+        'int_string'        => 'string',
+        'int_float'         => 'float',
+        'string_float'      => 'float',
+        'null'              => 'string',
     ];
 }

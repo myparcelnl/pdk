@@ -491,7 +491,7 @@ trait HasAttributes
 
         switch ($castType) {
             case 'int':
-                $value = (int) $value;
+                $value = $this->toInt($value);
                 break;
             case 'float':
                 $value = $this->fromFloat($value);
@@ -500,7 +500,7 @@ trait HasAttributes
                 $value = (string) $value;
                 break;
             case 'bool':
-                $value = (bool) $value;
+                $value = $this->toBool($value);
                 break;
             case 'date':
                 $value = $this->asDate($value);
@@ -874,5 +874,43 @@ trait HasAttributes
         } catch (Throwable $e) {
             throw new InvalidCastException($key, $class, $arguments, $e);
         }
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return bool
+     */
+    private function isStringBoolean($value): bool
+    {
+        return in_array($value, ['true', 'false'], true);
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return bool
+     */
+    private function toBool($value): bool
+    {
+        if ($this->isStringBoolean($value)) {
+            return 'true' === $value;
+        }
+
+        return (bool) $value;
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return int
+     */
+    private function toInt($value): int
+    {
+        if ($this->isStringBoolean($value)) {
+            return (int) $this->toBool($value);
+        }
+
+        return (int) $value;
     }
 }
