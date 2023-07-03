@@ -111,10 +111,10 @@ class Carrier extends Model
         $repository = Pdk::get(CarrierRepositoryInterface::class);
 
         if (isset($data['externalIdentifier']) && (! isset($data['name'], $data['id']))) {
-            [$name, $subscriptionId] = explode(':', $data['externalIdentifier']);
+            $parts = explode(':', $data['externalIdentifier']);
 
-            $data['name']           = $name;
-            $data['subscriptionId'] = $subscriptionId;
+            $data['name']           = $parts[0] ?? null;
+            $data['subscriptionId'] = $parts[1] ?? null;
         }
 
         if (! isset($data['name'], $data['id'])) {
