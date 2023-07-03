@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.5](https://github.com/myparcelnl/pdk/compare/v2.6.4...v2.6.5) (2023-07-03)
+
+
+### :bug: Bug Fixes
+
+* **deps:** always use latest v5 of myparcelnl/delivery-options ([5386fba](https://github.com/myparcelnl/pdk/commit/5386fba683f759b6a6f1fd022daace0525c10c83))
+
 ## [2.6.4](https://github.com/myparcelnl/pdk/compare/v2.6.3...v2.6.4) (2023-07-03)
 
 
