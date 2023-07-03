@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.4](https://github.com/myparcelnl/pdk/compare/v2.6.3...v2.6.4) (2023-07-03)
+
+
+### :bug: Bug Fixes
+
+* **carrier:** fix undefined index error ([75bbdbf](https://github.com/myparcelnl/pdk/commit/75bbdbff40601bccc72691f64216ef75b4383425))
+
 ## [2.6.3](https://github.com/myparcelnl/pdk/compare/v2.6.2...v2.6.3) (2023-07-03)
 
 
