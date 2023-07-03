@@ -1114,7 +1114,7 @@
         },
         {
             "name": "exportAgeCheck",
-            "$component": "TristateInput",
+            "$component": "TriStateInput",
             "$slot": null,
             "$wrapper": null,
             "label": "settings_product_export_age_check",
@@ -1122,7 +1122,7 @@
         },
         {
             "name": "exportInsurance",
-            "$component": "TristateInput",
+            "$component": "TriStateInput",
             "$slot": null,
             "$wrapper": null,
             "label": "settings_product_export_insurance",
@@ -1130,7 +1130,7 @@
         },
         {
             "name": "exportLargeFormat",
-            "$component": "TristateInput",
+            "$component": "TriStateInput",
             "$slot": null,
             "$wrapper": null,
             "label": "settings_product_export_large_format",
@@ -1138,7 +1138,7 @@
         },
         {
             "name": "exportOnlyRecipient",
-            "$component": "TristateInput",
+            "$component": "TriStateInput",
             "$slot": null,
             "$wrapper": null,
             "label": "settings_product_export_only_recipient",
@@ -1146,7 +1146,7 @@
         },
         {
             "name": "exportSignature",
-            "$component": "TristateInput",
+            "$component": "TriStateInput",
             "$slot": null,
             "$wrapper": null,
             "label": "settings_product_export_signature",
@@ -1154,7 +1154,7 @@
         },
         {
             "name": "exportReturn",
-            "$component": "TristateInput",
+            "$component": "TriStateInput",
             "$slot": null,
             "$wrapper": null,
             "label": "settings_product_export_return",
