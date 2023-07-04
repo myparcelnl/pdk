@@ -96,8 +96,10 @@ class ExportOrderAction extends AbstractOrderAction
                         $order->shippingAddress->phone = null;
                         $order->shippingAddress->email = null;
 
-                        $order->billingAddress->phone = null;
-                        $order->billingAddress->email = null;
+                        if ($order->billingAddress) {
+                            $order->billingAddress->phone = null;
+                            $order->billingAddress->email = null;
+                        }
                     }
 
                     return Order::fromPdkOrder($order);
