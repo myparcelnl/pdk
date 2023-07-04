@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 /**
- * @property bool        $apiLogging
  * @property bool        $barcodeInNote
  * @property null|string $barcodeInNoteTitle
  * @property bool        $conceptShipments
@@ -25,7 +24,6 @@ class GeneralSettings extends AbstractSettingsModel
     /**
      * Settings in this category.
      */
-    public const API_LOGGING                  = 'apiLogging';
     public const BARCODE_IN_NOTE              = 'barcodeInNote';
     public const BARCODE_IN_NOTE_TITLE        = 'barcodeInNoteTitle';
     public const CONCEPT_SHIPMENTS            = 'conceptShipments';
@@ -39,7 +37,6 @@ class GeneralSettings extends AbstractSettingsModel
     protected $attributes = [
         'id' => self::ID,
 
-        self::API_LOGGING                  => false,
         self::BARCODE_IN_NOTE              => false,
         self::BARCODE_IN_NOTE_TITLE        => null,
         self::CONCEPT_SHIPMENTS            => true,
@@ -52,7 +49,6 @@ class GeneralSettings extends AbstractSettingsModel
     ];
 
     protected $casts      = [
-        self::API_LOGGING                  => 'bool',
         self::BARCODE_IN_NOTE              => 'bool',
         self::BARCODE_IN_NOTE_TITLE        => 'string',
         self::CONCEPT_SHIPMENTS            => 'bool',
