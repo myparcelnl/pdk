@@ -16,8 +16,10 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
+use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
@@ -68,6 +70,7 @@ class MockPdkConfig
             BackendEndpointServiceInterface::class      => autowire(MockBackendEndpointService::class),
             ClientAdapterInterface::class               => autowire(Guzzle7ClientAdapter::class),
             ConfigInterface::class                      => autowire(MockConfig::class),
+            CronServiceInterface::class                 => autowire(MockCronService::class),
             FrontendEndpointServiceInterface::class     => autowire(MockFrontendEndpointService::class),
             LanguageServiceInterface::class             => autowire(MockLanguageService::class),
             LoggerInterface::class                      => autowire(MockLogger::class),
@@ -78,6 +81,7 @@ class MockPdkConfig
             PdkOrderRepositoryInterface::class          => autowire(MockPdkOrderRepository::class),
             PdkProductRepositoryInterface::class        => autowire(MockPdkProductRepository::class),
             PdkShippingMethodRepositoryInterface::class => autowire(MockPdkShippingMethodRepository::class),
+            PdkWebhooksRepositoryInterface::class       => autowire(MockPdkWebhooksRepository::class),
             SettingsRepositoryInterface::class          => autowire(MockSettingsRepository::class),
             StorageInterface::class                     => autowire(MemoryCacheStorage::class),
             TaxServiceInterface::class                  => autowire(MockTaxService::class),

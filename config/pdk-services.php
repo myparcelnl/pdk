@@ -18,6 +18,8 @@ use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Service\InstallerService;
 use MyParcelNL\Pdk\App\Installer\Service\MigrationService;
+use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
+use MyParcelNL\Pdk\App\Webhook\PdkWebhookManager;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
@@ -157,4 +159,9 @@ return [
     PdkAccountRepositoryInterface::class       => factory(function () {
         return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
     }),
+
+    /**
+     * Handles executing webhooks.
+     */
+    PdkWebhookManagerInterface::class          => autowire(PdkWebhookManager::class),
 ];
