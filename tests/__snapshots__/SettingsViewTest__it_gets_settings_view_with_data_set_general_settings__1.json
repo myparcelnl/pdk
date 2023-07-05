@@ -5,12 +5,35 @@
     "description": "settings_view_general_description",
     "elements": [
         {
-            "name": "apiLogging",
+            "name": "orderMode",
             "$component": "ToggleInput",
             "$slot": null,
             "$wrapper": null,
-            "label": "settings_general_api_logging",
-            "description": "settings_general_api_logging_description"
+            "subtext": "hint_enable_order_mode_backoffice",
+            "$readOnlyWhen": {
+                "orderMode": false
+            },
+            "label": "settings_general_order_mode",
+            "description": "settings_general_order_mode_description"
+        },
+        {
+            "name": "conceptShipments",
+            "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
+            "$visibleWhen": {
+                "orderMode": false
+            },
+            "label": "settings_general_concept_shipments",
+            "description": "settings_general_concept_shipments_description"
+        },
+        {
+            "name": "processDirectly",
+            "$component": "ToggleInput",
+            "$slot": null,
+            "$wrapper": null,
+            "label": "settings_general_process_directly",
+            "description": "settings_general_process_directly_description"
         },
         {
             "name": "shareCustomerInformation",
@@ -21,20 +44,12 @@
             "description": "settings_general_share_customer_information_description"
         },
         {
-            "name": "conceptShipments",
-            "$component": "ToggleInput",
+            "$component": "SettingsDivider",
             "$slot": null,
-            "$wrapper": null,
-            "label": "settings_general_concept_shipments",
-            "description": "settings_general_concept_shipments_description"
-        },
-        {
-            "name": "orderMode",
-            "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
-            "label": "settings_general_order_mode",
-            "description": "settings_general_order_mode_description"
+            "$wrapper": false,
+            "content": "settings_general_track_trace_description",
+            "heading": "settings_general_track_trace_title",
+            "level": 2
         },
         {
             "name": "trackTraceInEmail",
@@ -53,6 +68,14 @@
             "description": "settings_general_track_trace_in_account_description"
         },
         {
+            "$component": "SettingsDivider",
+            "$slot": null,
+            "$wrapper": false,
+            "content": "settings_general_order_notes_description",
+            "heading": "settings_general_order_notes_title",
+            "level": 2
+        },
+        {
             "name": "barcodeInNote",
             "$component": "ToggleInput",
             "$slot": null,
@@ -67,14 +90,6 @@
             "$wrapper": null,
             "label": "settings_general_barcode_in_note_title",
             "description": "settings_general_barcode_in_note_title_description"
-        },
-        {
-            "name": "processDirectly",
-            "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
-            "label": "settings_general_process_directly",
-            "description": "settings_general_process_directly_description"
         }
     ],
     "children": null
