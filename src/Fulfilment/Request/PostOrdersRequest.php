@@ -86,7 +86,6 @@ class PostOrdersRequest extends Request
      * @param  null|\MyParcelNL\Pdk\Base\Model\Address $address
      *
      * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getAddress(?Address $address): ?array
     {
@@ -94,19 +93,18 @@ class PostOrdersRequest extends Request
             return null;
         }
 
-        $addressSnakeCase = $address->toSnakeCaseArray();
-
-        return array_reduce(
-            array_keys($addressSnakeCase),
-            static function (array $carry, $key) use ($addressSnakeCase) {
-                if (null !== $addressSnakeCase[$key] && ! in_array($key, ['full_street', 'street_additional_info'])) {
-                    $carry[$key] = (string) $addressSnakeCase[$key];
-                }
-
-                return $carry;
-            },
-            []
-        );
+        return [
+            'street'      => implode(' ', [$address->address1, $address->address2]) ?? '',
+            'city'        => $address->city ?? '',
+            'area'        => $address->area ?? '',
+            'company'     => $address->company ?? '',
+            'cc'          => $address->cc ?? '',
+            'email'       => $address->email ?? '',
+            'person'      => $address->person ?? '',
+            'phone'       => $address->phone ?? '',
+            'postal_code' => $address->postalCode ?? '',
+            'region'      => $address->region ?? '',
+        ];
     }
 
     /**
@@ -115,13 +113,21 @@ class PostOrdersRequest extends Request
     private function getShipment(Order $order): ?array
     {
         $shipment                     = $order->shipment;
-        $shipment->recipient          = $this->getAddress($shipment->recipient);
-        $shipment->pickup             = $this->getAddress($shipment->pickup);
         $shipment->options->insurance = ['amount' => $shipment->options->insurance, 'currency' => 'EUR'];
         $shipment->options            = array_map(static function ($item) {
             return is_bool($item) ? (int) $item : $item;
         }, $shipment->options->toSnakeCaseArray());
 
-        return $shipment->toSnakeCaseArray() ?: null;
+        return [
+            'carrier'             => $shipment->carrier,
+            'customs_declaration' => $shipment->customsDeclaration ? $shipment->customsDeclaration->toSnakeCaseArray()
+                : null,
+            'options'             => $shipment->options,
+            'pickup'              => $shipment->pickup ? $shipment->pickup->toSnakeCaseArray() : null,
+            'recipient'           => $this->getAddress($shipment->recipient),
+            'physical_properties' => $shipment->physicalProperties ? $shipment->physicalProperties->toSnakeCaseArray()
+                : null,
+            'drop_off_point'      => $shipment->dropOffPoint ? $shipment->dropOffPoint->toSnakeCaseArray() : null,
+        ];
     }
 }
