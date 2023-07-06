@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
+use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
@@ -21,6 +22,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportOrderAction extends AbstractOrderAction
 {
+    /**
+     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository
+     */
+    private $orderNotesRepository;
+
     /**
      * @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository
      */
@@ -32,10 +38,12 @@ class ExportOrderAction extends AbstractOrderAction
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
+        OrderNotesRepository        $orderNotesRepository,
         ShipmentRepository          $shipmentRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->shipmentRepository = $shipmentRepository;
+        $this->orderNotesRepository = $orderNotesRepository;
+        $this->shipmentRepository   = $shipmentRepository;
     }
 
     /**
@@ -90,7 +98,13 @@ class ExportOrderAction extends AbstractOrderAction
 
         /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $orderRepository */
         $orderRepository = Pdk::get(OrderRepository::class);
-        $orderRepository->postOrders($fulfilmentOrders);
+        $orderCollection = $orderRepository->postOrders($fulfilmentOrders);
+
+        $orderCollection->each(function (Order $order) use ($orders) {
+            if (! $order->orderNotes->isEmpty()) {
+                $this->orderNotesRepository->postOrderNotes($order->orderNotes, $order->uuid);
+            }
+        });
 
         return $orders;
     }

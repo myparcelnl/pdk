@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
+use ReturnTypeWillChange;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -157,6 +158,7 @@ class Model implements Arrayable, ArrayAccess
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->getAttribute($offset);

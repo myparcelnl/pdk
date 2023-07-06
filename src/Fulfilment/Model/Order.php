@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 
 /**
@@ -25,6 +26,7 @@ use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
  * @property null|string                                               $language
  * @property null|\DateTime                                            $orderDate
  * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
+ * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $orderNotes
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment            $shipment
  * @property null|string                                               $status
  * @property null|string                                               $type
@@ -47,6 +49,7 @@ class Order extends Model
         'language'                    => null,
         'orderDate'                   => null,
         'orderLines'                  => OrderLineCollection::class,
+        'orderNotes'                  => OrderNoteCollection::class,
         'shipment'                    => null,
         'status'                      => null,
         'type'                        => null,
@@ -68,6 +71,7 @@ class Order extends Model
         'language'                    => 'string',
         'orderDate'                   => 'datetime',
         'orderLines'                  => OrderLineCollection::class,
+        'orderNotes'                  => OrderNoteCollection::class,
         'shipment'                    => Shipment::class,
         'status'                      => 'string',
         'type'                        => 'string',
