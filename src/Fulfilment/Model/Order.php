@@ -114,6 +114,7 @@ class Order extends Model
                         );
                     })
                     ->toArray(),
+                'orderNotes'                  => $pdkOrder->orderNotes,
                 'shipment'                    => $shipment,
                 'price'                       => $pdkOrder->orderPrice,
                 'priceAfterVat'               => $pdkOrder->orderPriceAfterVat,
