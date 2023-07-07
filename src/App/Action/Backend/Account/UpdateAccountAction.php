@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,7 +68,9 @@ class UpdateAccountAction implements ActionInterface
         $body     = json_decode($request->getContent(), true);
         $settings = $body['data']['account_settings'] ?? [];
 
-        $accountSettings = $this->updateAccountSettings($settings);
+        $accountSettings = empty($settings)
+            ? $this->getAccountSettings()
+            : $this->updateAccountSettings($settings);
 
         $this->updateAndSaveAccount($accountSettings);
 
@@ -91,11 +94,26 @@ class UpdateAccountAction implements ActionInterface
     }
 
     /**
-     * @param $settings
+     * @return \MyParcelNL\Pdk\Settings\Model\AccountSettings
+     */
+    protected function getAccountSettings(): AccountSettings
+    {
+        /** @var null|AccountSettings $accountSettings */
+        $accountSettings = $this->pdkSettingsRepository->all()->account;
+
+        if (! $accountSettings) {
+            throw new RuntimeException('Account settings not found');
+        }
+
+        return $accountSettings;
+    }
+
+    /**
+     * @param  array $settings
      *
      * @return \MyParcelNL\Pdk\Settings\Model\AccountSettings
      */
-    protected function updateAccountSettings($settings): AccountSettings
+    protected function updateAccountSettings(array $settings): AccountSettings
     {
         $accountSettings = new AccountSettings($settings);
 
