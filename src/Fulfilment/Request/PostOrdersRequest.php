@@ -66,20 +66,25 @@ class PostOrdersRequest extends Request
      */
     private function encodeOrder(Order $order): array
     {
-        $orderLines = $order->orderLines->reduce(function (array $carry, OrderLine $orderLine) {
-            $orderLineArray = $orderLine->toSnakeCaseArray();
-            unset($orderLineArray['vat']);
-            $carry[] = $orderLineArray;
-
-            return $carry;
-        }, []);
-
         return [
             'external_identifier'           => $order->externalIdentifier,
             'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
             'invoice_address'               => $this->getAddress($order->invoiceAddress),
-            'order_date'                    => $order->orderDate ? $order->orderDate->format('Y-m-d H:i:s') : null,
-            'order_lines'                   => $orderLines,
+            'order_date'                    => $order->orderDate
+                ? $order->orderDate->format('Y-m-d H:i:s')
+                : null,
+            'order_lines'                   => $order->orderLines->reduce(
+                function (array $carry, OrderLine $orderLine) {
+                    $orderLineArray = $orderLine->toSnakeCaseArray();
+
+                    unset($orderLineArray['vat']);
+
+                    $carry[] = $orderLineArray;
+
+                    return $carry;
+                },
+                []
+            ),
             'shipment'                      => $this->getShipment($order),
         ];
     }
@@ -96,10 +101,7 @@ class PostOrdersRequest extends Request
         }
 
         return Utils::filterNull([
-            'street'      => implode(
-                ' ',
-                [$address->address1, $address->address2]
-            ),
+            'street'      => implode(' ', [$address->address1, $address->address2]),
             'city'        => $address->city,
             'area'        => $address->area,
             'company'     => $address->company,
@@ -117,23 +119,34 @@ class PostOrdersRequest extends Request
      */
     private function getShipment(Order $order): ?array
     {
-        /** @var \MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment */
-        $shipment                     = $order->shipment;
-        $shipment->options->insurance = ['amount' => $shipment->options->insurance, 'currency' => 'EUR'];
-        $shipment->options            = array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
-        }, $shipment->options->toSnakeCaseArray());
+        $shipment = $order->shipment;
 
         return [
             'carrier'             => $shipment->carrier,
-            'customs_declaration' => $shipment->customsDeclaration ? $shipment->customsDeclaration->toSnakeCaseArray()
+            'customs_declaration' => $shipment->customsDeclaration
+                ? $shipment->customsDeclaration->toSnakeCaseArray()
                 : null,
-            'options'             => $shipment->options,
-            'pickup'              => $shipment->pickup ? $shipment->pickup->toSnakeCaseArray() : null,
+            'drop_off_point'      => $shipment->dropOffPoint
+                ? $shipment->dropOffPoint->toSnakeCaseArray()
+                : null,
+            'options'             => array_merge(
+                array_map(static function ($item) {
+                    return is_bool($item) ? (int) $item : $item;
+                }, $shipment->options->toSnakeCaseArray()),
+                [
+                    'insurance' => [
+                        'amount'   => $shipment->options->insurance,
+                        'currency' => 'EUR',
+                    ],
+                ]
+            ),
+            'physical_properties' => $shipment->physicalProperties
+                ? $shipment->physicalProperties->toSnakeCaseArray()
+                : null,
+            'pickup'              => $shipment->pickup
+                ? $shipment->pickup->toSnakeCaseArray()
+                : null,
             'recipient'           => $this->getAddress($shipment->recipient),
-            'physical_properties' => $shipment->physicalProperties ? $shipment->physicalProperties->toSnakeCaseArray()
-                : null,
-            'drop_off_point'      => $shipment->dropOffPoint ? $shipment->dropOffPoint->toSnakeCaseArray() : null,
         ];
     }
 }
