@@ -25,13 +25,7 @@ class PostOrdersResponse extends ApiResponseWithBody
 
     protected function parseResponseBody(): void
     {
-        $parsedBody      = json_decode($this->getBody(), true);
-        $orderCollection = new OrderCollection();
-
-        foreach ($parsedBody['data']['orders'] as $order) {
-            $orderCollection->push($order);
-        }
-
-        $this->orderCollection = $orderCollection;
+        $parsedBody            = json_decode($this->getBody(), true);
+        $this->orderCollection = new OrderCollection($parsedBody['data']['orders']);
     }
 }
