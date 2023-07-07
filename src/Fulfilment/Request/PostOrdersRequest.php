@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Base\Model\Address;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
@@ -69,6 +70,7 @@ class PostOrdersRequest extends Request
             $orderLineArray = $orderLine->toSnakeCaseArray();
             unset($orderLineArray['vat']);
             $carry[] = $orderLineArray;
+
             return $carry;
         }, []);
 
@@ -83,28 +85,31 @@ class PostOrdersRequest extends Request
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Base\Model\Address $address
+     * @param  null|\MyParcelNL\Pdk\Base\Model\ContactDetails $address
      *
      * @return null|array
      */
-    private function getAddress(?Address $address): ?array
+    private function getAddress(?ContactDetails $address): ?array
     {
         if (! $address) {
             return null;
         }
 
-        return [
-            'street'      => implode(' ', [$address->address1, $address->address2]) ?? '',
-            'city'        => $address->city ?? '',
-            'area'        => $address->area ?? '',
-            'company'     => $address->company ?? '',
-            'cc'          => $address->cc ?? '',
-            'email'       => $address->email ?? '',
-            'person'      => $address->person ?? '',
-            'phone'       => $address->phone ?? '',
-            'postal_code' => $address->postalCode ?? '',
-            'region'      => $address->region ?? '',
-        ];
+        return Utils::filterNull([
+            'street'      => implode(
+                ' ',
+                [$address->address1, $address->address2]
+            ),
+            'city'        => $address->city,
+            'area'        => $address->area,
+            'company'     => $address->company,
+            'cc'          => $address->cc,
+            'email'       => $address->email,
+            'person'      => $address->person,
+            'phone'       => $address->phone,
+            'postal_code' => $address->postalCode,
+            'region'      => $address->region,
+        ]);
     }
 
     /**
@@ -112,6 +117,7 @@ class PostOrdersRequest extends Request
      */
     private function getShipment(Order $order): ?array
     {
+        /** @var \MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment */
         $shipment                     = $order->shipment;
         $shipment->options->insurance = ['amount' => $shipment->options->insurance, 'currency' => 'EUR'];
         $shipment->options            = array_map(static function ($item) {
