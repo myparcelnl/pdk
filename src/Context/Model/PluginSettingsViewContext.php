@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\CarrierSettingsView;
 use MyParcelNL\Pdk\Frontend\View\CheckoutSettingsView;
@@ -45,6 +46,10 @@ class PluginSettingsViewContext implements Arrayable
      */
     public function __construct()
     {
+        if (! AccountSettings::getAccount()) {
+            return;
+        }
+
         foreach (self::ID_VIEW_MAP as $id => $viewClass) {
             /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
             $view = Pdk::get($viewClass);
