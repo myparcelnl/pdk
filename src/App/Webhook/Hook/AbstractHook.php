@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
 use MyParcelNL\Pdk\App\Webhook\Contract\HookInterface;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractHook implements HookInterface
@@ -16,6 +17,7 @@ abstract class AbstractHook implements HookInterface
      */
     public function handle(Request $request): void
     {
+        throw new RuntimeException('Not implemented');
     }
 
     /**

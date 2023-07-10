@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Webhook;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\App\Api\Contract\PdkApiInterface;
+use MyParcelNL\Pdk\App\Webhook\Contract\HookInterface;
+use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class PdkWebhook implements PdkApiInterface
+class PdkWebhookManager implements PdkWebhookManagerInterface
 {
+    private const CONTEXT_WEBHOOK = 'webhook';
+
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CronServiceInterface
      */
@@ -40,20 +42,23 @@ class PdkWebhook implements PdkApiInterface
     }
 
     /**
-     * @param  mixed  $input
-     * @param  string $context
+     * @param  Request $input
+     * @param  string  $context
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function call($input, string $context = 'webhook'): Response
+    public function call($input, string $context = self::CONTEXT_WEBHOOK): Response
     {
-        if (! $input instanceof Request) {
-            throw new InvalidArgumentException('Input must be an instance of ' . Request::class);
+        $response = new Response(null, Response::HTTP_ACCEPTED);
+
+        if (self::CONTEXT_WEBHOOK !== $context || ! $input instanceof Request) {
+            Logger::error('Webhook called with invalid input', compact('input', 'context'));
+            return $response;
         }
 
         $this->cronService->dispatch([$this, 'processWebhook'], $input);
 
-        return new JsonResponse(null, 202);
+        return $response;
     }
 
     /**
@@ -75,7 +80,8 @@ class PdkWebhook implements PdkApiInterface
 
         foreach ($this->getHooks($request) as $hook) {
             try {
-                $hook = $this->resolveHook($hook['event'] ?? null);
+                $hook               = $this->resolveHook($hook['event'] ?? null);
+                $logContext['hook'] = get_class($hook);
 
                 if (! $hook->validate($request)) {
                     Logger::debug('Webhook skipped', $logContext);
@@ -94,9 +100,9 @@ class PdkWebhook implements PdkApiInterface
     /**
      * @param  string $event
      *
-     * @return mixed
+     * @return \MyParcelNL\Pdk\App\Webhook\Contract\HookInterface
      */
-    public function resolveHook(string $event)
+    protected function resolveHook(string $event): HookInterface
     {
         $supportedWebhooks = Config::get('webhooks');
         $hookClass         = Arr::get($supportedWebhooks, $event);

@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
-class ShipmentStatusChangeWebhook extends AbstractHook
+final class ShipmentStatusChangeWebhook extends AbstractHook
 {
 }
