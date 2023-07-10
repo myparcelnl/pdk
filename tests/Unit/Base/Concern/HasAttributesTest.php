@@ -31,18 +31,22 @@ it('casts attributes to primitives', function ($property, $assertion) {
 
     expect($model[$property])->{$assertion}();
 })->with([
-    'String to int'   => ['stringInt', 'toBeInt'],
-    'String to bool'  => ['stringBool', 'toBeBool'],
-    'Int to string'   => ['intString', 'toBeString'],
-    'Int to float'    => ['intFloat', 'toBeFloat'],
-    'String to float' => ['stringFloat', 'toBeFloat'],
+    'String to int'        => ['stringInt', 'toBeInt'],
+    'String true to int'   => ['stringTrueInt', 'toBeInt'],
+    'String false to int'  => ['stringFalseInt', 'toBeInt'],
+    'String to bool'       => ['stringBool', 'toBeBool'],
+    'String true to bool'  => ['stringTrueBool', 'toBeBool'],
+    'String false to bool' => ['stringFalseBool', 'toBeBool'],
+    'Int to string'        => ['intString', 'toBeString'],
+    'Int to float'         => ['intFloat', 'toBeFloat'],
+    'String to float'      => ['stringFloat', 'toBeFloat'],
 ]);
 
 it('casts everything properly to array', function () {
     $model = new MockCastingModel();
 
     expect($model->attributesToArray())->toBe([
-        'collection'   => [
+        'collection'      => [
             [
                 'value' => 1,
             ],
@@ -50,20 +54,24 @@ it('casts everything properly to array', function () {
                 'value' => 2,
             ],
         ],
-        'object'       => [
+        'object'          => [
             'property' => 'hello',
         ],
-        'date'         => '2022-01-10 00:00:00',
-        'datetime'     => '2022-01-10 14:03:00',
-        'dateFromArr'  => '2022-12-25 17:02:32',
-        'timestamp'    => 1641823380,
-        'stringInt'    => 4,
-        'stringBool'   => true,
-        'intString'    => '1234',
-        'intFloat'     => 2.0,
-        'stringFloat'  => 2.0,
-        'withoutACast' => 'whatever',
-        'null'         => null,
+        'date'            => '2022-01-10 00:00:00',
+        'datetime'        => '2022-01-10 14:03:00',
+        'dateFromArr'     => '2022-12-25 17:02:32',
+        'timestamp'       => 1641823380,
+        'stringBool'      => true,
+        'stringFalseBool' => false,
+        'stringFalseInt'  => 0,
+        'stringInt'       => 4,
+        'stringTrueBool'  => true,
+        'stringTrueInt'   => 1,
+        'intString'       => '1234',
+        'intFloat'        => 2.0,
+        'stringFloat'     => 2.0,
+        'withoutACast'    => 'whatever',
+        'null'            => null,
     ]);
 });
 
