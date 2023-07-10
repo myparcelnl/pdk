@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.0](https://github.com/myparcelnl/pdk/compare/v2.7.0...v2.8.0) (2023-07-10)
+
+
+### :sparkles: New Features
+
+* **attributes:** convert string true and false to int/bool ([#114](https://github.com/myparcelnl/pdk/issues/114)) ([4ec94ab](https://github.com/myparcelnl/pdk/commit/4ec94abe7cb231c29b9d5dd8bb3702b59cee02da))
+* **webhooks:** add logic to shop update webhooks ([#115](https://github.com/myparcelnl/pdk/issues/115)) ([731ddc2](https://github.com/myparcelnl/pdk/commit/731ddc2aa286d696c9c2ff01d5aa992c240b4ad5))
+
+
+### :bug: Bug Fixes
+
+* **actions:** allow update account without passing new settings ([#118](https://github.com/myparcelnl/pdk/issues/118)) ([0935f35](https://github.com/myparcelnl/pdk/commit/0935f35fc18173f655369a5e083bacf3e3379d79))
+* **fulfilment:** fix validation errors on export ([#117](https://github.com/myparcelnl/pdk/issues/117)) ([2c82b36](https://github.com/myparcelnl/pdk/commit/2c82b36ee353f2721334119aaaefc0ddce854b1e))
+* **settings:** fix error when opening plugin settings without account ([#119](https://github.com/myparcelnl/pdk/issues/119)) ([996c3f5](https://github.com/myparcelnl/pdk/commit/996c3f50656300ecdc4ba00b8d994c68ba74be9b))
+
 ## [2.7.0](https://github.com/myparcelnl/pdk/compare/v2.6.5...v2.7.0) (2023-07-05)
 
 
