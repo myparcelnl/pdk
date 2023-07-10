@@ -20,6 +20,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
  * @property \MyParcelNL\Pdk\Shipment\Model\RetailLocation     $pickup
  * @property \MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
  * @property \MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
+ * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties $physicalProperties
  */
 class Shipment extends Model
 {
