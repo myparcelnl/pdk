@@ -24,7 +24,7 @@ class OrderNotesRepository extends ApiRepository
     public function postOrderNotes(OrderNoteCollection $collection, string $orderId): OrderNoteCollection
     {
         /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
-        $response = $this->api->doRequest(new PostOrderNotesRequest($collection), PostIdsResponse::class);
+        $response = $this->api->doRequest(new PostOrderNotesRequest($collection, $orderId), PostIdsResponse::class);
 
         return $collection;
     }

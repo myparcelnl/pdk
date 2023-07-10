@@ -16,12 +16,19 @@ class PostOrderNotesRequest extends Request
     private $collection;
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
+     * @var string
      */
-    public function __construct(OrderNoteCollection $collection)
+    private $orderId;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
+     * @param  string                                                    $orderId
+     */
+    public function __construct(OrderNoteCollection $collection, string $orderId)
     {
         parent::__construct();
         $this->collection = $collection;
+        $this->orderId    = $orderId;
     }
 
     /**
@@ -54,6 +61,6 @@ class PostOrderNotesRequest extends Request
      */
     public function getPath(): string
     {
-        return '/fulfilment/orders';
+        return '/fulfilment/orders/' . $this->orderId . '/notes';
     }
 }

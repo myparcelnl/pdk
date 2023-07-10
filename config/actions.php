@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdatePluginSettingsAction;
@@ -26,6 +27,7 @@ use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Orders\PostOrderNotesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PrintOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\UpdateOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Settings\UpdatePluginSettingsEndpointRequest;
@@ -170,6 +172,14 @@ return [
         PdkBackendActions::FETCH_WEBHOOKS          => [
             'request' => FetchWebhooksEndpointRequest::class,
             'action'  => FetchWebhooksAction::class,
+        ],
+
+        /**
+         * Post order notes
+         */
+        PdkBackendActions::POST_ORDER_NOTES        => [
+            'request' => PostOrderNotesEndpointRequest::class,
+            'action'  => PostOrderNotesAction::class,
         ],
     ],
 ];

@@ -9,10 +9,11 @@ final class PdkBackendActions
     // Account
     public const UPDATE_ACCOUNT = 'updateAccount';
     // Orders
-    public const EXPORT_ORDERS = 'exportOrders';
-    public const FETCH_ORDERS  = 'fetchOrders';
-    public const PRINT_ORDERS  = 'printOrders';
-    public const UPDATE_ORDERS = 'updateOrders';
+    public const EXPORT_ORDERS    = 'exportOrders';
+    public const FETCH_ORDERS     = 'fetchOrders';
+    public const PRINT_ORDERS     = 'printOrders';
+    public const UPDATE_ORDERS    = 'updateOrders';
+    public const POST_ORDER_NOTES = 'postOrderNotes';
     // Returns
     public const EXPORT_RETURN = 'exportReturn';
     // Shipments

@@ -34,6 +34,7 @@ class ExportOrderAction extends AbstractOrderAction
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository     $orderNotesRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
      */
     public function __construct(
@@ -100,11 +101,7 @@ class ExportOrderAction extends AbstractOrderAction
         $orderRepository = Pdk::get(OrderRepository::class);
         $orderCollection = $orderRepository->postOrders($fulfilmentOrders);
 
-        $orderCollection->each(function (Order $order) use ($orders) {
-            if (! $order->orderNotes->isEmpty()) {
-                $this->orderNotesRepository->postOrderNotes($order->orderNotes, $order->uuid);
-            }
-        });
+
 
         return $orders;
     }
