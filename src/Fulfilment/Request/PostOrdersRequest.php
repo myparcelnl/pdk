@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Base\Model\Address;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
@@ -65,48 +66,52 @@ class PostOrdersRequest extends Request
      */
     private function encodeOrder(Order $order): array
     {
-        $orderLines = $order->orderLines->reduce(function (array $carry, OrderLine $orderLine) {
-            $orderLineArray = $orderLine->toSnakeCaseArray();
-            unset($orderLineArray['vat']);
-            $carry[] = $orderLineArray;
-            return $carry;
-        }, []);
-
         return [
             'external_identifier'           => $order->externalIdentifier,
             'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
             'invoice_address'               => $this->getAddress($order->invoiceAddress),
-            'order_date'                    => $order->orderDate ? $order->orderDate->format('Y-m-d H:i:s') : null,
-            'order_lines'                   => $orderLines,
+            'order_date'                    => $order->orderDate
+                ? $order->orderDate->format('Y-m-d H:i:s')
+                : null,
+            'order_lines'                   => $order->orderLines->reduce(
+                function (array $carry, OrderLine $orderLine) {
+                    $orderLineArray = $orderLine->toSnakeCaseArray();
+
+                    unset($orderLineArray['vat']);
+
+                    $carry[] = $orderLineArray;
+
+                    return $carry;
+                },
+                []
+            ),
             'shipment'                      => $this->getShipment($order),
         ];
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Base\Model\Address $address
+     * @param  null|\MyParcelNL\Pdk\Base\Model\ContactDetails $address
      *
      * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getAddress(?Address $address): ?array
+    private function getAddress(?ContactDetails $address): ?array
     {
         if (! $address) {
             return null;
         }
 
-        $addressSnakeCase = $address->toSnakeCaseArray();
-
-        return array_reduce(
-            array_keys($addressSnakeCase),
-            static function (array $carry, $key) use ($addressSnakeCase) {
-                if (null !== $addressSnakeCase[$key] && ! in_array($key, ['full_street', 'street_additional_info'])) {
-                    $carry[$key] = (string) $addressSnakeCase[$key];
-                }
-
-                return $carry;
-            },
-            []
-        );
+        return Utils::filterNull([
+            'street'      => implode(' ', [$address->address1, $address->address2]),
+            'city'        => $address->city,
+            'area'        => $address->area,
+            'company'     => $address->company,
+            'cc'          => $address->cc,
+            'email'       => $address->email,
+            'person'      => $address->person,
+            'phone'       => $address->phone,
+            'postal_code' => $address->postalCode,
+            'region'      => $address->region,
+        ]);
     }
 
     /**
@@ -114,14 +119,34 @@ class PostOrdersRequest extends Request
      */
     private function getShipment(Order $order): ?array
     {
-        $shipment                     = $order->shipment;
-        $shipment->recipient          = $this->getAddress($shipment->recipient);
-        $shipment->pickup             = $this->getAddress($shipment->pickup);
-        $shipment->options->insurance = ['amount' => $shipment->options->insurance, 'currency' => 'EUR'];
-        $shipment->options            = array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
-        }, $shipment->options->toSnakeCaseArray());
+        $shipment = $order->shipment;
 
-        return $shipment->toSnakeCaseArray() ?: null;
+        return [
+            'carrier'             => $shipment->carrier,
+            'customs_declaration' => $shipment->customsDeclaration
+                ? $shipment->customsDeclaration->toSnakeCaseArray()
+                : null,
+            'drop_off_point'      => $shipment->dropOffPoint
+                ? $shipment->dropOffPoint->toSnakeCaseArray()
+                : null,
+            'options'             => array_merge(
+                array_map(static function ($item) {
+                    return is_bool($item) ? (int) $item : $item;
+                }, $shipment->options->toSnakeCaseArray()),
+                [
+                    'insurance' => [
+                        'amount'   => $shipment->options->insurance,
+                        'currency' => 'EUR',
+                    ],
+                ]
+            ),
+            'physical_properties' => $shipment->physicalProperties
+                ? $shipment->physicalProperties->toSnakeCaseArray()
+                : null,
+            'pickup'              => $shipment->pickup
+                ? $shipment->pickup->toSnakeCaseArray()
+                : null,
+            'recipient'           => $this->getAddress($shipment->recipient),
+        ];
     }
 }
