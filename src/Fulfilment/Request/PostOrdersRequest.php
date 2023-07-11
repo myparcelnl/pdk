@@ -129,16 +129,18 @@ class PostOrdersRequest extends Request
             'drop_off_point'      => $shipment->dropOffPoint
                 ? $shipment->dropOffPoint->toSnakeCaseArray()
                 : null,
-            'options'             => array_merge(
-                array_map(static function ($item) {
-                    return is_bool($item) ? (int) $item : $item;
-                }, $shipment->options->toSnakeCaseArray()),
-                [
-                    'insurance' => [
-                        'amount'   => $shipment->options->insurance,
-                        'currency' => 'EUR',
-                    ],
-                ]
+            'options'             => Utils::filterNull(
+                array_merge(
+                    array_map(static function ($item) {
+                        return is_bool($item) ? (int) $item : $item;
+                    }, $shipment->options->toSnakeCaseArray()),
+                    [
+                        'insurance' => [
+                            'amount'   => $shipment->options->insurance,
+                            'currency' => 'EUR',
+                        ],
+                    ]
+                )
             ),
             'physical_properties' => $shipment->physicalProperties
                 ? $shipment->physicalProperties->toSnakeCaseArray()
