@@ -15,7 +15,7 @@ class OrderNote extends Model
 {
     protected $attributes = [
         'note'   => null,
-        'author' => 1,
+        'author' => null,
     ];
 
     protected $casts      = [

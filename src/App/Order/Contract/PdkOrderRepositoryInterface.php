@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Order\Contract;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 
 interface PdkOrderRepositoryInterface
 {
@@ -30,4 +31,9 @@ interface PdkOrderRepositoryInterface
      * Update order data in bulk.
      */
     public function updateMany(PdkOrderCollection $collection): PdkOrderCollection;
+
+    /**
+     * Get order notes.
+     */
+    public function getOrderNotes(string $externalIdentifier): OrderNoteCollection;
 }

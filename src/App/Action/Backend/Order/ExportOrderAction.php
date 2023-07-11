@@ -101,7 +101,12 @@ class ExportOrderAction extends AbstractOrderAction
         $orderRepository = Pdk::get(OrderRepository::class);
         $orderCollection = $orderRepository->postOrders($fulfilmentOrders);
 
+        $orders->updateFulfilmentIdentifier($orderCollection);
 
+        $orderCollection->each( static function ( Order $order ) {
+            $order->orderNotes = $this->pdkOrderRepository->getOrderNotes($order->externalIdentifier);
+            $this->orderNotesRepository->postOrderNotes($order->orderNotes, $order->uuid);
+        } );
 
         return $orders;
     }

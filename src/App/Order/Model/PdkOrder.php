@@ -27,6 +27,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress                $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection    $shipments
  * @property null|\DateTimeImmutable                                        $orderDate
+ * @property null|string                                                    $fulfilmentIdentifier
  * @property bool                                                           $exported
  * @property int                                                            $shipmentPrice
  * @property int                                                            $shipmentPriceAfterVat
@@ -66,17 +67,22 @@ class PdkOrder extends Model implements StorableArrayable
         'customsDeclaration' => null,
         'physicalProperties' => PhysicalProperties::class,
 
-        'orderNotes' => OrderNoteCollection::class,
+        'orderNotes'           => OrderNoteCollection::class,
 
         /**
          * Timestamp of when the order was placed.
          */
-        'orderDate'  => null,
+        'orderDate'            => null,
+
+        /**
+         * The identifier of a fulfilment order.
+         */
+        'fulfilmentIdentifier' => null,
 
         /**
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
          */
-        'exported'   => false,
+        'exported'             => false,
 
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
@@ -106,6 +112,7 @@ class PdkOrder extends Model implements StorableArrayable
         'orderNotes'         => OrderNoteCollection::class,
 
         'orderDate'             => 'datetime',
+        'fulfilmentIdentifier'  => 'string',
         'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
@@ -189,8 +196,9 @@ class PdkOrder extends Model implements StorableArrayable
     public function toStorableArray(): array
     {
         return [
-            'exported'        => $this->exported,
-            'deliveryOptions' => $this->deliveryOptions->toArrayWithoutNull(),
+            'exported'             => $this->exported,
+            'deliveryOptions'      => $this->deliveryOptions->toArrayWithoutNull(),
+            'fulfilmentIdentifier' => $this->fulfilmentIdentifier,
         ];
     }
 

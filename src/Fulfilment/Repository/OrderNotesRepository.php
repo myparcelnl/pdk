@@ -15,18 +15,23 @@ use MyParcelNL\Pdk\Fulfilment\Response\GetOrderNotesResponse;
 class OrderNotesRepository extends ApiRepository
 {
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
-     * @param  string                                                    $orderId
+     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $orderNotes
+     * @param  null|string                                               $fulfilmentIdentifier
      *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
+     * @return null|\MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
      * @noinspection PhpUnused
      */
-    public function postOrderNotes(OrderNoteCollection $collection, string $orderId): OrderNoteCollection
+    public function postOrderNotes(OrderNoteCollection $orderNotes, ?string $fulfilmentIdentifier): ?OrderNoteCollection
     {
-        /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
-        $response = $this->api->doRequest(new PostOrderNotesRequest($collection, $orderId), PostIdsResponse::class);
+        // TODO: Check if paid subscription
+        if (! $fulfilmentIdentifier) {
+            return null;
+        }
 
-        return $collection;
+        /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
+        $response = $this->api->doRequest(new PostOrderNotesRequest($orderNotes, $fulfilmentIdentifier), PostIdsResponse::class);
+
+        return $orderNotes;
     }
 
     /**

@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
@@ -99,6 +100,13 @@ class PdkOrderCollection extends Collection
         return $this->getAllShipments()
             ->whereIn('id', is_array($shipmentIds) ? $shipmentIds : func_get_args())
             ->values();
+    }
+
+    public function updateFulfilmentIdentifier(OrderCollection $orders)
+    {
+        $this->each(function (PdkOrder $order) use ($orders) {
+            $order->fulfilmentIdentifier = $orders->firstWhere('externalIdentifier', $order->externalIdentifier)->uuid;
+        });
     }
 
     /**
