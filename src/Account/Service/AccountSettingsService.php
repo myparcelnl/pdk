@@ -98,6 +98,14 @@ class AccountSettingsService
     }
 
     /**
+     * @return bool
+     */
+    public function usesOrderMode(): bool
+    {
+        return $this->getAccount()->generalSettings->orderMode;
+    }
+
+    /**
      * @param  string $carrierName
      *
      * @return bool

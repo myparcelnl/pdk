@@ -21,16 +21,11 @@ class GeneralSettingsView extends AbstractSettingsView
      */
     protected function createElements(): FormElementCollection
     {
-        /** @var \MyParcelNL\Pdk\Account\Model\Account $account */
-        $account = AccountSettings::getAccount();
-
-        $hasOrderMode = $account->generalSettings->orderMode;
-
         $elements = [
             new InteractiveElement(
                 GeneralSettings::ORDER_MODE,
                 Components::INPUT_TOGGLE,
-                $hasOrderMode
+                AccountSettings::usesOrderMode()
                     ? []
                     : [
                     'subtext'       => 'hint_enable_order_mode_backoffice',
