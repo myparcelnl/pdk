@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -22,19 +21,27 @@ use Symfony\Component\HttpFoundation\Response;
 class ExportOrderAction extends AbstractOrderAction
 {
     /**
+     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository
+     */
+    private $orderRepository;
+
+    /**
      * @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository
      */
     private $shipmentRepository;
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
+        OrderRepository             $orderRepository,
         ShipmentRepository          $shipmentRepository
     ) {
         parent::__construct($pdkOrderRepository);
+        $this->orderRepository    = $orderRepository;
         $this->shipmentRepository = $shipmentRepository;
     }
 
@@ -46,10 +53,10 @@ class ExportOrderAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        $orders = $this->updateOrders($request);
-        $orders = $this->export($orders, $request);
+        $orders    = $this->updateOrders($request);
+        $newOrders = $this->export($orders, $request);
 
-        $this->pdkOrderRepository->updateMany($orders);
+        $this->pdkOrderRepository->updateMany($newOrders);
 
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, [
             'orderIds' => $this->getOrderIds($request),
@@ -88,11 +95,9 @@ class ExportOrderAction extends AbstractOrderAction
                 ->toArray()
         );
 
-        /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $orderRepository */
-        $orderRepository = Pdk::get(OrderRepository::class);
-        $orderRepository->postOrders($fulfilmentOrders);
+        $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
 
-        return $orders;
+        return $orders->addApiIdentifiers($apiOrders);
     }
 
     /**

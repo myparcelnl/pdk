@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
@@ -16,6 +17,22 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 class PdkOrderCollection extends Collection
 {
     protected $cast = PdkOrder::class;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $orders
+     *
+     * @return self
+     */
+    public function addApiIdentifiers(OrderCollection $orders): self
+    {
+        $this->each(function (PdkOrder $order) use ($orders) {
+            $order->apiIdentifier = $orders
+                ->firstWhere('externalIdentifier', $order->externalIdentifier)
+                ->apiIdentifier;
+        });
+
+        return $this;
+    }
 
     /**
      * @param  array $data Data to pass into each created shipment.

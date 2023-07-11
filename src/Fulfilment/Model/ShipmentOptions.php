@@ -58,6 +58,7 @@ class ShipmentOptions extends Model
         'package_type'      => 'int',
         'return'            => 'bool',
         'same_day_delivery' => 'bool',
+        'saturday_delivery' => 'bool',
         'signature'         => 'bool',
     ];
 }

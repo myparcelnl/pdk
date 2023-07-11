@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -18,6 +19,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
 /**
  * @property null|string                                                 $externalIdentifier
+ * @property null|string                                                 $apiIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
@@ -50,7 +52,11 @@ class PdkOrder extends Model implements StorableArrayable
     protected $attributes = [
         /** Plugin order id */
         'externalIdentifier' => null,
-        'deliveryOptions'    => DeliveryOptions::class,
+
+        /** Fulfilment order ID from MyParcel */
+        'apiIdentifier'      => null,
+
+        'deliveryOptions' => DeliveryOptions::class,
 
         'senderAddress'      => null,
         'billingAddress'     => null,
@@ -89,7 +95,9 @@ class PdkOrder extends Model implements StorableArrayable
 
     protected $casts      = [
         'externalIdentifier' => 'string',
-        'deliveryOptions'    => DeliveryOptions::class,
+        'apiIdentifier'      => 'string',
+
+        'deliveryOptions' => DeliveryOptions::class,
 
         'billingAddress'  => ContactDetails::class,
         'shippingAddress' => ShippingAddress::class,
@@ -132,6 +140,29 @@ class PdkOrder extends Model implements StorableArrayable
         parent::__construct($data);
         $this->updateShipments();
         $this->updateTotals();
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
+     *
+     * @return self
+     */
+    public static function fromFulfilmentOrder(Order $order): self
+    {
+        return new self([
+            'externalIdentifier' => $order->externalIdentifier,
+            'apiIdentifier'      => $order->uuid,
+            'orderDate'          => $order->orderDate,
+            'invoiceAddress'     => $order->invoiceAddress,
+            'dropOffPoint'       => $order->dropOffPoint,
+            'status'             => $order->status,
+            'type'               => $order->type,
+            'price'              => $order->price,
+            'vat'                => $order->vat,
+            'priceAfterVat'      => $order->priceAfterVat,
+            'createdAt'          => $order->createdAt,
+            'updatedAt'          => $order->updatedAt,
+        ]);
     }
 
     /**

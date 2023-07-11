@@ -25,4 +25,3 @@ class UpdateOrderAction extends AbstractOrderAction
         return Actions::execute(PdkBackendActions::FETCH_ORDERS);
     }
 }
-

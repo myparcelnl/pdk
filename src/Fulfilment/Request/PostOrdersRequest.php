@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
+use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 
 class PostOrdersRequest extends Request
 {
@@ -129,17 +131,7 @@ class PostOrdersRequest extends Request
             'drop_off_point'      => $shipment->dropOffPoint
                 ? $shipment->dropOffPoint->toSnakeCaseArray()
                 : null,
-            'options'             => array_merge(
-                array_map(static function ($item) {
-                    return is_bool($item) ? (int) $item : $item;
-                }, $shipment->options->toSnakeCaseArray()),
-                [
-                    'insurance' => [
-                        'amount'   => $shipment->options->insurance,
-                        'currency' => 'EUR',
-                    ],
-                ]
-            ),
+            'options'             => $this->getShipmentOptions($shipment),
             'physical_properties' => $shipment->physicalProperties
                 ? $shipment->physicalProperties->toSnakeCaseArray()
                 : null,
@@ -148,5 +140,25 @@ class PostOrdersRequest extends Request
                 : null,
             'recipient'           => $this->getAddress($shipment->recipient),
         ];
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function getShipmentOptions(Shipment $shipment): array
+    {
+        $options = $shipment->options->toArray(Arrayable::CASE_SNAKE | Arrayable::SKIP_NULL);
+
+        $options['insurance'] = [
+            'amount'   => $shipment->options->insurance,
+            'currency' => 'EUR',
+        ];
+
+        return array_map(static function ($item) {
+            return is_bool($item) ? (int) $item : $item;
+        }, $options);
     }
 }
