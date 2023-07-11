@@ -12,7 +12,7 @@ class GetOrdersResponse extends ApiResponseWithBody
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
-    private $orders;
+    protected $orders;
 
     /**
      * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection

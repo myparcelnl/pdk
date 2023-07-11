@@ -4,16 +4,35 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
-use MyParcelNL\Pdk\Api\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
+use MyParcelNL\Pdk\Fulfilment\Request\GetOrderRequest;
 use MyParcelNL\Pdk\Fulfilment\Request\GetOrdersRequest;
 use MyParcelNL\Pdk\Fulfilment\Request\PostOrdersRequest;
+use MyParcelNL\Pdk\Fulfilment\Response\GetOrderResponse;
 use MyParcelNL\Pdk\Fulfilment\Response\GetOrdersResponse;
 use MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse;
 
 class OrderRepository extends ApiRepository
 {
+    /**
+     * @param  string $uuid
+     *
+     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
+     */
+    public function get(string $uuid): Order
+    {
+        $request = new GetOrderRequest($uuid);
+
+        return $this->retrieve($request->getUniqueKey(), function () use ($request) {
+            /** @var \MyParcelNL\Pdk\Fulfilment\Response\GetOrderResponse $response */
+            $response = $this->api->doRequest($request, GetOrderResponse::class);
+
+            return $response->getOrder();
+        });
+    }
+
     /**
      * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $collection
      *
