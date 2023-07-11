@@ -9,10 +9,11 @@ final class PdkBackendActions
     // Account
     public const UPDATE_ACCOUNT = 'updateAccount';
     // Orders
-    public const EXPORT_ORDERS = 'exportOrders';
-    public const FETCH_ORDERS  = 'fetchOrders';
-    public const PRINT_ORDERS  = 'printOrders';
-    public const UPDATE_ORDERS = 'updateOrders';
+    public const EXPORT_ORDERS      = 'exportOrders';
+    public const FETCH_ORDERS       = 'fetchOrders';
+    public const PRINT_ORDERS       = 'printOrders';
+    public const SYNCHRONIZE_ORDERS = 'synchronizeOrders';
+    public const UPDATE_ORDERS      = 'updateOrders';
     // Returns
     public const EXPORT_RETURN = 'exportReturn';
     // Shipments
@@ -26,6 +27,4 @@ final class PdkBackendActions
     public const CREATE_WEBHOOKS = 'createWebhooks';
     public const DELETE_WEBHOOKS = 'deleteWebhooks';
     public const FETCH_WEBHOOKS  = 'fetchWebhooks';
-    // Optional actions
-    public const UPDATE_TRACKING_NUMBER = 'updateTrackingNumber';
 }

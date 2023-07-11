@@ -6,6 +6,7 @@ use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\SynchronizeOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdatePluginSettingsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdateProductSettingsAction;
@@ -27,6 +28,7 @@ use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PrintOrdersEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Orders\SynchronizeOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\UpdateOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Settings\UpdatePluginSettingsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Settings\UpdateProductSettingsEndpointRequest;
@@ -66,6 +68,14 @@ return [
         PdkBackendActions::UPDATE_ACCOUNT          => [
             'request' => UpdateAccountEndpointRequest::class,
             'action'  => UpdateAccountAction::class,
+        ],
+
+        /**
+         * Synchronize orders with the API.
+         */
+        PdkBackendActions::SYNCHRONIZE_ORDERS      => [
+            'request' => SynchronizeOrdersEndpointRequest::class,
+            'action'  => SynchronizeOrdersAction::class,
         ],
 
         /**
