@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderRepository;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 
 class MockPdkOrderRepository extends AbstractPdkOrderRepository
 {
@@ -33,5 +34,15 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
         return $this->retrieve((string) $orderData['externalIdentifier'], function () use ($orderData) {
             return new PdkOrder($orderData);
         });
+    }
+
+    /**
+     * @param  null|string $externalIdentifier
+     *
+     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
+     */
+    public function getOrderNotes(?string $externalIdentifier): OrderNoteCollection
+    {
+        return new OrderNoteCollection();
     }
 }

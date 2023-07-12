@@ -35,5 +35,5 @@ interface PdkOrderRepositoryInterface
     /**
      * Get order notes.
      */
-    public function getOrderNotes(string $externalIdentifier): OrderNoteCollection;
+    public function getOrderNotes(?string $externalIdentifier): OrderNoteCollection;
 }

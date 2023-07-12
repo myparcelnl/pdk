@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Fulfilment\Response;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 
-class GetOrderNotesResponse extends ApiResponseWithBody
+class PostOrderNotesResponse extends ApiResponseWithBody
 {
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection

@@ -135,7 +135,9 @@
                 "weight": 0,
                 "width": null
             },
+            "orderNotes": [],
             "orderDate": null,
+            "fulfilmentIdentifier": null,
             "exported": false,
             "shipmentPrice": 0,
             "shipmentPriceAfterVat": 0,

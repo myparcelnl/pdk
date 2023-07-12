@@ -103,10 +103,10 @@ class ExportOrderAction extends AbstractOrderAction
 
         $orders->updateFulfilmentIdentifier($orderCollection);
 
-        $orderCollection->each( static function ( Order $order ) {
+        $orderCollection->each(function (Order $order) {
             $order->orderNotes = $this->pdkOrderRepository->getOrderNotes($order->externalIdentifier);
             $this->orderNotesRepository->postOrderNotes($order->orderNotes, $order->uuid);
-        } );
+        });
 
         return $orders;
     }
