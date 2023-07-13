@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Uses;
 
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Pdk as PdkInstance;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
@@ -33,6 +34,7 @@ abstract class AbstractUsesMockPdkInstance implements BaseMock
      */
     protected function setup(): void
     {
+        PdkFactory::setMode(PdkInstance::MODE_PRODUCTION);
         PdkFactory::create(MockPdkConfig::create($this->config));
     }
 }

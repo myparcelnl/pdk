@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\env;
 use function DI\value;
@@ -15,11 +14,6 @@ return [
      * Path to the root directory of the pdk.
      */
     'rootDir'                  => value(__DIR__ . '/../'),
-
-    /**
-     * Mode to use for the PDK. Defaults to production. Set to debug to show debug messages and stack traces in exceptions.
-     */
-    'mode'                     => env('PDK_MODE', Pdk::MODE_PRODUCTION),
 
     /**
      * Url to the API.

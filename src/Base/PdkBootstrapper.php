@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
-use function DI\factory;
 use function DI\value;
 
 class PdkBootstrapper
@@ -29,6 +28,7 @@ class PdkBootstrapper
      * @param  string $version
      * @param  string $path
      * @param  string $url
+     * @param  string $mode
      *
      * @return \MyParcelNL\Pdk\Base\Pdk
      * @throws \Exception
@@ -38,9 +38,12 @@ class PdkBootstrapper
         string $title,
         string $version,
         string $path,
-        string $url
+        string $url,
+        string $mode = Pdk::MODE_PRODUCTION
     ): Pdk {
         if (! self::$initialized) {
+            PdkFactory::setMode($mode);
+
             self::$initialized = true;
             self::$pdk         = (new static())->createPdkInstance($name, $title, $version, $path, $url);
         }
@@ -65,18 +68,18 @@ class PdkBootstrapper
         string $path,
         string $url
     ): PdkInterface {
+        $appInfo = new AppInfo([
+            'name'    => $name,
+            'title'   => $title,
+            'version' => $version,
+            'path'    => $path,
+            'url'     => $url,
+        ]);
+
         return PdkFactory::create(
             implode('/', [$path, $this->getConfigPath()]),
             [
-                'appInfo'  => factory(function () use ($name, $title, $version, $path, $url) {
-                    return new AppInfo([
-                        'name'    => $name,
-                        'title'   => $title,
-                        'version' => $version,
-                        'path'    => $path,
-                        'url'     => $url,
-                    ]);
-                }),
+                'appInfo'  => value($appInfo),
                 'platform' => value($this->determinePlatform($name)),
             ],
             $this->getAdditionalConfig($name, $title, $version, $path, $url)

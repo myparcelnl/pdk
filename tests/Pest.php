@@ -1,8 +1,11 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
 include __DIR__ . '/usesShared.php';
 
@@ -11,6 +14,8 @@ include __DIR__ . '/usesShared.php';
  *
  * @see https://pestphp.com/docs/underlying-test-case#testspestphp
  */
+
+usesShared(new ClearContainerCache())->in(__DIR__);
 
 expect()
     ->extend('toHaveKeysAndValues', function (array $array) {

@@ -6,13 +6,22 @@ namespace MyParcelNL\Pdk\Base\Factory;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Pdk;
+use function DI\value;
 
 class PdkFactory
 {
+    private const MODES       = [Pdk::MODE_PRODUCTION, Pdk::MODE_DEVELOPMENT];
+    private const CACHE_DIR   = __DIR__ . '/../../../.cache';
     private const CONFIG_PATH = __DIR__ . '/../../../config';
+
+    /**
+     * @var string
+     */
+    protected static $mode;
 
     /**
      * @param  array[]|string[] $config
@@ -22,12 +31,55 @@ class PdkFactory
      */
     public static function create(...$config): PdkInterface
     {
-        $container = self::setupContainer(...$config);
-        $pdk       = new Pdk($container);
+        $instance  = new static();
+        $container = $instance->setupContainer(...$config);
+
+        $pdk = new Pdk($container);
 
         Facade::setPdkInstance($pdk);
 
         return $pdk;
+    }
+
+    /**
+     * @param  string $mode
+     *
+     * @return void
+     */
+    public static function setMode(string $mode): void
+    {
+        if (! in_array($mode, self::MODES, true)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid mode. Valid modes are: %s", implode(', ', self::MODES))
+            );
+        }
+
+        self::$mode = $mode;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getMode(): string
+    {
+        return self::$mode ?? getenv('PDK_MODE') ?: Pdk::MODE_PRODUCTION;
+    }
+
+    /**
+     * Caches the container definitions and proxies. This is only done in production mode.
+     *
+     * @param  \DI\ContainerBuilder $builder
+     *
+     * @return void
+     */
+    protected function setupCache(ContainerBuilder $builder): void
+    {
+        if (function_exists('apcu_fetch')) {
+            $builder->enableDefinitionCache('pdk-definition-cache');
+        }
+
+        $builder->enableCompilation(self::CACHE_DIR);
+        $builder->writeProxiesToFile(true, self::CACHE_DIR);
     }
 
     /**
@@ -36,9 +88,11 @@ class PdkFactory
      * @return \DI\Container
      * @throws \Exception
      */
-    private static function setupContainer(...$configs): Container
+    protected function setupContainer(...$configs): Container
     {
+        $mode    = $this->getMode();
         $builder = new ContainerBuilder();
+
         $builder->useAutowiring(true);
         $builder->addDefinitions(
             sprintf('%s/pdk-default.php', self::CONFIG_PATH),
@@ -48,8 +102,13 @@ class PdkFactory
             sprintf('%s/pdk-fields.php', self::CONFIG_PATH),
             sprintf('%s/pdk-services.php', self::CONFIG_PATH),
             sprintf('%s/pdk-settings.php', self::CONFIG_PATH),
+            ['mode' => value($mode)],
             ...$configs
         );
+
+        if (Pdk::MODE_PRODUCTION === $mode && ! getenv('PDK_DISABLE_CACHE')) {
+            $this->setupCache($builder);
+        }
 
         return $builder->build();
     }
