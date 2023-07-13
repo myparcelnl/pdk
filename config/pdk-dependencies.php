@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Facade\Pdk;
+use function DI\factory;
 use function DI\value;
 
 return [
@@ -31,4 +33,11 @@ return [
      * The version of vue demi in the PDK admin.
      */
     'vueDemiVersion'            => value('0.14.5'),
+
+    /**
+     * Whether the current php version is supported.
+     */
+    'isPhpVersionSupported'     => factory(function (): bool {
+        return version_compare(PHP_VERSION, Pdk::get('minimumPhpVersion'), '>=');
+    }),
 ];
