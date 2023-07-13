@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use function DI\factory;
@@ -54,7 +55,7 @@ class PdkBootstrapper
      * @param  string $path
      * @param  string $url
      *
-     * @return \MyParcelNL\Pdk\Base\Pdk
+     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface
      * @throws \Exception
      */
     protected function createPdkInstance(
@@ -63,7 +64,7 @@ class PdkBootstrapper
         string $version,
         string $path,
         string $url
-    ): Pdk {
+    ): PdkInterface {
         return PdkFactory::create(
             implode('/', [$path, $this->getConfigPath()]),
             [
