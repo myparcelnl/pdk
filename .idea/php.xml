@@ -138,7 +138,7 @@
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="65878930-6f8e-40a5-9468-2a119b1c994a" name="php" home="docker-compose://DATA" false="false" debugger_id="php.debugger.XDebug">
+      <interpreter id="65878930-6f8e-40a5-9468-2a119b1c994a" name="php" home="docker-compose://DATA" auto="false" debugger_id="php.debugger.XDebug">
         <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="php" DOCKER_REMOTE_PROJECT_PATH="/opt/project">
           <type_data command="RUN" />
           <dockerComposeConfigurationPaths>
@@ -153,7 +153,7 @@
     <phpInfoCache>
       <interpreter name="php">
         <phpinfo binary_type="PHP" php_cgi="/usr/local/bin/php-cgi" php_cli="/usr/local/bin/php" path_separator=":" version="7.4.33">
-          <additional_php_ini>/usr/local/etc/php/conf.d/blackfire.ini, /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/zzz-pcov.ini, /usr/local/etc/php/conf.d/zzz-xdebug.ini</additional_php_ini>
+          <additional_php_ini>/usr/local/etc/php/conf.d/docker-php-ext-pcov.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/zzz-pcov.ini, /usr/local/etc/php/conf.d/zzz-xdebug.ini</additional_php_ini>
           <configuration_file />
           <configuration_options>
             <configuration_option name="include_path" value=".:/usr/local/lib/php" />
@@ -170,7 +170,6 @@
             <extension name="Reflection" />
             <extension name="SPL" />
             <extension name="SimpleXML" />
-            <extension name="blackfire" />
             <extension name="ctype" />
             <extension name="curl" />
             <extension name="date" />
@@ -314,11 +313,6 @@
   </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
-  </component>
-  <component name="PhpUnit">
-    <phpunit_settings>
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" use_configuration_file="true" />
-    </phpunit_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />
