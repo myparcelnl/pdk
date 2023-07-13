@@ -4,6 +4,7 @@
     "orderData": [
         {
             "externalIdentifier": "123",
+            "apiIdentifier": null,
             "deliveryOptions": {
                 "carrier": {
                     "externalIdentifier": "postnl",
@@ -149,6 +150,7 @@
         },
         {
             "externalIdentifier": "124",
+            "apiIdentifier": null,
             "deliveryOptions": {
                 "carrier": {
                     "externalIdentifier": "postnl",
