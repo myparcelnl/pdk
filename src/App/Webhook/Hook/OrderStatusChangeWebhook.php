@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Symfony\Component\HttpFoundation\Request;
 
 final class OrderStatusChangeWebhook extends AbstractHook
@@ -22,5 +23,13 @@ final class OrderStatusChangeWebhook extends AbstractHook
         Actions::execute(PdkBackendActions::SYNCHRONIZE_ORDERS, [
             'orderIds' => $content['uuid'],
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHookEvent(): string
+    {
+        return WebhookSubscription::ORDER_STATUS_CHANGE;
     }
 }

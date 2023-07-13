@@ -36,27 +36,23 @@ it('executes "update account" action', function (string $hook, string $expectedC
 
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
 
-    $webhookManager->call(
-        Request::create(
-            $repository->getHashedUrl(),
-            Request::METHOD_POST,
-            [],
-            [],
-            [],
-            [],
-            json_encode([
-                'data' => [
-                    'hooks' => [
-                        array_merge(
-                            ['event' => $hook],
-                            $hookBody
-                        ),
-                    ],
+    $request = Request::create(
+        $repository->getHashedUrl(),
+        Request::METHOD_POST,
+        [],
+        [],
+        [],
+        ['HTTP_X_MYPARCEL_HOOK' => $hook],
+        json_encode([
+            'data' => [
+                'hooks' => [
+                    array_merge(['event' => $hook], $hookBody),
                 ],
-            ])
-        )
+            ],
+        ])
     );
 
+    $webhookManager->call($request);
     $cronService->executeScheduledTask();
 
     $logs = (new Collection($logger->getLogs()))->map(function (array $log) {

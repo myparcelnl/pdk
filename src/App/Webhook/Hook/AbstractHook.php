@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
 use MyParcelNL\Pdk\App\Webhook\Contract\HookInterface;
-use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractHook implements HookInterface
 {
+    abstract protected function getHookEvent(): string;
+
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
@@ -28,7 +29,7 @@ abstract class AbstractHook implements HookInterface
      */
     public function validate(Request $request): bool
     {
-        return $this->eventMatches($request, WebhookSubscription::SHIPMENT_STATUS_CHANGE);
+        return $this->eventMatches($request, $this->getHookEvent());
     }
 
     /**
@@ -41,7 +42,7 @@ abstract class AbstractHook implements HookInterface
     {
         $content = $this->getHookBody($request);
 
-        return $request->headers['x-myparcel-hook'] === $hook && $content['event'] === $hook;
+        return $request->headers->get('x-myparcel-hook') === $hook && $content['event'] === $hook;
     }
 
     /**

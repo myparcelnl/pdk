@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ShipmentLabelCreatedWebhook extends AbstractHook
@@ -23,5 +24,13 @@ final class ShipmentLabelCreatedWebhook extends AbstractHook
             'orderIds'    => [$content['shipment_reference_identifier']],
             'shipmentIds' => [$content['shipment_id']],
         ]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHookEvent(): string
+    {
+        return WebhookSubscription::SHIPMENT_LABEL_CREATED;
     }
 }

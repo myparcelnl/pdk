@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ShopCarrierConfigurationUpdatedWebhook extends AbstractHook
@@ -18,5 +19,13 @@ final class ShopCarrierConfigurationUpdatedWebhook extends AbstractHook
     public function handle(Request $request): void
     {
         Actions::execute(PdkBackendActions::UPDATE_ACCOUNT);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getHookEvent(): string
+    {
+        return WebhookSubscription::SHOP_CARRIER_CONFIGURATION_UPDATED;
     }
 }
