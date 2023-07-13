@@ -34,4 +34,14 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
             return new PdkOrder($orderData);
         });
     }
+
+    /**
+     * @param  null|string $externalIdentifier
+     *
+     * @return array
+     */
+    public function getOrderNotes(?string $externalIdentifier): array
+    {
+        return [];
+    }
 }

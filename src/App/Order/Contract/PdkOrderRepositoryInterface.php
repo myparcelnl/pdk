@@ -22,6 +22,15 @@ interface PdkOrderRepositoryInterface
     public function getMany($orderIds): PdkOrderCollection;
 
     /**
+     * Get the order notes for a given order.
+     *
+     * @param  null|string $externalIdentifier
+     *
+     * @return array
+     */
+    public function getOrderNotes(?string $externalIdentifier): array;
+
+    /**
      * Update order data.
      */
     public function update(PdkOrder $order): PdkOrder;
