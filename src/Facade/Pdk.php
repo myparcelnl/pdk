@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 
 /**
+ * @method static void clearCache()
  * @method static mixed get(string $id)
  * @method static AppInfo getAppInfo()
  * @method static string getMode()
