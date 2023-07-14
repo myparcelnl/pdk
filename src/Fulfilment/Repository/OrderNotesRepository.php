@@ -20,7 +20,7 @@ class OrderNotesRepository extends ApiRepository
      */
     public function postOrderNotes(OrderNoteCollection $orderNotes, ?string $fulfilmentIdentifier): ?OrderNoteCollection
     {
-        // TODO: Check if paid subscription through ACL endpoint
+        // TODO: Check if shop subscription allows using order notes
         if (! $fulfilmentIdentifier) {
             return null;
         }
