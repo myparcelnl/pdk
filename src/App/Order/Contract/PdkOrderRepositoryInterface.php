@@ -17,6 +17,8 @@ interface PdkOrderRepositoryInterface
 
     /**
      * Create a collection of order objects from input data
+     *
+     * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
      */
     public function getMany($orderIds): PdkOrderCollection;
 
