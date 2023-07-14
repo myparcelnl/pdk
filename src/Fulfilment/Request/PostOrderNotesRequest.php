@@ -61,6 +61,6 @@ class PostOrderNotesRequest extends Request
      */
     public function getPath(): string
     {
-        return '/fulfilment/orders/' . $this->orderId . '/notes';
+        return sprintf('/fulfilment/orders/%s/notes', $this->orderId);
     }
 }
