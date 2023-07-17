@@ -8,25 +8,25 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Acl;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 
-class GetAclResponse extends ApiResponseWithBody
+class GetSubscriptionFeaturesResponse extends ApiResponseWithBody
 {
     /**
-     * @var mixed
+     * @var array
      */
-    private $acl;
+    private $subscriptionFeatures;
 
     /**
-     * @return \MyParcelNL\Pdk\Account\Model\Account
+     * @return array
      */
-    public function getAcl(): Account
+    public function getSubscriptionFeatures(): array
     {
-        return $this->acl;
+        return $this->subscriptionFeatures;
     }
 
     protected function parseResponseBody(): void
     {
         $data = json_decode($this->getBody(), true);
 
-        $this->acl = new Acl([]);
+        $this->subscriptionFeatures = $data['data']['subscriptions'] ?? [];
     }
 }

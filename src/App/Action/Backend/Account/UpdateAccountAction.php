@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
@@ -134,6 +135,9 @@ class UpdateAccountAction implements ActionInterface
             : null;
 
         if ($foundAccount) {
+            $subscriptionFeatures               = Actions::execute(PdkBackendActions::FETCH_SUBSCRIPTION_FEATURES);
+            $foundAccount->subscriptionFeatures = $subscriptionFeatures;
+
             $this->fillAccount($foundAccount);
         }
 

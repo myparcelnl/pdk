@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Account\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 
-class GetAclRequest extends Request
+class GetSubscriptionFeaturesRequest extends Request
 {
     /**
      * @return string

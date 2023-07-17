@@ -16,25 +16,28 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property AccountGeneralSettings $generalSettings
  * @property ShopCollection         $shops
  * @property int                    $status
+ * @property array                  $subscriptionFeatures
  */
 class Account extends Model implements StorableArrayable
 {
     public $attributes = [
-        'id'              => null,
-        'platformId'      => null,
-        'contactInfo'     => ContactDetails::class,
-        'generalSettings' => AccountGeneralSettings::class,
-        'shops'           => ShopCollection::class,
-        'status'          => null,
+        'id'                   => null,
+        'platformId'           => null,
+        'contactInfo'          => ContactDetails::class,
+        'generalSettings'      => AccountGeneralSettings::class,
+        'shops'                => ShopCollection::class,
+        'status'               => null,
+        'subscriptionFeatures' => [],
     ];
 
     public $casts      = [
-        'id'              => 'int',
-        'platformId'      => 'int',
-        'contactInfo'     => ContactDetails::class,
-        'generalSettings' => AccountGeneralSettings::class,
-        'shops'           => ShopCollection::class,
-        'status'          => 'int',
+        'id'                   => 'int',
+        'platformId'           => 'int',
+        'contactInfo'          => ContactDetails::class,
+        'generalSettings'      => AccountGeneralSettings::class,
+        'shops'                => ShopCollection::class,
+        'status'               => 'int',
+        'subscriptionFeatures' => 'array',
     ];
 
     /**
