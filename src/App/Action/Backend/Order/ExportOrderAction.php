@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
-use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -22,11 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportOrderAction extends AbstractOrderAction
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository
-     */
-    private $orderNotesRepository;
-
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository
      */
@@ -39,20 +33,17 @@ class ExportOrderAction extends AbstractOrderAction
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository     $orderNotesRepository
      * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
-        OrderNotesRepository        $orderNotesRepository,
         OrderRepository             $orderRepository,
         ShipmentRepository          $shipmentRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->orderNotesRepository = $orderNotesRepository;
-        $this->orderRepository      = $orderRepository;
-        $this->shipmentRepository   = $shipmentRepository;
+        $this->orderRepository    = $orderRepository;
+        $this->shipmentRepository = $shipmentRepository;
     }
 
     /**
@@ -118,14 +109,13 @@ class ExportOrderAction extends AbstractOrderAction
 
         $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
 
-        $apiOrders->each(function (Order $order) {
-            $this->orderNotesRepository->postOrderNotes(
-                $this->pdkOrderRepository->getOrderNotes($order->externalIdentifier),
-                $order->uuid
-            );
-        });
+        $orders->addApiIdentifiers($apiOrders);
 
-        return $orders->addApiIdentifiers($apiOrders);
+        Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
+            'orders' => $orders,
+        ]);
+
+        return $orders;
     }
 
     /**

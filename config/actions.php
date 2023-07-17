@@ -6,6 +6,7 @@ use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\SynchronizeOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
@@ -29,6 +30,7 @@ use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Orders\PostOrderNotesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PrintOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\SynchronizeOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\UpdateOrdersEndpointRequest;
@@ -75,7 +77,7 @@ return [
         /**
          * Update account.
          */
-        PdkBackendActions::UPDATE_ACCOUNT          => [
+        PdkBackendActions::UPDATE_ACCOUNT     => [
             'request' => UpdateAccountEndpointRequest::class,
             'action'  => UpdateAccountAction::class,
         ],
@@ -83,7 +85,7 @@ return [
         /**
          * Synchronize orders with the API.
          */
-        PdkBackendActions::SYNCHRONIZE_ORDERS      => [
+        PdkBackendActions::SYNCHRONIZE_ORDERS => [
             'request' => SynchronizeOrdersEndpointRequest::class,
             'action'  => SynchronizeOrdersAction::class,
         ],
@@ -91,9 +93,14 @@ return [
         /**
          * Exports an order to MyParcel as order or shipment, depending on "mode" setting.
          */
-        PdkBackendActions::EXPORT_ORDERS           => [
+        PdkBackendActions::EXPORT_ORDERS      => [
             'request' => ExportOrdersEndpointRequest::class,
             'action'  => ExportOrderAction::class,
+        ],
+
+        PdkBackendActions::POST_ORDER_NOTES        => [
+            'request' => PostOrderNotesEndpointRequest::class,
+            'action'  => PostOrderNotesAction::class,
         ],
 
         /**

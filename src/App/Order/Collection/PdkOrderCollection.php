@@ -28,7 +28,7 @@ class PdkOrderCollection extends Collection
         $this->each(function (PdkOrder $order) use ($orders) {
             $order->apiIdentifier = $orders
                 ->firstWhere('externalIdentifier', $order->externalIdentifier)
-                ->apiIdentifier;
+                ->uuid;
         });
 
         return $this;
