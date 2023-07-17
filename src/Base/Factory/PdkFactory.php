@@ -15,7 +15,6 @@ use function DI\value;
 class PdkFactory
 {
     private const MODES       = [Pdk::MODE_PRODUCTION, Pdk::MODE_DEVELOPMENT];
-    private const CACHE_DIR   = __DIR__ . '/../../../.cache';
     private const CONFIG_PATH = __DIR__ . '/../../../config';
 
     /**
@@ -78,8 +77,8 @@ class PdkFactory
             $builder->enableDefinitionCache('pdk-definition-cache');
         }
 
-        $builder->enableCompilation(self::CACHE_DIR);
-        $builder->writeProxiesToFile(true, self::CACHE_DIR);
+        $builder->enableCompilation(Pdk::CACHE_DIR, Pdk::CACHE_FILE_NAME);
+        $builder->writeProxiesToFile(true, Pdk::CACHE_DIR);
     }
 
     /**
