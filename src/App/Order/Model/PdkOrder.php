@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -18,26 +19,27 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
 /**
- * @property null|string                                                 $externalIdentifier
- * @property null|string                                                 $apiIdentifier
- * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
- * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
- * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
- * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
- * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
- * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
- * @property null|\DateTimeImmutable                                     $orderDate
- * @property bool                                                        $exported
- * @property int                                                         $shipmentPrice
- * @property int                                                         $shipmentPriceAfterVat
- * @property int                                                         $shipmentVat
- * @property int                                                         $orderPrice
- * @property int                                                         $orderPriceAfterVat
- * @property int                                                         $orderVat
- * @property int                                                         $totalPrice
- * @property int                                                         $totalPriceAfterVat
- * @property int                                                         $totalVat
+ * @property null|string                                                    $externalIdentifier
+ * @property null|string                                                    $apiIdentifier
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration         $customsDeclaration
+ * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions                 $deliveryOptions
+ * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection    $lines
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                 $senderAddress
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails                 $billingAddress
+ * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress                $shippingAddress
+ * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection    $shipments
+ * @property null|\DateTimeImmutable                                        $orderDate
+ * @property bool                                                           $exported
+ * @property int                                                            $shipmentPrice
+ * @property int                                                            $shipmentPriceAfterVat
+ * @property int                                                            $shipmentVat
+ * @property int                                                            $orderPrice
+ * @property int                                                            $orderPriceAfterVat
+ * @property int                                                            $orderVat
+ * @property null|\MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $orderNotes
+ * @property int                                                            $totalPrice
+ * @property int                                                            $totalPriceAfterVat
+ * @property int                                                            $totalVat
  * @method canHaveMultiCollo(): bool
  * @method canHaveSignature(): bool
  * @method canHaveInsurance(int $value = 100): bool
@@ -75,6 +77,8 @@ class PdkOrder extends Model implements StorableArrayable
          */
         'orderDate'          => null,
 
+        'orderNotes'         => null,
+
         /**
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
          */
@@ -109,6 +113,7 @@ class PdkOrder extends Model implements StorableArrayable
         'lines'              => PdkOrderLineCollection::class,
 
         'orderDate'             => 'datetime',
+        'orderNotes'            => OrderNoteCollection::class,
         'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
@@ -155,6 +160,7 @@ class PdkOrder extends Model implements StorableArrayable
             'orderDate'          => $order->orderDate,
             'invoiceAddress'     => $order->invoiceAddress,
             'dropOffPoint'       => $order->dropOffPoint,
+            'orderNotes'         => $order->orderNotes,
             'status'             => $order->status,
             'type'               => $order->type,
             'price'              => $order->price,

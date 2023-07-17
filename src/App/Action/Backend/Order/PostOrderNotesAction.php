@@ -49,7 +49,7 @@ class PostOrderNotesAction implements ActionInterface
 
         $orders->each(function (PdkOrder $order) {
             $this->orderNotesRepository->postOrderNotes(
-                $this->orderRepository->getOrderNotes($order->externalIdentifier),
+                $order->orderNotes,
                 $order->apiIdentifier
             );
         });
