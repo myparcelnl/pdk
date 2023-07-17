@@ -20,19 +20,11 @@ class PostOrderNotesAction implements ActionInterface
     private $orderNotesRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository
-     */
-    private $orderRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository     $orderNotesRepository
+     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository $orderNotesRepository
      */
     public function __construct(
-        PdkOrderRepositoryInterface $pdkOrderRepository,
         OrderNotesRepository        $orderNotesRepository
     ) {
-        $this->orderRepository      = $pdkOrderRepository;
         $this->orderNotesRepository = $orderNotesRepository;
     }
 
