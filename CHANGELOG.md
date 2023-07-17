@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.1](https://github.com/myparcelnl/pdk/compare/v2.9.0...v2.9.1) (2023-07-17)
+
+
+### :bug: Bug Fixes
+
+* **container:** clear container cache on install/upgrade/uninstall ([#123](https://github.com/myparcelnl/pdk/issues/123)) ([06549f7](https://github.com/myparcelnl/pdk/commit/06549f7d656c6b342f889d2c96e4a1742b013cb6))
+
 ## [2.9.0](https://github.com/myparcelnl/pdk/compare/v2.8.0...v2.9.0) (2023-07-13)
 
 
