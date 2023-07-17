@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
