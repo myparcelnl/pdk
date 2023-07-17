@@ -77,7 +77,7 @@ class PdkFactory
             $builder->enableDefinitionCache('pdk-definition-cache');
         }
 
-        $builder->enableCompilation(Pdk::CACHE_DIR, Pdk::CACHE_FILE_NAME);
+        $builder->enableCompilation(Pdk::CACHE_DIR, Pdk::CACHE_CLASS_NAME);
         $builder->writeProxiesToFile(true, Pdk::CACHE_DIR);
     }
 

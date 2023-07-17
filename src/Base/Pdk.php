@@ -18,15 +18,15 @@ class Pdk implements PdkInterface
     /**
      * The directory where the container cache file will be stored.
      */
-    public const CACHE_DIR = __DIR__ . '/../../../.cache';
+    public const CACHE_DIR = __DIR__ . '/../../.cache';
     /**
-     * The filename of the container cache file.
+     * The container cache class name.
      */
-    public const CACHE_FILE_NAME = 'CompiledContainer.php';
+    public const CACHE_CLASS_NAME = 'CompiledContainer';
     /**
      * The full path to the container cache file.
      */
-    private const CACHE_FILE_PATH = self::CACHE_DIR . '/' . self::CACHE_FILE_NAME;
+    private const CACHE_FILE_PATH = self::CACHE_DIR . '/' . self::CACHE_CLASS_NAME . '.php';
 
     /**
      * @var \DI\Container
