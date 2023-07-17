@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
