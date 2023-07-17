@@ -13,7 +13,7 @@
             "deleteAccount": {
                 "body": null,
                 "headers": [],
-                "method": "DELETE",
+                "method": "POST",
                 "parameters": {
                     "action": "deleteAccount"
                 },
