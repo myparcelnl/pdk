@@ -8,6 +8,8 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
 
 interface PdkInterface
 {
+    public function clearCache(): void;
+
     public function get(string $key);
 
     public function getAppInfo(): AppInfo;

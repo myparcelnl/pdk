@@ -15,6 +15,18 @@ class Pdk implements PdkInterface
     public const PACKAGE_NAME     = 'myparcelnl/pdk';
     public const MODE_DEVELOPMENT = 'development';
     public const MODE_PRODUCTION  = 'production';
+    /**
+     * The directory where the container cache file will be stored.
+     */
+    public const CACHE_DIR = __DIR__ . '/../../../.cache';
+    /**
+     * The filename of the container cache file.
+     */
+    public const CACHE_FILE_NAME = 'CompiledContainer.php';
+    /**
+     * The full path to the container cache file.
+     */
+    private const CACHE_FILE_PATH = self::CACHE_DIR . '/' . self::CACHE_FILE_NAME;
 
     /**
      * @var \DI\Container
@@ -27,6 +39,20 @@ class Pdk implements PdkInterface
     public function __construct(Container $container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * Delete the container cache file if it exists.
+     *
+     * @return void
+     */
+    public function clearCache(): void
+    {
+        if (! file_exists(self::CACHE_FILE_PATH)) {
+            return;
+        }
+
+        unlink(self::CACHE_FILE_PATH);
     }
 
     /**

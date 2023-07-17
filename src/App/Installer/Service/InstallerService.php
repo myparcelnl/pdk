@@ -51,6 +51,8 @@ class InstallerService implements InstallerServiceInterface
             return;
         }
 
+        Pdk::clearCache();
+
         if (! $installedVersion) {
             $this->executeInstallation(...$args);
         } else {
@@ -67,6 +69,8 @@ class InstallerService implements InstallerServiceInterface
      */
     public function uninstall(...$args): void
     {
+        Pdk::clearCache();
+
         $installedVersion = $this->getInstalledVersion();
 
         if ($installedVersion) {
