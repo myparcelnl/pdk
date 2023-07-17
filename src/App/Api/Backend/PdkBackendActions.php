@@ -7,8 +7,9 @@ namespace MyParcelNL\Pdk\App\Api\Backend;
 final class PdkBackendActions
 {
     // Account
+    public const UPDATE_ACCOUNT              = 'updateAccount';
+    public const FETCH_SUBSCRIPTION_FEATURES = 'fetchSubscriptionFeatures';
     public const DELETE_ACCOUNT = 'deleteAccount';
-    public const UPDATE_ACCOUNT = 'updateAccount';
     public const FETCH_SUBSCRIPTION_FEATURES = 'fetchSubscriptionFeatures';
     public const DELETE_ACCOUNT              = 'deleteAccount';
     // Orders
