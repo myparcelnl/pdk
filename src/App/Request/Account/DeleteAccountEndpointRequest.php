@@ -13,6 +13,6 @@ final class DeleteAccountEndpointRequest extends AbstractEndpointRequest
      */
     public function getMethod(): string
     {
-        return 'DELETE';
+        return 'POST';
     }
 }
