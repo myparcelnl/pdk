@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Api\Backend;
 final class PdkBackendActions
 {
     // Account
+    public const DELETE_ACCOUNT = 'deleteAccount';
     public const UPDATE_ACCOUNT = 'updateAccount';
     // Orders
     public const EXPORT_ORDERS      = 'exportOrders';

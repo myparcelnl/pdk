@@ -63,14 +63,14 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
             try {
                 $account = $this->accountRepository->getAccount();
 
-                $this->markApiKeyAsValid($apiKey);
+                $this->markApiKeyAsValid();
 
                 return $account;
             } catch (Throwable $e) {
                 $this->markApiKeyAsInvalid($apiKey);
                 throw $e;
             }
-        });
+        }, $force);
     }
 
     /**

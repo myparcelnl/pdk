@@ -99,9 +99,9 @@ class Request implements RequestInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getProperty(): string
+    public function getProperty(): ?string
     {
         return $this->property;
     }
