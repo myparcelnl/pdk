@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\Order\Contract;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 
 interface PdkOrderRepositoryInterface
 {
@@ -21,11 +20,6 @@ interface PdkOrderRepositoryInterface
      * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
      */
     public function getMany($orderIds): PdkOrderCollection;
-
-    /**
-     * Get the order notes for a given order.
-     */
-    public function getOrderNotes(?string $externalIdentifier): OrderNoteCollection;
 
     /**
      * Update order data.

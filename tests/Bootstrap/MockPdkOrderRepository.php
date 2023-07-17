@@ -35,14 +35,4 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
             return new PdkOrder($orderData);
         });
     }
-
-    /**
-     * @param  null|string $externalIdentifier
-     *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
-     */
-    public function getOrderNotes(?string $externalIdentifier): OrderNoteCollection
-    {
-        return new OrderNoteCollection();
-    }
 }

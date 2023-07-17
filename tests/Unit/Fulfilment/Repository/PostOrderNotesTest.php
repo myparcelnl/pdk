@@ -11,7 +11,11 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesMockPdkInstance());
 
 it('creates a valid order note collection from api data', function (array $input, ?string $fulfilmentId, $result) {
     $pdk = PdkFactory::create(MockPdkConfig::create());
@@ -25,7 +29,7 @@ it('creates a valid order note collection from api data', function (array $input
     $savedOrderNotes = $repository->postOrderNotes(new OrderNoteCollection($input), $fulfilmentId);
 
     expect($savedOrderNotes)
-        ->toEqual($result);
+        ->toEqual($result->toArray());
 
     assertMatchesJsonSnapshot(json_encode($savedOrderNotes ? $savedOrderNotes->toArray() : null));
 })->with([
@@ -41,12 +45,12 @@ it('creates a valid order note collection from api data', function (array $input
             ],
         ],
         'fulfilmentId' => '12345678',
-        'result'       => new OrderNoteCollection([
+        'result'       => [
             [
                 'note'   => 'This is a note',
                 'author' => 'customer',
             ],
-        ]),
+        ],
     ],
     'multiple notes with non-existent fulfilment id' => [
         'input'        => [
