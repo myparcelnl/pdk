@@ -17,17 +17,14 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
-    new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
-    ]),
+    new UsesEachMockPdkInstance(),
     new UsesApiMock()
 );
 

@@ -73,11 +73,17 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
-        if (Settings::get(GeneralSettings::ORDER_MODE, GeneralSettings::ID)) {
-            return $this->exportOrders($orders);
+        if (! Settings::get(GeneralSettings::ORDER_MODE, GeneralSettings::ID)) {
+            return $this->exportShipments($orders, $request);
         }
 
-        return $this->exportShipments($orders, $request);
+        $response = $this->exportOrders($orders);
+
+        Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
+            'orderIds' => $this->getOrderIds($request),
+        ]);
+
+        return $response;
     }
 
     /**
@@ -109,13 +115,7 @@ class ExportOrderAction extends AbstractOrderAction
 
         $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
 
-        $orders->addApiIdentifiers($apiOrders);
-
-        Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
-            'orders' => $orders,
-        ]);
-
-        return $orders;
+        return $orders->addApiIdentifiers($apiOrders);
     }
 
     /**
