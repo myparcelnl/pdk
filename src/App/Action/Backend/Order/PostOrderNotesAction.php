@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,12 @@ class PostOrderNotesAction extends AbstractOrderAction
         }
 
         $orderIds = $this->getOrderIds($request);
+        $note     = $request->get('note');
         $orders   = $this->pdkOrderRepository->getMany($orderIds);
+
+        if ($note && $orders->count() === 1) {
+            $orders->first()->notes = new OrderNoteCollection([$note]);
+        }
 
         $orders
             ->filter(function (PdkOrder $order) {
