@@ -7,6 +7,7 @@ use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\SynchronizeOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
@@ -30,6 +31,7 @@ use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Orders\PostOrderNotesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PrintOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\SynchronizeOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\UpdateOrdersEndpointRequest;
@@ -103,6 +105,11 @@ return [
         PdkBackendActions::EXPORT_ORDERS               => [
             'request' => ExportOrdersEndpointRequest::class,
             'action'  => ExportOrderAction::class,
+        ],
+
+        PdkBackendActions::POST_ORDER_NOTES        => [
+            'request' => PostOrderNotesEndpointRequest::class,
+            'action'  => PostOrderNotesAction::class,
         ],
 
         /**

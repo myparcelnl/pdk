@@ -30,6 +30,7 @@
                 }
             }
         ],
+        "orderNotes": [],
         "shipment": {
             "carrier": 1,
             "contractId": null,

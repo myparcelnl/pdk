@@ -12,6 +12,7 @@ final class PdkBackendActions
     public const FETCH_SUBSCRIPTION_FEATURES = 'fetchSubscriptionFeatures';
     // Orders
     public const EXPORT_ORDERS      = 'exportOrders';
+    public const POST_ORDER_NOTES   = 'postOrderNotes';
     public const FETCH_ORDERS       = 'fetchOrders';
     public const PRINT_ORDERS       = 'printOrders';
     public const SYNCHRONIZE_ORDERS = 'synchronizeOrders';

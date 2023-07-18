@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 dataset('pdkOrdersDomestic', [
@@ -36,6 +37,20 @@ dataset('pdkOrdersDomestic', [
                     'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                     'shipmentOptions' => [
                         'signature' => true,
+                    ],
+                ],
+                'notes'              => [
+                    [
+                        'author'    => OrderNote::AUTHOR_WEBSHOP,
+                        'note'      => 'test note',
+                        'createdAt' => '2023-01-01 12:00:00',
+                        'updatedAt' => '2023-01-01 12:00:00',
+                    ],
+                    [
+                        'author'    => OrderNote::AUTHOR_CUSTOMER,
+                        'note'      => 'hello',
+                        'createdAt' => '2023-01-01 12:00:00',
+                        'updatedAt' => '2023-01-02 12:00:00',
                     ],
                 ],
             ]),
@@ -81,6 +96,14 @@ dataset('pdkOrdersDomestic', [
                 'deliveryOptions'    => [
                     'carrier'      => Carrier::CARRIER_POSTNL_NAME,
                     'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                ],
+                'notes'              => [
+                    [
+                        'author'    => OrderNote::AUTHOR_CUSTOMER,
+                        'note'      => 'test note from customer',
+                        'createdAt' => '2023-01-01 12:00:00',
+                        'updatedAt' => '2023-01-01 18:00:00',
+                    ],
                 ],
             ]),
         ];

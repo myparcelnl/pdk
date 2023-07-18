@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -23,6 +24,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
+ * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $notes
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
@@ -66,9 +68,10 @@ class PdkOrder extends Model implements StorableArrayable
          * Order shipments. Applicable when NOT using order mode.
          */
         'shipments'          => ShipmentCollection::class,
-        'lines'              => PdkOrderLineCollection::class,
         'customsDeclaration' => null,
         'physicalProperties' => PhysicalProperties::class,
+        'lines'              => PdkOrderLineCollection::class,
+        'notes'              => PdkOrderNoteCollection::class,
 
         /**
          * Timestamp of when the order was placed.
@@ -107,6 +110,7 @@ class PdkOrder extends Model implements StorableArrayable
         'customsDeclaration' => CustomsDeclaration::class,
         'physicalProperties' => PhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
+        'notes'              => PdkOrderNoteCollection::class,
 
         'orderDate'             => 'datetime',
         'exported'              => 'bool',
@@ -155,6 +159,7 @@ class PdkOrder extends Model implements StorableArrayable
             'orderDate'          => $order->orderDate,
             'invoiceAddress'     => $order->invoiceAddress,
             'dropOffPoint'       => $order->dropOffPoint,
+            'orderNotes'         => $order->orderNotes,
             'status'             => $order->status,
             'type'               => $order->type,
             'price'              => $order->price,
@@ -215,6 +220,7 @@ class PdkOrder extends Model implements StorableArrayable
     public function toStorableArray(): array
     {
         return [
+            'apiIdentifier'   => $this->apiIdentifier,
             'exported'        => $this->exported,
             'deliveryOptions' => $this->deliveryOptions->toArrayWithoutNull(),
         ];
