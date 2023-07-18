@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,6 +91,17 @@ class ExportOrderAction extends AbstractOrderAction
             $orders
                 ->map(function (PdkOrder $order) {
                     $order->exported = true;
+
+                    if ($this->notSharingCustomerInformation()) {
+                        $order->shippingAddress->phone = null;
+                        $order->shippingAddress->email = null;
+
+                        if ($order->billingAddress) {
+                            $order->billingAddress->phone = null;
+                            $order->billingAddress->email = null;
+                        }
+                    }
+
                     return Order::fromPdkOrder($order);
                 })
                 ->toArray()
@@ -116,6 +128,13 @@ class ExportOrderAction extends AbstractOrderAction
             return $orders;
         }
 
+        if ($this->notSharingCustomerInformation()) {
+            $shipments->each(function (Shipment $shipment) {
+                $shipment->recipient->email = null;
+                $shipment->recipient->phone = null;
+            });
+        }
+
         $concepts = $this->shipmentRepository->createConcepts($shipments);
 
         $orders->updateShipments($concepts);
@@ -125,6 +144,14 @@ class ExportOrderAction extends AbstractOrderAction
         });
 
         return $orders;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function notSharingCustomerInformation(): bool
+    {
+        return ! Settings::get(GeneralSettings::SHARE_CUSTOMER_INFORMATION, GeneralSettings::ID);
     }
 }
 
