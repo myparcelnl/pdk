@@ -15,19 +15,16 @@ use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
-    new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
-    ]),
+    new UsesEachMockPdkInstance(),
     new UsesApiMock()
 );
 
@@ -112,7 +109,7 @@ it('exports entire order', function (array $orders) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api = Pdk::get(ApiServiceInterface::class);
     $api->getMock()
-        ->append(new ExamplePostOrdersResponse());
+        ->append(new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse());
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
