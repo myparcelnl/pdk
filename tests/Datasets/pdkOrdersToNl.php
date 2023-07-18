@@ -13,12 +13,23 @@ dataset('pdkOrdersDomestic', [
         return [
             new PdkOrder([
                 'externalIdentifier' => '247',
+                'billingAddress'     => [
+                    'cc'          => 'NL',
+                    'city'        => 'Hoofddorp',
+                    'person'      => 'Felicia Parcel',
+                    'postal_code' => '2132 JE',
+                    'address1'    => 'Antareslaan 31',
+                    'email'       => 'myparcel@myparcel.nl',
+                    'phone'       => '0612345678',
+                ],
                 'shippingAddress'    => [
                     'cc'          => 'NL',
                     'city'        => 'Hoofddorp',
                     'person'      => 'Felicia Parcel',
                     'postal_code' => '2132 JE',
                     'address1'    => 'Antareslaan 31',
+                    'email'       => 'myparcel@myparcel.nl',
+                    'phone'       => '0612345678',
                 ],
                 'deliveryOptions'    => [
                     'carrier'         => Carrier::CARRIER_POSTNL_NAME,
@@ -40,11 +51,20 @@ dataset('pdkOrdersDomestic', [
                     'packageType' => 'package',
                     'labelAmount' => 2,
                 ],
+                'billingAddress'     => [
+                    'cc'         => CountryCodes::CC_NL,
+                    'address1'   => 'Antareslaan 31',
+                    'postalCode' => '2132JE',
+                    'city'       => 'Hoofddorp',
+                    'person'     => 'Felicia Parcel',
+                    'phone'      => '0612345678',
+                ],
                 'shippingAddress'    => [
                     'cc'         => CountryCodes::CC_NL,
                     'address1'   => 'Pietjestraat 35',
                     'postalCode' => '2771BW',
                     'city'       => 'Bikinibroek',
+                    'email'      => 'test@myparcel.nl',
                 ],
             ]),
 
@@ -56,6 +76,7 @@ dataset('pdkOrdersDomestic', [
                     'person'      => 'Felicia Parcel',
                     'postal_code' => '2132 JE',
                     'address1'    => 'Antareslaan 31',
+                    'email'       => 'test@myparcel.nl',
                 ],
                 'deliveryOptions'    => [
                     'carrier'      => Carrier::CARRIER_POSTNL_NAME,
