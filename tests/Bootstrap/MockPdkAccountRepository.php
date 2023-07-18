@@ -60,16 +60,24 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     private $storedAccount;
 
     /**
-     * @param  array                                                $data
+     * @param  null|array                                           $data
      * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface    $storage
      * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(array $data = [], StorageInterface $storage, AccountRepository $accountRepository)
+    public function __construct(?array $data = [], StorageInterface $storage, AccountRepository $accountRepository)
     {
         parent::__construct($storage, $accountRepository);
         $this->storedAccount = $data === null ? null : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
+    }
+
+    /**
+     * @return void
+     */
+    public function deleteAccount(): void
+    {
+        $this->store(null);
     }
 
     /**
@@ -117,6 +125,6 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     {
         $this->storedAccount = $account;
 
-        return $account;
+        return $this->save('account', $account);
     }
 }

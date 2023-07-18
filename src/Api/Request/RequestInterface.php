@@ -31,7 +31,7 @@ interface RequestInterface
      * there is no response property set.
      * @exampe { "data": { "<property>": [] } }
      */
-    public function getProperty(): string;
+    public function getProperty(): ?string;
 
     /**
      * Formatted query string.

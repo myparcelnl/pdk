@@ -24,4 +24,12 @@ class ApiRepository extends Repository
 
         $this->api = $api;
     }
+
+    /**
+     * @return string
+     */
+    protected function getKeyPrefix(): string
+    {
+        return 'api:';
+    }
 }

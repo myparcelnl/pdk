@@ -23,22 +23,22 @@ class UpdateAccountAction implements ActionInterface
     /**
      * @var \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository
      */
-    private $carrierConfigurationRepository;
+    protected $carrierConfigurationRepository;
 
     /**
      * @var \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository
      */
-    private $carrierOptionsRepository;
+    protected $carrierOptionsRepository;
 
     /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
-    private $pdkAccountRepository;
+    protected $pdkAccountRepository;
 
     /**
      * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
      */
-    private $pdkSettingsRepository;
+    protected $pdkSettingsRepository;
 
     /**
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository $carrierConfigurationRepository
