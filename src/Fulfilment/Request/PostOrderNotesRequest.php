@@ -21,10 +21,10 @@ class PostOrderNotesRequest extends Request
     private $orderId;
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
      * @param  string                                                    $orderId
+     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
      */
-    public function __construct(OrderNoteCollection $collection, string $orderId)
+    public function __construct(string $orderId, OrderNoteCollection $collection)
     {
         parent::__construct();
         $this->collection = $collection;
@@ -38,10 +38,12 @@ class PostOrderNotesRequest extends Request
     {
         return json_encode([
             'data' => [
-                'order_notes' => array_map(function (OrderNote $orderNote) {
+                'order_notes' => array_map(static function (OrderNote $orderNote) {
                     return [
-                        'note'   => $orderNote->note,
-                        'author' => $orderNote->author,
+                        'author'     => $orderNote->author,
+                        'note'       => $orderNote->note,
+                        'created_at' => $orderNote->createdAt,
+                        'updated_at' => $orderNote->updatedAt,
                     ];
                 }, $this->collection->all()),
             ],

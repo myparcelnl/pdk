@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderRepository;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 
 class MockPdkOrderRepository extends AbstractPdkOrderRepository
 {

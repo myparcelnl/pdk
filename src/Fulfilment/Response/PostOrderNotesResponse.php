@@ -42,13 +42,16 @@ class PostOrderNotesResponse extends ApiResponseWithBody
      */
     private function createOrderNotes(array $orderNotes): void
     {
-        $this->orderNotes = (new OrderNoteCollection(
+        $this->orderNotes = new OrderNoteCollection(
             array_map(static function (array $orderNote) {
                 return [
-                    'note'   => $orderNote['note'],
-                    'author' => $orderNote['author'],
+                    'uuid'      => $orderNote['uuid'],
+                    'author'    => $orderNote['author'],
+                    'note'      => $orderNote['note'],
+                    'createdAt' => $orderNote['created_at'],
+                    'updatedAt' => $orderNote['updated_at'],
                 ];
             }, $orderNotes)
-        ));
+        );
     }
 }

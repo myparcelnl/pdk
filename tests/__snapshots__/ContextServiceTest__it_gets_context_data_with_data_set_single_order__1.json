@@ -128,7 +128,6 @@
                 "company": null
             },
             "shipments": [],
-            "lines": [],
             "customsDeclaration": null,
             "physicalProperties": {
                 "height": null,
@@ -136,8 +135,9 @@
                 "weight": 0,
                 "width": null
             },
+            "lines": [],
+            "notes": [],
             "orderDate": null,
-            "orderNotes": null,
             "exported": false,
             "shipmentPrice": 0,
             "shipmentPriceAfterVat": 0,

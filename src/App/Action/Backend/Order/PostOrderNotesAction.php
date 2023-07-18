@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
-use MyParcelNL\Pdk\Api\Response\JsonResponse;
-use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PostOrderNotesAction implements ActionInterface
+class PostOrderNotesAction extends AbstractOrderAction
 {
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository
@@ -19,11 +20,14 @@ class PostOrderNotesAction implements ActionInterface
     private $orderNotesRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository $orderNotesRepository
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository     $orderNotesRepository
      */
     public function __construct(
+        PdkOrderRepositoryInterface $pdkOrderRepository,
         OrderNotesRepository        $orderNotesRepository
     ) {
+        parent::__construct($pdkOrderRepository);
         $this->orderNotesRepository = $orderNotesRepository;
     }
 
@@ -35,21 +39,36 @@ class PostOrderNotesAction implements ActionInterface
      */
     public function handle(Request $request): Response
     {
-        /** @var \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders */
-        $orders = $request->get('orders');
+        // TODO: Remove this and check if shop subscription allows using order notes
+        if (! $request->query->has('OVERRIDE')) {
+            return $this->getFetchOrdersResponse($request);
+        }
 
-        $orders->each(function (PdkOrder $order) {
-            if ($order->orderNotes) {
+        $orderIds = $this->getOrderIds($request);
+        $orders   = $this->pdkOrderRepository->getMany($orderIds);
+
+        $orders
+            ->filter(function (PdkOrder $order) {
+                return $order->apiIdentifier && $order->notes->isNotEmpty();
+            })
+            ->each(function (PdkOrder $order) {
                 $this->orderNotesRepository->postOrderNotes(
-                    $order->orderNotes,
-                    $order->apiIdentifier
+                    $order->apiIdentifier,
+                    $order->notes->toFulfilmentCollection()
                 );
-            }
-        });
+            });
 
-        return new JsonResponse([
-            'orders' => $orders,
-        ]);
+        return $this->getFetchOrdersResponse($request);
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function getFetchOrdersResponse(Request $request): Response
+    {
+        return Actions::execute(PdkBackendActions::FETCH_ORDERS, ['orderIds' => $this->getOrderIds($request)]);
     }
 }
 

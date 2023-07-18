@@ -5,21 +5,50 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|string $note
- * @property null|string $author
+ * @property null|string    $uuid
+ * @property null|string    $author - 'customer' or 'webshop'
+ * @property null|string    $note
+ * @property null|\DateTime $createdAt
+ * @property null|\DateTime $updatedAt
  */
 class OrderNote extends Model
 {
+    public const AUTHOR_CUSTOMER = 'customer';
+    public const AUTHOR_WEBSHOP  = 'webshop';
+
     protected $attributes = [
-        'note'   => null,
-        'author' => null,
+        'uuid'      => null,
+        'author'    => null,
+        'note'      => null,
+        'createdAt' => null,
+        'updatedAt' => null,
     ];
 
     protected $casts      = [
-        'note'   => 'string',
-        'author' => 'string',
+        'uuid'      => 'string',
+        'author'    => 'string',
+        'note'      => 'string',
+        'createdAt' => 'datetime',
+        'updatedAt' => 'datetime',
     ];
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderNote $pdkOrderNote
+     *
+     * @return void
+     */
+    public static function fromPdkOrderNote(PdkOrderNote $pdkOrderNote): self
+    {
+        return new self([
+            'uuid'      => $pdkOrderNote->apiIdentifier,
+            'author'    => $pdkOrderNote->author,
+            'note'      => $pdkOrderNote->note,
+            'createdAt' => $pdkOrderNote->createdAt,
+            'updatedAt' => $pdkOrderNote->updatedAt,
+        ]);
+    }
 }
