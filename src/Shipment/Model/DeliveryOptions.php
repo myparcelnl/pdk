@@ -147,7 +147,11 @@ class DeliveryOptions extends Model
      */
     public function getDateAsString(): ?string
     {
-        return $this->date ? $this->date->format('Y-m-d H:i:s') : null;
+        if (! $this->date || $this->date < new DateTime('now')) {
+            return null;
+        }
+
+        return $this->date->format('Y-m-d H:i:s');
     }
 
     /**
