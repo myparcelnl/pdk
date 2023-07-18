@@ -3,11 +3,16 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
+use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -106,3 +111,33 @@ it('calculates correct totals', function (array $input, array $totals) {
         ],
     ],
 ]);
+
+it('creates pdk order from fulfilment order', function (array $orders) {
+    $orderCollection = new OrderCollection($orders);
+
+    $pdkOrders = new PdkOrderCollection(
+        $orderCollection
+            ->map(function (Order $order) {
+                return PdkOrder::fromFulfilmentOrder($order);
+            })
+            ->all()
+    );
+
+    assertMatchesJsonSnapshot(json_encode($pdkOrders->toArrayWithoutNull()));
+})->with('fulfilmentOrders');
+
+it('creates a storable array', function (array $orders) {
+    $pdkOrders = new PdkOrderCollection($orders);
+    $result    = [];
+
+    foreach ($pdkOrders->all() as $pdkOrder) {
+        $arr = $pdkOrder->toStorableArray();
+
+        Arr::forget($arr, 'deliveryOptions.carrier.capabilities');
+        Arr::forget($arr, 'deliveryOptions.carrier.returnCapabilities');
+
+        $result[] = $arr;
+    }
+
+    assertMatchesJsonSnapshot(json_encode($result));
+})->with('pdkOrdersDomestic');

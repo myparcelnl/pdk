@@ -39,7 +39,7 @@ class OrderNote extends Model
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderNote $pdkOrderNote
      *
-     * @return void
+     * @return self
      */
     public static function fromPdkOrderNote(PdkOrderNote $pdkOrderNote): self
     {
