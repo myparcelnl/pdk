@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.0](https://github.com/myparcelnl/pdk/compare/v2.10.0...v2.11.0) (2023-07-18)
+
+
+### :sparkles: New Features
+
+* **fulfilment:** add order notes ([#122](https://github.com/myparcelnl/pdk/issues/122)) ([88a4c83](https://github.com/myparcelnl/pdk/commit/88a4c83ea70b13790f261ac63022623f3dc395d7))
+
 ## [2.10.0](https://github.com/myparcelnl/pdk/compare/v2.9.2...v2.10.0) (2023-07-18)
 
 
