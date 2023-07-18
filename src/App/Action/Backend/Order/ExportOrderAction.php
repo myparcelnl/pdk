@@ -110,7 +110,7 @@ class ExportOrderAction extends AbstractOrderAction
 
                     return Order::fromPdkOrder($order);
                 })
-                ->toArray()
+                ->all()
         );
 
         $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
