@@ -21,6 +21,8 @@ class OrderNotesRepository extends ApiRepository
     public function postOrderNotes(OrderNoteCollection $orderNotes, ?string $fulfilmentIdentifier): ?OrderNoteCollection
     {
         // TODO: Check if shop subscription allows using order notes
+        return null;
+
         if (! $fulfilmentIdentifier) {
             return null;
         }

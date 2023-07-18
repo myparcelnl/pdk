@@ -29,7 +29,7 @@ it('creates a valid order note collection from api data', function (array $input
     $savedOrderNotes = $repository->postOrderNotes(new OrderNoteCollection($input), $fulfilmentId);
 
     expect($savedOrderNotes)
-        ->toEqual($result->toArray());
+        ->toEqual($result ? $result->toArray() : null);
 
     assertMatchesJsonSnapshot(json_encode($savedOrderNotes ? $savedOrderNotes->toArray() : null));
 })->with([
@@ -45,12 +45,8 @@ it('creates a valid order note collection from api data', function (array $input
             ],
         ],
         'fulfilmentId' => '12345678',
-        'result'       => [
-            [
-                'note'   => 'This is a note',
-                'author' => 'customer',
-            ],
-        ],
+        // TODO: change this to actual result when subscription features are implemented
+        'result'       => null,
     ],
     'multiple notes with non-existent fulfilment id' => [
         'input'        => [
