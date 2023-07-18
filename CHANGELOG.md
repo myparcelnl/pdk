@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/myparcelnl/pdk/compare/v2.11.0...v2.11.1) (2023-07-18)
+
+
+### :bug: Bug Fixes
+
+* **tests:** include tests/Api and tests/Datasets in published package ([4cc0335](https://github.com/myparcelnl/pdk/commit/4cc033510cf83468257fb8b4161f525186d0167b))
+
+
+### :zap: Performance Improvements
+
+* **order:** improve export order performance ([ec9db3f](https://github.com/myparcelnl/pdk/commit/ec9db3f3c8f1718854e1793d7ba887076f8c9a6d))
+
 ## [2.11.0](https://github.com/myparcelnl/pdk/compare/v2.10.0...v2.11.0) (2023-07-18)
 
 
