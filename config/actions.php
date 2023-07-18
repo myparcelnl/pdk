@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
@@ -24,6 +25,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
+use MyParcelNL\Pdk\App\Request\Account\DeleteAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
@@ -63,6 +65,14 @@ return [
     ],
 
     PdkEndpoint::CONTEXT_BACKEND => [
+        /**
+         * Delete account.
+         */
+        PdkBackendActions::DELETE_ACCOUNT          => [
+            'request' => DeleteAccountEndpointRequest::class,
+            'action'  => DeleteAccountAction::class,
+        ],
+
         /**
          * Update account.
          */

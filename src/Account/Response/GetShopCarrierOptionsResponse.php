@@ -25,13 +25,12 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
     /**
      * The "name" property is omitted intentionally so the carrier data is filled using the CarrierRepository.
      *
-     * @see \MyParcelNL\Pdk\Carrier\Model\Carrier::__construct()
-     *
      * @return void
+     * @see \MyParcelNL\Pdk\Carrier\Model\Carrier::__construct()
      */
     protected function parseResponseBody(): void
     {
-        $options = json_decode($this->getBody(), true)['data']['carrier_options'];
+        $options = json_decode($this->getBody(), true)['data']['carrier_options'] ?? [];
 
         $this->options = new CarrierCollection(
             array_map(static function (array $option) {

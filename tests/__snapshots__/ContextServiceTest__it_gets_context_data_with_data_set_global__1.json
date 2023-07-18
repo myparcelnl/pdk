@@ -10,6 +10,17 @@
         "baseUrl": "BACKEND_URL",
         "bootstrapId": "myparcel-pdk-boot",
         "endpoints": {
+            "deleteAccount": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "deleteAccount"
+                },
+                "path": "",
+                "property": null,
+                "responseProperty": null
+            },
             "updateAccount": {
                 "body": null,
                 "headers": [],

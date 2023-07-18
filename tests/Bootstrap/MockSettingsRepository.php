@@ -12,9 +12,9 @@ use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 class MockSettingsRepository extends AbstractSettingsRepository
 {
     /**
-     * @var \MyParcelNL\Pdk\Settings\Model\Settings
+     * @var array
      */
-    private $settings;
+    private $settings = [];
 
     /**
      * @param  array                                      $settings
