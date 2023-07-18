@@ -137,6 +137,7 @@
                 "width": null
             },
             "orderDate": null,
+            "orderNotes": null,
             "exported": false,
             "shipmentPrice": 0,
             "shipmentPriceAfterVat": 0,

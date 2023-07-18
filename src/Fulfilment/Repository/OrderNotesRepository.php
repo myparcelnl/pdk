@@ -23,7 +23,7 @@ class OrderNotesRepository extends ApiRepository
         // TODO: Check if shop subscription allows using order notes
         return null;
 
-        if (! $fulfilmentIdentifier) {
+        if (! $fulfilmentIdentifier || $orderNotes->isEmpty()) {
             return null;
         }
 

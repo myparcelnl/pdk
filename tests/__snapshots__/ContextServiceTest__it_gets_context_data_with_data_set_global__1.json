@@ -54,6 +54,17 @@
                 "property": "orders",
                 "responseProperty": null
             },
+            "postOrderNotes": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "postOrderNotes"
+                },
+                "path": "",
+                "property": "orderNotes",
+                "responseProperty": null
+            },
             "fetchOrders": {
                 "body": null,
                 "headers": [],

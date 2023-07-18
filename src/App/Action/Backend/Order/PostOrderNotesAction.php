@@ -39,10 +39,12 @@ class PostOrderNotesAction implements ActionInterface
         $orders = $request->get('orders');
 
         $orders->each(function (PdkOrder $order) {
-            $this->orderNotesRepository->postOrderNotes(
-                $order->orderNotes,
-                $order->apiIdentifier
-            );
+            if ($order->orderNotes) {
+                $this->orderNotesRepository->postOrderNotes(
+                    $order->orderNotes,
+                    $order->apiIdentifier
+                );
+            }
         });
 
         return new JsonResponse([
