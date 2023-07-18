@@ -6,8 +6,6 @@
 /.yarn                export-ignore
 /coverage             export-ignore
 /private              export-ignore
-/tests/Api            export-ignore
-/tests/Datasets       export-ignore
 /tests/Mocks          export-ignore
 /tests/Unit           export-ignore
 /tests/__snapshots__  export-ignore
