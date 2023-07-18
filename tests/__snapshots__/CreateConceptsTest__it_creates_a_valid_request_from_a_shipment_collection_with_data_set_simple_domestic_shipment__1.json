@@ -7,7 +7,7 @@
     "options": {
       "package_type": 1,
       "delivery_type": 2,
-      "delivery_date": "2022-07-10 16:00:00",
+      "delivery_date": "2038-07-10 16:00:00",
       "insurance": {
         "amount": 500,
         "currency": "EUR"
