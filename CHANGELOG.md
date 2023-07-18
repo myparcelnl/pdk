@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.0](https://github.com/myparcelnl/pdk/compare/v2.9.2...v2.10.0) (2023-07-18)
+
+
+### :sparkles: New Features
+
+* **actions:** add delete account action ([#124](https://github.com/myparcelnl/pdk/issues/124)) ([0373ca9](https://github.com/myparcelnl/pdk/commit/0373ca9c486a344a3d08943e33c952ae29a1a116))
+* **orders:** honor the "share customer information" setting ([#113](https://github.com/myparcelnl/pdk/issues/113)) ([6238419](https://github.com/myparcelnl/pdk/commit/6238419a3376027fb630ef997f25b698de2c72b0))
+
 ## [2.9.2](https://github.com/myparcelnl/pdk/compare/v2.9.1...v2.9.2) (2023-07-17)
 
 
