@@ -9,8 +9,7 @@ final class PdkBackendActions
     // Account
     public const UPDATE_ACCOUNT              = 'updateAccount';
     public const FETCH_SUBSCRIPTION_FEATURES = 'fetchSubscriptionFeatures';
-    public const DELETE_ACCOUNT = 'deleteAccount';
-    public const FETCH_SUBSCRIPTION_FEATURES = 'fetchSubscriptionFeatures';
+    public const DELETE_ACCOUNT              = 'deleteAccount';
     // Orders
     public const EXPORT_ORDERS      = 'exportOrders';
     public const POST_ORDER_NOTES   = 'postOrderNotes';
