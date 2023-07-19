@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\env;
+use function DI\factory;
 use function DI\value;
 
 /**
@@ -31,16 +34,25 @@ return [
     'defaultTimeZone'          => value('Europe/Amsterdam'),
 
     /**
-     * Carriers that can be used and shown. Only use carriers that we tested and have a schema for, at the moment
+     * Carriers that can be used and shown. Only use carriers that we tested and have a schema for, at the moment.
+     * Filters by carriers that are allowed by the platform.
+     *
+     * @see  /config/platform/myparcel.php
+     * @see  /config/platform/flespakket.php
+     * @see  /config/platform/belgie.php
+     * @todo remove this and replace usage with Platform::get('allowedCarriers') when all carriers are supported
      */
-    'allowedCarriers'          => value([
-        'dhleuroplus',
-        'dhlforyou',
-        'dhlparcelconnect',
-        'postnl',
-        // todo: bpost
-        // todo: dpd
-    ]),
+    'allowedCarriers'          => factory(function (): array {
+        return array_intersect([
+            Carrier::CARRIER_DHL_EUROPLUS_NAME,
+            Carrier::CARRIER_DHL_FOR_YOU_NAME,
+            Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
+            Carrier::CARRIER_POSTNL_NAME,
+            // TODO: add support for these carriers
+            // Carrier::CARRIER_BPOST_NAME,
+            // Carrier::CARRIER_DPD_NAME,
+        ], Platform::get('allowedCarriers') ?? []);
+    }),
 
     /**
      * Package types, ordered by size from largest to smallest.

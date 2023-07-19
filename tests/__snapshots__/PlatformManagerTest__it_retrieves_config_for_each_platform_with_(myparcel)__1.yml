@@ -4,5 +4,10 @@ backofficeUrl: 'https://backoffice.myparcel.nl'
 localCountry: NL
 defaultCarrier: postnl
 defaultCarrierId: 1
+allowedCarriers:
+    - dhleuroplus
+    - dhlforyou
+    - dhlparcelconnect
+    - postnl
 defaultSettings:
     checkout: { pickupLocationsDefaultView: list }

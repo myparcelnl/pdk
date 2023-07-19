@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
@@ -70,4 +71,28 @@ it('converts name to id', function ($input, $output) {
     ['aardappel', null],
     [4, null],
     ['4', null],
+]);
+
+it('converts array to collection recursively', function (array $array) {
+    $collection = Utils::toRecursiveCollection($array);
+
+    $expectNestedCollections = function (Collection $collection) use (&$expectNestedCollections) {
+        expect($collection)->toBeInstanceOf(Collection::class);
+
+        $collection->each(function ($item) use (&$expectNestedCollections) {
+            if ($item instanceof Collection) {
+                $expectNestedCollections($item);
+                return;
+            }
+
+            expect($item)->not->toBeArray();
+        });
+    };
+
+    $expectNestedCollections($collection);
+})->with([
+    'simple array'                             => [[1, 2, 3]],
+    'nested array'                             => [[1, 2, [3, 4, 5]]],
+    'nested array with assoc'                  => [[1, 2, ['a' => 3, 'b' => 4, 'c' => 5]]],
+    'nested array with assoc and nested array' => [[1, 2, ['a' => 3, 'b' => 4, 'c' => [5, 6, 7]]]],
 ]);
