@@ -319,7 +319,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
      */
     protected function shouldRender(string $component): bool
     {
-        if ($this->requiresAccount($component) && ! AccountSettings::getAccount()) {
+        if ($this->requiresAccount($component) && ! AccountSettings::hasAccount()) {
             return false;
         }
 

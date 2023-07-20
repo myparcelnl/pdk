@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Logger;
 
-use Psr\Log\LoggerInterface;
+use MyParcelNL\Pdk\Base\Contract\LoggerInterface;
 use Psr\Log\LogLevel;
 
 abstract class AbstractLogger implements LoggerInterface
@@ -96,6 +96,39 @@ abstract class AbstractLogger implements LoggerInterface
     }
 
     /**
+     * @param  string      $class
+     * @param  null|string $replacement
+     *
+     * @return void
+     */
+    public function reportDeprecatedClass(string $class, ?string $replacement = null): void
+    {
+        $this->logDeprecation("Class $class", $replacement);
+    }
+
+    /**
+     * @param  string      $interface
+     * @param  null|string $replacement
+     *
+     * @return void
+     */
+    public function reportDeprecatedInterface(string $interface, ?string $replacement = null): void
+    {
+        $this->logDeprecation("Interface $interface", $replacement);
+    }
+
+    /**
+     * @param  string      $method
+     * @param  string|null $replacement
+     *
+     * @return void
+     */
+    public function reportDeprecatedMethod(string $method, ?string $replacement = null): void
+    {
+        $this->logDeprecation("Method $method()", $replacement);
+    }
+
+    /**
      * @param  string $message
      * @param  array  $context
      *
@@ -118,6 +151,23 @@ abstract class AbstractLogger implements LoggerInterface
         $message = "[PDK]: $message";
 
         $this->log($level, $message, $context);
+    }
+
+    /**
+     * @param  string      $thing
+     * @param  null|string $replacement
+     *
+     * @return void
+     */
+    protected function logDeprecation(string $thing, ?string $replacement = null): void
+    {
+        $message = sprintf('%s is deprecated and will be removed in the next major release.', $thing);
+
+        if ($replacement) {
+            $message .= sprintf(' Use %s instead.', $replacement);
+        }
+
+        $this->warning($message);
     }
 }
 

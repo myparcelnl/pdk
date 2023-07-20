@@ -10,7 +10,8 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Utils;
 
-abstract class AbstractPdkCartRepository extends Repository implements PdkCartRepositoryInterface
+abstract class AbstractPdkCartRepository extends Repository implements
+    PdkCartRepositoryInterface
 {
     /**
      * @param  mixed $input

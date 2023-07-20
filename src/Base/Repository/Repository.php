@@ -4,96 +4,22 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Repository;
 
+use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
 class Repository
 {
     /**
-     * @var \MyParcelNL\Pdk\Storage\Contract\StorageInterface
+     * @var \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface
      */
-    protected $storage;
+    protected $cache;
 
     /**
-     * @var array{string, string}
+     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface $cache
      */
-    protected $storageHashMap = [];
-
-    /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
-     */
-    public function __construct(StorageInterface $storage)
+    public function __construct(CacheStorageInterface $cache)
     {
-        $this->storage = $storage;
-    }
-
-    /**
-     * @return void
-     */
-    public function persist(): void
-    {
-        $prefix = $this->getKeyPrefix();
-
-        foreach ($this->storageHashMap as $key => $hash) {
-            $fullKey = $prefix . $key;
-            $data    = $this->storage->get($fullKey);
-
-            if ($hash === $this->generateDataHash($data)) {
-                continue;
-            }
-
-            $this->storage->set($fullKey, $data);
-            $this->storageHashMap[$fullKey] = $this->generateDataHash($data);
-        }
-    }
-
-    /**
-     * @param  string        $key
-     * @param  null|callable $callback
-     * @param  bool          $force
-     *
-     * @return mixed
-     */
-    public function retrieve(string $key, ?callable $callback = null, bool $force = false)
-    {
-        $fullKey = $this->getKeyPrefix() . $key;
-
-        if (null !== $callback && ($force || ! $this->storage->has($fullKey))) {
-            $data = $callback();
-
-            $this->storage->set($fullKey, $data);
-        }
-
-        $value = $this->storage->get($fullKey);
-
-        return is_object($value) ? clone $value : $value;
-    }
-
-    /**
-     * @param  string $key
-     * @param  mixed  $data
-     *
-     * @return mixed
-     */
-    public function save(string $key, $data)
-    {
-        $this->storage->set($this->getKeyPrefix() . $key, $data);
-        $this->storage->delete($this->getKeyPrefix() . $this->getAllStorageKey());
-
-        return $data;
-    }
-
-    /**
-     * @param  mixed $data
-     *
-     * @return null|string
-     */
-    protected function generateDataHash($data): ?string
-    {
-        if (! $data) {
-            return null;
-        }
-
-        return md5(var_export($data, true));
+        $this->cache = $cache;
     }
 
     /**
@@ -113,12 +39,44 @@ class Repository
     }
 
     /**
-     * @param  callable $callback
+     * @param  string                                                 $key
+     * @param  null|callable                                          $callback
+     * @param  bool                                                   $force
+     * @param  null|\MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
      *
      * @return mixed
      */
-    protected function retrieveAll(callable $callback)
+    protected function retrieve(
+        string           $key,
+        ?callable        $callback = null,
+        bool             $force = false,
+        StorageInterface $storage = null
+    ) {
+        $storage = $storage ?? $this->cache;
+
+        $fullKey = $this->getKeyPrefix() . $key;
+
+        if (null !== $callback && ($force || ! $storage->has($fullKey))) {
+            $data = $callback();
+
+            $storage->set($fullKey, $data);
+        }
+
+        $value = $storage->get($fullKey);
+
+        return is_object($value) ? clone $value : $value;
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $data
+     *
+     * @return mixed
+     */
+    protected function save(string $key, $data)
     {
-        return $this->retrieve($this->getAllStorageKey(), $callback);
+        $this->cache->set($this->getKeyPrefix() . $key, $data);
+
+        return $data;
     }
 }

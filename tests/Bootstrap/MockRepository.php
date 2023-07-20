@@ -22,12 +22,12 @@ class MockRepository extends ApiRepository
     private $values;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage       $storage
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage       $cache
      * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api
      */
-    public function __construct(MemoryCacheStorage $storage, ApiServiceInterface $api)
+    public function __construct(MemoryCacheStorage $cache, ApiServiceInterface $api)
     {
-        parent::__construct($storage, $api);
+        parent::__construct($cache, $api);
 
         $this->values = new Collection([
             'account' => $this->getAccount(),

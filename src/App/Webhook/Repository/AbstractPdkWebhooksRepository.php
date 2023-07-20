@@ -18,12 +18,12 @@ abstract class AbstractPdkWebhooksRepository extends Repository implements PdkWe
     protected $apiRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $storage
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $cache
      * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $subscriptionRepository
      */
-    public function __construct(StorageInterface $storage, WebhookSubscriptionRepository $subscriptionRepository)
+    public function __construct(StorageInterface $cache, WebhookSubscriptionRepository $subscriptionRepository)
     {
-        parent::__construct($storage);
+        parent::__construct($cache);
         $this->apiRepository = $subscriptionRepository;
     }
 

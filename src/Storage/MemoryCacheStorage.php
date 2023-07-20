@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Storage;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
 
-class MemoryCacheStorage implements StorageInterface
+class MemoryCacheStorage implements CacheStorageInterface
 {
     protected $data = [];
 
@@ -43,12 +43,12 @@ class MemoryCacheStorage implements StorageInterface
 
     /**
      * @param  string $storageKey
-     * @param         $item
+     * @param         $value
      *
      * @return void
      */
-    public function set(string $storageKey, $item): void
+    public function set(string $storageKey, $value): void
     {
-        Arr::set($this->data, $storageKey, $item);
+        Arr::set($this->data, $storageKey, $value);
     }
 }

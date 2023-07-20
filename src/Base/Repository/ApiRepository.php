@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Repository;
 
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
 
 class ApiRepository extends Repository
 {
@@ -15,12 +15,12 @@ class ApiRepository extends Repository
     protected $api;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface  $api
+     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface $cache
+     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface       $api
      */
-    public function __construct(StorageInterface $storage, ApiServiceInterface $api)
+    public function __construct(CacheStorageInterface $cache, ApiServiceInterface $api)
     {
-        parent::__construct($storage);
+        parent::__construct($cache);
 
         $this->api = $api;
     }

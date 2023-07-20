@@ -9,11 +9,17 @@ use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\Settings;
+use function array_keys;
 
-abstract class AbstractSettingsRepository extends Repository implements SettingsRepositoryInterface
+/**
+ * @deprecated use WcPdkSettingsRepository. Will be removed in v3.0.0
+ * @see        \MyParcelNL\Pdk\Settings\Repository\PdkSettingsRepository
+ * @todo       Remove in v3.0.0
+ */
+abstract class AbstractSettingsRepository extends Repository implements PdkSettingsRepositoryInterface
 {
     /**
      * @param  string $namespace
@@ -32,10 +38,11 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
 
     /**
      * @return \MyParcelNL\Pdk\Settings\Model\Settings
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function all(): Settings
     {
-        return $this->retrieveAll(function () {
+        return $this->retrieve('all', function () {
             $settings = new Settings();
 
             foreach ($settings->getAttributes() as $settingsId => $settingsModelOrCollection) {
@@ -75,19 +82,6 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
-     *
-     * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    public function storeAllSettings(Settings $settings): void
-    {
-        foreach (array_keys($settings->getAttributes()) as $attribute) {
-            $this->storeSettings($settings->getAttribute($attribute));
-        }
-    }
-
-    /**
      * @param  AbstractSettingsModel|SettingsModelCollection $settings
      *
      * @return void
@@ -95,6 +89,13 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
      */
     public function storeSettings($settings): void
     {
+        if ($settings instanceof Settings) {
+            foreach (array_keys($settings->getAttributes()) as $attribute) {
+                $this->storeSettings($settings->getAttribute($attribute));
+            }
+            return;
+        }
+
         if (! $settings instanceof SettingsModelCollection) {
             $this->store($this->createSettingsKey($settings->id), $settings->toStorableArray());
             return;

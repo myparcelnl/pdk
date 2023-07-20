@@ -27,6 +27,7 @@ use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\LoggerInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
@@ -46,14 +47,18 @@ use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
 use MyParcelNL\Pdk\Platform\PlatformManager;
 use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
+use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use function DI\autowire;
-use function DI\factory;
+use function MyParcelNL\Pdk\linkDeprecatedInterface;
 
 /**
  * Pre-defined services.
@@ -165,9 +170,16 @@ return [
     ShipmentOptionsServiceInterface::class     => autowire(ShipmentOptionsService::class),
 
     /**
-     * Default storage driver for all repositories. Defaults to in-memory storage. Can be replaced with a proper cache driver.
+     * Default storage driver for all repositories. Defaults to in-memory storage. Should be replaced with a proper storage driver.
+     *
+     * @todo remove default in v3.0.0
      */
     StorageInterface::class                    => autowire(MemoryCacheStorage::class),
+
+    /**
+     * Cache storage driver for all repositories. Defaults to in-memory storage. Can be replaced with a proper cache driver.
+     */
+    CacheStorageInterface::class               => autowire(MemoryCacheStorage::class),
 
     /**
      * Handles weight calculations and unit conversions.
@@ -177,12 +189,29 @@ return [
     /**
      * @todo remove in v3.0.0
      */
-    PdkAccountRepositoryInterface::class       => factory(function () {
-        return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
-    }),
+    PdkAccountRepositoryInterface::class       => linkDeprecatedInterface(
+        AccountRepositoryInterface::class,
+        PdkAccountRepositoryInterface::class
+    ),
 
     /**
      * Handles executing webhooks.
      */
     PdkWebhookManagerInterface::class          => autowire(PdkWebhookManager::class),
+
+    /**
+     * @todo remove in v3.0.0
+     */
+    PdkSettingsRepositoryInterface::class      => linkDeprecatedInterface(
+        SettingsRepositoryInterface::class,
+        PdkSettingsRepositoryInterface::class
+    ),
+
+    /**
+     * @todo remove in v3.0.0
+     */
+    PsrLoggerInterface::class                  => linkDeprecatedInterface(
+        PsrLoggerInterface::class,
+        LoggerInterface::class
+    ),
 ];

@@ -149,7 +149,7 @@ class InstallerService implements InstallerServiceInterface
     {
         $settings = new Settings(SettingsFacade::getDefaults());
 
-        $this->settingsRepository->storeAllSettings($settings);
+        $this->settingsRepository->storeSettings($settings);
     }
 
     /**

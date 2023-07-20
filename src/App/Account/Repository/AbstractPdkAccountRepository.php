@@ -8,13 +8,19 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Repository\Repository;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
 use Throwable;
 
-abstract class AbstractPdkAccountRepository extends Repository implements PdkAccountRepositoryInterface
+/**
+ * @deprecated Use \MyParcelNL\Pdk\Account\Repository\PdkAccountRepository instead. Will be removed in v3.0.0.
+ * @see        \MyParcelNL\Pdk\App\Account\Repository\PdkAccountRepository
+ */
+abstract class AbstractPdkAccountRepository extends Repository implements
+    PdkAccountRepositoryInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Account\Repository\AccountRepository
@@ -27,16 +33,17 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
+     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface           $cache
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository             $accountRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      */
     public function __construct(
-        StorageInterface            $storage,
-        AccountRepository           $accountRepository,
-        SettingsRepositoryInterface $settingsRepository
+        CacheStorageInterface          $cache,
+        AccountRepository              $accountRepository,
+        PdkSettingsRepositoryInterface $settingsRepository
     ) {
-        parent::__construct($storage);
+        Logger::reportDeprecatedClass(__CLASS__, PdkAccountRepository::class);
+        parent::__construct($cache);
         $this->accountRepository  = $accountRepository;
         $this->settingsRepository = $settingsRepository;
     }

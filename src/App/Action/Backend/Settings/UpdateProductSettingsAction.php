@@ -36,7 +36,7 @@ class UpdateProductSettingsAction implements ActionInterface
         $body     = json_decode($request->getContent(), true);
         $settings = $body['data']['product_settings'] ?? [];
 
-        $product = $this->productRepository->getProduct($productId);
+        $product = $this->productRepository->get($productId);
 
         $product->settings = $settings;
 

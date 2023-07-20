@@ -8,6 +8,9 @@ use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
+/**
+ * @deprecated Use \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface instead. Will be removed in v3.0.0.
+ */
 interface SettingsRepositoryInterface
 {
     /**
@@ -30,14 +33,7 @@ interface SettingsRepositoryInterface
     public function store(string $key, $value): void;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
-     *
-     * @return void
-     */
-    public function storeAllSettings(Settings $settings): void;
-
-    /**
-     * @param  SettingsModelCollection|AbstractSettingsModel $settings
+     * @param  Settings|SettingsModelCollection|AbstractSettingsModel $settings
      *
      * @return void
      */

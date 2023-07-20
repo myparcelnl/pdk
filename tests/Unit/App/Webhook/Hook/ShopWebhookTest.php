@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Hook;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\LoggerInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
@@ -18,7 +19,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -61,18 +61,18 @@ it('executes "update account" action', function (string $hook, string $expectedC
         return $log;
     });
 
-    expect($logs->toArray())->toBe([
-        [
+    expect($logs->first())
+        ->toBe([
             'level'   => 'debug',
             'message' => '[PDK]: Webhook received',
             'context' => [],
-        ],
-        [
+        ])
+        ->and($logs->last())
+        ->toBe([
             'level'   => 'debug',
             'message' => '[PDK]: Webhook processed',
             'context' => ['hook' => $expectedClass],
-        ],
-    ]);
+        ]);
 })->with([
     'shop updated' => [
         'hook'  => WebhookSubscription::SHOP_UPDATED,

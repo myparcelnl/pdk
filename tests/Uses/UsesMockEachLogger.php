@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Uses;
 
+use MyParcelNL\Pdk\Base\Contract\LoggerInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use Psr\Log\LoggerInterface;
 
 final class UsesMockEachLogger implements BaseMock
 {

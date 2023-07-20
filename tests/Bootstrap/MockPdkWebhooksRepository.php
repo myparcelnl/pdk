@@ -37,17 +37,17 @@ final class MockPdkWebhooksRepository extends AbstractPdkWebhooksRepository
 
     /**
      * @param  array                                                            $subscriptions
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $storage
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $cache
      * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $subscriptionRepository
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
     public function __construct(
         array                         $subscriptions = self::DEFAULT_SUBSCRIPTIONS,
-        StorageInterface              $storage,
+        StorageInterface              $cache,
         WebhookSubscriptionRepository $subscriptionRepository
     ) {
-        parent::__construct($storage, $subscriptionRepository);
+        parent::__construct($cache, $subscriptionRepository);
 
         $this->subscriptions = new WebhookSubscriptionCollection($subscriptions);
     }
@@ -79,13 +79,13 @@ final class MockPdkWebhooksRepository extends AbstractPdkWebhooksRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection $subscriptions
+     * @param  \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection $key
      *
      * @return void
      */
-    public function store(WebhookSubscriptionCollection $subscriptions): void
+    public function store(WebhookSubscriptionCollection $key): void
     {
-        $this->subscriptions = $subscriptions;
+        $this->subscriptions = $key;
     }
 
     /**

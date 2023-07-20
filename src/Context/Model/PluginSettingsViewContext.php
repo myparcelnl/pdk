@@ -46,7 +46,7 @@ class PluginSettingsViewContext implements Arrayable
      */
     public function __construct()
     {
-        if (! AccountSettings::getAccount()) {
+        if (! AccountSettings::hasAccount()) {
             return;
         }
 

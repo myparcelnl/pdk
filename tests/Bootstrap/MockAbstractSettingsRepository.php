@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 
-class MockSettingsRepository extends AbstractSettingsRepository
+class MockAbstractSettingsRepository extends AbstractSettingsRepository
 {
     /**
      * @var array

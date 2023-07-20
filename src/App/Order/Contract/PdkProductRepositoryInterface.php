@@ -6,22 +6,33 @@ namespace MyParcelNL\Pdk\App\Order\Contract;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Base\Contract\PdkMultipleRepositoryInterface;
 
-interface PdkProductRepositoryInterface
+interface PdkProductRepositoryInterface extends PdkMultipleRepositoryInterface
 {
     /**
+     * Get a single product.
+     */
+    public function get($input): PdkProduct;
+
+    /**
+     * Get multiple products.
+     */
+    public function getMany($input): PdkProductCollection;
+
+    /**
      * Get a product by identifier.
+     *
+     * @deprecated Use get() instead. Will be removed in v3.0.0.
+     * @TODO       Remove in v3.0.0
      */
     public function getProduct($identifier): PdkProduct;
 
     /**
-     * Get product settings by identifier.
-     */
-    public function getProductSettings($identifier): ProductSettings;
-
-    /**
      * Get multiple products by identifiers.
+     *
+     * @deprecated Use getMany() instead. Will be removed in v3.0.0.
+     * @TODO       Remove in v3.0.0
      */
     public function getProducts(array $identifiers = []): PdkProductCollection;
 

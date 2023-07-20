@@ -82,16 +82,16 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Account\Model\Account $account
+     * @param  null|\MyParcelNL\Pdk\Account\Model\Account $key
      *
      * @return void
      * @noinspection PhpOverridingMethodVisibilityInspection
      */
-    public function store(?Account $account): ?Account
+    public function store(?Account $key): ?Account
     {
-        $this->storedAccount = $account;
+        $this->storedAccount = $key;
 
-        return $this->save('account', $account);
+        return $this->save('account', $key);
     }
 
     /**

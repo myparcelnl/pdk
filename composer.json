@@ -43,7 +43,10 @@
     "autoload": {
         "psr-4": {
             "MyParcelNL\\Pdk\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -129,6 +129,20 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
+     * @param  mixed $input
+     *
+     * @return null|string
+     */
+    public static function generateHash($input): ?string
+    {
+        if (! $input) {
+            return null;
+        }
+
+        return md5(var_export($input, true));
+    }
+
+    /**
      * @param $class
      *
      * @return array

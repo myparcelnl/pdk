@@ -8,6 +8,7 @@ use JsonSchema\Validator;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
@@ -105,7 +106,7 @@ class SchemaRepository extends Repository
      */
     protected function handleOption(array $schema, string $path, $value)
     {
-        $key = $this->generateDataHash($schema);
+        $key = Utils::generateHash($schema);
         $key = is_array($value) ? "option_{$key}_$path" : "option_{$key}_{$path}_$value";
 
         return $this->retrieve($key, function () use ($schema, $path, $value) {

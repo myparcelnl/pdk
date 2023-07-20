@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
  * @method static CarrierCollection getCarrierOptions()
  * @method static CarrierCollection getCarriers()
  * @method static null|Shop getShop()
+ * @method static bool hasAccount()
  * @method static bool hasCarrier(string $name)
  * @method static bool hasTaxFields()
  * @method static bool hasSubscriptionFeature(string $feature)

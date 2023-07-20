@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -23,7 +23,7 @@ uses()->group('checkout');
 
 usesShared(
     new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        SettingsRepositoryInterface::class => autowire(MockAbstractSettingsRepository::class)->constructor([
             CarrierSettings::ID => [
                 Carrier::CARRIER_POSTNL_NAME => [
                     CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,

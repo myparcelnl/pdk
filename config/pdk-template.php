@@ -13,10 +13,11 @@ use MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterf
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\LoggerInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
-use Psr\Log\LoggerInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use function DI\autowire;
 use function DI\value;
 
@@ -81,10 +82,10 @@ return [
      * Handles settings being saved and retrieved in your app.
      *
      * @note Required for plugin settings.
-     * @see  \MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository
+     * @see  \MyParcelNL\Pdk\Settings\Repository\PdkSettingsRepository
      */
 
-    SettingsRepositoryInterface::class => autowire(),
+    PdkSettingsRepositoryInterface::class => autowire(),
 
     /**
      * Handles conversion of your app's cart data to PDK cart data.
@@ -109,6 +110,14 @@ return [
     #
     # These services are required for some or all parts of the PDK to work.
     #####
+
+    /**
+     * Storage. Should be persistent.
+     *
+     * @see \MyParcelNL\Pdk\Storage\MemoryCacheStorage for an example of a non-persistent storage.
+     */
+
+    StorageInterface::class => autowire(),
 
     /**
      * Adapter to make requests with.
