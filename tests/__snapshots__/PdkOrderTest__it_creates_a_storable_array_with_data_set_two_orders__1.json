@@ -2,7 +2,6 @@
   {
     "apiIdentifier": null,
     "exported": false,
-    "notes": [ ],
     "deliveryOptions": {
       "carrier": {
         "externalIdentifier": "postnl",
@@ -19,19 +18,12 @@
       "shipmentOptions": [ ],
       "deliveryType": "standard",
       "packageType": "package"
-    }
+    },
+    "notes": [ ]
   },
   {
     "apiIdentifier": null,
     "exported": false,
-    "notes": [
-      {
-        "author": "customer",
-        "createdAt": "2023-01-01 12:00:00",
-        "note": "test note from customer",
-        "updatedAt": "2023-01-01 18:00:00"
-      }
-    ],
     "deliveryOptions": {
       "carrier": {
         "externalIdentifier": "postnl",
@@ -48,6 +40,14 @@
       "shipmentOptions": [ ],
       "deliveryType": "standard",
       "packageType": "package"
-    }
+    },
+    "notes": [
+      {
+        "author": "customer",
+        "note": "This is a note",
+        "createdAt": "2023-01-01 12:00:00",
+        "updatedAt": "2023-01-01 18:00:00"
+      }
+    ]
   }
 ]

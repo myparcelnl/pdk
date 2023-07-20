@@ -2,20 +2,6 @@
   {
     "apiIdentifier": null,
     "exported": false,
-    "notes": [
-      {
-        "author": "webshop",
-        "createdAt": "2023-01-01 12:00:00",
-        "note": "test note",
-        "updatedAt": "2023-01-01 12:00:00"
-      },
-      {
-        "author": "customer",
-        "createdAt": "2023-01-01 12:00:00",
-        "note": "hello",
-        "updatedAt": "2023-01-02 12:00:00"
-      }
-    ],
     "deliveryOptions": {
       "carrier": {
         "externalIdentifier": "postnl",
@@ -34,6 +20,20 @@
       },
       "deliveryType": "standard",
       "packageType": "package"
-    }
+    },
+    "notes": [
+      {
+        "author": "customer",
+        "note": "This is a note",
+        "createdAt": "2023-01-01 12:00:00",
+        "updatedAt": "2023-01-01 12:00:00"
+      },
+      {
+        "author": "customer",
+        "note": "hello",
+        "createdAt": "2023-01-01 12:00:00",
+        "updatedAt": "2023-01-02 12:00:00"
+      }
+    ]
   }
 ]
