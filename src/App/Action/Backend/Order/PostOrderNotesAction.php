@@ -61,7 +61,7 @@ class PostOrderNotesAction extends AbstractOrderAction
                     })
                         ->toFulfilmentCollection()
                 );
-                $order->notes->map(function (PdkOrderNote $note) use ($notes) {
+                $order->notes->each(function (PdkOrderNote $note) use ($notes) {
                     $note->apiIdentifier = $notes->first(function (OrderNote $fulfilmentNote) use ($note) {
                         return $fulfilmentNote->note === $note->note && ! $note->apiIdentifier;
                     })->uuid;
