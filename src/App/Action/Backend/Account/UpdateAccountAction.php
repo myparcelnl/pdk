@@ -74,7 +74,12 @@ class UpdateAccountAction implements ActionInterface
 
         $this->updateAndSaveAccount($accountSettings);
 
-        return Actions::execute(PdkSharedActions::FETCH_CONTEXT, ['context' => Context::ID_DYNAMIC]);
+        return Actions::execute(PdkSharedActions::FETCH_CONTEXT, [
+            'context' => implode(',', [
+                Context::ID_DYNAMIC,
+                Context::ID_PLUGIN_SETTINGS_VIEW,
+            ]),
+        ]);
     }
 
     /**
