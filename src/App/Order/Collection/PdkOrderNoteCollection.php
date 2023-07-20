@@ -21,10 +21,10 @@ class PdkOrderNoteCollection extends Collection
     public function addApiIdentifiers(OrderNoteCollection $notes)
     {
         $this->each(function (PdkOrderNote $note, $index) use ($notes) {
-            $note->fill(
-                $notes->offsetGet($index)
-                    ->toArray() ?? []
-            );
+            $result = $notes->offsetGet($index);
+
+            $note->fill($result ? $result->toArray() : []);
+
             return $note;
         });
     }
