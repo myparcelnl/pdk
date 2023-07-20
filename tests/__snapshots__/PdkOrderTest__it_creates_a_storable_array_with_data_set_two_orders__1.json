@@ -1,44 +1,53 @@
 [
-    {
-        "apiIdentifier": null,
-        "exported": false,
-        "deliveryOptions": {
-            "carrier": {
-                "externalIdentifier": "postnl",
-                "id": 1,
-                "name": "postnl",
-                "human": "PostNL",
-                "enabled": false,
-                "isDefault": true,
-                "optional": false,
-                "primary": false,
-                "type": "main"
-            },
-            "labelAmount": 2,
-            "shipmentOptions": [],
-            "deliveryType": "standard",
-            "packageType": "package"
-        }
-    },
-    {
-        "apiIdentifier": null,
-        "exported": false,
-        "deliveryOptions": {
-            "carrier": {
-                "externalIdentifier": "postnl",
-                "id": 1,
-                "name": "postnl",
-                "human": "PostNL",
-                "enabled": false,
-                "isDefault": true,
-                "optional": false,
-                "primary": false,
-                "type": "main"
-            },
-            "labelAmount": 1,
-            "shipmentOptions": [],
-            "deliveryType": "standard",
-            "packageType": "package"
-        }
+  {
+    "apiIdentifier": null,
+    "exported": false,
+    "notes": [ ],
+    "deliveryOptions": {
+      "carrier": {
+        "externalIdentifier": "postnl",
+        "id": 1,
+        "name": "postnl",
+        "human": "PostNL",
+        "enabled": false,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
+      },
+      "labelAmount": 2,
+      "shipmentOptions": [ ],
+      "deliveryType": "standard",
+      "packageType": "package"
     }
+  },
+  {
+    "apiIdentifier": null,
+    "exported": false,
+    "notes": [
+      {
+        "author": "customer",
+        "createdAt": "2023-01-01 12:00:00",
+        "note": "test note from customer",
+        "updatedAt": "2023-01-01 18:00:00"
+      }
+    ],
+    "deliveryOptions": {
+      "carrier": {
+        "externalIdentifier": "postnl",
+        "id": 1,
+        "name": "postnl",
+        "human": "PostNL",
+        "enabled": false,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
+      },
+      "labelAmount": 1,
+      "shipmentOptions": [ ],
+      "deliveryType": "standard",
+      "packageType": "package"
+    }
+  }
 ]
