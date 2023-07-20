@@ -7,7 +7,9 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,11 +54,21 @@ class PostOrderNotesAction extends AbstractOrderAction
                 return $order->apiIdentifier && $order->notes->isNotEmpty();
             })
             ->each(function (PdkOrder $order) {
-                $this->orderNotesRepository->postOrderNotes(
+                $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
-                    $order->notes->toFulfilmentCollection()
+                    $order->notes->filter(function (PdkOrderNote $note) {
+                        return null === $note->apiIdentifier;
+                    })
+                        ->toFulfilmentCollection()
                 );
+                $order->notes->map(function (PdkOrderNote $note) use ($notes) {
+                    $note->apiIdentifier = $notes->first(function (OrderNote $fulfilmentNote) use ($note) {
+                        return $fulfilmentNote->note === $note->note && ! $note->apiIdentifier;
+                    })->uuid;
+                });
             });
+
+        $this->pdkOrderRepository->updateMany($orders);
 
         return $this->getFetchOrdersResponse($request);
     }
