@@ -115,7 +115,11 @@ class ExportOrderAction extends AbstractOrderAction
 
         $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
 
-        return $orders->addApiIdentifiers($apiOrders);
+        $orders->addApiIdentifiers($apiOrders);
+
+        $this->pdkOrderRepository->updateMany($orders);
+
+        return $orders;
     }
 
     /**

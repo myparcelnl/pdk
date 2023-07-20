@@ -40,10 +40,8 @@ class PostOrderNotesRequest extends Request
             'data' => [
                 'order_notes' => array_map(static function (OrderNote $orderNote) {
                     return [
-                        'author'     => $orderNote->author,
-                        'note'       => $orderNote->note,
-                        'created_at' => $orderNote->createdAt,
-                        'updated_at' => $orderNote->updatedAt,
+                        'author' => $orderNote->author,
+                        'note'   => $orderNote->note,
                     ];
                 }, $this->collection->all()),
             ],
