@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,11 +54,10 @@ class PostOrderNotesAction extends AbstractOrderAction
             ->each(function (PdkOrder $order) {
                 $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
-                    $order->notes->filter(function (PdkOrderNote $note) {
-                        return null === $note->apiIdentifier;
-                    })
+                    $order->notes->where('apiIdentifier', '==', null)
                         ->toFulfilmentCollection()
                 );
+
                 $order->notes->addApiIdentifiers($notes);
             });
 
