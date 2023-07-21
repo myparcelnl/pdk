@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -131,12 +130,7 @@ it('creates a storable array', function (array $orders) {
     $result    = [];
 
     foreach ($pdkOrders->all() as $pdkOrder) {
-        $arr = $pdkOrder->toStorableArray();
-
-        Arr::forget($arr, 'deliveryOptions.carrier.capabilities');
-        Arr::forget($arr, 'deliveryOptions.carrier.returnCapabilities');
-
-        $result[] = $arr;
+        $result[] = $pdkOrder->toStorableArray();
     }
 
     assertMatchesJsonSnapshot(json_encode($result));

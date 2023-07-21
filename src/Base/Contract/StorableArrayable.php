@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Contract;
 
-interface StorableArrayable
+interface StorableArrayable extends Arrayable
 {
     /**
      * @return array

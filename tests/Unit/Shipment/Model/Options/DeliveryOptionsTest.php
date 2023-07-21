@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -107,3 +108,31 @@ it('can get delivery type as id', function (string $name, int $id) {
 
     expect($deliveryOptions->getDeliveryTypeId())->toBe($id);
 })->with('deliveryTypeNamesToIds');
+
+it('can be instantiated from its storable array', function () {
+    $carrier = new Carrier([
+        'externalIdentifier' => 'dhlforyou:8277',
+    ]);
+
+    $original = new DeliveryOptions([
+        'carrier'         => $carrier,
+        'packageType'     => 'package',
+        'deliveryType'    => 'delivery',
+        'date'            => '2022-02-20 16:00:00',
+        'pickupLocation'  => ['cc' => CountryCodes::CC_NL],
+        'shipmentOptions' => [
+            'insurance'        => 5000,
+            'labelDescription' => 'hello',
+            'ageCheck'         => true,
+            'largeFormat'      => true,
+            'onlyRecipient'    => true,
+            'return'           => true,
+            'sameDayDelivery'  => true,
+            'signature'        => true,
+        ],
+    ]);
+
+    $fromStorable = new DeliveryOptions($original->toStorableArray());
+
+    expect($original->toArrayWithoutNull())->toEqual($fromStorable->toArrayWithoutNull());
+});
