@@ -3,10 +3,10 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Model;
+
 use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 

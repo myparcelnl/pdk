@@ -3,10 +3,11 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Repository;
+
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsFromContractResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithDropOffPoint;
@@ -14,10 +15,6 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithPickup;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-/**
- * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::query
- */
 
 usesShared(new UsesEachMockPdkInstance());
 

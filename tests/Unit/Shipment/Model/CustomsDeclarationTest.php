@@ -3,9 +3,9 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Model;
+
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
-use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
-use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 
 it('returns correct weight', function (array $input, int $expectedWeight) {
     $customsDeclaration = new CustomsDeclaration($input);

@@ -3,6 +3,9 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Webhook\Repository;
+
+use BadMethodCallException;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
@@ -12,7 +15,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
-use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(

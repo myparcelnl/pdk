@@ -3,15 +3,19 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Repository;
+
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsPdfResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use RuntimeException;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesMockPdkInstance());
 
 $array              = array_fill(0, 30, 'appelboom');
 $bulkShipmentsArray = array_map(function ($item, $index) {
@@ -86,7 +90,6 @@ dataset('collections', [
 it(
     'downloads labels as link',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
@@ -104,7 +107,7 @@ it(
         $request  = $mock->getLastRequest();
 
         if (! $request) {
-            throw new RuntimeException('Request not found.');
+            throw new RuntimeException('No request was made');
         }
 
         $uri = $request->getUri();
@@ -121,7 +124,6 @@ it(
 it(
     'downloads labels as pdf',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
@@ -134,7 +136,7 @@ it(
         $request  = $mock->getLastRequest();
 
         if (! $request) {
-            throw new RuntimeException('Request not found.');
+            throw new RuntimeException('No request was made');
         }
 
         $uri = $request->getUri();

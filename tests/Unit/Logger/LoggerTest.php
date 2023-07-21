@@ -3,13 +3,15 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+namespace MyParcelNL\Pdk\Logger;
+
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesEachMockPdkInstance());
 
 it('logs logs', function (string $level, string $message, array $context = []) {
-    PdkFactory::create(MockPdkConfig::create());
-
     Logger::{$level}($message, $context);
 
     expect(Logger::getLogs())->toBe([

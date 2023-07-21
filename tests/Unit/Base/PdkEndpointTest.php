@@ -3,10 +3,15 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Base;
+
+use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\SynchronizeOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdatePluginSettingsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdateProductSettingsAction;
@@ -34,43 +39,48 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('endpoints');
 
-$pdkConfig = [
-    CreateWebhooksAction::class        => autowire(MockAction::class),
-    DeleteShipmentsAction::class       => autowire(MockAction::class),
-    DeleteWebhooksAction::class        => autowire(MockAction::class),
-    ExportOrderAction::class           => autowire(MockAction::class),
-    ExportReturnAction::class          => autowire(MockAction::class),
-    FetchContextAction::class          => autowire(MockAction::class),
-    FetchOrdersAction::class           => autowire(MockAction::class),
-    UpdateShipmentsAction::class       => autowire(MockAction::class),
-    FetchWebhooksAction::class         => autowire(MockAction::class),
-    PrintOrdersAction::class           => autowire(MockAction::class),
-    PrintShipmentsAction::class        => autowire(MockAction::class),
-    UpdateAccountAction::class         => autowire(MockAction::class),
-    UpdateOrderAction::class           => autowire(MockAction::class),
-    UpdatePluginSettingsAction::class  => autowire(MockAction::class),
-    UpdateProductSettingsAction::class => autowire(MockAction::class),
-];
 usesShared(
-    new UsesEachMockPdkInstance($pdkConfig)
+    new UsesEachMockPdkInstance([
+        CreateWebhooksAction::class        => autowire(MockAction::class),
+        DeleteAccountAction::class         => autowire(MockAction::class),
+        DeleteShipmentsAction::class       => autowire(MockAction::class),
+        DeleteWebhooksAction::class        => autowire(MockAction::class),
+        ExportOrderAction::class           => autowire(MockAction::class),
+        ExportReturnAction::class          => autowire(MockAction::class),
+        FetchContextAction::class          => autowire(MockAction::class),
+        FetchOrdersAction::class           => autowire(MockAction::class),
+        FetchWebhooksAction::class         => autowire(MockAction::class),
+        PostOrderNotesAction::class        => autowire(MockAction::class),
+        PrintOrdersAction::class           => autowire(MockAction::class),
+        PrintShipmentsAction::class        => autowire(MockAction::class),
+        SynchronizeOrdersAction::class     => autowire(MockAction::class),
+        UpdateAccountAction::class         => autowire(MockAction::class),
+        UpdateOrderAction::class           => autowire(MockAction::class),
+        UpdatePluginSettingsAction::class  => autowire(MockAction::class),
+        UpdateProductSettingsAction::class => autowire(MockAction::class),
+        UpdateShipmentsAction::class       => autowire(MockAction::class),
+    ])
 );
 
 dataset('backendActions', function () {
     return [
-        PdkBackendActions::UPDATE_ACCOUNT,
-        PdkBackendActions::EXPORT_ORDERS,
-        PdkBackendActions::FETCH_ORDERS,
-        PdkBackendActions::PRINT_ORDERS,
-        PdkBackendActions::UPDATE_ORDERS,
-        PdkBackendActions::EXPORT_RETURN,
+        PdkBackendActions::CREATE_WEBHOOKS,
+        PdkBackendActions::DELETE_ACCOUNT,
         PdkBackendActions::DELETE_SHIPMENTS,
+        PdkBackendActions::DELETE_WEBHOOKS,
+        PdkBackendActions::EXPORT_ORDERS,
+        PdkBackendActions::EXPORT_RETURN,
+        PdkBackendActions::FETCH_ORDERS,
+        PdkBackendActions::FETCH_WEBHOOKS,
+        PdkBackendActions::POST_ORDER_NOTES,
+        PdkBackendActions::PRINT_ORDERS,
         PdkBackendActions::PRINT_SHIPMENTS,
-        PdkBackendActions::UPDATE_SHIPMENTS,
+        PdkBackendActions::SYNCHRONIZE_ORDERS,
+        PdkBackendActions::UPDATE_ACCOUNT,
+        PdkBackendActions::UPDATE_ORDERS,
         PdkBackendActions::UPDATE_PLUGIN_SETTINGS,
         PdkBackendActions::UPDATE_PRODUCT_SETTINGS,
-        PdkBackendActions::CREATE_WEBHOOKS,
-        PdkBackendActions::DELETE_WEBHOOKS,
-        PdkBackendActions::FETCH_WEBHOOKS,
+        PdkBackendActions::UPDATE_SHIPMENTS,
         PdkSharedActions::FETCH_CONTEXT,
     ];
 });

@@ -3,6 +3,9 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Platform;
+
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;

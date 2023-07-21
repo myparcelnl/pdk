@@ -3,8 +3,9 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Api\Service;
+
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\autowire;

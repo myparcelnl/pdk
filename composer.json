@@ -37,6 +37,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "MyParcelNL\\Pdk\\": "tests/Unit/",
             "MyParcelNL\\Pdk\\Tests\\": "tests/",
             "MyParcelNL\\Pdk\\Helper\\": "helper/"
         }

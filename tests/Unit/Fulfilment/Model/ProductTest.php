@@ -3,10 +3,9 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Unit\Fulfilment\Model;
+namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
-use MyParcelNL\Pdk\Fulfilment\Model\Product;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;

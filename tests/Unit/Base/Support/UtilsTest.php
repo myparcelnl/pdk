@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Base\Support\Utils;
+namespace MyParcelNL\Pdk\Base\Support;
+
 use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
 

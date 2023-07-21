@@ -3,20 +3,22 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Fulfilment\Repository;
+namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
-use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use RuntimeException;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+
+usesShared(new UsesMockPdkInstance());
 
 const DEFAULT_INPUT_RECIPIENT = [
     'cc'         => 'NL',
@@ -35,14 +37,13 @@ const DEFAULT_INPUT_SENDER = [
 ];
 
 it('creates a valid order collection from api data', function (array $input) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = $pdk->get(ApiServiceInterface::class);
+    $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
-    $repository  = $pdk->get(OrderRepository::class);
+    $repository  = Pdk::get(OrderRepository::class);
     $savedOrders = $repository->postOrders(new OrderCollection($input));
 
     expect($savedOrders)
@@ -52,15 +53,13 @@ it('creates a valid order collection from api data', function (array $input) {
 })->with('fulfilmentOrders');
 
 it('creates order', function ($input, $path, $query) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = $pdk->get(ApiServiceInterface::class);
+    $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExampleGetOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
-    $repository      = $pdk->get(OrderRepository::class);
+    $repository      = Pdk::get(OrderRepository::class);
     $order           = new Order($input);
     $orderCollection = (new OrderCollection())->push($order);
 
@@ -69,7 +68,7 @@ it('creates order', function ($input, $path, $query) {
     $request  = $mock->getLastRequest();
 
     if (! $request) {
-        throw new RuntimeException('Request is not set');
+        throw new RuntimeException('No request was made');
     }
 
     $uri = $request->getUri();

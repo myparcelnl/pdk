@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Api\Service;
+
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;

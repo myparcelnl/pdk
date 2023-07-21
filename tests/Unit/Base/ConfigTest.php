@@ -3,6 +3,9 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Base;
+
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Config;

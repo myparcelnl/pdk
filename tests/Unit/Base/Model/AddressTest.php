@@ -3,9 +3,8 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Unit\Base\Model;
+namespace MyParcelNL\Pdk\Base\Model;
 
-use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;

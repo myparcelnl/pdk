@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Language\Service;
+
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
@@ -12,9 +14,8 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesEachMockPdkInstance([
-            LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
-        ]
-    )
+        LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
+    ])
 );
 
 dataset('languages', [
