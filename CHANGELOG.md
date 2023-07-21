@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.0](https://github.com/myparcelnl/pdk/compare/v2.11.1...v2.12.0) (2023-07-21)
+
+
+### :sparkles: New Features
+
+* **fulfilment:** save order note uuids from api ([#130](https://github.com/myparcelnl/pdk/issues/130)) ([b068632](https://github.com/myparcelnl/pdk/commit/b06863207ad3157049244b0442063cba396185cb))
+* **settings:** fill carrier settings on fresh installation ([#127](https://github.com/myparcelnl/pdk/issues/127)) ([587cbcc](https://github.com/myparcelnl/pdk/commit/587cbcc18ec1a65dec7af3abc0685c47cc402157))
+
+
+### :bug: Bug Fixes
+
+* **api:** fix error when composer can't be used normally ([#128](https://github.com/myparcelnl/pdk/issues/128)) ([217d11c](https://github.com/myparcelnl/pdk/commit/217d11cc6a29de65b28dd32e62c6b267d863ef28))
+* **export:** prevent invalid delivery date ([#126](https://github.com/myparcelnl/pdk/issues/126)) ([d34624d](https://github.com/myparcelnl/pdk/commit/d34624de2167c33dbb64c46c46f1b9aad2ef2b04))
+* **order:** stop storing carrier details in db ([#125](https://github.com/myparcelnl/pdk/issues/125)) ([35dd3bb](https://github.com/myparcelnl/pdk/commit/35dd3bbfa17d2ffcb65b2280ff0fb860c58dce35))
+
 ## [2.11.1](https://github.com/myparcelnl/pdk/compare/v2.11.0...v2.11.1) (2023-07-18)
 
 
