@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -19,7 +20,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  * @property null|RetailLocation $pickupLocation
  * @property ShipmentOptions     $shipmentOptions
  */
-class DeliveryOptions extends Model
+class DeliveryOptions extends Model implements StorableArrayable
 {
     /**
      * Names
@@ -174,5 +175,17 @@ class DeliveryOptions extends Model
     public function isPickup(): bool
     {
         return $this->deliveryType === self::DELIVERY_TYPE_PICKUP_NAME && $this->pickupLocation;
+    }
+
+    /**
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        $array            = $this->toArrayWithoutNull();
+        $array['carrier'] = $this->carrier->externalIdentifier ?? null;
+
+        return $array;
     }
 }

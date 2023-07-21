@@ -6,6 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingCollection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
+use MyParcelNL\Pdk\Tests\Mocks\MockStorableModel;
 
 it('casts items to class on init', function () {
     $collection = new MockCastingCollection([
@@ -52,4 +53,45 @@ it('merges another collection by key', function () {
         ['id' => 3, 'name' => 'henk'],
         ['id' => 5, 'name' => 'klaas'],
     ]);
+});
+
+it('can create a storable array', function (array $items, array $storable) {
+    $collection = new Collection($items);
+
+    expect($collection->toStorableArray())->toEqual($storable);
+})->with(function () {
+    return [
+        '1 storable model' => [
+            'items'    => [
+                new MockStorableModel(['property' => ['a' => 1]]),
+            ],
+            'storable' => [
+                [
+                    'property' => '{"a":1}',
+                ],
+            ],
+        ],
+
+        '1 non-storable model' => [
+            'items'    => [
+                new MockCastModel(['property' => 'test']),
+            ],
+            'storable' => [
+                ['property' => 'test'],
+            ],
+        ],
+
+        '2 storable models and 1 non-storable' => [
+            'items'    => [
+                new MockStorableModel(['property' => ['a' => 1]]),
+                new MockStorableModel(['property' => ['b' => 2]]),
+                'test',
+            ],
+            'storable' => [
+                ['property' => '{"a":1}'],
+                ['property' => '{"b":2}'],
+                'test',
+            ],
+        ],
+    ];
 });

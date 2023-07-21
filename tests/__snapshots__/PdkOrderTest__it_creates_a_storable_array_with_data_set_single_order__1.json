@@ -1,39 +1,15 @@
 [
-  {
-    "apiIdentifier": null,
-    "exported": false,
-    "deliveryOptions": {
-      "carrier": {
-        "externalIdentifier": "postnl",
-        "id": 1,
-        "name": "postnl",
-        "human": "PostNL",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main"
-      },
-      "labelAmount": 1,
-      "shipmentOptions": {
-        "signature": true
-      },
-      "deliveryType": "standard",
-      "packageType": "package"
-    },
-    "notes": [
-      {
-        "author": "customer",
-        "note": "This is a note",
-        "createdAt": "2023-01-01 12:00:00",
-        "updatedAt": "2023-01-01 12:00:00"
-      },
-      {
-        "author": "customer",
-        "note": "hello",
-        "createdAt": "2023-01-01 12:00:00",
-        "updatedAt": "2023-01-02 12:00:00"
-      }
-    ]
-  }
+    {
+        "apiIdentifier": null,
+        "exported": false,
+        "deliveryOptions": {
+            "carrier": "postnl",
+            "labelAmount": 1,
+            "shipmentOptions": {
+                "signature": true
+            },
+            "deliveryType": "standard",
+            "packageType": "package"
+        }
+    }
 ]
