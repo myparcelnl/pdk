@@ -211,4 +211,24 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
             return $acc;
         }, []);
     }
+
+    /**
+     * @param  array $array
+     *
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
+     */
+    public static function toRecursiveCollection(array $array): Collection
+    {
+        $collection = new Collection($array);
+
+        $collection->each(function ($value, $key) use ($collection) {
+            if (! is_array($value)) {
+                return;
+            }
+
+            $collection->put($key, self::toRecursiveCollection($value));
+        });
+
+        return $collection;
+    }
 }
