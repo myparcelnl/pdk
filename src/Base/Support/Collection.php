@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 
-class Collection extends SdkCollection implements Arrayable
+class Collection extends SdkCollection implements StorableArrayable
 {
     /**
      * Defines a class items should be cast into.
@@ -109,6 +110,27 @@ class Collection extends SdkCollection implements Arrayable
         $this->cast = $class;
         $this->castItems();
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function toStorableArray(): array
+    {
+        return array_map(
+            static function ($value) {
+                if ($value instanceof StorableArrayable) {
+                    return $value->toStorableArray();
+                }
+
+                if ($value instanceof Arrayable) {
+                    return $value->toArray(Arrayable::SKIP_NULL);
+                }
+
+                return $value;
+            },
+            $this->items
+        );
     }
 
     /**
