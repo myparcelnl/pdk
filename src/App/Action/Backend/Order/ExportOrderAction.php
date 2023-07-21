@@ -115,7 +115,14 @@ class ExportOrderAction extends AbstractOrderAction
 
         $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
 
-        return $orders->addApiIdentifiers($apiOrders);
+        $orders->addApiIdentifiers($apiOrders);
+
+        // TODO: remove this as soon as saving to repository is fixed
+        $orders->each(function (PdkOrder $order) {
+            $this->pdkOrderRepository->save($order->externalIdentifier, $order);
+        });
+
+        return $orders;
     }
 
     /**

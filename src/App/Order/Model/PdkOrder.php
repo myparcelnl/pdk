@@ -223,6 +223,7 @@ class PdkOrder extends Model implements StorableArrayable
             'apiIdentifier'   => $this->apiIdentifier,
             'exported'        => $this->exported,
             'deliveryOptions' => $this->deliveryOptions->toArrayWithoutNull(),
+            'notes'           => $this->notes->toArrayWithoutNull(),
         ];
     }
 
