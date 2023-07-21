@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Base\Service;
+
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;

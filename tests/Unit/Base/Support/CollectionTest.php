@@ -3,7 +3,8 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Support\Collection;
+namespace MyParcelNL\Pdk\Base\Support;
+
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingCollection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockStorableModel;

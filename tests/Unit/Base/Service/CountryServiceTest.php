@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Base\Service;
+
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;

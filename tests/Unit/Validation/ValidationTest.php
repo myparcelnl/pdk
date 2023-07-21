@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Validation;
+
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;

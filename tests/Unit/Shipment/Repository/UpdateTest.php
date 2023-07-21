@@ -3,20 +3,20 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Repository;
+
 use GuzzleHttp\Psr7\Response;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use RuntimeException;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-/**
- * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::save
- */
+usesShared(new UsesMockPdkInstance());
 
 it('updates shipment', function (array $collection, ?int $size, $path, $query) {
-    PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();
@@ -29,7 +29,7 @@ it('updates shipment', function (array $collection, ?int $size, $path, $query) {
     $request  = $mock->getLastRequest();
 
     if (! $request) {
-        throw new RuntimeException('Request not found.');
+        throw new RuntimeException('No request was made');
     }
 
     $uri = $request->getUri();
@@ -81,7 +81,6 @@ it('updates shipment', function (array $collection, ?int $size, $path, $query) {
 ]);
 
 it('throws error when updating collection without ids or reference ids', function () {
-    PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
     $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();

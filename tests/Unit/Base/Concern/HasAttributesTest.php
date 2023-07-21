@@ -3,6 +3,10 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Base\Concern;
+
+use DateTime;
+use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Tests\Mocks\ClassWithGuardedAttributes;

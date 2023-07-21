@@ -3,13 +3,17 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Repository;
+
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use RuntimeException;
+use function MyParcelNL\Pdk\Tests\usesShared;
+
+usesShared(new UsesMockPdkInstance());
 
 dataset('shipments', [
     'single shipment id'    => [
@@ -25,7 +29,6 @@ dataset('shipments', [
 it(
     'gets shipments',
     function (array $collection, string $path) {
-        PdkFactory::create(MockPdkConfig::create());
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
         $api  = Pdk::get(ApiServiceInterface::class);
         $mock = $api->getMock();
@@ -39,7 +42,7 @@ it(
         $request  = $mock->getLastRequest();
 
         if (! $request) {
-            throw new RuntimeException('Request not found.');
+            throw new RuntimeException('No request was made');
         }
 
         $uri = $request->getUri();

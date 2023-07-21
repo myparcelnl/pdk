@@ -3,11 +3,14 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Model;
+
+use DateTimeImmutable;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
-use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 

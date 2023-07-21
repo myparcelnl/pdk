@@ -3,18 +3,23 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Shipment\Repository;
+
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use RuntimeException;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+
+usesShared(new UsesMockPdkInstance());
 
 const DEFAULT_INPUT_RECIPIENT = [
     'cc'         => 'NL',
@@ -34,9 +39,8 @@ const DEFAULT_INPUT_SENDER = [
 ];
 
 it('creates a valid request from a shipment collection', function (array $input) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = $pdk->get(ApiServiceInterface::class);
+    $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostIdsResponse());
 
@@ -54,14 +58,13 @@ it('creates a valid request from a shipment collection', function (array $input)
     $inputShipments = (new ShipmentCollection($input));
 
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
-    $repository = $pdk->get(ShipmentRepository::class);
+    $repository = Pdk::get(ShipmentRepository::class);
 
     $createdConcepts = $repository->createConcepts($inputShipments);
-
-    $request = $mock->getLastRequest();
+    $request         = $mock->getLastRequest();
 
     if (! $request) {
-        throw new RuntimeException('Request not found.');
+        throw new RuntimeException('No request was made');
     }
 
     $body = json_decode(
@@ -115,15 +118,15 @@ it('creates a valid request from a shipment collection', function (array $input)
             ],
         ],
     ],
-    'shipment to be delivered in the past' => [
+    'shipment to be delivered in the past'        => [
         'input' => [
             [
-                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'deliveryOptions'    => [
-                    'date'            => '2000-07-10 16:00:00',
+                'carrier'         => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'deliveryOptions' => [
+                    'date' => '2000-07-10 16:00:00',
                 ],
-                'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                'sender'             => DEFAULT_INPUT_SENDER,
+                'recipient'       => DEFAULT_INPUT_RECIPIENT,
+                'sender'          => DEFAULT_INPUT_SENDER,
             ],
         ],
     ],
@@ -333,20 +336,18 @@ it('creates a valid request from a shipment collection', function (array $input)
 ]);
 
 it('creates shipment', function ($input, $path, $query, $contentType) {
-    $pdk = PdkFactory::create(MockPdkConfig::create());
-
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = $pdk->get(ApiServiceInterface::class);
+    $api  = Pdk::get(ApiServiceInterface::class);
     $mock = $api->getMock();
     $mock->append(new ExamplePostIdsResponse());
 
-    $repository = $pdk->get(ShipmentRepository::class);
+    $repository = Pdk::get(ShipmentRepository::class);
 
     $response = $repository->createConcepts(new ShipmentCollection($input));
     $request  = $mock->getLastRequest();
 
     if (! $request) {
-        throw new RuntimeException('Request is not set');
+        throw new RuntimeException('No request was made');
     }
 
     $uri               = $request->getUri();

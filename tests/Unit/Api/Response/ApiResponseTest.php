@@ -3,10 +3,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Api\Response;
-
-use MyParcelNL\Pdk\Api\Response\ApiResponse;
-use MyParcelNL\Pdk\Api\Response\ClientResponse;
+namespace MyParcelNL\Pdk\Api\Response;
 
 it('can be instantiated', function () {
     $response = new ApiResponse(new ClientResponse(null, 201));

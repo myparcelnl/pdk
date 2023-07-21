@@ -3,9 +3,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Unit\Base\Support;
-
-use MyParcelNL\Pdk\Base\Support\Arr;
+namespace MyParcelNL\Pdk\Base\Support;
 
 it('can undot an array', function (array $input, array $output) {
     expect(Arr::undot($input))->toBe($output);

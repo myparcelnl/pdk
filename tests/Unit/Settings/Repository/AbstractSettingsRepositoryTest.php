@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Unit\Settings\Repository;
+namespace MyParcelNL\Pdk\Settings\Repository;
 
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;

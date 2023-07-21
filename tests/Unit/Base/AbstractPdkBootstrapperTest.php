@@ -3,12 +3,10 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Unit\Base;
+namespace MyParcelNL\Pdk\Base;
 
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
-use MyParcelNL\Pdk\Base\Pdk;
-use MyParcelNL\Pdk\Base\PdkBootstrapper;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use function DI\value;
 

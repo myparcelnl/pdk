@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Storage;
+
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;

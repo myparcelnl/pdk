@@ -3,9 +3,8 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Unit\Fulfilment\Model;
+namespace MyParcelNL\Pdk\Fulfilment\Model;
 
-use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;

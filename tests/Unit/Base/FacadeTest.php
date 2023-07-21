@@ -3,9 +3,10 @@
 
 declare(strict_types=1);
 
+namespace MyParcelNL\Pdk\Base;
+
 use DI\NotFoundException;
 use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
-use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
