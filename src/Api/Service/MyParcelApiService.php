@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Service;
 
-use Composer\InstalledVersions;
-use MyParcelNL\Pdk\Base\Pdk;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 
@@ -34,9 +33,9 @@ class MyParcelApiService extends AbstractApiService
     {
         $userAgentStrings = [];
         $userAgents       = array_merge(
-            \MyParcelNL\Pdk\Facade\Pdk::get('userAgent'),
+            Pdk::get('userAgent'),
             [
-                'MyParcelNL-PDK' => InstalledVersions::getPrettyVersion(Pdk::PACKAGE_NAME),
+                'MyParcelNL-PDK' => Pdk::get('pdkVersion'),
                 'php'            => PHP_VERSION,
             ]
         );

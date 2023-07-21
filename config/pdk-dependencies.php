@@ -7,6 +7,12 @@ use function DI\factory;
 use function DI\value;
 
 return [
+    'pdkVersion'                => factory(function (): string {
+        $composerJson = json_decode(file_get_contents(__DIR__ . '/../composer.json'), true);
+
+        return $composerJson['version'];
+    }),
+
     /**
      * The minimum PHP version required to run the app.
      */
