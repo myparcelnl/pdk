@@ -15,4 +15,12 @@ final class DeleteAccountEndpointRequest extends AbstractEndpointRequest
     {
         return 'POST';
     }
+
+    /**
+     * @return string
+     */
+    public function getResponseProperty(): string
+    {
+        return 'context';
+    }
 }

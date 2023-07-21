@@ -19,7 +19,7 @@
                 },
                 "path": "",
                 "property": null,
-                "responseProperty": null
+                "responseProperty": "context"
             },
             "updateAccount": {
                 "body": null,
