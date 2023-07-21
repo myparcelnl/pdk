@@ -92,7 +92,7 @@ it('creates a valid request from a shipment collection', function (array $input)
             [
                 'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'    => [
-                    'date'            => '2022-07-10 16:00:00',
+                    'date'            => '2038-07-10 16:00:00',
                     'shipmentOptions' => [
                         'ageCheck'         => true,
                         'insurance'        => 500,
@@ -109,6 +109,18 @@ it('creates a valid request from a shipment collection', function (array $input)
                     'width'  => 120,
                     'length' => 80,
                     'weight' => 2000,
+                ],
+                'recipient'          => DEFAULT_INPUT_RECIPIENT,
+                'sender'             => DEFAULT_INPUT_SENDER,
+            ],
+        ],
+    ],
+    'shipment to be delivered in the past' => [
+        'input' => [
+            [
+                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'deliveryOptions'    => [
+                    'date'            => '2000-07-10 16:00:00',
                 ],
                 'recipient'          => DEFAULT_INPUT_RECIPIENT,
                 'sender'             => DEFAULT_INPUT_SENDER,
@@ -271,7 +283,7 @@ it('creates a valid request from a shipment collection', function (array $input)
             [
                 'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'    => [
-                    'date'            => '2022-07-20 16:00:00',
+                    'date'            => '2038-07-20 16:00:00',
                     'shipmentOptions' => [
                         'ageCheck'         => true,
                         'insurance'        => 0,
@@ -295,7 +307,7 @@ it('creates a valid request from a shipment collection', function (array $input)
             [
                 'carrier'            => ['id' => Carrier::CARRIER_INSTABOX_ID],
                 'deliveryOptions'    => [
-                    'date'            => '2022-07-20 16:00:00',
+                    'date'            => '2038-07-20 16:00:00',
                     'shipmentOptions' => [
                         'ageCheck'         => true,
                         'insurance'        => 500,
