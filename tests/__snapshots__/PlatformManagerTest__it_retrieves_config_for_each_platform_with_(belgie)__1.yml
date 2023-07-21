@@ -4,5 +4,9 @@ backofficeUrl: 'https://backoffice.sendmyparcel.be'
 localCountry: BE
 defaultCarrier: bpost
 defaultCarrierId: 2
+allowedCarriers:
+    - bpost
+    - dpd
+    - postnl
 defaultSettings:
     checkout: { pickupLocationsDefaultView: map }

@@ -4,3 +4,10 @@ backofficeUrl: 'https://backoffice.flespakket.nl'
 localCountry: NL
 defaultCarrier: postnl
 defaultCarrierId: 1
+allowedCarriers:
+    - dhleuroplus
+    - dhlforyou
+    - dhlparcelconnect
+    - postnl
+defaultSettings:
+    checkout: { pickupLocationsDefaultView: list }

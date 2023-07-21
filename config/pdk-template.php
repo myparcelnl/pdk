@@ -27,7 +27,7 @@ return [
     /**
      * Information about the app that is using the PDK.
      */
-    'appInfo'   => value([
+    'appInfo'         => value([
         'name'    => null,
         'title'   => null,
         'path'    => null,
@@ -38,7 +38,12 @@ return [
     /**
      * User agent to pass to requests.
      */
-    'userAgent' => value([]),
+    'userAgent'       => value([]),
+
+    /**
+     * Default settings.
+     */
+    'defaultSettings' => value([]),
 
     #####
     # Repositories
