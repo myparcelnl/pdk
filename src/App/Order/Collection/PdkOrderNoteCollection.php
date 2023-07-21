@@ -14,6 +14,23 @@ class PdkOrderNoteCollection extends Collection
     protected $cast = PdkOrderNote::class;
 
     /**
+     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $notes
+     *
+     * @return void
+     */
+    public function addApiIdentifiers(OrderNoteCollection $notes): void
+    {
+        $this->each(function (PdkOrderNote $note, $index) use ($notes) {
+            /** @var OrderNote $apiNote */
+            $apiNote = $notes->offsetGet($index);
+
+            $note->apiIdentifier = $apiNote->uuid ?? null;
+
+            return $note;
+        });
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
      */
     public function toFulfilmentCollection(): OrderNoteCollection

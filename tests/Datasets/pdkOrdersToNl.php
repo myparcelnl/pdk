@@ -41,10 +41,11 @@ dataset('pdkOrdersDomestic', [
                 ],
                 'notes'              => [
                     [
-                        'author'    => OrderNote::AUTHOR_WEBSHOP,
-                        'note'      => 'test note',
-                        'createdAt' => '2023-01-01 12:00:00',
-                        'updatedAt' => '2023-01-01 12:00:00',
+                        'apiIdentifier' => '90001',
+                        'author'        => OrderNote::AUTHOR_WEBSHOP,
+                        'note'          => 'test note',
+                        'createdAt'     => '2023-01-01 12:00:00',
+                        'updatedAt'     => '2023-01-01 12:00:00',
                     ],
                     [
                         'author'    => OrderNote::AUTHOR_CUSTOMER,

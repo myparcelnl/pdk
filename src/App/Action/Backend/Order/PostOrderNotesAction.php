@@ -52,11 +52,16 @@ class PostOrderNotesAction extends AbstractOrderAction
                 return $order->apiIdentifier && $order->notes->isNotEmpty();
             })
             ->each(function (PdkOrder $order) {
-                $this->orderNotesRepository->postOrderNotes(
+                $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
-                    $order->notes->toFulfilmentCollection()
+                    $order->notes->where('apiIdentifier', '==', null)
+                        ->toFulfilmentCollection()
                 );
+
+                $order->notes->addApiIdentifiers($notes);
             });
+
+        $this->pdkOrderRepository->updateMany($orders);
 
         return $this->getFetchOrdersResponse($request);
     }

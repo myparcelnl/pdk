@@ -15,8 +15,9 @@ class ExamplePostOrderNotesResponse extends ExampleJsonResponse
             'data' => [
                 'order_notes' => [
                     [
-                        'note'   => 'This is a note',
+                        'uuid'   => 'uuid-1',
                         'author' => 'customer',
+                        'note'   => 'This is a note',
                     ],
                 ],
             ],
