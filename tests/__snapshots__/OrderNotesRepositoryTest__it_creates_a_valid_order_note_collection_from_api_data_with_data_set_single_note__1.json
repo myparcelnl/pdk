@@ -1,6 +1,6 @@
 [
     {
-        "uuid": null,
+        "uuid": "uuid-1",
         "author": "customer",
         "note": "This is a note",
         "createdAt": null,
