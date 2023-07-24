@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
-use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
-use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
-use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
-use MyParcelNL\Pdk\App\Action\Backend\Account\FetchSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
@@ -120,7 +116,7 @@ return [
         /**
          * Retrieve orders from the plugin.
          */
-        PdkBackendActions::FETCH_ORDERS                => [
+        PdkBackendActions::FETCH_ORDERS            => [
             'request' => FetchOrdersEndpointRequest::class,
             'action'  => FetchOrdersAction::class,
         ],
@@ -128,7 +124,7 @@ return [
         /**
          * Prints the order.
          */
-        PdkBackendActions::PRINT_ORDERS                => [
+        PdkBackendActions::PRINT_ORDERS            => [
             'request' => PrintOrdersEndpointRequest::class,
             'action'  => PrintOrdersAction::class,
         ],
@@ -136,7 +132,7 @@ return [
         /**
          * Update the order in the plugin.
          */
-        PdkBackendActions::UPDATE_ORDERS               => [
+        PdkBackendActions::UPDATE_ORDERS           => [
             'request' => UpdateOrdersEndpointRequest::class,
             'action'  => UpdateOrderAction::class,
         ],
@@ -144,7 +140,7 @@ return [
         /**
          * Get new shipments data from the API.
          */
-        PdkBackendActions::UPDATE_SHIPMENTS            => [
+        PdkBackendActions::UPDATE_SHIPMENTS        => [
             'request' => UpdateShipmentsEndpointRequest::class,
             'action'  => UpdateShipmentsAction::class,
         ],
@@ -152,7 +148,7 @@ return [
         /**
          * Soft delete shipments in the plugin.
          */
-        PdkBackendActions::DELETE_SHIPMENTS            => [
+        PdkBackendActions::DELETE_SHIPMENTS        => [
             'request' => DeleteShipmentsEndpointRequest::class,
             'action'  => DeleteShipmentsAction::class,
         ],
@@ -160,7 +156,7 @@ return [
         /**
          * Print shipment labels
          */
-        PdkBackendActions::PRINT_SHIPMENTS             => [
+        PdkBackendActions::PRINT_SHIPMENTS         => [
             'request' => PrintShipmentsEndpointRequest::class,
             'action'  => PrintShipmentsAction::class,
         ],
@@ -168,7 +164,7 @@ return [
         /**
          * Update plugin settings
          */
-        PdkBackendActions::UPDATE_PLUGIN_SETTINGS      => [
+        PdkBackendActions::UPDATE_PLUGIN_SETTINGS  => [
             'request' => UpdatePluginSettingsEndpointRequest::class,
             'action'  => UpdatePluginSettingsAction::class,
         ],
@@ -176,7 +172,7 @@ return [
         /**
          * Update product settings
          */
-        PdkBackendActions::UPDATE_PRODUCT_SETTINGS     => [
+        PdkBackendActions::UPDATE_PRODUCT_SETTINGS => [
             'request' => UpdateProductSettingsEndpointRequest::class,
             'action'  => UpdateProductSettingsAction::class,
         ],
@@ -184,7 +180,7 @@ return [
         /**
          * Create return shipment
          */
-        PdkBackendActions::EXPORT_RETURN               => [
+        PdkBackendActions::EXPORT_RETURN           => [
             'request' => ExportReturnEndpointRequest::class,
             'action'  => ExportReturnAction::class,
         ],
@@ -192,7 +188,7 @@ return [
         /**
          * Create webhooks
          */
-        PdkBackendActions::CREATE_WEBHOOKS             => [
+        PdkBackendActions::CREATE_WEBHOOKS         => [
             'request' => CreateWebhooksEndpointRequest::class,
             'action'  => CreateWebhooksAction::class,
         ],
@@ -200,7 +196,7 @@ return [
         /**
          * Delete webhooks
          */
-        PdkBackendActions::DELETE_WEBHOOKS             => [
+        PdkBackendActions::DELETE_WEBHOOKS         => [
             'request' => DeleteWebhooksEndpointRequest::class,
             'action'  => DeleteWebhooksAction::class,
         ],
@@ -208,7 +204,7 @@ return [
         /**
          * Fetch webhooks
          */
-        PdkBackendActions::FETCH_WEBHOOKS              => [
+        PdkBackendActions::FETCH_WEBHOOKS          => [
             'request' => FetchWebhooksEndpointRequest::class,
             'action'  => FetchWebhooksAction::class,
         ],
