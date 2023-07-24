@@ -7,11 +7,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Account/Service/AccountSettingsService.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Call to an undefined method MyParcelNL\\\\Pdk\\\\App\\\\Account\\\\Contract\\\\PdkAccountRepositoryInterface\\:\\:store\\(\\)\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/Action/Backend/Account/UpdateAccountAction.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Call to an undefined method MyParcelNL\\\\Pdk\\\\App\\\\Order\\\\Contract\\\\PdkOrderRepositoryInterface\\:\\:save\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/App/Action/Backend/Order/ExportOrderAction.php',

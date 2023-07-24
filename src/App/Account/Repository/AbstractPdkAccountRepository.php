@@ -47,11 +47,6 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
     abstract protected function getFromStorage(): ?Account;
 
     /**
-     * Store the given account. If null is given, the account data should be deleted.
-     */
-    abstract protected function store(?Account $account): ?Account;
-
-    /**
      * @param  bool $force
      *
      * @return null|\MyParcelNL\Pdk\Account\Model\Account

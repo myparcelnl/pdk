@@ -32,6 +32,17 @@
                 "property": "account_settings",
                 "responseProperty": "context"
             },
+            "updateSubscriptionFeatures": {
+                "body": null,
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "updateSubscriptionFeatures"
+                },
+                "path": "",
+                "property": null,
+                "responseProperty": "data"
+            },
             "synchronizeOrders": {
                 "body": null,
                 "headers": [],
@@ -424,7 +435,8 @@
                     "carrierConfigurations": []
                 }
             ],
-            "status": 2
+            "status": 2,
+            "subscriptionFeatures": []
         },
         "carriers": [
             {

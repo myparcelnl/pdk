@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Webhook\Hook\ShipmentStatusChangeWebhook;
 use MyParcelNL\Pdk\App\Webhook\Hook\ShopCarrierAccessibilityUpdatedWebhook;
 use MyParcelNL\Pdk\App\Webhook\Hook\ShopCarrierConfigurationUpdatedWebhook;
 use MyParcelNL\Pdk\App\Webhook\Hook\ShopUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\SubscriptionCreatedOrUpdatedWebhook;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 
 return [
@@ -40,4 +41,9 @@ return [
      * Called when the carrier configuration is updated, e.g. when a carrier's settings are changed.
      */
     WebhookSubscription::SHOP_CARRIER_CONFIGURATION_UPDATED => ShopCarrierConfigurationUpdatedWebhook::class,
+
+    /**
+     * Called when a subscription is created or updated.
+     */
+    WebhookSubscription::SUBSCRIPTION_CREATED_OR_UPDATED    => SubscriptionCreatedOrUpdatedWebhook::class,
 ];

@@ -95,6 +95,23 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
+     * @param  string $feature
+     *
+     * @return bool
+     */
+    public function hasSubscriptionFeature(string $feature): bool
+    {
+        if (! $this->hasAccount()) {
+            return false;
+        }
+
+        /** @var \MyParcelNL\Pdk\Base\Support\Collection $subscriptionFeatures */
+        $subscriptionFeatures = $this->getAccount()->subscriptionFeatures;
+
+        return in_array($feature, $subscriptionFeatures->toArray(), true);
+    }
+
+    /**
      * @return bool
      * @noinspection PhpUnused
      */

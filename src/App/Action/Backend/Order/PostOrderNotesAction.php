@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,8 +50,7 @@ class PostOrderNotesAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        // TODO: Remove this and check if shop subscription allows using order notes
-        if (! $request->query->has('OVERRIDE')) {
+        if (! AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES)) {
             return $this->getFetchOrdersResponse($request);
         }
 

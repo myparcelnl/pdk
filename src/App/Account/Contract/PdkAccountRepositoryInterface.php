@@ -14,4 +14,9 @@ interface PdkAccountRepositoryInterface
      * @see \MyParcelNL\Pdk\App\Account\Repository\AbstractPdkAccountRepository
      */
     public function getAccount(bool $force = false): ?Account;
+
+    /**
+     * Store the given account. If null is given, the account data should be deleted.
+     */
+    public function store(?Account $account): ?Account;
 }
