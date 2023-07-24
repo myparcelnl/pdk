@@ -20,6 +20,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class Account extends Model implements StorableArrayable
 {
+    public const FEATURE_ORDER_NOTES = 'allow_order_notes';
+    
     public $attributes = [
         'id'                   => null,
         'platformId'           => null,
@@ -27,7 +29,7 @@ class Account extends Model implements StorableArrayable
         'generalSettings'      => AccountGeneralSettings::class,
         'shops'                => ShopCollection::class,
         'status'               => null,
-        'subscriptionFeatures' => [],
+        'subscriptionFeatures' => null,
     ];
 
     public $casts      = [

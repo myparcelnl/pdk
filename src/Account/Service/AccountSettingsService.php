@@ -85,6 +85,22 @@ class AccountSettingsService
     }
 
     /**
+     * @param  string $feature
+     *
+     * @return bool
+     */
+    public function hasSubscriptionFeature(string $feature): bool
+    {
+        if (! $this->hasAccount()) {
+            return false;
+        }
+
+        $subscriptionFeatures = $this->getAccount()->subscriptionFeatures;
+
+        return in_array($feature, $subscriptionFeatures, true);
+    }
+
+    /**
      * @return bool
      * @noinspection PhpUnused
      */

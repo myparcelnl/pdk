@@ -25,6 +25,6 @@ class GetSubscriptionFeaturesResponse extends ApiResponseWithBody
     {
         $data = json_decode($this->getBody(), true);
 
-        $this->subscriptionFeatures = $data['data']['subscriptions'] ?? [];
+        $this->subscriptionFeatures = $data['subscription_features'] ?? [];
     }
 }

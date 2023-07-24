@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
@@ -73,7 +74,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
-        if (! Settings::get(GeneralSettings::ORDER_MODE, GeneralSettings::ID)) {
+        if (! AccountSettings::usesOrderMode()) {
             return $this->exportShipments($orders, $request);
         }
 

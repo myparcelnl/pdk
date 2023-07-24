@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
  * @method static null|Shop getShop()
  * @method static bool hasCarrier(string $name)
  * @method static bool hasTaxFields()
+ * @method static bool hasSubscriptionFeature(string $feature)
  * @method static bool usesOrderMode()
  * @implements \MyParcelNL\Pdk\Account\Service\AccountSettingsService
  */

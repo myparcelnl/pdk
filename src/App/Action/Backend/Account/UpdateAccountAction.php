@@ -140,7 +140,8 @@ class UpdateAccountAction implements ActionInterface
             : null;
 
         if ($foundAccount) {
-            $subscriptionFeatures               = Actions::execute(PdkBackendActions::FETCH_SUBSCRIPTION_FEATURES);
+            $data                               = Actions::execute(PdkBackendActions::FETCH_SUBSCRIPTION_FEATURES);
+            $subscriptionFeatures               = json_decode($data->getContent(), true)['data'];
             $foundAccount->subscriptionFeatures = $subscriptionFeatures;
 
             $this->fillAccount($foundAccount);
