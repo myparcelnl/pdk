@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
@@ -17,73 +16,72 @@ use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApiService;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
+use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(
-    new UsesEachMockPdkInstance(),
-    new UsesApiMock()
-);
+usesShared(new UsesApiMock());
 
-it(
-    'exports order without customer information if setting is false',
-    function (bool $share, bool $orderMode, array $orders) {
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-        $api = Pdk::get(ApiServiceInterface::class);
-        $api->getMock()
-            ->append($orderMode ? new ExamplePostOrdersResponse() : new ExamplePostShipmentsResponse());
-
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
-        $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
-        $settingsRepository->storeSettings(
-            new GeneralSettings([
+it('exports order without customer information if setting is false', function (
+    bool  $share,
+    bool  $orderMode,
+    array $orders
+) {
+    MockPdkFactory::create([
+        ApiServiceInterface::class         => autowire(MockApiService::class)->constructor(
+            $orderMode ? new ExamplePostOrdersResponse() : new ExamplePostShipmentsResponse()
+        ),
+        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
+        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+            GeneralSettings::ID => [
                 GeneralSettings::ORDER_MODE                 => $orderMode,
                 GeneralSettings::SHARE_CUSTOMER_INFORMATION => $share,
-            ])
-        );
+            ],
+        ]),
+    ]);
 
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
-        $orderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-        $orderRepository->updateMany(new PdkOrderCollection($orders));
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
+    ]);
 
-        Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
-            'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
-        ]);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
+    $api         = Pdk::get(ApiServiceInterface::class);
+    $lastRequest = $api->getMock()
+        ->getLastRequest();
 
-        $lastRequest = $api->getMock()
-            ->getLastRequest();
-
-        if (! $lastRequest) {
-            throw new RuntimeException('No request was made.');
-        }
-
-        $content = json_decode(
-            $lastRequest->getBody()
-                ->getContents(),
-            true
-        );
-
-        $postedAddress = Arr::get(
-            $content,
-            $orderMode
-                ? 'data.orders.0.invoice_address'
-                : 'data.shipments.0.recipient'
-        );
-
-        expect($postedAddress)->toBeArray();
-
-        if ($share) {
-            expect(Arr::only($postedAddress, ['email', 'phone']))
-                ->each->toBeString();
-        } else {
-            expect(Arr::only($postedAddress, ['email', 'phone']))
-                ->each->toBeNull();
-        }
+    if (! $lastRequest) {
+        throw new RuntimeException('No request was made.');
     }
-)
+
+    $content = json_decode(
+        $lastRequest->getBody()
+            ->getContents(),
+        true
+    );
+
+    $postedAddress = Arr::get(
+        $content,
+        $orderMode
+            ? 'data.orders.0.invoice_address'
+            : 'data.shipments.0.recipient'
+    );
+
+    expect($postedAddress)->toBeArray();
+
+    if ($share) {
+        expect(Arr::only($postedAddress, ['email', 'phone']))
+            ->each->toBeString();
+    } else {
+        expect(Arr::only($postedAddress, ['email', 'phone']))
+            ->each->toBeNull();
+    }
+})
     ->with([
         'share'        => [
             'share'     => true,
@@ -106,22 +104,18 @@ it(
     ->with('pdkOrdersDomestic');
 
 it('exports entire order', function (array $orders) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse());
-
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
-    $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
-    $settingsRepository->storeSettings(
-        new GeneralSettings([
-            GeneralSettings::ORDER_MODE => true,
-        ])
-    );
-
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
-    $orderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    $orderRepository->add(...(new PdkOrderCollection($orders))->all());
+    MockPdkFactory::create([
+        ApiServiceInterface::class         => autowire(MockApiService::class)->constructor([
+            new ExamplePostOrdersResponse(),
+            new ExamplePostOrderNotesResponse(),
+        ]),
+        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
+        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+            GeneralSettings::ID => [
+                GeneralSettings::ORDER_MODE => true,
+            ],
+        ]),
+    ]);
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => Arr::pluck($orders, 'externalIdentifier'),

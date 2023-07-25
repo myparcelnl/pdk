@@ -7,7 +7,9 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
 
 class MockApiService extends AbstractApiService
@@ -17,7 +19,13 @@ class MockApiService extends AbstractApiService
      */
     private $mock;
 
-    public function __construct(Guzzle7ClientAdapter $clientAdapter)
+    /**
+     * @param  Response|Response[]                            $mockQueue
+     * @param  \MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter $clientAdapter
+     *
+     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     */
+    public function __construct($mockQueue = [], Guzzle7ClientAdapter $clientAdapter)
     {
         $mock   = new MockHandler();
         $client = new Client(['handler' => HandlerStack::create($mock)]);
@@ -27,6 +35,10 @@ class MockApiService extends AbstractApiService
         parent::__construct($clientAdapter);
 
         $this->mock = $mock;
+
+        foreach (Arr::wrap($mockQueue) as $response) {
+            $this->mock->append($response);
+        }
     }
 
     /**

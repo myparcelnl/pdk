@@ -21,7 +21,6 @@ use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -45,7 +44,7 @@ class MockPdkConfig
      */
     public static function create(array $config = []): array
     {
-        return array_replace_recursive(self::getDefaultConfig(), Arr::dot($config));
+        return array_replace(self::getDefaultConfig(), $config);
     }
 
     /**
