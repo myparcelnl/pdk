@@ -30,18 +30,6 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder ...$orders
-     *
-     * @return void
-     */
-    public function add(PdkOrder ...$orders): void
-    {
-        foreach ($orders as $order) {
-            $this->save($order->externalIdentifier, $order);
-        }
-    }
-
-    /**
      * @param  int|string $input
      *
      * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder

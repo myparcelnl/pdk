@@ -5,23 +5,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApiService;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -34,9 +31,6 @@ it('exports order without customer information if setting is false', function (
     array $orders
 ) {
     MockPdkFactory::create([
-        ApiServiceInterface::class         => autowire(MockApiService::class)->constructor(
-            $orderMode ? new ExamplePostOrdersResponse() : new ExamplePostShipmentsResponse()
-        ),
         PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
         SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
             GeneralSettings::ID => [
@@ -46,18 +40,13 @@ it('exports order without customer information if setting is false', function (
         ]),
     ]);
 
+    MockApi::enqueue($orderMode ? new ExamplePostOrdersResponse() : new ExamplePostShipmentsResponse());
+
     Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
     ]);
 
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api         = Pdk::get(ApiServiceInterface::class);
-    $lastRequest = $api->getMock()
-        ->getLastRequest();
-
-    if (! $lastRequest) {
-        throw new RuntimeException('No request was made.');
-    }
+    $lastRequest = MockApi::ensureLastRequest();
 
     $content = json_decode(
         $lastRequest->getBody()
@@ -105,10 +94,6 @@ it('exports order without customer information if setting is false', function (
 
 it('exports entire order', function (array $orders) {
     MockPdkFactory::create([
-        ApiServiceInterface::class         => autowire(MockApiService::class)->constructor([
-            new ExamplePostOrdersResponse(),
-            new ExamplePostOrderNotesResponse(),
-        ]),
         PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
         SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
             GeneralSettings::ID => [
@@ -116,6 +101,11 @@ it('exports entire order', function (array $orders) {
             ],
         ]),
     ]);
+
+    MockApi::enqueue(
+        new ExamplePostOrdersResponse(),
+        new ExamplePostOrderNotesResponse()
+    );
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => Arr::pluck($orders, 'externalIdentifier'),

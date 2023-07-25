@@ -5,10 +5,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -16,12 +16,10 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 usesShared(new UsesMockPdkInstance());
 
 it('creates a valid order note collection from api data', function (?string $fulfilmentId, array $input) {
+    MockApi::enqueue(new ExamplePostOrderNotesResponse());
+
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository $repository */
     $repository = Pdk::get(OrderNotesRepository::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new ExamplePostOrderNotesResponse());
 
     $savedOrderNotes = $repository->postOrderNotes($fulfilmentId, new OrderNoteCollection($input));
 

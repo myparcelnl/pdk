@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsFromContractResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithDropOffPoint;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithPickup;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -19,10 +19,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 usesShared(new UsesEachMockPdkInstance());
 
 it('creates shipment collection from queried data', function (string $responseClass) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new $responseClass());
+    MockApi::enqueue(new $responseClass());
 
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
     $repository = Pdk::get(ShipmentRepository::class);

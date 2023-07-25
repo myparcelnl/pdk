@@ -9,14 +9,13 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use function DI\autowire;
@@ -90,17 +89,15 @@ dataset('shipment options', [
 
 function mockPdk(array $carrierSettings = [], array $products = [], array $checkoutSettings = []): void
 {
-    PdkFactory::create(
-        MockPdkConfig::create([
-            PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor($products),
-            SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor(
-                [
-                    CarrierSettings::ID  => [CARRIER => $carrierSettings],
-                    CheckoutSettings::ID => $checkoutSettings,
-                ]
-            ),
-        ])
-    );
+    MockPdkFactory::create([
+        PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor($products),
+        SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor(
+            [
+                CarrierSettings::ID  => [CARRIER => $carrierSettings],
+                CheckoutSettings::ID => $checkoutSettings,
+            ]
+        ),
+    ]);
 }
 
 function expectShipmentOptionToEqual(PdkOrder $order, array $options): void
@@ -120,8 +117,7 @@ it('inherits shipment option from carrier settings', function (array $option, st
     $service->calculate($order);
 
     expectShipmentOptionToEqual($order, [$option[KEY_SHIPMENT_OPTION] => $option[$key]]);
-}
-)
+})
     ->with('shipment options')
     ->with(['enabled' => KEY_ENABLED_VALUE, 'disabled' => KEY_DISABLED_VALUE]);
 

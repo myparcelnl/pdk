@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -14,8 +13,8 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use RuntimeException;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -39,12 +38,8 @@ const DEFAULT_INPUT_SENDER = [
 ];
 
 it('creates a valid request from a shipment collection', function (array $input) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
-    $mock = $api->getMock();
-    $mock->append(new ExamplePostIdsResponse());
-
-    $mock->append(
+    MockApi::enqueue(
+        new ExamplePostIdsResponse(),
         new ExamplePostIdsResponse(
             array_map(function (array $data) {
                 return [
@@ -55,17 +50,13 @@ it('creates a valid request from a shipment collection', function (array $input)
         )
     );
 
-    $inputShipments = (new ShipmentCollection($input));
+    $inputShipments = new ShipmentCollection($input);
 
     /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
     $repository = Pdk::get(ShipmentRepository::class);
 
     $createdConcepts = $repository->createConcepts($inputShipments);
-    $request         = $mock->getLastRequest();
-
-    if (! $request) {
-        throw new RuntimeException('No request was made');
-    }
+    $request         = MockApi::ensureLastRequest();
 
     $body = json_decode(
         $request->getBody()
@@ -336,19 +327,12 @@ it('creates a valid request from a shipment collection', function (array $input)
 ]);
 
 it('creates shipment', function ($input, $path, $query, $contentType) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
-    $mock = $api->getMock();
-    $mock->append(new ExamplePostIdsResponse());
+    MockApi::enqueue(new ExamplePostIdsResponse());
 
     $repository = Pdk::get(ShipmentRepository::class);
 
     $response = $repository->createConcepts(new ShipmentCollection($input));
-    $request  = $mock->getLastRequest();
-
-    if (! $request) {
-        throw new RuntimeException('No request was made');
-    }
+    $request  = MockApi::ensureLastRequest();
 
     $uri               = $request->getUri();
     $contentTypeHeader = Arr::first($request->getHeaders()['Content-Type']);

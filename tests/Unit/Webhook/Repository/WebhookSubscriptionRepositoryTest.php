@@ -6,11 +6,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Webhook\Repository;
 
 use BadMethodCallException;
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
@@ -23,10 +23,7 @@ usesShared(
 );
 
 it('creates WebhookSubscription from api response', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new ExampleGetWebhookSubscriptionsResponse());
+    MockApi::enqueue(new ExampleGetWebhookSubscriptionsResponse());
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
@@ -35,10 +32,7 @@ it('creates WebhookSubscription from api response', function () {
 });
 
 it('creates WebhookSubscriptionCollection from api response', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new ExampleGetWebhookSubscriptionsResponse());
+    MockApi::enqueue(new ExampleGetWebhookSubscriptionsResponse());
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
@@ -47,10 +41,7 @@ it('creates WebhookSubscriptionCollection from api response', function () {
 });
 
 it('subscribes to a webhook', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new ExamplePostIdsResponse([['id' => 3001518]]));
+    MockApi::enqueue(new ExamplePostIdsResponse([['id' => 3001518]]));
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
@@ -73,10 +64,7 @@ it('subscribes to a webhook', function () {
 });
 
 it('subscribes to a webhook using a shorthand method', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new ExamplePostIdsResponse([['id' => 5731310]]));
+    MockApi::enqueue(new ExamplePostIdsResponse([['id' => 5731310]]));
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
@@ -102,10 +90,7 @@ it('throws an exception when calling a non-existing method', function () {
 })->throws(BadMethodCallException::class);
 
 it('unsubscribes from a webhook', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-    $api->getMock()
-        ->append(new Example204NoContentResponse());
+    MockApi::enqueue(new Example204NoContentResponse());
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);

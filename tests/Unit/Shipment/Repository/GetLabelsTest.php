@@ -5,14 +5,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsPdfResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use RuntimeException;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -90,11 +89,7 @@ dataset('collections', [
 it(
     'downloads labels as link',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-        $api  = Pdk::get(ApiServiceInterface::class);
-        $mock = $api->getMock();
-
-        $mock->append(
+        MockApi::enqueue(
             count($collection) > 25
                 ? new ExampleGetShipmentLabelsLinkV2Response()
                 : new ExampleGetShipmentLabelsLinkResponse()
@@ -104,11 +99,7 @@ it(
         $repository = Pdk::get(ShipmentRepository::class);
 
         $response = $repository->fetchLabelLink(new ShipmentCollection($collection), $format, $position);
-        $request  = $mock->getLastRequest();
-
-        if (! $request) {
-            throw new RuntimeException('No request was made');
-        }
+        $request  = MockApi::ensureLastRequest();
 
         $uri = $request->getUri();
 
@@ -124,20 +115,13 @@ it(
 it(
     'downloads labels as pdf',
     function (array $collection, ?string $format, ?array $position, string $path, string $query) {
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-        $api  = Pdk::get(ApiServiceInterface::class);
-        $mock = $api->getMock();
-        $mock->append(new ExampleGetShipmentLabelsPdfResponse());
+        MockApi::enqueue(new ExampleGetShipmentLabelsPdfResponse());
 
         /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
         $repository = Pdk::get(ShipmentRepository::class);
 
         $response = $repository->fetchLabelPdf(new ShipmentCollection($collection), $format, $position);
-        $request  = $mock->getLastRequest();
-
-        if (! $request) {
-            throw new RuntimeException('No request was made');
-        }
+        $request  = MockApi::ensureLastRequest();
 
         $uri = $request->getUri();
 

@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Account;
 
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -15,6 +14,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -33,15 +33,11 @@ usesShared(
 
 function executeUpdateAccount(?array $settings, array $accounts = null): Response
 {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-
-    $api->getMock()
-        ->append(
-            new ExampleGetAccountsResponse($accounts),
-            new ExampleGetCarrierConfigurationResponse(),
-            new ExampleGetCarrierOptionsResponse()
-        );
+    MockApi::enqueue(
+        new ExampleGetAccountsResponse($accounts),
+        new ExampleGetCarrierConfigurationResponse(),
+        new ExampleGetCarrierOptionsResponse()
+    );
 
     $request = new Request(
         [
@@ -85,9 +81,6 @@ it('fetches account with carrier configurations and options', function () {
 });
 
 it('fetches new account and carrier data from api when called with empty array', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-
     $existingAccount = AccountSettings::getAccount();
 
     expect($existingAccount)->toBeInstanceOf(Account::class);
@@ -102,8 +95,7 @@ it('fetches new account and carrier data from api when called with empty array',
         // posting an empty array should trigger a fetch of the current account
         // and its carrier configuration and options
         ->and(
-            $api->getMock()
-                ->getLastRequest()
+            MockApi::ensureLastRequest()
                 ->getUri()
                 ->getPath()
         )

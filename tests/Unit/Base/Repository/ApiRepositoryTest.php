@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -24,11 +25,7 @@ it('retrieves api instance', function () {
 });
 
 it('gets data from the api', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api = Pdk::get(ApiServiceInterface::class);
-
-    $api->getMock()
-        ->append(new ExampleGetAccountsResponse());
+    MockApi::enqueue(new ExampleGetAccountsResponse());
 
     /** @var \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository */
     $accountRepository = Pdk::get(AccountRepository::class);

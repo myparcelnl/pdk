@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -13,8 +12,8 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use RuntimeException;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -39,11 +38,7 @@ const DEFAULT_INPUT_SENDER = [
 ];
 
 it('creates return shipment', function (array $input) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
-    $mock = $api->getMock();
-    $mock->append(new ExamplePostIdsResponse());
-    $mock->append(new ExampleGetShipmentsResponse());
+    MockApi::enqueue(new ExamplePostIdsResponse(), new ExampleGetShipmentsResponse());
 
     $repository             = Pdk::get(ShipmentRepository::class);
     $inputShipments         = (new Collection($input))->mapInto(Shipment::class);
@@ -93,19 +88,11 @@ it('creates return shipment', function (array $input) {
 ]);
 
 it('creates a valid request from a shipment collection', function ($input, $path, $query) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-    $api  = Pdk::get(ApiServiceInterface::class);
-    $mock = $api->getMock();
-    $mock->append(new ExamplePostIdsResponse());
-    $mock->append(new ExampleGetShipmentsResponse());
+    MockApi::enqueue(new ExamplePostIdsResponse(), new ExampleGetShipmentsResponse());
 
     $repository = Pdk::get(ShipmentRepository::class);
     $response   = $repository->createReturnShipments(new ShipmentCollection($input));
-    $request    = $mock->getLastRequest();
-
-    if (! $request) {
-        throw new RuntimeException('No request was made');
-    }
+    $request    = MockApi::ensureLastRequest();
 
     $uri = $request->getUri();
 
