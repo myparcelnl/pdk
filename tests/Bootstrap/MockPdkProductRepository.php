@@ -17,6 +17,7 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     private const DEFAULT_PRODUCTS = [
         [
             'externalIdentifier' => '123',
+            'name'               => 'Pear',
             'weight'             => 4000,
             'settings'           => [
                 ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
@@ -35,6 +36,9 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
         ],
         [
             'externalIdentifier' => '456',
+            'name'               => 'Apple',
+            'sku'                => 'A-456',
+            'ean'                => '212444',
             'weight'             => 5000,
             'settings'           => [
                 ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
@@ -53,6 +57,8 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
         ],
         [
             'externalIdentifier' => '789',
+            'name'               => 'Banana',
+            'sku'                => 'A-789',
             'weight'             => 6000,
             'settings'           => [
                 ProductSettings::EXPORT_ONLY_RECIPIENT    => false,
@@ -84,13 +90,23 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     /**
      * @param  array                                      $products
      * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
+     *
+     * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
     public function __construct(array $products = self::DEFAULT_PRODUCTS, MemoryCacheStorage $storage)
     {
         parent::__construct($storage);
+        $this->reset($products);
+    }
 
-        $this->saved    = new PdkProductCollection($products);
-        $this->products = $this->getFromStorage();
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection $products
+     *
+     * @return void
+     */
+    public function add(PdkProductCollection $products): void
+    {
+        $this->products = $this->products->merge($products);
     }
 
     /**
@@ -101,6 +117,11 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
         return $this->saved;
     }
 
+    /**
+     * @param $identifier
+     *
+     * @return \MyParcelNL\Pdk\App\Order\Model\PdkProduct
+     */
     public function getProduct($identifier): PdkProduct
     {
         $product = $this->products->firstWhere('externalIdentifier', $identifier);
@@ -134,6 +155,30 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
         }
 
         return $this->products->whereIn('externalIdentifier', $identifiers);
+    }
+
+    /**
+     * @param  array $products
+     *
+     * @return void
+     */
+    public function reset(array $products = self::DEFAULT_PRODUCTS): void
+    {
+        $this->saved    = new PdkProductCollection($products);
+        $this->products = $this->getFromStorage();
+    }
+
+    /**
+     * @param  string $key
+     * @param  mixed  $data
+     *
+     * @return mixed
+     */
+    public function save(string $key, $data)
+    {
+        $this->products->push($data);
+
+        return parent::save($key, $data);
     }
 
     /**

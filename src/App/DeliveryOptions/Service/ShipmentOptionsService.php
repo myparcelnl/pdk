@@ -6,16 +6,18 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use Throwable;
 
 class ShipmentOptionsService implements ShipmentOptionsServiceInterface
 {
@@ -58,12 +60,12 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
      */
-    private $countryService;
+    protected $countryService;
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
      */
-    private $currencyService;
+    protected $currencyService;
 
     /**
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService
@@ -78,32 +80,24 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
-     * @return void
+     * @return PdkOrder
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function calculate(PdkOrder $order): void
+    public function calculate(PdkOrder $order): PdkOrder
     {
-        try {
-            $order->deliveryOptions->shipmentOptions = $this->mergeOrderLines($order);
-        } catch (Throwable $e) {
-            Logger::error('Could not calculate shipment options', ['exception' => $e]);
-            return;
+        $newOrder = clone $order;
+
+        $shipmentOptions = $this->calculateShipmentOptions($newOrder);
+
+        $shipmentOptions->labelDescription = $this->formatLabelDescription($order);
+
+        if (AbstractSettingsModel::TRISTATE_VALUE_ENABLED === $shipmentOptions->insurance) {
+            $shipmentOptions->insurance = $this->calculateInsurance($order);
         }
-    }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
-     * @return mixed
-     */
-    public function mergeProductSettings(PdkOrder $order)
-    {
-        return $order->lines->reduce(function (ProductSettings $acc, PdkOrderLine $line) {
-            foreach ($line->product->settings->getAttributes() as $attribute => $value) {
-                $acc->setAttribute($attribute, $this->valueProcessor($acc->getAttribute($attribute), $value));
-            }
+        $newOrder->deliveryOptions->shipmentOptions = $shipmentOptions;
 
-            return $acc;
-        }, new ProductSettings());
+        return $newOrder;
     }
 
     /**
@@ -112,7 +106,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
      * @return int
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function calculateInsurance(PdkOrder $order): int
+    protected function calculateInsurance(PdkOrder $order): int
     {
         $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
 
@@ -137,9 +131,122 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     }
 
     /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function calculateShipmentOptions(PdkOrder $order): ShipmentOptions
+    {
+        /** @var CarrierSettings $carrierSettings */
+        $carrierSettings = null;
+        /** @var ProductSettings $productSettings */
+        $productSettings = null;
+
+        $shipmentOptions = $order->deliveryOptions->shipmentOptions;
+
+        foreach (self::SETTING_KEYS as $keys) {
+            $key = $keys[self::SHIPMENT_OPTION_KEY];
+
+            // If value is already set, keep it.
+            if (null !== $shipmentOptions->getAttribute($key)) {
+                continue;
+            }
+
+            $productSettings = $productSettings ?? $this->mergeProductSettings($order);
+
+            $value = $productSettings->getAttribute($keys[self::PRODUCT_SETTING_KEY]);
+
+            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT === $value) {
+                $carrierSettings = $carrierSettings ?? CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
+
+                $value = $carrierSettings->getAttribute($keys[self::CARRIER_SETTING_KEY]) ?? false;
+            }
+
+            $shipmentOptions->setAttribute($key, $value);
+        }
+
+        return $shipmentOptions;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
+     *
+     * @return string
+     */
+    protected function formatLabelDescription(PdkOrder $order): string
+    {
+        $description = $order->deliveryOptions->shipmentOptions->labelDescription
+            ?? Settings::get(LabelSettings::DESCRIPTION, LabelSettings::ID)
+            ?? '';
+
+        $createString = static function (string $key) use ($order): string {
+            return implode(', ', Utils::filterNull(Arr::pluck($order->lines->all(), $key)));
+        };
+
+        return preg_replace_callback_array([
+            '/\[ORDER_ID\]/' => static function () use ($order) {
+                return $order->externalIdentifier;
+            },
+
+            '/\[CUSTOMER_NOTE\]/' => static function () use ($order) {
+                return $order->notes->firstWhere('author', OrderNote::AUTHOR_CUSTOMER)->note ?? '';
+            },
+
+            '/\[PRODUCT_ID\]/' => static function () use ($createString) {
+                return $createString('product.externalIdentifier');
+            },
+
+            '/\[PRODUCT_NAME\]/' => static function () use ($createString) {
+                return $createString('product.name');
+            },
+
+            '/\[PRODUCT_SKU\]/' => static function () use ($createString) {
+                return $createString('product.sku');
+            },
+
+            '/\[PRODUCT_EAN\]/' => static function () use ($createString) {
+                return $createString('product.ean');
+            },
+
+            '/\[PRODUCT_QTY\]/' => static function () use ($order) {
+                return $order->lines->sum('quantity');
+            },
+        ], $description);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
+     *
+     * @return ProductSettings
+     */
+    protected function mergeProductSettings(PdkOrder $order): ProductSettings
+    {
+        $productSettings = new ProductSettings();
+
+        foreach (self::SETTING_KEYS as $option) {
+            $productSettingsKey = $option[self::PRODUCT_SETTING_KEY];
+
+            $values = $order->lines
+                ->pluck(sprintf('product.settings.%s', $productSettingsKey))
+                ->filter(function ($value) {
+                    return is_int($value)
+                        && $value >= AbstractSettingsModel::TRISTATE_VALUE_DEFAULT
+                        && $value <= AbstractSettingsModel::TRISTATE_VALUE_ENABLED;
+                })
+                ->all();
+
+            $productSettings->setAttribute($productSettingsKey, $this->resolveTriStateValues(...$values));
+        }
+
+        return $productSettings;
+    }
+
+    /**
      * @param  null|string $cc
      *
      * @return string
+     * @noinspection MultipleReturnStatementsInspection
      */
     private function getInsuranceUpToKey(?string $cc): string
     {
@@ -180,72 +287,14 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
     }
 
     /**
-     * values in $shipmentOptions have priority over calculated values from $lines
+     * @param  int ...$args
      *
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @return int
      */
-    private function mergeOrderLines(PdkOrder $order): ShipmentOptions
+    private function resolveTriStateValues(int ...$args): int
     {
-        $carrierSettings = CarrierSettings::fromCarrier($order->deliveryOptions->carrier);
-        $productSettings = $this->mergeProductSettings($order);
-        $shipmentOptions = $order->deliveryOptions->shipmentOptions;
-
-        foreach (self::SETTING_KEYS as $keys) {
-            $shipmentOptionKey = $keys[self::SHIPMENT_OPTION_KEY];
-
-            // If value is already set, keep it.
-            if (null !== $shipmentOptions->getAttribute($shipmentOptionKey)) {
-                continue;
-            }
-
-            $carrierSettingKey  = $keys[self::CARRIER_SETTING_KEY];
-            $productSettingsKey = $keys[self::PRODUCT_SETTING_KEY];
-
-            if (isset($productSettings[$productSettingsKey]) && AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== $productSettings[$productSettingsKey]) {
-                $shipmentOptions->setAttribute($shipmentOptionKey, $productSettings[$productSettingsKey]);
-            } else {
-                $shipmentOptions->setAttribute(
-                    $shipmentOptionKey,
-                    $carrierSettings[$carrierSettingKey] ?? $productSettings[$productSettingsKey] ?? null
-                );
-            }
-        }
-
-        if (AbstractSettingsModel::TRISTATE_VALUE_ENABLED === $shipmentOptions->insurance) {
-            $shipmentOptions->insurance = $this->calculateInsurance($order);
-        }
-
-        return $shipmentOptions;
-    }
-
-    /**
-     * Returns the value that should be used for the shipment option.
-     * Arguments will be processed in order, so the last one is most important.
-     * Special values are -1 (tristate default) and null, which will be ignored.
-     * For booleans: true will prevail over false. valueProcessor returns the value as int (1 for true, 0 for false).
-     * For integers: higher values prevail. Strings will be converted to integers, when numeric.
-     * For strings: the last non-empty string will prevail.
-     * When mixed types are given, output is not guaranteed.
-     *
-     * @param ...$args
-     *
-     * @return mixed
-     */
-    private function valueProcessor(...$args)
-    {
-        return array_reduce($args, static function ($carry, $item) {
-            if (is_bool($item)) {
-                $item = (int) $item;
-            }
-
-            if (is_numeric($item)) {
-                return max((int) $carry, (int) $item);
-            }
-
-            return $item ?? $carry;
-        }, AbstractSettingsModel::TRISTATE_VALUE_DISABLED);
+        return array_reduce($args, static function (int $carry, int $item) {
+            return max($carry, $item);
+        }, AbstractSettingsModel::TRISTATE_VALUE_DEFAULT);
     }
 }

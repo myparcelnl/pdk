@@ -1,0 +1,51 @@
+[
+    {
+        "apiIdentifier": null,
+        "exported": false,
+        "deliveryOptions": {
+            "carrier": "postnl",
+            "labelAmount": 1,
+            "shipmentOptions": [],
+            "deliveryType": "standard",
+            "packageType": "mailbox"
+        },
+        "notes": []
+    },
+    {
+        "apiIdentifier": null,
+        "exported": false,
+        "deliveryOptions": {
+            "carrier": "postnl",
+            "date": "2077-10-23 09:47:51",
+            "labelAmount": 1,
+            "shipmentOptions": {
+                "ageCheck": false,
+                "onlyRecipient": true,
+                "signature": true
+            },
+            "deliveryType": "evening",
+            "packageType": "package"
+        },
+        "notes": []
+    },
+    {
+        "apiIdentifier": null,
+        "exported": false,
+        "deliveryOptions": {
+            "carrier": "postnl",
+            "labelAmount": 1,
+            "shipmentOptions": {
+                "ageCheck": true,
+                "insurance": 1,
+                "labelDescription": "1",
+                "largeFormat": true,
+                "onlyRecipient": true,
+                "return": true,
+                "signature": true
+            },
+            "deliveryType": "standard",
+            "packageType": "package"
+        },
+        "notes": []
+    }
+]
