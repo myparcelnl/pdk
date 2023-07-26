@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Facade\Frontend;
@@ -79,5 +80,14 @@ dataset('components', [
             };
         },
         'views'    => [MockAbstractViewService::PAGE_PRODUCT],
+    ],
+
+    'delivery options' => [
+        'callback' => function () {
+            return function () {
+                return Frontend::renderDeliveryOptions(new PdkCart());
+            };
+        },
+        'views'    => [MockAbstractViewService::PAGE_CHECKOUT],
     ],
 ]);

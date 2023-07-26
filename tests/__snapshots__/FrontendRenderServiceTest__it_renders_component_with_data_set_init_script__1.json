@@ -1,0 +1,838 @@
+{
+    "global": {
+        "appInfo": {
+            "name": "pest",
+            "title": "Pest",
+            "version": "1.0.0",
+            "path": "APP_PATH",
+            "url": "APP_URL"
+        },
+        "baseUrl": "BACKEND_URL",
+        "bootstrapId": "myparcel-pdk-boot",
+        "endpoints": {
+            "deleteAccount": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "deleteAccount"
+                },
+                "path": "",
+                "property": null,
+                "responseProperty": "context"
+            },
+            "updateAccount": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "updateAccount"
+                },
+                "path": "",
+                "property": "account_settings",
+                "responseProperty": "context"
+            },
+            "synchronizeOrders": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "synchronizeOrders"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
+            "exportOrders": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "exportOrders"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
+            "postOrderNotes": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "postOrderNotes"
+                },
+                "path": "",
+                "property": "orderNotes",
+                "responseProperty": null
+            },
+            "fetchOrders": {
+                "body": null,
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchOrders"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
+            "printOrders": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "printOrders"
+                },
+                "path": "",
+                "property": "pdfs",
+                "responseProperty": null
+            },
+            "updateOrders": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "updateOrders"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
+            "updateShipments": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "updateShipments"
+                },
+                "path": "",
+                "property": "shipments",
+                "responseProperty": null
+            },
+            "deleteShipments": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "deleteShipments"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
+            "printShipments": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "printShipments"
+                },
+                "path": "",
+                "property": "pdfs",
+                "responseProperty": null
+            },
+            "updatePluginSettings": {
+                "body": null,
+                "headers": [],
+                "method": "PUT",
+                "parameters": {
+                    "action": "updatePluginSettings"
+                },
+                "path": "",
+                "property": "plugin_settings",
+                "responseProperty": null
+            },
+            "updateProductSettings": {
+                "body": null,
+                "headers": [],
+                "method": "PUT",
+                "parameters": {
+                    "action": "updateProductSettings"
+                },
+                "path": "",
+                "property": "product_settings",
+                "responseProperty": null
+            },
+            "exportReturn": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "exportReturn"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
+            "createWebhooks": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "createWebhooks"
+                },
+                "path": "",
+                "property": "webhooks",
+                "responseProperty": null
+            },
+            "deleteWebhooks": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "deleteWebhooks"
+                },
+                "path": "",
+                "property": "webhooks",
+                "responseProperty": null
+            },
+            "fetchWebhooks": {
+                "body": null,
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchWebhooks"
+                },
+                "path": "",
+                "property": "webhooks",
+                "responseProperty": null
+            },
+            "fetchContext": {
+                "body": null,
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchContext"
+                },
+                "path": "",
+                "property": "context",
+                "responseProperty": null
+            }
+        },
+        "event": "myparcel_pdk_loaded",
+        "language": "nl",
+        "mode": "production",
+        "platform": {
+            "name": "myparcel",
+            "human": "MyParcel",
+            "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
+            "localCountry": "NL",
+            "defaultCarrier": "postnl",
+            "defaultCarrierId": 1,
+            "allowedCarriers": [
+                "dhleuroplus",
+                "dhlforyou",
+                "dhlparcelconnect",
+                "postnl"
+            ],
+            "defaultSettings": {
+                "checkout": {
+                    "pickupLocationsDefaultView": "list"
+                }
+            }
+        },
+        "translations": {
+            "apple_tree": "Appelboom"
+        }
+    },
+    "dynamic": {
+        "account": {
+            "id": 21000,
+            "platformId": 1,
+            "contactInfo": {
+                "address1": null,
+                "address2": null,
+                "area": null,
+                "cc": null,
+                "city": null,
+                "postalCode": null,
+                "region": null,
+                "state": null,
+                "email": "test@myparcel.nl",
+                "phone": null,
+                "person": null,
+                "company": null
+            },
+            "generalSettings": {
+                "isTest": false,
+                "orderMode": false,
+                "hasCarrierContract": false
+            },
+            "shops": [
+                {
+                    "id": 23999,
+                    "accountId": 21000,
+                    "platformId": 1,
+                    "name": "MyParcel",
+                    "hidden": false,
+                    "billing": [],
+                    "deliveryAddress": [],
+                    "generalSettings": [],
+                    "return": [],
+                    "shipmentOptions": [],
+                    "trackTrace": [],
+                    "carriers": [
+                        {
+                            "externalIdentifier": "postnl",
+                            "id": 1,
+                            "name": "postnl",
+                            "human": "PostNL",
+                            "subscriptionId": null,
+                            "enabled": true,
+                            "isDefault": true,
+                            "label": null,
+                            "optional": false,
+                            "primary": false,
+                            "type": "main",
+                            "capabilities": {
+                                "deliveryTypes": [
+                                    "morning",
+                                    "standard",
+                                    "evening",
+                                    "pickup"
+                                ],
+                                "features": {
+                                    "labelDescriptionLength": 45
+                                },
+                                "packageTypes": [
+                                    "package",
+                                    "mailbox",
+                                    "letter",
+                                    "digital_stamp"
+                                ],
+                                "shipmentOptions": {
+                                    "ageCheck": true,
+                                    "largeFormat": true,
+                                    "onlyRecipient": true,
+                                    "return": true,
+                                    "sameDayDelivery": true,
+                                    "signature": true,
+                                    "insurance": [
+                                        0,
+                                        10000,
+                                        25000,
+                                        50000,
+                                        100000,
+                                        150000,
+                                        200000,
+                                        250000,
+                                        300000,
+                                        350000,
+                                        400000,
+                                        450000,
+                                        500000
+                                    ]
+                                }
+                            },
+                            "returnCapabilities": {
+                                "deliveryTypes": [
+                                    "standard"
+                                ],
+                                "features": {
+                                    "labelDescriptionLength": 45
+                                },
+                                "packageTypes": [
+                                    "package"
+                                ],
+                                "shipmentOptions": {
+                                    "signature": true,
+                                    "insurance": [
+                                        0,
+                                        10000,
+                                        25000,
+                                        50000,
+                                        100000,
+                                        150000,
+                                        200000,
+                                        250000,
+                                        300000,
+                                        350000,
+                                        400000,
+                                        450000,
+                                        500000
+                                    ],
+                                    "return": true,
+                                    "ageCheck": true,
+                                    "onlyRecipient": true,
+                                    "sameDayDelivery": true,
+                                    "largeFormat": true
+                                }
+                            }
+                        },
+                        {
+                            "externalIdentifier": "dhlforyou:8277",
+                            "id": 9,
+                            "name": "dhlforyou",
+                            "human": "DHL For You",
+                            "subscriptionId": "8277",
+                            "enabled": true,
+                            "isDefault": true,
+                            "label": null,
+                            "optional": false,
+                            "primary": false,
+                            "type": "main",
+                            "capabilities": {
+                                "deliveryTypes": [
+                                    "standard",
+                                    "pickup"
+                                ],
+                                "features": {
+                                    "labelDescriptionLength": 45
+                                },
+                                "packageTypes": [
+                                    "package",
+                                    "mailbox"
+                                ],
+                                "shipmentOptions": {
+                                    "ageCheck": true,
+                                    "largeFormat": false,
+                                    "onlyRecipient": true,
+                                    "return": true,
+                                    "sameDayDelivery": true,
+                                    "signature": true,
+                                    "saturdayDelivery": true,
+                                    "hideSender": true,
+                                    "insurance": [
+                                        0,
+                                        50000,
+                                        100000,
+                                        150000,
+                                        200000,
+                                        250000,
+                                        300000,
+                                        350000,
+                                        400000,
+                                        450000,
+                                        500000
+                                    ]
+                                }
+                            },
+                            "returnCapabilities": {
+                                "deliveryTypes": [
+                                    "standard"
+                                ],
+                                "features": {
+                                    "labelDescriptionLength": 45
+                                },
+                                "packageTypes": [
+                                    "package"
+                                ],
+                                "shipmentOptions": {
+                                    "signature": true,
+                                    "insurance": [
+                                        0
+                                    ],
+                                    "return": true,
+                                    "ageCheck": true,
+                                    "onlyRecipient": true,
+                                    "sameDayDelivery": true,
+                                    "largeFormat": true
+                                }
+                            }
+                        }
+                    ],
+                    "carrierConfigurations": []
+                }
+            ],
+            "status": 2
+        },
+        "carriers": [
+            {
+                "externalIdentifier": "postnl",
+                "id": 1,
+                "name": "postnl",
+                "human": "PostNL",
+                "subscriptionId": null,
+                "enabled": true,
+                "isDefault": true,
+                "label": null,
+                "optional": false,
+                "primary": false,
+                "type": "main",
+                "capabilities": {
+                    "deliveryTypes": [
+                        "morning",
+                        "standard",
+                        "evening",
+                        "pickup"
+                    ],
+                    "features": {
+                        "labelDescriptionLength": 45
+                    },
+                    "packageTypes": [
+                        "package",
+                        "mailbox",
+                        "letter",
+                        "digital_stamp"
+                    ],
+                    "shipmentOptions": {
+                        "ageCheck": true,
+                        "largeFormat": true,
+                        "onlyRecipient": true,
+                        "return": true,
+                        "sameDayDelivery": true,
+                        "signature": true,
+                        "insurance": [
+                            0,
+                            10000,
+                            25000,
+                            50000,
+                            100000,
+                            150000,
+                            200000,
+                            250000,
+                            300000,
+                            350000,
+                            400000,
+                            450000,
+                            500000
+                        ]
+                    }
+                },
+                "returnCapabilities": {
+                    "deliveryTypes": [
+                        "standard"
+                    ],
+                    "features": {
+                        "labelDescriptionLength": 45
+                    },
+                    "packageTypes": [
+                        "package"
+                    ],
+                    "shipmentOptions": {
+                        "signature": true,
+                        "insurance": [
+                            0,
+                            10000,
+                            25000,
+                            50000,
+                            100000,
+                            150000,
+                            200000,
+                            250000,
+                            300000,
+                            350000,
+                            400000,
+                            450000,
+                            500000
+                        ],
+                        "return": true,
+                        "ageCheck": true,
+                        "onlyRecipient": true,
+                        "sameDayDelivery": true,
+                        "largeFormat": true
+                    }
+                }
+            },
+            {
+                "externalIdentifier": "dhlforyou:8277",
+                "id": 9,
+                "name": "dhlforyou",
+                "human": "DHL For You",
+                "subscriptionId": "8277",
+                "enabled": true,
+                "isDefault": true,
+                "label": null,
+                "optional": false,
+                "primary": false,
+                "type": "main",
+                "capabilities": {
+                    "deliveryTypes": [
+                        "standard",
+                        "pickup"
+                    ],
+                    "features": {
+                        "labelDescriptionLength": 45
+                    },
+                    "packageTypes": [
+                        "package",
+                        "mailbox"
+                    ],
+                    "shipmentOptions": {
+                        "ageCheck": true,
+                        "largeFormat": false,
+                        "onlyRecipient": true,
+                        "return": true,
+                        "sameDayDelivery": true,
+                        "signature": true,
+                        "saturdayDelivery": true,
+                        "hideSender": true,
+                        "insurance": [
+                            0,
+                            50000,
+                            100000,
+                            150000,
+                            200000,
+                            250000,
+                            300000,
+                            350000,
+                            400000,
+                            450000,
+                            500000
+                        ]
+                    }
+                },
+                "returnCapabilities": {
+                    "deliveryTypes": [
+                        "standard"
+                    ],
+                    "features": {
+                        "labelDescriptionLength": 45
+                    },
+                    "packageTypes": [
+                        "package"
+                    ],
+                    "shipmentOptions": {
+                        "signature": true,
+                        "insurance": [
+                            0
+                        ],
+                        "return": true,
+                        "ageCheck": true,
+                        "onlyRecipient": true,
+                        "sameDayDelivery": true,
+                        "largeFormat": true
+                    }
+                }
+            }
+        ],
+        "pluginSettings": {
+            "account": {
+                "id": "account",
+                "apiKey": null
+            },
+            "general": {
+                "id": "general",
+                "barcodeInNote": false,
+                "barcodeInNoteTitle": null,
+                "conceptShipments": true,
+                "exportWithAutomaticStatus": null,
+                "orderMode": false,
+                "processDirectly": false,
+                "shareCustomerInformation": false,
+                "trackTraceInAccount": false,
+                "trackTraceInEmail": false
+            },
+            "order": {
+                "id": "order",
+                "emptyDigitalStampWeight": 0,
+                "emptyMailboxWeight": 0,
+                "emptyParcelWeight": 0,
+                "orderStatusMail": true,
+                "saveCustomerAddress": false,
+                "sendNotificationAfter": null,
+                "sendOrderStateForDigitalStamp": true,
+                "statusOnLabelCreate": null,
+                "statusWhenDelivered": null,
+                "statusWhenLabelScanned": null
+            },
+            "label": {
+                "id": "label",
+                "description": null,
+                "format": "a4",
+                "output": "open",
+                "position": [
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "prompt": false
+            },
+            "customs": {
+                "id": "customs",
+                "countryOfOrigin": null,
+                "customsCode": "0",
+                "packageContents": "1"
+            },
+            "checkout": {
+                "id": "checkout",
+                "allowedShippingMethods": [],
+                "deliveryOptionsCustomCss": null,
+                "deliveryOptionsHeader": null,
+                "deliveryOptionsPosition": null,
+                "pickupLocationsDefaultView": null,
+                "priceType": "included",
+                "enableDeliveryOptions": true,
+                "enableDeliveryOptionsWhenNotInStock": true,
+                "useSeparateAddressFields": false
+            },
+            "carrier": []
+        },
+        "printOptionsView": null,
+        "shop": {
+            "id": 23999,
+            "accountId": 21000,
+            "platformId": 1,
+            "name": "MyParcel",
+            "hidden": false,
+            "billing": [],
+            "deliveryAddress": [],
+            "generalSettings": [],
+            "return": [],
+            "shipmentOptions": [],
+            "trackTrace": [],
+            "carriers": [
+                {
+                    "externalIdentifier": "postnl",
+                    "id": 1,
+                    "name": "postnl",
+                    "human": "PostNL",
+                    "subscriptionId": null,
+                    "enabled": true,
+                    "isDefault": true,
+                    "label": null,
+                    "optional": false,
+                    "primary": false,
+                    "type": "main",
+                    "capabilities": {
+                        "deliveryTypes": [
+                            "morning",
+                            "standard",
+                            "evening",
+                            "pickup"
+                        ],
+                        "features": {
+                            "labelDescriptionLength": 45
+                        },
+                        "packageTypes": [
+                            "package",
+                            "mailbox",
+                            "letter",
+                            "digital_stamp"
+                        ],
+                        "shipmentOptions": {
+                            "ageCheck": true,
+                            "largeFormat": true,
+                            "onlyRecipient": true,
+                            "return": true,
+                            "sameDayDelivery": true,
+                            "signature": true,
+                            "insurance": [
+                                0,
+                                10000,
+                                25000,
+                                50000,
+                                100000,
+                                150000,
+                                200000,
+                                250000,
+                                300000,
+                                350000,
+                                400000,
+                                450000,
+                                500000
+                            ]
+                        }
+                    },
+                    "returnCapabilities": {
+                        "deliveryTypes": [
+                            "standard"
+                        ],
+                        "features": {
+                            "labelDescriptionLength": 45
+                        },
+                        "packageTypes": [
+                            "package"
+                        ],
+                        "shipmentOptions": {
+                            "signature": true,
+                            "insurance": [
+                                0,
+                                10000,
+                                25000,
+                                50000,
+                                100000,
+                                150000,
+                                200000,
+                                250000,
+                                300000,
+                                350000,
+                                400000,
+                                450000,
+                                500000
+                            ],
+                            "return": true,
+                            "ageCheck": true,
+                            "onlyRecipient": true,
+                            "sameDayDelivery": true,
+                            "largeFormat": true
+                        }
+                    }
+                },
+                {
+                    "externalIdentifier": "dhlforyou:8277",
+                    "id": 9,
+                    "name": "dhlforyou",
+                    "human": "DHL For You",
+                    "subscriptionId": "8277",
+                    "enabled": true,
+                    "isDefault": true,
+                    "label": null,
+                    "optional": false,
+                    "primary": false,
+                    "type": "main",
+                    "capabilities": {
+                        "deliveryTypes": [
+                            "standard",
+                            "pickup"
+                        ],
+                        "features": {
+                            "labelDescriptionLength": 45
+                        },
+                        "packageTypes": [
+                            "package",
+                            "mailbox"
+                        ],
+                        "shipmentOptions": {
+                            "ageCheck": true,
+                            "largeFormat": false,
+                            "onlyRecipient": true,
+                            "return": true,
+                            "sameDayDelivery": true,
+                            "signature": true,
+                            "saturdayDelivery": true,
+                            "hideSender": true,
+                            "insurance": [
+                                0,
+                                50000,
+                                100000,
+                                150000,
+                                200000,
+                                250000,
+                                300000,
+                                350000,
+                                400000,
+                                450000,
+                                500000
+                            ]
+                        }
+                    },
+                    "returnCapabilities": {
+                        "deliveryTypes": [
+                            "standard"
+                        ],
+                        "features": {
+                            "labelDescriptionLength": 45
+                        },
+                        "packageTypes": [
+                            "package"
+                        ],
+                        "shipmentOptions": {
+                            "signature": true,
+                            "insurance": [
+                                0
+                            ],
+                            "return": true,
+                            "ageCheck": true,
+                            "onlyRecipient": true,
+                            "sameDayDelivery": true,
+                            "largeFormat": true
+                        }
+                    }
+                }
+            ],
+            "carrierConfigurations": []
+        }
+    }
+}
