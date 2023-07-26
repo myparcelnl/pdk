@@ -1,0 +1,14 @@
+[
+    {
+        "apiIdentifier": null,
+        "exported": false,
+        "deliveryOptions": {
+            "carrier": "dhlforyou",
+            "labelAmount": 1,
+            "shipmentOptions": [],
+            "deliveryType": "standard",
+            "packageType": "package"
+        },
+        "notes": []
+    }
+]

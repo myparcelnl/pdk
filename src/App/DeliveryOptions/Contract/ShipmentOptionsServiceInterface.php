@@ -11,5 +11,5 @@ interface ShipmentOptionsServiceInterface
     /**
      * Calculate shipment options for an order based on default settings, order lines and the order itself.
      */
-    public function calculate(PdkOrder $order): void;
+    public function calculate(PdkOrder $order): PdkOrder;
 }

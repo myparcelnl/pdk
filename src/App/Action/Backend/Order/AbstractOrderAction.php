@@ -77,10 +77,8 @@ abstract class AbstractOrderAction implements ActionInterface
         /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $shipmentOptionsService */
         $shipmentOptionsService = Pdk::get(ShipmentOptionsServiceInterface::class);
 
-        return $orders->each(function (PdkOrder $pdkOrder) use ($shipmentOptionsService, $attributes) {
-            $pdkOrder->fill($attributes);
-
-            $shipmentOptionsService->calculate($pdkOrder);
+        return $orders->map(function (PdkOrder $pdkOrder) use ($shipmentOptionsService, $attributes) {
+            return $shipmentOptionsService->calculate($pdkOrder->fill($attributes));
         });
     }
 }

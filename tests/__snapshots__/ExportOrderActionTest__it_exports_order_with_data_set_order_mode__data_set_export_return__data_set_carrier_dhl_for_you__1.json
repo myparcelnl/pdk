@@ -1,0 +1,45 @@
+{
+    "data": {
+        "orders": [
+            {
+                "external_identifier": "249",
+                "fulfilment_partner_identifier": null,
+                "invoice_address": null,
+                "order_date": null,
+                "order_lines": [],
+                "shipment": {
+                    "carrier": 9,
+                    "customs_declaration": null,
+                    "drop_off_point": null,
+                    "options": {
+                        "age_check": 0,
+                        "delivery_type": 2,
+                        "insurance": {
+                            "amount": 0,
+                            "currency": "EUR"
+                        },
+                        "label_description": "",
+                        "large_format": 0,
+                        "only_recipient": 0,
+                        "package_type": 1,
+                        "return": 0,
+                        "signature": 0
+                    },
+                    "physical_properties": {
+                        "height": 0,
+                        "length": 0,
+                        "weight": 0,
+                        "width": 0
+                    },
+                    "pickup": null,
+                    "recipient": {
+                        "street": "Pietjestraat 35 ",
+                        "city": "Bikinibroek",
+                        "cc": "NL",
+                        "postal_code": "2771BW"
+                    }
+                }
+            }
+        ]
+    }
+}
