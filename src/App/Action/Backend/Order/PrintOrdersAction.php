@@ -22,7 +22,7 @@ class PrintOrdersAction extends PrintShipmentsAction
 
         $shipmentIds = $orders->getAllShipments()
             ->pluck('id')
-            ->toArray();
+            ->all();
 
         $request->query->set('shipmentIds', implode(';', $shipmentIds));
 

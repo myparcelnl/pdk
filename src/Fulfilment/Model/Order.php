@@ -113,7 +113,7 @@ class Order extends Model
                             ] + $pdkOrderLine->toSnakeCaseArray()
                         );
                     })
-                    ->toArray(),
+                    ->all(),
                 'orderNotes'                  => $pdkOrder->orderNotes,
                 'shipment'                    => $shipment,
                 'price'                       => $pdkOrder->orderPrice,

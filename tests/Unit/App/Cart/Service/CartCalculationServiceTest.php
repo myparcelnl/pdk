@@ -124,7 +124,7 @@ it('calculates allowed package types', function (array $lines, array $result) {
 it('calculates shipping method in cart', function (array $lines, array $result) {
     $cart = new PdkCart(['lines' => $lines]);
 
-    expect(Arr::except($cart->shippingMethod->toArray(), 'shippingAddress'))->toEqual($result);
+    expect($cart->shippingMethod->except('shippingAddress'))->toEqual($result);
 })->with([
     'no product settings' => [
         'cart'   => [

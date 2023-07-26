@@ -28,7 +28,7 @@ class FetchOrdersAction extends AbstractOrderAction
         return new JsonResponse([
             'orders' => $contextService
                 ->createOrderDataContext($collection)
-                ->toArray(),
+                ->toArrayWithoutNull(),
         ]);
     }
 }

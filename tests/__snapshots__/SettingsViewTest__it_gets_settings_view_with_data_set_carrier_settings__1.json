@@ -8,7 +8,6 @@
         {
             "id": "postnl",
             "title": "carrier_postnl",
-            "titleSuffix": null,
             "description": "settings_view_carrier_postnl_description",
             "elements": [
                 {
@@ -797,13 +796,11 @@
                     "label": "settings_carrier_price_delivery_type_pickup",
                     "description": "settings_carrier_price_delivery_type_pickup_description"
                 }
-            ],
-            "children": null
+            ]
         },
         {
             "id": "dhlforyou:8277",
             "title": "carrier_dhlforyou",
-            "titleSuffix": null,
             "description": "settings_view_carrier_dhlforyou_description",
             "elements": [
                 {
@@ -1466,8 +1463,7 @@
                     "label": "settings_carrier_price_delivery_type_pickup",
                     "description": "settings_carrier_price_delivery_type_pickup_description"
                 }
-            ],
-            "children": null
+            ]
         }
     ]
 }

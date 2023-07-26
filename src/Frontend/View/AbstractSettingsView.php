@@ -299,9 +299,10 @@ abstract class AbstractSettingsView implements Arrayable
     private function cacheToArray(string $key, callable $closure): ?array
     {
         return $this->cacheValue($key, function () use ($closure): ?array {
+            /** @var null|Collection $data */
             $data = $closure();
 
-            return $data ? $data->toArray() : null;
+            return $data ? $data->toArrayWithoutNull() : null;
         });
     }
 

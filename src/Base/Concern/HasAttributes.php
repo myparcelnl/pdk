@@ -10,6 +10,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -118,20 +119,9 @@ trait HasAttributes
      */
     public function attributesToArray(?int $flags = null): array
     {
-        $attributes        = $this->getAttributes($flags);
-        $mutatedAttributes = $this->getMutatedAttributes();
+        $attributes = $this->getAttributes($flags);
 
-        $attributes = $this->addMutatedAttributesToArray(
-            $attributes,
-            $mutatedAttributes,
-            $flags
-        );
-
-        return $this->addCastAttributesToArray(
-            $attributes,
-            $mutatedAttributes,
-            $flags
-        );
+        return $this->createArrayFromAttributes($attributes, $flags);
     }
 
     /**
@@ -143,25 +133,7 @@ trait HasAttributes
      */
     public function except($attributes, ?int $flags = null): array
     {
-        $attributes = is_array($attributes) ? $attributes : func_get_args();
-
-        $results = [];
-
-        foreach ($this->attributes as $attribute => $value) {
-            if (in_array($attribute, $attributes, true)) {
-                continue;
-            }
-
-            $value = $this->getAttribute($attribute);
-
-            if ($flags & Arrayable::SKIP_NULL && $value === null) {
-                continue;
-            }
-
-            $results[$attribute] = $value;
-        }
-
-        return $results;
+        return $this->createArrayFromAttributes(Arr::except($this->attributes, Arr::wrap($attributes)), $flags);
     }
 
     /**
@@ -278,27 +250,15 @@ trait HasAttributes
     /**
      * Get a subset of the model's attributes.
      *
-     * @param  array|mixed $attributes
-     * @param  null|int    $flags
+     * @param  string|array $attributes
+     * @param  null|int     $flags
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function only($attributes, ?int $flags = null): array
     {
-        $results = [];
-
-        foreach (is_array($attributes) ? $attributes : func_get_args() as $attribute) {
-            $value = $this->getAttribute($attribute);
-
-            if ($flags & Arrayable::SKIP_NULL && $value === null) {
-                continue;
-            }
-
-            $results[$attribute] = $value;
-        }
-
-        return $results;
+        return $this->createArrayFromAttributes(Arr::only($this->attributes, Arr::wrap($attributes)), $flags);
     }
 
     /**
@@ -552,6 +512,22 @@ trait HasAttributes
         $this->logDeprecationWarning($key, $newKey);
 
         return $newKey;
+    }
+
+    /**
+     * @param  array    $attributes
+     * @param  null|int $flags
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function createArrayFromAttributes(array $attributes, ?int $flags): array
+    {
+        $mutatedAttributes = $this->getMutatedAttributes();
+
+        $attributes = $this->addMutatedAttributesToArray($attributes, $mutatedAttributes, $flags);
+
+        return $this->addCastAttributesToArray($attributes, $mutatedAttributes, $flags);
     }
 
     /**

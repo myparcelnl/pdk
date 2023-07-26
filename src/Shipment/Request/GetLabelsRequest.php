@@ -45,7 +45,7 @@ class GetLabelsRequest extends Request
         $path           = $usesV2Endpoint ? self::PATH_V2 : self::PATH;
         $ids            = $this->collection
             ->pluck('id')
-            ->toArray();
+            ->all();
 
         return strtr($path, [':ids' => implode(';', $ids)]);
     }

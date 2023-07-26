@@ -45,7 +45,7 @@ class ProductSettingsViewContext extends Model
      */
     public function getValuesAttribute(): array
     {
-        return $this->product->settings->toArray();
+        return $this->product->settings->toArrayWithoutNull();
     }
 
     /**

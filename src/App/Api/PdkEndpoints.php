@@ -38,7 +38,7 @@ abstract class PdkEndpoints implements EndpointServiceInterface
                     'parameters' => ['action' => $action] + $this->parameters,
                 ]);
             })
-            ->toArray();
+            ->toArrayWithoutNull();
     }
 
     protected function getActionsByScope(string $scope): Collection

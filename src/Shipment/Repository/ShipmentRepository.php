@@ -54,7 +54,7 @@ class ShipmentRepository extends ApiRepository
 
         $returnIds = $response->getIds()
             ->pluck('id')
-            ->toArray();
+            ->all();
 
         return $this->getShipments($returnIds);
     }
