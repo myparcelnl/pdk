@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.2](https://github.com/myparcelnl/pdk/compare/v2.12.1...v2.12.2) (2023-07-26)
+
+
+### :bug: Bug Fixes
+
+* **settings:** fix carrier and product settings not being respected when exporting ([#134](https://github.com/myparcelnl/pdk/issues/134)) ([749819f](https://github.com/myparcelnl/pdk/commit/749819f3babe60bc890ad391cfe64eab0a22544e))
+
 ## [2.12.1](https://github.com/myparcelnl/pdk/compare/v2.12.0...v2.12.1) (2023-07-21)
 
 
