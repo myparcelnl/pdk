@@ -48,12 +48,11 @@ class PdkOrderCollection extends Collection
             $validator = $order->getValidator();
 
             if (! $validator->validate()) {
-                Notifications::add(
+                Notifications::error(
                     "Failed to export order $order->externalIdentifier",
                     array_map(static function (array $error) {
                         return sprintf('%s: %s', $error['property'], $error['message']);
-                    }, $validator->getErrors()),
-                    'error'
+                    }, $validator->getErrors())
                 );
 
                 return;

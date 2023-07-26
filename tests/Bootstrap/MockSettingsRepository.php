@@ -41,6 +41,14 @@ class MockSettingsRepository extends AbstractSettingsRepository
     }
 
     /**
+     * @return void
+     */
+    public function reset(): void
+    {
+        $this->settings = [];
+    }
+
+    /**
      * @param  string $key
      * @param  mixed  $value
      *
