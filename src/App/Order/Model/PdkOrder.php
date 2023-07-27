@@ -212,6 +212,14 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
+     * @return bool
+     */
+    public function isDeliverable(): bool
+    {
+        return $this->lines->isDeliverable();
+    }
+
+    /**
      * Turns data into an array that should be stored in the plugin.
      *
      * @return void

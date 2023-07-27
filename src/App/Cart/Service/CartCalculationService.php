@@ -76,7 +76,7 @@ class CartCalculationService implements CartCalculationServiceInterface
     protected function hasDeliveryOptions(PdkCart $cart): bool
     {
         $deliveryOptionsDisabled = $cart->lines->containsStrict('product.settings.disableDeliveryOptions', true);
-        $anyItemIsDeliverable    = $cart->lines->containsStrict('product.isDeliverable', true);
+        $anyItemIsDeliverable    = $cart->lines->isDeliverable();
 
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
     }
