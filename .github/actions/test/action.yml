@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: 'Handle coverage cache'
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: coverage-cache
       with:
         path: ./clover.xml
