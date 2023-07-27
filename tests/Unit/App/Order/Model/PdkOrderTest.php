@@ -136,3 +136,48 @@ it('creates a storable array', function (array $orders) {
 
     assertMatchesJsonSnapshot(json_encode($result));
 })->with('pdkOrdersDomestic');
+
+it('can check whether an order is deliverable', function (array $lines, bool $result) {
+    $pdkOrder = new PdkOrder(['lines' => $lines]);
+
+    expect($pdkOrder->isDeliverable())->toBe($result);
+})
+    ->with([
+        'one line, not deliverable' => [
+            'lines'  => [
+                ['quantity' => 1, 'product' => ['isDeliverable' => false]],
+            ],
+            'result' => false,
+        ],
+
+        'one line, deliverable' => [
+            'lines'  => [
+                ['quantity' => 1, 'product' => ['isDeliverable' => true]],
+            ],
+            'result' => true,
+        ],
+
+        'two lines, one deliverable' => [
+            'lines'  => [
+                ['quantity' => 1, 'product' => ['isDeliverable' => false]],
+                ['quantity' => 1, 'product' => ['isDeliverable' => true]],
+            ],
+            'result' => true,
+        ],
+
+        'two lines, both deliverable' => [
+            'lines'  => [
+                ['quantity' => 1, 'product' => ['isDeliverable' => true]],
+                ['quantity' => 1, 'product' => ['isDeliverable' => true]],
+            ],
+            'result' => true,
+        ],
+
+        'two lines, both not deliverable' => [
+            'lines'  => [
+                ['quantity' => 1, 'product' => ['isDeliverable' => false]],
+                ['quantity' => 1, 'product' => ['isDeliverable' => false]],
+            ],
+            'result' => false,
+        ],
+    ]);

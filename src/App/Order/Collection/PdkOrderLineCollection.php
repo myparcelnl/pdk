@@ -13,4 +13,12 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 class PdkOrderLineCollection extends Collection
 {
     protected $cast = PdkOrderLine::class;
+
+    /**
+     * @return bool
+     */
+    public function isDeliverable(): bool
+    {
+        return $this->containsStrict('product.isDeliverable', true);
+    }
 }
