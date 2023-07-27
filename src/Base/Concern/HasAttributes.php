@@ -399,10 +399,7 @@ trait HasAttributes
         }
 
         if (is_array($value) && isset($value['date'])) {
-            return new DateTimeImmutable(
-                $value['date'],
-                new DateTimeZone($value['timezone'] ?? Pdk::get('defaultTimeZone'))
-            );
+            return new DateTimeImmutable($value['date'], new DateTimeZone($value['timezone']));
         }
 
         foreach ($this->getDateFormats() as $dateFormat) {
@@ -411,11 +408,7 @@ trait HasAttributes
                 $value      .= ' 00:00:00';
             }
 
-            $date = DateTimeImmutable::createFromFormat(
-                $dateFormat,
-                (string) $value,
-                new DateTimeZone(Pdk::get('defaultTimeZone'))
-            );
+            $date = DateTimeImmutable::createFromFormat($dateFormat, (string) $value);
 
             if ($date) {
                 return $date;

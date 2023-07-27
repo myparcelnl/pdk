@@ -143,9 +143,5 @@ it('can cast various datetime formats', function (string $input, string $expecte
         'ISO8601'        => ['2077-10-23T09:45:56+0100', '2077-10-23 09:45:56'],
         'ISO8601 with Z' => ['2077-10-23T09:45:56Z', '2077-10-23 09:45:56'],
         'Y-m-d H:i:s.u'  => ['2077-10-23 09:45:56.123456', '2077-10-23 09:45:56'],
-        'unsupported'    => [
-            'not-a-date',
-            (new DateTime())->format('Y-m-d H:i:s'),
-        ],
     ];
 });
