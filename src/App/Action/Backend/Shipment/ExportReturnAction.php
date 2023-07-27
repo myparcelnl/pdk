@@ -48,7 +48,7 @@ class ExportReturnAction extends AbstractOrderAction
         $this->pdkOrderRepository->updateMany($orders);
 
         $orderIds = $orders->pluck('externalIdentifier')
-            ->toArray();
+            ->all();
 
         // todo only return shipments that are created
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, ['orderIds' => $orderIds]);

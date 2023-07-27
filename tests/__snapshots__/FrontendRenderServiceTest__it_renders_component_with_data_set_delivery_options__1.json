@@ -7,7 +7,6 @@
             "currency": "EUR",
             "locale": "nl-NL",
             "packageType": "package",
-            "pickupLocationsDefaultView": null,
             "platform": "myparcel",
             "showPriceSurcharge": false,
             "apiBaseUrl": "https:\/\/api.myparcel.nl"

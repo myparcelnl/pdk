@@ -172,7 +172,9 @@ class FrontendRenderService implements FrontendRenderServiceInterface
      */
     protected function encodeContext(?ContextBag $context): string
     {
-        return $context ? htmlspecialchars(json_encode(array_filter($context->toArray())), ENT_QUOTES, 'UTF-8') : '{}';
+        return $context
+            ? htmlspecialchars(json_encode(array_filter($context->toArrayWithoutNull())), ENT_QUOTES, 'UTF-8')
+            : '{}';
     }
 
     /**

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
@@ -27,7 +28,7 @@ it('creates default carrier for platform', function (string $platform) {
     $carrier = new Carrier();
 
     assertMatchesJsonSnapshot(
-        json_encode(Arr::except($carrier->toArrayWithoutNull(), ['capabilities', 'returnCapabilities']))
+        json_encode($carrier->except(['capabilities', 'returnCapabilities'], Arrayable::SKIP_NULL))
     );
 
     $mockPdk->set('platform', $oldPlatform);

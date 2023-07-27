@@ -53,6 +53,6 @@ class ShipmentCollection extends Collection implements StorableArrayable
             ->map(function (Shipment $shipment) {
                 return $shipment->toStorableArray();
             })
-            ->toArray();
+            ->toArrayWithoutNull();
     }
 }

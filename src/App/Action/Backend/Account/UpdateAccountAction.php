@@ -91,11 +91,8 @@ class UpdateAccountAction implements ActionInterface
     {
         $shop = $account->shops->first();
 
-        $carrierConfigurations       = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
-        $shop->carrierConfigurations = $carrierConfigurations->toArray();
-
-        $carriers       = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
-        $shop->carriers = $carriers->toArray();
+        $shop->carrierConfigurations = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
+        $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
     }
 
     /**

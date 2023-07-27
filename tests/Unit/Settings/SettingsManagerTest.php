@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings;
 
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
-use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -80,10 +80,10 @@ it('retrieves default settings', function (string $platform) {
 
     $defaults = Settings::getDefaults();
 
-    $array = (new SettingsModel($defaults))->toArrayWithoutNull();
+    $array = (new SettingsModel($defaults))->except(CarrierSettings::ID, Arrayable::SKIP_NULL);
 
     // Carrier settings are tested separately
-    assertMatchesJsonSnapshot(json_encode(Arr::except($array, CarrierSettings::ID)));
+    assertMatchesJsonSnapshot(json_encode($array));
 
     $resetPlatform();
 })->with('platforms');

@@ -18,8 +18,9 @@ class JsonResponse extends Response
     {
         if (Notifications::isNotEmpty()) {
             $data['notifications'] = Notifications::all()
-                ->toArray();
+                ->toArrayWithoutNull();
         }
+
         parent::__construct(json_encode(['data' => $data]), $status, ['Content-Type' => 'application/json'] + $headers);
     }
 }

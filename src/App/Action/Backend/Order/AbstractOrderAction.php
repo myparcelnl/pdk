@@ -56,7 +56,7 @@ abstract class AbstractOrderAction implements ActionInterface
         if ($orders->isNotEmpty()) {
             return $orders->getAllShipments()
                 ->pluck('id')
-                ->toArray();
+                ->all();
         }
 
         throw new InvalidArgumentException('No shipmentIds or orderIds found in request');

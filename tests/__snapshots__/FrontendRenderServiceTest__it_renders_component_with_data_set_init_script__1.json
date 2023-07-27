@@ -240,18 +240,7 @@
             "id": 21000,
             "platformId": 1,
             "contactInfo": {
-                "address1": null,
-                "address2": null,
-                "area": null,
-                "cc": null,
-                "city": null,
-                "postalCode": null,
-                "region": null,
-                "state": null,
-                "email": "test@myparcel.nl",
-                "phone": null,
-                "person": null,
-                "company": null
+                "email": "test@myparcel.nl"
             },
             "generalSettings": {
                 "isTest": false,
@@ -598,15 +587,12 @@
         ],
         "pluginSettings": {
             "account": {
-                "id": "account",
-                "apiKey": null
+                "id": "account"
             },
             "general": {
                 "id": "general",
                 "barcodeInNote": false,
-                "barcodeInNoteTitle": null,
                 "conceptShipments": true,
-                "exportWithAutomaticStatus": null,
                 "orderMode": false,
                 "processDirectly": false,
                 "shareCustomerInformation": false,
@@ -620,15 +606,10 @@
                 "emptyParcelWeight": 0,
                 "orderStatusMail": true,
                 "saveCustomerAddress": false,
-                "sendNotificationAfter": null,
-                "sendOrderStateForDigitalStamp": true,
-                "statusOnLabelCreate": null,
-                "statusWhenDelivered": null,
-                "statusWhenLabelScanned": null
+                "sendOrderStateForDigitalStamp": true
             },
             "label": {
                 "id": "label",
-                "description": null,
                 "format": "a4",
                 "output": "open",
                 "position": [
@@ -641,17 +622,12 @@
             },
             "customs": {
                 "id": "customs",
-                "countryOfOrigin": null,
                 "customsCode": "0",
                 "packageContents": "1"
             },
             "checkout": {
                 "id": "checkout",
                 "allowedShippingMethods": [],
-                "deliveryOptionsCustomCss": null,
-                "deliveryOptionsHeader": null,
-                "deliveryOptionsPosition": null,
-                "pickupLocationsDefaultView": null,
                 "priceType": "included",
                 "enableDeliveryOptions": true,
                 "enableDeliveryOptionsWhenNotInStock": true,
@@ -659,7 +635,6 @@
             },
             "carrier": []
         },
-        "printOptionsView": null,
         "shop": {
             "id": 23999,
             "accountId": 21000,

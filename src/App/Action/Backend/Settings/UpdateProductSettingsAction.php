@@ -43,7 +43,7 @@ class UpdateProductSettingsAction implements ActionInterface
         $this->productRepository->update($product);
 
         return new JsonResponse([
-            'product_settings' => $product->settings->toArray(),
+            'product_settings' => $product->settings->toArrayWithoutNull(),
         ]);
     }
 }
