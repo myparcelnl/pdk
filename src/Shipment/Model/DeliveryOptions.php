@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
  * @property Carrier                $carrier
@@ -149,7 +150,7 @@ class DeliveryOptions extends Model implements StorableArrayable
      */
     public function getDateAsString(): ?string
     {
-        return $this->date ? $this->date->format('Y-m-d H:i:s') : null;
+        return $this->date ? $this->date->format(Pdk::get('defaultDateFormat')) : null;
     }
 
     /**

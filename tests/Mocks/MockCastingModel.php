@@ -5,9 +5,28 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Mocks;
 
 use DateTime;
+use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 
+/**
+ * @property Collection        $collection
+ * @property DateTimeInterface $date
+ * @property DateTimeInterface $dateFromArr
+ * @property DateTimeInterface $datetime
+ * @property float             $intFloat
+ * @property string            $intString
+ * @property string            $null
+ * @property MockCastModel     $object
+ * @property bool              $stringBool
+ * @property bool              $stringFalseBool
+ * @property int               $stringFalseInt
+ * @property float             $stringFloat
+ * @property int               $stringInt
+ * @property bool              $stringTrueBool
+ * @property int               $stringTrueInt
+ * @property int               $timestamp
+ */
 class MockCastingModel extends Model
 {
     protected $attributes = [

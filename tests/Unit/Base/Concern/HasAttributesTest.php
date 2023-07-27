@@ -14,8 +14,12 @@ use MyParcelNL\Pdk\Tests\Mocks\InvalidCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('model');
+
+usesShared(new UsesMockPdkInstance());
 
 it('casts attributes to classes', function () {
     $model = new MockCastingModel();
@@ -121,4 +125,27 @@ it('checks if guarded properties cannot be modified', function () {
     $model->field = 5;
 
     expect($model->field)->toEqual('test');
+});
+
+it('can cast various datetime formats', function (string $input, string $expected) {
+    $model = new MockCastingModel([
+        'datetime' => $input,
+    ]);
+
+    $array = $model->toArrayWithoutNull();
+
+    expect($array['datetime'])->toBe($expected);
+})->with(function () {
+    return [
+        'Y-m-d'          => ['2077-10-23', '2077-10-23 00:00:00'],
+        'Y-m-d H:i:s'    => ['2077-10-23 09:45:56', '2077-10-23 09:45:56'],
+        'ATOM, RFC3339'  => ['2077-10-23T09:45:56+01:00', '2077-10-23 09:45:56'],
+        'ISO8601'        => ['2077-10-23T09:45:56+0100', '2077-10-23 09:45:56'],
+        'ISO8601 with Z' => ['2077-10-23T09:45:56Z', '2077-10-23 09:45:56'],
+        'Y-m-d H:i:s.u'  => ['2077-10-23 09:45:56.123456', '2077-10-23 09:45:56'],
+        'unsupported'    => [
+            'not-a-date',
+            (new DateTime())->format('Y-m-d H:i:s'),
+        ],
+    ];
 });

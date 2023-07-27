@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
@@ -73,7 +74,7 @@ class PostOrdersRequest extends Request
             'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
             'invoice_address'               => $this->getAddress($order->invoiceAddress),
             'order_date'                    => $order->orderDate
-                ? $order->orderDate->format('Y-m-d H:i:s')
+                ? $order->orderDate->format(Pdk::get('defaultDateFormat'))
                 : null,
             'order_lines'                   => $order->orderLines->reduce(
                 function (array $carry, OrderLine $orderLine) {
