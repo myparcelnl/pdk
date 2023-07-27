@@ -29,6 +29,8 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                  $dropOffDelay
  * @property DropOffPossibilities $dropOffPossibilities
  * @property bool                 $exportAgeCheck
+ * @property bool                 $exportExtraAssurance
+ * @property bool                 $exportHideSender
  * @property bool                 $exportInsurance
  * @property int                  $exportInsuranceFromAmount
  * @property float                $exportInsurancePriceFactor
@@ -84,6 +86,8 @@ class CarrierSettings extends AbstractSettingsModel
     public const DROP_OFF_DELAY                          = 'dropOffDelay';
     public const DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
     public const EXPORT_AGE_CHECK                        = 'exportAgeCheck';
+    public const EXPORT_EXTRA_ASSURANCE                  = 'exportExtraAssurance';
+    public const EXPORT_HIDE_SENDER                      = 'exportHideSender';
     public const EXPORT_INSURANCE                        = 'exportInsurance';
     public const EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
     public const EXPORT_INSURANCE_PRICE_FACTOR           = 'exportInsurancePriceFactor';
@@ -133,6 +137,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::DROP_OFF_DELAY                          => 0,
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
         self::EXPORT_AGE_CHECK                        => false,
+        self::EXPORT_EXTRA_ASSURANCE                  => false,
+        self::EXPORT_HIDE_SENDER                      => false,
         self::EXPORT_INSURANCE                        => false,
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
         self::EXPORT_INSURANCE_PRICE_FACTOR           => 1.0,

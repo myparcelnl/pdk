@@ -33,6 +33,7 @@
                     "options": {
                         "age_check": 0,
                         "delivery_type": 3,
+                        "hide_sender": 0,
                         "insurance": {
                             "amount": 0,
                             "currency": "EUR"
@@ -91,6 +92,7 @@
                     "options": {
                         "age_check": 0,
                         "delivery_type": 3,
+                        "hide_sender": 0,
                         "insurance": {
                             "amount": 0,
                             "currency": "EUR"
@@ -143,12 +145,13 @@
                     }
                 ],
                 "shipment": {
-                    "carrier": 1,
+                    "carrier": 9,
                     "customs_declaration": null,
                     "drop_off_point": null,
                     "options": {
                         "age_check": 1,
                         "delivery_type": 2,
+                        "hide_sender": 1,
                         "insurance": {
                             "amount": 0,
                             "currency": "EUR"

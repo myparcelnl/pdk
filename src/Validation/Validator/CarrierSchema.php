@@ -39,6 +39,19 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME);
     }
 
+    public function canHaveExtraAssurance(): bool
+    {
+        return (bool) $this->getShipmentOption(ShipmentOptions::EXTRA_ASSURANCE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function canHaveHideSender(): bool
+    {
+        return (bool) $this->getShipmentOption(ShipmentOptions::HIDE_SENDER);
+    }
+
     /**
      * We can safely ignore the amount here as it's not used in the capabilities.
      *

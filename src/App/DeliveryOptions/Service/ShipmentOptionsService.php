@@ -30,6 +30,16 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_AGE_CHECK,
         ],
         [
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::EXTRA_ASSURANCE,
+            self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_EXTRA_ASSURANCE,
+            self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_EXTRA_ASSURANCE,
+        ],
+        [
+            self::SHIPMENT_OPTION_KEY => ShipmentOptions::HIDE_SENDER,
+            self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_HIDE_SENDER,
+            self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_HIDE_SENDER,
+        ],
+        [
             self::SHIPMENT_OPTION_KEY => ShipmentOptions::INSURANCE,
             self::CARRIER_SETTING_KEY => CarrierSettings::EXPORT_INSURANCE,
             self::PRODUCT_SETTING_KEY => ProductSettings::EXPORT_INSURANCE,

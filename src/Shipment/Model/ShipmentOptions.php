@@ -10,6 +10,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property bool|null   $ageCheck
  * @property int|null    $insurance
  * @property string|null $labelDescription
+ * @property bool|null   $extraAssurance
+ * @property bool|null   $hideSender
  * @property bool|null   $largeFormat
  * @property bool|null   $onlyRecipient
  * @property bool|null   $return
@@ -19,6 +21,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class ShipmentOptions extends Model
 {
     public const AGE_CHECK         = 'ageCheck';
+    public const EXTRA_ASSURANCE   = 'extraAssurance';
+    public const HIDE_SENDER       = 'hideSender';
     public const INSURANCE         = 'insurance';
     public const LABEL_DESCRIPTION = 'labelDescription';
     public const LARGE_FORMAT      = 'largeFormat';
@@ -29,6 +33,8 @@ class ShipmentOptions extends Model
 
     protected $attributes = [
         self::AGE_CHECK         => null,
+        self::EXTRA_ASSURANCE   => null,
+        self::HIDE_SENDER       => null,
         self::INSURANCE         => null,
         self::LABEL_DESCRIPTION => null,
         self::LARGE_FORMAT      => null,
@@ -40,6 +46,8 @@ class ShipmentOptions extends Model
 
     protected $casts      = [
         self::AGE_CHECK         => 'bool',
+        self::EXTRA_ASSURANCE   => 'bool',
+        self::HIDE_SENDER       => 'bool',
         self::INSURANCE         => 'int',
         self::LABEL_DESCRIPTION => 'string',
         self::LARGE_FORMAT      => 'bool',

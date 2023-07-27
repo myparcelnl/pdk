@@ -40,14 +40,6 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property int                                                         $totalPrice
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
- * @method canHaveMultiCollo(): bool
- * @method canHaveSignature(): bool
- * @method canHaveInsurance(int $value = 100): bool
- * @method canHaveOnlyRecipient(): bool
- * @method canHaveAgeCheck(): bool
- * @method canHaveLargeFormat(): bool
- * @method canHaveWeight(int $value = 1): bool
- * @method canHaveDate(): bool
  */
 class PdkOrder extends Model implements StorableArrayable
 {

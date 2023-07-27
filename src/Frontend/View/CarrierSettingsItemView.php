@@ -227,6 +227,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE),
             ] : [],
 
+            $this->carrierSchema->canHaveExtraAssurance() ? [
+                new InteractiveElement(CarrierSettings::EXPORT_EXTRA_ASSURANCE, Components::INPUT_TOGGLE),
+            ] : [],
+
+            $this->carrierSchema->canHaveHideSender() ? [
+                new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE),
+            ] : [],
+
             $this->carrierSchema->canHaveInsurance() ? $this->getExportInsuranceFields() : [],
         ];
     }

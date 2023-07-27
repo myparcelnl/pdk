@@ -136,6 +136,8 @@
             "pickupLocation": null,
             "shipmentOptions": {
                 "ageCheck": false,
+                "extraAssurance": null,
+                "hideSender": null,
                 "insurance": 20000,
                 "labelDescription": "standaard kenmerk",
                 "largeFormat": false,

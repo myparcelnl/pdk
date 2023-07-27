@@ -7,6 +7,8 @@
             "disableDeliveryOptions": 1,
             "dropOffDelay": 2,
             "exportAgeCheck": 1,
+            "exportExtraAssurance": -1,
+            "exportHideSender": -1,
             "exportInsurance": 1,
             "exportLargeFormat": 1,
             "exportOnlyRecipient": 1,
