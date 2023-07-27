@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
+use DateTime;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -70,7 +71,7 @@ it('instantiates shipment options', function () {
 it('instantiates delivery options with pickup location', function () {
     $deliveryOptions = new DeliveryOptions(
         [
-            'date'           => '2022-02-20 16:00:00',
+            'date'           => new DateTime('+1 day'),
             'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
             'pickupLocation' => new RetailLocation(['cc' => CountryCodes::CC_NL]),
         ]
@@ -84,6 +85,12 @@ it('instantiates delivery options with pickup location', function () {
         ->toBe(CountryCodes::CC_NL)
         ->and($deliveryOptions->isPickup())
         ->toBeTrue();
+});
+
+it('does not return a date in the past', function () {
+    $deliveryOptions = new DeliveryOptions(['date' => new DateTime('-1 day')]);
+
+    expect($deliveryOptions->date)->toBeNull();
 });
 
 it('converts input package type to name', function (string $name, int $id) {
