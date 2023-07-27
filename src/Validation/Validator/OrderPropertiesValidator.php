@@ -57,7 +57,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveEveningDelivery(): bool
     {
-        return $this->canHaveOption(sprintf('%s.morningDelivery', self::DELIVERY_OPTIONS_KEY));
+        return $this->canHaveOption(sprintf('%s.eveningDelivery', self::DELIVERY_OPTIONS_KEY));
     }
 
     /**
