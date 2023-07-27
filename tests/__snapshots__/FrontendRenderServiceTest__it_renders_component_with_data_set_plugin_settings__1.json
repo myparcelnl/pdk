@@ -90,6 +90,9 @@
                     "$component": "TextInput",
                     "$slot": null,
                     "$wrapper": null,
+                    "$visibleWhen": {
+                        "barcodeInNote": true
+                    },
                     "label": "settings_general_barcode_in_note_title",
                     "description": "settings_general_barcode_in_note_title_description"
                 }

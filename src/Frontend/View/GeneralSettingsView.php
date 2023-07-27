@@ -51,7 +51,12 @@ class GeneralSettingsView extends AbstractSettingsView
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'order_notes')),
 
             new InteractiveElement(GeneralSettings::BARCODE_IN_NOTE, Components::INPUT_TOGGLE),
-            new InteractiveElement(GeneralSettings::BARCODE_IN_NOTE_TITLE, Components::INPUT_TEXT),
+            $this->withProps(
+                [
+                    '$visibleWhen' => [GeneralSettings::BARCODE_IN_NOTE => true],
+                ],
+                new InteractiveElement(GeneralSettings::BARCODE_IN_NOTE_TITLE, Components::INPUT_TEXT)
+            ),
         ];
 
         return new FormElementCollection($this->flattenElements($elements));
