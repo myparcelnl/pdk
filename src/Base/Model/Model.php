@@ -205,7 +205,7 @@ class Model implements Arrayable, ArrayAccess
      */
     public function toArrayWithoutNull(): array
     {
-        return $this->attributesToArray(Arrayable::SKIP_NULL);
+        return $this->toArray(Arrayable::SKIP_NULL);
     }
 
     /**
@@ -214,7 +214,7 @@ class Model implements Arrayable, ArrayAccess
      */
     public function toKebabCaseArray(): array
     {
-        return $this->attributesToArray(Arrayable::CASE_KEBAB);
+        return $this->toArray(Arrayable::CASE_KEBAB);
     }
 
     /**
@@ -223,7 +223,7 @@ class Model implements Arrayable, ArrayAccess
      */
     public function toSnakeCaseArray(): array
     {
-        return $this->attributesToArray(Arrayable::CASE_SNAKE);
+        return $this->toArray(Arrayable::CASE_SNAKE);
     }
 
     /**
@@ -232,7 +232,7 @@ class Model implements Arrayable, ArrayAccess
      */
     public function toStudlyCaseArray(): array
     {
-        return $this->attributesToArray(Arrayable::CASE_STUDLY);
+        return $this->toArray(Arrayable::CASE_STUDLY);
     }
 
     /**

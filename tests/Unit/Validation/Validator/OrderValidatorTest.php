@@ -63,7 +63,7 @@ $defaultOrderData = [
         'address1'   => 'Antareslaan 31',
     ],
     'deliveryOptions'    => [
-        'date'         => '2022-02-02',
+        'date'         => '2077-10-23 09:47:51',
         'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
         'packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
     ],
@@ -128,6 +128,7 @@ it('validates order', function (array $order) use ($createOrder) {
             'order' => [
                 'deliveryOptions' => [
                     'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                    'date'            => '2077-10-23 09:47:51',
                     'shipmentOptions' => [
                         'signature' => true,
                     ],
@@ -138,6 +139,7 @@ it('validates order', function (array $order) use ($createOrder) {
             'order' => [
                 'deliveryOptions' => [
                     'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+                    'date'            => '2077-10-23 09:47:51',
                     'shipmentOptions' => [
                         'signature'     => true,
                         'onlyRecipient' => true,
@@ -149,13 +151,11 @@ it('validates order', function (array $order) use ($createOrder) {
             ],
         ],
         'package without country'                     => [
-            'order' => (
-            [
+            'order' => [
                 'shippingAddress' => [
                     'cc' => null,
                 ],
-            ]
-            ),
+            ],
         ],
         'postnl with same day delivery'               => [
             'order' => ['deliveryOptions' => ['shipmentOptions' => ['sameDayDelivery' => true]]],

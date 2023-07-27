@@ -6,19 +6,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
+use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
- * @property Carrier             $carrier
- * @property null|DateTime       $date
- * @property null|string         $deliveryType
- * @property int                 $labelAmount
- * @property null|string         $packageType
- * @property null|RetailLocation $pickupLocation
- * @property ShipmentOptions     $shipmentOptions
+ * @property Carrier                $carrier
+ * @property null|DateTimeInterface $date
+ * @property null|string            $deliveryType
+ * @property int                    $labelAmount
+ * @property null|string            $packageType
+ * @property null|RetailLocation    $pickupLocation
+ * @property ShipmentOptions        $shipmentOptions
  */
 class DeliveryOptions extends Model implements StorableArrayable
 {
@@ -148,11 +149,22 @@ class DeliveryOptions extends Model implements StorableArrayable
      */
     public function getDateAsString(): ?string
     {
-        if (! $this->date || $this->date < new DateTime('now')) {
+        return $this->date ? $this->date->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * @return null|\DateTime
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function getDateAttribute(): ?DateTimeInterface
+    {
+        $date = $this->getCastAttribute('date');
+
+        if (! $date || $date < new DateTime('now')) {
             return null;
         }
 
-        return $this->date->format('Y-m-d H:i:s');
+        return $date;
     }
 
     /**
@@ -179,6 +191,17 @@ class DeliveryOptions extends Model implements StorableArrayable
     public function isPickup(): bool
     {
         return $this->deliveryType === self::DELIVERY_TYPE_PICKUP_NAME && $this->pickupLocation;
+    }
+
+    /**
+     * @param  null|int $flags
+     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toArray(?int $flags = null): array
+    {
+        return Utils::filterNull(['date' => $this->getDateAsString()]) + parent::toArray($flags);
     }
 
     /**
