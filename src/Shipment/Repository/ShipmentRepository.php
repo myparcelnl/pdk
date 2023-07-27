@@ -80,7 +80,7 @@ class ShipmentRepository extends ApiRepository
             'positions' => $position,
         ]);
 
-        return $this->retrieve($request->getUniqueKey(), function () use ($request, $collection) {
+        return $this->retrieve($request->getUniqueKey(), function () use ($request) {
             /** @var \MyParcelNL\Pdk\Shipment\Response\GetLabelsResponse $response */
             $response = $this->api->doRequest($request, GetLabelsResponse::class);
 
