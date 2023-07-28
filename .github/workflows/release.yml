@@ -43,6 +43,7 @@ jobs:
       - uses: ./.github/actions/setup
 
   test:
+    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
     needs: setup
     runs-on: ubuntu-22.04
     steps:
@@ -50,6 +51,7 @@ jobs:
       - uses: ./.github/actions/test
 
   quality:
+    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
     needs: setup
     runs-on: ubuntu-22.04
     steps:
