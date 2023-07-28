@@ -20,14 +20,10 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
-    new UsesMockPdkInstance([
-        PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)
-            ->constructor(null),
-    ]),
+    new UsesMockPdkInstance(),
     new UsesApiMock()
 );
 
@@ -99,5 +95,5 @@ it('fetches new account and carrier data from api when called with empty array',
                 ->getUri()
                 ->getPath()
         )
-        ->toEndWith('/carrier_management/shops/3/carrier_options');
+        ->toEndWith('/carrier_management/shops/2100/carrier_options');
 });

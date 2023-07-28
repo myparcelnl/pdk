@@ -4,8 +4,12 @@ on:
   merge_group:
 
 jobs:
-  test:
-    uses: ./.github/workflows/--test.yml
+  test-unit:
+    uses: ./.github/workflows/--test-unit.yml
+    secrets: inherit
+
+  test-integration:
+    uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
   quality:

@@ -19,6 +19,11 @@ runs:
       with:
         image: ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
 
+    - name: 'Prepare environment'
+      shell: bash
+      run: |
+        touch .env.local
+
     - name: 'Install composer dependencies'
       shell: bash
       #language=sh

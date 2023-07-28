@@ -5,5 +5,7 @@ services:
     image: ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
     init: true
     command: [ 'composer', 'install', '--no-interaction', '--no-progress', '--no-suggest' ]
+    env_file:
+      - .env.local
     volumes:
       - ./:/app

@@ -13,8 +13,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    uses: ./.github/workflows/--test.yml
+  test-unit:
+    uses: ./.github/workflows/--test-unit.yml
+    secrets: inherit
+
+  test-integration:
+    uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
   quality:
@@ -25,7 +29,8 @@ jobs:
 
   rebase-prs:
     needs:
-      - test
+      - test-unit
+      - test-integration
       - quality
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit

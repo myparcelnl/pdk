@@ -1,0 +1,17 @@
+name: '♻️ Run integration tests'
+
+on:
+  workflow_call:
+
+jobs:
+  test-integration:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+
+      - name: 'Run integration tests'
+        shell: bash
+        run: |
+          docker compose run php composer test:integration
