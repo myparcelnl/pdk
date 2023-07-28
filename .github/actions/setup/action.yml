@@ -7,7 +7,10 @@ runs:
     - name: 'Handle composer cache'
       uses: actions/cache@v3
       with:
-        path: $HOME/.composer
+        path: |
+          $HOME/.composer
+          ./composer.lock
+          ./vendor
         key: composer-${{ hashFiles('**/composer.json') }}
         restore-keys: |
           composer-
