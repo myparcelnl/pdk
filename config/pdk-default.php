@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\env;
@@ -27,6 +28,29 @@ return [
      * CDN URL to use for frontend dependencies.
      */
     'baseCdnUrl'               => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
+
+    /**
+     * The default date format to use for date and time functions.
+     */
+    'defaultDateFormat'        => value('Y-m-d H:i:s'),
+
+    /**
+     * Short date format.
+     */
+    'defaultDateFormatShort'   => value('Y-m-d'),
+
+    /**
+     * Supported date formats.
+     */
+    'dateFormats'              => factory(function () {
+        return [
+            'Y-m-d\TH:i:s.uP',
+            'Y-m-d\TH:i:sP',
+            'Y-m-d H:i:s.u',
+            Pdk::get('defaultDateFormat'),
+            Pdk::get('defaultDateFormatShort'),
+        ];
+    }),
 
     /**
      * The default time zone to use for date and time functions.

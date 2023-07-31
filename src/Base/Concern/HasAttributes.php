@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
@@ -54,11 +55,6 @@ trait HasAttributes
      * @var array
      */
     protected $casts = [];
-
-    /**
-     * @var string
-     */
-    protected $dateFormats = ['Y-m-d H:i:s', 'Y-m-d', DateTime::ATOM];
 
     /**
      * List of deprecated attributes and their replacements.
@@ -402,11 +398,16 @@ trait HasAttributes
             return DateTimeImmutable::createFromMutable($value);
         }
 
-        if (is_array($value) && isset($value['date'], $value['timezone'])) {
+        if (is_array($value) && isset($value['date'])) {
             return new DateTimeImmutable($value['date'], new DateTimeZone($value['timezone']));
         }
 
-        foreach ($this->dateFormats as $dateFormat) {
+        foreach ($this->getDateFormats() as $dateFormat) {
+            if (Pdk::get('defaultDateFormatShort') === $dateFormat) {
+                $dateFormat = Pdk::get('defaultDateFormat');
+                $value      .= ' 00:00:00';
+            }
+
             $date = DateTimeImmutable::createFromFormat($dateFormat, (string) $value);
 
             if ($date) {
@@ -612,6 +613,14 @@ trait HasAttributes
     }
 
     /**
+     * @return array
+     */
+    protected function getDateFormats(): array
+    {
+        return Pdk::get('dateFormats');
+    }
+
+    /**
      * @param  null|int $flags
      *
      * @return null|string
@@ -773,7 +782,7 @@ trait HasAttributes
      */
     protected function serializeDate(DateTimeInterface $date): string
     {
-        return $date->format($this->dateFormats[0]);
+        return $date->format(Pdk::get('defaultDateFormat'));
     }
 
     /**
