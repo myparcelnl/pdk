@@ -6,20 +6,22 @@ namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
 /**
- * @property null|string                                    $externalIdentifier
- * @property null|string                                    $sku
- * @property null|string                                    $ean
- * @property null|bool                                      $isDeliverable
- * @property null|string                                    $name
- * @property null|\MyParcelNL\Pdk\Base\Model\Currency       $price
- * @property int                                            $weight
- * @property int                                            $length
- * @property int                                            $height
- * @property int                                            $width
- * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings $settings
+ * @property null|string                                     $externalIdentifier
+ * @property null|string                                     $sku
+ * @property null|string                                     $ean
+ * @property null|bool                                       $isDeliverable
+ * @property null|string                                     $name
+ * @property null|\MyParcelNL\Pdk\Base\Model\Currency        $price
+ * @property int                                             $weight
+ * @property int                                             $length
+ * @property int                                             $height
+ * @property int                                             $width
+ * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $settings
+ * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $parent
  */
 class PdkProduct extends Model
 {
@@ -38,6 +40,7 @@ class PdkProduct extends Model
         'width'              => 0,
         'height'             => 0,
         'settings'           => ProductSettings::class,
+        'parent'             => null,
     ];
 
     /**
@@ -55,5 +58,32 @@ class PdkProduct extends Model
         'width'              => 'int',
         'height'             => 'int',
         'settings'           => ProductSettings::class,
+        'parent'             => self::class,
     ];
+
+    /**
+     * @param  null|array $data
+     */
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+        $this->mergeProductSettings();
+    }
+
+    /**
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function mergeProductSettings()
+    {
+        if (! $this->parent instanceof self) {
+            return;
+        }
+
+        foreach ($this->settings->getAttributes() as $key => $value) {
+            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT === $value
+                || '' === $value) {
+                $this->settings->setAttribute($key, $this->parent->settings->getAttribute($key));
+            }
+        }
+    }
 }
