@@ -48,8 +48,8 @@ class PostOrderNotesResponse extends ApiResponseWithBody
                     'uuid'      => $orderNote['uuid'],
                     'author'    => $orderNote['author'],
                     'note'      => $orderNote['note'],
-                    'createdAt' => $orderNote['created_at'],
-                    'updatedAt' => $orderNote['updated_at'],
+                    'createdAt' => $orderNote['created'],
+                    'updatedAt' => $orderNote['updated'],
                 ];
             }, $orderNotes)
         );
