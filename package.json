@@ -5,11 +5,11 @@
     "scripts": {
         "docker": "docker compose run --rm php",
         "prepare": "is-ci || husky install",
+        "quality": "yarn docker composer quality",
+        "quality:fix": "yarn docker composer quality:fix",
         "test": "yarn docker composer test",
         "test:coverage": "yarn docker composer test:coverage",
-        "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'",
-        "quality": "yarn docker composer quality",
-        "quality:fix": "yarn docker composer quality:fix"
+        "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'"
     },
     "lint-staged": {
         "*.{md}": "prettier --write",
@@ -27,5 +27,8 @@
         "lint-staged": "^13.1.1",
         "prettier": "^2.8.4"
     },
-    "packageManager": "yarn@3.6.0"
+    "packageManager": "yarn@3.6.0",
+    "volta": {
+        "node": "18.17.0"
+    }
 }
