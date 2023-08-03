@@ -21,6 +21,7 @@ runs:
 
     - name: 'Install composer dependencies'
       shell: bash
+      #language=sh
       run: |
         docker compose run \
           --volume $HOME/.composer:/root/.composer \

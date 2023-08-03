@@ -38,18 +38,22 @@ jobs:
       - uses: ./.github/actions/setup
         if: steps.rector-cache.outputs.cache-hit != 'true'
 
-      - name: 'Run Rector'
-        if: steps.rector-cache.outputs.cache-hit != 'true'
+      - name: 'Run quality checks in dry-run mode'
+        if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run == 'true'
         shell: bash
+        #language=sh
         run: |
-          docker compose run php \
-            vendor/bin/rector process \
-              --no-progress-bar \
-              --ansi \
-              ${{ github.event.inputs.dry-run == 'true' && '--dry-run' || '' }}
+          docker compose run php composer quality
+
+      - name: 'Run quality checks and apply changes'
+        if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run != 'true'
+        shell: bash
+        #language=sh
+        run: |
+          docker compose run php composer quality:fix
 
       - uses: stefanzweifel/git-auto-commit-action@v4
-        if: github.event.inputs.dry-run != 'true' && steps.rector-cache.outputs.cache-hit != 'true'
+        if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run != 'true'
         with:
           commit_message: 'style(rector): apply changes'
           commit_options: '--no-verify --signoff'

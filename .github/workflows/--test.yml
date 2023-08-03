@@ -22,11 +22,10 @@ jobs:
       - name: 'Run tests'
         if: steps.coverage-cache.outputs.cache-hit != 'true'
         shell: bash
+        #language=sh
         run: |
-          docker compose run php \
-            php -dpcov.enabled=1 \
-            vendor/bin/pest --coverage-clover clover.xml
-          
+          docker compose run php composer test:coverage
+
           # Strip the /app/ prefix from the coverage paths before uploading.
           sed -i 's/\/app\///g' clover.xml
 
