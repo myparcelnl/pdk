@@ -32,21 +32,13 @@ jobs:
               echo "new-commits=true" >> $GITHUB_OUTPUT
           fi
 
-  setup:
-    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
-    needs: prepare
-    uses: ./.github/workflows/--setup.yml
-    secrets: inherit
-
   test:
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
-    needs: setup
     uses: ./.github/workflows/--test.yml
     secrets: inherit
 
   quality:
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
-    needs: setup
     uses: ./.github/workflows/--quality.yml
     secrets: inherit
 

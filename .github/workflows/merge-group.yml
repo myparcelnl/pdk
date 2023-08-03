@@ -4,17 +4,11 @@ on:
   merge_group:
 
 jobs:
-  setup:
-    uses: ./.github/workflows/--setup.yml
-    secrets: inherit
-
   test:
-    needs: setup
     uses: ./.github/workflows/--test.yml
     secrets: inherit
 
   quality:
-    needs: setup
     uses: ./.github/workflows/--quality.yml
     secrets: inherit
     with:
