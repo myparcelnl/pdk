@@ -7,17 +7,21 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 class ExamplePostShipmentsResponse extends ExampleJsonResponse
 {
     /**
-     * @return array
+     * @return array[]
      */
-    public function getContent(): array
+    protected function getDefaultResponseContent(): array
     {
         return [
-            'data' => [
-                'ids' => [
-                    ['id' => '123'],
-                    ['id' => '456'],
-                ],
-            ],
+            ['id' => '123'],
+            ['id' => '456'],
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResponseProperty(): string
+    {
+        return 'ids';
     }
 }

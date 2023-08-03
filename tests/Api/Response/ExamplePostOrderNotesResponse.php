@@ -7,20 +7,24 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 class ExamplePostOrderNotesResponse extends ExampleJsonResponse
 {
     /**
-     * @return array
+     * @return array[]
      */
-    public function getContent(): array
+    protected function getDefaultResponseContent(): array
     {
         return [
-            'data' => [
-                'order_notes' => [
-                    [
-                        'uuid'   => 'uuid-1',
-                        'author' => 'customer',
-                        'note'   => 'This is a note',
-                    ],
-                ],
+            [
+                'uuid'   => 'uuid-1',
+                'author' => 'customer',
+                'note'   => 'This is a note',
             ],
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResponseProperty(): string
+    {
+        return 'order_notes';
     }
 }

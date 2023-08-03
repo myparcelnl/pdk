@@ -6,14 +6,21 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 class ExampleGetShipmentLabelsLinkResponse extends ExampleJsonResponse
 {
-    public function getContent(): array
+    /**
+     * @return string[]
+     */
+    protected function getDefaultResponseContent(): array
     {
         return [
-            'data' => [
-                'pdfs' => [
-                    'url' => '/pdfs/label_hash',
-                ],
-            ],
+            'url' => '/pdfs/label_hash',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResponseProperty(): string
+    {
+        return 'pdfs';
     }
 }

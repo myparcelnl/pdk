@@ -8,19 +8,26 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 class ExampleGetCarrierOptionsResponse extends ExampleJsonResponse
 {
-    public function getContent(): array
+    /**
+     * @return array[]
+     */
+    protected function getDefaultResponseContent(): array
     {
         return [
-            'data' => [
-                'carrier_options' => [
-                    [
-                        'id'       => 7,
-                        'carrier'  => ['id' => Carrier::CARRIER_POSTNL_ID],
-                        'enabled'  => true,
-                        'optional' => false,
-                    ],
-                ],
+            [
+                'id'       => 7,
+                'carrier'  => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'enabled'  => true,
+                'optional' => false,
             ],
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResponseProperty(): string
+    {
+        return 'carrier_options';
     }
 }
