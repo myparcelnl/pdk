@@ -1,7 +1,7 @@
-name: 'Run pull request checks ⚙️'
+name: 'On push ⚙️'
 
 on:
-  pull_request:
+  push:
     branches:
       - main
       - alpha
@@ -9,7 +9,7 @@ on:
       - rc
 
 concurrency:
-  group: ${{github.workflow}}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -25,4 +25,14 @@ jobs:
   quality:
     needs: setup
     uses: ./.github/workflows/--quality.yml
+    with:
+      dry-run: true
+    secrets: inherit
+
+  rebase-prs:
+    needs:
+      - test
+      - quality
+    if: always()
+    uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit

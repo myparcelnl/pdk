@@ -1,10 +1,6 @@
 name: 'Publish new version 🚀'
 
 on:
-  push:
-    branches:
-      - main
-
   workflow_dispatch:
 
   schedule:
@@ -23,6 +19,8 @@ jobs:
       new-commits: ${{ steps.check-release.outputs.new-commits }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: 'Check if there are commits since the last release'
         id: check-release
@@ -36,38 +34,29 @@ jobs:
 
   setup:
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
-    runs-on: ubuntu-22.04
     needs: prepare
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup
+    uses: ./.github/workflows/--setup.yml
+    secrets: inherit
 
   test:
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
     needs: setup
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/test
+    uses: ./.github/workflows/--test.yml
+    secrets: inherit
 
   quality:
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
     needs: setup
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/rector
-        with:
-          dry-run: true
-          app-id: ${{ secrets.MYPARCEL_APP_ID }}
-          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+    uses: ./.github/workflows/--quality.yml
+    secrets: inherit
 
   release:
     runs-on: ubuntu-22.04
-    if: github.event_name != 'push'
     needs:
       - test
       - quality
+    outputs:
+      released: ${{ steps.semantic-release.outputs.released }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -88,24 +77,13 @@ jobs:
       - uses: myparcelnl/actions/yarn-install@v3
 
       - uses: myparcelnl/actions/semantic-release@v3
+        id: semantic-release
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
           write-summary: true
 
   rebase-prs:
     needs: release
-    if: always()
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: myparcelnl/actions/setup-git-credentials@v3
-        id: credentials
-        with:
-          app-id: ${{ secrets.MYPARCEL_APP_ID }}
-          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
-
-      - uses: peter-evans/rebase@v2
-        with:
-          token: ${{ steps.credentials.outputs.token }}
-          base: ${{ github.ref_name }}
-          exclude-drafts: true
-          exclude-labels: 'dependencies'
+    if: needs.release.outputs.released == 'true'
+    uses: ./.github/workflows/--rebase-prs.yml
+    secrets: inherit

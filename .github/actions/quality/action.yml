@@ -1,4 +1,4 @@
-name: 'Run Rector'
+name: 'Run quality checks'
 description: 'Run Rector on the codebase'
 
 inputs:
