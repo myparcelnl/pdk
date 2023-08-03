@@ -11,6 +11,11 @@ use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 interface FrontendRenderServiceInterface
 {
     /**
+     * Render a child product's settings. A child product is a product that has a parent.
+     */
+    public function renderChildProductSettings(PdkProduct $product): string;
+
+    /**
      * Renders the delivery options component.
      */
     public function renderDeliveryOptions(PdkCart $cart): string;

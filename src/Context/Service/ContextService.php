@@ -6,10 +6,14 @@ namespace MyParcelNL\Pdk\Context\Service;
 
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection;
+use MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Model\CheckoutContext;
@@ -72,15 +76,12 @@ class ContextService implements ContextServiceInterface
      */
     public function createOrderDataContext($orderData): OrderDataContextCollection
     {
-        if (is_a($orderData, PdkOrder::class) || (is_array($orderData) && Arr::isAssoc($orderData))) {
-            $orderData = [$orderData];
-        }
-
-        $orders = is_a($orderData, PdkOrderCollection::class)
-            ? $orderData
-            : new PdkOrderCollection($orderData);
-
-        return new OrderDataContextCollection($orders ? $orders->all() : null);
+        return $this->createContextCollection(
+            $orderData,
+            PdkOrder::class,
+            PdkOrderCollection::class,
+            OrderDataContextCollection::class
+        );
     }
 
     /**
@@ -92,20 +93,60 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
+     * @param  null|PdkProduct|PdkProductCollection $productData
      *
+     * @return \MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection
+     */
+    public function createProductDataContext($productData): ProductDataContextCollection
+    {
+        return $this->createContextCollection(
+            $productData,
+            PdkProduct::class,
+            PdkProductCollection::class,
+            ProductDataContextCollection::class
+        );
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext
      */
-    public function createProductSettingsViewContext(?PdkProduct $product): ProductSettingsViewContext
+    public function createProductSettingsViewContext(): ProductSettingsViewContext
     {
-        return new ProductSettingsViewContext(['product' => $product]);
+        return new ProductSettingsViewContext();
+    }
+
+    /**
+     * @param  null|array|Model|Collection $input
+     * @param  class-string<Model>         $modelClass
+     * @param  class-string<Collection>    $modelCollectionClass
+     * @param  class-string<Collection>    $contextCollectionClass
+     *
+     * @return \MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection
+     */
+    protected function createContextCollection(
+        $input,
+        string $modelClass,
+        string $modelCollectionClass,
+        string $contextCollectionClass
+    ): Collection {
+        /** @noinspection PhpUnnecessaryParenthesesInspection */
+        if (is_a($input, $modelClass) || (is_array($input) && Arr::isAssoc($input))) {
+            $input = [$input];
+        }
+
+        $collection = is_a($input, $modelCollectionClass)
+            ? $input
+            : new $modelCollectionClass($input);
+
+        return new $contextCollectionClass($collection->all());
     }
 
     /**
      * @param  string $contextId
      * @param  array  $data
      *
-     * @return null|GlobalContext|DynamicContext|OrderDataContextCollection|PluginSettingsViewContext|ProductSettingsViewContext|CheckoutContext
+     * @return null|CheckoutContext|DynamicContext|GlobalContext|OrderDataContextCollection|PluginSettingsViewContext|ProductDataContextCollection|ProductSettingsViewContext
+     * @noinspection MultipleReturnStatementsInspection
      */
     protected function resolveContext(string $contextId, array $data = [])
     {
@@ -122,8 +163,11 @@ class ContextService implements ContextServiceInterface
             case Context::ID_PLUGIN_SETTINGS_VIEW:
                 return $this->createPluginSettingsViewContext();
 
+            case Context::ID_PRODUCT_DATA:
+                return $this->createProductDataContext($data['product'] ?? null);
+
             case Context::ID_PRODUCT_SETTINGS_VIEW:
-                return $this->createProductSettingsViewContext($data['product'] ?? null);
+                return $this->createProductSettingsViewContext();
 
             case Context::ID_CHECKOUT:
                 return $this->createCheckoutContext($data['cart'] ?? null);

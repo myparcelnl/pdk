@@ -82,6 +82,15 @@ dataset('components', [
         'views'    => [MockAbstractViewService::PAGE_PRODUCT],
     ],
 
+    'child product settings' => [
+        'callback' => function () {
+            return function () {
+                return Frontend::renderChildProductSettings(new PdkProduct(['parent' => new PdkProduct()]));
+            };
+        },
+        'views'    => [MockAbstractViewService::PAGE_PRODUCT],
+    ],
+
     'delivery options' => [
         'callback' => function () {
             return function () {

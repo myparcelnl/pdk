@@ -1,6 +1,7 @@
 {
-    "global": null,
+    "checkout": null,
     "dynamic": null,
+    "global": null,
     "orderData": [
         {
             "externalIdentifier": "123",
@@ -300,6 +301,6 @@
         }
     ],
     "pluginSettingsView": null,
-    "productSettingsView": null,
-    "checkout": null
+    "productData": null,
+    "productSettingsView": null
 }

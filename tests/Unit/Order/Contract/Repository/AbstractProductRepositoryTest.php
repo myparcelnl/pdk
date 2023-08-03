@@ -30,6 +30,7 @@ it('has correct default values', function () {
         ->toEqual([
             'ean'                             => null,
             'name'                            => null,
+            'parent'                          => null,
             'settings.countryOfOrigin'        => 'NL',
             'settings.customsCode'            => '0000',
             'settings.disableDeliveryOptions' => -1,

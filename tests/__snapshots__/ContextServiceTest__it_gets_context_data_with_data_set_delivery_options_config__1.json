@@ -1,9 +1,4 @@
 {
-    "global": null,
-    "dynamic": null,
-    "orderData": null,
-    "pluginSettingsView": null,
-    "productSettingsView": null,
     "checkout": {
         "config": null,
         "strings": {
@@ -74,5 +69,11 @@
             "carriersWithTaxFields": []
         },
         "endpoints": []
-    }
+    },
+    "dynamic": null,
+    "global": null,
+    "orderData": null,
+    "pluginSettingsView": null,
+    "productData": null,
+    "productSettingsView": null
 }
