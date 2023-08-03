@@ -2,7 +2,7 @@
 <div data-pdk-context="__CONTEXT__" id="__ID__"></div>
 <script id="__ID__-script">
 (() => {
-  var e = 'myparcel_pdk_loaded';
+  var e = 'myparcel_pdk_pong';
   var listener = function(event) {
     event.detail.render('DeliveryOptions', '#__ID__');
     document.getElementById('__ID__-script').remove();
@@ -10,6 +10,7 @@
   };
 
   document.addEventListener(e, listener);
+  document.dispatchEvent(new Event('myparcel_pdk_ping'));
 })();
 </script>
 </body></html>

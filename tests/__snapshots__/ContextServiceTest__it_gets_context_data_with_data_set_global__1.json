@@ -209,7 +209,8 @@
                 "responseProperty": null
             }
         },
-        "event": "myparcel_pdk_loaded",
+        "eventPing": "myparcel_pdk_ping",
+        "eventPong": "myparcel_pdk_pong",
         "language": "nl",
         "mode": "production",
         "platform": {
