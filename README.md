@@ -47,22 +47,10 @@ docker compose up php
 
 ### Running tests
 
-Run all tests:
+Run all unit tests:
 
 ```shell
 docker compose run php composer test
-```
-
-Run only unit tests:
-
-```shell
-docker compose run php composer test:unit
-```
-
-Run only integration tests:
-
-```shell
- docker compose run php composer test:integration
 ```
 
 [Developer Portal contact page]: https://developer.myparcel.nl/contact.html
