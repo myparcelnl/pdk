@@ -33,6 +33,5 @@ jobs:
     needs:
       - test
       - quality
-    if: always()
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit
