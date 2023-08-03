@@ -1,4 +1,5 @@
 name: '♻️ Setup'
+
 on:
   workflow_call:
 
