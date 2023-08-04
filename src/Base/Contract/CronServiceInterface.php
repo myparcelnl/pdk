@@ -8,11 +8,15 @@ interface CronServiceInterface
 {
     /**
      * Dispatch an action now.
+     *
+     * @param  callable|string|callable-string $callback
      */
-    public function dispatch(callable $callback, ...$args): void;
+    public function dispatch($callback, ...$args): void;
 
     /**
      * Schedule an action for later.
+     *
+     * @param  callable|string|callable-string $callback
      */
-    public function schedule(callable $callback, int $timestamp, ...$args): void;
+    public function schedule($callback, int $timestamp, ...$args): void;
 }
