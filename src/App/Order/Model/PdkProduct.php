@@ -67,7 +67,7 @@ class PdkProduct extends Model
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
-        $this->mergeProductSettings();
+        //$this->mergeProductSettings();
     }
 
     /**
