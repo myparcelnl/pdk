@@ -21,11 +21,12 @@ use Throwable;
 
 class FrontendRenderService implements FrontendRenderServiceInterface
 {
-    public const  BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-boot';
+    public const BOOTSTRAP_CONTAINER_ID = 'myparcel-pdk-boot';
     /**
      * Ids and events
      */
-    public const  BOOTSTRAP_RENDER_EVENT = 'myparcel_pdk_loaded';
+    public const BOOTSTRAP_RENDER_EVENT_PING = 'myparcel_pdk_ping';
+    public const BOOTSTRAP_RENDER_EVENT_PONG = 'myparcel_pdk_pong';
     /**
      * Delivery options
      */
@@ -217,9 +218,10 @@ class FrontendRenderService implements FrontendRenderServiceInterface
         return $this->renderTemplate(
             $this->getRenderTemplate(),
             [
-                '__ID__'        => sprintf('pdk-%s-%s', Str::kebab($component), mt_rand()),
-                '__COMPONENT__' => $component,
-                '__EVENT__'     => self::BOOTSTRAP_RENDER_EVENT,
+                '__ID__'         => sprintf('pdk-%s-%s', Str::kebab($component), mt_rand()),
+                '__COMPONENT__'  => $component,
+                '__EVENT_PING__' => self::BOOTSTRAP_RENDER_EVENT_PING,
+                '__EVENT_PONG__' => self::BOOTSTRAP_RENDER_EVENT_PONG,
             ],
             $contexts,
             $arguments

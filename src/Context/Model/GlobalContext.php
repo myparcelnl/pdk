@@ -18,7 +18,8 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
  * @property string                    $baseUrl
  * @property string                    $bootstrapId
  * @property EndpointRequestCollection $endpoints
- * @property string                    $event
+ * @property string                    $eventPing
+ * @property string                    $eventPong
  * @property string                    $language
  * @property string                    $mode
  * @property array                     $platform
@@ -31,7 +32,8 @@ class GlobalContext extends Model
         'baseUrl'      => null,
         'bootstrapId'  => FrontendRenderService::BOOTSTRAP_CONTAINER_ID,
         'endpoints'    => EndpointRequestCollection::class,
-        'event'        => FrontendRenderService::BOOTSTRAP_RENDER_EVENT,
+        'eventPing'    => FrontendRenderService::BOOTSTRAP_RENDER_EVENT_PING,
+        'eventPong'    => FrontendRenderService::BOOTSTRAP_RENDER_EVENT_PONG,
         'language'     => null,
         'mode'         => null,
         'platform'     => [],
@@ -43,7 +45,8 @@ class GlobalContext extends Model
         'baseUrl'      => 'string',
         'bootstrapId'  => 'string',
         'endpoints'    => EndpointRequestCollection::class,
-        'event'        => 'string',
+        'eventPing'    => 'string',
+        'eventPong'    => 'string',
         'language'     => 'string',
         'mode'         => 'string',
         'platform'     => 'array',
