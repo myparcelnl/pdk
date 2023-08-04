@@ -13,9 +13,11 @@ class ExamplePostOrderNotesResponse extends ExampleJsonResponse
     {
         return [
             [
-                'uuid'   => 'uuid-1',
-                'author' => 'customer',
-                'note'   => 'This is a note',
+                'uuid'    => 'uuid-1',
+                'author'  => 'customer',
+                'note'    => 'This is a note',
+                'created' => '2023-01-31 12:00:00',
+                'updated' => '2023-01-31 12:00:01',
             ],
         ];
     }

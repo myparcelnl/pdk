@@ -1,9 +1,9 @@
 [
-    {
-        "uuid": "uuid-1",
-        "author": "customer",
-        "note": "This is a note",
-        "createdAt": null,
-        "updatedAt": null
-    }
+  {
+    "uuid": "uuid-1",
+    "author": "customer",
+    "note": "This is a note",
+    "createdAt": "2023-01-31 12:00:00",
+    "updatedAt": "2023-01-31 12:00:01"
+  }
 ]
