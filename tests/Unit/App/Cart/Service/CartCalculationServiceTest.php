@@ -59,6 +59,20 @@ const LINES_DONT_FIT_MAILBOX = [
     ],
 ];
 
+const LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT = [
+    [
+        'quantity' => 5,
+        'product'  => [
+            'isDeliverable' => true,
+            'weight'        => 500,
+            'settings'      => [
+                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                'fitInMailbox' => 10,
+            ],
+        ],
+    ],
+];
+
 const LINES_EXCEEDING_MAILBOX_SIZE = [
     [
         'quantity' => 5,
@@ -113,6 +127,10 @@ it('calculates allowed package types', function (array $lines, array $result) {
     ],
     'one item does not fit in mailbox' => [
         'lines'  => LINES_DONT_FIT_MAILBOX,
+        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'items exceeding mailbox weight'   => [
+        'lines'  => LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
         'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'items exceeding mailbox size'     => [

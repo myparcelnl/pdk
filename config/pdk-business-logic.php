@@ -17,6 +17,7 @@ return [
     'dropOffDelayMaximum'   => value(14),
     'dropOffDelayMinimum'   => value(0),
     'numberSuffixMaxLength' => value(6),
+    'mailboxWeightMaximum'  => value(2000),
 
     // Delivery options
     'deliveryDaysWindowMin' => value(0),
