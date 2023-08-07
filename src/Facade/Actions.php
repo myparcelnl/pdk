@@ -6,10 +6,11 @@ namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\App\Api\PdkActions;
 use MyParcelNL\Pdk\Base\Facade;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @method static Response execute($action, array $parameters = [])
+ * @method static Response execute(string|Request $action, array $parameters = [])
  * @implements PdkActions
  */
 final class Actions extends Facade

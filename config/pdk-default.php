@@ -20,6 +20,13 @@ return [
     'rootDir'                  => value(__DIR__ . '/../'),
 
     /**
+     * Directories to load config files from.
+     */
+    'configDirs'               => value([
+        __DIR__ . '/../config',
+    ]),
+
+    /**
      * Url to the API.
      */
     'apiUrl'                   => env('PDK_API_URL', 'https://api.myparcel.nl'),

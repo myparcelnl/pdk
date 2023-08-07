@@ -32,9 +32,14 @@ jobs:
               echo "new-commits=true" >> $GITHUB_OUTPUT
           fi
 
-  test:
+  test-unit:
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
-    uses: ./.github/workflows/--test.yml
+    uses: ./.github/workflows/--test-unit.yml
+    secrets: inherit
+
+  test-integration:
+    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
+    uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
   quality:
@@ -45,7 +50,8 @@ jobs:
   release:
     runs-on: ubuntu-22.04
     needs:
-      - test
+      - test-unit
+      - test-integration
       - quality
     outputs:
       released: ${{ steps.semantic-release.outputs.released }}

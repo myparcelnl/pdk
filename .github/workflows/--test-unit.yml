@@ -1,10 +1,10 @@
-name: '♻️ Test'
+name: '♻️ Run unit tests'
 
 on:
   workflow_call:
 
 jobs:
-  test:
+  test-unit:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -19,12 +19,12 @@ jobs:
       - uses: ./.github/actions/setup
         if: steps.coverage-cache.outputs.cache-hit != 'true'
 
-      - name: 'Run tests'
+      - name: 'Run unit tests'
         if: steps.coverage-cache.outputs.cache-hit != 'true'
         shell: bash
         #language=sh
         run: |
-          docker compose run php composer test:coverage
+          docker compose run php composer test:unit:coverage
 
           # Strip the /app/ prefix from the coverage paths before uploading.
           sed -i 's/\/app\///g' clover.xml

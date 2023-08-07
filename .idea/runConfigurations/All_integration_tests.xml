@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All integration tests" type="PhpBehatConfigurationType">
+    <BehatRunner scenario="" scope="Yml" />
+    <CommandLine parameters="-dpcov.enabled=1">
+      <PhpTestInterpreterSettings>
+        <option name="interpreterName" value="php" />
+      </PhpTestInterpreterSettings>
+    </CommandLine>
+    <method v="2" />
+  </configuration>
+</component>

@@ -8,6 +8,10 @@ use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 include __DIR__ . '/usesShared.php';
+include __DIR__ . '/functions.php';
+
+const TESTS_DIR = __DIR__;
+const ROOT_DIR  = TESTS_DIR . '/..';
 
 /**
  * Global Pest test configuration.

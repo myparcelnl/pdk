@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Api\Response;
 
 use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 
-abstract class ApiResponseWithBody extends ApiResponse
+class ApiResponseWithBody extends ApiResponse
 {
     /**
      * @var null|string
@@ -30,13 +30,19 @@ abstract class ApiResponseWithBody extends ApiResponse
         }
     }
 
-    abstract protected function parseResponseBody(): void;
-
     /**
      * @return null|string
      */
     public function getBody(): ?string
     {
         return $this->body;
+    }
+
+    /**
+     * @return void
+     * @codeCoverageIgnore
+     */
+    protected function parseResponseBody(): void
+    {
     }
 }

@@ -20,6 +20,26 @@ class Config implements ConfigInterface
      */
     public function get(string $key)
     {
+        return is_file($key) || is_dir($key)
+            ? $this->loadFileCached($key)
+            : $this->getFileByKey($key);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getConfigDirs(): array
+    {
+        return \MyParcelNL\Pdk\Facade\Pdk::get('configDirs');
+    }
+
+    /**
+     * @param  string $key
+     *
+     * @return mixed
+     */
+    protected function getFileByKey(string $key)
+    {
         $pathParts = [];
 
         if (Str::contains($key, '.')) {
@@ -29,7 +49,7 @@ class Config implements ConfigInterface
             $filename = $key;
         }
 
-        $data = $this->findConfig($filename);
+        $data = $this->loadFileCached($filename);
 
         if (count($pathParts)) {
             array_shift($pathParts);
@@ -40,11 +60,34 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return string
+     * @return array[]
      */
-    public function getConfigDir(): string
+    protected function getFilenameParserMap(): array
     {
-        return sprintf('%s/../../config', __DIR__);
+        return [
+            '.php' => [$this, 'parsePhp'],
+            '.inc' => [$this, 'parsePhp'],
+            '.json' => [$this, 'parseJson'],
+        ];
+    }
+
+    /**
+     * @param  string $filename
+     *
+     * @return null|mixed
+     * @noinspection MultipleReturnStatementsInspection
+     */
+    protected function load(string $filename)
+    {
+        if (is_dir($filename)) {
+            return $this->loadDirectory($filename);
+        }
+
+        if (is_file($filename)) {
+            return $this->loadFile($filename);
+        }
+
+        return null;
     }
 
     /**
@@ -52,30 +95,98 @@ class Config implements ConfigInterface
      *
      * @return mixed
      */
-    private function findConfig(string $filename)
+    protected function loadByKey(string $filename)
     {
-        if (! isset(self::$cache[$filename])) {
-            $dir = $this->getConfigDir();
+        $paths = [];
 
-            $phpPath  = "$dir/$filename.php";
-            $jsonPath = "$dir/$filename.json";
+        foreach ($this->getConfigDirs() as $dir) {
+            $paths[] = "$dir/$filename";
 
-            $isPhpFile  = file_exists($phpPath);
-            $isJsonFile = file_exists($jsonPath);
-
-            if (! $isPhpFile && ! $isJsonFile) {
-                throw new InvalidArgumentException(sprintf('File config/%s.php does not exist.', $filename));
-            }
-
-            if ($isJsonFile) {
-                self::$cache[$filename] = json_decode(file_get_contents($jsonPath), true);
-            }
-
-            if ($isPhpFile) {
-                self::$cache[$filename] = require $phpPath;
+            foreach (array_keys($this->getFilenameParserMap()) as $extension) {
+                $paths[] = "$dir/$filename$extension";
             }
         }
 
+        foreach ($paths as $path) {
+            $content = $this->load($path);
+
+            if ($content) {
+                return $content;
+            }
+        }
+
+        throw new InvalidArgumentException(sprintf('File "%s" not found.', $filename));
+    }
+
+    /**
+     * @param  string $path
+     *
+     * @return array
+     */
+    protected function loadDirectory(string $path): array
+    {
+        $files = array_filter(scandir($path), static function ($file) {
+            return ! in_array($file, ['.', '..']);
+        });
+
+        return array_combine(
+            $files,
+            array_map(function ($file) use ($path) {
+                return $this->loadFileCached("$path/$file");
+            }, $files)
+        );
+    }
+
+    /**
+     * @param  string $path
+     *
+     * @return mixed
+     */
+    protected function loadFile(string $path)
+    {
+        $map = $this->getFilenameParserMap();
+
+        $parser = array_reduce(
+            array_keys($map),
+            static function ($carry, $extension) use ($map, $path) {
+                return Str::endsWith($path, $extension) ? $map[$extension] : $carry;
+            }
+        );
+
+        return $parser ? $parser($path) : null;
+    }
+
+    /**
+     * @param  string $filename
+     *
+     * @return mixed
+     */
+    protected function loadFileCached(string $filename)
+    {
+        if (! isset(self::$cache[$filename])) {
+            self::$cache[$filename] = $this->load($filename) ?? $this->loadByKey($filename);
+        }
+
         return self::$cache[$filename];
+    }
+
+    /**
+     * @param  string $filename
+     *
+     * @return array
+     */
+    protected function parseJson(string $filename): array
+    {
+        return json_decode(file_get_contents($filename), true);
+    }
+
+    /**
+     * @param  string $filename
+     *
+     * @return array
+     */
+    protected function parsePhp(string $filename): array
+    {
+        return require $filename;
     }
 }

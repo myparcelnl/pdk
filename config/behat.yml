@@ -1,0 +1,12 @@
+default:
+  autoload:
+    '': 'tests/Features'
+
+  suites:
+    default:
+      paths:
+        - 'tests/Integration/Features'
+      contexts:
+        - MyParcelNL\Pdk\Tests\Integration\Context\PdkContext
+        - MyParcelNL\Pdk\Tests\Integration\Context\RequestContext
+        - MyParcelNL\Pdk\Tests\Integration\Context\SettingsContext

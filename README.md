@@ -33,6 +33,12 @@ View our [contribution guidelines] for information on how to contribute to the P
 
 ### Installation
 
+Create `.env.local`:
+
+```shell
+cp .env.local.template .env.local
+```
+
 Install Yarn dependencies:
 
 ```shell
