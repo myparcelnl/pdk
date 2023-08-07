@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Integration\Bootstrap;
+namespace MyParcelNL\Pdk\Tests\Integration\Base;
 
 use Brick\VarExporter\VarExporter;
 use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 use MyParcelNL\Pdk\Base\Config;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
 
 final class BehatConfig extends Config
 {
-    private const ADDITIONAL_CONFIG_DIR = __DIR__ . '/..';
-    private const EXAMPLES_DIR          = self::ADDITIONAL_CONFIG_DIR . '/Examples';
-
     /**
      * @param  string                                               $httpMethod
      * @param  string                                               $uri
@@ -44,23 +42,12 @@ final class BehatConfig extends Config
             strtr(
                 $this->getExampleTemplate(),
                 [
-                    ':METHOD'      => $httpMethod,
-                    ':PATH'        => $this->getPath($uri),
                     ':BODY'        => $bodyString,
+                    ':CONDITION'   => $this->buildCondition($httpMethod, $uri, $options),
                     ':STATUS_CODE' => $response->getStatusCode(),
                 ]
             )
         );
-    }
-
-    /**
-     * @return array|string[]
-     */
-    protected function getConfigDirs(): array
-    {
-        return array_merge([
-            self::ADDITIONAL_CONFIG_DIR,
-        ], parent::getConfigDirs());
     }
 
     /**
@@ -73,17 +60,15 @@ final class BehatConfig extends Config
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Api\Response\ClientResponse;
-use Symfony\Component\HttpFoundation\Request;
+use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;use MyParcelNL\Pdk\Tests\Integration\Api\Response\BehatClientResponse;use Symfony\Component\HttpFoundation\Request;
 
 return [
     'match' => static function (Request $request): bool {
-        return ':PATH' === $request->getPathInfo() 
-          && ':METHOD' === $request->getMethod();
+        return :CONDITION;
     },
 
-    'response' => static function (Request $request): ClientResponse {
-        return new ClientResponse(:BODY, :STATUS_CODE);
+    'response' => static function (Request $request): ClientResponseInterface {
+        return new BehatClientResponse(:BODY, :STATUS_CODE);
     },
 ];
 
@@ -103,16 +88,41 @@ EOF;
     /**
      * @param  string $httpMethod
      * @param  string $uri
+     * @param  array  $options
      *
      * @return string
      */
-    private function generateExampleFilename(string $httpMethod, string $uri): string
+    private function buildCondition(string $httpMethod, string $uri, array $options): string
     {
-        return sprintf(
-            '%s/%s%s.inc',
-            self::EXAMPLES_DIR,
+        $conditions = [
+            sprintf('\'%s\' === $request->getPathInfo()', $this->getPath($uri)),
+            sprintf('\'%s\' === $request->getMethod()', $httpMethod),
+        ];
+
+        return implode("\n            && ", $conditions);
+    }
+
+    /**
+     * @param  string   $httpMethod
+     * @param  string   $uri
+     * @param  null|int $increment
+     *
+     * @return string
+     */
+    private function generateExampleFilename(string $httpMethod, string $uri, ?int $increment = null): string
+    {
+        $filename = sprintf(
+            '%s/%s%s%s.inc',
+            Pdk::get('behatExamplesDir'),
             $httpMethod,
-            Str::snake(str_replace('/', '_', $this->getPath($uri)))
+            Str::snake(str_replace('/', '_', $this->getPath($uri))),
+            $increment ? "_$increment" : ''
         );
+
+        if (file_exists($filename)) {
+            return $this->generateExampleFilename($httpMethod, $uri, $increment + 1);
+        }
+
+        return $filename;
     }
 }

@@ -166,6 +166,16 @@ abstract class AbstractContext extends TestCase implements ContextInterface
     }
 
     /**
+     * @param  string $method
+     *
+     * @return void
+     */
+    protected function markDebugMethod(string $method): void
+    {
+        self::markTestIncomplete(sprintf('Step %s is only for debugging purposes. Remove it when done.', $method));
+    }
+
+    /**
      * @param  null|\MyParcelNL\Pdk\Account\Model\Account $model
      * @param  string                                     $key
      *

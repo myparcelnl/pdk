@@ -1,4 +1,4 @@
-Feature: As a user I want to create and get my account
+Feature: As a user I want to retrieve context for use with the frontend
 
   Scenario: Fetch data from a MyParcel account
     Given a valid API key is set

@@ -25,7 +25,7 @@ function getFiles(): array
 
 function getFullPath(?string $path = ''): string
 {
-    return PdkFacade::get('rootDir') . '.tmp/tests/' . $path;
+    return sprintf('%s.tmp/tests/%s', PdkFacade::get('rootDir'), $path);
 }
 
 beforeEach(function () {

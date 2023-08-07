@@ -9,12 +9,29 @@ use Behat\Gherkin\Node\TableNode;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Integration\Context\Concern\MakesHttpRequests;
+use MyParcelNL\Pdk\Tests\Integration\Context\Concern\MakesPdkHttpRequests;
 use Psr\Log\LoggerInterface;
 
+/**
+ * This context is for tests that do requests to the PDK API.
+ */
 final class RequestContext extends AbstractContext
 {
-    use MakesHttpRequests;
+    use MakesPdkHttpRequests;
+
+    /**
+     * @param  null|string $name
+     * @param  array       $data
+     * @param  string      $dataName
+     */
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+
+        $this->onAfterScenario(function () {
+            $this->response = null;
+        });
+    }
 
     /**
      * @Then I expect the response body to contain:
@@ -23,9 +40,11 @@ final class RequestContext extends AbstractContext
     {
         $this->IExpectTheResponseToBeSuccessful();
 
-        $body = json_decode($this->response->getBody(), true);
+        $body = $this->response->getBody();
 
-        self::assertIsArray($body, 'Response body is not an array');
+        self::assertNotNull($body, 'Response body is null');
+
+        $body = json_decode($body, true);
 
         foreach ($this->parseTable($node) as $key => $value) {
             $exists = Arr::has($body, $key);
@@ -69,34 +88,44 @@ final class RequestContext extends AbstractContext
     }
 
     /**
+     * @When I do a :method request to action :action with content:
+     */
+    public function iDoARequestToActionWithContent(string $method, string $action, ?TableNode $body = null): void
+    {
+        $this->iDoARequestToActionWithParametersAndContent($method, $action, '', $body);
+    }
+
+    /**
      * @When I do a :method request to action :action with parameters :parameters
      */
     public function iDoARequestToActionWithParameters(string $method, string $action, string $parameters): void
     {
-        $this->iDoARequestToActionWithParametersAndBody($method, $action, $parameters);
+        $this->iDoARequestToActionWithParametersAndContent($method, $action, $parameters);
     }
 
     /**
      * @When I do a :method request to action :action with parameters :parameters and content:
      */
-    public function iDoARequestToActionWithParametersAndBody(
+    public function iDoARequestToActionWithParametersAndContent(
         string     $method,
         string     $action,
-        string     $parameters,
+        string     $parameters = '',
         ?TableNode $body = null
     ): void {
-        $this->doRequest(
+        $this->doPdkRequest(
             $method,
-            'PDK',
-            $this->parseParameters($parameters, ['action' => $action]),
+            $this->createParameters($parameters, ['action' => $action]),
             ['Content-Type' => 'application/json'],
-            json_encode($this->parseTable($body))
+            $body ? json_encode(Arr::undot($this->parseTable($body))) : null
         );
     }
 
     /**
+     * Debug step used to show the response in dot notation, for easy copy-pasting into a table in the feature file.
+     *
      * @Then         show the response in dot notation
      * @return void
+     * @noinspection ForgottenDebugOutputInspection
      */
     public function showResponseInDotNotation(): void
     {
@@ -106,7 +135,13 @@ final class RequestContext extends AbstractContext
         $maxValueLength = max(array_map('strlen', array_map('strval', array_values($array))));
 
         $log = static function (string $key, $value) use ($maxKeyLength, $maxValueLength) {
-            echo sprintf("| %s | %s |\n", str_pad($key, $maxKeyLength), str_pad((string) $value, $maxValueLength));
+            $message = sprintf(
+                '| %s | %s |',
+                str_pad($key, $maxKeyLength),
+                str_pad((string) $value, $maxValueLength)
+            );
+
+            error_log($message);
         };
 
         $log('key', 'value');
@@ -114,5 +149,7 @@ final class RequestContext extends AbstractContext
         foreach ($array as $key => $value) {
             $log($key, $value);
         }
+
+        $this->markDebugMethod(__METHOD__);
     }
 }

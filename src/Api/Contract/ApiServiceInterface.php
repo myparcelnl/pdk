@@ -14,7 +14,7 @@ interface ApiServiceInterface
 {
     /**
      * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
-     * @param  string                                       $responseClass
+     * @param  class-string<ApiResponseInterface>           $responseClass
      *
      * @return \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface
      */

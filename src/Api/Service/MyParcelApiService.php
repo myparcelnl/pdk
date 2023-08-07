@@ -18,12 +18,20 @@ class MyParcelApiService extends AbstractApiService
      */
     public function getHeaders(): array
     {
-        $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
-
         return [
-            'Authorization' => $apiKey ? sprintf('appelboom %s', base64_encode($apiKey)) : null,
+            'Authorization' => $this->getAuthorizationHeader(),
             'User-Agent'    => $this->getUserAgentHeader(),
         ];
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getAuthorizationHeader(): ?string
+    {
+        $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
+
+        return $apiKey ? sprintf('appelboom %s', base64_encode($apiKey)) : null;
     }
 
     /**

@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Integration\Context;
 
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
 
+/**
+ * This context is for tests that use the settings repository.
+ */
 final class SettingsContext extends AbstractContext
 {
     /**
@@ -29,6 +33,13 @@ final class SettingsContext extends AbstractContext
         $this->settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
 
         $this->onAfterScenario(function () {
+            /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $accountRepository */
+            $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
+
+            // Delete any account that was created during the test.
+            $accountRepository->store(null);
+
+            // Wipe the settings repository.
             $this->settingsRepository->reset();
         });
     }

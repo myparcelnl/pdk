@@ -21,6 +21,11 @@ class ApiException extends Exception
     private $requestId;
 
     /**
+     * @var \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
+     */
+    private $response;
+
+    /**
      * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
      * @param  int                                                  $code
      * @param  \Throwable|null                                      $previous
@@ -29,6 +34,7 @@ class ApiException extends Exception
     {
         $body = json_decode($response->getBody(), true);
 
+        $this->response  = $response;
         $this->errors    = $body['errors'] ?? [];
         $this->requestId = $body['request_id'] ?? null;
 
@@ -57,5 +63,13 @@ class ApiException extends Exception
     public function getRequestId(): ?string
     {
         return $this->requestId;
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
+     */
+    public function getResponse(): ClientResponseInterface
+    {
+        return $this->response;
     }
 }

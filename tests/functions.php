@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
@@ -15,7 +16,7 @@ function mockPlatform(string $platform): callable
 
     $mockPdk->set('platform', $platform);
 
-    return function () use ($mockPdk, $oldPlatform) {
+    return static function () use ($mockPdk, $oldPlatform) {
         $mockPdk->set('platform', $oldPlatform);
     };
 }

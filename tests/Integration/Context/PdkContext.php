@@ -10,16 +10,16 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
-use MyParcelNL\Pdk\Tests\Integration\Bootstrap\BehatApiService;
-use MyParcelNL\Pdk\Tests\Integration\Bootstrap\BehatClientAdapter;
-use MyParcelNL\Pdk\Tests\Integration\Bootstrap\BehatConfig;
+use MyParcelNL\Pdk\Tests\Integration\Api\Adapter\BehatMyParcelClientAdapter;
+use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatMyParcelApiService;
+use MyParcelNL\Pdk\Tests\Integration\Base\BehatConfig;
 use function DI\autowire;
+use function DI\value;
 
-/**
- * Defines application features from the specific context.
- */
-final class FeatureContext extends AbstractContext
+final class PdkContext extends AbstractContext
 {
+    private const EXAMPLES_DIR = __DIR__ . '/../Examples';
+
     /**
      * @param  null|string $name
      * @param  array       $data
@@ -34,8 +34,15 @@ final class FeatureContext extends AbstractContext
         putenv('PDK_DISABLE_CACHE=true');
 
         MockPdkFactory::create([
-            ApiServiceInterface::class           => autowire(BehatApiService::class),
-            ClientAdapterInterface::class        => autowire(BehatClientAdapter::class),
+            'configDirs' => value([
+                __DIR__ . '/../../../config',
+                self::EXAMPLES_DIR,
+            ]),
+
+            'behatExamplesDir' => value(self::EXAMPLES_DIR),
+
+            ApiServiceInterface::class           => autowire(BehatMyParcelApiService::class),
+            ClientAdapterInterface::class        => autowire(BehatMyParcelClientAdapter::class),
             ConfigInterface::class               => autowire(BehatConfig::class),
             PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)->constructor(null),
         ]);

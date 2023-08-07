@@ -6,54 +6,65 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
 use Behat\Gherkin\Node\TableNode;
-use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
+use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use Throwable;
+use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatPdkApiService;
+use MyParcelNL\Pdk\Tests\Integration\Exception\NoExampleException;
 
-trait MakesHttpRequests
+trait MakesPdkHttpRequests
 {
     /**
-     * @var \MyParcelNL\Pdk\Api\Response\ApiResponse
+     * @var \MyParcelNL\Pdk\Api\Response\ApiResponse|null
      */
     protected $response;
 
     /**
-     * @param  string $method
-     * @param  string $path
-     * @param  array  $parameters
-     * @param  array  $headers
-     * @param  string $body
+     * @param  string $parameters
+     * @param  array  $initial
+     *
+     * @return string[]
+     */
+    protected function createParameters(string $parameters, array $initial = []): array
+    {
+        parse_str($parameters, $parsedParameters);
+
+        return array_merge($initial, $parsedParameters);
+    }
+
+    /**
+     * @param  string      $method
+     * @param  array       $parameters
+     * @param  array       $headers
+     * @param  null|string $body
      *
      * @return void
-     * @noinspection PhpUnhandledExceptionInspection
+     * @noinspection PhpRedundantCatchClauseInspection
      */
-    protected function doRequest(
-        string $method = 'GET',
-        string $path = '/',
-        array  $parameters = [],
-        array  $headers = [],
-        string $body = ''
+    protected function doPdkRequest(
+        string  $method,
+        array   $parameters,
+        array   $headers,
+        ?string $body
     ): void {
-        expect(function () use ($headers, $body, $parameters, $path, $method) {
-            /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockApiService $api */
-            $api = Pdk::get(ApiServiceInterface::class);
+        /** @var \MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatPdkApiService $api */
+        $api = Pdk::get(BehatPdkApiService::class);
 
-            $request = new Request([
-                'body'       => $body,
-                'headers'    => $headers,
-                'method'     => $method,
-                'parameters' => $parameters,
-                'path'       => $path,
-            ]);
+        try {
+            $request = new Request(compact('method', 'parameters', 'headers', 'body'));
 
             /** @var \MyParcelNL\Pdk\Api\Response\ApiResponse $response */
-            $response = $api->doRequest($request);
+            $response = $api->doRequest($request, ApiResponseWithBody::class);
+        } catch (NoExampleException $e) {
+            self::markTestIncomplete($e->getMessage());
+        } catch (ApiException $e) {
+            $response = new ApiResponseWithBody($e->getResponse());
+        }
 
-            $this->setResponse($response);
-        })->not->toThrow(Throwable::class);
+        $this->setResponse($response);
     }
 
     /**
@@ -72,27 +83,6 @@ trait MakesHttpRequests
         self::assertNotEmpty($array, 'Parsed response body is empty');
 
         return $array;
-    }
-
-    /**
-     * @param  string $parameters
-     * @param  array  $initial
-     *
-     * @return string[]
-     */
-    protected function parseParameters(string $parameters, array $initial = []): array
-    {
-        return array_reduce(
-            explode('&', $parameters),
-            static function (array $carry, string $item): array {
-                [$key, $value] = explode('=', $item);
-
-                $carry[$key] = $value;
-
-                return $carry;
-            },
-            $initial
-        );
     }
 
     /**
