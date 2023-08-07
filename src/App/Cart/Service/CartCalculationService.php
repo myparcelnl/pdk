@@ -23,7 +23,7 @@ class CartCalculationService implements CartCalculationServiceInterface
         return PackageTypeCollection::fromAll()
             ->sortBySize(true)
             ->filter(function (PackageType $packageType) use ($cart) {
-                $lineHasPackageType = $cart->lines->containsStrict('product.settings.packageType', $packageType->name);
+                $lineHasPackageType = $cart->lines->containsStrict('settings.packageType', $packageType->name);
 
                 if ($lineHasPackageType && DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageType->name) {
                     return $this->calculateMailboxPercentage($cart) <= 100.0;

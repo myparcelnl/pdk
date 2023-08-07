@@ -6,13 +6,15 @@ namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\Base\Concern\HasPrices;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
 /**
- * @property int                                             $quantity
- * @property int                                             $price
- * @property int                                             $vat
- * @property int                                             $priceAfterVat
- * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
+ * @property int                                                 $quantity
+ * @property int                                                 $price
+ * @property int                                                 $vat
+ * @property int                                                 $priceAfterVat
+ * @property null|\MyParcelNL\Pdk\Settings\Model\ProductSettings $settings
+ * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct     $product
  */
 class PdkOrderLine extends Model
 {
@@ -23,6 +25,7 @@ class PdkOrderLine extends Model
         'price'         => 0,
         'vat'           => 0,
         'priceAfterVat' => 0,
+        'settings'      => null,
         'product'       => null,
     ];
 
@@ -31,6 +34,7 @@ class PdkOrderLine extends Model
         'price'         => 'int',
         'vat'           => 'int',
         'priceAfterVat' => 'int',
+        'settings'      => ProductSettings::class,
         'product'       => PdkProduct::class,
     ];
 
@@ -43,5 +47,6 @@ class PdkOrderLine extends Model
     {
         parent::__construct($data);
         $this->calculateVatTotals();
+        $this->settings = $this->product->getMergedSettings();
     }
 }

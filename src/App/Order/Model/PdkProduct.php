@@ -62,28 +62,23 @@ class PdkProduct extends Model
     ];
 
     /**
-     * @param  null|array $data
-     */
-    public function __construct(?array $data = null)
-    {
-        parent::__construct($data);
-        //$this->mergeProductSettings();
-    }
-
-    /**
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function mergeProductSettings()
+    public function getMergedSettings(): ProductSettings
     {
         if (! $this->parent instanceof self) {
-            return;
+            return $this->settings;
         }
+
+        $settings = $this->parent->getMergedSettings();
 
         foreach ($this->settings->getAttributes() as $key => $value) {
             if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT === $value
                 || '' === $value) {
-                $this->settings->setAttribute($key, $this->parent->settings->getAttribute($key));
+                $settings->setAttribute($key, $this->parent->settings->getAttribute($key));
             }
         }
+
+        return $settings;
     }
 }
