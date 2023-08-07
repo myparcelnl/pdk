@@ -19,7 +19,9 @@ class PdkOrderLineCollection extends Collection
      */
     public function getTotalWeight(): int
     {
-        return $this->sum('quantity * product.weight');
+        return $this->reduce(static function ($carry, $line) {
+            return $carry + $line->quantity * $line->product->weight;
+        }, 0);
     }
 
     /**
