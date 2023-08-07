@@ -89,17 +89,40 @@ it('calculates shipment options for child products', function ($key, $output, $o
             ],
         ],
     ]);
-    //    var_dump($key, $options[1]);
-    //    var_dump($order->lines);
-    //    die();
+
     $result = $order->lines[0]->settings->getAttribute($key);
 
     expect($result)->toBe($output);
 })->with([
-    'bloep' => [
+    '0, 1 -> 1'      => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 1,
+        'options' => [0, 1],
+    ],
+    '0, 0, 1 -> 1'   => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 1,
         'options' => [0, 0, 1],
+    ],
+    '0, 0 -> 0'      => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 0,
+        'options' => [0, 0],
+    ],
+    '-1, -1, 0 -> 0' => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 0,
+        'options' => [-1, -1, 0],
+    ],
+    '-1, 1 -> 1'     => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 1,
+        'options' => [-1, 1],
+    ],
+    '-1, -1 -> -1'   => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => -1,
+        'options' => [-1, -1],
     ],
 ]);
 
