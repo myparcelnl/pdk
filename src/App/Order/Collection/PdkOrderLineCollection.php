@@ -15,6 +15,14 @@ class PdkOrderLineCollection extends Collection
     protected $cast = PdkOrderLine::class;
 
     /**
+     * @return int
+     */
+    public function getTotalWeight(): int
+    {
+        return $this->sum('quantity * product.weight');
+    }
+
+    /**
      * @return bool
      */
     public function isDeliverable(): bool

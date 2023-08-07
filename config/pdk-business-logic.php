@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\value;
 
 /**
@@ -13,15 +14,18 @@ return [
      */
 
     // Shipments
-    'customsCodeMaxLength'  => value(10),
-    'dropOffDelayMaximum'   => value(14),
-    'dropOffDelayMinimum'   => value(0),
-    'numberSuffixMaxLength' => value(6),
-    'mailboxWeightMaximum'  => value(2000),
+    'customsCodeMaxLength'    => value(10),
+    'dropOffDelayMaximum'     => value(14),
+    'dropOffDelayMinimum'     => value(0),
+    'numberSuffixMaxLength'   => value(6),
+    'packageTypeWeightLimits' => value([
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 2000,
+        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 2000,
+    ]),
 
     // Delivery options
-    'deliveryDaysWindowMin' => value(0),
-    'deliveryDaysWindowMax' => value(14),
+    'deliveryDaysWindowMin'   => value(0),
+    'deliveryDaysWindowMax'   => value(14),
 
     /**
      * PDK
