@@ -14,15 +14,11 @@ use MyParcelNL\Pdk\Frontend\View\ProductSettingsView;
 class ProductSettingsViewContext extends Model
 {
     public    $attributes = [
-        //        'product' => null,
         'view' => null,
-        //        'values'  => [],
     ];
 
     protected $casts      = [
-        //        'product' => PdkProduct::class,
         'view' => ProductSettingsView::class,
-        //        'values'  => 'array',
     ];
 
     /**
@@ -34,30 +30,4 @@ class ProductSettingsViewContext extends Model
 
         $this->attributes['view'] = Pdk::get(ProductSettingsView::class);
     }
-
-    //    /**
-    //     * @return array
-    //     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-    //     * @noinspection PhpUnused
-    //     */
-    //    public function getValuesAttribute(): array
-    //    {
-    //        return $this->product->settings->toArrayWithoutNull();
-    //    }
-    //
-    //    /**
-    //     * @param  mixed $product
-    //     *
-    //     * @noinspection PhpUnused
-    //     */
-    //    public function setProductAttribute($product): self
-    //    {
-    //        if (! $product instanceof PdkProduct) {
-    //            $product = new PdkProduct($product);
-    //        }
-    //
-    //        $this->attributes['product'] = $product;
-    //
-    //        return $this;
-    //    }
 }

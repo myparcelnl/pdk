@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -70,6 +71,37 @@ function setupPdk(array $settings = []): PdkOrder
         ], $settings['order'] ?? [])
     );
 }
+
+it('calculates shipment options for child products', function ($key, $output, $options) {
+    $order = setupPdk([
+        'products' => [
+            [
+                'externalIdentifier' => 'PDK-I',
+                'settings'           => [$key => $options[0] ?? -1],
+                'parent'             => [
+                    'externalIdentifier' => 'PDK-II',
+                    'settings'           => [$key => $options[1] ?? -1],
+                    'parent'             => [
+                        'externalIdentifier' => 'PDK-III',
+                        'settings'           => [$key => $options[2] ?? -1],
+                    ],
+                ],
+            ],
+        ],
+    ]);
+    //    var_dump($key, $options[1]);
+    //    var_dump($order->lines);
+    //    die();
+    $result = $order->lines[0]->settings->getAttribute($key);
+
+    expect($result)->toBe($output);
+})->with([
+    'bloep' => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 1,
+        'options' => [0, 0, 1],
+    ],
+]);
 
 it('calculates shipment options from defaults and product settings', function (
     array $option,
