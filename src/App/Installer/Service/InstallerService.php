@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings as SettingsFacade;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -53,10 +54,12 @@ class InstallerService implements InstallerServiceInterface
 
         Pdk::clearCache();
 
-        if (! $installedVersion) {
-            $this->executeInstallation(...$args);
-        } else {
+        if ($installedVersion) {
+            Logger::debug("Migrating from $installedVersion to $currentVersion");
             $this->migrateUp($currentVersion);
+        } else {
+            Logger::debug("Installing $currentVersion");
+            $this->executeInstallation(...$args);
         }
 
         $this->updateInstalledVersion($currentVersion);
@@ -74,6 +77,7 @@ class InstallerService implements InstallerServiceInterface
         $installedVersion = $this->getInstalledVersion();
 
         if ($installedVersion) {
+            Logger::debug("Uninstalling $installedVersion");
             $this->executeUninstallation(...$args);
             $this->migrateDown();
             $this->updateInstalledVersion(null);
