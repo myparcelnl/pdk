@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 
 class AccountSettingsService
 {
@@ -55,7 +56,7 @@ class AccountSettingsService
             return new CarrierCollection();
         }
 
-        $allowedCarriers = Pdk::get('allowedCarriers');
+        $allowedCarriers = Platform::get('allowedCarriers');
 
         return $shop->carriers
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {

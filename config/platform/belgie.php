@@ -17,7 +17,7 @@ return [
     /**
      * Carriers that can be used and shown in this platform. Retrieve via Pdk facade.
      *
-     * @example Pdk::get('allowedCarriers')
+     * @example Platform::get('allowedCarriers')
      * @see     /config/pdk-default.php
      */
     'allowedCarriers'  => [
