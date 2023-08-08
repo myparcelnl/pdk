@@ -42,7 +42,7 @@ class ProductSettingsView extends AbstractSettingsView
                 ['options' => $this->createPackageTypeOptions()]
             ),
 
-            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER, ['min' => 0]),
+            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER, ['min' => -1]),
 
             /**
              * Delivery options.

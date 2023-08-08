@@ -152,7 +152,8 @@ abstract class AbstractSettingsView implements Arrayable
                 array_map(static function ($packageType) {
                     return sprintf('package_type_%s', $packageType);
                 }, $packageTypes)
-            )
+            ),
+            true
         );
     }
 
