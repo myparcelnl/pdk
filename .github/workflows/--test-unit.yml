@@ -14,7 +14,7 @@ jobs:
         id: coverage-cache
         with:
           path: ./clover.xml
-          key: coverage-clover-${{ hashFiles('**/composer.lock', './src/**', './tests/**') }}
+          key: coverage-clover-${{ hashFiles('**/composer.lock', './src/**', './tests/**', './.github/workflows/--test-unit.yml') }}
 
       - uses: ./.github/actions/setup
         if: steps.coverage-cache.outputs.cache-hit != 'true'
@@ -26,8 +26,8 @@ jobs:
         run: |
           docker compose run php \
             vendor/bin/pest \
-              --coverage-clover clover.xml \
-              --colors always \
+              --coverage-clover=clover.xml \
+              --colors=always \
               --no-interaction
 
           # Strip the /app/ prefix from the coverage paths before uploading.
