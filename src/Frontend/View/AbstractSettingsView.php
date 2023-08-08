@@ -17,12 +17,15 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 abstract class AbstractSettingsView implements Arrayable
 {
-    public const  OPTIONS_VALUE_NONE       = -1;
-    private const CACHE_KEY_CHILDREN       = 'children';
-    private const CACHE_KEY_CHILDREN_ARRAY = 'children_array';
-    private const CACHE_KEY_ELEMENTS       = 'elements';
-    private const CACHE_KEY_ELEMENTS_ARRAY = 'elements_array';
-    private const KEY_PREFIX               = 'settings';
+    public const  OPTIONS_VALUE_DEFAULT         = -1;
+    public const  SELECT_INCLUDE_OPTION_DEFAULT = 4;
+    public const  SELECT_INCLUDE_OPTION_NONE    = 2;
+    public const  SELECT_USE_PLAIN_LABEL        = 1;
+    private const CACHE_KEY_CHILDREN            = 'children';
+    private const CACHE_KEY_CHILDREN_ARRAY      = 'children_array';
+    private const CACHE_KEY_ELEMENTS            = 'elements';
+    private const CACHE_KEY_ELEMENTS_ARRAY      = 'elements_array';
+    private const KEY_PREFIX                    = 'settings';
 
     protected $cache = [];
 
@@ -97,15 +100,27 @@ abstract class AbstractSettingsView implements Arrayable
 
     /**
      * @param  array $options
+     * @param  int   $displayOptions
      *
      * @return array
      */
-    protected function addNoneOption(array $options): array
+    protected function addDefaultOption(array $options, int $displayOptions): array
     {
-        array_unshift($options, [
-            'value' => self::OPTIONS_VALUE_NONE,
-            'label' => sprintf('%s_none', self::KEY_PREFIX),
-        ]);
+        $labelKey = $displayOptions & self::SELECT_USE_PLAIN_LABEL ? 'plainLabel' : 'label';
+
+        if ($displayOptions & self::SELECT_INCLUDE_OPTION_DEFAULT) {
+            array_unshift($options, [
+                'value'   => self::OPTIONS_VALUE_DEFAULT,
+                $labelKey => sprintf('%s_default', self::KEY_PREFIX),
+            ]);
+        }
+        
+        if ($displayOptions & self::SELECT_INCLUDE_OPTION_NONE) {
+            array_unshift($options, [
+                'value'   => self::OPTIONS_VALUE_DEFAULT,
+                $labelKey => sprintf('%s_none', self::KEY_PREFIX),
+            ]);
+        }
 
         return $options;
     }
@@ -153,7 +168,7 @@ abstract class AbstractSettingsView implements Arrayable
                     return sprintf('package_type_%s', $packageType);
                 }, $packageTypes)
             ),
-            true
+            self::SELECT_INCLUDE_OPTION_DEFAULT
         );
     }
 
@@ -214,17 +229,16 @@ abstract class AbstractSettingsView implements Arrayable
 
     /**
      * @param  array $array
-     * @param  bool  $includeNone
-     * @param  bool  $plainLabels
+     * @param  int   $displayOptions
      *
      * @return array
      */
-    protected function toSelectOptions(array $array, bool $includeNone = false, bool $plainLabels = false): array
+    protected function toSelectOptions(array $array, int $displayOptions = 0): array
     {
         $associativeArray = (Arr::isAssoc($array) ? $array : array_combine($array, $array)) ?? [];
 
-        $options = array_map(static function ($value, $key) use ($plainLabels) {
-            $labelKey = $plainLabels ? 'plainLabel' : 'label';
+        $options = array_map(static function ($value, $key) use ($displayOptions) {
+            $labelKey = $displayOptions & self::SELECT_USE_PLAIN_LABEL ? 'plainLabel' : 'label';
 
             return [
                 'value'   => $key,
@@ -232,9 +246,7 @@ abstract class AbstractSettingsView implements Arrayable
             ];
         }, $associativeArray, array_keys($associativeArray));
 
-        if ($includeNone) {
-            $options = $this->addNoneOption($options);
-        }
+        $options = $this->addDefaultOption($options, $displayOptions);
 
         return $options;
     }

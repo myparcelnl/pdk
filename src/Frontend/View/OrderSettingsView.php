@@ -34,8 +34,14 @@ class OrderSettingsView extends AbstractSettingsView
      */
     protected function createElements(): FormElementCollection
     {
-        $orderStatuses         = $this->toSelectOptions($this->orderStatusService->all(), false, true);
-        $orderStatusesWithNone = $this->addNoneOption($orderStatuses);
+        $orderStatuses = $this->toSelectOptions(
+            $this->orderStatusService->all(),
+            AbstractSettingsView::SELECT_USE_PLAIN_LABEL
+        );
+        $orderStatusesWithNone = $this->addDefaultOption(
+            $orderStatuses,
+            AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
+        );
 
         return new FormElementCollection([
             new InteractiveElement(OrderSettings::SAVE_CUSTOMER_ADDRESS, Components::INPUT_TOGGLE),

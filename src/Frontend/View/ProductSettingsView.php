@@ -71,7 +71,12 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(
                 ProductSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
-                ['options' => $this->toSelectOptions($this->countryService->getAllTranslatable(), true)]
+                [
+                    'options' => $this->toSelectOptions(
+                        $this->countryService->getAllTranslatable(),
+                        AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
+                    ),
+                ]
             ),
             new InteractiveElement(
                 ProductSettings::CUSTOMS_CODE,
