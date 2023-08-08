@@ -24,7 +24,11 @@ jobs:
         shell: bash
         #language=sh
         run: |
-          docker compose run php composer test:unit:coverage
+          docker compose run php \
+            vendor/bin/pest \
+              --coverage-clover clover.xml \
+              --colors always \
+              --no-interaction
 
           # Strip the /app/ prefix from the coverage paths before uploading.
           sed -i 's/\/app\///g' clover.xml
