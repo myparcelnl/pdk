@@ -77,13 +77,13 @@ it('calculates shipment options for child products', function ($key, $output, $o
         'products' => [
             [
                 'externalIdentifier' => 'PDK-I',
-                'settings'           => [$key => $options[0] ?? -1],
+                'settings'           => [$key => $options[0]],
                 'parent'             => [
                     'externalIdentifier' => 'PDK-II',
-                    'settings'           => [$key => $options[1] ?? -1],
+                    'settings'           => [$key => $options[1]],
                     'parent'             => [
                         'externalIdentifier' => 'PDK-III',
-                        'settings'           => [$key => $options[2] ?? -1],
+                        'settings'           => [$key => $options[2]],
                     ],
                 ],
             ],
@@ -94,45 +94,45 @@ it('calculates shipment options for child products', function ($key, $output, $o
 
     expect($result)->toBe($output);
 })->with([
-    '0, 1 -> 1'                        => [
+    '0, 1, -1 -> 1'                    => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 1,
-        'options' => [0, 1],
+        'options' => [0, 1, -1],
     ],
     '0, 0, 1 -> 1'                     => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 1,
         'options' => [0, 0, 1],
     ],
-    '0, 0 -> 0'                        => [
+    '0, 0, -1 -> 0'                    => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 0,
-        'options' => [0, 0],
+        'options' => [0, 0, -1],
     ],
-    '0, -1 -> 0'                       => [
+    '0, -1, -1 -> 0'                   => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 0,
-        'options' => [0, -1],
+        'options' => [0, -1, -1],
     ],
     '-1, -1, 0 -> 0'                   => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 0,
         'options' => [-1, -1, 0],
     ],
-    '-1, 1 -> 1'                       => [
+    '-1, 1, -1 -> 1'                   => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => 1,
-        'options' => [-1, 1],
+        'options' => [-1, 1, -1],
     ],
-    '-1, -1 -> -1'                     => [
+    '-1, -1, -1 -> -1'                 => [
         'key'     => ProductSettings::EXPORT_SIGNATURE,
         'output'  => -1,
-        'options' => [-1, -1],
+        'options' => [-1, -1, -1],
     ],
-    '``, `broccoli` -> `broccoli`'     => [
+    '``, `broccoli`, `` -> `broccoli`' => [
         'key'     => ProductSettings::CUSTOMS_CODE,
         'output'  => 'broccoli',
-        'options' => ['', 'broccoli'],
+        'options' => ['', 'broccoli', ''],
     ],
     '`broccoli`, ``, `` -> `broccoli`' => [
         'key'     => ProductSettings::CUSTOMS_CODE,
