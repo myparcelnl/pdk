@@ -73,7 +73,7 @@ class PdkProduct extends Model
         $settings = $this->parent->getMergedSettings();
 
         foreach ($settings->getAttributes() as $key => $value) {
-            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT === $value
+            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT === (int) $value
                 || '' === $value) {
                 $settings->setAttribute($key, $this->settings->getAttribute($key));
             }
