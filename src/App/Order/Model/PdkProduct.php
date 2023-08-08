@@ -21,7 +21,6 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
  * @property int                                             $height
  * @property int                                             $width
  * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $settings
- * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $mergedSettings
  * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $parent
  */
 class PdkProduct extends Model
@@ -41,7 +40,6 @@ class PdkProduct extends Model
         'width'              => 0,
         'height'             => 0,
         'settings'           => ProductSettings::class,
-        'mergedSettings'     => ProductSettings::class,
         'parent'             => null,
     ];
 
@@ -60,29 +58,19 @@ class PdkProduct extends Model
         'width'              => 'int',
         'height'             => 'int',
         'settings'           => ProductSettings::class,
-        'mergedSettings'     => ProductSettings::class,
         'parent'             => self::class,
     ];
 
     /**
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function __construct(?array $data = null)
-    {
-        parent::__construct($data);
-        $this->mergedSettings = $this->getMergedSettings();
-    }
-
-    /**
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    public function getMergedSettings(): ProductSettings
+    public function getMergedSettingsAttribute(): ProductSettings
     {
         if (! $this->parent instanceof self) {
             return $this->settings;
         }
 
-        $settings = $this->parent->getMergedSettings();
+        $settings = $this->parent->getMergedSettingsAttribute();
 
         foreach ($settings->getAttributes() as $key => $value) {
             if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT === (int) $value
