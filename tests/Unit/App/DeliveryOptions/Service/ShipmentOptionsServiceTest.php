@@ -90,7 +90,7 @@ it('calculates shipment options for child products', function ($key, $output, $o
         ],
     ]);
 
-    $result = $order->lines[0]->settings->getAttribute($key);
+    $result = $order->lines[0]->product->mergedSettings->getAttribute($key);
 
     expect($result)->toBe($output);
 })->with([
