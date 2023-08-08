@@ -36,6 +36,10 @@ class ProductSettingsView extends AbstractSettingsView
     protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
+            /**
+             * MyParcel
+             */
+            new SettingsDivider($this->getSettingKey('myparcel_options')),
             new InteractiveElement(
                 ProductSettings::PACKAGE_TYPE,
                 Components::INPUT_SELECT,
