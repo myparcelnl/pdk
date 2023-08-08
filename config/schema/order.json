@@ -111,6 +111,9 @@
             "ageCheck": {
               "type": ["boolean", "null"]
             },
+            "hideSender": {
+              "type": ["boolean", "null"]
+            },
             "insurance": {
               "type": ["integer", "null"]
             },

@@ -230,10 +230,11 @@ dataset('pdkOrdersDomestic', [
                     ],
                 ],
                 'deliveryOptions'    => [
-                    'carrier'         => Carrier::CARRIER_POSTNL_NAME,
+                    'carrier'         => Carrier::CARRIER_DHL_FOR_YOU_NAME,
                     'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                     'shipmentOptions' => [
                         ShipmentOptions::AGE_CHECK         => true,
+                        ShipmentOptions::HIDE_SENDER       => true,
                         ShipmentOptions::INSURANCE         => true,
                         ShipmentOptions::LABEL_DESCRIPTION => true,
                         ShipmentOptions::LARGE_FORMAT      => true,

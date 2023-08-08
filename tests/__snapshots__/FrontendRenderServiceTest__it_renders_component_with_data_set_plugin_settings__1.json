@@ -2447,6 +2447,14 @@
                             "description": "settings_carrier_export_return_description"
                         },
                         {
+                            "name": "exportHideSender",
+                            "$component": "ToggleInput",
+                            "$slot": null,
+                            "$wrapper": null,
+                            "label": "settings_carrier_export_hide_sender",
+                            "description": "settings_carrier_export_hide_sender_description"
+                        },
+                        {
                             "name": "exportInsurance",
                             "$component": "ToggleInput",
                             "$slot": null,

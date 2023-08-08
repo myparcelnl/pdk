@@ -40,6 +40,14 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
+     * @return bool
+     */
+    public function canHaveHideSender(): bool
+    {
+        return (bool) $this->getShipmentOption(ShipmentOptions::HIDE_SENDER);
+    }
+
+    /**
      * We can safely ignore the amount here as it's not used in the capabilities.
      *
      * @param  null|int $amount

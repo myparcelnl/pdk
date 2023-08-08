@@ -20,6 +20,7 @@
                     "options": {
                         "age_check": 0,
                         "delivery_type": 2,
+                        "hide_sender": 0,
                         "insurance": {
                             "amount": 0,
                             "currency": "EUR"
@@ -59,6 +60,7 @@
                     "options": {
                         "age_check": 0,
                         "delivery_type": 2,
+                        "hide_sender": 0,
                         "insurance": {
                             "amount": 0,
                             "currency": "EUR"

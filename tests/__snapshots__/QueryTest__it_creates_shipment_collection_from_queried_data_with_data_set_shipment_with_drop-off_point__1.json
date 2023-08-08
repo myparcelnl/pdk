@@ -118,6 +118,7 @@
         "pickupLocation": null,
         "shipmentOptions": {
             "ageCheck": true,
+            "hideSender": null,
             "insurance": 0,
             "labelDescription": "Vliegtuig",
             "largeFormat": true,

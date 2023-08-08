@@ -86,6 +86,7 @@
                 "dropOffDaysDeviations": []
             },
             "exportAgeCheck": false,
+            "exportHideSender": false,
             "exportInsurance": false,
             "exportInsuranceFromAmount": 0,
             "exportInsurancePriceFactor": 1,
@@ -137,6 +138,7 @@
                 "dropOffDaysDeviations": []
             },
             "exportAgeCheck": false,
+            "exportHideSender": false,
             "exportInsurance": false,
             "exportInsuranceFromAmount": 0,
             "exportInsurancePriceFactor": 1,
@@ -188,6 +190,7 @@
                 "dropOffDaysDeviations": []
             },
             "exportAgeCheck": false,
+            "exportHideSender": false,
             "exportInsurance": false,
             "exportInsuranceFromAmount": 0,
             "exportInsurancePriceFactor": 1,

@@ -96,6 +96,7 @@
                 "pickupLocation": null,
                 "shipmentOptions": {
                     "ageCheck": null,
+                    "hideSender": null,
                     "insurance": null,
                     "labelDescription": null,
                     "largeFormat": null,

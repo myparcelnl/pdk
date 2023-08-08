@@ -51,6 +51,7 @@ it('has correct default values', function () {
             'settings.exportOnlyRecipient'    => -1,
             'settings.exportReturn'           => -1,
             'settings.exportSignature'        => -1,
+            'settings.exportHideSender'       => -1,
         ]);
 });
 

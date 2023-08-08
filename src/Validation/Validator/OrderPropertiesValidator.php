@@ -61,6 +61,14 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     }
 
     /**
+     * @return bool
+     */
+    public function canHaveHideSender(): bool
+    {
+        return $this->canHaveOption(sprintf('%s.hideSender', self::SHIPMENT_OPTIONS_KEY));
+    }
+
+    /**
      * @param  null|int $amount
      *
      * @return bool
