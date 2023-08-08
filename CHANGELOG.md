@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.0](https://github.com/myparcelnl/pdk/compare/v2.12.3...v2.13.0) (2023-08-08)
+
+
+### :zap: Performance Improvements
+
+* reduce amount of stored data and calls to toArray ([#135](https://github.com/myparcelnl/pdk/issues/135)) ([25bca7c](https://github.com/myparcelnl/pdk/commit/25bca7c306a599cbb0d0bae27f6608a5e54c0a24))
+
+
+### :bug: Bug Fixes
+
+* **delivery-options:** do not return date if it's in the past ([#138](https://github.com/myparcelnl/pdk/issues/138)) ([759b204](https://github.com/myparcelnl/pdk/commit/759b204899b10d9f6ccfcc1b2bb7a11213a80a54))
+* **deps:** move unnecessary dependencies to require-dev ([178863d](https://github.com/myparcelnl/pdk/commit/178863d615024d08b02ea87194b6ea3e2e1f4d89))
+* **orders:** fix validation of evening delivery ([2accccc](https://github.com/myparcelnl/pdk/commit/2accccc4fe706c2bb5a41be6c099d5908ad25321))
+* **orders:** use endpoints correctly ([#142](https://github.com/myparcelnl/pdk/issues/142)) ([c558c01](https://github.com/myparcelnl/pdk/commit/c558c0155c104ecdd902563f15c0f72daf4d7dba))
+* **settings:** fix saved invalid api key causing errors ([#149](https://github.com/myparcelnl/pdk/issues/149)) ([7ba4a02](https://github.com/myparcelnl/pdk/commit/7ba4a02e29ab164534cb2ce0fb86809d1eec3e6f))
+* **settings:** hide "barcode in note title" when barcode in note is off ([#136](https://github.com/myparcelnl/pdk/issues/136)) ([8ba980e](https://github.com/myparcelnl/pdk/commit/8ba980e19320823a2a0cd6dc2da2af834a753e31))
+* support more date formats ([#139](https://github.com/myparcelnl/pdk/issues/139)) ([2f1ee2f](https://github.com/myparcelnl/pdk/commit/2f1ee2f3fe10bf881860eb45cdb890c44970ecb6))
+
+
+### :sparkles: New Features
+
+* **carriers:** enable bpost and dpd for myparcel be ([#150](https://github.com/myparcelnl/pdk/issues/150)) ([5cb9203](https://github.com/myparcelnl/pdk/commit/5cb9203eca8df35363d71586e44455d30fbe402a))
+* **cron:** allow more flexible use of the cron service ([#145](https://github.com/myparcelnl/pdk/issues/145)) ([3a64d97](https://github.com/myparcelnl/pdk/commit/3a64d97699d1923b730fe38ae038d2e196af348f))
+* **dhl:** support hide_sender option ([#140](https://github.com/myparcelnl/pdk/issues/140)) ([e74fee6](https://github.com/myparcelnl/pdk/commit/e74fee68651fb30810aed253d34c9ea34b9c7b1e))
+* **frontend:** allow rendering components at any moment after initial render ([#144](https://github.com/myparcelnl/pdk/issues/144)) ([02302a8](https://github.com/myparcelnl/pdk/commit/02302a8673ead97390b7cdb0592dbd176c17f72c))
+* **order:** add shorthand method to check if order is deliverable ([#137](https://github.com/myparcelnl/pdk/issues/137)) ([9a3506d](https://github.com/myparcelnl/pdk/commit/9a3506d221e44aaa02af89d8ad67c59b432fdbf0))
+
 ## [2.12.3](https://github.com/myparcelnl/pdk/compare/v2.12.2...v2.12.3) (2023-07-26)
 
 
