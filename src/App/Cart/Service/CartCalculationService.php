@@ -28,7 +28,7 @@ class CartCalculationService implements CartCalculationServiceInterface
                 $packageTypeName    = $packageType->name;
                 $lineHasPackageType = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName);
 
-                if ($this->isWeightUnderPackageTypeLimit($cart, $packageTypeName)) {
+                if (! $this->isWeightUnderPackageTypeLimit($cart, $packageTypeName)) {
                     return false;
                 }
 
