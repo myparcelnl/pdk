@@ -64,7 +64,7 @@ final class SettingsContext extends AbstractContext
     {
         $platform = Platform::getPlatform();
 
-        $apiKey = getenv('API_KEY_' . strtoupper($platform)) ?? 'valid-api-key';
+        $apiKey = getenv('API_KEY_' . strtoupper($platform)) ?: 'valid-api-key';
 
         $this->settingsRepository->storeSettings(new AccountSettings([AccountSettings::API_KEY => $apiKey]));
     }
