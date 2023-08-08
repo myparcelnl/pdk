@@ -24,7 +24,7 @@ runs:
       run: |
         touch .env.local
 
-    - name: 'Install composer dependencies'
+    - name: 'Update composer dependencies'
       shell: bash
       #language=sh
       run: |
@@ -32,4 +32,4 @@ runs:
           --volume $HOME/.composer:/root/.composer \
           --env COMPOSER_CACHE_DIR=/root/.composer \
           php \
-          composer install --no-progress --no-scripts --no-plugins
+          composer update --no-progress --no-scripts --no-plugins
