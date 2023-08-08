@@ -35,12 +35,12 @@ final class MockCronService implements CronServiceInterface
     }
 
     /**
-     * @param  callable $callback
-     * @param           ...$args
+     * @param  callable|string|callable-string $callback
+     * @param  mixed                           ...$args
      *
      * @return void
      */
-    public function dispatch(callable $callback, ...$args): void
+    public function dispatch($callback, ...$args): void
     {
         $this->schedule($callback, time(), ...$args);
     }
@@ -84,13 +84,13 @@ final class MockCronService implements CronServiceInterface
     }
 
     /**
-     * @param  callable $callback
-     * @param  int      $timestamp
-     * @param           ...$args
+     * @param  callable|string|callable-string $callback
+     * @param  int                             $timestamp
+     * @param  mixed                           ...$args
      *
      * @return void
      */
-    public function schedule(callable $callback, int $timestamp, ...$args): void
+    public function schedule($callback, int $timestamp, ...$args): void
     {
         $this->scheduledTasks->put($this->incrementingId, [
             'id'        => $this->incrementingId,
