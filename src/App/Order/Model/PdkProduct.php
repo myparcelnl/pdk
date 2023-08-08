@@ -41,6 +41,7 @@ class PdkProduct extends Model
         'width'              => 0,
         'height'             => 0,
         'settings'           => ProductSettings::class,
+        'mergedSettings'     => null,
         'parent'             => null,
     ];
 
@@ -59,11 +60,14 @@ class PdkProduct extends Model
         'width'              => 'int',
         'height'             => 'int',
         'settings'           => ProductSettings::class,
+        'mergedSettings'     => ProductSettings::class,
         'parent'             => self::class,
     ];
 
     /**
+     * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @noinspection PhpUnused
      */
     public function getMergedSettingsAttribute(): ProductSettings
     {
@@ -74,8 +78,7 @@ class PdkProduct extends Model
         $settings = $this->parent->mergedSettings;
 
         foreach ($settings->getAttributes() as $key => $value) {
-            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== (int) $value
-                && '' !== $value) {
+            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== (int) $value && '' !== $value) {
                 continue;
             }
 
