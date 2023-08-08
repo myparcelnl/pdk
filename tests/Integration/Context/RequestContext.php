@@ -49,7 +49,11 @@ final class RequestContext extends AbstractContext
         foreach ($this->parseTable($node) as $key => $value) {
             $exists = Arr::has($body, $key);
 
-            self::assertTrue($exists, "Key '$key' does not exist in response body");
+            if ('NULL' === $value) {
+                self::assertFalse($exists, "Key '$key' exists in response body");
+            } else {
+                self::assertTrue($exists, "Key '$key' does not exist in response body");
+            }
 
             $this->validateValue($key, $value, $body);
         }

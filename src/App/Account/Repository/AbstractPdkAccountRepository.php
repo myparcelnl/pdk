@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use Throwable;
@@ -21,13 +22,23 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
     private $accountRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface    $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository
+     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
      */
-    public function __construct(StorageInterface $storage, AccountRepository $accountRepository)
-    {
+    private $settingsRepository;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
+     */
+    public function __construct(
+        StorageInterface            $storage,
+        AccountRepository           $accountRepository,
+        SettingsRepositoryInterface $settingsRepository
+    ) {
         parent::__construct($storage);
-        $this->accountRepository = $accountRepository;
+        $this->accountRepository  = $accountRepository;
+        $this->settingsRepository = $settingsRepository;
     }
 
     /**
@@ -63,22 +74,14 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
             try {
                 $account = $this->accountRepository->getAccount();
 
-                $this->markApiKeyAsValid();
+                $this->setApiKeyValidity(true);
 
                 return $account;
             } catch (Throwable $e) {
-                $this->markApiKeyAsInvalid($apiKey);
+                $this->setApiKeyValidity(false);
                 throw $e;
             }
         }, $force);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getInvalidKeyName(): string
-    {
-        return 'invalid_api_key';
     }
 
     /**
@@ -88,24 +91,27 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
      */
     protected function isInvalidApiKey(?string $apiKey): bool
     {
-        return ! $apiKey || $this->retrieve($this->getInvalidKeyName()) === $apiKey;
+        if (! $apiKey) {
+            return true;
+        }
+
+        $accountSettings = $this->settingsRepository->all()->account;
+
+        return $accountSettings->apiKey === $apiKey && ! $accountSettings->apiKeyValid;
     }
 
     /**
-     * @param  string $apiKey
+     * @param  bool $apiKeyIsValid
      *
      * @return void
      */
-    protected function markApiKeyAsInvalid(string $apiKey): void
+    protected function setApiKeyValidity(bool $apiKeyIsValid): void
     {
-        $this->save($this->getInvalidKeyName(), $apiKey);
-    }
+        $accountSettings = $this->settingsRepository->all()->account
+            ->fill([
+                AccountSettings::API_KEY_VALID => $apiKeyIsValid,
+            ]);
 
-    /**
-     * @return void
-     */
-    protected function markApiKeyAsValid(): void
-    {
-        $this->storage->delete($this->getKeyPrefix() . $this->getInvalidKeyName());
+        $this->settingsRepository->storeSettings($accountSettings);
     }
 }

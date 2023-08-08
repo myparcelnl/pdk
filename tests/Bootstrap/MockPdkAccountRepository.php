@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Repository\AbstractPdkAccountRepository;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
 final class MockPdkAccountRepository extends AbstractPdkAccountRepository
@@ -50,26 +51,26 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     ];
 
     /**
-     * @var string
-     */
-    private $invalidApiKey;
-
-    /**
      * @var \MyParcelNL\Pdk\Account\Model\Account|null
      */
     private $storedAccount;
 
     /**
-     * @param  null|array                                           $data
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface    $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository $accountRepository
+     * @param  null|array                                                    $data
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(?array $data = [], StorageInterface $storage, AccountRepository $accountRepository)
-    {
-        parent::__construct($storage, $accountRepository);
-        $this->storedAccount = $data === null ? null : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
+    public function __construct(
+        ?array                      $data = [],
+        StorageInterface            $storage,
+        AccountRepository           $accountRepository,
+        SettingsRepositoryInterface $settingsRepository
+    ) {
+        parent::__construct($storage, $accountRepository, $settingsRepository);
+        $this->storedAccount = null === $data ? null : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
     }
 
     /**
@@ -81,50 +82,23 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     }
 
     /**
-     * @return null|\MyParcelNL\Pdk\Account\Model\Account
-     */
-    public function getFromStorage(): ?Account
-    {
-        return $this->storedAccount;
-    }
-
-    /**
-     * @param  null|string $apiKey
-     *
-     * @return bool
-     */
-    public function isInvalidApiKey(?string $apiKey): bool
-    {
-        return $this->invalidApiKey === $apiKey;
-    }
-
-    /**
-     * @param  string $apiKey
-     *
-     * @return void
-     */
-    public function markApiKeyAsInvalid(string $apiKey): void
-    {
-        $this->invalidApiKey = $apiKey;
-    }
-
-    /**
-     * @return void
-     */
-    public function markApiKeyAsValid(): void
-    {
-        $this->invalidApiKey = null;
-    }
-
-    /**
      * @param  null|\MyParcelNL\Pdk\Account\Model\Account $account
      *
      * @return void
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function store(?Account $account): ?Account
     {
         $this->storedAccount = $account;
 
         return $this->save('account', $account);
+    }
+
+    /**
+     * @return null|\MyParcelNL\Pdk\Account\Model\Account
+     */
+    protected function getFromStorage(): ?Account
+    {
+        return $this->storedAccount;
     }
 }

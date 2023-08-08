@@ -94,7 +94,8 @@ it('gets a settings group through the settings facade', function () {
         ->toBeInstanceOf(AccountSettings::class)
         ->and($account->toArray())
         ->toEqual([
-            'id'     => AccountSettings::ID,
-            'apiKey' => '1234567890',
+            'id'                           => AccountSettings::ID,
+            AccountSettings::API_KEY       => '1234567890',
+            AccountSettings::API_KEY_VALID => true,
         ]);
 });

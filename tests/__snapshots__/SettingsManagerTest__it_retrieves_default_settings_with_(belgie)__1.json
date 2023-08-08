@@ -1,6 +1,7 @@
 {
     "account": {
-        "id": "account"
+        "id": "account",
+        "apiKeyValid": true
     },
     "general": {
         "id": "general",

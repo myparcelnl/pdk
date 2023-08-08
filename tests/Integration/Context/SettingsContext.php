@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Integration\Context;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
@@ -76,5 +77,38 @@ final class SettingsContext extends AbstractContext
     public function anInvalidAPIKeyIsSet(): void
     {
         $this->settingsRepository->storeSettings(new AccountSettings([AccountSettings::API_KEY => 'invalid-api-key']));
+    }
+
+    /**
+     * @Given I expect the API key to be marked as invalid
+     */
+    public function iExpectTheAPIKeyToBeMarkedAsInvalid(): void
+    {
+        $this->assertApiKeyValidity(false);
+    }
+
+    /**
+     * @Given I expect the API key to be marked as valid
+     */
+    public function iExpectTheAPIKeyToBeMarkedAsValid(): void
+    {
+        $this->assertApiKeyValidity(true);
+    }
+
+    /**
+     * @param  bool $valid
+     *
+     * @return void
+     */
+    protected function assertApiKeyValidity(bool $valid): void
+    {
+        $isValid = Settings::get(AccountSettings::API_KEY_VALID, AccountSettings::ID);
+
+        if ($valid) {
+            self::assertTrue($isValid, 'API key is not marked as valid');
+            return;
+        }
+
+        self::assertFalse($isValid, 'API key is not marked as invalid');
     }
 }
