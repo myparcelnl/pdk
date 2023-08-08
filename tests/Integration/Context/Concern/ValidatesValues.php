@@ -82,9 +82,12 @@ trait ValidatesValues
                     self::assertNull($actualValue, "Value for key '$key' is not null");
                     break;
 
+                case 'FILLED':
+                    self::assertNotEmpty($actualValue, "Value for key '$key' is empty");
+                    break;
+
                 case 'LENGTH':
                     $this->validateLength($actualValue, (int) $matchArgs, $key);
-
                     break;
             }
         }
