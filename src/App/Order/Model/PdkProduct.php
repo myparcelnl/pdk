@@ -21,6 +21,7 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
  * @property int                                             $height
  * @property int                                             $width
  * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $settings
+ * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $mergedSettings
  * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $parent
  */
 class PdkProduct extends Model
