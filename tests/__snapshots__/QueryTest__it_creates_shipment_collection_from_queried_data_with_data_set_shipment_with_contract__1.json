@@ -9,11 +9,11 @@
     "externalIdentifier": "3SMYPA060119130",
     "barcode": "3SMYPA123456789",
     "carrier": {
-        "externalIdentifier": "postnl",
-        "id": 1,
-        "name": "postnl",
-        "human": "PostNL",
-        "subscriptionId": null,
+        "externalIdentifier": "dpd:10932623",
+        "id": 4,
+        "name": "dpd",
+        "human": "DPD",
+        "subscriptionId": "10932623",
         "enabled": false,
         "isDefault": true,
         "label": null,
@@ -27,91 +27,19 @@
     "delivered": false,
     "deliveryOptions": {
         "carrier": {
-            "externalIdentifier": "postnl",
-            "id": 1,
-            "name": "postnl",
-            "human": "PostNL",
-            "subscriptionId": null,
+            "externalIdentifier": "dpd:10932623",
+            "id": 4,
+            "name": "dpd",
+            "human": "DPD",
+            "subscriptionId": "10932623",
             "enabled": false,
             "isDefault": true,
             "label": null,
             "optional": false,
             "primary": false,
             "type": "main",
-            "capabilities": {
-                "deliveryTypes": [
-                    "morning",
-                    "standard",
-                    "evening",
-                    "pickup"
-                ],
-                "features": {
-                    "labelDescriptionLength": 45
-                },
-                "packageTypes": [
-                    "package",
-                    "mailbox",
-                    "letter",
-                    "digital_stamp"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": true,
-                    "largeFormat": true,
-                    "onlyRecipient": true,
-                    "return": true,
-                    "sameDayDelivery": true,
-                    "signature": true,
-                    "insurance": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                }
-            },
-            "returnCapabilities": {
-                "deliveryTypes": [
-                    "standard"
-                ],
-                "features": {
-                    "labelDescriptionLength": 45
-                },
-                "packageTypes": [
-                    "package"
-                ],
-                "shipmentOptions": {
-                    "signature": true,
-                    "insurance": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ],
-                    "return": true,
-                    "ageCheck": true,
-                    "onlyRecipient": true,
-                    "sameDayDelivery": true,
-                    "largeFormat": true
-                }
-            }
+            "capabilities": null,
+            "returnCapabilities": null
         },
         "date": null,
         "labelAmount": 1,
