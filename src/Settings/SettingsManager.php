@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Settings;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -93,7 +94,7 @@ class SettingsManager implements SettingsManagerInterface
         $carrierSettings = $defaults->get(CarrierSettings::ID);
 
         // add any keys that are not present yet from allowed carriers to $carrierSettings
-        (new Collection(Pdk::get('allowedCarriers') ?? []))
+        (new Collection(Platform::get('allowedCarriers') ?? []))
             ->diff($carrierSettings->keys())
             ->each(function ($carrier) use ($carrierSettings) {
                 $carrierSettings->put($carrier, new Collection());
