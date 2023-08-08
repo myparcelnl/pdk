@@ -234,7 +234,6 @@ dataset('pdkOrdersDomestic', [
                     'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                     'shipmentOptions' => [
                         ShipmentOptions::AGE_CHECK         => true,
-                        ShipmentOptions::EXTRA_ASSURANCE   => true,
                         ShipmentOptions::HIDE_SENDER       => true,
                         ShipmentOptions::INSURANCE         => true,
                         ShipmentOptions::LABEL_DESCRIPTION => true,

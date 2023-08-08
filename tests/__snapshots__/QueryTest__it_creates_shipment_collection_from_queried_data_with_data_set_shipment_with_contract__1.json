@@ -118,7 +118,6 @@
         "pickupLocation": null,
         "shipmentOptions": {
             "ageCheck": null,
-            "extraAssurance": null,
             "hideSender": null,
             "insurance": 0,
             "labelDescription": null,

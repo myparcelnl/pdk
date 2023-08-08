@@ -111,9 +111,6 @@
             "ageCheck": {
               "type": ["boolean", "null"]
             },
-            "extraAssurance": {
-              "type": ["boolean", "null"]
-            },
             "hideSender": {
               "type": ["boolean", "null"]
             },

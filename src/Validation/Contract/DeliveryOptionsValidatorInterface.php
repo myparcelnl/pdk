@@ -14,8 +14,6 @@ interface DeliveryOptionsValidatorInterface
 
     public function canHaveEveningDelivery(): bool;
 
-    public function canHaveExtraAssurance(): bool;
-
     public function canHaveHideSender(): bool;
 
     public function canHaveInsurance(?int $amount): bool;

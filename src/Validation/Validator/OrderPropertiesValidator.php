@@ -63,14 +63,6 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     /**
      * @return bool
      */
-    public function canHaveExtraAssurance(): bool
-    {
-        return $this->canHaveOption(sprintf('%s.extraAssurance', self::SHIPMENT_OPTIONS_KEY));
-    }
-
-    /**
-     * @return bool
-     */
     public function canHaveHideSender(): bool
     {
         return $this->canHaveOption(sprintf('%s.hideSender', self::SHIPMENT_OPTIONS_KEY));

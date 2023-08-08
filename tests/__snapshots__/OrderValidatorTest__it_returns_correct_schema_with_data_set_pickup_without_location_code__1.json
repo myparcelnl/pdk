@@ -161,12 +161,6 @@
                                 "null"
                             ]
                         },
-                        "extraAssurance": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ]
-                        },
                         "hideSender": {
                             "type": [
                                 "boolean",

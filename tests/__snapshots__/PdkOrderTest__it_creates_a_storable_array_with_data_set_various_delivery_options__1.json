@@ -36,7 +36,6 @@
             "labelAmount": 1,
             "shipmentOptions": {
                 "ageCheck": true,
-                "extraAssurance": true,
                 "hideSender": true,
                 "insurance": 1,
                 "labelDescription": "1",

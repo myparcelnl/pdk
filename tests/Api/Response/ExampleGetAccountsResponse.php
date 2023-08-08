@@ -209,7 +209,6 @@ class ExampleGetAccountsResponse extends ExampleJsonResponse
                             'collect'                  => 0,
                             'same_day_delivery'        => 0,
                             'printerless_return'       => 0,
-                            'extra_assurance'          => 0,
                             'hide_sender'              => 0,
                         ],
                         'created'                => '2018-10-01 16:10:54',

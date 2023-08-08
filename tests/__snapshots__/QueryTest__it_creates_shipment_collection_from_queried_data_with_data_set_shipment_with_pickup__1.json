@@ -131,7 +131,6 @@
         },
         "shipmentOptions": {
             "ageCheck": false,
-            "extraAssurance": null,
             "hideSender": null,
             "insurance": 0,
             "labelDescription": "",
