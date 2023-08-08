@@ -10,3 +10,4 @@ Feature: As a user I want to be able to update my account settings
       | errors.0.status | 401            |
       | errors.0.code   | 3000           |
       | errors.0.title  | Access Denied. |
+    And I expect the API key to be marked as invalid
