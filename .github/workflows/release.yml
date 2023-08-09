@@ -86,6 +86,6 @@ jobs:
 
   rebase-prs:
     needs: release
-    if: needs.release.outputs.released == 'true'
+    if: ((always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true') && needs.release.outputs.released == 'true'
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit
