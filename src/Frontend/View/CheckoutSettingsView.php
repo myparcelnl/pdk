@@ -115,8 +115,7 @@ class CheckoutSettingsView extends AbstractSettingsView
                     return $cur;
                 }, []
             ),
-            false,
-            true
+            AbstractSettingsView::SELECT_USE_PLAIN_LABEL
         );
     }
 }

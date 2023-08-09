@@ -233,7 +233,7 @@ class ShipmentOptionsService implements ShipmentOptionsServiceInterface
             $productSettingsKey = $option[self::PRODUCT_SETTING_KEY];
 
             $values = $order->lines
-                ->pluck(sprintf('product.settings.%s', $productSettingsKey))
+                ->pluck(sprintf('product.mergedSettings.%s', $productSettingsKey))
                 ->filter(function ($value) {
                     return is_int($value)
                         && $value >= AbstractSettingsModel::TRISTATE_VALUE_DEFAULT

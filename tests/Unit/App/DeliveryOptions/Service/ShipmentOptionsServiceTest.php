@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -70,6 +71,80 @@ function setupPdk(array $settings = []): PdkOrder
         ], $settings['order'] ?? [])
     );
 }
+
+it('calculates shipment options for child products', function ($key, $output, $options) {
+    $order = setupPdk([
+        'products' => [
+            [
+                'externalIdentifier' => 'PDK-I',
+                'settings'           => [$key => $options[0]],
+                'parent'             => [
+                    'externalIdentifier' => 'PDK-II',
+                    'settings'           => [$key => $options[1]],
+                    'parent'             => [
+                        'externalIdentifier' => 'PDK-III',
+                        'settings'           => [$key => $options[2]],
+                    ],
+                ],
+            ],
+        ],
+    ]);
+
+    $result = $order->lines[0]->product->mergedSettings->getAttribute($key);
+
+    expect($result)->toBe($output);
+})->with([
+    '0, 1, -1 -> 1'                      => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 1,
+        'options' => [0, 1, -1],
+    ],
+    '0, 0, 1 -> 1'                       => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 1,
+        'options' => [0, 0, 1],
+    ],
+    '0, 0, -1 -> 0'                      => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 0,
+        'options' => [0, 0, -1],
+    ],
+    '0, -1, -1 -> 0'                     => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 0,
+        'options' => [0, -1, -1],
+    ],
+    '-1, -1, 0 -> 0'                     => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 0,
+        'options' => [-1, -1, 0],
+    ],
+    '-1, 1, -1 -> 1'                     => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => 1,
+        'options' => [-1, 1, -1],
+    ],
+    '-1, -1, -1 -> -1'                   => [
+        'key'     => ProductSettings::EXPORT_SIGNATURE,
+        'output'  => -1,
+        'options' => [-1, -1, -1],
+    ],
+    '``, `broccoli`, `` -> `broccoli`'   => [
+        'key'     => ProductSettings::CUSTOMS_CODE,
+        'output'  => 'broccoli',
+        'options' => ['', 'broccoli', ''],
+    ],
+    '`broccoli`, ``, `` -> `broccoli`'   => [
+        'key'     => ProductSettings::CUSTOMS_CODE,
+        'output'  => 'broccoli',
+        'options' => ['broccoli', '', ''],
+    ],
+    '`-1`, `mailbox`, `-1` -> `mailbox`' => [
+        'key'     => ProductSettings::PACKAGE_TYPE,
+        'output'  => 'mailbox',
+        'options' => ['-1', 'mailbox', '-1'],
+    ],
+]);
 
 it('calculates shipment options from defaults and product settings', function (
     array $option,

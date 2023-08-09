@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 /**
  * @property string     $countryOfOrigin
  * @property string     $customsCode
- * @property int<-1, 1> $disableDeliveryOptions
+ * @property bool       $disableDeliveryOptions
  * @property int        $dropOffDelay
  * @property int<-1, 1> $exportAgeCheck
  * @property int<-1, 1> $exportHideSender
@@ -46,7 +46,7 @@ class ProductSettings extends AbstractSettingsModel
 
         self::COUNTRY_OF_ORIGIN        => CountryCodes::CC_NL,
         self::CUSTOMS_CODE             => CustomsDeclarationItem::DEFAULT_CLASSIFICATION,
-        self::DISABLE_DELIVERY_OPTIONS => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
+        self::DISABLE_DELIVERY_OPTIONS => false,
         self::DROP_OFF_DELAY           => 0,
         self::EXPORT_AGE_CHECK         => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
         self::EXPORT_HIDE_SENDER       => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
@@ -62,7 +62,7 @@ class ProductSettings extends AbstractSettingsModel
     protected $casts      = [
         self::COUNTRY_OF_ORIGIN        => 'string',
         self::CUSTOMS_CODE             => 'string',
-        self::DISABLE_DELIVERY_OPTIONS => 'int',
+        self::DISABLE_DELIVERY_OPTIONS => 'boolean',
         self::DROP_OFF_DELAY           => 'int',
         self::EXPORT_AGE_CHECK         => 'int',
         self::EXPORT_HIDE_SENDER       => 'int',

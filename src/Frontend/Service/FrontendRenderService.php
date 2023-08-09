@@ -34,13 +34,14 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     /**
      * Frontend components
      */
-    protected const COMPONENT_INIT_SCRIPT      = 'init';
-    protected const COMPONENT_MODALS           = 'Modals';
-    protected const COMPONENT_NOTIFICATIONS    = 'Notifications';
-    protected const COMPONENT_ORDER_BOX        = 'OrderBox';
-    protected const COMPONENT_ORDER_LIST_ITEM  = 'OrderListItem';
-    protected const COMPONENT_PLUGIN_SETTINGS  = 'PluginSettings';
-    protected const COMPONENT_PRODUCT_SETTINGS = 'ProductSettings';
+    protected const COMPONENT_INIT_SCRIPT            = 'init';
+    protected const COMPONENT_CHILD_PRODUCT_SETTINGS = 'ChildProductSettings';
+    protected const COMPONENT_MODALS                 = 'Modals';
+    protected const COMPONENT_NOTIFICATIONS          = 'Notifications';
+    protected const COMPONENT_ORDER_BOX              = 'OrderBox';
+    protected const COMPONENT_ORDER_LIST_ITEM        = 'OrderListItem';
+    protected const COMPONENT_PLUGIN_SETTINGS        = 'PluginSettings';
+    protected const COMPONENT_PRODUCT_SETTINGS       = 'ProductSettings';
 
     /**
      * @var string
@@ -70,6 +71,24 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     {
         $this->contextService = $contextService;
         $this->viewService    = $viewService;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
+     *
+     * @return string
+     */
+    public function renderChildProductSettings(PdkProduct $product): string
+    {
+        if (! $product->parent) {
+            throw new InvalidArgumentException('Product is not a child product');
+        }
+
+        return $this->renderComponent(
+            self::COMPONENT_CHILD_PRODUCT_SETTINGS,
+            [Context::ID_PRODUCT_DATA],
+            ['product' => $product]
+        );
     }
 
     /**
@@ -160,7 +179,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     {
         return $this->renderComponent(
             self::COMPONENT_PRODUCT_SETTINGS,
-            [Context::ID_PRODUCT_SETTINGS_VIEW],
+            [Context::ID_PRODUCT_DATA, Context::ID_PRODUCT_SETTINGS_VIEW],
             ['product' => $product]
         );
     }
@@ -294,6 +313,12 @@ class FrontendRenderService implements FrontendRenderServiceInterface
         }
 
         switch ($component) {
+            case self::COMPONENT_CHILD_PRODUCT_SETTINGS:
+                return $this->viewService->isChildProductPage();
+
+            case self::COMPONENT_DELIVERY_OPTIONS:
+                return $this->viewService->isCheckoutPage();
+
             case self::COMPONENT_INIT_SCRIPT:
                 return $this->viewService->isAnyPdkPage();
 
@@ -314,9 +339,6 @@ class FrontendRenderService implements FrontendRenderServiceInterface
 
             case self::COMPONENT_PRODUCT_SETTINGS:
                 return $this->viewService->isProductPage();
-
-            case self::COMPONENT_DELIVERY_OPTIONS:
-                return $this->viewService->isCheckoutPage();
 
             default:
                 throw new InvalidArgumentException("Unknown component: $component");

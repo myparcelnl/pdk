@@ -4,7 +4,7 @@
             "id": "product",
             "countryOfOrigin": "DE",
             "customsCode": "388",
-            "disableDeliveryOptions": 1,
+            "disableDeliveryOptions": true,
             "dropOffDelay": 2,
             "exportAgeCheck": 1,
             "exportHideSender": -1,

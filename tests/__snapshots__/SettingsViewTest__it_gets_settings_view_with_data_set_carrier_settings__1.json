@@ -368,6 +368,10 @@
                     "$wrapper": null,
                     "options": [
                         {
+                            "value": -1,
+                            "label": "settings_default"
+                        },
+                        {
                             "value": "package",
                             "label": "package_type_package"
                         },
@@ -439,6 +443,10 @@
                     "$slot": null,
                     "$wrapper": null,
                     "options": [
+                        {
+                            "value": -1,
+                            "label": "settings_default"
+                        },
                         {
                             "value": "package",
                             "label": "package_type_package"
@@ -1129,6 +1137,10 @@
                     "$wrapper": null,
                     "options": [
                         {
+                            "value": -1,
+                            "label": "settings_default"
+                        },
+                        {
                             "value": "package",
                             "label": "package_type_package"
                         },
@@ -1184,6 +1196,10 @@
                     "$slot": null,
                     "$wrapper": null,
                     "options": [
+                        {
+                            "value": -1,
+                            "label": "settings_default"
+                        },
                         {
                             "value": "package",
                             "label": "package_type_package"

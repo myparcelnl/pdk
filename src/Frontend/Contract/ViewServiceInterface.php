@@ -34,6 +34,13 @@ interface ViewServiceInterface
     public function isCheckoutPage(): bool;
 
     /**
+     * True if the current page is the child product page.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderChildProductSettings()
+     */
+    public function isChildProductPage(): bool;
+
+    /**
      * True if the current page is the order list page.
      *
      * @see \MyParcelNL\Pdk\Facade\Frontend::renderOrderListItem()

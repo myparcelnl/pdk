@@ -5,11 +5,23 @@
     "description": "settings_view_product_description",
     "elements": [
         {
+            "$component": "SettingsDivider",
+            "$slot": null,
+            "$wrapper": false,
+            "content": "settings_product_myparcel_options_description",
+            "heading": "settings_product_myparcel_options_title",
+            "level": 2
+        },
+        {
             "name": "packageType",
             "$component": "SelectInput",
             "$slot": null,
             "$wrapper": null,
             "options": [
+                {
+                    "value": -1,
+                    "label": "settings_default"
+                },
                 {
                     "value": "package",
                     "label": "package_type_package"
@@ -35,7 +47,7 @@
             "$component": "NumberInput",
             "$slot": null,
             "$wrapper": null,
-            "min": 0,
+            "min": -1,
             "label": "settings_product_fit_in_mailbox",
             "description": "settings_product_fit_in_mailbox_description"
         },

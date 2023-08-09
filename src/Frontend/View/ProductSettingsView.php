@@ -36,13 +36,17 @@ class ProductSettingsView extends AbstractSettingsView
     protected function createElements(): FormElementCollection
     {
         return new FormElementCollection([
+            /**
+             * MyParcel
+             */
+            new SettingsDivider($this->getSettingKey('myparcel_options')),
             new InteractiveElement(
                 ProductSettings::PACKAGE_TYPE,
                 Components::INPUT_SELECT,
                 ['options' => $this->createPackageTypeOptions()]
             ),
 
-            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER, ['min' => 0]),
+            new InteractiveElement(ProductSettings::FIT_IN_MAILBOX, Components::INPUT_NUMBER, ['min' => -1]),
 
             /**
              * Delivery options.
@@ -67,7 +71,12 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(
                 ProductSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
-                ['options' => $this->toSelectOptions($this->countryService->getAllTranslatable(), true)]
+                [
+                    'options' => $this->toSelectOptions(
+                        $this->countryService->getAllTranslatable(),
+                        AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
+                    ),
+                ]
             ),
             new InteractiveElement(
                 ProductSettings::CUSTOMS_CODE,

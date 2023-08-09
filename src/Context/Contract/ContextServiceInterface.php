@@ -6,9 +6,11 @@ namespace MyParcelNL\Pdk\Context\Contract;
 
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection;
+use MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection;
 use MyParcelNL\Pdk\Context\Model\CheckoutContext;
 use MyParcelNL\Pdk\Context\Model\ContextBag;
 use MyParcelNL\Pdk\Context\Model\DynamicContext;
@@ -44,7 +46,7 @@ interface ContextServiceInterface
     public function createGlobalContext(): GlobalContext;
 
     /**
-     * @param  null|PdkOrder|PdkOrderCollection $orderData
+     * @param  null|array|PdkOrder|PdkOrderCollection $orderData
      *
      * @return \MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection
      */
@@ -56,9 +58,14 @@ interface ContextServiceInterface
     public function createPluginSettingsViewContext(): PluginSettingsViewContext;
 
     /**
-     * @param  null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
+     * @param  null|array|PdkProduct|PdkProductCollection $productData
      *
+     * @return \MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection
+     */
+    public function createProductDataContext($productData): ProductDataContextCollection;
+
+    /**
      * @return \MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext
      */
-    public function createProductSettingsViewContext(?PdkProduct $product): ProductSettingsViewContext;
+    public function createProductSettingsViewContext(): ProductSettingsViewContext;
 }

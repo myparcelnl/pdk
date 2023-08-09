@@ -144,7 +144,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             Components::INPUT_SELECT,
             [
                 '$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true],
-                'options'      => $this->toSelectOptions($options, false, true),
+                'options'      => $this->toSelectOptions($options, AbstractSettingsView::SELECT_USE_PLAIN_LABEL),
             ]
         );
     }

@@ -1,6 +1,12 @@
 {
-    "productSettingsView": {
-        "product": {
+    "productData": [
+        {
+            "externalIdentifier": null,
+            "sku": null,
+            "ean": null,
+            "isDeliverable": null,
+            "name": null,
+            "price": null,
             "weight": 0,
             "length": 0,
             "width": 0,
@@ -9,7 +15,7 @@
                 "id": "product",
                 "countryOfOrigin": "NL",
                 "customsCode": "0000",
-                "disableDeliveryOptions": -1,
+                "disableDeliveryOptions": false,
                 "dropOffDelay": 0,
                 "exportAgeCheck": -1,
                 "exportHideSender": -1,
@@ -20,8 +26,27 @@
                 "exportSignature": -1,
                 "fitInMailbox": 0,
                 "packageType": "package"
-            }
-        },
+            },
+            "mergedSettings": {
+                "id": "product",
+                "countryOfOrigin": "NL",
+                "customsCode": "0000",
+                "disableDeliveryOptions": false,
+                "dropOffDelay": 0,
+                "exportAgeCheck": -1,
+                "exportHideSender": -1,
+                "exportInsurance": -1,
+                "exportLargeFormat": -1,
+                "exportOnlyRecipient": -1,
+                "exportReturn": -1,
+                "exportSignature": -1,
+                "fitInMailbox": 0,
+                "packageType": "package"
+            },
+            "parent": null
+        }
+    ],
+    "productSettingsView": {
         "view": {
             "id": "product",
             "title": "settings_view_product_title",
@@ -29,11 +54,23 @@
             "description": "settings_view_product_description",
             "elements": [
                 {
+                    "$component": "SettingsDivider",
+                    "$slot": null,
+                    "$wrapper": false,
+                    "content": "settings_product_myparcel_options_description",
+                    "heading": "settings_product_myparcel_options_title",
+                    "level": 2
+                },
+                {
                     "name": "packageType",
                     "$component": "SelectInput",
                     "$slot": null,
                     "$wrapper": null,
                     "options": [
+                        {
+                            "value": -1,
+                            "label": "settings_default"
+                        },
                         {
                             "value": "package",
                             "label": "package_type_package"
@@ -59,7 +96,7 @@
                     "$component": "NumberInput",
                     "$slot": null,
                     "$wrapper": null,
-                    "min": 0,
+                    "min": -1,
                     "label": "settings_product_fit_in_mailbox",
                     "description": "settings_product_fit_in_mailbox_description"
                 },
@@ -1186,22 +1223,6 @@
                 }
             ],
             "children": null
-        },
-        "values": {
-            "id": "product",
-            "countryOfOrigin": "NL",
-            "customsCode": "0000",
-            "disableDeliveryOptions": -1,
-            "dropOffDelay": 0,
-            "exportAgeCheck": -1,
-            "exportHideSender": -1,
-            "exportInsurance": -1,
-            "exportLargeFormat": -1,
-            "exportOnlyRecipient": -1,
-            "exportReturn": -1,
-            "exportSignature": -1,
-            "fitInMailbox": 0,
-            "packageType": "package"
         }
     }
 }

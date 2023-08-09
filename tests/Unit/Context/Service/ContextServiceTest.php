@@ -29,13 +29,8 @@ it('gets context data', function (string $id, array $arguments) {
     ],
 
     'empty order data' => [
-        'id'          => Context::ID_ORDER_DATA,
-        'arguments'   => [],
-        'expectation' => [
-            'global'          => null,
-            'orderData'       => [],
-            'deliveryOptions' => null,
-        ],
+        'id'        => Context::ID_ORDER_DATA,
+        'arguments' => [],
     ],
 
     'single order' => [
@@ -51,6 +46,34 @@ it('gets context data', function (string $id, array $arguments) {
         'id'        => Context::ID_ORDER_DATA,
         'arguments' => [
             'order' => [
+                [
+                    'externalIdentifier' => '123',
+                ],
+                [
+                    'externalIdentifier' => '124',
+                ],
+            ],
+        ],
+    ],
+
+    'empty product data' => [
+        'id'        => Context::ID_PRODUCT_DATA,
+        'arguments' => [],
+    ],
+
+    'single product' => [
+        'id'        => Context::ID_PRODUCT_DATA,
+        'arguments' => [
+            'product' => [
+                'externalIdentifier' => '123',
+            ],
+        ],
+    ],
+
+    'multiple products' => [
+        'id'        => Context::ID_PRODUCT_DATA,
+        'arguments' => [
+            'product' => [
                 [
                     'externalIdentifier' => '123',
                 ],
@@ -80,11 +103,12 @@ it('handles invalid context keys', function () {
     $contextBag = $service->createContexts(['random_word']);
 
     expect($contextBag->toArray())->toEqual([
+        'checkout'            => null,
+        'dynamic'             => null,
         'global'              => null,
         'orderData'           => null,
-        'dynamic'             => null,
         'pluginSettingsView'  => null,
+        'productData'         => null,
         'productSettingsView' => null,
-        'checkout'            => null,
     ]);
 });
