@@ -25,18 +25,20 @@ class CartCalculationService implements CartCalculationServiceInterface
         return PackageTypeCollection::fromAll()
             ->sortBySize(true)
             ->filter(function (PackageType $packageType) use ($cart) {
-                $packageTypeName    = $packageType->name;
-                $lineHasPackageType = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName);
+                $packageTypeName = $packageType->name;
 
-                if (! $this->isWeightUnderPackageTypeLimit($cart, $packageTypeName)) {
-                    return false;
+                if (DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageTypeName) {
+                    return true;
                 }
 
-                if ($lineHasPackageType && DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
-                    return $this->calculateMailboxPercentage($cart) <= 100.0;
+                $allowed = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName)
+                    && $this->isWeightUnderPackageTypeLimit($cart, $packageTypeName);
+
+                if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
+                    return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
                 }
 
-                return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageTypeName || $lineHasPackageType;
+                return $allowed;
             });
     }
 
@@ -96,10 +98,8 @@ class CartCalculationService implements CartCalculationServiceInterface
      */
     private function isWeightUnderPackageTypeLimit(PdkCart $cart, string $packageType): bool
     {
-        return $cart->lines->getTotalWeight() <= Arr::get(
-                Pdk::get('packageTypeWeightLimits'),
-                $packageType,
-                20000
-            );
+        $limit = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);
+
+        return $cart->lines->getTotalWeight() <= $limit;
     }
 }
