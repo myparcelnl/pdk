@@ -64,7 +64,10 @@ class AccountSettingsService
 
                 return $isAllowed && $carrier->enabled && $carrier->capabilities;
             })
-            ->values();
+            ->values()
+            ->sort(function (Carrier $carrier1, Carrier $carrier2) {
+                return Pdk::get('sortOrderCarriers')[$carrier1->name] > Pdk::get('sortOrderCarriers')[$carrier2->name];
+            });
     }
 
     /**
