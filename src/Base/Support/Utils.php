@@ -31,7 +31,7 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
             return $args[0];
         }
 
-        $cacheKey = sprintf('%s-%s', $class, md5(var_export($args, true)));
+        $cacheKey = sprintf('%s-%s', $class, md5(serialize($args)));
 
         if (! isset(self::$classCastCache[$cacheKey])) {
             self::$classCastCache[$cacheKey] = new $class(...$args);
