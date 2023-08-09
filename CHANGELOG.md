@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.0](https://github.com/myparcelnl/pdk/compare/v2.13.0...v2.14.0) (2023-08-09)
+
+
+### :sparkles: New Features
+
+* **product:** support product variants ([#143](https://github.com/myparcelnl/pdk/issues/143)) ([937800e](https://github.com/myparcelnl/pdk/commit/937800ea49391664324ce1cb4a99d6902125a578))
+
+
+### :bug: Bug Fixes
+
+* **cast:** prevent circular reference ([#148](https://github.com/myparcelnl/pdk/issues/148)) ([c8c9fde](https://github.com/myparcelnl/pdk/commit/c8c9fde1d19266f2849dfc21852ba6e5c7c450cc))
+* **model:** make 'boolean' cast work the same as 'bool' ([4c22bf4](https://github.com/myparcelnl/pdk/commit/4c22bf4520282e80d5cf4d03ba2de748421ddee7))
+* **shipments:** fix carrier defaulting to postnl ([#151](https://github.com/myparcelnl/pdk/issues/151)) ([1639cdf](https://github.com/myparcelnl/pdk/commit/1639cdf63ea25611c6e49eb85aece23490cfa1ca))
+
 ## [2.13.0](https://github.com/myparcelnl/pdk/compare/v2.12.3...v2.13.0) (2023-08-08)
 
 
