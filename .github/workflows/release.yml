@@ -52,6 +52,7 @@ jobs:
 
   release:
     runs-on: ubuntu-22.04
+    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
     needs:
       - test-unit
       - test-integration
