@@ -36,6 +36,7 @@ trait HasAttributes
     protected static $primitiveCastTypes = [
         'array',
         'bool',
+        'boolean',
         'date',
         'datetime',
         'float',
@@ -461,6 +462,7 @@ trait HasAttributes
                 $value = (string) $value;
                 break;
             case 'bool':
+            case 'boolean':
                 $value = $this->toBool($value);
                 break;
             case 'date':
