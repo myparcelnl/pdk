@@ -88,7 +88,7 @@ dataset('components', [
                 return Frontend::renderChildProductSettings(new PdkProduct(['parent' => new PdkProduct()]));
             };
         },
-        'views'    => [MockAbstractViewService::PAGE_PRODUCT],
+        'views'    => [MockAbstractViewService::PAGE_CHILD_PRODUCT],
     ],
 
     'delivery options' => [

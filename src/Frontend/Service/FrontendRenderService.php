@@ -313,6 +313,12 @@ class FrontendRenderService implements FrontendRenderServiceInterface
         }
 
         switch ($component) {
+            case self::COMPONENT_CHILD_PRODUCT_SETTINGS:
+                return $this->viewService->isChildProductPage();
+
+            case self::COMPONENT_DELIVERY_OPTIONS:
+                return $this->viewService->isCheckoutPage();
+
             case self::COMPONENT_INIT_SCRIPT:
                 return $this->viewService->isAnyPdkPage();
 
@@ -331,12 +337,8 @@ class FrontendRenderService implements FrontendRenderServiceInterface
             case self::COMPONENT_PLUGIN_SETTINGS:
                 return $this->viewService->isPluginSettingsPage();
 
-            case self::COMPONENT_CHILD_PRODUCT_SETTINGS:
             case self::COMPONENT_PRODUCT_SETTINGS:
                 return $this->viewService->isProductPage();
-
-            case self::COMPONENT_DELIVERY_OPTIONS:
-                return $this->viewService->isCheckoutPage();
 
             default:
                 throw new InvalidArgumentException("Unknown component: $component");

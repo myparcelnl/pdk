@@ -28,6 +28,11 @@ class MockViewService implements ViewServiceInterface
         return true;
     }
 
+    public function isChildProductPage(): bool
+    {
+        return true;
+    }
+
     public function isOrderListPage(): bool
     {
         return true;
