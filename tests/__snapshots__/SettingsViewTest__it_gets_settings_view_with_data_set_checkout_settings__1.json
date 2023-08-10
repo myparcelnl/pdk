@@ -7,14 +7,11 @@
         {
             "name": "useSeparateAddressFields",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_checkout_use_separate_address_fields",
             "description": "settings_checkout_use_separate_address_fields_description"
         },
         {
             "$component": "SettingsDivider",
-            "$slot": null,
             "$wrapper": false,
             "content": "settings_checkout_delivery_options_description",
             "heading": "settings_checkout_delivery_options_title",
@@ -23,54 +20,76 @@
         {
             "name": "enableDeliveryOptions",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_checkout_enable_delivery_options",
             "description": "settings_checkout_enable_delivery_options_description"
         },
         {
             "name": "enableDeliveryOptionsWhenNotInStock",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "enableDeliveryOptions": true
-            },
             "label": "settings_checkout_enable_delivery_options_when_not_in_stock",
             "description": "settings_checkout_enable_delivery_options_when_not_in_stock_description"
         },
         {
             "name": "deliveryOptionsPosition",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "enableDeliveryOptions": true
-            },
             "options": [],
             "label": "settings_checkout_delivery_options_position",
             "description": "settings_checkout_delivery_options_position_description"
         },
         {
             "name": "allowedShippingMethods",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "MultiSelectInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "enableDeliveryOptions": true
-            },
             "options": [],
             "label": "settings_checkout_allowed_shipping_methods",
             "description": "settings_checkout_allowed_shipping_methods_description"
         },
         {
             "name": "priceType",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "enableDeliveryOptions": true
-            },
             "options": [
                 {
                     "value": "included",
@@ -86,23 +105,35 @@
         },
         {
             "name": "deliveryOptionsHeader",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "TextInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "enableDeliveryOptions": true
-            },
             "label": "settings_checkout_delivery_options_header",
             "description": "settings_checkout_delivery_options_header_description"
         },
         {
             "name": "deliveryOptionsCustomCss",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "CodeEditor",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "enableDeliveryOptions": true
-            },
             "label": "settings_checkout_delivery_options_custom_css",
             "description": "settings_checkout_delivery_options_custom_css_description"
         }

@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Frontend\View;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 
 /**
@@ -39,9 +38,9 @@ class CarrierSettingsView extends AbstractSettingsView
     }
 
     /**
-     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): ?FormElementCollection
+    protected function createElements(): ?array
     {
         return null;
     }

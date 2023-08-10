@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
@@ -26,9 +25,9 @@ class LabelSettingsView extends AbstractSettingsView
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): FormElementCollection
+    protected function createElements(): ?array
     {
         $fields = [
             new InteractiveElement(LabelSettings::DESCRIPTION, Components::INPUT_TEXT),
@@ -48,7 +47,7 @@ class LabelSettingsView extends AbstractSettingsView
             }
         }
 
-        return new FormElementCollection($fields);
+        return $fields;
     }
 
     /**

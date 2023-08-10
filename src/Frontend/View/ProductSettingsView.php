@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
@@ -31,11 +30,11 @@ class ProductSettingsView extends AbstractSettingsView
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): FormElementCollection
+    protected function createElements(): ?array
     {
-        return new FormElementCollection([
+        return [
             /**
              * MyParcel
              */
@@ -94,7 +93,7 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRI_STATE),
             new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRI_STATE),
             new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRI_STATE),
-        ]);
+        ];
     }
 
     /**

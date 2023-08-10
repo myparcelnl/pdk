@@ -6,46 +6,54 @@
     "elements": [
         {
             "name": "orderMode",
+            "$builders": [
+                {
+                    "$readOnlyWhen": {
+                        "$if": [
+                            {
+                                "$target": "orderMode",
+                                "$eq": false
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "subtext": "hint_enable_order_mode_backoffice",
-            "$readOnlyWhen": {
-                "orderMode": false
-            },
             "label": "settings_general_order_mode",
             "description": "settings_general_order_mode_description"
         },
         {
             "name": "conceptShipments",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "orderMode"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "orderMode": false
-            },
             "label": "settings_general_concept_shipments",
             "description": "settings_general_concept_shipments_description"
         },
         {
             "name": "processDirectly",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_general_process_directly",
             "description": "settings_general_process_directly_description"
         },
         {
             "name": "shareCustomerInformation",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_general_share_customer_information",
             "description": "settings_general_share_customer_information_description"
         },
         {
             "$component": "SettingsDivider",
-            "$slot": null,
             "$wrapper": false,
             "content": "settings_general_track_trace_description",
             "heading": "settings_general_track_trace_title",
@@ -54,22 +62,17 @@
         {
             "name": "trackTraceInEmail",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_general_track_trace_in_email",
             "description": "settings_general_track_trace_in_email_description"
         },
         {
             "name": "trackTraceInAccount",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_general_track_trace_in_account",
             "description": "settings_general_track_trace_in_account_description"
         },
         {
             "$component": "SettingsDivider",
-            "$slot": null,
             "$wrapper": false,
             "content": "settings_general_order_notes_description",
             "heading": "settings_general_order_notes_title",
@@ -78,19 +81,23 @@
         {
             "name": "barcodeInNote",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_general_barcode_in_note",
             "description": "settings_general_barcode_in_note_description"
         },
         {
             "name": "barcodeInNoteTitle",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "barcodeInNote"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "TextInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "barcodeInNote": true
-            },
             "label": "settings_general_barcode_in_note_title",
             "description": "settings_general_barcode_in_note_title_description"
         }

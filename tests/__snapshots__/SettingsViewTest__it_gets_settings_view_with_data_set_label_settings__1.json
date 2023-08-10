@@ -7,22 +7,17 @@
         {
             "name": "description",
             "$component": "TextInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_label_description",
             "description": "settings_label_description_description"
         },
         {
             "name": "prompt",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_label_prompt",
             "description": "settings_label_prompt_description"
         },
         {
             "$component": "SettingsDivider",
-            "$slot": null,
             "$wrapper": false,
             "content": "settings_label_defaults_description",
             "heading": "settings_label_defaults_title",
@@ -31,8 +26,6 @@
         {
             "name": "output",
             "$component": "RadioGroup",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": "open",
@@ -49,8 +42,6 @@
         {
             "name": "format",
             "$component": "RadioGroup",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": "a4",
@@ -66,12 +57,19 @@
         },
         {
             "name": "position",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "format",
+                                "$eq": "a4"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "MultiSelectInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "format": "a4"
-            },
             "options": [
                 {
                     "value": 1,
