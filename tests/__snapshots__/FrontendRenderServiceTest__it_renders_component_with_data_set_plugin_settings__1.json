@@ -50,6 +50,14 @@
                     "description": "settings_general_process_directly_description"
                 },
                 {
+                    "name": "sendReturnEmail",
+                    "$component": "ToggleInput",
+                    "$slot": null,
+                    "$wrapper": null,
+                    "label": "settings_general_send_return_email",
+                    "description": "settings_general_send_return_email_description"
+                },
+                {
                     "name": "shareCustomerInformation",
                     "$component": "ToggleInput",
                     "label": "settings_general_share_customer_information",
