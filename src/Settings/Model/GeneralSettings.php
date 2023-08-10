@@ -11,6 +11,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @property null|string $exportWithAutomaticStatus
  * @property bool        $orderMode
  * @property bool        $processDirectly
+ * @property bool        $sendReturnEmail
  * @property bool        $shareCustomerInformation
  * @property bool        $trackTraceInAccount
  * @property bool        $trackTraceInEmail
@@ -18,21 +19,17 @@ namespace MyParcelNL\Pdk\Settings\Model;
 class GeneralSettings extends AbstractSettingsModel
 {
     /**
-     * Settings in this category.
-     */
-    public const BARCODE_IN_NOTE              = 'barcodeInNote';
-
-    public const BARCODE_IN_NOTE_TITLE        = 'barcodeInNoteTitle';
-
-    public const CONCEPT_SHIPMENTS            = 'conceptShipments';
-
-    public const EXPORT_WITH_AUTOMATIC_STATUS = 'exportWithAutomaticStatus';
-
-    /**
      * Settings category ID.
      */
     public const ID = 'general';
 
+    /**
+     * Settings in this category.
+     */
+    public const BARCODE_IN_NOTE              = 'barcodeInNote';
+    public const BARCODE_IN_NOTE_TITLE        = 'barcodeInNoteTitle';
+    public const CONCEPT_SHIPMENTS            = 'conceptShipments';
+    public const EXPORT_WITH_AUTOMATIC_STATUS = 'exportWithAutomaticStatus';
     public const ORDER_MODE                   = 'orderMode';
     public const PROCESS_DIRECTLY             = 'processDirectly';
     public const SEND_RETURN_EMAIL            = 'sendReturnEmail';
