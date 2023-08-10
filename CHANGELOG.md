@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.1](https://github.com/myparcelnl/pdk/compare/v2.14.0...v2.14.1) (2023-08-10)
+
+
+### :bug: Bug Fixes
+
+* **cart-calculation:** fix mailbox packages over 2kg being allowed ([#147](https://github.com/myparcelnl/pdk/issues/147)) ([a126a54](https://github.com/myparcelnl/pdk/commit/a126a549aac5429bac030828842871f4cbdce811))
+
 ## [2.14.0](https://github.com/myparcelnl/pdk/compare/v2.13.0...v2.14.0) (2023-08-09)
 
 
