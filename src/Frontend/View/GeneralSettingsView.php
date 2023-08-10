@@ -45,6 +45,7 @@ class GeneralSettingsView extends AbstractSettingsView
             ),
 
             new InteractiveElement(GeneralSettings::PROCESS_DIRECTLY, Components::INPUT_TOGGLE),
+            new InteractiveElement(GeneralSettings::SEND_RETURN_EMAIL, Components::INPUT_TOGGLE),
             new InteractiveElement(GeneralSettings::SHARE_CUSTOMER_INFORMATION, Components::INPUT_TOGGLE),
 
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'track_trace')),
