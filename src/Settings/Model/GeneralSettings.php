@@ -33,12 +33,12 @@ class GeneralSettings extends AbstractSettingsModel
      */
     public const ID = 'general';
 
-    public const ORDER_MODE                   = 'orderMode';
-    public const PROCESS_DIRECTLY             = 'processDirectly';
-    public const SEND_RETURN_EMAIL            = 'sendReturnEmail';
-    public const SHARE_CUSTOMER_INFORMATION   = 'shareCustomerInformation';
-    public const TRACK_TRACE_IN_ACCOUNT       = 'trackTraceInAccount';
-    public const TRACK_TRACE_IN_EMAIL         = 'trackTraceInEmail';
+    public const ORDER_MODE                 = 'orderMode';
+    public const PROCESS_DIRECTLY           = 'processDirectly';
+    public const SEND_RETURN_EMAIL          = 'sendReturnEmail';
+    public const SHARE_CUSTOMER_INFORMATION = 'shareCustomerInformation';
+    public const TRACK_TRACE_IN_ACCOUNT     = 'trackTraceInAccount';
+    public const TRACK_TRACE_IN_EMAIL       = 'trackTraceInEmail';
 
     protected $attributes = [
         'id' => self::ID,
