@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -23,16 +25,20 @@ class CartCalculationService implements CartCalculationServiceInterface
         return PackageTypeCollection::fromAll()
             ->sortBySize(true)
             ->filter(function (PackageType $packageType) use ($cart) {
-                $lineHasPackageType = $cart->lines->containsStrict(
-                    'product.mergedSettings.packageType',
-                    $packageType->name
-                );
+                $packageTypeName = $packageType->name;
 
-                if ($lineHasPackageType && DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageType->name) {
-                    return $this->calculateMailboxPercentage($cart) <= 100.0;
+                if (DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageTypeName) {
+                    return true;
                 }
 
-                return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageType->name || $lineHasPackageType;
+                $allowed = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName)
+                    && $this->isWeightUnderPackageTypeLimit($cart, $packageTypeName);
+
+                if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
+                    return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
+                }
+
+                return $allowed;
             });
     }
 
@@ -82,5 +88,18 @@ class CartCalculationService implements CartCalculationServiceInterface
         $anyItemIsDeliverable    = $cart->lines->isDeliverable();
 
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     * @param  string                                 $packageType
+     *
+     * @return bool
+     */
+    private function isWeightUnderPackageTypeLimit(PdkCart $cart, string $packageType): bool
+    {
+        $limit = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);
+
+        return $cart->lines->getTotalWeight() <= $limit;
     }
 }
