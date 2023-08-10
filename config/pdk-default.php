@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\env;
@@ -77,14 +76,4 @@ return [
      * Allowed positions for the delivery options in the checkout.
      */
     'deliveryOptionsPositions' => value([]),
-
-    /**
-     * Preferred sort order when displaying carrier names.
-     */
-    'sortOrderCarriers' => value([
-        Carrier::CARRIER_POSTNL_NAME             => 1,
-        Carrier::CARRIER_DHL_FOR_YOU_NAME        => 2,
-        Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME => 3,
-        Carrier::CARRIER_DHL_EUROPLUS_NAME       => 4,
-    ]),
 ];

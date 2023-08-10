@@ -32,4 +32,11 @@ return [
             CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW => CheckoutSettings::PICKUP_LOCATIONS_VIEW_LIST,
         ],
     ],
+
+    'sortOrderCarriers' => [
+        Carrier::CARRIER_POSTNL_NAME,
+        Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
+        Carrier::CARRIER_DHL_EUROPLUS_NAME,
+    ],
 ];
