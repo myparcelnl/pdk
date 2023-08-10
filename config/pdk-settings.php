@@ -116,7 +116,7 @@ return [
      */
 
     'createBarcodeNoteIdentifier' => factory(function () {
-        return static function (int $shipmentId) {
+        return static function (string $shipmentId) {
             return "barcode-$shipmentId";
         };
     }),
