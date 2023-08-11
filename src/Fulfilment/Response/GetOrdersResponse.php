@@ -58,7 +58,7 @@ class GetOrdersResponse extends ApiResponseWithBody
                     'vat'                         => $order['vat'],
                     'priceAfterVat'               => $order['price_after_vat'],
                     'invoiceAddress'              => $order['invoice_address'],
-                    'orderLines'                  => $order['order_lines'] ?? [],
+                    'lines'                       => $order['order_lines'] ?? [],
                     'shipment'                    => $order['shipment'] ?? [],
                     'createdAt'                   => $order['created_at'],
                     'updatedAt'                   => $order['updated_at'],

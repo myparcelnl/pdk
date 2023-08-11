@@ -9,9 +9,11 @@ use MyParcelNL\Pdk\Context\Context;
 
 /**
  * @property null|string                                                 $externalIdentifier
+ * @property null|string                                                 $apiIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
+ * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $notes
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress

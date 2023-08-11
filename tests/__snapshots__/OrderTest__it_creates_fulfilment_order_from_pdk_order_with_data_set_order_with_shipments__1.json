@@ -8,8 +8,8 @@
     "invoiceAddress": null,
     "language": "nl",
     "orderDate": null,
-    "orderLines": [],
-    "orderNotes": [],
+    "lines": [],
+    "notes": [],
     "shipment": {
         "carrier": 1,
         "contractId": null,

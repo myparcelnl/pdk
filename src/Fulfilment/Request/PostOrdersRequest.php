@@ -76,13 +76,9 @@ class PostOrdersRequest extends Request
             'order_date'                    => $order->orderDate
                 ? $order->orderDate->format(Pdk::get('defaultDateFormat'))
                 : null,
-            'order_lines'                   => $order->orderLines->reduce(
+            'order_lines'                   => $order->lines->reduce(
                 function (array $carry, OrderLine $orderLine) {
-                    $orderLineArray = $orderLine->toSnakeCaseArray();
-
-                    unset($orderLineArray['vat']);
-
-                    $carry[] = $orderLineArray;
+                    $carry[] = $orderLine->except('vat', Arrayable::CASE_SNAKE);
 
                     return $carry;
                 },
