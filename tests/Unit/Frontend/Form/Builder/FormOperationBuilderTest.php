@@ -12,9 +12,16 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
 
     expect($result)->toBe($output);
 })->with(function () {
+    $multipleBuilder = new FormOperationBuilder();
+
+    $multipleBuilder->visibleWhen('foo')
+        ->eq('bar');
+    $multipleBuilder->visibleWhen('bar')
+        ->eq('baz');
+
     return [
         'simple setValue on self' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())->setValue('foo'),
+            'builder' => (new FormOperationBuilder())->setValue('foo'),
 
             'output' => [
                 [
@@ -26,7 +33,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'simple setValue on target' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('new')
                 ->on('old'),
 
@@ -41,7 +48,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'setValue with condition on self' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('foo')
                 ->if('foo')
                 ->eq('foo'),
@@ -62,7 +69,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'setValue with condition on target' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('new')
                 ->if('old')
                 ->eq('old'),
@@ -83,7 +90,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'setValue with and conditions' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('appelboom')
                 ->if('a-setting')
                 ->gt(1)->and->lt(10),
@@ -112,7 +119,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'setValue with or conditions' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('other-setting')
                 ->if('some-setting')
                 ->gte(1)->or->lte(10),
@@ -141,7 +148,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'setValue if in or not in' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('new')
                 ->if('foo')
                 ->in(['foo', 'bar'])->or->nin(['baz', 'qux']),
@@ -170,7 +177,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'readOnlyWhen' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->readOnlyWhen()
                 ->ne('foo')->and->ne('bar'),
 
@@ -191,7 +198,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'visibleWhen' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->visibleWhen('target', true),
 
             'output' => [
@@ -209,7 +216,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'visibleWhen with multiple targets' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->visibleWhen('target')
                 ->and('other-target'),
 
@@ -230,7 +237,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'visibleWhen without value' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->visibleWhen('target'),
 
             'output' => [
@@ -244,8 +251,28 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
             ],
         ],
 
+        'multiple visibleWhen operations merged into one' => [
+            'builder' => $multipleBuilder,
+            'output'  => [
+                [
+                    '$visibleWhen' => [
+                        '$if' => [
+                            [
+                                '$target' => 'foo',
+                                '$eq'     => 'bar',
+                            ],
+                            [
+                                '$target' => 'bar',
+                                '$eq'     => 'baz',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
         'afterUpdate' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->afterUpdate()
                 ->setValue('groente')
                 ->on('soep')
@@ -268,7 +295,7 @@ it('builds form operation arrays', function (BuilderInterface $input, array $out
         ],
 
         'complex multiple setValues' => [
-            'afterUpdateBuilder' => (new FormOperationBuilder())
+            'builder' => (new FormOperationBuilder())
                 ->setValue('foo')
                 ->if->eq('foo')
                 ->then->setValue('bar')

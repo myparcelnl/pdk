@@ -2409,13 +2409,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowMondayDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2466,13 +2460,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowSaturdayDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2523,13 +2511,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowMorningDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2580,13 +2562,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowEveningDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2637,13 +2613,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowSameDayDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2743,13 +2713,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowSignature"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2800,13 +2764,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowOnlyRecipient"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -2868,13 +2826,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowPickupLocations"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$target": "deliveryOptionsEnabled"
                                             }
@@ -3595,13 +3547,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowMondayDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -3652,13 +3598,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowSaturdayDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -3709,13 +3649,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowSameDayDelivery"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -3815,13 +3749,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowSignature"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -3872,13 +3800,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowOnlyRecipient"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$and": [
                                                     {
@@ -3940,13 +3862,7 @@
                                         "$if": [
                                             {
                                                 "$target": "allowPickupLocations"
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
+                                            },
                                             {
                                                 "$target": "deliveryOptionsEnabled"
                                             }

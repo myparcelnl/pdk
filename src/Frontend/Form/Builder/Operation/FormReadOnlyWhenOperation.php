@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder\Operation;
 
-final class FormReadOnlyWhenOperation extends AbstractFormOperation
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSingletonOperationInterface;
+
+final class FormReadOnlyWhenOperation extends AbstractFormOperation implements FormSingletonOperationInterface
 {
     protected function getOperationKey(): string
     {

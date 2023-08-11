@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSingletonOperationInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormReadOnlyWhenOperation;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormVisibleWhenOperation;
@@ -97,14 +99,42 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder
             $callback = null;
         }
 
-        $if = $this
+        $if = $this->hasExistingSingletonOperation($operation, $target);
+
+        $resolvedIf = $if ?? $this
             ->addOperation($operation, $callback)
             ->if($target);
 
         if (isset($value)) {
-            $if->eq($value);
+            $resolvedIf->eq($value);
         }
 
-        return $if;
+        return $resolvedIf;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface $operation
+     * @param  null|string                                                           $target
+     *
+     * @return null|\MyParcelNL\Pdk\Frontend\Form\Builder\FormCondition
+     */
+    private function hasExistingSingletonOperation(FormOperationInterface $operation, ?string $target): ?FormCondition
+    {
+        if (! $operation instanceof FormSingletonOperationInterface) {
+            return null;
+        }
+
+        $sameOperation = Arr::first(
+            $this->operations,
+            static function (FormOperationInterface $existingOperation) use ($operation) {
+                return get_class($existingOperation) === get_class($operation);
+            }
+        );
+
+        if ($sameOperation) {
+            return $sameOperation->if($target);
+        }
+
+        return null;
     }
 }

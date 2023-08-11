@@ -159,12 +159,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
     ): array {
         return [
             new InteractiveElement($allowSetting, Components::INPUT_TOGGLE),
-            (new InteractiveElement(
-                $priceSetting,
-                Components::INPUT_CURRENCY
-            ))->builder(function (FormOperationBuilder $builder) use ($allowSetting) {
-                $builder->visibleWhen($allowSetting);
-            }),
+            (new InteractiveElement($priceSetting, Components::INPUT_CURRENCY))
+                ->builder(function (FormOperationBuilder $builder) use ($allowSetting) {
+                    $builder->visibleWhen($allowSetting);
+                }),
         ];
     }
 
