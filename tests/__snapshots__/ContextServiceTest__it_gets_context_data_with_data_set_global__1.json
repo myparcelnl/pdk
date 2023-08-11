@@ -1,6 +1,4 @@
 {
-    "checkout": null,
-    "dynamic": null,
     "global": {
         "appInfo": {
             "name": "pest",
@@ -223,10 +221,10 @@
             "defaultCarrier": "postnl",
             "defaultCarrierId": 1,
             "allowedCarriers": [
-                "dhleuroplus",
+                "postnl",
                 "dhlforyou",
                 "dhlparcelconnect",
-                "postnl"
+                "dhleuroplus"
             ],
             "defaultSettings": {
                 "checkout": {
@@ -238,6 +236,8 @@
             "apple_tree": "Appelboom"
         }
     },
+    "dynamic": null,
+    "checkout": null,
     "orderData": null,
     "pluginSettingsView": null,
     "productData": null,

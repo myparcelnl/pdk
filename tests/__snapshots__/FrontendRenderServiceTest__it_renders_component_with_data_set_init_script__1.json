@@ -221,10 +221,10 @@
             "defaultCarrier": "postnl",
             "defaultCarrierId": 1,
             "allowedCarriers": [
-                "dhleuroplus",
+                "postnl",
                 "dhlforyou",
                 "dhlparcelconnect",
-                "postnl"
+                "dhleuroplus"
             ],
             "defaultSettings": {
                 "checkout": {

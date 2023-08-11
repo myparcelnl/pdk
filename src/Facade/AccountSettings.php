@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Facade;
 
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
-use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 
@@ -18,12 +18,12 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
  * @method static bool hasCarrier(string $name)
  * @method static bool hasTaxFields()
  * @method static bool usesOrderMode()
- * @implements \MyParcelNL\Pdk\Account\Service\AccountSettingsService
+ * @implements \MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface
  */
 final class AccountSettings extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return AccountSettingsService::class;
+        return AccountSettingsServiceInterface::class;
     }
 }
