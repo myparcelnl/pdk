@@ -32,7 +32,7 @@ final class FormSetValueOperation extends AbstractFormOperation
     /**
      * @return array
      */
-    public function createArray(): array
+    protected function createArray(): array
     {
         return ['$value' => $this->value] + parent::createArray();
     }

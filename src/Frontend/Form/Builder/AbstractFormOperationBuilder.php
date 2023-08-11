@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
 use MyParcelNL\Pdk\Frontend\Form\Builder\Concern\HasFormOperationBuilderParent;
-use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\ChainableFormOperationBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetValueOperation;
 
-abstract class AbstractFormOperationBuilder implements FormOperationBuilderInterface
+abstract class AbstractFormOperationBuilder implements ChainableFormOperationBuilderInterface
 {
     use HasFormOperationBuilderParent;
 

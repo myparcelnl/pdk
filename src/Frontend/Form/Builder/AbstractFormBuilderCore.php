@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
+use BadMethodCallException;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Concern\HasFormOperationBuilderParent;
-use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\BuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface;
 
 /**
- * @property FormOperationBuilderInterface $then
+ * @property RootFormOperationBuilderInterface $then
  */
-abstract class AbstractFormBuilderCore implements BuilderInterface
+abstract class AbstractFormBuilderCore implements FormOperationBuilderInterface
 {
     use HasFormOperationBuilderParent;
 
@@ -24,46 +26,44 @@ abstract class AbstractFormBuilderCore implements BuilderInterface
      * @param $name
      *
      * @return null
-     * @noinspection MultipleReturnStatementsInspection
      */
     public function __get($name)
     {
-        if (property_exists($this, $name)) {
-            return $this->{$name};
-        }
-
         if (in_array($name, $this->magicMethods, true)) {
             return $this->{$name}();
         }
 
-        return null;
+        throw new InvalidArgumentException('Property does not exist');
     }
 
     public function __isset($name)
     {
-        if (property_exists($this, $name)) {
-            return null !== $this->{$name};
-        }
-
-        return in_array($name, $this->magicMethods, true);
+        $this->throwOnAccessorMethod();
     }
 
     public function __set($name, $value)
     {
-        if (property_exists($this, $name)) {
-            $this->{$name} = $value;
-        }
+        $this->throwOnAccessorMethod();
     }
 
     public function __unset($name)
     {
-        if (property_exists($this, $name)) {
-            $this->{$name} = null;
-        }
+        $this->throwOnAccessorMethod();
     }
 
-    protected function then(): FormOperationBuilderInterface
+    /**
+     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface
+     */
+    protected function then(): RootFormOperationBuilderInterface
     {
         return $this->getRoot();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function throwOnAccessorMethod()
+    {
+        throw new BadMethodCallException('Not implemented');
     }
 }

@@ -6,14 +6,15 @@ namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Concern\HasFormOperationBuilderParent;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
 
 /**
- * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormCondition        $or
- * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormCondition        $and
- * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder $then
+ * @property \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $or
+ * @property \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $and
+ * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder            $then
  */
-final class FormCondition extends AbstractFormBuilderCore
+final class FormCondition extends AbstractFormBuilderCore implements FormConditionInterface
 {
     use HasFormOperationBuilderParent;
 
@@ -59,7 +60,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return self
      */
-    public function and(?string $target = null): self
+    public function and(?string $target = null): FormConditionInterface
     {
         $and = new self($this->parent, $target ?? $this->target);
 
@@ -77,7 +78,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function eq($value): self
+    public function eq($value): FormConditionInterface
     {
         $this->matcher = '$eq';
         $this->value   = $value;
@@ -90,7 +91,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function gt($value): self
+    public function gt($value): FormConditionInterface
     {
         $this->matcher = '$gt';
         $this->value   = $value;
@@ -103,7 +104,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function gte($value): self
+    public function gte($value): FormConditionInterface
     {
         $this->matcher = '$gte';
         $this->value   = $value;
@@ -116,7 +117,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function in(array $value): self
+    public function in(array $value): FormConditionInterface
     {
         $this->matcher = '$in';
         $this->value   = $value;
@@ -129,7 +130,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function lt($value): self
+    public function lt($value): FormConditionInterface
     {
         $this->matcher = '$lt';
         $this->value   = $value;
@@ -142,7 +143,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function lte($value): self
+    public function lte($value): FormConditionInterface
     {
         $this->matcher = '$lte';
         $this->value   = $value;
@@ -155,7 +156,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function ne($value): self
+    public function ne($value): FormConditionInterface
     {
         $this->matcher = '$ne';
         $this->value   = $value;
@@ -168,7 +169,7 @@ final class FormCondition extends AbstractFormBuilderCore
      *
      * @return $this
      */
-    public function nin(array $value): self
+    public function nin(array $value): FormConditionInterface
     {
         $this->matcher = '$nin';
         $this->value   = $value;
@@ -198,7 +199,7 @@ final class FormCondition extends AbstractFormBuilderCore
     /**
      * @return self
      */
-    protected function or(): self
+    protected function or(): FormConditionInterface
     {
         $or = new self($this->parent, $this->target);
 

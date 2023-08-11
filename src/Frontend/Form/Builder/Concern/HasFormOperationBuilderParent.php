@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder\Concern;
 
-use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\BuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
-use RuntimeException;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface;
 
 trait HasFormOperationBuilderParent
 {
     /**
-     * @var BuilderInterface
+     * @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface
      */
     protected $parent;
 
@@ -34,7 +33,7 @@ trait HasFormOperationBuilderParent
     }
 
     /**
-     * @return FormOperationBuilderInterface|null
+     * @return null|\MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface
      */
     public function getParent(): ?FormOperationBuilderInterface
     {
@@ -42,18 +41,14 @@ trait HasFormOperationBuilderParent
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface
+     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface
      */
-    protected function getRoot(): FormOperationBuilderInterface
+    protected function getRoot(): RootFormOperationBuilderInterface
     {
-        $root = $this;
+        $root = $this->parent;
 
         while (null !== $root->getParent()) {
             $root = $root->getParent();
-        }
-
-        if (! $root instanceof FormOperationBuilderInterface) {
-            throw new RuntimeException(sprintf('Root is not a %s', FormOperationBuilderInterface::class));
         }
 
         return $root;
