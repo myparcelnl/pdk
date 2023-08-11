@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.15.0](https://github.com/myparcelnl/pdk/compare/v2.14.1...v2.15.0) (2023-08-11)
+
+
+### :sparkles: New Features
+
+* **settings:** allow embedding more interactivity in form views ([#156](https://github.com/myparcelnl/pdk/issues/156)) ([b4dcd30](https://github.com/myparcelnl/pdk/commit/b4dcd3087bd8aeb0a842ddaf55f17c948c9f71ac))
+
+
+### :bug: Bug Fixes
+
+* **carriers:** sort in preferred order for displaying names ([#152](https://github.com/myparcelnl/pdk/issues/152)) ([060867c](https://github.com/myparcelnl/pdk/commit/060867c122fe8ebbc582dcbc93ec81f0afe8bb3a))
+
 ## [2.14.1](https://github.com/myparcelnl/pdk/compare/v2.14.0...v2.14.1) (2023-08-10)
 
 
