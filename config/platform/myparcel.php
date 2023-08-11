@@ -21,10 +21,10 @@ return [
      * @see     /config/pdk-default.php
      */
     'allowedCarriers'  => [
-        Carrier::CARRIER_DHL_EUROPLUS_NAME,
+        Carrier::CARRIER_POSTNL_NAME,
         Carrier::CARRIER_DHL_FOR_YOU_NAME,
         Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
-        Carrier::CARRIER_POSTNL_NAME,
+        Carrier::CARRIER_DHL_EUROPLUS_NAME,
     ],
 
     'defaultSettings' => [

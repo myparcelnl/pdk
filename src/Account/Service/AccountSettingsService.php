@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Service;
 
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
@@ -13,7 +14,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 
-class AccountSettingsService
+class AccountSettingsService implements AccountSettingsServiceInterface
 {
     /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
@@ -63,6 +64,14 @@ class AccountSettingsService
                 $isAllowed = in_array($carrier->name, $allowedCarriers, true);
 
                 return $isAllowed && $carrier->enabled && $carrier->capabilities;
+            })
+            ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
+                $aIndex = array_search($carrierA->name, $allowedCarriers, true);
+                $bIndex = array_search($carrierB->name, $allowedCarriers, true);
+
+                return $aIndex === $bIndex
+                    ? $carrierA->subscriptionId <=> $carrierB->subscriptionId
+                    : $aIndex <=> $bIndex;
             })
             ->values();
     }

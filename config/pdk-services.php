@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
@@ -59,6 +61,11 @@ return [
      * The main entry point for the PDK DI container.
      */
     PdkInterface::class                        => autowire(Pdk::class),
+
+    /**
+     * Handles account settings.
+     */
+    AccountSettingsServiceInterface::class     => autowire(AccountSettingsService::class),
 
     /**
      * Used to make requests to the MyParcel API.
