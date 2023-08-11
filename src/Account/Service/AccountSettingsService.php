@@ -58,19 +58,19 @@ class AccountSettingsService
 
         $allowedCarriers = Platform::get('allowedCarriers');
 
-        $carriers = $shop->carriers
+        return $shop->carriers
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {
                 $isAllowed = in_array($carrier->name, $allowedCarriers, true);
 
                 return $isAllowed && $carrier->enabled && $carrier->capabilities;
             })
-            ->values()->all();
-
-        usort($carriers, function (Carrier $carrier1, Carrier $carrier2) {
-            return Pdk::get('sortOrderCarriers')[$carrier1->name] > Pdk::get('sortOrderCarriers')[$carrier2->name];
-        });
-
-        return new CarrierCollection($carriers);
+            ->sort(function (Carrier $a, Carrier $b) {
+                return array_search($a->name, Platform::get('allowedCarriers')) <=> array_search(
+                        $b->name,
+                        Platform::get('allowedCarriers')
+                    );
+            })
+            ->values();
     }
 
     /**
