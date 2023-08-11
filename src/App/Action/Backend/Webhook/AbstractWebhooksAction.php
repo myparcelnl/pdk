@@ -66,9 +66,9 @@ abstract class AbstractWebhooksAction implements ActionInterface
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection|\MyParcelNL\Pdk\Webhook\Model\WebhookSubscription[]
+     * @return \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
      */
-    protected function getExistingSubscriptions()
+    protected function getExistingSubscriptions(): WebhookSubscriptionCollection
     {
         $url = $this->pdkWebhooksRepository->getHashedUrl();
 

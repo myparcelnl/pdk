@@ -114,7 +114,7 @@ abstract class AbstractSettingsView implements Arrayable
                 $labelKey => sprintf('%s_default', self::KEY_PREFIX),
             ]);
         }
-        
+
         if ($displayOptions & self::SELECT_INCLUDE_OPTION_NONE) {
             array_unshift($options, [
                 'value'   => self::OPTIONS_VALUE_DEFAULT,
@@ -254,9 +254,9 @@ abstract class AbstractSettingsView implements Arrayable
     /**
      * @param  \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection $elements
      *
-     * @return mixed|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    protected function updateElements(FormElementCollection $elements)
+    protected function updateElements(FormElementCollection $elements): FormElementCollection
     {
         return $elements->map(function (PlainElement $element): PlainElement {
             if ($element instanceof InteractiveElement) {
