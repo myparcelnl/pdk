@@ -7,8 +7,6 @@
         {
             "name": "packageContents",
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": 1,
@@ -37,16 +35,12 @@
         {
             "name": "customsCode",
             "$component": "TextInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_customs_customs_code",
             "description": "settings_customs_customs_code_description"
         },
         {
             "name": "countryOfOrigin",
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": -1,

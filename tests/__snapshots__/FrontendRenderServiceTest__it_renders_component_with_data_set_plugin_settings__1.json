@@ -8,46 +8,54 @@
             "elements": [
                 {
                     "name": "orderMode",
+                    "$builders": [
+                        {
+                            "$readOnlyWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "orderMode",
+                                        "$eq": false
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "subtext": "hint_enable_order_mode_backoffice",
-                    "$readOnlyWhen": {
-                        "orderMode": false
-                    },
                     "label": "settings_general_order_mode",
                     "description": "settings_general_order_mode_description"
                 },
                 {
                     "name": "conceptShipments",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "orderMode"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "orderMode": false
-                    },
                     "label": "settings_general_concept_shipments",
                     "description": "settings_general_concept_shipments_description"
                 },
                 {
                     "name": "processDirectly",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_general_process_directly",
                     "description": "settings_general_process_directly_description"
                 },
                 {
                     "name": "shareCustomerInformation",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_general_share_customer_information",
                     "description": "settings_general_share_customer_information_description"
                 },
                 {
                     "$component": "SettingsDivider",
-                    "$slot": null,
                     "$wrapper": false,
                     "content": "settings_general_track_trace_description",
                     "heading": "settings_general_track_trace_title",
@@ -56,22 +64,17 @@
                 {
                     "name": "trackTraceInEmail",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_general_track_trace_in_email",
                     "description": "settings_general_track_trace_in_email_description"
                 },
                 {
                     "name": "trackTraceInAccount",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_general_track_trace_in_account",
                     "description": "settings_general_track_trace_in_account_description"
                 },
                 {
                     "$component": "SettingsDivider",
-                    "$slot": null,
                     "$wrapper": false,
                     "content": "settings_general_order_notes_description",
                     "heading": "settings_general_order_notes_title",
@@ -80,19 +83,23 @@
                 {
                     "name": "barcodeInNote",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_general_barcode_in_note",
                     "description": "settings_general_barcode_in_note_description"
                 },
                 {
                     "name": "barcodeInNoteTitle",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "barcodeInNote"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "TextInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "barcodeInNote": true
-                    },
                     "label": "settings_general_barcode_in_note_title",
                     "description": "settings_general_barcode_in_note_title_description"
                 }
@@ -108,14 +115,11 @@
                 {
                     "name": "saveCustomerAddress",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_order_save_customer_address",
                     "description": "settings_order_save_customer_address_description"
                 },
                 {
                     "$component": "SettingsDivider",
-                    "$slot": null,
                     "$wrapper": false,
                     "content": "settings_order_status_description",
                     "heading": "settings_order_status_title",
@@ -124,8 +128,6 @@
                 {
                     "name": "statusOnLabelCreate",
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": -1,
@@ -162,8 +164,6 @@
                 {
                     "name": "statusWhenLabelScanned",
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": -1,
@@ -200,8 +200,6 @@
                 {
                     "name": "statusWhenDelivered",
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": -1,
@@ -238,19 +236,23 @@
                 {
                     "name": "orderStatusMail",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_order_order_status_mail",
                     "description": "settings_order_order_status_mail_description"
                 },
                 {
                     "name": "sendNotificationAfter",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "orderStatusMail"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "orderStatusMail": true
-                    },
                     "options": [
                         {
                             "value": -1,
@@ -287,14 +289,11 @@
                 {
                     "name": "sendOrderStateForDigitalStamp",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_order_send_order_state_for_digital_stamp",
                     "description": "settings_order_send_order_state_for_digital_stamp_description"
                 },
                 {
                     "$component": "SettingsDivider",
-                    "$slot": null,
                     "$wrapper": false,
                     "content": "settings_order_weight_description",
                     "heading": "settings_order_weight_title",
@@ -303,24 +302,18 @@
                 {
                     "name": "emptyParcelWeight",
                     "$component": "NumberInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_order_empty_parcel_weight",
                     "description": "settings_order_empty_parcel_weight_description"
                 },
                 {
                     "name": "emptyMailboxWeight",
                     "$component": "NumberInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_order_empty_mailbox_weight",
                     "description": "settings_order_empty_mailbox_weight_description"
                 },
                 {
                     "name": "emptyDigitalStampWeight",
                     "$component": "NumberInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_order_empty_digital_stamp_weight",
                     "description": "settings_order_empty_digital_stamp_weight_description"
                 }
@@ -336,22 +329,17 @@
                 {
                     "name": "description",
                     "$component": "TextInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_label_description",
                     "description": "settings_label_description_description"
                 },
                 {
                     "name": "prompt",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_label_prompt",
                     "description": "settings_label_prompt_description"
                 },
                 {
                     "$component": "SettingsDivider",
-                    "$slot": null,
                     "$wrapper": false,
                     "content": "settings_label_defaults_description",
                     "heading": "settings_label_defaults_title",
@@ -360,8 +348,6 @@
                 {
                     "name": "output",
                     "$component": "RadioGroup",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": "open",
@@ -378,8 +364,6 @@
                 {
                     "name": "format",
                     "$component": "RadioGroup",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": "a4",
@@ -395,12 +379,19 @@
                 },
                 {
                     "name": "position",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "format",
+                                        "$eq": "a4"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "MultiSelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "format": "a4"
-                    },
                     "options": [
                         {
                             "value": 1,
@@ -434,8 +425,6 @@
                 {
                     "name": "packageContents",
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": 1,
@@ -464,16 +453,12 @@
                 {
                     "name": "customsCode",
                     "$component": "TextInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_customs_customs_code",
                     "description": "settings_customs_customs_code_description"
                 },
                 {
                     "name": "countryOfOrigin",
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "options": [
                         {
                             "value": -1,
@@ -1499,14 +1484,11 @@
                 {
                     "name": "useSeparateAddressFields",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_checkout_use_separate_address_fields",
                     "description": "settings_checkout_use_separate_address_fields_description"
                 },
                 {
                     "$component": "SettingsDivider",
-                    "$slot": null,
                     "$wrapper": false,
                     "content": "settings_checkout_delivery_options_description",
                     "heading": "settings_checkout_delivery_options_title",
@@ -1515,54 +1497,76 @@
                 {
                     "name": "enableDeliveryOptions",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_checkout_enable_delivery_options",
                     "description": "settings_checkout_enable_delivery_options_description"
                 },
                 {
                     "name": "enableDeliveryOptionsWhenNotInStock",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "enableDeliveryOptions"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "enableDeliveryOptions": true
-                    },
                     "label": "settings_checkout_enable_delivery_options_when_not_in_stock",
                     "description": "settings_checkout_enable_delivery_options_when_not_in_stock_description"
                 },
                 {
                     "name": "deliveryOptionsPosition",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "enableDeliveryOptions"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "enableDeliveryOptions": true
-                    },
                     "options": [],
                     "label": "settings_checkout_delivery_options_position",
                     "description": "settings_checkout_delivery_options_position_description"
                 },
                 {
                     "name": "allowedShippingMethods",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "enableDeliveryOptions"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "MultiSelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "enableDeliveryOptions": true
-                    },
                     "options": [],
                     "label": "settings_checkout_allowed_shipping_methods",
                     "description": "settings_checkout_allowed_shipping_methods_description"
                 },
                 {
                     "name": "priceType",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "enableDeliveryOptions"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "SelectInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "enableDeliveryOptions": true
-                    },
                     "options": [
                         {
                             "value": "included",
@@ -1578,23 +1582,35 @@
                 },
                 {
                     "name": "deliveryOptionsHeader",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "enableDeliveryOptions"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "TextInput",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "enableDeliveryOptions": true
-                    },
                     "label": "settings_checkout_delivery_options_header",
                     "description": "settings_checkout_delivery_options_header_description"
                 },
                 {
                     "name": "deliveryOptionsCustomCss",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "enableDeliveryOptions"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
                     "$component": "CodeEditor",
-                    "$slot": null,
-                    "$wrapper": null,
-                    "$visibleWhen": {
-                        "enableDeliveryOptions": true
-                    },
                     "label": "settings_checkout_delivery_options_custom_css",
                     "description": "settings_checkout_delivery_options_custom_css_description"
                 }
@@ -1615,79 +1631,128 @@
                     "elements": [
                         {
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_export_description",
                             "heading": "settings_carrier_export_title",
                             "level": 2
                         },
                         {
-                            "name": "exportSignature",
+                            "name": "exportAgeCheck",
+                            "$builders": [
+                                {
+                                    "$afterUpdate": [
+                                        {
+                                            "$setValue": {
+                                                "$value": true,
+                                                "$target": "exportSignature",
+                                                "$if": [
+                                                    {
+                                                        "$eq": true
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": true,
+                                                "$target": "exportOnlyRecipient",
+                                                "$if": [
+                                                    {
+                                                        "$eq": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
+                            "label": "settings_carrier_export_age_check",
+                            "description": "settings_carrier_export_age_check_description"
+                        },
+                        {
+                            "name": "exportSignature",
+                            "$builders": [
+                                {
+                                    "$readOnlyWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportAgeCheck"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "ToggleInput",
                             "label": "settings_carrier_export_signature",
                             "description": "settings_carrier_export_signature_description"
                         },
                         {
                             "name": "exportOnlyRecipient",
+                            "$builders": [
+                                {
+                                    "$readOnlyWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportAgeCheck"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_only_recipient",
                             "description": "settings_carrier_export_only_recipient_description"
                         },
                         {
-                            "name": "exportAgeCheck",
-                            "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "label": "settings_carrier_export_age_check",
-                            "description": "settings_carrier_export_age_check_description"
-                        },
-                        {
                             "name": "exportLargeFormat",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_large_format",
                             "description": "settings_carrier_export_large_format_description"
                         },
                         {
                             "name": "exportReturn",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_return",
                             "description": "settings_carrier_export_return_description"
                         },
                         {
                             "name": "exportInsurance",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_insurance",
                             "description": "settings_carrier_export_insurance_description"
                         },
                         {
                             "name": "exportInsuranceFromAmount",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "label": "settings_carrier_export_insurance_from_amount",
                             "description": "settings_carrier_export_insurance_from_amount_description"
                         },
                         {
                             "name": "exportInsuranceUpTo",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -1747,12 +1812,18 @@
                         },
                         {
                             "name": "exportInsuranceUpToUnique",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -1812,12 +1883,18 @@
                         },
                         {
                             "name": "exportInsuranceUpToEu",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -1877,12 +1954,18 @@
                         },
                         {
                             "name": "exportInsuranceUpToRow",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -1942,12 +2025,18 @@
                         },
                         {
                             "name": "exportInsurancePriceFactor",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "$attributes": {
                                 "min": 0,
                                 "step": 0.01,
@@ -1958,7 +2047,6 @@
                         },
                         {
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_export_returns_description",
                             "heading": "settings_carrier_export_returns_title",
@@ -1967,8 +2055,6 @@
                         {
                             "name": "exportReturnPackageType",
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "options": [
                                 {
                                     "value": -1,
@@ -1997,14 +2083,11 @@
                         {
                             "name": "exportReturnLargeFormat",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_return_large_format",
                             "description": "settings_carrier_export_return_large_format_description"
                         },
                         {
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_options_description",
                             "heading": "settings_carrier_delivery_options_title",
@@ -2013,38 +2096,65 @@
                         {
                             "name": "deliveryOptionsEnabled",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_delivery_options_enabled",
                             "description": "settings_carrier_delivery_options_enabled_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_options_delivery_description",
                             "heading": "settings_carrier_delivery_options_delivery_title",
-                            "level": 3,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            }
+                            "level": 3
                         },
                         {
                             "name": "allowDeliveryOptions",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            },
                             "label": "settings_carrier_allow_delivery_options",
                             "description": "settings_carrier_allow_delivery_options_description"
                         },
                         {
                             "name": "defaultPackageType",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "options": [
                                 {
                                     "value": -1,
@@ -2067,343 +2177,664 @@
                                     "label": "package_type_digital_stamp"
                                 }
                             ],
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_default_package_type",
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
                             "name": "priceDeliveryTypeStandard",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_standard",
                             "description": "settings_carrier_price_delivery_type_standard_description"
                         },
                         {
                             "name": "pricePackageTypeMailbox",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_package_type_mailbox",
                             "description": "settings_carrier_price_package_type_mailbox_description"
                         },
                         {
                             "name": "pricePackageTypeDigitalStamp",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "$attributes": {
                                 "min": 0,
                                 "max": 14
-                            },
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
                             },
                             "label": "settings_carrier_delivery_days_window",
                             "description": "settings_carrier_delivery_days_window_description"
                         },
                         {
                             "name": "dropOffDelay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_drop_off_delay",
                             "description": "settings_carrier_drop_off_delay_description"
                         },
                         {
                             "name": "dropOffPossibilities",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "DropOffInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_drop_off_possibilities",
                             "description": "settings_carrier_drop_off_possibilities_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_moments_description",
                             "heading": "settings_carrier_delivery_moments_title",
-                            "level": 4,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            }
+                            "level": 4
                         },
                         {
                             "name": "showDeliveryDay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_show_delivery_day",
                             "description": "settings_carrier_show_delivery_day_description"
                         },
                         {
                             "name": "allowMondayDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_monday_delivery",
                             "description": "settings_carrier_allow_monday_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeMonday",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowMondayDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowMondayDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_monday",
                             "description": "settings_carrier_price_delivery_type_monday_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_saturday_delivery",
                             "description": "settings_carrier_allow_saturday_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeSaturday",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowSaturdayDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowSaturdayDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_saturday",
                             "description": "settings_carrier_price_delivery_type_saturday_description"
                         },
                         {
                             "name": "allowMorningDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_morning_delivery",
                             "description": "settings_carrier_allow_morning_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeMorning",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowMorningDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowMorningDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_morning",
                             "description": "settings_carrier_price_delivery_type_morning_description"
                         },
                         {
                             "name": "allowEveningDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_evening_delivery",
                             "description": "settings_carrier_allow_evening_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeEvening",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowEveningDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowEveningDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_evening",
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
                             "name": "allowSameDayDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_same_day_delivery",
                             "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeSameDay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowSameDayDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowSameDayDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_same_day",
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
                             "name": "cutoffTimeSameDay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "TimeInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_cutoff_time_same_day",
                             "description": "settings_carrier_cutoff_time_same_day_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_shipment_options_description",
                             "heading": "settings_carrier_shipment_options_title",
-                            "level": 4,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            }
+                            "level": 4
                         },
                         {
                             "name": "allowSignature",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_signature",
                             "description": "settings_carrier_allow_signature_description"
                         },
                         {
                             "name": "priceSignature",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowSignature"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowSignature": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_signature",
                             "description": "settings_carrier_price_signature_description"
                         },
                         {
                             "name": "allowOnlyRecipient",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_only_recipient",
                             "description": "settings_carrier_allow_only_recipient_description"
                         },
                         {
                             "name": "priceOnlyRecipient",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowOnlyRecipient"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowOnlyRecipient": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_only_recipient",
                             "description": "settings_carrier_price_only_recipient_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_options_pickup_description",
                             "heading": "settings_carrier_delivery_options_pickup_title",
-                            "level": 3,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            }
+                            "level": 3
                         },
                         {
                             "name": "allowPickupLocations",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            },
                             "label": "settings_carrier_allow_pickup_locations",
                             "description": "settings_carrier_allow_pickup_locations_description"
                         },
                         {
                             "name": "priceDeliveryTypePickup",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowPickupLocations"
+                                            },
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowPickupLocations": true,
-                                "deliveryOptionsEnabled": true
-                            },
                             "label": "settings_carrier_price_delivery_type_pickup",
                             "description": "settings_carrier_price_delivery_type_pickup_description"
                         }
@@ -2416,79 +2847,128 @@
                     "elements": [
                         {
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_export_description",
                             "heading": "settings_carrier_export_title",
                             "level": 2
                         },
                         {
-                            "name": "exportSignature",
+                            "name": "exportAgeCheck",
+                            "$builders": [
+                                {
+                                    "$afterUpdate": [
+                                        {
+                                            "$setValue": {
+                                                "$value": true,
+                                                "$target": "exportSignature",
+                                                "$if": [
+                                                    {
+                                                        "$eq": true
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": true,
+                                                "$target": "exportOnlyRecipient",
+                                                "$if": [
+                                                    {
+                                                        "$eq": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
+                            "label": "settings_carrier_export_age_check",
+                            "description": "settings_carrier_export_age_check_description"
+                        },
+                        {
+                            "name": "exportSignature",
+                            "$builders": [
+                                {
+                                    "$readOnlyWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportAgeCheck"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "ToggleInput",
                             "label": "settings_carrier_export_signature",
                             "description": "settings_carrier_export_signature_description"
                         },
                         {
                             "name": "exportOnlyRecipient",
+                            "$builders": [
+                                {
+                                    "$readOnlyWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportAgeCheck"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_only_recipient",
                             "description": "settings_carrier_export_only_recipient_description"
                         },
                         {
-                            "name": "exportAgeCheck",
-                            "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "label": "settings_carrier_export_age_check",
-                            "description": "settings_carrier_export_age_check_description"
-                        },
-                        {
                             "name": "exportReturn",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_return",
                             "description": "settings_carrier_export_return_description"
                         },
                         {
                             "name": "exportHideSender",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_hide_sender",
                             "description": "settings_carrier_export_hide_sender_description"
                         },
                         {
                             "name": "exportInsurance",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_export_insurance",
                             "description": "settings_carrier_export_insurance_description"
                         },
                         {
                             "name": "exportInsuranceFromAmount",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "label": "settings_carrier_export_insurance_from_amount",
                             "description": "settings_carrier_export_insurance_from_amount_description"
                         },
                         {
                             "name": "exportInsuranceUpTo",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -2540,12 +3020,18 @@
                         },
                         {
                             "name": "exportInsuranceUpToUnique",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -2597,12 +3083,18 @@
                         },
                         {
                             "name": "exportInsuranceUpToEu",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -2654,12 +3146,18 @@
                         },
                         {
                             "name": "exportInsuranceUpToRow",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "options": [
                                 {
                                     "value": 0,
@@ -2711,12 +3209,18 @@
                         },
                         {
                             "name": "exportInsurancePriceFactor",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "exportInsurance"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "exportInsurance": true
-                            },
                             "$attributes": {
                                 "min": 0,
                                 "step": 0.01,
@@ -2727,7 +3231,6 @@
                         },
                         {
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_export_returns_description",
                             "heading": "settings_carrier_export_returns_title",
@@ -2736,8 +3239,6 @@
                         {
                             "name": "exportReturnPackageType",
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "options": [
                                 {
                                     "value": -1,
@@ -2757,7 +3258,6 @@
                         },
                         {
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_options_description",
                             "heading": "settings_carrier_delivery_options_title",
@@ -2766,38 +3266,65 @@
                         {
                             "name": "deliveryOptionsEnabled",
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "label": "settings_carrier_delivery_options_enabled",
                             "description": "settings_carrier_delivery_options_enabled_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_options_delivery_description",
                             "heading": "settings_carrier_delivery_options_delivery_title",
-                            "level": 3,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            }
+                            "level": 3
                         },
                         {
                             "name": "allowDeliveryOptions",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            },
                             "label": "settings_carrier_allow_delivery_options",
                             "description": "settings_carrier_allow_delivery_options_description"
                         },
                         {
                             "name": "defaultPackageType",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SelectInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "options": [
                                 {
                                     "value": -1,
@@ -2812,281 +3339,538 @@
                                     "label": "package_type_mailbox"
                                 }
                             ],
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_default_package_type",
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
                             "name": "priceDeliveryTypeStandard",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_standard",
                             "description": "settings_carrier_price_delivery_type_standard_description"
                         },
                         {
                             "name": "pricePackageTypeMailbox",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_package_type_mailbox",
                             "description": "settings_carrier_price_package_type_mailbox_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
                             "$attributes": {
                                 "min": 0,
                                 "max": 14
-                            },
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
                             },
                             "label": "settings_carrier_delivery_days_window",
                             "description": "settings_carrier_delivery_days_window_description"
                         },
                         {
                             "name": "dropOffDelay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "NumberInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_drop_off_delay",
                             "description": "settings_carrier_drop_off_delay_description"
                         },
                         {
                             "name": "dropOffPossibilities",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "DropOffInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_drop_off_possibilities",
                             "description": "settings_carrier_drop_off_possibilities_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_moments_description",
                             "heading": "settings_carrier_delivery_moments_title",
-                            "level": 4,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            }
+                            "level": 4
                         },
                         {
                             "name": "showDeliveryDay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_show_delivery_day",
                             "description": "settings_carrier_show_delivery_day_description"
                         },
                         {
                             "name": "allowMondayDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_monday_delivery",
                             "description": "settings_carrier_allow_monday_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeMonday",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowMondayDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowMondayDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_monday",
                             "description": "settings_carrier_price_delivery_type_monday_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_saturday_delivery",
                             "description": "settings_carrier_allow_saturday_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeSaturday",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowSaturdayDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowSaturdayDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_saturday",
                             "description": "settings_carrier_price_delivery_type_saturday_description"
                         },
                         {
                             "name": "allowSameDayDelivery",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_same_day_delivery",
                             "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "priceDeliveryTypeSameDay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowSameDayDelivery"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowSameDayDelivery": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_delivery_type_same_day",
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
                             "name": "cutoffTimeSameDay",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "TimeInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_cutoff_time_same_day",
                             "description": "settings_carrier_cutoff_time_same_day_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_shipment_options_description",
                             "heading": "settings_carrier_shipment_options_title",
-                            "level": 4,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            }
+                            "level": 4
                         },
                         {
                             "name": "allowSignature",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_signature",
                             "description": "settings_carrier_allow_signature_description"
                         },
                         {
                             "name": "priceSignature",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowSignature"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowSignature": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_signature",
                             "description": "settings_carrier_price_signature_description"
                         },
                         {
                             "name": "allowOnlyRecipient",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_allow_only_recipient",
                             "description": "settings_carrier_allow_only_recipient_description"
                         },
                         {
                             "name": "priceOnlyRecipient",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowOnlyRecipient"
+                                            },
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowOnlyRecipient": true,
-                                "deliveryOptionsEnabled": true,
-                                "allowDeliveryOptions": true
-                            },
                             "label": "settings_carrier_price_only_recipient",
                             "description": "settings_carrier_price_only_recipient_description"
                         },
                         {
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "SettingsDivider",
-                            "$slot": null,
                             "$wrapper": false,
                             "content": "settings_carrier_delivery_options_pickup_description",
                             "heading": "settings_carrier_delivery_options_pickup_title",
-                            "level": 3,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            }
+                            "level": 3
                         },
                         {
                             "name": "allowPickupLocations",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "ToggleInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "deliveryOptionsEnabled": true
-                            },
                             "label": "settings_carrier_allow_pickup_locations",
                             "description": "settings_carrier_allow_pickup_locations_description"
                         },
                         {
                             "name": "priceDeliveryTypePickup",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$target": "allowPickupLocations"
+                                            },
+                                            {
+                                                "$target": "deliveryOptionsEnabled"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
                             "$component": "CurrencyInput",
-                            "$slot": null,
-                            "$wrapper": null,
-                            "$visibleWhen": {
-                                "allowPickupLocations": true,
-                                "deliveryOptionsEnabled": true
-                            },
                             "label": "settings_carrier_price_delivery_type_pickup",
                             "description": "settings_carrier_price_delivery_type_pickup_description"
                         }

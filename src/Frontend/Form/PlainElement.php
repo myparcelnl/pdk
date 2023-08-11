@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Form;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 
 class PlainElement implements Arrayable
 {
@@ -17,6 +19,11 @@ class PlainElement implements Arrayable
      * @var array
      */
     public $props;
+
+    /**
+     * @var \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder
+     */
+    private $builder;
 
     /**
      * @var null|string
@@ -36,14 +43,36 @@ class PlainElement implements Arrayable
     }
 
     /**
+     * @param  callable $callback
+     *
+     * @return $this
+     */
+    public function builder(callable $callback): self
+    {
+        if (! isset($this->builder)) {
+            $this->builder = new FormOperationBuilder();
+        }
+
+        $callback($this->builder);
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
     {
-        return array_merge([
-            '$component' => $this->component,
-            '$slot'      => $this->content,
-            '$wrapper'   => false,
-        ], $this->props);
+        return Utils::filterNull(
+            array_merge(
+                $this->builder ? ['$builders' => $this->builder->build()] : [],
+                [
+                    '$component' => $this->component,
+                    '$slot'      => $this->content,
+                    '$wrapper'   => false,
+                ],
+                $this->props
+            )
+        );
     }
 }

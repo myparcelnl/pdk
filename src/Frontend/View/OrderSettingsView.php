@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
+use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
@@ -30,11 +30,11 @@ class OrderSettingsView extends AbstractSettingsView
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): FormElementCollection
+    protected function createElements(): ?array
     {
-        $orderStatuses = $this->toSelectOptions(
+        $orderStatuses         = $this->toSelectOptions(
             $this->orderStatusService->all(),
             AbstractSettingsView::SELECT_USE_PLAIN_LABEL
         );
@@ -43,7 +43,7 @@ class OrderSettingsView extends AbstractSettingsView
             AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
         );
 
-        return new FormElementCollection([
+        return [
             new InteractiveElement(OrderSettings::SAVE_CUSTOMER_ADDRESS, Components::INPUT_TOGGLE),
 
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'status')),
@@ -64,14 +64,16 @@ class OrderSettingsView extends AbstractSettingsView
                 ['options' => $orderStatusesWithNone]
             ),
             new InteractiveElement(OrderSettings::ORDER_STATUS_MAIL, Components::INPUT_TOGGLE),
-            new InteractiveElement(
+            (new InteractiveElement(
                 OrderSettings::SEND_NOTIFICATION_AFTER,
                 Components::INPUT_SELECT,
                 [
-                    '$visibleWhen' => [OrderSettings::ORDER_STATUS_MAIL => true],
-                    'options'      => $orderStatusesWithNone,
+                    'options' => $orderStatusesWithNone,
                 ]
-            ),
+            ))->builder(function (FormOperationBuilder $builder) {
+                $builder->visibleWhen(OrderSettings::ORDER_STATUS_MAIL);
+            }),
+
             new InteractiveElement(OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMP, Components::INPUT_TOGGLE),
 
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'weight')),
@@ -79,7 +81,7 @@ class OrderSettingsView extends AbstractSettingsView
             new InteractiveElement(OrderSettings::EMPTY_PARCEL_WEIGHT, Components::INPUT_NUMBER),
             new InteractiveElement(OrderSettings::EMPTY_MAILBOX_WEIGHT, Components::INPUT_NUMBER),
             new InteractiveElement(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, Components::INPUT_NUMBER),
-        ]);
+        ];
     }
 
     /**

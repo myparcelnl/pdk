@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Settings\View;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Frontend\View\AbstractSettingsView;
@@ -27,7 +26,7 @@ final class MockSettingsView extends AbstractSettingsView
     public function __construct($children = null, $elements = null)
     {
         $this->children = $children ? new Collection($children) : null;
-        $this->elements = $elements ? new FormElementCollection($elements) : null;
+        $this->elements = $elements;
     }
 
     public function render(): string
@@ -40,7 +39,7 @@ final class MockSettingsView extends AbstractSettingsView
         return $this->children;
     }
 
-    protected function createElements(): ?FormElementCollection
+    protected function createElements(): ?array
     {
         return $this->elements;
     }
@@ -73,10 +72,10 @@ it('can render a settings view', function (array $data) {
 
     'with elements' => function () {
         return [
-            'elements' => new FormElementCollection([
+            'elements' => [
                 new InteractiveElement('interactive-test', 'test', ['prop' => 'value']),
                 new PlainElement('plain-test', ['prop' => 'value']),
-            ]),
+            ],
             'children' => null,
             'result'   => [
                 'id'          => 'test',
@@ -87,15 +86,12 @@ it('can render a settings view', function (array $data) {
                     [
                         'name'        => 'interactive-test',
                         '$component'  => 'test',
-                        '$slot'       => null,
-                        '$wrapper'    => null,
                         'prop'        => 'value',
                         'label'       => 'settings_test_interactive-test',
                         'description' => 'settings_test_interactive-test_description',
                     ],
                     [
                         '$component' => 'plain-test',
-                        '$slot'      => null,
                         '$wrapper'   => false,
                         'prop'       => 'value',
                     ],

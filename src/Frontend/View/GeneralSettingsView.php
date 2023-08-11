@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
+use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
@@ -17,27 +17,31 @@ use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 class GeneralSettingsView extends AbstractSettingsView
 {
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): FormElementCollection
+    protected function createElements(): ?array
     {
-        $elements = [
-            new InteractiveElement(
+        return [
+            (new InteractiveElement(
                 GeneralSettings::ORDER_MODE,
                 Components::INPUT_TOGGLE,
                 AccountSettings::usesOrderMode()
                     ? []
                     : [
-                    'subtext'       => 'hint_enable_order_mode_backoffice',
-                    '$readOnlyWhen' => [GeneralSettings::ORDER_MODE => false],
+                    'subtext' => 'hint_enable_order_mode_backoffice',
                 ]
-            ),
+            ))->builder(function (FormOperationBuilder $builder) {
+                if (AccountSettings::usesOrderMode()) {
+                    return;
+                }
 
-            $this->withProps(
-                [
-                    '$visibleWhen' => [GeneralSettings::ORDER_MODE => false],
-                ],
-                new InteractiveElement(GeneralSettings::CONCEPT_SHIPMENTS, Components::INPUT_TOGGLE)
+                $builder->readOnlyWhen(GeneralSettings::ORDER_MODE, false);
+            }),
+
+            (new InteractiveElement(GeneralSettings::CONCEPT_SHIPMENTS, Components::INPUT_TOGGLE))->builder(
+                function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(GeneralSettings::ORDER_MODE);
+                }
             ),
 
             new InteractiveElement(GeneralSettings::PROCESS_DIRECTLY, Components::INPUT_TOGGLE),
@@ -51,15 +55,13 @@ class GeneralSettingsView extends AbstractSettingsView
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'order_notes')),
 
             new InteractiveElement(GeneralSettings::BARCODE_IN_NOTE, Components::INPUT_TOGGLE),
-            $this->withProps(
-                [
-                    '$visibleWhen' => [GeneralSettings::BARCODE_IN_NOTE => true],
-                ],
+            $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(GeneralSettings::BARCODE_IN_NOTE);
+                },
                 new InteractiveElement(GeneralSettings::BARCODE_IN_NOTE_TITLE, Components::INPUT_TEXT)
             ),
         ];
-
-        return new FormElementCollection($this->flattenElements($elements));
     }
 
     /**

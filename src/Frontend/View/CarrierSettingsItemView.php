@@ -7,7 +7,8 @@ namespace MyParcelNL\Pdk\Frontend\View;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
+use MyParcelNL\Pdk\Frontend\Form\Builder\FormAfterUpdateBuilder;
+use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
@@ -85,15 +86,15 @@ class CarrierSettingsItemView extends AbstractSettingsView
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): FormElementCollection
+    protected function createElements(): ?array
     {
         if (empty($this->elements)) {
             $this->elements = $this->gatherElements();
         }
 
-        return new FormElementCollection($this->elements);
+        return $this->elements;
     }
 
     /**
@@ -142,10 +143,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         return new InteractiveElement(
             $name,
             Components::INPUT_SELECT,
-            [
-                '$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true],
-                'options'      => $this->toSelectOptions($options, AbstractSettingsView::SELECT_USE_PLAIN_LABEL),
-            ]
+            ['options' => $this->toSelectOptions($options, AbstractSettingsView::SELECT_USE_PLAIN_LABEL)]
         );
     }
 
@@ -161,15 +159,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
     ): array {
         return [
             new InteractiveElement($allowSetting, Components::INPUT_TOGGLE),
-            new InteractiveElement(
-                $priceSetting,
-                Components::INPUT_CURRENCY,
-                [
-                    '$visibleWhen' => [
-                        $allowSetting => true,
-                    ],
-                ]
-            ),
+            (new InteractiveElement($priceSetting, Components::INPUT_CURRENCY))
+                ->builder(function (FormOperationBuilder $builder) use ($allowSetting) {
+                    $builder->visibleWhen($allowSetting);
+                }),
         ];
     }
 
@@ -178,7 +171,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function gatherElements(): array
     {
-        return $this->flattenElements([
+        return [
             /**
              * Default export settings.
              */
@@ -193,7 +186,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
              * Delivery options settings.
              */
             $this->getDeliveryOptionsFields(),
-        ]);
+        ];
     }
 
     /**
@@ -207,29 +200,52 @@ class CarrierSettingsItemView extends AbstractSettingsView
              */
             new SettingsDivider($this->createGenericLabel('export')),
 
-            $this->carrierSchema->canHaveSignature() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_SIGNATURE, Components::INPUT_TOGGLE),
-            ] : [],
+            $this->carrierSchema->canHaveAgeCheck()
+                ? [
+                (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
+                    ->builder(function (FormOperationBuilder $builder) {
+                        $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
+                            $afterUpdate
+                                ->setValue(true)
+                                ->on(CarrierSettings::EXPORT_SIGNATURE)
+                                ->if->eq(true);
 
-            $this->carrierSchema->canHaveOnlyRecipient() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TOGGLE),
-            ] : [],
+                            $afterUpdate
+                                ->setValue(true)
+                                ->on(CarrierSettings::EXPORT_ONLY_RECIPIENT)
+                                ->if->eq(true);
+                        });
+                    }),
+            ]
+                : [],
 
-            $this->carrierSchema->canHaveAgeCheck() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE),
-            ] : [],
+            $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    if (! $this->carrierSchema->canHaveAgeCheck()) {
+                        return;
+                    }
 
-            $this->carrierSchema->canHaveLargeFormat() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE),
-            ] : [],
+                    $builder->readOnlyWhen(CarrierSettings::EXPORT_AGE_CHECK);
+                },
+                $this->carrierSchema->canHaveSignature()
+                    ? [new InteractiveElement(CarrierSettings::EXPORT_SIGNATURE, Components::INPUT_TOGGLE)]
+                    : [],
+                $this->carrierSchema->canHaveOnlyRecipient()
+                    ? [new InteractiveElement(CarrierSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TOGGLE)]
+                    : []
+            ),
 
-            $this->carrierSchema->canHaveDirectReturn() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE),
-            ] : [],
+            $this->carrierSchema->canHaveLargeFormat()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE)]
+                : [],
 
-            $this->carrierSchema->canHaveHideSender() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE),
-            ] : [],
+            $this->carrierSchema->canHaveDirectReturn()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE)]
+                : [],
+
+            $this->carrierSchema->canHaveHideSender()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE)]
+                : [],
 
             $this->carrierSchema->canHaveInsurance() ? $this->getExportInsuranceFields() : [],
         ];
@@ -281,23 +297,20 @@ class CarrierSettingsItemView extends AbstractSettingsView
             /**
              * Home delivery
              */
-            $this->withProps(
-                [
-                    '$visibleWhen' => [
-                        CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
-                    ],
-                ],
+            $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED);
+                },
                 new SettingsDivider($this->createGenericLabel('delivery_options_delivery'), SettingsDivider::LEVEL_3),
                 new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE)
             ),
 
-            $this->withProps(
-                [
-                    '$visibleWhen' => [
-                        CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
-                        CarrierSettings::ALLOW_DELIVERY_OPTIONS   => true,
-                    ],
-                ],
+            $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    $builder
+                        ->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED)
+                        ->and(CarrierSettings::ALLOW_DELIVERY_OPTIONS);
+                },
 
                 $this->getPackageTypeFields(),
 
@@ -377,12 +390,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
             /**
              * Pickup locations
              */
-            $this->carrierSchema->canHavePickup() ? $this->withProps(
-                [
-                    '$visibleWhen' => [
-                        CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
-                    ],
-                ],
+            $this->carrierSchema->canHavePickup() ? $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED);
+                },
                 new SettingsDivider($this->createGenericLabel('delivery_options_pickup'), SettingsDivider::LEVEL_3),
                 $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_PICKUP_LOCATIONS,
@@ -399,26 +410,28 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         return [
             new InteractiveElement(CarrierSettings::EXPORT_INSURANCE, Components::INPUT_TOGGLE),
-            new InteractiveElement(
-                CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT,
-                Components::INPUT_NUMBER,
-                ['$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true]]
-            ),
-            $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO),
-            $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE),
-            $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_EU),
-            $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW),
-            new InteractiveElement(
-                CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR,
-                Components::INPUT_NUMBER,
-                [
-                    '$visibleWhen' => [CarrierSettings::EXPORT_INSURANCE => true],
-                    '$attributes'  => [
-                        'min' => Pdk::get('insuranceFactorMin'),
-                        'step' => Pdk::get('insuranceFactorStep'),
-                        'max' => Pdk::get('insuranceFactorMax'),
-                    ],
-                ]
+
+            $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(CarrierSettings::EXPORT_INSURANCE);
+                },
+
+                new InteractiveElement(CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT, Components::INPUT_NUMBER),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_EU),
+                $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW),
+                new InteractiveElement(
+                    CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR,
+                    Components::INPUT_NUMBER,
+                    [
+                        '$attributes' => [
+                            'min' => Pdk::get('insuranceFactorMin'),
+                            'step' => Pdk::get('insuranceFactorStep'),
+                            'max' => Pdk::get('insuranceFactorMax'),
+                        ],
+                    ]
+                )
             ),
         ];
     }

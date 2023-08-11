@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
-use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
+use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
@@ -12,11 +12,11 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 class PrintOptionsView extends AbstractSettingsView
 {
     /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    protected function createElements(): FormElementCollection
+    protected function createElements(): ?array
     {
-        return new FormElementCollection([
+        return [
             new InteractiveElement(LabelSettings::OUTPUT, Components::INPUT_RADIO_GROUP, [
                 'options' => $this->createSelectOptions(LabelSettings::OUTPUT, [
                     LabelSettings::OUTPUT_OPEN,
@@ -29,16 +29,17 @@ class PrintOptionsView extends AbstractSettingsView
                     LabelSettings::FORMAT_A6,
                 ]),
             ]),
-            new InteractiveElement(LabelSettings::POSITION, Components::INPUT_MULTI_SELECT, [
-                '$visibleWhen' => [LabelSettings::FORMAT => LabelSettings::FORMAT_A4],
-                'options'      => $this->createSelectOptions(LabelSettings::POSITION, [
+            (new InteractiveElement(LabelSettings::POSITION, Components::INPUT_MULTI_SELECT, [
+                'options' => $this->createSelectOptions(LabelSettings::POSITION, [
                     LabelSettings::POSITION_1,
                     LabelSettings::POSITION_2,
                     LabelSettings::POSITION_3,
                     LabelSettings::POSITION_4,
                 ]),
-            ]),
-        ]);
+            ]))->builder(function (FormOperationBuilder $builder) {
+                $builder->visibleWhen(LabelSettings::FORMAT, LabelSettings::FORMAT_A4);
+            }),
+        ];
     }
 
     /**

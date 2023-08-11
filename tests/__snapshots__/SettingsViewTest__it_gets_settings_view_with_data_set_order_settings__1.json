@@ -7,14 +7,11 @@
         {
             "name": "saveCustomerAddress",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_order_save_customer_address",
             "description": "settings_order_save_customer_address_description"
         },
         {
             "$component": "SettingsDivider",
-            "$slot": null,
             "$wrapper": false,
             "content": "settings_order_status_description",
             "heading": "settings_order_status_title",
@@ -23,8 +20,6 @@
         {
             "name": "statusOnLabelCreate",
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -61,8 +56,6 @@
         {
             "name": "statusWhenLabelScanned",
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -99,8 +92,6 @@
         {
             "name": "statusWhenDelivered",
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
             "options": [
                 {
                     "value": -1,
@@ -137,19 +128,23 @@
         {
             "name": "orderStatusMail",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_order_order_status_mail",
             "description": "settings_order_order_status_mail_description"
         },
         {
             "name": "sendNotificationAfter",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "orderStatusMail"
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "SelectInput",
-            "$slot": null,
-            "$wrapper": null,
-            "$visibleWhen": {
-                "orderStatusMail": true
-            },
             "options": [
                 {
                     "value": -1,
@@ -186,14 +181,11 @@
         {
             "name": "sendOrderStateForDigitalStamp",
             "$component": "ToggleInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_order_send_order_state_for_digital_stamp",
             "description": "settings_order_send_order_state_for_digital_stamp_description"
         },
         {
             "$component": "SettingsDivider",
-            "$slot": null,
             "$wrapper": false,
             "content": "settings_order_weight_description",
             "heading": "settings_order_weight_title",
@@ -202,24 +194,18 @@
         {
             "name": "emptyParcelWeight",
             "$component": "NumberInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_order_empty_parcel_weight",
             "description": "settings_order_empty_parcel_weight_description"
         },
         {
             "name": "emptyMailboxWeight",
             "$component": "NumberInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_order_empty_mailbox_weight",
             "description": "settings_order_empty_mailbox_weight_description"
         },
         {
             "name": "emptyDigitalStampWeight",
             "$component": "NumberInput",
-            "$slot": null,
-            "$wrapper": null,
             "label": "settings_order_empty_digital_stamp_weight",
             "description": "settings_order_empty_digital_stamp_weight_description"
         }

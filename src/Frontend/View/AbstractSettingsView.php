@@ -30,9 +30,9 @@ abstract class AbstractSettingsView implements Arrayable
     protected $cache = [];
 
     /**
-     * @return null|\MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
+     * @return null|array
      */
-    abstract protected function createElements(): ?FormElementCollection;
+    abstract protected function createElements(): ?array;
 
     /**
      * @return string
@@ -63,7 +63,9 @@ abstract class AbstractSettingsView implements Arrayable
         return $this->cacheValue(self::CACHE_KEY_ELEMENTS, function (): ?FormElementCollection {
             $elements = $this->createElements();
 
-            return $elements ? $this->updateElements($elements) : null;
+            return $elements
+                ? $this->updateElements(new FormElementCollection($this->flattenElements($elements)))
+                : null;
         });
     }
 
@@ -258,7 +260,7 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function updateElements(FormElementCollection $elements): FormElementCollection
     {
-        return $elements->map(function (PlainElement $element): PlainElement {
+        return $elements->map(function ($element): PlainElement {
             if ($element instanceof InteractiveElement) {
                 $label       = $this->createLabel($this->getLabelPrefix(), $element->name);
                 $description = "{$label}_description";
@@ -286,6 +288,21 @@ abstract class AbstractSettingsView implements Arrayable
         if (! isset($item['name'], $item['class'])) {
             throw new InvalidArgumentException(sprintf('Fields "name" and "class" are required in %s', $item['class']));
         }
+    }
+
+    /**
+     * @param  callable                    $callback
+     * @param  PlainElement[]|PlainElement ...$fields
+     *
+     * @return array
+     */
+    protected function withOperation(callable $callback, ...$fields): array
+    {
+        return $this->flattenElements($fields, static function (PlainElement $field) use ($callback) {
+            $field->builder($callback);
+
+            return $field;
+        });
     }
 
     /**
