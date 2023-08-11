@@ -37,11 +37,20 @@ class UpdateShipmentsAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        $orderIds = $this->getOrderIds($request);
-        $orders   = $this->pdkOrderRepository->getMany($orderIds);
+        $orderIds      = $this->getOrderIds($request);
+        $orders        = $this->pdkOrderRepository->getMany($orderIds);
+        $knownBarcodes = $orders->getAllShipments()
+            ->pluck('barcode')
+            ->toArray();
+        $shipmentIds   = $this->getShipmentIds($request, $orders);
+        $shipments     = $this->shipmentRepository->getShipments($shipmentIds);
 
-        $shipmentIds = $this->getShipmentIds($request, $orders);
-        $shipments   = $this->shipmentRepository->getShipments($shipmentIds);
+        $shipments->each(function ($shipment) use ($knownBarcodes) {
+            if (in_array($shipment->barcode, $knownBarcodes, true)) {
+                return;
+            }
+            $this->pdkOrderRepository->addBarcodeInOrderNote($shipment);
+        });
 
         if ($orders->isNotEmpty()) {
             $orders->updateShipments($shipments);
