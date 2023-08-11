@@ -84,7 +84,7 @@ class PdkEndpoint implements PdkApiInterface
         Throwable $throwable,
         int       $statusCode = Response::HTTP_BAD_REQUEST
     ): JsonResponse {
-        return (new JsonResponse(
+        return new JsonResponse(
             [
                 'message' => $throwable->getMessage(),
                 'errors'  => [
@@ -99,6 +99,6 @@ class PdkEndpoint implements PdkApiInterface
                 ],
             ],
             $statusCode
-        ));
+        );
     }
 }

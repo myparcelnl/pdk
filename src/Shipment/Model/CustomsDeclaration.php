@@ -45,7 +45,7 @@ class CustomsDeclaration extends Model
     protected function getWeightAttribute(): int
     {
         return $this->attributes['weight'] ?? $this->items->reduce(static function (int $acc, $item) {
-            return $acc + ($item['weight'] * $item['amount']);
+            return $acc + $item['weight'] * $item['amount'];
         }, 0);
     }
 }

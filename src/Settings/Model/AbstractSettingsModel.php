@@ -66,7 +66,7 @@ abstract class AbstractSettingsModel extends Model implements StorableArrayable
                 continue;
             }
 
-            $defaultValue = Platform::get(sprintf('settings.defaults.%s.%s', $this->getId(), $key));
+            $defaultValue = Platform::get(sprintf('settings.defaults.%s.%s', $this->id, $key));
 
             if (null === $defaultValue) {
                 continue;

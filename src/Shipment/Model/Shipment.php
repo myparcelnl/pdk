@@ -215,7 +215,7 @@ class Shipment extends Model implements StorableArrayable
      */
     public function toStorableArray(): array
     {
-        if ($this->updated === null) {
+        if (null === $this->updated) {
             $timeZone      = new DateTimeZone(Pdk::get('defaultTimeZone'));
             $this->updated = new DateTime('now', $timeZone);
         }

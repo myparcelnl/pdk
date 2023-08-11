@@ -208,7 +208,7 @@ trait HasAttributes
         if ($flags) {
             if ($flags & Arrayable::SKIP_NULL) {
                 $attributes = array_filter($attributes, static function ($value) {
-                    return $value !== null;
+                    return null !== $value;
                 });
             }
 
@@ -605,10 +605,10 @@ trait HasAttributes
 
         $value = $this->getCastModel($key, $value);
 
-        if (! is_object($value)) {
-            unset($this->classCastCache[$key]);
-        } else {
+        if (is_object($value)) {
             $this->classCastCache[$key] = $value;
+        } else {
+            unset($this->classCastCache[$key]);
         }
 
         return $value;

@@ -50,8 +50,6 @@ abstract class Facade
      * Get the root object behind the facade.
      *
      * @return mixed
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidFacadeException
      */
     protected static function getFacadeRoot()

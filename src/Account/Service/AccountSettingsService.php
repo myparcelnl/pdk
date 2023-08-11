@@ -82,7 +82,7 @@ class AccountSettingsService
      */
     public function hasAccount(): bool
     {
-        return $this->getAccount() !== null;
+        return null !== $this->getAccount();
     }
 
     /**

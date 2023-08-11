@@ -42,7 +42,7 @@ class GetOrdersResponse extends ApiResponseWithBody
      */
     private function createOrders(array $orders): void
     {
-        $this->orders = (new OrderCollection(
+        $this->orders = new OrderCollection(
             array_map(static function (array $order) {
                 return [
                     'uuid'                        => $order['uuid'],
@@ -64,6 +64,6 @@ class GetOrdersResponse extends ApiResponseWithBody
                     'updatedAt'                   => $order['updated_at'],
                 ];
             }, $orders)
-        ));
+        );
     }
 }

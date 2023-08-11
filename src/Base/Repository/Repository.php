@@ -57,7 +57,7 @@ class Repository
     {
         $fullKey = $this->getKeyPrefix() . $key;
 
-        if ($callback !== null && ($force || ! $this->storage->has($fullKey))) {
+        if (null !== $callback && ($force || ! $this->storage->has($fullKey))) {
             $data = $callback();
 
             $this->storage->set($fullKey, $data);

@@ -99,7 +99,7 @@ class SchemaRepository extends Repository
     /**
      * @param  array  $schema
      * @param  string $path
-     * @param         $value mixed when array this returns the enum, otherwise will validate against the value
+     * @param  mixed  $value when array this returns the enum, otherwise will validate against the value
      *
      * @return mixed array when $value is array, bool otherwise
      */

@@ -62,7 +62,7 @@ class CurrencyService implements CurrencyServiceInterface
         $currencySymbol = '€';
         $iso2           = Language::getIso2();
 
-        if ($iso2 === 'nl') {
+        if ('nl' === $iso2) {
             return sprintf('%s %s', $currencySymbol, number_format($amount / 100, 2, ',', '.'));
         }
 

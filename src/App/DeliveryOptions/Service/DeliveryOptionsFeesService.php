@@ -86,7 +86,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
                 continue;
             }
 
-            if ($option === false) {
+            if (false === $option) {
                 continue;
             }
 

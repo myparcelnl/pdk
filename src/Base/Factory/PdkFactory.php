@@ -49,7 +49,7 @@ class PdkFactory
     {
         if (! in_array($mode, self::MODES, true)) {
             throw new InvalidArgumentException(
-                sprintf("Invalid mode. Valid modes are: %s", implode(', ', self::MODES))
+                sprintf('Invalid mode. Valid modes are: %s', implode(', ', self::MODES))
             );
         }
 

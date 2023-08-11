@@ -14,7 +14,7 @@ class PlatformManager implements PlatformManagerInterface
      */
     public function all(): array
     {
-        return Config::get(sprintf("platform/%s", $this->getPlatform()));
+        return Config::get(sprintf('platform/%s', $this->getPlatform()));
     }
 
     /**
@@ -24,7 +24,7 @@ class PlatformManager implements PlatformManagerInterface
      */
     public function get(string $key)
     {
-        return Config::get(sprintf("platform/%s.%s", $this->getPlatform(), $key));
+        return Config::get(sprintf('platform/%s.%s', $this->getPlatform(), $key));
     }
 
     /**

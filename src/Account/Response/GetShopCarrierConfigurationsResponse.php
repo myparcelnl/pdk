@@ -31,12 +31,12 @@ class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
         $parsedBody     = json_decode($this->getBody(), true);
         $configurations = $parsedBody['data']['carrier_configurations'] ?? [];
 
-        $this->configurations = (new ShopCarrierConfigurationCollection(
+        $this->configurations = new ShopCarrierConfigurationCollection(
             array_map(static function (array $configuration) {
                 return ($configuration['configuration'] ?? []) + [
                         'carrier' => $configuration['carrier_id'],
                     ];
             }, $configurations)
-        ));
+        );
     }
 }

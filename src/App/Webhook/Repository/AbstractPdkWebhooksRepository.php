@@ -45,6 +45,6 @@ abstract class AbstractPdkWebhooksRepository extends Repository implements PdkWe
      */
     public function has(string $hook): bool
     {
-        return $this->get($hook) !== null;
+        return null !== $this->get($hook);
     }
 }
