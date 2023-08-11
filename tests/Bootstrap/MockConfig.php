@@ -21,12 +21,10 @@ final class MockConfig extends Config
     private $config;
 
     /**
-     * @param  array $data
      * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     * @param  array                                    $data
      */
-    public function __construct(array $data = [], FileSystemInterface $fileSystem)
+    public function __construct(FileSystemInterface $fileSystem, array $data = [])
     {
         parent::__construct($fileSystem);
 

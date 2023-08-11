@@ -97,6 +97,7 @@ class Collection extends SdkCollection implements StorableArrayable
     {
         parent::push(...$values);
         $this->castItems();
+
         return $this;
     }
 
@@ -109,6 +110,7 @@ class Collection extends SdkCollection implements StorableArrayable
     {
         $this->cast = $class;
         $this->castItems();
+
         return $this;
     }
 

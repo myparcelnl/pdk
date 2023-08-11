@@ -25,15 +25,13 @@ class PdkOrderNoteCollection extends Collection
     {
         $this->each(function (PdkOrderNote $note, $index) use ($notes) {
             if (! $notes->offsetExists($index)) {
-                return $note;
+                return;
             }
 
             /** @var OrderNote $apiNote */
             $apiNote = $notes->offsetGet($index);
 
             $note->apiIdentifier = $apiNote->uuid ?? null;
-
-            return $note;
         });
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Actions;
@@ -20,15 +21,23 @@ class PostOrderNotesAction extends AbstractOrderAction
     private $orderNotesRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository     $orderNotesRepository
+     * @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface
+     */
+    private $pdkOrderNoteRepository;
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface     $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository
+     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository         $orderNotesRepository
      */
     public function __construct(
-        PdkOrderRepositoryInterface $pdkOrderRepository,
-        OrderNotesRepository        $orderNotesRepository
+        PdkOrderRepositoryInterface     $pdkOrderRepository,
+        PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository,
+        OrderNotesRepository            $orderNotesRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->orderNotesRepository = $orderNotesRepository;
+        $this->pdkOrderNoteRepository = $pdkOrderNoteRepository;
+        $this->orderNotesRepository   = $orderNotesRepository;
     }
 
     /**
@@ -59,9 +68,9 @@ class PostOrderNotesAction extends AbstractOrderAction
                 );
 
                 $order->notes->addApiIdentifiers($notes);
-            });
 
-        $this->pdkOrderRepository->updateMany($orders);
+                $this->pdkOrderNoteRepository->updateMany($order->notes);
+            });
 
         return $this->getFetchOrdersResponse($request);
     }

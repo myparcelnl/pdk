@@ -19,22 +19,6 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesMockPdkInstance());
 
-const DEFAULT_INPUT_RECIPIENT = [
-    'cc'         => 'NL',
-    'city'       => 'Hoofddorp',
-    'person'     => 'Jaap Krekel',
-    'postalCode' => '2132JE',
-    'address1'   => 'Antareslaan 31',
-];
-
-const DEFAULT_INPUT_SENDER = [
-    'cc'         => 'NL',
-    'city'       => 'Amsterdam',
-    'person'     => 'Willem Wever',
-    'postalCode' => '4164ZF',
-    'address1'   => 'Werf 2',
-];
-
 it('creates a valid order collection from api data', function (array $input) {
     MockApi::enqueue(new ExamplePostOrdersResponse());
 

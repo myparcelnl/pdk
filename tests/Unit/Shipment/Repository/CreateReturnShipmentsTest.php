@@ -28,7 +28,7 @@ const INPUT_RECIPIENT = [
     'street'     => 'Antareslaan 31',
 ];
 
-const DEFAULT_INPUT_SENDER = [
+const DEFAULT_INPUT_SENDER_SHIPMENT_RETURN = [
     'cc'         => 'NL',
     'city'       => 'Amsterdam',
     'number'     => '2',
@@ -81,7 +81,7 @@ it('creates return shipment', function (array $input) {
                 ],
                 'recipient'           => INPUT_RECIPIENT,
                 'referenceIdentifier' => 'Fulfilment-1',
-                'sender'              => DEFAULT_INPUT_SENDER,
+                'sender'              => DEFAULT_INPUT_SENDER_SHIPMENT_RETURN,
             ],
         ],
     ],
@@ -129,7 +129,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
                 ],
                 'recipient'           => INPUT_RECIPIENT,
                 'referenceIdentifier' => 'my_ref_id',
-                'sender'              => DEFAULT_INPUT_SENDER,
+                'sender'              => DEFAULT_INPUT_SENDER_SHIPMENT_RETURN,
             ],
         ],
         'path'  => 'API/shipments/1',
