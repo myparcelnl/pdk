@@ -15,9 +15,9 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheDirectory(__DIR__ . '/.cache/rector');
 
     $rectorConfig->paths([
-        __DIR__ . '/helper',
-        __DIR__ . '/src',
         __DIR__ . '/config',
+        __DIR__ . '/private',
+        __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
 

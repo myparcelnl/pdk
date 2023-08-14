@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MyParcelNL\Pdk\Console\Types\Shared\Model;
+
+use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassMethodCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassPropertyCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\KeyValueCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection;
+use ReflectionClass;
+
+/**
+ * @property KeyValueCollection        $comments
+ * @property ClassMethodCollection     $methods
+ * @property ClassDefinitionCollection $parents
+ * @property ClassPropertyCollection   $properties
+ * @property ReflectionClass           $ref
+ * @property TypeCollection            $types
+ */
+class ClassDefinition extends Model
+{
+    public    $attributes = [
+        'comments'   => KeyValueCollection::class,
+        'methods'    => ClassMethodCollection::class,
+        'parents'    => ClassDefinitionCollection::class,
+        'properties' => ClassPropertyCollection::class,
+        'ref'        => null,
+        'types'      => TypeCollection::class,
+    ];
+
+    protected $casts      = [
+        'comments'   => KeyValueCollection::class,
+        'methods'    => ClassMethodCollection::class,
+        'parents'    => ClassDefinitionCollection::class,
+        'properties' => ClassPropertyCollection::class,
+        'ref'        => ReflectionClass::class,
+        'types'      => TypeCollection::class,
+    ];
+
+    /**
+     * @param  string $className
+     *
+     * @return bool
+     */
+    public function isSubclassOf(string $className): bool
+    {
+        return $this->parents->containsStrict(function (ClassDefinition $definition) use ($className) {
+            return $definition->ref->isSubclassOf($className) || $definition->ref->getName() === $className;
+        });
+    }
+}
