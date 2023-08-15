@@ -119,8 +119,10 @@ class PdkOrder extends Model implements StorableArrayable
 
     // TODO: v3.0.0 stop supporting deprecated attributes
     protected $deprecated = [
-        'recipient' => 'shippingAddress',
-        'sender'    => 'senderAddress',
+        'orderLines' => 'lines',
+        'orderNotes' => 'notes',
+        'recipient'  => 'shippingAddress',
+        'sender'     => 'senderAddress',
     ];
 
     /**
@@ -151,7 +153,8 @@ class PdkOrder extends Model implements StorableArrayable
             'orderDate'          => $order->orderDate,
             'invoiceAddress'     => $order->invoiceAddress,
             'dropOffPoint'       => $order->dropOffPoint,
-            'orderNotes'         => $order->orderNotes,
+            'notes'              => new PdkOrderNoteCollection($order->notes->all()),
+            'lines'              => new PdkOrderLineCollection($order->lines->all()),
             'status'             => $order->status,
             'type'               => $order->type,
             'price'              => $order->price,

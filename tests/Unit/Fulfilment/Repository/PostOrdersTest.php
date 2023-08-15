@@ -77,7 +77,7 @@ it('creates order', function ($input, $path, $query) {
             ],
             'language'       => null,
             'orderDate'      => '2022-08-22 00:00:00',
-            'orderLines'     => [
+            'lines'          => [
                 [
                     'uuid'          => '1234',
                     'quantity'      => 1,

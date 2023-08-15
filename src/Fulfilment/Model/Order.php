@@ -25,8 +25,8 @@ use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails            $invoiceAddress
  * @property null|string                                               $language
  * @property null|\DateTime                                            $orderDate
- * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $orderLines
- * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $orderNotes
+ * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $lines
+ * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $notes
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment            $shipment
  * @property null|string                                               $status
  * @property null|string                                               $type
@@ -48,8 +48,8 @@ class Order extends Model
         'invoiceAddress'              => null,
         'language'                    => null,
         'orderDate'                   => null,
-        'orderLines'                  => OrderLineCollection::class,
-        'orderNotes'                  => OrderNoteCollection::class,
+        'lines'                       => OrderLineCollection::class,
+        'notes'                       => OrderNoteCollection::class,
         'shipment'                    => null,
         'status'                      => null,
         'type'                        => null,
@@ -70,8 +70,8 @@ class Order extends Model
         'invoiceAddress'              => ContactDetails::class,
         'language'                    => 'string',
         'orderDate'                   => 'datetime',
-        'orderLines'                  => OrderLineCollection::class,
-        'orderNotes'                  => OrderNoteCollection::class,
+        'lines'                       => OrderLineCollection::class,
+        'notes'                       => OrderNoteCollection::class,
         'shipment'                    => Shipment::class,
         'status'                      => 'string',
         'type'                        => 'string',
@@ -105,7 +105,7 @@ class Order extends Model
                 'invoiceAddress'              => $pdkOrder->billingAddress ?? null,
                 'language'                    => Language::getIso2(),
                 'orderDate'                   => $pdkOrder->orderDate,
-                'orderLines'                  => $pdkOrder->lines
+                'lines'                       => $pdkOrder->lines
                     ->map(function (PdkOrderLine $pdkOrderLine) {
                         return new OrderLine(
                             [
@@ -114,7 +114,7 @@ class Order extends Model
                         );
                     })
                     ->all(),
-                'orderNotes'                  => $pdkOrder->orderNotes,
+                'notes'                       => $pdkOrder->notes,
                 'shipment'                    => $shipment,
                 'price'                       => $pdkOrder->orderPrice,
                 'priceAfterVat'               => $pdkOrder->orderPriceAfterVat,

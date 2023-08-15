@@ -8,7 +8,7 @@
     "invoiceAddress": null,
     "language": "nl",
     "orderDate": "2023-01-01 00:00:00",
-    "orderLines": [
+    "lines": [
         {
             "uuid": null,
             "quantity": 10,
@@ -29,7 +29,7 @@
             }
         }
     ],
-    "orderNotes": [],
+    "notes": [],
     "shipment": {
         "carrier": 1,
         "contractId": null,
