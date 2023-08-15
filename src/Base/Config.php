@@ -7,11 +7,25 @@ namespace MyParcelNL\Pdk\Base;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class Config implements ConfigInterface
 {
     private static $cache = [];
+
+    /**
+     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
+     */
+    protected $fileSystem;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
+     */
+    public function __construct(FileSystemInterface $fileSystem)
+    {
+        $this->fileSystem = $fileSystem;
+    }
 
     /**
      * @param  string $key
@@ -20,7 +34,7 @@ class Config implements ConfigInterface
      */
     public function get(string $key)
     {
-        return is_file($key) || is_dir($key)
+        return $this->fileSystem->isFile($key) || $this->fileSystem->isDir($key)
             ? $this->loadFileCached($key)
             : $this->getFileByKey($key);
     }
@@ -30,7 +44,7 @@ class Config implements ConfigInterface
      */
     protected function getConfigDirs(): array
     {
-        return \MyParcelNL\Pdk\Facade\Pdk::get('configDirs');
+        return PdkFacade::get('configDirs');
     }
 
     /**
@@ -79,11 +93,11 @@ class Config implements ConfigInterface
      */
     protected function load(string $filename)
     {
-        if (is_dir($filename)) {
+        if ($this->fileSystem->isDir($filename)) {
             return $this->loadDirectory($filename);
         }
 
-        if (is_file($filename)) {
+        if ($this->fileSystem->isFile($filename)) {
             return $this->loadFile($filename);
         }
 
@@ -125,7 +139,7 @@ class Config implements ConfigInterface
      */
     protected function loadDirectory(string $path): array
     {
-        $files = array_filter(scandir($path), static function ($file) {
+        $files = array_filter($this->fileSystem->scandir($path), static function ($file) {
             return ! in_array($file, ['.', '..']);
         });
 
@@ -177,7 +191,7 @@ class Config implements ConfigInterface
      */
     protected function parseJson(string $filename): array
     {
-        return json_decode(file_get_contents($filename), true);
+        return json_decode($this->fileSystem->get($filename), true);
     }
 
     /**

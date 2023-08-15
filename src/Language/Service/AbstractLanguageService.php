@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Language\Service;
 
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
@@ -11,16 +12,23 @@ use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 abstract class AbstractLanguageService implements LanguageServiceInterface
 {
     /**
+     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
+     */
+    protected $fileSystem;
+
+    /**
      * @var \MyParcelNL\Pdk\Language\Repository\LanguageRepository
      */
     protected $repository;
 
     /**
      * @param  \MyParcelNL\Pdk\Language\Repository\LanguageRepository $repository
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface               $fileSystem
      */
-    public function __construct(LanguageRepository $repository)
+    public function __construct(LanguageRepository $repository, FileSystemInterface $fileSystem)
     {
         $this->repository = $repository;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -49,7 +57,7 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
         $iso2 = substr($lang, 0, 2);
 
         return $this->repository->getTranslations($iso2, function () use ($iso2) {
-            return json_decode(file_get_contents($this->getFilePath($iso2)), true);
+            return json_decode($this->fileSystem->get($this->getFilePath($iso2)), true);
         });
     }
 

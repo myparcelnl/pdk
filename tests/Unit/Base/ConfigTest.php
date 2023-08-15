@@ -8,55 +8,44 @@ namespace MyParcelNL\Pdk\Base;
 use Brick\VarExporter\VarExporter;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
+use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
-use RuntimeException;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockRealConfig;
+use function DI\autowire;
 
 function getFiles(): array
 {
     return [
-        ['tmp-config-1.php', ['value1' => ['sub1' => 1]]],
-        ['tmp-config-2.inc', ['value2' => ['sub2' => 2]]],
-        ['nested/tmp-config-3.php', ['value3' => ['sub3' => 3]]],
-        ['nested/tmp-config-4.php', ['value4' => ['sub4' => 4]]],
+        ['/tmp/config/tmp-config-1.php', ['value1' => ['sub1' => 1]]],
+        ['/tmp/config/tmp-config-2.inc', ['value2' => ['sub2' => 2]]],
+        ['/tmp/config/nested/tmp-config-3.php', ['value3' => ['sub3' => 3]]],
+        ['/tmp/config/nested/tmp-config-4.php', ['value4' => ['sub4' => 4]]],
     ];
 }
 
-function getFullPath(?string $path = ''): string
-{
-    return sprintf('%s.tmp/tests/%s', PdkFacade::get('rootDir'), $path);
-}
-
 beforeEach(function () {
-    MockPdkFactory::create();
+    MockPdkFactory::create([
+        ConfigInterface::class => autowire(MockRealConfig::class),
+    ]);
 
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockFileSystem $fileSystem */
+    $fileSystem = PdkFacade::get(FileSystemInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
-    $pdk        = PdkFacade::get(PdkInterface::class);
-    $configDirs = array_merge($pdk->get('configDirs'), [getFullPath()]);
+    $pdk = PdkFacade::get(PdkInterface::class);
+
+    $configDirs = array_merge($pdk->get('configDirs'), ['/tmp/config']);
 
     $pdk->set('configDirs', $configDirs);
 
     foreach (getFiles() as [$path, $value]) {
-        $fullPath = getFullPath($path);
-        $dir      = dirname($fullPath);
-
-        if (! is_dir($dir) && ! mkdir($dir, 0755, true) && ! is_dir($dir)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
-        }
-
-        file_put_contents($fullPath, "<?php\n\n" . VarExporter::export($value, VarExporter::ADD_RETURN));
+        $fileSystem->put($path, "<?php\n\n" . VarExporter::export($value, VarExporter::ADD_RETURN));
     }
 });
 
-afterEach(function () {
-    foreach (getFiles() as [$path]) {
-        unlink(getFullPath($path));
-    }
-});
-
-it('gets a config file', function (string $input, bool $fullPath) {
-    $value = Config::get($fullPath ? getFullPath($input) : $input);
+it('gets a config file', function (string $input) {
+    $value = Config::get($input);
 
     expect($value)
         ->toBeArray()
@@ -68,13 +57,13 @@ it('gets a config file', function (string $input, bool $fullPath) {
         ]);
 })->with(function () {
     return [
-        'key'       => ['tmp-config-1', false],
-        'full path' => ['tmp-config-1.php', true],
+        'key'       => ['tmp-config-1'],
+        'full path' => ['/tmp/config/tmp-config-1.php'],
     ];
 });
 
-it('gets a directory', function (string $input, bool $fullPath) {
-    $value = Config::get($fullPath ? getFullPath($input) : $input);
+it('gets a directory', function (string $input) {
+    $value = Config::get($input);
 
     expect($value)->toBe([
         'tmp-config-3.php' => ['value3' => ['sub3' => 3]],
@@ -82,8 +71,8 @@ it('gets a directory', function (string $input, bool $fullPath) {
     ]);
 })->with(function () {
     return [
-        'key'       => ['nested', false],
-        'full path' => ['nested', true],
+        'key'       => ['nested'],
+        'full path' => ['/tmp/config/nested'],
     ];
 });
 

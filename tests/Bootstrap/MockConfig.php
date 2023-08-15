@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Base\Config;
-use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
-class MockConfig implements ConfigInterface
+final class MockConfig extends Config
 {
     public const SUBSCRIPTION_ID_DHL_FOR_YOU = 23182;
 
@@ -22,9 +22,14 @@ class MockConfig implements ConfigInterface
 
     /**
      * @param  array $data
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
+     *
+     * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], FileSystemInterface $fileSystem)
     {
+        parent::__construct($fileSystem);
+
         $carriers = $this->getFromRealConfig('carriers');
 
         $defaultDhl = (new Collection($carriers))->firstWhere('id', Carrier::CARRIER_DHL_FOR_YOU_ID);

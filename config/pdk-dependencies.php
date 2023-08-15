@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use function DI\factory;
 use function DI\value;
 
 return [
-    'pdkVersion'                => factory(function (): string {
-        $composerJson = json_decode(file_get_contents(__DIR__ . '/../composer.json'), true);
+    'pdkVersion'                => factory(function (FileSystemInterface $fileSystem): string {
+        $composerJson = json_decode($fileSystem->get(__DIR__ . '/../composer.json'), true);
 
         return $composerJson['version'];
     }),

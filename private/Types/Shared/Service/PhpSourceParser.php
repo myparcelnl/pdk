@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Service;
 
+use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
@@ -26,6 +27,11 @@ final class PhpSourceParser
     protected $definitions;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\FileSystem
+     */
+    private $fileSystem;
+
+    /**
      * @var \Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor
      */
     private $reflectionExtractor;
@@ -39,6 +45,7 @@ final class PhpSourceParser
     {
         $this->typeParser          = new PhpTypeParser();
         $this->definitions         = new ClassDefinitionCollection();
+        $this->fileSystem          = new FileSystem();
         $this->reflectionExtractor = $this->reflectionExtractor ?? new ReflectionExtractor();
     }
 
@@ -59,7 +66,7 @@ final class PhpSourceParser
     public function parseDirectory(string $directory): void
     {
         $time = $this->getTime();
-        $dir  = realpath($directory);
+        $dir  = $this->fileSystem->realpath($directory);
         $this->log('⏳', "Parsing $dir...");
 
         $loader = new RobotLoader();
@@ -272,7 +279,7 @@ final class PhpSourceParser
      */
     private function getUses(ReflectionClass $ref): array
     {
-        $file = file_get_contents($ref->getFileName());
+        $file = $this->fileSystem->get($ref->getFileName());
 
         preg_match_all('/use\s+(.+);/', $file, $matches);
 
