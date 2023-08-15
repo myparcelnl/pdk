@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Php;
 
+use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Console\Types\Shared\AbstractHelperGenerator;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
@@ -77,7 +78,7 @@ final class PhpHelperGenerator extends AbstractHelperGenerator
      */
     protected function getAllowedClasses(): array
     {
-        return [/*Model::class,*/ Collection::class];
+        return [Model::class, Collection::class];
     }
 
     /**
