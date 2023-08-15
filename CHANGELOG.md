@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.0](https://github.com/myparcelnl/pdk/compare/v2.15.0...v2.16.0) (2023-08-15)
+
+
+### :bug: Bug Fixes
+
+* **orders:** fix order notes not being posted ([#157](https://github.com/myparcelnl/pdk/issues/157)) ([b0c1d7b](https://github.com/myparcelnl/pdk/commit/b0c1d7b038452d3975b60cb4aac4e56fa69ee408))
+
+
+### :sparkles: New Features
+
+* add file system interface ([#61](https://github.com/myparcelnl/pdk/issues/61)) ([eb4700b](https://github.com/myparcelnl/pdk/commit/eb4700b466596c89c19d7389e23cdf3afbaaf80e))
+
 ## [2.15.0](https://github.com/myparcelnl/pdk/compare/v2.14.1...v2.15.0) (2023-08-11)
 
 
