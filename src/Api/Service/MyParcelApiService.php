@@ -31,7 +31,7 @@ class MyParcelApiService extends AbstractApiService
     {
         $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
 
-        return $apiKey ? sprintf('appelboom %s', base64_encode($apiKey)) : null;
+        return $apiKey ? sprintf('bearer %s', base64_encode($apiKey)) : null;
     }
 
     /**
