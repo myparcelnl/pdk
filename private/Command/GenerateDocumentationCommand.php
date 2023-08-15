@@ -12,6 +12,7 @@ final class GenerateDocumentationCommand extends AbstractGenerateTypesCommand
 
     protected function configure(): void
     {
+        parent::configure();
         $this->setDescription('Generate documentation');
     }
 

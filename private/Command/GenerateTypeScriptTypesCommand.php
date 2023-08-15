@@ -12,6 +12,7 @@ final class GenerateTypeScriptTypesCommand extends AbstractGenerateTypesCommand
 
     protected function configure(): void
     {
+        parent::configure();
         $this->setDescription('Generate TypeScript types');
     }
 

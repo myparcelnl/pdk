@@ -6,20 +6,30 @@ namespace MyParcelNL\Pdk\Console\Types\Shared\Service;
 
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Console\Concern\HasCommandContext;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
-use MyParcelNL\Pdk\Console\Types\Shared\Concern\HasLogging;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassMethodCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassPropertyCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Collection\KeyValueCollection;
+use MyParcelNL\Pdk\Console\Types\Shared\Concern\ReportsTiming;
+use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
+use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassMethod;
+use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
 use Nette\Loaders\RobotLoader;
 use ReflectionClass;
 use ReflectionMethod;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 
 final class PhpSourceParser
 {
+    use HasCommandContext;
+    use ReportsTiming;
     use ParsesPhpDocs;
-    use HasLogging;
 
     /**
      * @var \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection
@@ -41,11 +51,14 @@ final class PhpSourceParser
      */
     private $typeParser;
 
-    public function __construct()
+    public function __construct(InputInterface $input, OutputInterface $output)
     {
-        $this->typeParser          = new PhpTypeParser();
+        $this->setCommandContext($input, $output);
+
+        $this->typeParser = Pdk::get(PhpTypeParser::class);
+        $this->fileSystem = Pdk::get(FileSystem::class);
+
         $this->definitions         = new ClassDefinitionCollection();
-        $this->fileSystem          = new FileSystem();
         $this->reflectionExtractor = $this->reflectionExtractor ?? new ReflectionExtractor();
     }
 
@@ -67,7 +80,7 @@ final class PhpSourceParser
     {
         $time = $this->getTime();
         $dir  = $this->fileSystem->realpath($directory);
-        $this->log('⏳', "Parsing $dir...");
+        $this->output->writeln("⏳ Parsing $dir...");
 
         $loader = new RobotLoader();
         $loader->addDirectory($directory);
@@ -80,38 +93,62 @@ final class PhpSourceParser
 
         $this->parseClassNames($filenames);
 
-        $this->log('✅', sprintf("Parsed $dir in %s", $this->printTimeSince($time)));
+        $this->output->writeln(sprintf("✅ Parsed $dir in %s", $this->printTimeSince($time)));
+    }
+
+    /**
+     * @param  \ReflectionClass $reflectionClass
+     *
+     * @return string
+     */
+    protected function getCacheKey(ReflectionClass $reflectionClass): string
+    {
+        $fileName = $reflectionClass->getFileName();
+
+        return sprintf(
+            '%s.tmp/console/_%s.txt',
+            Pdk::get('rootDir'),
+            $fileName
+                ? md5_file($fileName) . filemtime($fileName)
+                : Str::snake($reflectionClass->getName())
+        );
     }
 
     /**
      * @param  string $name
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition
      * @throws \ReflectionException
      */
-    protected function getDefinitionByName(string $name): array
+    protected function getDefinitionByName(string $name): ClassDefinition
     {
         $ref = $this->getReflectionClass($name);
 
-        $fileName = $ref->getFileName();
-
-        $cacheKey = sprintf('%s/.cache/cd_%s', __DIR__, $fileName ? md5_file($fileName) . filemtime($fileName) : $name);
-
-        return $this->cache($cacheKey, function () use ($ref, $name): array {
+        $cached = $this->fileCache($this->getCacheKey($ref), function () use ($ref, $name): array {
             $time = $this->getTime();
 
             $definition = [
-                'ref'        => $ref,
-                'parents'    => $this->getClassParents($ref),
-                'comments'   => $this->getClassComments($ref),
-                'properties' => $this->getClassProperties($ref),
-                'methods'    => $this->getClassMethods($ref),
+                'ref'        => [
+                    'name' => $ref->getName(),
+                ],
+                'parents'    => $this->getClassParents($ref)
+                    ->toStorableArray(),
+                'comments'   => $this->getClassComments($ref)
+                    ->toStorableArray(),
+                'properties' => $this->getClassProperties($ref)
+                    ->toStorableArray(),
+                'methods'    => $this->getClassMethods($ref)
+                    ->toStorableArray(),
             ];
 
-            $this->log(sprintf('✅ Parsed class %s in %s', $name, $this->printTimeSince($time)));
+            if ($this->output->isVerbose()) {
+                $this->output->writeln(sprintf('✅ Parsed class %s in %s', $name, $this->printTimeSince($time)));
+            }
 
             return $definition;
         });
+
+        return new ClassDefinition($cached);
     }
 
     /**
@@ -156,119 +193,132 @@ final class PhpSourceParser
     protected function parseClassNames(array $filenames): void
     {
         foreach (array_keys($filenames) as $filename) {
-            $this->definitions->push($this->getDefinitionByName($filename));
+            $def = $this->getDefinitionByName($filename);
+
+            $this->definitions->push($def);
         }
     }
 
     /**
      * @param  \ReflectionClass $ref
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\KeyValueCollection
      */
-    private function getClassComments(ReflectionClass $ref): array
+    private function getClassComments(ReflectionClass $ref): KeyValueCollection
     {
-        return $this->cache(sprintf('comments_%s', $ref->getName()), function () use ($ref) {
-            $comment = $ref->getDocComment();
+        $comment = $ref->getDocComment();
 
-            if (! $comment) {
-                return [];
-            }
+        if (! $comment) {
+            return new KeyValueCollection();
+        }
 
-            preg_match_all('/@([\w-]+)\s+(.+)/', $comment, $matches);
+        preg_match_all('/@([\w-]+)\s+(.+)/', $comment, $matches);
 
-            return array_map(static function ($key, $value) {
+        return new KeyValueCollection(
+            array_map(static function ($key, $value) {
                 return [
                     'key'   => $key,
                     'value' => $value,
                 ];
-            }, $matches[1], $matches[2]);
-        });
+            }, $matches[1], $matches[2])
+        );
     }
 
     /**
      * @param  \ReflectionClass $ref
      *
-     * @return array[]
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassMethodCollection
      */
-    private function getClassMethods(ReflectionClass $ref): array
+    private function getClassMethods(ReflectionClass $ref): ClassMethodCollection
     {
         $reflectionMethods = array_filter(
             $ref->getMethods(ReflectionMethod::IS_PUBLIC),
-            static function (ReflectionMethod $method) {
-                return ! Str::startsWith($method->getName(), '__');
+            static function (ReflectionMethod $reflectionMethod) {
+                return ! Str::startsWith($reflectionMethod->getName(), '__');
             }
         );
 
-        return array_map(
-            function (ReflectionMethod $method) use ($ref): array {
-                return [
-                    'name'       => $method->getName(),
-                    'ref'        => $method,
-                    'parameters' => $this->getPhpDocTypes($ref->getName(), $method->getName()),
-                ];
+        $items = array_map(
+            function (ReflectionMethod $reflectionMethod) use ($ref): ClassMethod {
+                $name = $reflectionMethod->getName();
+
+                return new ClassMethod([
+                    'name'       => $name,
+                    'ref'        => [
+                        'name'  => $name,
+                        'class' => $ref->getName(),
+                    ],
+                    'parameters' => $this->getPhpDocTypes($ref->getName(), $name),
+                ]);
             },
             $reflectionMethods
         );
+
+        return new ClassMethodCollection($items);
     }
 
     /**
      * @param  \ReflectionClass $ref
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection
      * @throws \ReflectionException
      */
-    private function getClassParents(ReflectionClass $ref): array
+    private function getClassParents(ReflectionClass $ref): ClassDefinitionCollection
     {
-        return array_values(
-            array_map(function (string $name) {
-                return $this->getDefinitionByName($name);
-            }, Utils::getClassParentsRecursive($ref->getName()))
+        return new ClassDefinitionCollection(
+            array_values(
+                array_map(function (string $name): ClassDefinition {
+                    return $this->getDefinitionByName($name);
+                }, Utils::getClassParentsRecursive($ref->getName()))
+            )
         );
     }
 
     /**
      * @param  \ReflectionClass $ref
      *
-     * @return array
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassPropertyCollection
      */
-    private function getClassProperties(ReflectionClass $ref): array
+    private function getClassProperties(ReflectionClass $ref): ClassPropertyCollection
     {
         if (! $ref->isSubclassOf(Model::class)) {
             $refProperties = $this->reflectionExtractor->getProperties($ref->getName()) ?? [];
         }
 
-        return array_map(
-            function (string $property) use ($ref) {
-                $classDocProperty = Arr::first(
-                    $this->getClassComments($ref),
-                    static function (array $keyValue) use ($property) {
-                        return $keyValue['key'] === 'property' && Str::contains($keyValue['value'], "$$property");
+        return new ClassPropertyCollection(
+            array_map(
+                function (string $property) use ($ref) {
+                    $classDocProperty = $this->getClassComments($ref)
+                        ->first(
+                            static function (KeyValue $item) use ($property) {
+                                return 'property' === $item->key && Str::contains($item->value, "$$property");
+                            }
+                        );
+
+                    if ($classDocProperty) {
+                        $typeString = Str::before($classDocProperty['value'], '$');
+                        $uses       = $this->getUses($ref);
+
+                        $types = $this->typeParser->convertToTypes(
+                            $ref->getNamespaceName(),
+                            $typeString,
+                            $uses
+                        );
+                    } else {
+                        $types = $this->getPhpDocTypes($ref->getName(), $property);
+
+                        if (empty($types)) {
+                            $types = $this->getReflectionTypes($ref->getName(), $property);
+                        }
                     }
-                );
 
-                if ($classDocProperty) {
-                    $typeString = Str::before($classDocProperty['value'], '$');
-                    $uses       = $this->getUses($ref);
-
-                    $types = $this->typeParser->convertToTypes(
-                        $ref->getNamespaceName(),
-                        $typeString,
-                        $uses
-                    );
-                } else {
-                    $types = $this->getPhpDocTypes($ref->getName(), $property);
-
-                    if (empty($types)) {
-                        $types = $this->getReflectionTypes($ref->getName(), $property);
-                    }
-                }
-
-                return [
-                    'name'  => $property,
-                    'types' => $types,
-                ];
-            },
-            array_merge($refProperties ?? [], $this->getDocProperties($ref))
+                    return [
+                        'name'  => $property,
+                        'types' => $types,
+                    ];
+                },
+                array_merge($refProperties ?? [], $this->getDocProperties($ref))
+            )
         );
     }
 

@@ -27,12 +27,7 @@ trait ParsesPhpDocs
     {
         $this->phpDocExtractor = $this->phpDocExtractor ?? new PhpDocExtractor();
 
-        return $this->cache(
-            sprintf('php_doc_types_%s_%s', $refName, $propertyName),
-            function () use ($refName, $propertyName) {
-                return $this->phpDocExtractor->getTypes($refName, $propertyName) ?? [];
-            }
-        );
+        return $this->phpDocExtractor->getTypes($refName, $propertyName) ?? [];
     }
 
     /**
@@ -68,11 +63,6 @@ trait ParsesPhpDocs
     {
         $this->reflectionExtractor = $this->reflectionExtractor ?? new ReflectionExtractor();
 
-        return $this->cache(
-            sprintf('php_ref_types_%s_%s', $refName, $propertyName),
-            function () use ($refName, $propertyName) {
-                return $this->reflectionExtractor->getTypes($refName, $propertyName) ?? [];
-            }
-        );
+        return $this->reflectionExtractor->getTypes($refName, $propertyName) ?? [];
     }
 }

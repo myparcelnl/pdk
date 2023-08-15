@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Concern;
 
-trait HasLogging
+trait ReportsTiming
 {
     /**
      * @param  float $time
@@ -22,16 +22,6 @@ trait HasLogging
     protected function getTime(): float
     {
         return microtime(true);
-    }
-
-    /**
-     * @param ...$args
-     *
-     * @return void
-     */
-    protected function log(...$args): void
-    {
-        echo implode(' ', $args) . PHP_EOL;
     }
 
     /**

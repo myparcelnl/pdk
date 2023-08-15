@@ -8,16 +8,20 @@ namespace MyParcelNL\Pdk\Console\Types\Shared;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Console\Concern\HasCommandContext;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
-use MyParcelNL\Pdk\Console\Types\Shared\Concern\HasLogging;
+use MyParcelNL\Pdk\Console\Types\Shared\Concern\ReportsTiming;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\ParsesPhpDocs;
 use MyParcelNL\Pdk\Facade\Pdk;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractHelperGenerator
 {
-    use HasLogging;
+    use HasCommandContext;
     use ParsesPhpDocs;
+    use ReportsTiming;
 
     /**
      * @var string
@@ -40,11 +44,19 @@ abstract class AbstractHelperGenerator
     private $handles;
 
     /**
+     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
      * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
      * @param  string                                                                    $baseDir
      */
-    public function __construct(ClassDefinitionCollection $definitions, string $baseDir)
-    {
+    public function __construct(
+        InputInterface            $input,
+        OutputInterface           $output,
+        ClassDefinitionCollection $definitions,
+        string                    $baseDir
+    ) {
+        $this->setCommandContext($input, $output);
+
         $this->definitions = $definitions
             ->filter(function (ClassDefinition $definition): bool {
                 return $this->classAllowed($definition);
@@ -83,11 +95,11 @@ abstract class AbstractHelperGenerator
         $time          = $this->getTime();
         $classBasename = Utils::classBasename(static::class);
 
-        $this->log('🧬', sprintf('Running %s...', $classBasename));
+        $this->output->writeln(sprintf('🧬 Running %s...', $classBasename));
 
         $this->generate();
 
-        $this->log('🏁', sprintf('Finished running %s in %s', $classBasename, $this->printTimeSince($time)));
+        $this->output->writeln(sprintf('🏁 Finished running %s in %s', $classBasename, $this->printTimeSince($time)));
     }
 
     /**
@@ -99,7 +111,7 @@ abstract class AbstractHelperGenerator
     {
         $whitelist = $this->getAllowedClasses();
 
-        if (count($whitelist) === 0) {
+        if (0 === count($whitelist)) {
             return true;
         }
 
@@ -118,7 +130,7 @@ abstract class AbstractHelperGenerator
     {
         $this->fileSystem->closeStream($handle);
         $path = $this->fileSystem->realpath($filename);
-        $this->log('✏️', "Wrote to $path");
+        $this->output->writeln("️✏️ Wrote to $path");
     }
 
     /**

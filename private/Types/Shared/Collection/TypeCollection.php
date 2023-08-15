@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser;
 use Symfony\Component\PropertyInfo\Type;
 
 /**
- * @property Type $items
+ * @property Type[] $items
  */
 class TypeCollection extends Collection
 {
@@ -37,5 +37,15 @@ class TypeCollection extends Collection
                 return $this->typeParser->getTypeAsString($type);
             })
             ->all();
+    }
+
+    /**
+     * @return array
+     */
+    public function toStorableArray(): array
+    {
+        return array_map(function (Type $type) {
+            return $this->typeParser->getTypeAsString($type);
+        }, $this->items);
     }
 }

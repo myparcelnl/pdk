@@ -12,20 +12,8 @@ final class GeneratePhpHelperCommand extends AbstractGenerateTypesCommand
 
     protected function configure(): void
     {
+        parent::configure();
         $this->setDescription('Generate PHP helper');
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getDirectories(): array
-    {
-        return array_merge(
-            parent::getDirectories(),
-            [
-                'private',
-            ]
-        );
     }
 
     /**
@@ -34,5 +22,18 @@ final class GeneratePhpHelperCommand extends AbstractGenerateTypesCommand
     protected function getGeneratorClass(): string
     {
         return PhpHelperGenerator::class;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getSourceDirectories(): array
+    {
+        return array_merge(
+            parent::getSourceDirectories(),
+            [
+                'private',
+            ]
+        );
     }
 }

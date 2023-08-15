@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Console\Types\Shared\Concern;
 
 use MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorage;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Sdk\src\Support\Str;
 
 trait UsesCache
 {
@@ -32,14 +34,29 @@ trait UsesCache
         $driver = $this->getDriver($driverName);
 
         if ($driver->has($key)) {
-            return $driver->get($key);
+            $contents = $driver->get($key);
+
+            return $this->tryUnserialize($contents);
         }
 
-        $res = $callback();
+        $result = $callback();
 
-        $driver->set($key, $res);
+        $driver->set($key, $result);
 
-        return $res;
+        return $result;
+    }
+
+    /**
+     * @param  string   $key
+     * @param  callable $callback
+     *
+     * @return mixed
+     */
+    protected function fileCache(string $key, callable $callback)
+    {
+        return $this->cache($key, function () use ($key, $callback) {
+            return $this->cache($key, $callback, 'file');
+        });
     }
 
     /**
@@ -51,16 +68,30 @@ trait UsesCache
     {
         switch ($driverName) {
             case 'file':
-                self::$cacheFileStorage = self::$cacheFileStorage ?? new CacheFileStorage();
+                self::$cacheFileStorage = self::$cacheFileStorage ?? Pdk::get(CacheFileStorage::class);
                 $driver                 = self::$cacheFileStorage;
                 break;
 
             default:
-                self::$memoryCache = self::$memoryCache ?? new MemoryCacheStorage();
+                self::$memoryCache = self::$memoryCache ?? Pdk::get(MemoryCacheStorage::class);
                 $driver            = self::$memoryCache;
                 break;
         }
 
         return $driver;
+    }
+
+    /**
+     * @param  mixed $contents
+     *
+     * @return mixed|string
+     */
+    private function tryUnserialize($contents)
+    {
+        if (is_string($contents) && Str::startsWith($contents, 'a:')) {
+            $contents = unserialize($contents, ['allowed_classes' => true]);
+        }
+
+        return $contents;
     }
 }
