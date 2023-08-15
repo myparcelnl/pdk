@@ -7,11 +7,20 @@ namespace MyParcelNL\Pdk\Tests\Integration\Base;
 use Brick\VarExporter\VarExporter;
 use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 use MyParcelNL\Pdk\Base\Config;
+use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
 
 final class BehatConfig extends Config
 {
+    /**
+     * @param  \MyParcelNL\Pdk\Base\FileSystem $fileSystem
+     */
+    public function __construct(FileSystem $fileSystem)
+    {
+        parent::__construct($fileSystem);
+    }
+
     /**
      * @param  string                                               $httpMethod
      * @param  string                                               $uri
@@ -37,7 +46,7 @@ final class BehatConfig extends Config
             $bodyString = sprintf('json_encode(%s)', VarExporter::export(json_decode($body, true)));
         }
 
-        file_put_contents(
+        $this->fileSystem->put(
             $filename,
             strtr(
                 $this->getExampleTemplate(),
@@ -119,7 +128,7 @@ EOF;
             $increment ? "_$increment" : ''
         );
 
-        if (file_exists($filename)) {
+        if ($this->fileSystem->fileExists($filename)) {
             return $this->generateExampleFilename($httpMethod, $uri, $increment + 1);
         }
 

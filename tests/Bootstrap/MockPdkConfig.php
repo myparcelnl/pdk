@@ -20,6 +20,7 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
@@ -70,6 +71,7 @@ class MockPdkConfig
             ClientAdapterInterface::class               => autowire(Guzzle7ClientAdapter::class),
             ConfigInterface::class                      => autowire(MockConfig::class),
             CronServiceInterface::class                 => autowire(MockCronService::class),
+            FileSystemInterface::class                  => autowire(MockFileSystem::class),
             FrontendEndpointServiceInterface::class     => autowire(MockFrontendEndpointService::class),
             LanguageServiceInterface::class             => autowire(MockLanguageService::class),
             LoggerInterface::class                      => autowire(MockLogger::class),

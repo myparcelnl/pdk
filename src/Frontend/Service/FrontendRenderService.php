@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Model\ContextBag;
@@ -59,6 +60,11 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     protected $contextService;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
+     */
+    private $fileSystem;
+
+    /**
      * @var \MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface
      */
     private $viewService;
@@ -66,11 +72,16 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     /**
      * @param  \MyParcelNL\Pdk\Context\Contract\ContextServiceInterface $contextService
      * @param  \MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface   $viewService
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface                 $fileSystem
      */
-    public function __construct(ContextServiceInterface $contextService, ViewServiceInterface $viewService)
-    {
+    public function __construct(
+        ContextServiceInterface $contextService,
+        ViewServiceInterface    $viewService,
+        FileSystemInterface     $fileSystem
+    ) {
         $this->contextService = $contextService;
         $this->viewService    = $viewService;
+        $this->fileSystem     = $fileSystem;
     }
 
     /**
@@ -203,7 +214,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     protected function getJavaScriptInitTemplate(): string
     {
         if (! self::$jsInitTemplate) {
-            self::$jsInitTemplate = file_get_contents($this->getTemplate(sprintf('init.%s.html', Pdk::getMode())));
+            self::$jsInitTemplate = $this->fileSystem->get($this->getTemplate(sprintf('init.%s.html', Pdk::getMode())));
         }
 
         return self::$jsInitTemplate;
@@ -215,7 +226,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     protected function getRenderTemplate(): string
     {
         if (! self::$renderTemplate) {
-            self::$renderTemplate = file_get_contents($this->getTemplate('context.html'));
+            self::$renderTemplate = $this->fileSystem->get($this->getTemplate('context.html'));
         }
 
         return self::$renderTemplate;

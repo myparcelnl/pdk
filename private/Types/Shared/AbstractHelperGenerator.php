@@ -5,13 +5,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared;
 
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Concern\HasLogging;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\ParsesPhpDocs;
-use RuntimeException;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 abstract class AbstractHelperGenerator
 {
@@ -29,6 +30,11 @@ abstract class AbstractHelperGenerator
     protected $definitions;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
+     */
+    private $fileSystem;
+
+    /**
      * @var array<string,resource>
      */
     private $handles;
@@ -44,7 +50,8 @@ abstract class AbstractHelperGenerator
                 return $this->classAllowed($definition);
             });
 
-        $this->baseDir = $baseDir;
+        $this->baseDir    = $baseDir;
+        $this->fileSystem = Pdk::get(FileSystemInterface::class);
     }
 
     /**
@@ -58,15 +65,11 @@ abstract class AbstractHelperGenerator
     public function getHandle(string $filename)
     {
         if (! $this->handles[$filename]) {
-            $directory = dirname($filename);
+            $directory = $this->fileSystem->dirname($filename);
 
-            if (! is_dir($directory)
-                && ! mkdir($concurrentDirectory = $directory, 0755, true)
-                && ! is_dir($concurrentDirectory)) {
-                throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-            }
+            $this->fileSystem->mkdir($directory);
 
-            $this->handles[$filename] = fopen($filename, 'wb+');
+            $this->handles[$filename] = $this->fileSystem->openStream($filename, 'wb+');
         }
 
         return $this->handles[$filename];
@@ -113,8 +116,8 @@ abstract class AbstractHelperGenerator
      */
     protected function close($handle, string $filename): void
     {
-        fclose($handle);
-        $path = realpath($filename);
+        $this->fileSystem->closeStream($handle);
+        $path = $this->fileSystem->realpath($filename);
         $this->log('✏️', "Wrote to $path");
     }
 
@@ -134,7 +137,7 @@ abstract class AbstractHelperGenerator
      */
     protected function write($handle, string $content): void
     {
-        fwrite($handle, $content);
+        $this->fileSystem->writeToStream($handle, $content);
     }
 
     /**

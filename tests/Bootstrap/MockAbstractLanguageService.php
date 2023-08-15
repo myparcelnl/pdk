@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 use MyParcelNL\Pdk\Language\Service\AbstractLanguageService;
-use RuntimeException;
 
 class MockAbstractLanguageService extends AbstractLanguageService
 {
@@ -17,18 +17,19 @@ class MockAbstractLanguageService extends AbstractLanguageService
 
     /**
      * @param  \MyParcelNL\Pdk\Language\Repository\LanguageRepository $repository
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface               $fileSystem
      */
-    public function __construct(LanguageRepository $repository)
+    public function __construct(LanguageRepository $repository, FileSystemInterface $fileSystem)
     {
-        $dir                = dirname($this->getFilePath());
+        parent::__construct($repository, $fileSystem);
+
+        $dir                = $this->fileSystem->dirname($this->getFilePath());
         $translationsPathNl = $this->getFilePath('nl');
         $translationsPathEn = $this->getFilePath('en');
 
-        if (! is_dir($dir) && ! mkdir($dir) && ! is_dir($dir)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
-        }
+        $this->fileSystem->mkdir($dir, true);
 
-        file_put_contents(
+        $this->fileSystem->put(
             $translationsPathNl,
             json_encode([
                 'send_help'               => 'Stuur hulp',
@@ -37,7 +38,7 @@ class MockAbstractLanguageService extends AbstractLanguageService
             ])
         );
 
-        file_put_contents(
+        $this->fileSystem->put(
             $translationsPathEn,
             json_encode([
                 'send_help'               => 'Send help',
@@ -45,19 +46,6 @@ class MockAbstractLanguageService extends AbstractLanguageService
                 'in_a_docker_environment' => 'In a Docker environment',
             ])
         );
-
-        parent::__construct($repository);
-
-        // Delete temporary files after test is done.
-        register_shutdown_function(static function () use ($translationsPathEn, $translationsPathNl) {
-            if (file_exists($translationsPathNl)) {
-                unlink($translationsPathNl);
-            }
-
-            if (file_exists($translationsPathEn)) {
-                unlink($translationsPathEn);
-            }
-        });
     }
 
     /**
