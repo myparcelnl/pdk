@@ -28,7 +28,7 @@ class PhpTypeParser
         }, explode('|', $typeString));
 
         $filtered = array_filter($parts, static function (string $item) {
-            return $item !== 'null';
+            return 'null' !== $item;
         });
 
         $nullable = count($filtered) !== count($parts);
@@ -72,6 +72,10 @@ class PhpTypeParser
 
         if (in_array($typeString, Type::$builtinTypes, true)) {
             return new Type($typeString, $nullable);
+        }
+
+        if (! Str::startsWith($typeString, '\\')) {
+            $typeString = sprintf('\\%s', $typeString);
         }
 
         return new Type('object', $nullable, $typeString);

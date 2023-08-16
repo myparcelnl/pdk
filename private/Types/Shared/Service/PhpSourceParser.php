@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Service;
 
-use MyParcelNL\Pdk\Base\FileSystem;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
@@ -21,8 +21,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 
 final class PhpSourceParser
@@ -30,11 +28,6 @@ final class PhpSourceParser
     use HasCommandContext;
     use ReportsTiming;
     use ParsesPhpDocs;
-
-    /**
-     * @var \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection
-     */
-    protected $definitions;
 
     /**
      * @var \MyParcelNL\Pdk\Base\FileSystem
@@ -51,14 +44,53 @@ final class PhpSourceParser
      */
     private $typeParser;
 
-    public function __construct(InputInterface $input, OutputInterface $output)
+    /**
+     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser $typeParser
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface                   $fileSystem
+     */
+    public function __construct(PhpTypeParser $typeParser, FileSystemInterface $fileSystem)
     {
-        $this->setCommandContext($input, $output);
-
-        $this->typeParser = Pdk::get(PhpTypeParser::class);
-        $this->fileSystem = Pdk::get(FileSystem::class);
+        $this->typeParser = $typeParser;
+        $this->fileSystem = $fileSystem;
 
         $this->reflectionExtractor = $this->reflectionExtractor ?? new ReflectionExtractor();
+    }
+
+    /**
+     * @param  string $name
+     *
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition
+     * @throws \ReflectionException
+     */
+    public function getDefinitionByName(string $name): ClassDefinition
+    {
+        $ref = new ReflectionClass($name);
+
+        $cached = $this->fileCache($this->getCacheKey($ref), function () use ($ref, $name): array {
+            $time = $this->getTime();
+
+            $definition = [
+                'ref'        => [
+                    'name' => $ref->getName(),
+                ],
+                'parents'    => $this->getClassParents($ref)
+                    ->toStorableArray(),
+                'comments'   => $this->getClassComments($ref)
+                    ->toStorableArray(),
+                'properties' => $this->getClassProperties($ref)
+                    ->toStorableArray(),
+                'methods'    => $this->getClassMethods($ref)
+                    ->toStorableArray(),
+            ];
+
+            if ($this->output->isVerbose()) {
+                $this->output->writeln(sprintf('✅ Parsed class %s in %s', $name, $this->printTimeSince($time)));
+            }
+
+            return $definition;
+        });
+
+        return new ClassDefinition($cached);
     }
 
     /**
@@ -101,43 +133,6 @@ final class PhpSourceParser
     }
 
     /**
-     * @param  string $name
-     *
-     * @return \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition
-     * @throws \ReflectionException
-     */
-    protected function getDefinitionByName(string $name): ClassDefinition
-    {
-        $ref = $this->getReflectionClass($name);
-
-        $cached = $this->fileCache($this->getCacheKey($ref), function () use ($ref, $name): array {
-            $time = $this->getTime();
-
-            $definition = [
-                'ref'        => [
-                    'name' => $ref->getName(),
-                ],
-                'parents'    => $this->getClassParents($ref)
-                    ->toStorableArray(),
-                'comments'   => $this->getClassComments($ref)
-                    ->toStorableArray(),
-                'properties' => $this->getClassProperties($ref)
-                    ->toStorableArray(),
-                'methods'    => $this->getClassMethods($ref)
-                    ->toStorableArray(),
-            ];
-
-            if ($this->output->isVerbose()) {
-                $this->output->writeln(sprintf('✅ Parsed class %s in %s', $name, $this->printTimeSince($time)));
-            }
-
-            return $definition;
-        });
-
-        return new ClassDefinition($cached);
-    }
-
-    /**
      * @param  \ReflectionClass|\ReflectionMethod                     $ref
      * @param  \ReflectionClass|\ReflectionMethod|\ReflectionProperty $commentRef
      *
@@ -155,19 +150,6 @@ final class PhpSourceParser
         preg_match_all("/@property\s+.+?\\$(\w+)/", $comment, $matches);
 
         return $matches[1];
-    }
-
-    /**
-     * @param  string $name
-     *
-     * @return \ReflectionClass
-     * @throws \ReflectionException
-     */
-    protected function getReflectionClass(string $name): ReflectionClass
-    {
-        return $this->cache(sprintf('reflection_class_%s', $name), function () use ($name) {
-            return new ReflectionClass($name);
-        });
     }
 
     /**

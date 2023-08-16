@@ -10,8 +10,6 @@ use MyParcelNL\Pdk\Console\Types\Shared\Service\ParsesPhpDocs;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
 use Nette\Loaders\RobotLoader;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 final class PhpLoader
 {
@@ -25,14 +23,11 @@ final class PhpLoader
     private $fileSystem;
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
      */
-    public function __construct(InputInterface $input, OutputInterface $output)
+    public function __construct(FileSystemInterface $fileSystem)
     {
-        $this->setCommandContext($input, $output);
-
-        $this->fileSystem = Pdk::get(FileSystemInterface::class);
+        $this->fileSystem = $fileSystem;
     }
 
     /**

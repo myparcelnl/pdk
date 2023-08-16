@@ -28,14 +28,20 @@ class TypeCollection extends Collection
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getTypeStrings()
+            ->implode('|');
+    }
+
+    /**
      * @return string[]
      */
     public function getNames(): array
     {
-        return $this
-            ->map(function (Type $type) {
-                return $this->typeParser->getTypeAsString($type);
-            })
+        return $this->getTypeStrings()
             ->all();
     }
 
@@ -47,5 +53,15 @@ class TypeCollection extends Collection
         return array_map(function (Type $type) {
             return $this->typeParser->getTypeAsString($type);
         }, $this->items);
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection
+     */
+    protected function getTypeStrings(): TypeCollection
+    {
+        return $this->map(function (Type $type) {
+            return $this->typeParser->getTypeAsString($type);
+        });
     }
 }

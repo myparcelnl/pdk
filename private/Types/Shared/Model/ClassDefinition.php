@@ -6,12 +6,16 @@ namespace MyParcelNL\Pdk\Console\Types\Shared\Model;
 
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassMethodCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassPropertyCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\KeyValueCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection;
 use ReflectionClass;
+use RuntimeException;
 
 /**
  * @property KeyValueCollection        $comments
@@ -40,6 +44,29 @@ final class ClassDefinition extends Model implements StorableArrayable
         'ref'        => ReflectionClass::class,
         'types'      => TypeCollection::class,
     ];
+
+    /**
+     * @return null|string
+     */
+    public function getCollectionValueType(): ?string
+    {
+        if (! $this->isSubclassOf(Collection::class)) {
+            throw new RuntimeException(sprintf('ref is not a %s', Utils::classBasename(Collection::class)));
+        }
+
+        $itemsProperty = $this->properties->firstWhere('name', 'items');
+
+        if (! $itemsProperty || $itemsProperty->types->isEmpty()) {
+            return null;
+        }
+
+        /** @var \Symfony\Component\PropertyInfo\Type $type */
+        $type = $itemsProperty->types->first();
+
+        $valueType = Arr::first($type->getCollectionValueTypes());
+
+        return $valueType ? $valueType->getClassName() : null;
+    }
 
     /**
      * @return \ReflectionClass

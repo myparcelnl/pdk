@@ -1,0 +1,21 @@
+<?php
+/** @noinspection PhpUnused */
+
+declare(strict_types=1);
+
+namespace __FACTORY_NAMESPACE__;
+
+use __NAMESPACE__\__NAME__;
+use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Tests\Factory\AbstractModelFactory;
+
+/**
+ * __COMMENTS__
+ */
+final class __NAME__Factory extends AbstractModelFactory
+{
+    public function getModel(): string
+    {
+        return __NAME__::class;
+    }
+}
