@@ -12,24 +12,44 @@ use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Console\Concern\HasCommandContext;
+use MyParcelNL\Pdk\Console\Contract\HasCommandContextInterface;
+use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use function DI\autowire;
 use function DI\value;
 
-abstract class AbstractCommand extends Command
+abstract class AbstractCommand extends Command implements HasCommandContextInterface
 {
     use HasCommandContext;
+
+    /**
+     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
+     */
+    protected $fileSystem;
 
     /**
      * @throws \Exception
      */
     public function __construct(string $name = null)
     {
-        parent::__construct($name);
-
         $this->setupPdk();
+        $this->fileSystem = PdkFacade::get(FileSystemInterface::class);
+
+        parent::__construct($name);
+    }
+
+    protected function configure(): void
+    {
+        $this->addOption(
+            'rootDir',
+            'r',
+            InputOption::VALUE_OPTIONAL,
+            'The root directory.',
+            $this->fileSystem->realpath(__DIR__ . '/../../')
+        );
     }
 
     /**

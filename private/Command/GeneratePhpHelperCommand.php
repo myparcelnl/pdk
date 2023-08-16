@@ -32,7 +32,7 @@ final class GeneratePhpHelperCommand extends AbstractGenerateTypesCommand
         return array_merge(
             parent::getSourceDirectories(),
             [
-                'private',
+                __DIR__ . '/../../private',
             ]
         );
     }

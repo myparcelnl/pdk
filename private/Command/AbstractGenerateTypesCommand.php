@@ -18,6 +18,12 @@ abstract class AbstractGenerateTypesCommand extends AbstractCommand
      */
     abstract protected function getGeneratorClass(): string;
 
+    protected function configure(): void
+    {
+        parent::configure();
+        $this->registerFilesArgument();
+    }
+
     /**
      * @param  \Symfony\Component\Console\Input\InputInterface   $input
      * @param  \Symfony\Component\Console\Output\OutputInterface $output
@@ -40,7 +46,7 @@ abstract class AbstractGenerateTypesCommand extends AbstractCommand
                 $input,
                 $output,
                 $definitions,
-                $this->getBaseDir()
+                $input->getOption('rootDir')
             );
 
             $generatorInstance->run();

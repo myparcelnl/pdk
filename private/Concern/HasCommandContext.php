@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Concern;
 
+use MyParcelNL\Pdk\Base\Support\Utils;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @see \MyParcelNL\Pdk\Console\Contract\HasCommandContextInterface
+ */
 trait HasCommandContext
 {
     /**
@@ -25,9 +30,35 @@ trait HasCommandContext
      *
      * @return void
      */
-    protected function setCommandContext(InputInterface $input, OutputInterface $output): void
+    public function setCommandContext(InputInterface $input, OutputInterface $output): void
     {
         $this->input  = $input;
         $this->output = $output;
+
+        $this->extendOutputStyles($output);
+    }
+
+    /**
+     * @param  string $content
+     *
+     * @return void
+     */
+    protected function log(string $content): void
+    {
+        $this->output->writeln(sprintf('<context>[%s]</context> %s', Utils::classBasename(static::class), $content));
+    }
+
+    /**
+     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return void
+     */
+    private function extendOutputStyles(OutputInterface $output): void
+    {
+        $formatter = $output->getFormatter();
+
+        $formatter->setStyle('def', new OutputFormatterStyle('cyan', null, ['bold']));
+        $formatter->setStyle('success', new OutputFormatterStyle('green'));
+        $formatter->setStyle('context', new OutputFormatterStyle('blue', null, ['bold']));
     }
 }

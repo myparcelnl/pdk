@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Console\Types\Shared\Service;
 
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Console\Concern\HasCommandContext;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
@@ -18,7 +19,6 @@ use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassMethod;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
-use Nette\Loaders\RobotLoader;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,42 +58,28 @@ final class PhpSourceParser
         $this->typeParser = Pdk::get(PhpTypeParser::class);
         $this->fileSystem = Pdk::get(FileSystem::class);
 
-        $this->definitions         = new ClassDefinitionCollection();
         $this->reflectionExtractor = $this->reflectionExtractor ?? new ReflectionExtractor();
     }
 
     /**
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $files
+     *
      * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection
      */
-    public function getDefinitions(): ClassDefinitionCollection
-    {
-        return $this->definitions;
-    }
-
-    /**
-     * @param  string $directory
-     *
-     * @return void
-     * @throws \ReflectionException
-     */
-    public function parseDirectory(string $directory): void
+    public function parse(Collection $files): ClassDefinitionCollection
     {
         $time = $this->getTime();
-        $dir  = $this->fileSystem->realpath($directory);
-        $this->output->writeln("⏳ Parsing $dir...");
+        $this->output->writeln('⏳ Parsing files...');
 
-        $loader = new RobotLoader();
-        $loader->addDirectory($directory);
+        $result = $this->parseFiles($files);
 
-        // Scans directories for classes / interfaces / traits
-        $loader->rebuild();
+        $this->output->writeln(sprintf('✅ Parsed files in %s', $this->printTimeSince($time)));
 
-        $filenames = $loader->getIndexedClasses();
-        ksort($filenames);
+        if ($result->isEmpty()) {
+            $this->output->writeln('<error>No files found</error>');
+        }
 
-        $this->parseClassNames($filenames);
-
-        $this->output->writeln(sprintf("✅ Parsed $dir in %s", $this->printTimeSince($time)));
+        return $result;
     }
 
     /**
@@ -185,18 +171,17 @@ final class PhpSourceParser
     }
 
     /**
-     * @param  array $filenames
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $filenames
      *
-     * @return void
-     * @throws \ReflectionException
+     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection
      */
-    protected function parseClassNames(array $filenames): void
+    protected function parseFiles(Collection $filenames): ClassDefinitionCollection
     {
-        foreach (array_keys($filenames) as $filename) {
-            $def = $this->getDefinitionByName($filename);
-
-            $this->definitions->push($def);
-        }
+        return new ClassDefinitionCollection(
+            $filenames->map(function (string $filename) {
+                return $this->getDefinitionByName($filename);
+            })
+        );
     }
 
     /**
