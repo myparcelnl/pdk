@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.1](https://github.com/myparcelnl/pdk/compare/v2.16.0...v2.16.1) (2023-08-16)
+
+
+### :bug: Bug Fixes
+
+* **container:** add default implementation for file system interface ([ea00035](https://github.com/myparcelnl/pdk/commit/ea00035942198caffe92e0acc8373732cd52640b))
+
 ## [2.16.0](https://github.com/myparcelnl/pdk/compare/v2.15.0...v2.16.0) (2023-08-15)
 
 
