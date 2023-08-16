@@ -28,6 +28,8 @@ use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\FileSystem;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
@@ -116,6 +118,11 @@ return [
      * Calculates drop off moments.
      */
     DropOffServiceInterface::class             => autowire(DropOffService::class),
+
+    /**
+     * Handles file system operations.
+     */
+    FileSystemInterface::class                 => autowire(FileSystem::class),
 
     /**
      * Used to render parts of the admin frontend.
