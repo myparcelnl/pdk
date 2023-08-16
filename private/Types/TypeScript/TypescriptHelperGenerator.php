@@ -13,6 +13,8 @@ use MyParcelNL\Pdk\Console\Types\Shared\AbstractHelperGenerator;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
 use MyParcelNL\Pdk\Context\Context;
 use ReflectionClass;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class TypescriptHelperGenerator extends AbstractHelperGenerator
 {
@@ -27,12 +29,18 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
     private $parser;
 
     /**
+     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
      * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
      * @param  string                                                                    $baseDir
      */
-    public function __construct(ClassDefinitionCollection $definitions, string $baseDir)
-    {
-        parent::__construct($definitions, $baseDir);
+    public function __construct(
+        InputInterface            $input,
+        OutputInterface           $output,
+        ClassDefinitionCollection $definitions,
+        string                    $baseDir
+    ) {
+        parent::__construct($input, $output, $definitions, $baseDir);
         $this->parser = new TsTypeParser();
     }
 
