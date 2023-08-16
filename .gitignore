@@ -11,9 +11,10 @@ pdk_ide_helper.php
 /.cache/
 /.tmp/
 /coverage/
+/docs/
 /node_modules/
-/vendor/
 /types/
+/vendor/
 
 .yarn/*
 !.yarn/releases
