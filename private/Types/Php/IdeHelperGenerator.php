@@ -86,7 +86,7 @@ final class PhpHelperGenerator extends AbstractHelperGenerator
      */
     private function getFilename(): string
     {
-        return "$this->baseDir/types/pdk_ide_helper.php";
+        return "$this->baseDir/.meta/pdk_ide_helper.php";
     }
 
     /**
