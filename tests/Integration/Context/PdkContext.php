@@ -8,8 +8,10 @@ use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Integration\Api\Adapter\BehatMyParcelClientAdapter;
 use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatMyParcelApiService;
 use MyParcelNL\Pdk\Tests\Integration\Base\BehatConfig;
@@ -46,5 +48,25 @@ final class PdkContext extends AbstractContext
             ConfigInterface::class               => autowire(BehatConfig::class),
             PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)->constructor(null),
         ]);
+    }
+
+    /**
+     * @Given /^I expect my account to have (\d+) shops?$/
+     */
+    public function iExpectMyAccountToHaveNShops(int $count): void
+    {
+        $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
+
+        expect(
+            $accountRepository->getAccount()->shops->count()
+        )->toBe($count);
+    }
+
+    /**
+     * @Given /my account is set up(?: with (\d+) shops?)?/
+     */
+    public function myAccountIsSetUp(int $shops = 1): void
+    {
+        TestBootstrapper::hasAccount($this->getValidApiKey(), $shops);
     }
 }

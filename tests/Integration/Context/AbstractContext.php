@@ -14,6 +14,8 @@ use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Hook\Scope\HookScope;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
 use MyParcelNL\Pdk\Tests\Integration\Context\Concern\ValidatesValues;
 use MyParcelNL\Pdk\Tests\Integration\Context\Contract\ContextInterface;
@@ -91,6 +93,8 @@ abstract class AbstractContext extends TestCase implements ContextInterface
      */
     final public static function beforeSuite(BeforeSuiteScope $scope): void
     {
+        require_once __DIR__ . '/../../functions.php';
+
         self::executeHooks(self::BEFORE_SUITE, $scope);
     }
 
@@ -163,6 +167,14 @@ abstract class AbstractContext extends TestCase implements ContextInterface
     final public function beforeStep(BeforeStepScope $scope): void
     {
         self::executeHooks(self::BEFORE_STEP, $scope);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getValidApiKey(): string
+    {
+        return getenv(sprintf('API_KEY_%s', strtoupper(Platform::getPlatform()))) ?: TestBootstrapper::API_KEY_VALID;
     }
 
     /**

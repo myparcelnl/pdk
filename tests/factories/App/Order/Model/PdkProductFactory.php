@@ -1,0 +1,75 @@
+<?php
+/** @noinspection PhpUnused */
+
+declare(strict_types=1);
+
+namespace MyParcelNL\Pdk\App\Order\Model;
+
+use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
+use MyParcelNL\Pdk\Base\Model\Currency;
+use MyParcelNL\Pdk\Base\Model\CurrencyFactory;
+use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Settings\Model\ProductSettingsFactory;
+use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
+use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use function MyParcelNL\Pdk\Tests\factory;
+
+/**
+ * @template T of PdkProduct
+ * @method PdkProduct make()
+ * @method $this withEan(string $ean)
+ * @method $this withExternalIdentifier(string $externalIdentifier)
+ * @method $this withHeight(int $height)
+ * @method $this withIsDeliverable(bool $isDeliverable)
+ * @method $this withLength(int $length)
+ * @method $this withMergedSettings(ProductSettings|ProductSettingsFactory $mergedSettings)
+ * @method $this withName(string $name)
+ * @method $this withParent(PdkProduct|PdkProductFactory $parent)
+ * @method $this withSettings(ProductSettings|ProductSettingsFactory $settings)
+ * @method $this withSku(string $sku)
+ * @method $this withWeight(int $weight)
+ * @method $this withWidth(int $width)
+ */
+final class PdkProductFactory extends AbstractModelFactory
+{
+    public function getModel(): string
+    {
+        return PdkProduct::class;
+    }
+
+    /**
+     * @param  int|Currency|CurrencyFactory $price
+     *
+     * @return void
+     */
+    public function withPrice($price): self
+    {
+        if (is_int($price)) {
+            $price = factory(Currency::class)->withAmount($price);
+        }
+
+        return $this->with($price);
+    }
+
+    protected function createDefault(): FactoryInterface
+    {
+        return $this
+            ->withExternalIdentifier('123')
+            ->withSku('test')
+            ->withName('test')
+            ->withPrice(1000);
+    }
+
+    /**
+     * @param  T $model
+     *
+     * @return void
+     */
+    protected function save(Model $model): void
+    {
+        Pdk::get(PdkProductRepositoryInterface::class)
+            ->update($model);
+    }
+}
