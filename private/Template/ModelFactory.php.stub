@@ -7,7 +7,7 @@ namespace __FACTORY_NAMESPACE__;
 
 use __NAMESPACE__\__NAME__;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Tests\Factory\AbstractModelFactory;
+use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
 /**
  * __COMMENTS__

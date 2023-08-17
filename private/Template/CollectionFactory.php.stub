@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace __FACTORY_NAMESPACE__;
 
 use __NAMESPACE__\__NAME__;
-use MyParcelNL\Pdk\Tests\Factory\AbstractCollectionFactory;
+use MyParcelNL\Pdk\Tests\Factory\Collection\AbstractCollectionFactory;
 __MODEL_FACTORY_USE__
 
 /**

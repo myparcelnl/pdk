@@ -43,7 +43,10 @@ final class CollectionFactoryGeneratorService extends AbstractFactoryGeneratorSe
      */
     protected function createComments(ClassDefinition $definition): Collection
     {
-        return new Collection([sprintf('@method %s make()', $definition->ref->getShortName())]);
+        return new Collection([
+            sprintf('@template T of %s', $definition->ref->getShortName()),
+            sprintf('@method %s make()', $definition->ref->getShortName()),
+        ]);
     }
 
     /**

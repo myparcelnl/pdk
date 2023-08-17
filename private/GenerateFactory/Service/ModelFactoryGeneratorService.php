@@ -29,7 +29,10 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
             if ($definition->isSubclassOf(Model::class)) {
                 $modelFactory = FactoryFactory::create($definition->ref->getName());
 
-                return $types->push($this->typeParser->createType(get_class($modelFactory)));
+                return $types->push(
+                    $this->typeParser->createType('array'),
+                    $this->typeParser->createType(get_class($modelFactory))
+                );
             }
 
             if ($definition->isSubclassOf(Collection::class)) {
@@ -41,7 +44,10 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
 
                 $modelFactory = FactoryFactory::create($collectionValueType);
 
-                return $types->push($this->typeParser->createType(get_class($modelFactory), false, true));
+                return $types->push(
+                    $this->typeParser->createType('array', false, true),
+                    $this->typeParser->createType(get_class($modelFactory), false, true)
+                );
             }
         } catch (Throwable $e) {
             // Silently ignore
@@ -63,14 +69,15 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
                 $typesString = (string) $types;
 
                 return sprintf(
-                    ' * @method $this with%s(%s$%s)',
+                    '@method $this with%s(%s$%s)',
                     Str::studly($property->name),
                     $typesString ? "$typesString " : '',
                     Str::camel($property->name)
                 );
             })
             ->sort()
-            ->prepend(sprintf('@method %s make()', $definition->ref->getShortName()));
+            ->prepend(sprintf('@method %s make()', $definition->ref->getShortName()))
+            ->prepend(sprintf('@template T of %s', $definition->ref->getShortName()));
     }
 
     /**

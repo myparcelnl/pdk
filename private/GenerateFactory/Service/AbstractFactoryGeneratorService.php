@@ -124,12 +124,10 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
      */
     protected function generateFilename(ClassDefinition $definition): string
     {
-        $basename = Utils::classBasename($this->getClass());
-
         return strtr(
-            str_replace("$basename/", '', $definition->ref->getFileName()),
+            $definition->ref->getFileName(),
             [
-                '/src/' => "/tests/Factory/$basename/",
+                '/src/' => '/tests/factories/',
                 '.php'  => 'Factory.php',
             ]
         );
@@ -153,11 +151,11 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
     protected function getTemplateReplacers(ClassDefinition $definition): array
     {
         return [
-            '__FACTORY_NAMESPACE__' => $this->createNamespace($definition),
+            '__FACTORY_NAMESPACE__' => $definition->ref->getNamespaceName(),
             '__NAMESPACE__'         => $definition->ref->getNamespaceName(),
             '__NAME__'              => $definition->ref->getShortName(),
             '__COMMENTS__'          => $this->createComments($definition)
-                ->implode("\n"),
+                ->implode("\n * "),
         ];
     }
 }
