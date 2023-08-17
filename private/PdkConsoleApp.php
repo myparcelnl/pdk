@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Console;
 
 use MyParcelNL\Pdk\Console\Command\GenerateDocumentationCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateFactoryCommand;
-use MyParcelNL\Pdk\Console\Command\GeneratePhpHelperCommand;
+use MyParcelNL\Pdk\Console\Command\GenerateIdeHelperCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateTypeScriptTypesCommand;
 use Symfony\Component\Console\Application;
 
@@ -25,7 +25,7 @@ final class PdkConsoleApp
 
         $app->add(new GenerateDocumentationCommand());
         $app->add(new GenerateFactoryCommand());
-        $app->add(new GeneratePhpHelperCommand());
+        $app->add(new GenerateIdeHelperCommand());
         $app->add(new GenerateTypeScriptTypesCommand());
 
         $app->run();

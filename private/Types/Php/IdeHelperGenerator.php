@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyInfo\Type;
 
-final class PhpHelperGenerator extends AbstractHelperGenerator
+final class IdeHelperGenerator extends AbstractHelperGenerator
 {
     /**
      * @var \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser

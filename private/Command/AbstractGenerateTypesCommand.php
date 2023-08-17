@@ -21,7 +21,7 @@ abstract class AbstractGenerateTypesCommand extends AbstractCommand
     protected function configure(): void
     {
         parent::configure();
-        $this->registerFilesArgument();
+        $this->registerFilesArgument($this->getDefaultSourceDirectories());
     }
 
     /**
@@ -57,5 +57,13 @@ abstract class AbstractGenerateTypesCommand extends AbstractCommand
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getDefaultSourceDirectories(): array
+    {
+        return ['src'];
     }
 }

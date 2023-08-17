@@ -14,7 +14,7 @@
     },
     "scripts": {
         "console": "php bin/console",
-        "post-autoload-dump": "composer console generate:php",
+        "post-autoload-dump": "composer console generate:ide-helper",
         "quality": "rector process --dry-run",
         "quality:fix": "rector process",
         "test": "composer run test:unit && composer run test:integration",
