@@ -22,3 +22,20 @@ pdk_ide_helper.php
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+# IntelliJ files
+/.idea/*.xml
+!/.idea/codeception.xml
+!/.idea/externalDependencies.xml
+!/.idea/jsLibraryMappings.xml
+!/.idea/jsonSchemas.xml
+!/.idea/misc.xml
+!/.idea/modules.xml
+!/.idea/pdk.iml
+!/.idea/php-docker-settings.xml
+!/.idea/php-test-framework.xml
+!/.idea/php.xml
+!/.idea/phpspec.xml
+!/.idea/phpunit.xml
+!/.idea/prettier.xml
+!/.idea/vcs.xml
