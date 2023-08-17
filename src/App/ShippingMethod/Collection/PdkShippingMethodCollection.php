@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Support\Collection;
 
 /**
- * @property \MyParcelNL\Pdk\App\Cart\Model\PdkCart[] $items
+ * @property PdkShippingMethod[] $items
  */
 class PdkShippingMethodCollection extends Collection
 {

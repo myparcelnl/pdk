@@ -9,6 +9,9 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 
+/**
+ * @property PdkOrderNote[] $items
+ */
 class PdkOrderNoteCollection extends Collection
 {
     protected $cast = PdkOrderNote::class;
