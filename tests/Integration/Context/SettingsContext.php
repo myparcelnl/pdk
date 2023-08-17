@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Tests\Integration\Context;
 
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
 
 /**
@@ -59,24 +59,18 @@ final class SettingsContext extends AbstractContext
 
     /**
      * @Given a valid API key is set
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function aValidAPIKeyIsSet(): void
     {
-        $platform = Platform::getPlatform();
-
-        $apiKey = getenv('API_KEY_' . strtoupper($platform)) ?: 'valid-api-key';
-
-        $this->settingsRepository->storeSettings(new AccountSettings([AccountSettings::API_KEY => $apiKey]));
+        TestBootstrapper::hasApiKey($this->getValidApiKey());
     }
 
     /**
      * @Given an invalid API key is set
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function anInvalidAPIKeyIsSet(): void
     {
-        $this->settingsRepository->storeSettings(new AccountSettings([AccountSettings::API_KEY => 'invalid-api-key']));
+        TestBootstrapper::hasApiKey('invalid-api-key');
     }
 
     /**

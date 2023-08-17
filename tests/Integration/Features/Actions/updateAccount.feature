@@ -34,3 +34,12 @@ Feature: As a user I want to be able to update my account settings
       | errors.0.code   | 3000           |
       | errors.0.title  | Access Denied. |
     And I expect the API key to be marked as invalid
+
+  Scenario: When I update my account without any data, I expect account data to be fetched from the API
+    Given my account is set up with 2 shops
+    # This corresponds to the "manual update" button in the frontend settings
+    When I do a POST request to action "updateAccount" with content:
+      | key | value |
+      |     |       |
+    Then I expect the response code to be 200
+    And I expect my account to have 1 shop
