@@ -10,8 +10,6 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 
 const LINES_FITS_IN_MAILBOX = [
     [
@@ -88,8 +86,6 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
 ];
 
 uses()->group('checkout');
-
-usesShared(new UsesMockPdkInstance());
 
 it('calculates mailbox percentage', function (array $lines, float $expected) {
     /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */

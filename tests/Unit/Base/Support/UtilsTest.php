@@ -1,12 +1,13 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
-use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
+use MyParcelNL\Pdk\Mock\Concern\MockBeConcerned;
+use MyParcelNL\Pdk\Mock\MockClassWithTrait;
 
 it('gets parents of class recursively', function () {
     expect(Utils::getClassParentsRecursive(new MockClassWithTrait()))

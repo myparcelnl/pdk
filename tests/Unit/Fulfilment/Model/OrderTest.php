@@ -6,11 +6,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-usesShared(new UsesMockPdkInstance());
 it('creates fulfilment order from pdk order', function (array $input) {
     $pdkOrder = new PdkOrder($input);
 

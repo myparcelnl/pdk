@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Model;
 
-use MyParcelNL\Pdk\Tests\Mocks\DifferentAttributeCasingModel;
+use MyParcelNL\Pdk\Mock\Model\DifferentAttributeCasingModel;
 
 it('can initialize and get properties with any case', function () {
     $model = new DifferentAttributeCasingModel([

@@ -10,12 +10,8 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Frontend\View\AbstractSettingsView;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('frontend', 'settings');
-
-usesShared(new UsesMockPdkInstance());
 
 final class MockSettingsView extends AbstractSettingsView
 {

@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Uses;
 
-class UsesMockPdkInstance extends AbstractUsesMockPdkInstance
-{
-    public function afterAll(): void
-    {
-        $this->reset();
-    }
+use MyParcelNL\Pdk\Tests\Uses\Contract\BaseMock;
 
+final class UsesMockPdkInstance implements BaseMock
+{
     /**
+     * @return void
      * @throws \Exception
      */
     public function beforeAll(): void
     {
-        $this->setup();
+        //        MockPdkFactory::create();
     }
 }

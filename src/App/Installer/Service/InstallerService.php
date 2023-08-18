@@ -108,7 +108,7 @@ class InstallerService implements InstallerServiceInterface
      */
     protected function getInstalledVersion(): ?string
     {
-        return $this->settingsRepository->get(Pdk::get('settingKeyInstalledVersion'));
+        return $this->settingsRepository->get(Pdk::get('settingKeyInstalledVersion')) ?: null;
     }
 
     /**

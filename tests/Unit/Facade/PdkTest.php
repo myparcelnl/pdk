@@ -7,24 +7,29 @@ namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\value;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
+
+beforeAll(function () {
+    //    MockPdkFactory::clear();
+});
 
 afterEach(function () {
-    Pdk::setPdkInstance(null);
+    //    MockPdkFactory::clear();
+});
+
+afterAll(function () {
 });
 
 it('works', function () {
-    PdkFactory::create(MockPdkConfig::create());
-
     expect(Pdk::get(ApiServiceInterface::class))->toBeInstanceOf(
         ApiServiceInterface::class
     );
 });
 
 it('exposes mode property', function (string $mode, bool $isDevelopment) {
-    PdkFactory::create(MockPdkConfig::create(['mode' => value($mode)]));
+    mockPdkProperties(['mode' => value($mode)]);
 
     expect(Pdk::getMode())
         ->toBe($mode)
@@ -44,13 +49,13 @@ it('exposes mode property', function (string $mode, bool $isDevelopment) {
 ]);
 
 it('throws error if appInfo is missing', function () {
-    PdkFactory::create();
+    mockPdkProperty('appInfo', null);
 
     Pdk::getAppInfo();
 })->throws(PdkConfigException::class);
 
 it('throws error if appInfo is not an instance of AppInfo', function () {
-    PdkFactory::create(MockPdkConfig::create(['appInfo' => value('foo')]));
+    mockPdkProperties(['appInfo' => value('foo')]);
 
     Pdk::getAppInfo();
 })->throws(PdkConfigException::class);

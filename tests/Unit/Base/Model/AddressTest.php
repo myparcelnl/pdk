@@ -6,10 +6,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('correctly transforms deprecated fields', function (array $input, array $output) {
     $address = new Address($input);

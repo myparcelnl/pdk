@@ -5,34 +5,37 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
+use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 uses()->group('checkout');
 
-usesShared(
-    new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            CarrierSettings::ID => [
-                Carrier::CARRIER_POSTNL_NAME => [
-                    CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS   => true,
-                ],
+beforeEach(function () {
+    factory(Shop::class)
+        ->withCarriers([
+            [
+                'name'    => Carrier::CARRIER_POSTNL_NAME,
+                'enabled' => true,
             ],
-        ]),
-    ])
-);
+        ])
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrierPostNl([
+            CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
+            CarrierSettings::ALLOW_DELIVERY_OPTIONS   => true,
+        ])
+        ->store();
+});
 
 it('creates carrier settings', function (array $cart) {
     /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */

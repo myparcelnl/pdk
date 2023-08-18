@@ -7,20 +7,13 @@ namespace MyParcelNL\Pdk\Account\Service;
 
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 
-usesShared(new UsesMockPdkInstance());
-
-beforeAll(function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
-    $repository = Pdk::get(PdkAccountRepositoryInterface::class);
-
-    $repository->store(
-        new Account([
+beforeEach(function () {
+    factory(Account::class)
+        ->with([
             'id'         => '1234567',
             'platformId' => 1,
             'status'     => 2,
@@ -72,7 +65,7 @@ beforeAll(function () {
                 ],
             ],
         ])
-    );
+        ->store();
 });
 
 it('gets carriers in correct order', function () {

@@ -11,9 +11,8 @@ use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockRealConfig;
 use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 function getFiles(): array
 {
@@ -26,13 +25,13 @@ function getFiles(): array
 }
 
 beforeEach(function () {
-    MockPdkFactory::create([
+    mockPdkProperties([
         ConfigInterface::class => autowire(MockRealConfig::class),
     ]);
 
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockFileSystem $fileSystem */
+    /** @var \MyParcelNL\Pdk\Base\MockFileSystem $fileSystem */
     $fileSystem = PdkFacade::get(FileSystemInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
+    /** @var \MyParcelNL\Pdk\Base\MockPdk $pdk */
     $pdk = PdkFacade::get(PdkInterface::class);
 
     $configDirs = array_merge($pdk->get('configDirs'), ['/tmp/config']);

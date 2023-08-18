@@ -6,11 +6,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-usesShared(new UsesMockPdkInstance());
 it('creates fulfilment shipment from pdk shipment', function (array $input) {
     $pdkShipment = new PdkShipment($input);
     $shipment    = Shipment::fromPdkShipment($pdkShipment);

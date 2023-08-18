@@ -18,9 +18,10 @@ interface SettingsRepositoryInterface
     /**
      * Get a single setting's value from your platform by a dot separated setting identifier.
      *
-     * @see     \MyParcelNL\Pdk\Settings\Model\Settings
+     * @return mixed
      * @example get('general.apiKey')
      * @example get('carrier.postnl.allowOnlyRecipient')
+     * @see     \MyParcelNL\Pdk\Settings\Model\Settings
      */
     public function get(string $key);
 

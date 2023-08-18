@@ -3,20 +3,10 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
-use MyParcelNL\Pdk\Tests\Factory\SharedFactoryState;
-use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
-use Symfony\Contracts\Service\ResetInterface;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
 
-include __DIR__ . '/usesShared.php';
 include __DIR__ . '/functions.php';
-
-const TESTS_DIR = __DIR__;
-const ROOT_DIR  = TESTS_DIR . '/..';
 
 /**
  * Global Pest test configuration.
@@ -24,34 +14,34 @@ const ROOT_DIR  = TESTS_DIR . '/..';
  * @see https://pestphp.com/docs/underlying-test-case#testspestphp
  */
 
-usesShared(new ClearContainerCache())->in(__DIR__);
+uses(TestCase::class)->in(__DIR__);
 
-uses()
-    ->afterEach(function () {
-        if (! Facade::getPdkInstance()) {
-            return;
-        }
-
-        $services = [
-            MockMemoryCacheStorage::class,
-            SharedFactoryState::class,
-        ];
-
-        foreach ($services as $service) {
-            try {
-                $instance = Pdk::get($service);
-
-                if (! $instance instanceof ResetInterface) {
-                    continue;
-                }
-
-                $instance->reset();
-            } catch (Exception $e) {
-                // Ignore
-            }
-        }
-    })
-    ->in(__DIR__);
+//uses()
+//    ->afterEach(function () {
+//        if (! Facade::getPdkInstance()) {
+//            return;
+//        }
+//
+//        $services = [
+//            MockMemoryCacheStorage::class,
+//            SharedFactoryState::class,
+//        ];
+//
+//        foreach ($services as $service) {
+//            try {
+//                $instance = Pdk::get($service);
+//
+//                if (! $instance instanceof ResetInterface) {
+//                    continue;
+//                }
+//
+//                $instance->reset();
+//            } catch (Exception $e) {
+//                // Ignore
+//            }
+//        }
+//    })
+//    ->in(__DIR__);
 
 expect()
     ->extend('toHaveKeysAndValues', function (array $array) {

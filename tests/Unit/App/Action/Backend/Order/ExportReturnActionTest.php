@@ -6,55 +6,47 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 
-usesShared(
-    new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor([
-            [
-                'externalIdentifier' => '701',
-                'shipments'          => [
-                    [
-                        'id'                  => 100001,
-                        'referenceIdentifier' => '1',
+beforeEach(function () {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('701')
+        ->withShipments([
+            factory(Shipment::class)
+                ->withId(100001)
+                ->withReferenceIdentifier('1'),
+
+            factory(Shipment::class)
+                ->withId(100002)
+                ->withReferenceIdentifier('2')
+                ->withDeliveryOptions([
+                    'carrier'         => Carrier::CARRIER_POSTNL_NAME,
+                    'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+                    'shipmentOptions' => [
+                        'signature' => true,
                     ],
-                    [
-                        'id'                  => 100002,
-                        'referenceIdentifier' => '2',
-                        'deliveryOptions'     => [
-                            'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
-                            'shipmentOptions' => [
-                                'signature' => true,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'externalIdentifier' => '247',
-                'deliveryOptions'    => [
-                    'carrier'      => Carrier::CARRIER_POSTNL_NAME,
-                    'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
-                ],
-            ],
-        ]),
-    ]),
-    new UsesApiMock()
-);
+                ]),
+        ])
+        ->store();
+
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('247')
+        ->withDeliveryOptions([
+            'carrier'      => Carrier::CARRIER_POSTNL_NAME,
+            'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+        ])
+        ->store();
+});
 
 it('exports return', function () {
     MockApi::enqueue(

@@ -11,35 +11,28 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 uses()->group('settings');
 
-usesShared(
-    new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            AccountSettings::ID => [
-                AccountSettings::API_KEY => '1234567890',
-            ],
-            CarrierSettings::ID => [
-                'postnl' => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                    CarrierSettings::CUTOFF_TIME            => '17:00',
-                ],
-                'dhl'    => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => false,
-                ],
-                'bpost'  => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                ],
-            ],
-        ]),
-    ])
-);
+beforeEach(function () {
+    factory(\MyParcelNL\Pdk\Settings\Model\Settings::class)
+        ->withAccount([
+            AccountSettings::API_KEY => '1234567890',
+        ])
+        ->withCarrierPostNl([
+            CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+            CarrierSettings::CUTOFF_TIME            => '17:00',
+        ])
+        ->withCarrierDhlForYou([
+            CarrierSettings::ALLOW_DELIVERY_OPTIONS => false,
+        ])
+        ->withCarrierBpost([
+            CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+        ])
+        ->store();
+});
 
 it('retrieves all categories and fields', function () {
     /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository */
@@ -61,7 +54,7 @@ it('retrieves a single setting from a category', function (string $key, $expecte
 ]);
 
 it('updates settings', function () {
-    /** @var MockSettingsRepository $repository */
+    /** @var \MyParcelNL\Pdk\Settings\Repository\MockSettingsRepository $repository */
     $repository        = Pdk::get(SettingsRepositoryInterface::class);
     $createSettingsKey = Pdk::get('createSettingsKey');
 

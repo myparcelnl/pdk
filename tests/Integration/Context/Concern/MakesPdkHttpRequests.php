@@ -7,13 +7,13 @@ namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
 use Behat\Gherkin\Node\TableNode;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
+use MyParcelNL\Pdk\Api\Exception\NoExampleException;
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
+use MyParcelNL\Pdk\Api\Service\BehatPdkApiService;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatPdkApiService;
-use MyParcelNL\Pdk\Tests\Integration\Exception\NoExampleException;
 
 trait MakesPdkHttpRequests
 {
@@ -50,7 +50,7 @@ trait MakesPdkHttpRequests
         array   $headers,
         ?string $body
     ): void {
-        /** @var \MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatPdkApiService $api */
+        /** @var \MyParcelNL\Pdk\Api\Service\BehatPdkApiService $api */
         $api = Pdk::get(BehatPdkApiService::class);
 
         try {

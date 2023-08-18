@@ -6,23 +6,21 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Service;
 
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Facade\Pdk;
 use function DI\autowire;
 use function DI\value;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 it('gets correct headers', function () {
-    $pdk = PdkFactory::create(
-        MockPdkConfig::create([
-            'userAgent'                => value(['MyParcelNL-Platform' => '2.0.0', 'Platform' => '1.2.3']),
-            ApiServiceInterface::class => autowire(MyParcelApiService::class),
-        ])
-    );
+    mockPdkProperties([
+        'userAgent'                => value(['MyParcelNL-Platform' => '2.0.0', 'Platform' => '1.2.3']),
+        ApiServiceInterface::class => autowire(MyParcelApiService::class),
+    ]);
 
-    /** @var \MyParcelNL\Pdk\Api\Service\MyParcelApiService $api */
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = Pdk::get(ApiServiceInterface::class);
 
     $headers = $api->getHeaders();
+
     expect(array_keys($headers))
         ->toEqual(['Authorization', 'User-Agent'])
         ->and($headers['Authorization'])
@@ -34,14 +32,15 @@ it('gets correct headers', function () {
 });
 
 it('gets base url', function () {
-    $pdk = PdkFactory::create(
-        MockPdkConfig::create([
+    mockPdkProperties(
+        [
             'apiUrl'                   => 'https://api.baseurl.com',
             ApiServiceInterface::class => autowire(MyParcelApiService::class),
-        ])
+        ]
     );
 
-    $api = $pdk->get(ApiServiceInterface::class);
+    $api = Pdk::get(ApiServiceInterface::class);
+
     expect($api->getBaseUrl())
         ->toBe('https://api.baseurl.com');
 });

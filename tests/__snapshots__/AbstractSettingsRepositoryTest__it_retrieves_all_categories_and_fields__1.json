@@ -113,8 +113,8 @@
             "priceSignature": 0,
             "showDeliveryDay": true
         },
-        "dhl": {
-            "id": "dhl",
+        "dhlforyou": {
+            "id": "dhlforyou",
             "carrierName": null,
             "allowDeliveryOptions": false,
             "allowEveningDelivery": false,

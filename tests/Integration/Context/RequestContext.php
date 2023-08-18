@@ -76,7 +76,7 @@ final class RequestContext extends AbstractContext
     public function IExpectTheResponseToBeSuccessful(): void
     {
         if (! $this->response instanceof ApiResponse) {
-            /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+            /** @var \MyParcelNL\Pdk\Logger\MockLogger $logger */
             $logger = Pdk::get(LoggerInterface::class);
 
             self::fail(sprintf("Response is null. Logs:\n%s", json_encode($logger->getLogs(), JSON_PRETTY_PRINT)));

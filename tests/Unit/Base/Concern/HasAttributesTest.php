@@ -9,17 +9,13 @@ use DateTime;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Tests\Mocks\ClassWithGuardedAttributes;
-use MyParcelNL\Pdk\Tests\Mocks\InvalidCastingModel;
-use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
-use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
-use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Mock\Model\GuardedAttributesModel;
+use MyParcelNL\Pdk\Mock\Model\InvalidCastingModel;
+use MyParcelNL\Pdk\Mock\Model\MockCastingModel;
+use MyParcelNL\Pdk\Mock\Model\MockCastModel;
+use MyParcelNL\Pdk\Mock\Model\MockMutateModel;
 
 uses()->group('model');
-
-usesShared(new UsesMockPdkInstance());
 
 it('casts attributes to classes', function () {
     $model = new MockCastingModel();
@@ -117,7 +113,7 @@ it('gets only requested elements with string', function () {
 });
 
 it('checks if guarded properties cannot be modified', function () {
-    $model = new ClassWithGuardedAttributes(['field' => 1]);
+    $model = new GuardedAttributesModel(['field' => 1]);
 
     $model['field'] = 2;
     $model->setField(3);

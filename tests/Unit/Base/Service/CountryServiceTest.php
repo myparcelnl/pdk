@@ -9,10 +9,6 @@ use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('returns all languages', function () {
     /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $service */
@@ -76,7 +72,7 @@ it('can check if a country is an unique zone', function (string $country, bool $
 ]);
 
 it('can check if a country is the local country', function (string $platform, string $country, bool $isLocal) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
+    /** @var \MyParcelNL\Pdk\Base\MockPdk $pdk */
     $pdk = Pdk::get(PdkInterface::class);
 
     $previousPlatform = $pdk->get('platform');
@@ -176,7 +172,7 @@ it('gets countries with translation keys', function () {
     $service = Pdk::get(CountryServiceInterface::class);
     $all     = $service->getAllTranslatable();
 
-    expect(($all))->toHaveKeysAndValues([
+    expect($all)->toHaveKeysAndValues([
         'NL' => 'country_nl',
     ]);
 });

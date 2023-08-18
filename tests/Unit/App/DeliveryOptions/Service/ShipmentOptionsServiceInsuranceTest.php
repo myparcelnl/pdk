@@ -6,69 +6,65 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
-use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
-
-afterEach(function () {
-    /** @var MockPdkProductRepository $productRepository */
-    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
-    $productRepository->reset();
-});
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use function MyParcelNL\Pdk\Tests\factory;
 
 it('calculates insurance', function (array $input) {
-    /** @var MockSettingsRepository $settingsRepository */
-    $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
-    /** @var MockPdkProductRepository $productRepository */
-    $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
-
-    $settingsRepository->storeAllSettings(
-        new Settings([
-            CarrierSettings::ID => [
-                    $input['carrier'] ?? Carrier::CARRIER_POSTNL_NAME => array_replace([
-                    CarrierSettings::EXPORT_INSURANCE              => true,
-                    CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT  => 0,
-                    CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => 1,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO        => 5000,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE => 5000,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO_EU     => 5000,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW    => 5000,
-                ],
-                    $input['settings'] ?? []),
+    factory(Settings::class)
+        ->withCarrier(
+            $input['carrier'] ?? Carrier::CARRIER_POSTNL_NAME,
+            array_replace([
+                CarrierSettings::EXPORT_INSURANCE              => true,
+                CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT  => 0,
+                CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => 1,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO        => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_EU     => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW    => 5000,
             ],
-        ])
-    );
+                $input['settings'] ?? [])
+        )
+        ->store();
 
-    $product = new PdkProduct([
-        'externalIdentifier' => 'insurance',
-        'price'              => ['amount' => $input['orderPrice'] ?? 0],
-    ]);
+    factory(PdkProduct::class)
+        ->withExternalIdentifier('insurance')
+        ->withPrice($input['orderPrice'] ?? 0)
+        ->store();
 
-    $productRepository->add(new PdkProductCollection([$product]));
+    $product = Pdk::get(PdkProductRepositoryInterface::class)
+        ->getProduct('insurance');
 
-    $order = new PdkOrder([
-        'deliveryOptions' => $input['deliveryOptions'] ?? [],
-        'lines'           => [
+    factory(PdkOrder::class)
+        ->fromScratch()
+        ->withExternalIdentifier('PDK-1')
+        ->withOrderPrice($input['orderPrice'] ?? 0)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->fromScratch()
+                ->withCarrier($input['carrier'] ?? Carrier::CARRIER_POSTNL_NAME)
+                ->with($input['deliveryOptions'] ?? [])
+        )
+        ->withShippingAddress(['cc' => $input['country'] ?? 'NL'])
+        ->withLines([
             [
                 'quantity' => 1,
                 'product'  => $product,
                 'price'    => $input['orderPrice'] ?? 0,
             ],
-        ],
-        'shippingAddress' => ['cc' => $input['country'] ?? 'NL'],
-    ]);
+        ])
+        ->store();
+
+    $repo = Pdk::get(PdkOrderRepositoryInterface::class);
+
+    $order = $repo->get('PDK-1');
 
     /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $service */
     $service  = Pdk::get(ShipmentOptionsServiceInterface::class);

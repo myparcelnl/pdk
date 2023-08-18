@@ -42,7 +42,7 @@
     "checkout": {
         "id": "checkout",
         "allowedShippingMethods": [],
-        "pickupLocationsDefaultView": "list",
+        "pickupLocationsDefaultView": "map",
         "priceType": "included",
         "enableDeliveryOptions": true,
         "enableDeliveryOptionsWhenNotInStock": true,

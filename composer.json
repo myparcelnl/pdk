@@ -42,7 +42,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "MyParcelNL\\Pdk\\": ["tests/Unit/", "tests/factories"],
+            "MyParcelNL\\Pdk\\": [
+                "tests/Unit/",
+                "tests/factories/",
+                "tests/mocks/"
+            ],
             "MyParcelNL\\Pdk\\Console\\": "private/",
             "MyParcelNL\\Pdk\\Tests\\": "tests/"
         }

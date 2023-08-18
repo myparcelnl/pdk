@@ -7,16 +7,14 @@ namespace MyParcelNL\Pdk\Language\Service;
 
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
-usesShared(
-    new UsesEachMockPdkInstance([
+beforeEach(function () {
+    mockPdkProperties([
         LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
-    ])
-);
+    ]);
+});
 
 dataset('languages', [
     ['language' => 'en-GB', 'translation' => 'Send help', 'iso2' => 'en'],

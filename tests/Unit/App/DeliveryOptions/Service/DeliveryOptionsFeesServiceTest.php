@@ -6,38 +6,30 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 
-usesShared(
-    new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)
-            ->constructor([
-                CarrierSettings::ID => [
-                    'postnl' => [
-                        CarrierSettings::PRICE_DELIVERY_TYPE_MORNING  => 1.3,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD => 4.5,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_EVENING  => 3,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY   => 1.5,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY => 8.2,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP   => 0.5,
+beforeEach(function () {
+    factory(Settings::class)
+        ->withCarrierPostNl([
+            CarrierSettings::PRICE_DELIVERY_TYPE_MORNING  => 1.3,
+            CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD => 4.5,
+            CarrierSettings::PRICE_DELIVERY_TYPE_EVENING  => 3,
+            CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY   => 1.5,
+            CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY => 8.2,
+            CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP   => 0.5,
 
-                        CarrierSettings::PRICE_ONLY_RECIPIENT => 0.7,
-                        CarrierSettings::PRICE_SIGNATURE      => 1.1,
+            CarrierSettings::PRICE_ONLY_RECIPIENT => 0.7,
+            CarrierSettings::PRICE_SIGNATURE      => 1.1,
 
-                        CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP => 3.6,
-                        CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX       => 4.8,
-                    ],
-                ],
-            ]),
-    ])
-);
+            CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP => 3.6,
+            CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX       => 4.8,
+        ])
+        ->store();
+});
 
 it('calculates fees based on delivery options', function (array $input, array $expectation) {
     /** @var DeliveryOptionsFeesService $service */

@@ -22,25 +22,22 @@ use MyParcelNL\Pdk\App\Action\Backend\Shipment\UpdateShipmentsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\CreateWebhooksAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\DeleteWebhooksAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\FetchWebhooksAction;
+use MyParcelNL\Pdk\App\Action\MockAction;
 use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 use function DI\value;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 uses()->group('endpoints');
 
-usesShared(
-    new UsesEachMockPdkInstance([
+beforeEach(function () {
+    mockPdkProperties([
         CreateWebhooksAction::class        => autowire(MockAction::class),
         DeleteAccountAction::class         => autowire(MockAction::class),
         DeleteShipmentsAction::class       => autowire(MockAction::class),
@@ -59,8 +56,8 @@ usesShared(
         UpdatePluginSettingsAction::class  => autowire(MockAction::class),
         UpdateProductSettingsAction::class => autowire(MockAction::class),
         UpdateShipmentsAction::class       => autowire(MockAction::class),
-    ])
-);
+    ]);
+});
 
 dataset('backendActions', function () {
     return [
@@ -136,7 +133,7 @@ it('returns error response on nonexistent action', function () {
 });
 
 it('shows stack trace in development mode', function () {
-    PdkFactory::create(MockPdkConfig::create(['mode' => value(\MyParcelNL\Pdk\Base\Pdk::MODE_DEVELOPMENT)]));
+    mockPdkProperties(['mode' => value(\MyParcelNL\Pdk\Base\Pdk::MODE_DEVELOPMENT)]);
 
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);

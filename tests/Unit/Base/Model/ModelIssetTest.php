@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Model;
 
-use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
+use MyParcelNL\Pdk\Mock\Model\MockMutateModel;
 
 it('can use isset on property', function () {
     $model = new MockMutateModel();
