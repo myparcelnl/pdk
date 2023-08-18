@@ -6,21 +6,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Webhook\Repository;
 
 use BadMethodCallException;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Mock\Api\Response\Example204NoContentResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetWebhookSubscriptionsResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(
-    new UsesMockPdkInstance(),
-    new UsesApiMock()
-);
 
 it('creates WebhookSubscription from api response', function () {
     MockApi::enqueue(new ExampleGetWebhookSubscriptionsResponse());

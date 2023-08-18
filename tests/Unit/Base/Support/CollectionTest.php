@@ -5,9 +5,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Pdk\Tests\Mocks\MockCastingCollection;
-use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
-use MyParcelNL\Pdk\Tests\Mocks\MockStorableModel;
+use MyParcelNL\Pdk\Mock\Collection\MockCastingCollection;
+use MyParcelNL\Pdk\Mock\Model\MockCastModel;
+use MyParcelNL\Pdk\Mock\Model\MockStorableModel;
 
 it('casts items to class on init', function () {
     $collection = new MockCastingCollection([

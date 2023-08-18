@@ -9,16 +9,12 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 uses()->group('settings');
-
-usesShared(new UsesMockPdkInstance());
 
 it('saves settings', function (string $productId, array $settings) {
     $content = json_encode([

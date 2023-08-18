@@ -9,30 +9,23 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Repository\MockPdkOrderRepository;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostOrderNotesResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostOrdersResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
+use MyParcelNL\Pdk\Settings\Repository\MockSettingsRepository;
 use Symfony\Component\HttpFoundation\Response;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesMockPdkInstance(), new UsesApiMock(), new UsesNotificationsMock(), new UsesSettingsMock());
 
 dataset('orderModeToggle', [
     'default'    => [false],
@@ -44,7 +37,7 @@ it('exports order', function (
     array $carrierSettings,
     array $orders
 ) {
-    /** @var MockPdkOrderRepository $pdkOrderRepository */
+    /** @var \MyParcelNL\Pdk\App\Order\Repository\MockPdkOrderRepository $pdkOrderRepository */
     $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
     /** @var MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
@@ -110,7 +103,7 @@ it('exports order without customer information if setting is false', function (
 ) {
     /** @var MockPdkOrderRepository $pdkOrderRepository */
     $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    /** @var MockSettingsRepository $settingsRepository */
+    /** @var \MyParcelNL\Pdk\Settings\Repository\MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
 
     $collection = new PdkOrderCollection($orders);

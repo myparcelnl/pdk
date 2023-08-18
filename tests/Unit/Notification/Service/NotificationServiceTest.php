@@ -7,11 +7,6 @@ namespace MyParcelNL\Pdk\Notification\Service;
 
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
 
 it('can add notifications', function (string $variant, $content) {
     Notifications::add('title', $content, $variant);

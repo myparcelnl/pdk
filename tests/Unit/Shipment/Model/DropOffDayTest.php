@@ -11,8 +11,6 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 
 const DROP_OFF_DAYS = [
     '0' => [
@@ -73,14 +71,12 @@ const DROP_OFF_DAYS = [
     ],
 ];
 
-usesShared(new UsesMockPdkInstance());
-
 it('returns correct delivery days using a specific date', function (
     string $date,
     array  $settingsOverrides,
     array  $expectation
 ) {
-    $carrierSettings = (new CarrierSettings($settingsOverrides));
+    $carrierSettings = new CarrierSettings($settingsOverrides);
 
     /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
     $service = Pdk::get(DropOffServiceInterface::class);

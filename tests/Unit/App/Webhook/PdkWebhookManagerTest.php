@@ -9,22 +9,17 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance(), new UsesMockEachCron());
 
 it('dispatches incoming webhook', function (string $hook) {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
     /** @var PdkWebhookManagerInterface $webhookManager */
     $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
+    /** @var \MyParcelNL\Pdk\Base\Service\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
 
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));

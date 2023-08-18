@@ -5,19 +5,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetOrdersResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesMockPdkInstance());
 
 const DEFAULT_INPUT_RECIPIENT = [
     'cc'         => 'NL',

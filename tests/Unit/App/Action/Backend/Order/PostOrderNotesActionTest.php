@@ -6,36 +6,30 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 
-usesShared(new UsesApiMock());
+beforeEach(function () {
+    factory(GeneralSettings::class)
+        ->withOrderMode(true)
+        ->store();
+});
 
 it('posts order notes if order has notes', function (array $orders) {
-    MockPdkFactory::create([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            GeneralSettings::ID => [
-                GeneralSettings::ORDER_MODE => true,
-            ],
-        ]),
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
-    ]);
+    foreach ($orders as $order) {
+        factory(PdkOrder::class)
+            ->with($order)
+            ->store();
+    }
 
     MockApi::enqueue(new ExamplePostOrderNotesResponse());
 

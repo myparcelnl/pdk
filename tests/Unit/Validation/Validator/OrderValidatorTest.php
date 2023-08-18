@@ -11,12 +11,8 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use RuntimeException;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesEachMockPdkInstance());
 
 /**
  * array_merge overwrites entire keys, array_merge_recursive only adds to them, thereby corrupting the array.

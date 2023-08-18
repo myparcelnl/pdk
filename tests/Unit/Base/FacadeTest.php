@@ -9,10 +9,16 @@ use DI\NotFoundException;
 use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(new UsesMockPdkInstance());
+$previousInstance = null;
+
+beforeAll(function () use (&$previousInstance) {
+    $previousInstance = Facade::getPdkInstance();
+});
+
+afterAll(function () use ($previousInstance) {
+    Facade::setPdkInstance($previousInstance);
+});
 
 it('can call instance behind facade', function () {
     expect(Pdk::has(StorageInterface::class))->toEqual(true);

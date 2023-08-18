@@ -10,25 +10,19 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
 it('executes "update account" action', function (string $hook, string $expectedClass, array $hookBody) {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
     /** @var PdkWebhookManagerInterface $webhookManager */
     $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
+    /** @var \MyParcelNL\Pdk\Base\Service\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    /** @var \MyParcelNL\Pdk\Logger\MockLogger $logger */
     $logger = Pdk::get(LoggerInterface::class);
 
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));

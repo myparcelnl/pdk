@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 abstract class Facade
 {
     /**
-     * @var \MyParcelNL\Pdk\Base\Concern\PdkInterface
+     * @var \MyParcelNL\Pdk\Base\Concern\PdkInterface|null
      */
     protected static $pdk;
 
@@ -29,6 +29,14 @@ abstract class Facade
             ->$method(
                 ...$args
             );
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface|null
+     */
+    public static function getPdkInstance(): ?PdkInterface
+    {
+        return self::$pdk;
     }
 
     /**

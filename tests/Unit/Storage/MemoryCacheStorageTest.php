@@ -6,10 +6,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Storage;
 
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('can get and set items', function () {
     /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage */

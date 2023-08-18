@@ -7,19 +7,17 @@ namespace MyParcelNL\Pdk\Api\Service;
 
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleErrorNotFoundResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleErrorResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleErrorUnprocessableEntityResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleErrorNotFoundResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleErrorResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleErrorUnprocessableEntityResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('handles various error responses', function (string $response) {
     MockApi::enqueue(new $response());

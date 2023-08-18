@@ -8,7 +8,7 @@ namespace MyParcelNL\Pdk\Base\Service;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
+use MyParcelNL\Pdk\Language\Service\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -136,7 +136,7 @@ it('converts to cents', function ($input, int $expected) {
 ]);
 
 it('formats currencies', function (string $language, int $input, string $expected) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService $languageService */
+    /** @var \MyParcelNL\Pdk\Language\Service\MockAbstractLanguageService $languageService */
     $languageService = Pdk::get(LanguageServiceInterface::class);
     $languageService->setLanguage($language);
 

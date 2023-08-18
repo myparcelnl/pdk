@@ -12,18 +12,13 @@ use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesEachMockPdkInstance());
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetAccountsResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetCarrierConfigurationResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetCarrierOptionsResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShopsResponse;
 
 it('gets repositories', function ($response, $repositoryClass, $expected, $method, $args = []) {
     MockApi::enqueue(new $response());
@@ -71,8 +66,8 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
 it('uses all methods of repository', function () {
     MockApi::enqueue(new ExampleGetShopsResponse());
 
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockRepository $repository */
-    $repository = Pdk::get(MockRepository::class);
+    /** @var \MyParcelNL\Pdk\Base\Repository\MockApiRepository $repository */
+    $repository = Pdk::get(MockApiRepository::class);
     $repository->persist();
     $repository->persist();
 

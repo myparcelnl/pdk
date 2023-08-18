@@ -7,13 +7,9 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('updates shipment', function (array $collection, ?int $size, $path, $query) {
     MockApi::enqueue(new Response());

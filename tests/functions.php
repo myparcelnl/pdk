@@ -1,33 +1,21 @@
 <?php
-/** @noinspection PhpDocMissingThrowsInspection */
-
-/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpDocMissingThrowsInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests;
 
-use MyParcelNL\Pdk\Base\Concern\PdkInterface;
-use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\Facade\Mock;
 use MyParcelNL\Pdk\Tests\Factory\FactoryFactory;
 
-function mockPdkProperty(string $property, $value): callable
+function mockPdkProperty(string $property, $value): void
 {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $mockPdk */
-    $mockPdk = Pdk::get(PdkInterface::class);
-
-    $oldValue = $mockPdk->get($property);
-
-    $mockPdk->set($property, $value);
-
-    return static function () use ($mockPdk, $oldValue, $property) {
-        $mockPdk->set($property, $oldValue);
-    };
+    Mock::override($property, $value);
 }
 
-function mockPlatform(string $platform): callable
+function mockPdkProperties(array $properties): void
 {
-    return mockPdkProperty('platform', $platform);
+    Mock::overrideMany($properties);
 }
 
 /**

@@ -7,19 +7,15 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\MockConfig;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 const DHL_FOR_YOU_CUSTOM_IDENTIFIER = Carrier::CARRIER_DHL_FOR_YOU_NAME . ':' . MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU;
 
-usesShared(new UsesMockPdkInstance());
-
 it('creates default carrier for platform', function (string $platform) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $mockPdk */
+    /** @var \MyParcelNL\Pdk\Base\MockPdk $mockPdk */
     $mockPdk = Pdk::get(PdkInterface::class);
 
     $oldPlatform = $mockPdk->get('platform');

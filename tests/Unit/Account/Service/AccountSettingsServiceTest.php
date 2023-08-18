@@ -10,13 +10,9 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 beforeAll(function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
+    /** @var \MyParcelNL\Pdk\App\Account\Repository\MockPdkAccountRepository $repository */
     $repository = Pdk::get(PdkAccountRepositoryInterface::class);
 
     $repository->store(

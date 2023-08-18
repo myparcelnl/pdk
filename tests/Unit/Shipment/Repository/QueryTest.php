@@ -5,18 +5,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsFromContractResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithDropOffPoint;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponseWithPickup;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsFromContractResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsResponseWithDropOffPoint;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsResponseWithPickup;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesEachMockPdkInstance());
 
 it('creates shipment collection from queried data', function (string $responseClass) {
     MockApi::enqueue(new $responseClass());

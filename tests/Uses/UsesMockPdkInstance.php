@@ -4,18 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Uses;
 
-class UsesMockPdkInstance extends AbstractUsesMockPdkInstance
+use MyParcelNL\Pdk\Tests\Bootstrap\Facade\Mock;
+use MyParcelNL\Pdk\Tests\Uses\Contract\BaseMock;
+
+final class UsesMockPdkInstance implements BaseMock
 {
-    public function afterAll(): void
+    /**
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * @param  array $config
+     */
+    public function __construct(array $config = [])
     {
-        $this->reset();
+        $this->config = $config;
     }
 
     /**
-     * @throws \Exception
+     * @return void
      */
-    public function beforeAll(): void
+    public function beforeEach(): void
     {
-        $this->setup();
+        Mock::overrideMany($this->config);
     }
 }

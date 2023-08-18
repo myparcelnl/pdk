@@ -5,16 +5,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Logger;
 
-use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesEachMockPdkInstance());
+use MyParcelNL\Pdk\Facade\Pdk;
+use Psr\Log\LoggerInterface;
 
 it('logs logs', function (string $level, string $message, array $context = []) {
-    Logger::{$level}($message, $context);
+    /** @var \MyParcelNL\Pdk\Logger\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
 
-    expect(Logger::getLogs())->toBe([
+    $logger->{$level}($message, $context);
+
+    expect($logger->getLogs())->toBe([
         [
             'level'   => $level,
             'message' => "[PDK]: $message",

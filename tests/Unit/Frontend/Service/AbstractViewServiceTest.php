@@ -9,8 +9,6 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Facade\Frontend;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockFrontendRenderService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;

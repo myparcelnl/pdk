@@ -10,26 +10,21 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\App\Order\Repository\MockPdkProductRepository;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 afterEach(function () {
-    /** @var MockPdkProductRepository $productRepository */
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\App\Order\Repository\MockPdkProductRepository $productRepository */
     $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
     $productRepository->reset();
 });
 
 it('calculates insurance', function (array $input) {
-    /** @var MockSettingsRepository $settingsRepository */
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\Settings\Repository\MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
     /** @var MockPdkProductRepository $productRepository */
     $productRepository = Pdk::get(PdkProductRepositoryInterface::class);

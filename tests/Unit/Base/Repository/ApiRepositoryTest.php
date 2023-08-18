@@ -8,14 +8,9 @@ namespace MyParcelNL\Pdk\Base\Repository;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AbstractApiService;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance(), new UsesApiMock());
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetAccountsResponse;
 
 it('retrieves api instance', function () {
     /** @var \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api */

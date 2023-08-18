@@ -7,7 +7,7 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Facade\Frontend;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
+use MyParcelNL\Pdk\Frontend\Service\MockAbstractViewService;
 
 /**
  * Defines all pdk components and the views where they should render.

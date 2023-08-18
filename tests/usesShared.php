@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests;
 
-use MyParcelNL\Pdk\Tests\Uses\BaseMock;
+use MyParcelNL\Pdk\Tests\Uses\Contract\BaseMock;
 use MyParcelNL\Sdk\src\Support\Str;
 use Pest\PendingObjects\UsesCall;
 use Pest\Support\Backtrace;
@@ -39,7 +39,7 @@ function getCallable(array $mocks, string $name): ?callable
 }
 
 /**
- * @param  \MyParcelNL\Pdk\Tests\Uses\BaseMock ...$classes
+ * @param  \MyParcelNL\Pdk\Tests\Uses\Contract\BaseMock ...$classes
  *
  * @return UsesCall
  */

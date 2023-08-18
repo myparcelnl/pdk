@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
-use function MyParcelNL\Pdk\Tests\mockPlatform;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 
 /**
  * This context is for tests that use the settings repository.
@@ -18,7 +18,7 @@ use function MyParcelNL\Pdk\Tests\mockPlatform;
 final class SettingsContext extends AbstractContext
 {
     /**
-     * @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository
+     * @var \MyParcelNL\Pdk\Settings\Repository\MockSettingsRepository
      */
     protected $settingsRepository;
 
@@ -34,7 +34,7 @@ final class SettingsContext extends AbstractContext
         $this->settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
 
         $this->onAfterScenario(function () {
-            /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $accountRepository */
+            /** @var \MyParcelNL\Pdk\App\Account\Repository\MockPdkAccountRepository $accountRepository */
             $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
 
             // Delete any account that was created during the test.
@@ -50,11 +50,7 @@ final class SettingsContext extends AbstractContext
      */
     public function IAmAPlatformUser(string $platform): void
     {
-        $resetPlatform = mockPlatform($platform);
-
-        $this->onAfterScenario(function () use ($resetPlatform) {
-            $resetPlatform();
-        });
+        mockPdkProperty('platform', $platform);
     }
 
     /**

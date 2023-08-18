@@ -5,20 +5,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesMockPdkInstance());
 
 const DEFAULT_INPUT_RECIPIENT = [
     'cc'         => 'NL',

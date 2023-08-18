@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Model;
 
-use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
+use MyParcelNL\Pdk\Mock\Model\MockCastModel;
 
 it('fills attributes', function () {
     $model = new MockCastModel();

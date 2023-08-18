@@ -9,10 +9,6 @@ use DateTime;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('instantiates default delivery options', function () {
     $deliveryOptions = new DeliveryOptions();

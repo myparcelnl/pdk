@@ -8,13 +8,9 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Repository\MockPdkProductRepository;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('formats label description', function (string $labelDescription, string $output) {
     /** @var MockPdkProductRepository $repository */

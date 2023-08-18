@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -61,7 +60,7 @@ it('retrieves a single setting from a category', function (string $key, $expecte
 ]);
 
 it('updates settings', function () {
-    /** @var MockSettingsRepository $repository */
+    /** @var \MyParcelNL\Pdk\Settings\Repository\MockSettingsRepository $repository */
     $repository        = Pdk::get(SettingsRepositoryInterface::class);
     $createSettingsKey = Pdk::get('createSettingsKey');
 

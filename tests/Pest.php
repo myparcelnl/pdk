@@ -4,14 +4,10 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
 
 include __DIR__ . '/usesShared.php';
 include __DIR__ . '/functions.php';
-
-const TESTS_DIR = __DIR__;
-const ROOT_DIR  = TESTS_DIR . '/..';
 
 /**
  * Global Pest test configuration.
@@ -19,7 +15,21 @@ const ROOT_DIR  = TESTS_DIR . '/..';
  * @see https://pestphp.com/docs/underlying-test-case#testspestphp
  */
 
-usesShared(new ClearContainerCache())->in(__DIR__);
+uses(TestCase::class)->in(__DIR__);
+
+//uses()
+//    ->afterEach(function () {
+//        /** @noinspection ForgottenDebugOutputInspection */
+//        error_log(
+//            sprintf(
+//                '%s Memory usage: %d MB out of %d MB',
+//                str_pad(Utils::classBasename(get_class($this)) . ']', 50),
+//                memory_get_usage(true) / 1024 / 1024,
+//                memory_get_peak_usage(true) / 1024 / 1024
+//            )
+//        );
+//    })
+//    ->in(__DIR__);
 
 expect()
     ->extend('toHaveKeysAndValues', function (array $array) {

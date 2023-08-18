@@ -1,34 +1,28 @@
 <?php
-/** @noinspection PhpUnhandledExceptionInspection */
-
-/** @noinspection StaticClosureCanBeUsedInspection */
+/** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
-use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
+use MyParcelNL\Pdk\Mock\Api\Response\ExamplePostIdsResponse;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 
-usesShared(
-    new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor([
-            ['externalIdentifier' => '263'],
-            ['externalIdentifier' => '264'],
-        ]),
-    ]),
-    new UsesApiMock()
-);
+beforeEach(function () {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('263')
+        ->store();
+
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('264')
+        ->store();
+});
 
 it('prints order', function () {
     MockApi::enqueue(

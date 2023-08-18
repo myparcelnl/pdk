@@ -9,9 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 /**
@@ -104,8 +102,6 @@ const STANDARD_INPUT = [
     ],
     'shipments'          => null,
 ];
-
-usesShared(new UsesMockPdkInstance());
 
 it('returns correct schema', function (array $input) {
     $pdkOrder = new PdkOrder($input);

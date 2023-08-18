@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
-use MyParcelNL\Pdk\Tests\Integration\Api\Response\BehatClientResponse;
+use MyParcelNL\Pdk\Api\Response\BehatClientResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetAccountsResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 return [

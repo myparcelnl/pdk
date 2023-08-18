@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests/Unit" isTestSource="true" packagePrefix="MyParcelNL\Pdk\" />
       <sourceFolder url="file://$MODULE_DIR$/private" isTestSource="true" packagePrefix="MyParcelNL\Pdk\Console\" />
       <sourceFolder url="file://$MODULE_DIR$/tests/factories" isTestSource="true" packagePrefix="MyParcelNL\Pdk\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests/mocks" isTestSource="true" packagePrefix="MyParcelNL\Pdk\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/deprecation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/container" />

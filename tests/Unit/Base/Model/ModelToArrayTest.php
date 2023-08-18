@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
+use MyParcelNL\Pdk\Mock\Model\MockNestedModel;
 
 const MODEL_DATA = [
     'my_value' => 1,

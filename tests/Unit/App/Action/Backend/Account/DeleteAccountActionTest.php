@@ -9,10 +9,6 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(new UsesMockPdkInstance());
 
 it('deletes account', function () {
     expect(AccountSettings::getAccount())->toBeInstanceOf(Account::class);

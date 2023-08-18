@@ -8,28 +8,20 @@ namespace MyParcelNL\Pdk\Settings;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\mockPlatform;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 uses()->group('frontend', 'settings');
 
-usesShared(
-    new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            LabelSettings::ID => [
-                LabelSettings::DESCRIPTION => 'description',
-            ],
-        ]),
-    ])
-);
+beforeEach(function () {
+    factory(LabelSettings::class)
+        ->withDescription('description')
+        ->store();
+});
 
 it('returns all keys', function () {
     $settings = Settings::all();
@@ -63,7 +55,7 @@ it('retrieves a specific setting by key and namespace', function () {
 });
 
 it('retrieves default settings', function (string $platform) {
-    $resetPlatform = mockPlatform($platform);
+    mockPdkProperty('platform', $platform);
 
     $defaults = Settings::getDefaults();
 
@@ -71,13 +63,11 @@ it('retrieves default settings', function (string $platform) {
 
     // Carrier settings are tested separately
     assertMatchesJsonSnapshot(json_encode($array));
-
-    $resetPlatform();
 })->with('platforms');
 
 it('retrieves default carrier settings', function (string $platform) {
-    $resetPlatform = mockPlatform($platform);
-    $carriers      = Platform::get('allowedCarriers') ?? [];
+    mockPdkProperty('platform', $platform);
+    $carriers = Platform::get('allowedCarriers') ?? [];
 
     $defaults        = Settings::getDefaults();
     $carrierSettings = $defaults[CarrierSettings::ID];
@@ -101,6 +91,4 @@ it('retrieves default carrier settings', function (string $platform) {
         ->carrier->toArrayWithoutNull();
 
     assertMatchesJsonSnapshot(json_encode($array));
-
-    $resetPlatform();
 })->with('platforms');

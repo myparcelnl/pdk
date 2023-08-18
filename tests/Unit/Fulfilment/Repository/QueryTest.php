@@ -5,15 +5,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetOrdersResponse;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-usesShared(new UsesMockPdkInstance());
 
 /**
  * @covers \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository::query

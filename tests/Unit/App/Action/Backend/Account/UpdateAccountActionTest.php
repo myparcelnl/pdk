@@ -8,24 +8,15 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Account;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\Base\Facade\MockApi;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetAccountsResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetCarrierConfigurationResponse;
+use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetCarrierOptionsResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function MyParcelNL\Pdk\Tests\usesShared;
-
-usesShared(
-    new UsesMockPdkInstance(),
-    new UsesApiMock()
-);
 
 function executeUpdateAccount(?array $settings, array $accounts = null): Response
 {
@@ -53,7 +44,7 @@ function executeUpdateAccount(?array $settings, array $accounts = null): Respons
 }
 
 it('fetches account with carrier configurations and options', function () {
-    /** @var MockPdkAccountRepository $accountRepository */
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\App\Account\Repository\MockPdkAccountRepository $accountRepository */
     $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
     $accountRepository->deleteAccount();
 

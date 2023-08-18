@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Repository\MockPdkProductRepository;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -17,14 +18,9 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use const MyParcelNL\Pdk\Tests\Datasets\KEY_DEFAULT;
 use const MyParcelNL\Pdk\Tests\Datasets\KEY_DELIVERY_OPTIONS;
 use const MyParcelNL\Pdk\Tests\Datasets\KEY_PRODUCT;
-
-usesShared(new UsesMockPdkInstance());
 
 afterEach(function () {
     /** @var MockPdkProductRepository $productRepository */
@@ -45,7 +41,7 @@ function setupPdk(array $settings = []): PdkOrder
 {
     /** @var SettingsRepositoryInterface $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
-    /** @var MockPdkProductRepository $productRepository */
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\App\Order\Repository\MockPdkProductRepository $productRepository */
     $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
     $settingsRepository->storeAllSettings(
