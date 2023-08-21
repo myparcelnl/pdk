@@ -22,7 +22,7 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
     /**
      * @var array
      */
-    private static $cache = [];
+    private $cache = [];
 
     /**
      * @param  mixed $name
@@ -60,11 +60,11 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
 
         $cacheKey = sprintf('%s::%s', $model, md5(json_encode($attributes)));
 
-        if (! isset(self::$cache[$cacheKey])) {
-            self::$cache[$cacheKey] = new $model($attributes);
+        if (! isset($this->cache[$cacheKey])) {
+            $this->cache[$cacheKey] = new $model($attributes);
         }
 
-        return self::$cache[$cacheKey];
+        return $this->cache[$cacheKey];
     }
 
     /**
