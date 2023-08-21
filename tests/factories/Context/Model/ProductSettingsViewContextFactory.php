@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 /**
  * @template T of ProductSettingsViewContext
  * @method ProductSettingsViewContext make()
- * @method $this withView(ProductSettingsView $view)
+ * @method $this withView(array|ProductSettingsView $view)
  */
 final class ProductSettingsViewContextFactory extends AbstractModelFactory
 {

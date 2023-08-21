@@ -15,13 +15,13 @@ use function MyParcelNL\Pdk\Tests\factory;
 /**
  * @template T of DeliveryOptions
  * @method DeliveryOptions make()
- * @method $this withCarrier(Carrier|CarrierFactory $carrier)
- * @method $this withDate(string|DateTimeInterface $date)
+ * @method $this withCarrier(array|string|Carrier|CarrierFactory $carrier)
+ * @method $this withDate(array|string|DateTimeInterface $date)
  * @method $this withDeliveryType(string $deliveryType)
  * @method $this withLabelAmount(int $labelAmount)
  * @method $this withPackageType(string $packageType)
- * @method $this withPickupLocation(RetailLocation|RetailLocationFactory $pickupLocation)
- * @method $this withShipmentOptions(ShipmentOptions|ShipmentOptionsFactory $shipmentOptions)
+ * @method $this withPickupLocation(array|RetailLocation|RetailLocationFactory $pickupLocation)
+ * @method $this withShipmentOptions(array|ShipmentOptions|ShipmentOptionsFactory $shipmentOptions)
  */
 final class DeliveryOptionsFactory extends AbstractModelFactory
 {

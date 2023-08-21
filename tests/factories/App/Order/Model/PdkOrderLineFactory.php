@@ -16,7 +16,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method PdkOrderLine make()
  * @method $this withPrice(int $price)
  * @method $this withPriceAfterVat(int $priceAfterVat)
- * @method $this withProduct(PdkProduct|PdkProductFactory $product)
+ * @method $this withProduct(array|PdkProduct|PdkProductFactory $product)
  * @method $this withQuantity(int $quantity)
  * @method $this withVat(int $vat)
  */
@@ -25,6 +25,14 @@ final class PdkOrderLineFactory extends AbstractModelFactory
     public function getModel(): string
     {
         return PdkOrderLine::class;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withProductWithAllSettings(): self
+    {
+        return $this->withProduct(factory(PdkProduct::class)->withSettingsWithAllOptions());
     }
 
     protected function createDefault(): FactoryInterface

@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Model;
 
+use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\CurrencyFactory;
@@ -12,6 +13,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettingsFactory;
+use MyParcelNL\Pdk\Tests\Factory\Concern\HasIncrementingId;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -24,16 +26,18 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withHeight(int $height)
  * @method $this withIsDeliverable(bool $isDeliverable)
  * @method $this withLength(int $length)
- * @method $this withMergedSettings(ProductSettings|ProductSettingsFactory $mergedSettings)
+ * @method $this withMergedSettings(array|ProductSettings|ProductSettingsFactory $mergedSettings)
  * @method $this withName(string $name)
- * @method $this withParent(PdkProduct|PdkProductFactory $parent)
- * @method $this withSettings(ProductSettings|ProductSettingsFactory $settings)
+ * @method $this withParent(array|PdkProduct|PdkProductFactory $parent)
+ * @method $this withSettings(array|ProductSettings|ProductSettingsFactory $settings)
  * @method $this withSku(string $sku)
  * @method $this withWeight(int $weight)
  * @method $this withWidth(int $width)
  */
 final class PdkProductFactory extends AbstractModelFactory
 {
+    use HasIncrementingId;
+
     public function getModel(): string
     {
         return PdkProduct::class;
@@ -53,10 +57,21 @@ final class PdkProductFactory extends AbstractModelFactory
         return $this->with($price);
     }
 
+    /**
+     * @return $this
+     */
+    public function withSettingsWithAllOptions(): self
+    {
+        return $this->withSettings(factory(ProductSettings::class)->withAllOptions());
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface
+     */
     protected function createDefault(): FactoryInterface
     {
         return $this
-            ->withExternalIdentifier('123')
+            ->withExternalIdentifier("PDK-{$this->getNextId()}")
             ->withSku('test')
             ->withName('test')
             ->withPrice(1000);
@@ -69,7 +84,9 @@ final class PdkProductFactory extends AbstractModelFactory
      */
     protected function save(Model $model): void
     {
-        Pdk::get(PdkProductRepositoryInterface::class)
-            ->update($model);
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */
+        $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
+
+        $productRepository->add(new PdkProductCollection([$model]));
     }
 }

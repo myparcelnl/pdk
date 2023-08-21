@@ -22,8 +22,8 @@ use function MyParcelNL\Pdk\Tests\factory;
 /**
  * @template T of Account
  * @method Account make()
- * @method $this withContactInfo(ContactDetails|ContactDetailsFactory $contactInfo)
- * @method $this withGeneralSettings(AccountGeneralSettings|AccountGeneralSettingsFactory $generalSettings)
+ * @method $this withContactInfo(array|ContactDetails|ContactDetailsFactory $contactInfo)
+ * @method $this withGeneralSettings(array|AccountGeneralSettings|AccountGeneralSettingsFactory $generalSettings)
  * @method $this withId(int $id)
  * @method $this withPlatformId(int $platformId)
  * @method $this withStatus(int $status)

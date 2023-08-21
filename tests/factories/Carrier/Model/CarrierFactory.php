@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 /**
  * @template T of Carrier
  * @method Carrier make()
- * @method $this withCapabilities(CarrierCapabilities|CarrierCapabilitiesFactory $capabilities)
+ * @method $this withCapabilities(array|CarrierCapabilities|CarrierCapabilitiesFactory $capabilities)
  * @method $this withEnabled(bool $enabled)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withHuman(string $human)
@@ -21,7 +21,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withName(string $name)
  * @method $this withOptional(bool $optional)
  * @method $this withPrimary(bool $primary)
- * @method $this withReturnCapabilities(CarrierCapabilities|CarrierCapabilitiesFactory $returnCapabilities)
+ * @method $this withReturnCapabilities(array|CarrierCapabilities|CarrierCapabilitiesFactory $returnCapabilities)
  * @method $this withSubscriptionId(int $subscriptionId)
  * @method $this withType(string $type)
  */

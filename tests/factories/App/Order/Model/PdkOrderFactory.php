@@ -58,7 +58,7 @@ final class PdkOrderFactory extends AbstractModelFactory
      */
     public function withDeliveryOptions($deliveryOptions = null): self
     {
-        return $this->with($deliveryOptions ?? factory(DeliveryOptions::class));
+        return $this->with(['deliveryOptions' => $deliveryOptions ?? factory(DeliveryOptions::class)]);
     }
 
     public function withDeliveryOptionsWithAllOptions(): self

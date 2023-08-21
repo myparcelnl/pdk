@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Settings\Model;
 
 /**
  * @template T of CarrierSettings
- * @method CarrierSettings make()
  * @method $this withAllowDeliveryOptions(bool $allowDeliveryOptions)
  * @method $this withAllowEveningDelivery(bool $allowEveningDelivery)
  * @method $this withAllowMondayDelivery(bool $allowMondayDelivery)
@@ -26,7 +25,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @method $this withDeliveryOptionsEnabledForBackorders(bool $deliveryOptionsEnabledForBackorders)
  * @method $this withDigitalStampDefaultWeight(int $digitalStampDefaultWeight)
  * @method $this withDropOffDelay(int $dropOffDelay)
- * @method $this withDropOffPossibilities(DropOffPossibilities|DropOffPossibilitiesFactory $dropOffPossibilities)
+ * @method $this withDropOffPossibilities(array|DropOffPossibilities|DropOffPossibilitiesFactory $dropOffPossibilities)
  * @method $this withExportAgeCheck(bool $exportAgeCheck)
  * @method $this withExportHideSender(bool $exportHideSender)
  * @method $this withExportInsurance(bool $exportInsurance)
@@ -56,8 +55,30 @@ namespace MyParcelNL\Pdk\Settings\Model;
  */
 final class CarrierSettingsFactory extends AbstractSettingsModelFactory
 {
+    /**
+     * @param  null|string $id
+     */
+    public function __construct(string $id = null)
+    {
+        parent::__construct();
+
+        if ($id) {
+            $this->withId($id);
+        }
+    }
+
     public function getModel(): string
     {
         return CarrierSettings::class;
+    }
+
+    /**
+     * @param  string $id
+     *
+     * @return $this
+     */
+    public function withId(string $id): self
+    {
+        return $this->with(['id' => $id]);
     }
 }

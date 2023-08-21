@@ -12,8 +12,8 @@ use MyParcelNL\Pdk\Shipment\Model\DropOffDayFactory;
 /**
  * @template T of DropOffPossibilities
  * @method DropOffPossibilities make()
- * @method $this withDropOffDays(DropOffDayCollectionFactory|DropOffDayCollection|DropOffDayFactory[] $dropOffDays)
- * @method $this withDropOffDaysDeviations(DropOffDayCollectionFactory|DropOffDayCollection|DropOffDayFactory[] $dropOffDaysDeviations)
+ * @method $this withDropOffDays(array|DropOffDayCollectionFactory|DropOffDayCollection|DropOffDayFactory[] $dropOffDays)
+ * @method $this withDropOffDaysDeviations(array|DropOffDayCollectionFactory|DropOffDayCollection|DropOffDayFactory[] $dropOffDaysDeviations)
  */
 final class DropOffPossibilitiesFactory extends AbstractSettingsModelFactory
 {
