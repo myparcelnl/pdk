@@ -29,17 +29,15 @@ use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
-use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('endpoints');
 
-usesShared(
-    new UsesMockPdkInstance([
+beforeEach(function () {
+    mockPdkProperties([
         CreateWebhooksAction::class        => autowire(MockAction::class),
         DeleteAccountAction::class         => autowire(MockAction::class),
         DeleteShipmentsAction::class       => autowire(MockAction::class),
@@ -58,8 +56,8 @@ usesShared(
         UpdatePluginSettingsAction::class  => autowire(MockAction::class),
         UpdateProductSettingsAction::class => autowire(MockAction::class),
         UpdateShipmentsAction::class       => autowire(MockAction::class),
-    ])
-);
+    ]);
+});
 
 dataset('backendActions', function () {
     return [

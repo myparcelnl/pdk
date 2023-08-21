@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpDocMissingThrowsInspection */
 
 declare(strict_types=1);
 
@@ -10,6 +11,7 @@ use MyParcelNL\Pdk\Contract\MockServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\Facade\Mock;
 use Nette\Loaders\RobotLoader;
+use ReflectionClass;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class TestCase extends \PHPUnit\Framework\TestCase
@@ -64,9 +66,31 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function tearDown(): void
     {
-        $this->resetServices();
-
         Mock::reset();
+
+        $this->resetServices();
+    }
+
+    /**
+     * @param  \ReflectionClass $ref
+     *
+     * @return void
+     */
+    private function resetCoreServices(ReflectionClass $ref): void
+    {
+        foreach ($ref->getInterfaces() as $interface) {
+            if ($interface->getName() === MockServiceInterface::class) {
+                continue;
+            }
+
+            $instance = Pdk::get($interface->getName());
+
+            if (! $instance instanceof MockServiceInterface) {
+                continue;
+            }
+
+            $instance->reset();
+        }
     }
 
     /**
@@ -75,14 +99,14 @@ class TestCase extends \PHPUnit\Framework\TestCase
     private function resetServices(): void
     {
         foreach (self::getServices() as $class) {
-            /** @var \MyParcelNL\Pdk\Contract\MockServiceInterface $instance */
-            $instance = Pdk::get($class);
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $ref = new ReflectionClass($class);
 
-            if (! $instance instanceof MockServiceInterface) {
+            if (! $ref->implementsInterface(MockServiceInterface::class)) {
                 continue;
             }
 
-            $instance->reset();
+            $this->resetCoreServices($ref);
         }
     }
 }

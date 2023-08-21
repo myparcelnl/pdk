@@ -16,8 +16,6 @@ use MyParcelNL\Pdk\Mock\Api\Response\ExampleErrorUnprocessableEntityResponse;
 use MyParcelNL\Pdk\Mock\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 
 it('handles various error responses', function (string $response) {
     MockApi::enqueue(new $response());

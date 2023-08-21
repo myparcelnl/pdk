@@ -46,7 +46,7 @@ final class PdkProductFactory extends AbstractModelFactory
     /**
      * @param  int|Currency|CurrencyFactory $price
      *
-     * @return void
+     * @return $this
      */
     public function withPrice($price): self
     {

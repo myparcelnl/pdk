@@ -1,0 +1,8 @@
+{
+    "0.property": "deliveryOptions.shipmentOptions.largeFormat",
+    "0.pointer": "\/deliveryOptions\/shipmentOptions\/largeFormat",
+    "0.message": "Does not have a value in the enumeration [false]",
+    "0.constraint": "enum",
+    "0.context": 1,
+    "0.enum.0": false
+}

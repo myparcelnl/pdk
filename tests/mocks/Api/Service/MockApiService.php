@@ -9,10 +9,14 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Pdk\Api\Adapter\Guzzle7ClientAdapter;
+use MyParcelNL\Pdk\Contract\MockServiceInterface;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
 
-final class MockApiService extends AbstractApiService
+/**
+ * @property \MyParcelNL\Pdk\Api\Adapter\Guzzle7ClientAdapter $clientAdapter
+ */
+final class MockApiService extends AbstractApiService implements MockServiceInterface
 {
     /**
      * @var \GuzzleHttp\Handler\MockHandler
@@ -24,14 +28,9 @@ final class MockApiService extends AbstractApiService
      */
     public function __construct(Guzzle7ClientAdapter $clientAdapter)
     {
-        $mock   = new MockHandler();
-        $client = new Client(['handler' => HandlerStack::create($mock)]);
-
-        $clientAdapter->setClient($client);
-
         parent::__construct($clientAdapter);
 
-        $this->mock = $mock;
+        $this->createNewMockClient();
     }
 
     /**
@@ -84,5 +83,24 @@ final class MockApiService extends AbstractApiService
     public function getMock(): MockHandler
     {
         return $this->mock;
+    }
+
+    public function reset(): void
+    {
+        $this->createNewMockClient();
+    }
+
+    /**
+     * @return void
+     */
+    private function createNewMockClient(): void
+    {
+        $this->mock = new MockHandler();
+
+        $this->clientAdapter->setClient(
+            new Client([
+                'handler' => HandlerStack::create($this->mock),
+            ])
+        );
     }
 }

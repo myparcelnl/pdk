@@ -9,15 +9,14 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Language\Service\MockAbstractLanguageService;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
-usesShared(
-    new UsesMockPdkInstance([
+beforeEach(function () {
+    mockPdkProperties([
         LanguageServiceInterface::class => autowire(MockAbstractLanguageService::class),
-    ])
-);
+    ]);
+});
 
 it('calculates vat totals', function (array $input, array $expected) {
     /** @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService */

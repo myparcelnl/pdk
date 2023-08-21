@@ -78,13 +78,11 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository implem
     }
 
     /**
-     * @param  null|array $data
-     *
      * @return void
      */
-    public function reset(?array $data = []): void
+    public function reset(): void
     {
-        $this->storedAccount = $this->getDefaultAccount($data);
+        $this->store($this->getDefaultAccount());
     }
 
     /**
@@ -109,14 +107,10 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository implem
     }
 
     /**
-     * @param  null|array $data
-     *
      * @return null|\MyParcelNL\Pdk\Account\Model\Account
      */
-    private function getDefaultAccount(?array $data): ?Account
+    private function getDefaultAccount(): ?Account
     {
-        return null === $data
-            ? null
-            : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
+        return new Account(self::DEFAULT_DATA);
     }
 }

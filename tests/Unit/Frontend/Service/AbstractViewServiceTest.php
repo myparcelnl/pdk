@@ -9,18 +9,17 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Facade\Frontend;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 uses()->group('frontend');
 
-usesShared(
-    new UsesMockPdkInstance([
+beforeEach(function () {
+    mockPdkProperties([
         FrontendRenderServiceInterface::class => autowire(MockFrontendRenderService::class),
         ViewServiceInterface::class           => autowire(MockAbstractViewService::class),
-    ])
-);
+    ]);
+});
 
 it('renders component on correct pages', function (callable $callback, array $views, string $page) {
     global $currentPage;

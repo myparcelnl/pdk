@@ -9,15 +9,12 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
-usesShared(
-    new UsesMockPdkInstance([
-        FileSystemInterface::class => autowire(FileSystem::class),
-    ])
-);
+beforeEach(function () {
+    mockPdkProperties([FileSystemInterface::class => autowire(FileSystem::class)]);
+});
 
 it('creates directories', function () {
     /** @var FileSystemInterface $fileSystem */

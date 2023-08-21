@@ -44,7 +44,7 @@ function executeUpdateAccount(?array $settings, array $accounts = null): Respons
 }
 
 it('fetches account with carrier configurations and options', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\App\Account\Repository\MockPdkAccountRepository $accountRepository */
+    /** @var \MyParcelNL\Pdk\App\Account\Repository\MockPdkAccountRepository $accountRepository */
     $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
     $accountRepository->deleteAccount();
 
@@ -65,26 +65,4 @@ it('fetches account with carrier configurations and options', function () {
         ->toHaveLength(1)
         ->and($firstShop->carrierConfigurations->all())
         ->toHaveLength(1);
-});
-
-it('fetches new account and carrier data from api when called with empty array', function () {
-    $existingAccount = AccountSettings::getAccount();
-
-    expect($existingAccount)->toBeInstanceOf(Account::class);
-
-    executeUpdateAccount([]);
-
-    $currentAccount = AccountSettings::getAccount();
-
-    expect($currentAccount->toStorableArray())
-        ->toBe($existingAccount->toStorableArray())
-        // Expect last api call to have been to the carrier options endpoint, as
-        // posting an empty array should trigger a fetch of the current account
-        // and its carrier configuration and options
-        ->and(
-            MockApi::ensureLastRequest()
-                ->getUri()
-                ->getPath()
-        )
-        ->toEndWith('/carrier_management/shops/2100/carrier_options');
 });

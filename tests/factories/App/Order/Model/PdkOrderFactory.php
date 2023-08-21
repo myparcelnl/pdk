@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptionsFactory;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentFactory;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Tests\Factory\Concern\HasIncrementingId;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -46,6 +47,8 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class PdkOrderFactory extends AbstractModelFactory
 {
+    use HasIncrementingId;
+
     public function getModel(): string
     {
         return PdkOrder::class;
@@ -107,6 +110,7 @@ final class PdkOrderFactory extends AbstractModelFactory
         $dutchAddress = factory(ContactDetails::class)->inTheNetherlands();
 
         return $this
+            ->withExternalIdentifier("PDK-{$this->getNextId()}")
             ->withBillingAddress($dutchAddress)
             ->withShippingAddress($dutchAddress)
             ->withOrderPrice(1000)

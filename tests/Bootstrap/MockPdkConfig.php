@@ -54,7 +54,7 @@ use MyParcelNL\Pdk\Notification\Service\MockNotificationService;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Repository\MockSettingsRepository;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\MockMemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Bootstrap\Contract\MockPdkServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\Service\MockPdkService;
 use Psr\Log\LoggerInterface;
@@ -119,7 +119,7 @@ final class MockPdkConfig
             PdkWebhookServiceInterface::class           => autowire(MockPdkWebhookService::class),
             PdkWebhooksRepositoryInterface::class       => autowire(MockPdkWebhooksRepository::class),
             SettingsRepositoryInterface::class          => autowire(MockSettingsRepository::class),
-            StorageInterface::class                     => autowire(MemoryCacheStorage::class),
+            StorageInterface::class                     => autowire(MockMemoryCacheStorage::class),
             TaxServiceInterface::class                  => autowire(MockTaxService::class),
             ViewServiceInterface::class                 => autowire(MockViewService::class),
         ];
