@@ -55,9 +55,16 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
      */
     public function make(): Model
     {
-        $model = $this->getModel();
+        $model      = $this->getModel();
+        $attributes = $this->resolveAttributes();
 
-        return new $model($this->resolveAttributes());
+        $cacheKey = sprintf('%s::%s', $model, md5(json_encode($attributes)));
+
+        if (! isset(self::$cache[$cacheKey])) {
+            self::$cache[$cacheKey] = new $model($attributes);
+        }
+
+        return self::$cache[$cacheKey];
     }
 
     /**
