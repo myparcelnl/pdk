@@ -12,8 +12,8 @@
         "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'"
     },
     "lint-staged": {
-        "*.{md}": "prettier --write",
-        "*.php,__1": "yarn quality:fix && yarn test"
+        "*.md": "prettier --write",
+        "*.php": "yarn quality:fix && yarn test"
     },
     "prettier": "@myparcel/prettier-config",
     "release": {
