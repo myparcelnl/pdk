@@ -26,7 +26,6 @@ use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
@@ -84,7 +83,7 @@ class MockPdkConfig
             PdkShippingMethodRepositoryInterface::class => autowire(MockPdkShippingMethodRepository::class),
             PdkWebhooksRepositoryInterface::class       => autowire(MockPdkWebhooksRepository::class),
             SettingsRepositoryInterface::class          => autowire(MockSettingsRepository::class),
-            StorageInterface::class                     => autowire(MemoryCacheStorage::class),
+            StorageInterface::class                     => autowire(MockMemoryCacheStorage::class),
             TaxServiceInterface::class                  => autowire(MockTaxService::class),
             ViewServiceInterface::class                 => autowire(MockViewService::class),
         ];
