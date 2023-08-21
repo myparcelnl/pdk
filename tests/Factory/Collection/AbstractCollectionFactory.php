@@ -103,6 +103,19 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
     }
 
     /**
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return $this
+     */
+    public function put(string $key, $value): CollectionFactoryInterface
+    {
+        $this->entries->put($key, $value);
+
+        return $this;
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface>
      */
     protected function models(): Collection

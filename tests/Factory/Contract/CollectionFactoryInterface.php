@@ -45,4 +45,12 @@ interface CollectionFactoryInterface extends FactoryInterface
      * @return GCollectionFactory
      */
     public function push(...$items): CollectionFactoryInterface;
+
+    /**
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return GCollectionFactory
+     */
+    public function put(string $key, $value): CollectionFactoryInterface;
 }
