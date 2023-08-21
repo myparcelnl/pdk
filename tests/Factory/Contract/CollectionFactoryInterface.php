@@ -53,4 +53,9 @@ interface CollectionFactoryInterface extends FactoryInterface
      * @return GCollectionFactory
      */
     public function put(string $key, $value): CollectionFactoryInterface;
+
+    /**
+     * @return GCollectionFactory
+     */
+    public function store(): CollectionFactoryInterface;
 }

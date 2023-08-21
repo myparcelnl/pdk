@@ -20,6 +20,11 @@ use ReflectionClass;
 abstract class AbstractModelFactory extends AbstractFactory implements ModelFactoryInterface
 {
     /**
+     * @var array
+     */
+    private static $cache = [];
+
+    /**
      * @param  mixed $name
      * @param  mixed $arguments
      *

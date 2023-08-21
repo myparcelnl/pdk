@@ -116,6 +116,20 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
     }
 
     /**
+     * @return $this
+     */
+    public function store(): CollectionFactoryInterface
+    {
+        $this
+            ->models()
+            ->each(function (ModelFactoryInterface $model) {
+                $model->store();
+            });
+
+        return $this;
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface>
      */
     protected function models(): Collection
