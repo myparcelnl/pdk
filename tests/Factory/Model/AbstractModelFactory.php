@@ -150,7 +150,11 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
         if ($items instanceof CollectionFactoryInterface) {
             $items = $items->eachWith($factoryCallback);
         } elseif (is_array($items)) {
-            $items = array_map($factoryCallback, $items);
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $collectionFactory = $this->createCollectionFactory($key)
+                ->push(...$items);
+
+            return $this->withCollection($key, $collectionFactory, $callback);
         } elseif (is_int($items)) {
             /** @noinspection PhpUnhandledExceptionInspection */
             $items = $this->createCollectionFactory($key)
