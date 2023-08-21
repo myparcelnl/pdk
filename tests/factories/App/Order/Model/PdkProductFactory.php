@@ -54,7 +54,7 @@ final class PdkProductFactory extends AbstractModelFactory
             $price = factory(Currency::class)->withAmount($price);
         }
 
-        return $this->with($price);
+        return $this->with(['price' => $price]);
     }
 
     /**
