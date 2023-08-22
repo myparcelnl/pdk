@@ -49,9 +49,9 @@ class PostOrderNotesAction extends AbstractOrderAction
     public function handle(Request $request): Response
     {
         // TODO: Remove this and check if shop subscription allows using order notes
-        //        if (! $request->query->has('OVERRIDE')) {
-        //            return $this->getFetchOrdersResponse($request);
-        //        }
+        if (! $request->query->has('OVERRIDE')) {
+            return $this->getFetchOrdersResponse($request);
+        }
 
         $orderIds = $this->getOrderIds($request);
         $orders   = $this->pdkOrderRepository->getMany($orderIds);
