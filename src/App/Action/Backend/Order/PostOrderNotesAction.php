@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,9 +50,9 @@ class PostOrderNotesAction extends AbstractOrderAction
     public function handle(Request $request): Response
     {
         // TODO: Remove this and check if shop subscription allows using order notes
-        if (! $request->query->has('OVERRIDE')) {
-            return $this->getFetchOrdersResponse($request);
-        }
+        //        if (! $request->query->has('OVERRIDE')) {
+        //            return $this->getFetchOrdersResponse($request);
+        //        }
 
         $orderIds = $this->getOrderIds($request);
         $orders   = $this->pdkOrderRepository->getMany($orderIds);
@@ -61,11 +62,17 @@ class PostOrderNotesAction extends AbstractOrderAction
                 return $order->apiIdentifier && $order->notes->isNotEmpty();
             })
             ->each(function (PdkOrder $order) {
-                $notes = $this->orderNotesRepository->postOrderNotes(
-                    $order->apiIdentifier,
-                    $order->notes->where('apiIdentifier', '==', null)
-                        ->toFulfilmentCollection()
-                );
+                //                $notes = $this->orderNotesRepository->postOrderNotes(
+                //                    $order->apiIdentifier,
+                //                    $order->notes->where('apiIdentifier', '==', null)
+                //                        ->toFulfilmentCollection()
+                //                );
+
+                $notes = $order->notes
+                    ->map(function (PdkOrderNote $note) {
+                        return $note->fill(['apiIdentifier' => 'test']);
+                    })
+                    ->toFulfilmentCollection();
 
                 $order->notes->addApiIdentifiers($notes);
 
