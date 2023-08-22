@@ -26,10 +26,11 @@ use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
 use Psr\Log\LoggerInterface;
-use function DI\autowire;
 use function DI\factory;
+use function DI\get;
 use function DI\value;
 
 /**
@@ -63,29 +64,30 @@ class MockPdkConfig
                 ]);
             }),
 
-            'platform' => value(Platform::MYPARCEL_NAME),
+            'platform'                                  => value(Platform::MYPARCEL_NAME),
+            ApiServiceInterface::class                  => get(MockApiService::class),
+            BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
+            ClientAdapterInterface::class               => get(Guzzle7ClientAdapter::class),
+            ConfigInterface::class                      => get(MockConfig::class),
+            CronServiceInterface::class                 => get(MockCronService::class),
+            FileSystemInterface::class                  => get(MockFileSystem::class),
+            FrontendEndpointServiceInterface::class     => get(MockFrontendEndpointService::class),
+            LanguageServiceInterface::class             => get(MockLanguageService::class),
+            LoggerInterface::class                      => get(MockLogger::class),
+            OrderStatusServiceInterface::class          => get(MockOrderStatusService::class),
+            PdkAccountRepositoryInterface::class        => get(MockPdkAccountRepository::class),
+            PdkCartRepositoryInterface::class           => get(MockPdkCartRepository::class),
+            PdkInterface::class                         => get(MockPdk::class),
+            PdkOrderRepositoryInterface::class          => get(MockPdkOrderRepository::class),
+            PdkProductRepositoryInterface::class        => get(MockPdkProductRepository::class),
+            PdkShippingMethodRepositoryInterface::class => get(MockPdkShippingMethodRepository::class),
+            PdkWebhooksRepositoryInterface::class       => get(MockPdkWebhooksRepository::class),
+            SettingsRepositoryInterface::class          => get(MockSettingsRepository::class),
+            StorageInterface::class                     => get(MockMemoryCacheStorage::class),
+            TaxServiceInterface::class                  => get(MockTaxService::class),
+            ViewServiceInterface::class                 => get(MockViewService::class),
 
-            ApiServiceInterface::class                  => autowire(MockApiService::class),
-            BackendEndpointServiceInterface::class      => autowire(MockBackendEndpointService::class),
-            ClientAdapterInterface::class               => autowire(Guzzle7ClientAdapter::class),
-            ConfigInterface::class                      => autowire(MockConfig::class),
-            CronServiceInterface::class                 => autowire(MockCronService::class),
-            FileSystemInterface::class                  => autowire(MockFileSystem::class),
-            FrontendEndpointServiceInterface::class     => autowire(MockFrontendEndpointService::class),
-            LanguageServiceInterface::class             => autowire(MockLanguageService::class),
-            LoggerInterface::class                      => autowire(MockLogger::class),
-            OrderStatusServiceInterface::class          => autowire(MockOrderStatusService::class),
-            PdkAccountRepositoryInterface::class        => autowire(MockPdkAccountRepository::class),
-            PdkCartRepositoryInterface::class           => autowire(MockPdkCartRepository::class),
-            PdkInterface::class                         => autowire(MockPdk::class),
-            PdkOrderRepositoryInterface::class          => autowire(MockPdkOrderRepository::class),
-            PdkProductRepositoryInterface::class        => autowire(MockPdkProductRepository::class),
-            PdkShippingMethodRepositoryInterface::class => autowire(MockPdkShippingMethodRepository::class),
-            PdkWebhooksRepositoryInterface::class       => autowire(MockPdkWebhooksRepository::class),
-            SettingsRepositoryInterface::class          => autowire(MockSettingsRepository::class),
-            StorageInterface::class                     => autowire(MockMemoryCacheStorage::class),
-            TaxServiceInterface::class                  => autowire(MockTaxService::class),
-            ViewServiceInterface::class                 => autowire(MockViewService::class),
+            MemoryCacheStorage::class => get(MockMemoryCacheStorage::class),
         ];
     }
 }
