@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
-use MyParcelNL\Pdk\Tests\Factory\Concern\HasIncrementingId;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -33,8 +32,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class ShopFactory extends AbstractModelFactory
 {
-    use HasIncrementingId;
-
     public function getModel(): string
     {
         return Shop::class;

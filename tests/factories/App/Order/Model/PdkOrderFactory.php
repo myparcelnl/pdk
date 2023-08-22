@@ -107,6 +107,7 @@ final class PdkOrderFactory extends AbstractModelFactory
         $dutchAddress = factory(ContactDetails::class)->inTheNetherlands();
 
         return $this
+            ->withExternalIdentifier("PDK-{$this->getNextId()}")
             ->withBillingAddress($dutchAddress)
             ->withShippingAddress($dutchAddress)
             ->withOrderPrice(1000)

@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettingsFactory;
-use MyParcelNL\Pdk\Tests\Factory\Concern\HasIncrementingId;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -36,8 +35,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class PdkProductFactory extends AbstractModelFactory
 {
-    use HasIncrementingId;
-
     public function getModel(): string
     {
         return PdkProduct::class;

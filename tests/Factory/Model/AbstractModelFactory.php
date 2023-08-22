@@ -132,6 +132,18 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
     }
 
     /**
+     * @param  string|null $key
+     *
+     * @return int
+     */
+    protected function getNextId(string $key = null): int
+    {
+        $key = $key ?? $this->getModel();
+
+        return $this->state->getNextId($key);
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Base\Model\Model $model
      *
      * @return void

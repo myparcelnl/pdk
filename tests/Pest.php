@@ -3,10 +3,13 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
+use MyParcelNL\Pdk\Tests\Factory\SharedFactoryState;
 use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
+use Symfony\Contracts\Service\ResetInterface;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 include __DIR__ . '/usesShared.php';
@@ -23,12 +26,32 @@ const ROOT_DIR  = TESTS_DIR . '/..';
 
 usesShared(new ClearContainerCache())->in(__DIR__);
 
-uses()->afterEach(static function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage $storage */
-    $storage = Pdk::get(StorageInterface::class);
+uses()
+    ->afterEach(function () {
+        if (! Facade::getPdkInstance()) {
+            return;
+        }
 
-    $storage->reset();
-});
+        $services = [
+            MockMemoryCacheStorage::class,
+            SharedFactoryState::class,
+        ];
+
+        foreach ($services as $service) {
+            try {
+                $instance = Pdk::get($service);
+
+                if (! $instance instanceof ResetInterface) {
+                    continue;
+                }
+
+                $instance->reset();
+            } catch (Exception $e) {
+                // Ignore
+            }
+        }
+    })
+    ->in(__DIR__);
 
 expect()
     ->extend('toHaveKeysAndValues', function (array $array) {

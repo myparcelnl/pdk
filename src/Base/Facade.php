@@ -32,9 +32,19 @@ abstract class Facade
     }
 
     /**
+     * @return null|\MyParcelNL\Pdk\Base\Concern\PdkInterface
+     * @internal
+     */
+    public static function getPdkInstance(): ?PdkInterface
+    {
+        return self::$pdk;
+    }
+
+    /**
      * @param  null|\MyParcelNL\Pdk\Base\Concern\PdkInterface $pdk
      *
      * @return void
+     * @internal
      */
     public static function setPdkInstance(?PdkInterface $pdk): void
     {

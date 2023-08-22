@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\ContactDetailsFactory;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Factory\Concern\HasIncrementingId;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
@@ -30,8 +29,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class AccountFactory extends AbstractModelFactory
 {
-    use HasIncrementingId;
-
     public function getModel(): string
     {
         return Account::class;

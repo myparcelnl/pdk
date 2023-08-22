@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Factory;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 
 abstract class AbstractFactory implements FactoryInterface
@@ -14,8 +15,15 @@ abstract class AbstractFactory implements FactoryInterface
      */
     protected $attributes;
 
+    /**
+     * @var \MyParcelNL\Pdk\Tests\Factory\SharedFactoryState
+     */
+    protected $state;
+
     public function __construct()
     {
+        $this->state = Pdk::get(SharedFactoryState::class);
+
         $this->fromScratch();
         $this->createDefault();
     }
