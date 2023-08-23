@@ -80,6 +80,25 @@ class MockApiService extends AbstractApiService
     }
 
     /**
+     * @return null|array
+     * @noinspection PhpUnused
+     */
+    public function getLastRequestBody(): ?array
+    {
+        $lastRequest = $this->getLastRequest();
+
+        if (! $lastRequest) {
+            return null;
+        }
+
+        return json_decode(
+            $lastRequest->getBody()
+                ->getContents(),
+            true
+        );
+    }
+
+    /**
      * @return \GuzzleHttp\Handler\MockHandler
      */
     public function getMock(): MockHandler

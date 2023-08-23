@@ -14,6 +14,20 @@ interface ElementBuilderInterface
     public function getName(): ?string;
 
     /**
+     * @param  string $key
+     *
+     * @return null|mixed
+     */
+    public function getProp(string $key);
+
+    /**
+     * @param  string $key
+     *
+     * @return bool
+     */
+    public function hasProp(string $key): bool;
+
+    /**
      * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface
      */
     public function make(): ElementInterface;

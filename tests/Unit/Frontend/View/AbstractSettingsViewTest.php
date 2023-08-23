@@ -53,7 +53,7 @@ final class MockSettingsView extends AbstractSettingsView
 it('can render a settings view', function (array $data) {
     $view = new MockSettingsView($data['children'], $data['elements']);
 
-    expect($view->toArray())->toBe($data['result']);
+    expect($view->toArray())->toEqual($data['result']);
 })->with([
     'base' => function () {
         return [

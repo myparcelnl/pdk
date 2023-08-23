@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\App\Options\Helper\CarrierSettingsDefinitionHelper;
+use MyParcelNL\Pdk\App\Options\Helper\ProductSettingsDefinitionHelper;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Context\Context;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 
 /**
  * @property null|string                                                 $externalIdentifier
@@ -29,10 +34,19 @@ use MyParcelNL\Pdk\Context\Context;
  * @property int                                                         $totalPrice
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
+ * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $inheritedDeliveryOptions
  */
 class OrderDataContext extends PdkOrder
 {
     public const ID = Context::ID_ORDER_DATA;
+
+    public function __construct(?array $data = null)
+    {
+        $this->attributes['inheritedDeliveryOptions'] = null;
+        $this->casts['inheritedDeliveryOptions']      = DeliveryOptions::class;
+
+        parent::__construct($data);
+    }
 
     /**
      * Remove deleted shipments from the array.
@@ -55,5 +69,37 @@ class OrderDataContext extends PdkOrder
             ->values();
 
         return $clone->toArray($flags);
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions
+     * @noinspection PhpUnused
+     */
+    protected function getInheritedDeliveryOptionsAttribute(): DeliveryOptions
+    {
+        /** @var TriStateServiceInterface $triStateService */
+        $triStateService = Pdk::get(TriStateServiceInterface::class);
+
+        $deliveryOptions = new DeliveryOptions([
+            'carrier' => [
+                'name' => $this->deliveryOptions->carrier->name,
+                'id'   => $this->deliveryOptions->carrier->id,
+            ],
+        ]);
+
+        $productHelper = new ProductSettingsDefinitionHelper($this);
+        $carrierHelper = new CarrierSettingsDefinitionHelper($this);
+
+        /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition */
+        foreach (Pdk::get('orderOptionDefinitions') as $definition) {
+            $inheritedValue = $triStateService->resolve(
+                $productHelper->get($definition),
+                $carrierHelper->get($definition)
+            );
+
+            $deliveryOptions->shipmentOptions->setAttribute($definition->getShipmentOptionsKey(), $inheritedValue);
+        }
+
+        return $deliveryOptions;
     }
 }

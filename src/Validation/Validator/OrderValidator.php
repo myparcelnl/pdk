@@ -8,42 +8,21 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator as JsonSchemaValidator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Validation\Contract\ValidatorInterface;
 use RuntimeException;
 
-class OrderValidator extends OrderPropertiesValidator implements ValidatorInterface
+class OrderValidator extends OrderPropertiesValidator implements OrderValidatorInterface
 {
-    /**
-     * @var array
-     */
-    private $errors;
-
     /**
      * @var \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
-    private $order;
-
-    /**
-     * @var array
-     */
-    private $orderArray;
-
-    /**
-     * @return array
-     */
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
+    protected $order;
 
     /**
      * @return array
      */
     public function getSchema(): array
     {
-        if (! $this->order) {
-            throw new RuntimeException('Order is not set.');
-        }
+        $this->ensureOrder();
 
         $deliveryOptions = $this->order->deliveryOptions;
 
@@ -58,48 +37,52 @@ class OrderValidator extends OrderPropertiesValidator implements ValidatorInterf
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
-     * @return self
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @return $this
      */
-    public function setOrder(PdkOrder $order): self
+    public function setOrder(PdkOrder $order): OrderValidatorInterface
     {
-        $this->lockShipmentOptions($order);
-
-        $this->order      = $order;
-        $this->orderArray = $order->toArray();
+        $this->order = $order;
 
         return $this;
     }
 
     /**
      * @return bool
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function validate(): bool
     {
-        $validator = new JsonSchemaValidator();
-        $validator->validate($this->orderArray, $this->getSchema(), Constraint::CHECK_MODE_TYPE_CAST);
+        $this->ensureOrder();
 
-        $this->errors = $validator->getErrors();
+        $array = $this->createOrderArray();
+
+        $validator = new JsonSchemaValidator();
+        $schema    = $this->getSchema();
+
+        $validator->validate($array, $schema, Constraint::CHECK_MODE_TYPE_CAST);
+
+        $this->errors      = $validator->getErrors();
+        $this->description = $schema['description'] ?? null;
 
         return $validator->isValid();
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    protected function createOrderArray(): array
+    {
+        return $this->order->toArray();
+    }
+
+    /**
      * @return void
      */
-    private function lockShipmentOptions(PdkOrder $order): void
+    protected function ensureOrder(): void
     {
-        $order->deliveryOptions->shipmentOptions->fill([
-            'ageCheck'         => (bool) $order->deliveryOptions->shipmentOptions->ageCheck,
-            'insurance'        => (int) $order->deliveryOptions->shipmentOptions->insurance,
-            'labelDescription' => (string) $order->deliveryOptions->shipmentOptions->labelDescription,
-            'largeFormat'      => (bool) $order->deliveryOptions->shipmentOptions->largeFormat,
-            'onlyRecipient'    => (bool) $order->deliveryOptions->shipmentOptions->onlyRecipient,
-            'return'           => (bool) $order->deliveryOptions->shipmentOptions->return,
-            'sameDayDelivery'  => (bool) $order->deliveryOptions->shipmentOptions->sameDayDelivery,
-            'signature'        => (bool) $order->deliveryOptions->shipmentOptions->signature,
-        ]);
+        if (! $this->order) {
+            throw new RuntimeException('Order is not set.');
+        }
     }
 }

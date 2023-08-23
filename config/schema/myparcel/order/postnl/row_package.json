@@ -19,7 +19,7 @@
               "enum": [0, 5000, 50000]
             },
             "largeFormat": {
-              "enum": [false]
+              "enum": [0]
             }
           }
         }

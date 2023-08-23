@@ -6,7 +6,11 @@
         },
         "options": {
             "package_type": 1,
-            "delivery_type": 2
+            "delivery_type": 2,
+            "insurance": {
+                "amount": -1,
+                "currency": "EUR"
+            }
         },
         "physical_properties": {
             "weight": 0

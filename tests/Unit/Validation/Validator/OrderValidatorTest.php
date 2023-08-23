@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -18,31 +17,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesEachMockPdkInstance());
 
-/**
- * array_merge overwrites entire keys, array_merge_recursive only adds to them, thereby corrupting the array.
- * This function only overwrites the keys within the keys that are present, and leaves the rest as is.
- *
- * @param  array ...$arrays
- *
- * @return array
- */
-function arrayMergeOrder(array ...$arrays): array
-{
-    if (! isset($arrays[0])) {
-        return [];
-    }
-
-    return Arr::undot(
-        array_reduce($arrays, static function (array $carry, array $merge) {
-            foreach (Arr::dot($merge) as $key => $value) {
-                $carry[$key] = $value;
-            }
-            return $carry;
-        }, [])
-    );
-}
-
-$defaultOrderData = [
+const DEFAULT_ORDER_DATA = [
     'externalIdentifier' => '1',
     'shippingAddress'    => [
         'cc'         => 'NL',
@@ -73,8 +48,8 @@ $defaultOrderData = [
     'shipments'          => null,
 ];
 
-$createOrder = function (array $input = []) use ($defaultOrderData): PdkOrder {
-    return new PdkOrder(arrayMergeOrder($defaultOrderData, $input));
+$createOrder = function (array $input = []): PdkOrder {
+    return new PdkOrder(array_replace_recursive(DEFAULT_ORDER_DATA, $input));
 };
 
 it('returns correct schema', function (array $order) use ($createOrder) {
@@ -375,7 +350,15 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
 );
 
 it('throws error when trying to validate without an order', function () {
+    /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
     $validator = Pdk::get(OrderValidator::class);
 
     $validator->validate();
+})->throws(RuntimeException::class);
+
+it('throws error when trying to get schema without an order', function () {
+    /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
+    $validator = Pdk::get(OrderValidator::class);
+
+    $validator->getSchema();
 })->throws(RuntimeException::class);

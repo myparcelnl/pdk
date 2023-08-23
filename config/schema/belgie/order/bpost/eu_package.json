@@ -8,7 +8,7 @@
               "enum": [null, 0, 50000]
             },
             "signature": {
-              "enum": [false]
+              "enum": [0]
             }
           }
         }

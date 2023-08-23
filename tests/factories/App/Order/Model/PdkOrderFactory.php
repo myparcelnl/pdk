@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentFactory;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
@@ -146,7 +147,7 @@ final class PdkOrderFactory extends AbstractModelFactory
             factory(DeliveryOptions::class)
                 ->withShipmentOptions(
                     factory(ShipmentOptions::class)
-                        ->withSignature(true)
+                        ->withSignature(TriStateService::ENABLED)
                 )
         );
     }

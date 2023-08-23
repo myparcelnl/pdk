@@ -5,6 +5,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation\Validator;
 
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 use MyParcelNL\Pdk\Validation\Contract\SchemaInterface;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
@@ -16,16 +26,23 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     private const SHIPMENT_OPTIONS_KEY = self::DELIVERY_OPTIONS_KEY . '.shipmentOptions.properties';
 
     /**
+     * @var null|string
+     */
+    protected $description;
+
+    /**
+     * @var array
+     */
+    protected $errors;
+
+    /**
      * @var \MyParcelNL\Pdk\Validation\Repository\SchemaRepository
      */
     protected $repository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository $repository
-     */
-    public function __construct(SchemaRepository $repository)
+    public function __construct()
     {
-        $this->repository = $repository;
+        $this->repository = Pdk::get(SchemaRepository::class);
     }
 
     /**
@@ -33,7 +50,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveAgeCheck(): bool
     {
-        return $this->canHaveOption(sprintf('%s.ageCheck', self::SHIPMENT_OPTIONS_KEY));
+        return $this->canHaveOptionDef(AgeCheckDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -41,7 +58,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveDate(): bool
     {
-        return $this->canHaveOption(sprintf('%s.date', self::DELIVERY_OPTIONS_KEY));
+        return $this->canHaveOption(sprintf('%s.date', self::DELIVERY_OPTIONS_KEY), null);
     }
 
     /**
@@ -49,7 +66,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveDirectReturn(): bool
     {
-        return $this->canHaveOption(sprintf('%s.return', self::SHIPMENT_OPTIONS_KEY));
+        return $this->canHaveOptionDef(DirectReturnDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -65,7 +82,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveHideSender(): bool
     {
-        return $this->canHaveOption(sprintf('%s.hideSender', self::SHIPMENT_OPTIONS_KEY));
+        return $this->canHaveOptionDef(HideSenderDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -75,7 +92,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveInsurance(?int $amount = 10000): bool
     {
-        return $this->canHaveOption(sprintf('%s.insurance', self::SHIPMENT_OPTIONS_KEY), $amount);
+        return $this->canHaveOptionDef(InsuranceDefinition::class, self::SHIPMENT_OPTIONS_KEY, $amount);
     }
 
     /**
@@ -83,7 +100,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveLargeFormat(): bool
     {
-        return $this->canHaveOption(sprintf('%s.largeFormat', self::SHIPMENT_OPTIONS_KEY));
+        return $this->canHaveOptionDef(LargeFormatDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -99,7 +116,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveMultiCollo(): bool
     {
-        return $this->canHaveOption('properties.multiCollo');
+        return $this->canHaveOption('properties.multiCollo', true);
     }
 
     /**
@@ -107,7 +124,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveOnlyRecipient(): bool
     {
-        return $this->canHaveOption(sprintf('%s.onlyRecipient', self::SHIPMENT_OPTIONS_KEY));
+        return $this->canHaveOptionDef(OnlyRecipientDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -123,7 +140,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveSameDayDelivery(): bool
     {
-        return $this->canHaveOption(sprintf('%s.sameDayDelivery', self::DELIVERY_OPTIONS_KEY));
+        return $this->canHaveOptionDef(SameDayDeliveryDefinition::class, self::DELIVERY_OPTIONS_KEY);
     }
 
     /**
@@ -131,7 +148,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveSignature(): bool
     {
-        return $this->canHaveOption(sprintf('%s.signature', self::SHIPMENT_OPTIONS_KEY));
+        return $this->canHaveOptionDef(SignatureDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -151,7 +168,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     {
         return $this->repository->getValidOptions(
             $this->getSchema(),
-            sprintf('%s.insurance', self::SHIPMENT_OPTIONS_KEY)
+            $this->getKey(InsuranceDefinition::class, self::SHIPMENT_OPTIONS_KEY)
         );
     }
 
@@ -164,13 +181,58 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     }
 
     /**
+     * @return null|string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
      * @param  string $option
-     * @param         $value
+     * @param  mixed  $value
      *
      * @return bool
      */
-    protected function canHaveOption(string $option, $value = null): bool
+    protected function canHaveOption(string $option, $value = TriStateService::ENABLED): bool
     {
         return $this->repository->validateOption($this->getSchema(), $option, $value);
+    }
+
+    /**
+     * @param  class-string<\MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface> $definitionClass
+     * @param  string                                                                            $prefix
+     * @param  mixed                                                                             $value
+     *
+     * @return bool
+     */
+    protected function canHaveOptionDef(
+        string $definitionClass,
+        string $prefix = '',
+               $value = TriStateService::ENABLED
+    ): bool {
+        return $this->canHaveOption($this->getKey($definitionClass, $prefix), $value);
+    }
+
+    /**
+     * @param  string $definitionClass
+     * @param  string $prefix
+     *
+     * @return string
+     */
+    private function getKey(string $definitionClass, string $prefix): string
+    {
+        /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $instance */
+        $instance = new $definitionClass();
+
+        return sprintf('%s.%s', $prefix, $instance->getShipmentOptionsKey());
     }
 }

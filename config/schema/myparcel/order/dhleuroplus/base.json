@@ -7,15 +7,10 @@
         {
           "properties": {
             "deliveryOptions": {
-              "required": [
-                "deliveryType"
-              ],
+              "required": ["deliveryType"],
               "properties": {
                 "deliveryType": {
-                  "enum": [
-                    "standard",
-                    null
-                  ]
+                  "enum": ["standard", null]
                 }
               }
             }
@@ -24,9 +19,7 @@
         {
           "properties": {
             "deliveryOptions": {
-              "required": [
-                "date"
-              ],
+              "required": ["date"],
               "properties": {
                 "date": {
                   "type": "string",
@@ -50,17 +43,10 @@
     "deliveryOptions": {
       "properties": {
         "deliveryType": {
-          "enum": [
-            "standard",
-            null
-          ]
+          "enum": ["standard", null]
         },
         "packageType": {
-          "enum": [
-            "letter",
-            "package",
-            null
-          ]
+          "enum": ["letter", "package", null]
         },
         "shipmentOptions": {
           "properties": {
@@ -68,15 +54,10 @@
               "maxLength": 50
             },
             "signature": {
-              "enum": [
-                true
-              ]
+              "enum": [1]
             },
             "saturdayDelivery": {
-              "enum": [
-                true,
-                false
-              ]
+              "enum": [1, 0]
             },
             "insurance": {
               "enum": [
@@ -95,10 +76,7 @@
               ]
             },
             "hideSender": {
-              "enum": [
-                true,
-                false
-              ]
+              "enum": [1, 0]
             }
           }
         }

@@ -37,7 +37,7 @@
                             "largeFormat": true,
                             "onlyRecipient": true,
                             "return": true,
-                            "sameDayDelivery": true,
+                            "sameDayDelivery": false,
                             "signature": true,
                             "insurance": [
                                 0,
@@ -86,7 +86,7 @@
                             "return": true,
                             "ageCheck": true,
                             "onlyRecipient": true,
-                            "sameDayDelivery": true,
+                            "sameDayDelivery": false,
                             "largeFormat": true
                         }
                     }
@@ -95,15 +95,15 @@
                 "labelAmount": 1,
                 "pickupLocation": null,
                 "shipmentOptions": {
-                    "ageCheck": null,
-                    "hideSender": null,
-                    "insurance": null,
                     "labelDescription": null,
-                    "largeFormat": null,
-                    "onlyRecipient": null,
-                    "return": null,
-                    "sameDayDelivery": null,
-                    "signature": null
+                    "insurance": -1,
+                    "ageCheck": -1,
+                    "hideSender": -1,
+                    "largeFormat": -1,
+                    "onlyRecipient": -1,
+                    "return": -1,
+                    "sameDayDelivery": -1,
+                    "signature": -1
                 },
                 "deliveryType": "standard",
                 "packageType": "package"
@@ -146,7 +146,40 @@
             "orderVat": 0,
             "totalPrice": 0,
             "totalVat": 0,
-            "totalPriceAfterVat": 0
+            "totalPriceAfterVat": 0,
+            "inheritedDeliveryOptions": {
+                "carrier": {
+                    "externalIdentifier": "postnl",
+                    "id": 1,
+                    "name": "postnl",
+                    "human": null,
+                    "subscriptionId": null,
+                    "enabled": false,
+                    "isDefault": true,
+                    "label": null,
+                    "optional": false,
+                    "primary": false,
+                    "type": "main",
+                    "capabilities": null,
+                    "returnCapabilities": null
+                },
+                "date": null,
+                "labelAmount": 1,
+                "pickupLocation": null,
+                "shipmentOptions": {
+                    "labelDescription": "",
+                    "insurance": 0,
+                    "ageCheck": 0,
+                    "hideSender": 0,
+                    "largeFormat": 0,
+                    "onlyRecipient": 0,
+                    "return": 0,
+                    "sameDayDelivery": 0,
+                    "signature": 0
+                },
+                "deliveryType": "standard",
+                "packageType": "package"
+            }
         }
     ]
 }

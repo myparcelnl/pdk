@@ -6,9 +6,13 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -55,8 +59,9 @@ class ExportOrderAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        $orders    = $this->updateOrders($request);
-        $newOrders = $this->export($orders, $request);
+        $orders      = $this->updateOrders($request);
+        $validOrders = $this->validateOrders($orders);
+        $newOrders   = $this->export($validOrders, $request);
 
         $this->pdkOrderRepository->updateMany($newOrders);
 
@@ -178,6 +183,46 @@ class ExportOrderAction extends AbstractOrderAction
     protected function notSharingCustomerInformation(): bool
     {
         return ! Settings::get(GeneralSettings::SHARE_CUSTOMER_INFORMATION, GeneralSettings::ID);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
+     *
+     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
+     */
+    protected function validateOrders(PdkOrderCollection $orders): PdkOrderCollection
+    {
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $orderService */
+        $orderService = Pdk::get(PdkOrderOptionsServiceInterface::class);
+
+        return $orders
+            ->map(static function (PdkOrder $order) use ($orderService) {
+                return $orderService->calculate($order);
+            })
+            ->filter(static function (PdkOrder $order) {
+                $validator = $order->getValidator();
+
+                if ($validator->validate()) {
+                    return true;
+                }
+
+                $validatorErrors = $validator->getErrors();
+
+                Logger::error('Failed to export order', [
+                    'order'       => $order->externalIdentifier,
+                    'description' => $validator->getDescription(),
+                    'errors'      => $validatorErrors,
+                ]);
+
+                Notifications::error(
+                    "Failed to export order $order->externalIdentifier",
+                    array_map(static function (array $error) {
+                        return sprintf('%s: %s', $error['property'], $error['message']);
+                    }, $validatorErrors)
+                );
+
+                return false;
+            });
     }
 }
 

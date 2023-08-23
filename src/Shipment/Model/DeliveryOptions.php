@@ -25,10 +25,15 @@ use MyParcelNL\Pdk\Facade\Pdk;
 class DeliveryOptions extends Model implements StorableArrayable
 {
     /**
-     * Names
+     * Attributes
      */
-    public const DELIVERY_TYPE = 'deliveryType';
-    public const PACKAGE_TYPE  = 'packageType';
+    public const CARRIER          = 'carrier';
+    public const DATE             = 'date';
+    public const DELIVERY_TYPE    = 'deliveryType';
+    public const LABEL_AMOUNT     = 'labelAmount';
+    public const PACKAGE_TYPE     = 'packageType';
+    public const PICKUP_LOCATION  = 'pickupLocation';
+    public const SHIPMENT_OPTIONS = 'shipmentOptions';
     /**
      * Values
      */
@@ -72,53 +77,53 @@ class DeliveryOptions extends Model implements StorableArrayable
     /**
      * Package types
      */
-    public const PACKAGE_TYPE_PACKAGE_ID         = 1;
-    public const PACKAGE_TYPE_MAILBOX_ID         = 2;
-    public const PACKAGE_TYPE_LETTER_ID          = 3;
-    public const PACKAGE_TYPE_DIGITAL_STAMP_ID   = 4;
-    public const PACKAGE_TYPE_PACKAGE_NAME       = 'package';
-    public const PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
-    public const PACKAGE_TYPE_LETTER_NAME        = 'letter';
-    public const PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
-    public const PACKAGE_TYPES_IDS               = [
+    public const  PACKAGE_TYPE_PACKAGE_ID         = 1;
+    public const  PACKAGE_TYPE_MAILBOX_ID         = 2;
+    public const  PACKAGE_TYPE_LETTER_ID          = 3;
+    public const  PACKAGE_TYPE_DIGITAL_STAMP_ID   = 4;
+    public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
+    public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
+    public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
+    public const  PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
+    public const  PACKAGE_TYPES_IDS               = [
         self::PACKAGE_TYPE_PACKAGE_ID,
         self::PACKAGE_TYPE_MAILBOX_ID,
         self::PACKAGE_TYPE_LETTER_ID,
         self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
     ];
-    public const PACKAGE_TYPES_NAMES             = [
+    public const  PACKAGE_TYPES_NAMES             = [
         self::PACKAGE_TYPE_PACKAGE_NAME,
         self::PACKAGE_TYPE_MAILBOX_NAME,
         self::PACKAGE_TYPE_LETTER_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
     ];
-    public const PACKAGE_TYPES_NAMES_IDS_MAP     = [
+    public const  PACKAGE_TYPES_NAMES_IDS_MAP     = [
         self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE_ID,
         self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX_ID,
         self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER_ID,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
     ];
-    public const DEFAULT_PACKAGE_TYPE_ID         = self::PACKAGE_TYPE_PACKAGE_ID;
-    public const DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
+    public const  DEFAULT_PACKAGE_TYPE_ID         = self::PACKAGE_TYPE_PACKAGE_ID;
+    public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
 
     protected $attributes = [
-        'carrier'           => Carrier::class,
-        'date'              => null,
-        'labelAmount'       => 1,
-        'pickupLocation'    => null,
-        'shipmentOptions'   => ShipmentOptions::class,
-        self::DELIVERY_TYPE => self::DEFAULT_DELIVERY_TYPE_NAME,
-        self::PACKAGE_TYPE  => self::DEFAULT_PACKAGE_TYPE_NAME,
+        self::CARRIER          => Carrier::class,
+        self::DATE             => null,
+        self::LABEL_AMOUNT     => 1,
+        self::PICKUP_LOCATION  => null,
+        self::SHIPMENT_OPTIONS => ShipmentOptions::class,
+        self::DELIVERY_TYPE    => self::DEFAULT_DELIVERY_TYPE_NAME,
+        self::PACKAGE_TYPE     => self::DEFAULT_PACKAGE_TYPE_NAME,
     ];
 
     protected $casts      = [
-        'carrier'           => Carrier::class,
-        'date'              => DateTime::class,
-        'labelAmount'       => 'int',
-        'pickupLocation'    => RetailLocation::class,
-        'shipmentOptions'   => ShipmentOptions::class,
-        self::DELIVERY_TYPE => 'string',
-        self::PACKAGE_TYPE  => 'string',
+        self::CARRIER          => Carrier::class,
+        self::DATE             => DateTime::class,
+        self::LABEL_AMOUNT     => 'int',
+        self::PICKUP_LOCATION  => RetailLocation::class,
+        self::SHIPMENT_OPTIONS => ShipmentOptions::class,
+        self::DELIVERY_TYPE    => 'string',
+        self::PACKAGE_TYPE     => 'string',
     ];
 
     public function __construct(?array $data = null)
@@ -137,8 +142,8 @@ class DeliveryOptions extends Model implements StorableArrayable
             );
         }
 
-        if (isset($data['carrier']) && is_string($data['carrier'])) {
-            $data['carrier'] = ['externalIdentifier' => $data['carrier']];
+        if (isset($data[self::CARRIER]) && is_string($data[self::CARRIER])) {
+            $data[self::CARRIER] = ['externalIdentifier' => $data[self::CARRIER]];
         }
 
         parent::__construct($data);
@@ -159,7 +164,7 @@ class DeliveryOptions extends Model implements StorableArrayable
      */
     public function getDateAttribute(): ?DateTimeInterface
     {
-        $date = $this->getCastAttribute('date');
+        $date = $this->getCastAttribute(self::DATE);
 
         if (! $date || $date < new DateTime('now')) {
             return null;
@@ -202,7 +207,7 @@ class DeliveryOptions extends Model implements StorableArrayable
      */
     public function toArray(?int $flags = null): array
     {
-        return Utils::filterNull(['date' => $this->getDateAsString()]) + parent::toArray($flags);
+        return Utils::filterNull([self::DATE => $this->getDateAsString()]) + parent::toArray($flags);
     }
 
     /**
@@ -211,8 +216,8 @@ class DeliveryOptions extends Model implements StorableArrayable
      */
     public function toStorableArray(): array
     {
-        $array            = $this->toArrayWithoutNull();
-        $array['carrier'] = $this->carrier->externalIdentifier ?? null;
+        $array                = $this->toArrayWithoutNull();
+        $array[self::CARRIER] = $this->carrier->externalIdentifier ?? null;
 
         return $array;
     }

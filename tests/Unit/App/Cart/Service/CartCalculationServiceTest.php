@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 const LINES_FITS_IN_MAILBOX = [
@@ -172,7 +173,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
                 ],
             ],
             'hasDeliveryOptions'  => true,
-            'minimumDropOffDelay' => 0,
+            'minimumDropOffDelay' => TriStateService::INHERIT,
         ],
     ],
 

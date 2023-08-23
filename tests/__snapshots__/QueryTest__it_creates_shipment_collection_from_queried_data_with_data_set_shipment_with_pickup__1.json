@@ -59,7 +59,7 @@
                     "largeFormat": true,
                     "onlyRecipient": true,
                     "return": true,
-                    "sameDayDelivery": true,
+                    "sameDayDelivery": false,
                     "signature": true,
                     "insurance": [
                         0,
@@ -108,7 +108,7 @@
                     "return": true,
                     "ageCheck": true,
                     "onlyRecipient": true,
-                    "sameDayDelivery": true,
+                    "sameDayDelivery": false,
                     "largeFormat": true
                 }
             }
@@ -130,15 +130,15 @@
             "street": "Kerkstraat"
         },
         "shipmentOptions": {
-            "ageCheck": false,
-            "hideSender": null,
-            "insurance": 0,
             "labelDescription": "",
-            "largeFormat": false,
-            "onlyRecipient": false,
-            "return": false,
-            "sameDayDelivery": false,
-            "signature": true
+            "insurance": 0,
+            "ageCheck": 0,
+            "hideSender": -1,
+            "largeFormat": 0,
+            "onlyRecipient": 0,
+            "return": 0,
+            "sameDayDelivery": 0,
+            "signature": 1
         },
         "deliveryType": "pickup",
         "packageType": "package"

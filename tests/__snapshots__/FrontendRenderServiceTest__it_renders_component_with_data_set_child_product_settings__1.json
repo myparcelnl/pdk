@@ -13,10 +13,10 @@
             "height": 0,
             "settings": {
                 "id": "product",
-                "countryOfOrigin": "NL",
-                "customsCode": "0000",
-                "disableDeliveryOptions": false,
-                "dropOffDelay": 0,
+                "countryOfOrigin": -1,
+                "customsCode": -1,
+                "disableDeliveryOptions": -1,
+                "dropOffDelay": -1,
                 "exportAgeCheck": -1,
                 "exportHideSender": -1,
                 "exportInsurance": -1,
@@ -24,16 +24,15 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
-                "fitInMailbox": 0,
-                "fitInDigitalStamp": 0,
-                "packageType": "package"
+                "fitInMailbox": -1,
+                "packageType": -1
             },
             "mergedSettings": {
                 "id": "product",
-                "countryOfOrigin": "NL",
-                "customsCode": "0000",
-                "disableDeliveryOptions": false,
-                "dropOffDelay": 0,
+                "countryOfOrigin": -1,
+                "customsCode": -1,
+                "disableDeliveryOptions": -1,
+                "dropOffDelay": -1,
                 "exportAgeCheck": -1,
                 "exportHideSender": -1,
                 "exportInsurance": -1,
@@ -41,9 +40,8 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
-                "fitInMailbox": 0,
-                "fitInDigitalStamp": 0,
-                "packageType": "package"
+                "fitInMailbox": -1,
+                "packageType": -1
             },
             "parent": {
                 "externalIdentifier": null,
@@ -58,10 +56,10 @@
                 "height": 0,
                 "settings": {
                     "id": "product",
-                    "countryOfOrigin": "NL",
-                    "customsCode": "0000",
-                    "disableDeliveryOptions": false,
-                    "dropOffDelay": 0,
+                    "countryOfOrigin": -1,
+                    "customsCode": -1,
+                    "disableDeliveryOptions": -1,
+                    "dropOffDelay": -1,
                     "exportAgeCheck": -1,
                     "exportHideSender": -1,
                     "exportInsurance": -1,
@@ -69,16 +67,15 @@
                     "exportOnlyRecipient": -1,
                     "exportReturn": -1,
                     "exportSignature": -1,
-                    "fitInMailbox": 0,
-                    "fitInDigitalStamp": 0,
-                    "packageType": "package"
+                    "fitInMailbox": -1,
+                    "packageType": -1
                 },
                 "mergedSettings": {
                     "id": "product",
-                    "countryOfOrigin": "NL",
-                    "customsCode": "0000",
-                    "disableDeliveryOptions": false,
-                    "dropOffDelay": 0,
+                    "countryOfOrigin": -1,
+                    "customsCode": -1,
+                    "disableDeliveryOptions": -1,
+                    "dropOffDelay": -1,
                     "exportAgeCheck": -1,
                     "exportHideSender": -1,
                     "exportInsurance": -1,
@@ -86,9 +83,8 @@
                     "exportOnlyRecipient": -1,
                     "exportReturn": -1,
                     "exportSignature": -1,
-                    "fitInMailbox": 0,
-                    "fitInDigitalStamp": 0,
-                    "packageType": "package"
+                    "fitInMailbox": -1,
+                    "packageType": -1
                 },
                 "parent": null
             }

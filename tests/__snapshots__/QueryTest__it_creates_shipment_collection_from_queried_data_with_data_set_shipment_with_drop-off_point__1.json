@@ -101,15 +101,15 @@
         "labelAmount": 1,
         "pickupLocation": null,
         "shipmentOptions": {
-            "ageCheck": true,
-            "hideSender": null,
-            "insurance": 0,
             "labelDescription": "Vliegtuig",
-            "largeFormat": true,
-            "onlyRecipient": true,
-            "return": true,
-            "sameDayDelivery": true,
-            "signature": false
+            "insurance": 0,
+            "ageCheck": 1,
+            "hideSender": -1,
+            "largeFormat": 1,
+            "onlyRecipient": 1,
+            "return": 1,
+            "sameDayDelivery": 1,
+            "signature": 0
         },
         "deliveryType": "standard",
         "packageType": "package"

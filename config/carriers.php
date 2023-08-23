@@ -30,7 +30,7 @@ return [
                 'largeFormat'     => true,
                 'onlyRecipient'   => true,
                 'return'          => true,
-                'sameDayDelivery' => true,
+                'sameDayDelivery' => false,
                 'signature'       => true,
                 'insurance'       => [
                     0,
@@ -79,7 +79,7 @@ return [
                 'return'          => true,
                 'ageCheck'        => true,
                 'onlyRecipient'   => true,
-                'sameDayDelivery' => true,
+                'sameDayDelivery' => false,
                 'largeFormat'     => true,
             ],
             'features'        => [

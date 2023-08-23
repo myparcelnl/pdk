@@ -29,6 +29,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Psr\Log\LoggerInterface;
 use function DI\factory;
 use function DI\get;
@@ -68,6 +69,7 @@ class MockPdkConfig
             'platform'                                  => value(Platform::MYPARCEL_NAME),
             ApiServiceInterface::class                  => get(MockApiService::class),
             BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
+            CarrierSchema::class                        => get(MockCarrierSchema::class),
             ClientAdapterInterface::class               => get(Guzzle7ClientAdapter::class),
             ConfigInterface::class                      => get(MockConfig::class),
             CronServiceInterface::class                 => get(MockCronService::class),

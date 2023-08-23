@@ -7,13 +7,13 @@
           "required": ["onlyRecipient", "signature"],
           "properties": {
             "ageCheck": {
-              "enum": [false]
+              "enum": [0]
             },
             "onlyRecipient": {
-              "enum": [true]
+              "enum": [1]
             },
             "signature": {
-              "enum": [true]
+              "enum": [1]
             }
           }
         }

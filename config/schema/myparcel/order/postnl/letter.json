@@ -9,22 +9,22 @@
         "shipmentOptions": {
           "properties": {
             "ageCheck": {
-              "enum": [false]
+              "enum": [0]
             },
             "insurance": {
               "enum": [0, null]
             },
             "largeFormat": {
-              "enum": [false]
+              "enum": [0]
             },
             "onlyRecipient": {
-              "enum": [false]
+              "enum": [0]
             },
             "return": {
-              "enum": [false]
+              "enum": [0]
             },
             "signature": {
-              "enum": [false]
+              "enum": [0]
             }
           }
         }

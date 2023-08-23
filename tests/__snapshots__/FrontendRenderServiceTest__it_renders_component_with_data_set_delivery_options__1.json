@@ -69,8 +69,8 @@
                     }
                 }
             },
-            "allowedShippingMethods": null,
-            "hasDeliveryOptions": null,
+            "allowedShippingMethods": [],
+            "hasDeliveryOptions": true,
             "hiddenInputName": "pest_checkout_data",
             "countriesWithSeparateAddressFields": [
                 "NL",

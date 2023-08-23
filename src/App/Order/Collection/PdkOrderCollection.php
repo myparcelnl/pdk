@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -45,19 +44,6 @@ class PdkOrderCollection extends Collection
         $newShipments = new ShipmentCollection();
 
         $this->each(function (PdkOrder $order) use ($newShipments, $data) {
-            $validator = $order->getValidator();
-
-            if (! $validator->validate()) {
-                Notifications::error(
-                    "Failed to export order $order->externalIdentifier",
-                    array_map(static function (array $error) {
-                        return sprintf('%s: %s', $error['property'], $error['message']);
-                    }, $validator->getErrors())
-                );
-
-                return;
-            }
-
             $newShipment = $order->createShipment($data);
             $newShipments->push($newShipment);
             $order->shipments->push($newShipment);

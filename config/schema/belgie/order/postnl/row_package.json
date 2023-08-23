@@ -18,13 +18,13 @@
               "enum": [20000]
             },
             "largeFormat": {
-              "enum": [false]
+              "enum": [0]
             },
             "onlyRecipient": {
-              "enum": [false]
+              "enum": [0]
             },
             "signature": {
-              "enum": [false]
+              "enum": [0]
             }
           }
         }

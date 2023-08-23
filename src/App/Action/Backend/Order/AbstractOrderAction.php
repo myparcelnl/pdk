@@ -6,12 +6,10 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
-use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Facade\Pdk;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractOrderAction implements ActionInterface
@@ -74,11 +72,8 @@ abstract class AbstractOrderAction implements ActionInterface
         $body       = json_decode($request->getContent(), true);
         $attributes = Utils::filterNull($body['data']['orders'][0] ?? []);
 
-        /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface $shipmentOptionsService */
-        $shipmentOptionsService = Pdk::get(ShipmentOptionsServiceInterface::class);
-
-        return $orders->map(function (PdkOrder $pdkOrder) use ($shipmentOptionsService, $attributes) {
-            return $shipmentOptionsService->calculate($pdkOrder->fill($attributes));
+        return $orders->map(function (PdkOrder $pdkOrder) use ($attributes) {
+            return $pdkOrder->fill($attributes);
         });
     }
 }

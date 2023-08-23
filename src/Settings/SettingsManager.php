@@ -27,17 +27,11 @@ class SettingsManager implements SettingsManagerInterface
     protected $repository;
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Model\Settings
-     */
-    protected $settings;
-
-    /**
      * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository
      */
     public function __construct(SettingsRepositoryInterface $repository)
     {
         $this->repository = $repository;
-        $this->settings   = $this->repository->all();
     }
 
     /**
@@ -45,7 +39,7 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function all(): Settings
     {
-        return $this->settings;
+        return $this->repository->all();
     }
 
     /**

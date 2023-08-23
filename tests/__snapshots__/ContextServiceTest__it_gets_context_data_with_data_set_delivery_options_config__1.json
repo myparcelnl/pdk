@@ -1,4 +1,6 @@
 {
+    "global": null,
+    "dynamic": null,
     "checkout": {
         "config": null,
         "strings": {
@@ -59,8 +61,8 @@
                     }
                 }
             },
-            "allowedShippingMethods": null,
-            "hasDeliveryOptions": null,
+            "allowedShippingMethods": [],
+            "hasDeliveryOptions": true,
             "hiddenInputName": "pest_checkout_data",
             "countriesWithSeparateAddressFields": [
                 "NL",
@@ -70,8 +72,6 @@
         },
         "endpoints": []
     },
-    "dynamic": null,
-    "global": null,
     "orderData": null,
     "pluginSettingsView": null,
     "productData": null,
