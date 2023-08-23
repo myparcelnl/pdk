@@ -31,8 +31,8 @@ function mockPlatform(string $platform): callable
 }
 
 /**
- * @param  class-string $class
- * @param  mixed        ...$args
+ * @param  class-string<\MyParcelNL\Pdk\Base\Model\Model|\MyParcelNL\Pdk\Base\Support\Collection> $class
+ * @param  mixed                                                                                  ...$args
  */
 function factory(string $class, ...$args)
 {
