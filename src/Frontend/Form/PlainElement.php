@@ -8,6 +8,9 @@ use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface;
 
+/**
+ * @todo merge into AbstractPlainElement when forms are converted
+ */
 class PlainElement implements ElementInterface
 {
     /**
