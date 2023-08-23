@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form;
 
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
+use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface;
 
-class PlainElement implements Arrayable
+class PlainElement implements ElementInterface
 {
     /**
      * @var string
@@ -47,13 +47,25 @@ class PlainElement implements Arrayable
      *
      * @return $this
      */
-    public function builder(callable $callback): self
+    public function builder(callable $callback): ElementInterface
     {
         if (! isset($this->builder)) {
             $this->builder = new FormOperationBuilder();
         }
 
         $callback($this->builder);
+
+        return $this;
+    }
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder $builder
+     *
+     * @return $this
+     */
+    public function setBuilder(?FormOperationBuilder $builder): self
+    {
+        $this->builder = $builder;
 
         return $this;
     }
