@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
 
 /**
- * @implements OptionsInterface
+ * @implements ElementBuilderWithOptionsInterface
  */
 trait HasOptions
 {
@@ -21,9 +21,9 @@ trait HasOptions
      * @param  array $options
      * @param  int   $flags
      *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface
+     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface
      */
-    public function withOptions(array $options, int $flags = 0): ElementBuilderInterface
+    public function withOptions(array $options, int $flags = 0): ElementBuilderWithOptionsInterface
     {
         $this->addHook(
             ElementBuilderInterface::HOOK_PROPS,
@@ -43,19 +43,17 @@ trait HasOptions
      */
     protected function addDefaultOption(array $options, int $flags = 0): array
     {
-        $labelKey = $flags & OptionsInterface::USE_PLAIN_LABEL ? 'plainLabel' : 'label';
-
-        if ($flags & OptionsInterface::INCLUDE_OPTION_DEFAULT) {
+        if ($flags & ElementBuilderWithOptionsInterface::ADD_DEFAULT) {
             array_unshift($options, [
-                'value'   => OptionsInterface::VALUE_DEFAULT,
-                $labelKey => sprintf('%s_default', Arr::first($this->prefixes)),
+                'value' => ElementBuilderWithOptionsInterface::VALUE_DEFAULT,
+                'label' => sprintf('%s_default', Arr::first($this->prefixes)),
             ]);
         }
 
-        if ($flags & OptionsInterface::INCLUDE_OPTION_NONE) {
+        if ($flags & ElementBuilderWithOptionsInterface::ADD_NONE) {
             array_unshift($options, [
-                'value'   => OptionsInterface::VALUE_DEFAULT,
-                $labelKey => sprintf('%s_none', Arr::first($this->prefixes)),
+                'value' => ElementBuilderWithOptionsInterface::VALUE_DEFAULT,
+                'label' => sprintf('%s_none', Arr::first($this->prefixes)),
             ]);
         }
 
@@ -72,13 +70,13 @@ trait HasOptions
     {
         $associativeArray = (Arr::isAssoc($array) ? $array : array_combine($array, $array)) ?? [];
 
-        $options = array_map(function ($value, $key) use ($flags) {
-            $usePlainLabel = $flags & OptionsInterface::USE_PLAIN_LABEL;
+        $options = array_map(function ($value, string $key) use ($flags) {
+            $usePlainLabel = $flags & ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL;
             $labelKey      = $usePlainLabel ? 'plainLabel' : 'label';
 
             return [
-                'value'   => $key,
-                $labelKey => $usePlainLabel ? $value : $this->createOptionLabel($value),
+                $labelKey => $usePlainLabel ? $key : $this->createOptionLabel($key),
+                'value'   => $value,
             ];
         }, $associativeArray, array_keys($associativeArray));
 

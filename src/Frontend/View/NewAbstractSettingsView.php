@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
@@ -89,7 +88,9 @@ abstract class NewAbstractSettingsView implements Arrayable
     {
         $this->updateElements(new FormElementCollection($this->all()));
 
-        return (new Collection($this->formBuilder->build()))->toArrayWithoutNull();
+        return $this->formBuilder
+            ->build()
+            ->toArrayWithoutNull();
     }
 
     /**

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form;
 
+use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
 
-final class FormBuilder
+final class FormBuilder implements FormBuilderInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface[]
@@ -31,14 +32,28 @@ final class FormBuilder
      *
      * @return $this
      */
-    public function add(ElementBuilderInterface ...$builders): self
+    public function add(ElementBuilderInterface ...$builders): FormBuilderInterface
     {
-        $this->elements = array_merge(
-            $this->elements,
-            array_map(function (ElementBuilderInterface $builder) {
-                return $builder->withPrefixes(...$this->prefixes);
-            }, $builders)
-        );
+        foreach ($builders as $builder) {
+            $this->addBuilder($builder);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  callable                                                               $callback
+     * @param  \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface ...$builders
+     *
+     * @return $this
+     */
+    public function addWith(callable $callback, ElementBuilderInterface ...$builders): FormBuilderInterface
+    {
+        foreach ($builders as $builder) {
+            $callback($builder);
+
+            $this->addBuilder($builder);
+        }
 
         return $this;
     }
@@ -52,15 +67,27 @@ final class FormBuilder
     }
 
     /**
-     * @return array
+     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
      */
-    public function build(): array
+    public function build(): FormElementCollection
     {
-        return array_map(
-            static function (ElementBuilderInterface $builder) {
-                return $builder->make();
-            },
-            $this->elements
+        return new FormElementCollection(
+            array_map(
+                static function (ElementBuilderInterface $builder) {
+                    return $builder->make();
+                },
+                $this->elements
+            )
         );
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface $builder
+     *
+     * @return void
+     */
+    private function addBuilder(ElementBuilderInterface $builder): void
+    {
+        $this->elements[] = $builder->withPrefixes(...$this->prefixes);
     }
 }
