@@ -91,5 +91,3 @@ it('returns null if key does not exist', function () {
 it('throws error if config file does not exist', function () {
     Config::get('randomConfigFileThatDoesNotExist.property');
 })->throws(InvalidArgumentException::class);
-
-

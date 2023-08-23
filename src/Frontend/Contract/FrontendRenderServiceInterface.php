@@ -55,5 +55,3 @@ interface FrontendRenderServiceInterface
      */
     public function renderProductSettings(PdkProduct $product): string;
 }
-
-
