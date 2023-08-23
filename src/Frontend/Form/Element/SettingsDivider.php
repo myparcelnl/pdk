@@ -32,16 +32,6 @@ final class SettingsDivider extends AbstractPlainElement
         );
     }
 
-    /**
-     * @param  int $level
-     *
-     * @return self
-     */
-    public function withLevel(int $level): self
-    {
-        return $this->withProp('level', $level);
-    }
-
     protected function getComponent(): string
     {
         return Components::SETTINGS_DIVIDER;
