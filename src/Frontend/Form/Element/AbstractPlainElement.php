@@ -48,18 +48,6 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     abstract protected function getComponent(): string;
 
     /**
-     * @param  callable $callback
-     *
-     * @return $this
-     */
-    public function builder(callable $callback): ElementBuilderInterface
-    {
-        $callback($this->getBuilder());
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getName(): ?string

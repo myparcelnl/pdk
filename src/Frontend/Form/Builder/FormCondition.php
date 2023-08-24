@@ -12,13 +12,12 @@ use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
 /**
  * @property \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $or
  * @property \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $and
- * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder            $then
  */
 final class FormCondition extends AbstractFormBuilderCore implements FormConditionInterface
 {
     use HasFormOperationBuilderParent;
 
-    protected $magicMethods = ['and', 'or', 'then'];
+    protected $magicMethods = ['and', 'or'];
 
     /**
      * @var string

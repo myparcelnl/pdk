@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Frontend\Form\Builder\FormCondition;
 
 abstract class AbstractFormOperation extends AbstractFormBuilderCore implements FormOperationInterface
 {
-    protected $magicMethods = ['then', 'if'];
+    protected $magicMethods = ['if'];
 
     /**
      * @var null|string

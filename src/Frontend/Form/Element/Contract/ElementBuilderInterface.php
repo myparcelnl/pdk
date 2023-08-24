@@ -9,13 +9,6 @@ interface ElementBuilderInterface
     public const HOOK_PROPS = 'props';
 
     /**
-     * @param  callable $callback
-     *
-     * @return $this
-     */
-    public function builder(callable $callback): ElementBuilderInterface;
-
-    /**
      * @return null|string
      */
     public function getName(): ?string;

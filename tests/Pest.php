@@ -27,6 +27,14 @@ const ROOT_DIR  = TESTS_DIR . '/..';
 usesShared(new ClearContainerCache())->in(__DIR__);
 
 uses()
+    ->group('frontend')
+    ->in(__DIR__ . '/Unit/Frontend');
+
+uses()
+    ->group('settings')
+    ->in(__DIR__ . '/Unit/Settings');
+
+uses()
     ->afterEach(function () {
         if (! Facade::getPdkInstance()) {
             return;

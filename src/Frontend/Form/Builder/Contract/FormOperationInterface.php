@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\Form\Builder\Contract;
 
 /**
- * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder $then
- * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormCondition        $if
+ * @property \MyParcelNL\Pdk\Frontend\Form\Builder\FormCondition $if
  */
 interface FormOperationInterface
 {

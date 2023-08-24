@@ -5,184 +5,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface;
 
 it('builds form operation arrays', function (array $args) {
-    $result = $args['builder']->build();
+    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder $builder */
+    $builder = $args['builder'];
+    $result  = $builder->build();
 
     expect($result)->toBe($args['output']);
 })->with(function () {
     return [
-        'simple setValue on self' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())->setValue('foo'),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'foo',
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'simple setValue on target' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('new')
-                    ->on('old'),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value'  => 'new',
-                            '$target' => 'old',
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'setValue with condition on self' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('foo')
-                    ->if('foo')
-                    ->eq('foo'),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'foo',
-                            '$if'    => [
-                                [
-                                    '$target' => 'foo',
-                                    '$eq'     => 'foo',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'setValue with condition on target' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('new')
-                    ->if('old')
-                    ->eq('old'),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'new',
-                            '$if'    => [
-                                [
-                                    '$target' => 'old',
-                                    '$eq'     => 'old',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'setValue with and conditions' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('appelboom')
-                    ->if('a-setting')
-                    ->gt(1)->and->lt(10),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'appelboom',
-                            '$if'    => [
-                                [
-                                    '$and' => [
-                                        [
-                                            '$target' => 'a-setting',
-                                            '$gt'     => 1,
-                                        ],
-                                        [
-                                            '$target' => 'a-setting',
-                                            '$lt'     => 10,
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'setValue with or conditions' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('other-setting')
-                    ->if('some-setting')
-                    ->gte(1)->or->lte(10),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'other-setting',
-                            '$if'    => [
-                                [
-                                    '$or' => [
-                                        [
-                                            '$target' => 'some-setting',
-                                            '$gte'    => 1,
-                                        ],
-                                        [
-                                            '$target' => 'some-setting',
-                                            '$lte'    => 10,
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'setValue if in or not in' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('new')
-                    ->if('foo')
-                    ->in(['foo', 'bar'])->or->nin(['baz', 'qux']),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'new',
-                            '$if'    => [
-                                [
-                                    '$or' => [
-                                        [
-                                            '$target' => 'foo',
-                                            '$in'     => ['foo', 'bar'],
-                                        ],
-                                        [
-                                            '$target' => 'foo',
-                                            '$nin'    => ['baz', 'qux'],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
         'readOnlyWhen' => function () {
             return [
                 'builder' => (new FormOperationBuilder())
@@ -323,8 +157,7 @@ it('builds form operation arrays', function (array $args) {
                     ->on('soep')
                     ->if('bloemkool')
                     ->eq('broccoli'),
-
-                'output' => [
+                'output'  => [
                     [
                         '$afterUpdate' => [
                             [
@@ -340,79 +173,25 @@ it('builds form operation arrays', function (array $args) {
             ];
         },
 
-        'complex multiple setValues' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('foo')
-                    ->if->eq('foo')
-                    ->then->setValue('bar')
-                    ->if('bar')
-                    ->ne('baz')
-                    ->and
-                    ->ne('qux')
-                    ->then->setValue('baz')
-                    ->then->setValue('qux'),
-
-                'output' => [
-                    [
-                        '$setValue' => [
-                            '$value' => 'foo',
-                            '$if'    => [
-                                [
-                                    '$eq' => 'foo',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        '$setValue' => [
-                            '$value' => 'bar',
-                            '$if'    => [
-                                [
-                                    '$and' => [
-                                        [
-                                            '$target' => 'bar',
-                                            '$ne'     => 'baz',
-                                        ],
-                                        [
-                                            '$target' => 'bar',
-                                            '$ne'     => 'qux',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        '$setValue' => [
-                            '$value' => 'baz',
-                        ],
-                    ],
-                    [
-                        '$setValue' => [
-                            '$value' => 'qux',
-                        ],
-                    ],
-                ],
-            ];
-        },
-
         'with inline callback' => function () {
             return [
-                'builder' => (new FormOperationBuilder())
-                    ->setValue('broccoli', static function (FormOperationInterface $builder) {
-                        $builder->if('pannenkoek')
-                            ->eq('groente');
-                    }),
-
-                'output' => [
+                'builder' => (new FormOperationBuilder())->afterUpdate(
+                    function (FormSubOperationBuilderInterface $builder) {
+                        $builder
+                            ->setValue('groente')
+                            ->on('soep')
+                            ->if('bloemkool')
+                            ->eq('broccoli');
+                    }
+                ),
+                'output'  => [
                     [
-                        '$setValue' => [
-                            '$value' => 'broccoli',
-                            '$if'    => [
-                                [
-                                    '$target' => 'pannenkoek',
-                                    '$eq'     => 'groente',
+                        '$afterUpdate' => [
+                            [
+                                '$setValue' => [
+                                    '$value'  => 'groente',
+                                    '$target' => 'soep',
+                                    '$if'     => [['$target' => 'bloemkool', '$eq' => 'broccoli']],
                                 ],
                             ],
                         ],
@@ -423,19 +202,26 @@ it('builds form operation arrays', function (array $args) {
 
         'if with inline callback' => function () {
             return [
-                'builder' => (new FormOperationBuilder())->setValue('broccoli')
-                    ->if('pannenkoek', static function (FormCondition $builder) {
-                        $builder->eq('groente');
-                    }),
-
-                'output' => [
+                'builder' => (new FormOperationBuilder())->afterUpdate(
+                    function (FormSubOperationBuilderInterface $builder) {
+                        $builder->setValue('broccoli')
+                            ->if('pannenkoek', static function (FormConditionInterface $builder) {
+                                $builder->eq('groente');
+                            });
+                    }
+                ),
+                'output'  => [
                     [
-                        '$setValue' => [
-                            '$value' => 'broccoli',
-                            '$if'    => [
-                                [
-                                    '$target' => 'pannenkoek',
-                                    '$eq'     => 'groente',
+                        '$afterUpdate' => [
+                            [
+                                '$setValue' => [
+                                    '$value' => 'broccoli',
+                                    '$if'    => [
+                                        [
+                                            '$target' => 'pannenkoek',
+                                            '$eq'     => 'groente',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
