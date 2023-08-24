@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.16.2](https://github.com/myparcelnl/pdk/compare/v2.16.1...v2.16.2) (2023-08-24)
+
+
+### :bug: Bug Fixes
+
+* **form:** treat value strings that are also callable as a string ([#162](https://github.com/myparcelnl/pdk/issues/162)) ([ef5fa5e](https://github.com/myparcelnl/pdk/commit/ef5fa5ef1f981077bf32dfb99973539288697a30))
+
 ## [2.16.1](https://github.com/myparcelnl/pdk/compare/v2.16.0...v2.16.1) (2023-08-16)
 
 
