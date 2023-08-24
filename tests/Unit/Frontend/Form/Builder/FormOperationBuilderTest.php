@@ -226,6 +226,26 @@ it('builds form operation arrays', function (array $args) {
             ];
         },
 
+        'visibleWhen with string that happens to also be a callable' => function () {
+            return [
+                'builder' => (new FormOperationBuilder())
+                    ->visibleWhen('target', 'test'), // test is a function from pest
+
+                'output' => [
+                    [
+                        '$visibleWhen' => [
+                            '$if' => [
+                                [
+                                    '$target' => 'target',
+                                    '$eq'     => 'test',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        },
+
         'visibleWhen with multiple targets' => function () {
             return [
                 'builder' => (new FormOperationBuilder())
