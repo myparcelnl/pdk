@@ -16,9 +16,4 @@ interface FormOperationInterface
      * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */
     public function if(?string $target = null, ?callable $callable = null): FormConditionInterface;
-
-    /**
-     * @param  null|string $target
-     */
-    public function on(?string $target): FormOperationInterface;
 }

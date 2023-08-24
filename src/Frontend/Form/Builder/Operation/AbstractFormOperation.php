@@ -48,18 +48,6 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
     }
 
     /**
-     * @param  null|string $target
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface
-     */
-    public function on(?string $target): FormOperationInterface
-    {
-        $this->target = $target;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     final public function toArray(): array

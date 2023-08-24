@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
+use MyParcelNL\Pdk\Context\Model\OrderDataContext;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface;
@@ -251,6 +252,47 @@ it('builds form operation arrays', function (array $args) {
                                 [
                                     '$target' => 'target',
                                 ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        },
+
+        'setProp' => function () {
+            return [
+                'builder' => (new FormOperationBuilder())
+                    ->afterUpdate(function (FormSubOperationBuilderInterface $builder) {
+                        $builder->setProp('foo', 'bar');
+                    }),
+
+                'output' => [
+                    [
+                        '$afterUpdate' => [
+                            [
+                                '$setProp' => [
+                                    '$prop'  => 'foo',
+                                    '$value' => 'bar',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        },
+
+        'fetchContext' => function () {
+            return [
+                'builder' => (new FormOperationBuilder())
+                    ->afterUpdate(function (FormSubOperationBuilderInterface $builder) {
+                        $builder->fetchContext(OrderDataContext::ID);
+                    }),
+
+                'output' => [
+                    [
+                        '$afterUpdate' => [
+                            [
+                                '$fetchContext' => ['$id' => OrderDataContext::ID],
                             ],
                         ],
                     ],
