@@ -30,7 +30,8 @@
                     "$visibleWhen": {
                         "$if": [
                             {
-                                "$target": "orderMode"
+                                "$target": "orderMode",
+                                "$ne": true
                             }
                         ]
                     }

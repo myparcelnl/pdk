@@ -40,7 +40,7 @@ class GeneralSettingsView extends AbstractSettingsView
 
             (new InteractiveElement(GeneralSettings::CONCEPT_SHIPMENTS, Components::INPUT_TOGGLE))->builder(
                 function (FormOperationBuilder $builder) {
-                    $builder->visibleWhen(GeneralSettings::ORDER_MODE);
+                    $builder->visibleWhen(GeneralSettings::ORDER_MODE)->ne(true);
                 }
             ),
 

@@ -156,6 +156,18 @@ class ExportOrderAction extends AbstractOrderAction
             $order->shipments = [$order->shipments->last()];
         });
 
+        if (! Settings::get(GeneralSettings::CONCEPT_SHIPMENTS, GeneralSettings::ID)) {
+            $this->shipmentRepository->fetchLabelLink($concepts, 'a4');
+
+            $ordersWithBarcode =
+                $this->shipmentRepository->getShipments(
+                    $concepts->pluck('id')
+                        ->toArray()
+                );
+
+            $orders->updateShipments($ordersWithBarcode);
+        }
+
         return $orders;
     }
 
