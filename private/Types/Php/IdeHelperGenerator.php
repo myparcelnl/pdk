@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Php;
 
+use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Console\Types\Shared\AbstractHelperGenerator;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
+use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -53,14 +55,21 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
             '',
         ];
 
+        /** @var ClassDefinition $definition */
         foreach ($this->definitions->all() as $definition) {
-            [$modelGetters, $modelSetters, $modelProperties] = $this->getModelProperties($definition);
+            if ($definition->isSubclassOf(Facade::class)) {
+                $properties = array_map(static function (KeyValue $comment) {
+                    return "@$comment->key $comment->value";
+                }, $definition->comments->all());
+            } else {
+                $properties = $this->getModelProperties($definition);
+            }
 
             $lines[] = "namespace {$definition->ref->getNamespaceName()};";
             $lines[] = '';
             $lines[] = '/**';
 
-            foreach (array_merge($modelProperties, $modelGetters, $modelSetters) as $property) {
+            foreach ($properties as $property) {
                 $lines[] = " * $property";
             }
 
@@ -78,7 +87,7 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
      */
     protected function getAllowedClasses(): array
     {
-        return [Model::class, Collection::class];
+        return [Model::class, Collection::class, Facade::class];
     }
 
     /**
@@ -92,7 +101,7 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
     /**
      * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
      *
-     * @return array[]
+     * @return string[]
      */
     private function getModelProperties(ClassDefinition $definition): array
     {
@@ -137,7 +146,7 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
             }
         }
 
-        return [$modelGetters, $modelSetters, $modelProperties];
+        return array_merge($modelGetters, $modelSetters, $modelProperties);
     }
 
     /**
