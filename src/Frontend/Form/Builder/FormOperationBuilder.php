@@ -94,7 +94,7 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
         ?string                         $target = null,
                                         $valueOrCallback = null
     ): FormConditionInterface {
-        if (is_callable($valueOrCallback)) {
+        if (! is_string($valueOrCallback) && is_callable($valueOrCallback)) {
             $value    = null;
             $callback = $valueOrCallback;
         } else {
