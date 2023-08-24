@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element;
 
 use MyParcelNL\Pdk\Frontend\Form\Components;
 
-final class CheckboxInput extends AbstractInteractiveInput
+final class CheckboxInput extends AbstractInteractiveElement
 {
     protected function getComponent(): string
     {

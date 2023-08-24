@@ -64,7 +64,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
      */
     public function getName(): ?string
     {
-        return null;
+        return $this->name;
     }
 
     /**
@@ -72,7 +72,10 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
      */
     public function make(): ElementInterface
     {
-        return new PlainElement($this->getComponent(), $this->getProps(), $this->getContent());
+        return (new PlainElement($this->getComponent(), $this->getProps(), $this->getContent()))
+            ->setBuilder(
+                $this->builder
+            );
     }
 
     /**
@@ -187,9 +190,13 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
         $this->executeHooks(ElementBuilderInterface::HOOK_PROPS);
 
         return array_filter(
-            array_merge($this->props, [
-                '$attributes' => array_filter($this->attributes),
-            ])
+            array_merge(
+                $this->props,
+                [
+                    'name'        => $this->name,
+                    '$attributes' => array_filter($this->attributes),
+                ]
+            )
         );
     }
 }

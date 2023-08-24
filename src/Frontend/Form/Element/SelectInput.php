@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Concern\HasOptions;
 
-final class SelectInput extends AbstractInteractiveInput implements ElementBuilderWithOptionsInterface
+final class SelectInput extends AbstractInteractiveElement implements ElementBuilderWithOptionsInterface
 {
     use HasOptions;
 

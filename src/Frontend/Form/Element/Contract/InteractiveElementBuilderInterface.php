@@ -14,13 +14,6 @@ interface InteractiveElementBuilderInterface extends ElementBuilderInterface
     public function afterUpdate(callable $callable): self;
 
     /**
-     * @param  callable $callback
-     *
-     * @return $this
-     */
-    public function build(callable $callback): self;
-
-    /**
      * @param  null|string     $target
      * @param  scalar|callable $valueOrCallback
      *

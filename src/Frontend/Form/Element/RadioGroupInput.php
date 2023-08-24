@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Concern\HasOptions;
 
-final class RadioGroupInput extends AbstractInteractiveInput implements ElementBuilderWithOptionsInterface
+final class RadioGroupInput extends AbstractInteractiveElement implements ElementBuilderWithOptionsInterface
 {
     use HasOptions;
 

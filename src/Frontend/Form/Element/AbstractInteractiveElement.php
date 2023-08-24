@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\InteractiveElementBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 
-abstract class AbstractInteractiveInput extends AbstractPlainElement implements InteractiveElementBuilderInterface
+abstract class AbstractInteractiveElement extends AbstractPlainElement implements InteractiveElementBuilderInterface
 {
     /**
      * @param  string $name
@@ -29,26 +29,6 @@ abstract class AbstractInteractiveInput extends AbstractPlainElement implements 
             ->afterUpdate($callable);
 
         return $this;
-    }
-
-    /**
-     * @param  callable $callback
-     *
-     * @return $this
-     */
-    public function build(callable $callback): InteractiveElementBuilderInterface
-    {
-        $callback($this->getBuilder());
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     /**

@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element;
 
 use MyParcelNL\Pdk\Frontend\Form\Components;
 
-final class NumberInput extends AbstractInteractiveInput
+final class NumberInput extends AbstractInteractiveElement
 {
     protected function getComponent(): string
     {

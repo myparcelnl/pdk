@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element;
 
 use MyParcelNL\Pdk\Frontend\Form\Components;
 
-final class ToggleInput extends AbstractInteractiveInput
+final class ToggleInput extends AbstractInteractiveElement
 {
     protected function getComponent(): string
     {

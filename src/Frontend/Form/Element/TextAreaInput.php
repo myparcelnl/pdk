@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element;
 
 use MyParcelNL\Pdk\Frontend\Form\Components;
 
-final class TextAreaInput extends AbstractInteractiveInput
+final class TextAreaInput extends AbstractInteractiveElement
 {
     protected function getComponent(): string
     {
