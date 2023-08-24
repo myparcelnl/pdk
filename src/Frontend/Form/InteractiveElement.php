@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form;
 
+/**
+ * @todo merge into AbstractInteractiveElement when forms are converted
+ */
 class InteractiveElement extends PlainElement
 {
     /**

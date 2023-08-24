@@ -15,6 +15,10 @@ use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\src\Support\Str;
 
+/**
+ * @deprecated use NewAbstractSettingsView instead
+ * @see        \MyParcelNL\Pdk\Frontend\View\NewAbstractSettingsView
+ */
 abstract class AbstractSettingsView implements Arrayable
 {
     public const  OPTIONS_VALUE_DEFAULT         = -1;

@@ -4,48 +4,45 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
-use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
-use MyParcelNL\Pdk\Frontend\Form\Components;
-use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
+use MyParcelNL\Pdk\Frontend\Form\Element\MultiSelectInput;
+use MyParcelNL\Pdk\Frontend\Form\Element\RadioGroupInput;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
-class PrintOptionsView extends AbstractSettingsView
+final class PrintOptionsView extends NewAbstractSettingsView
 {
     /**
-     * @return null|array
+     * @return void
      */
-    protected function createElements(): ?array
+    protected function addElements(): void
     {
-        return [
-            new InteractiveElement(LabelSettings::OUTPUT, Components::INPUT_RADIO_GROUP, [
-                'options' => $this->createSelectOptions(LabelSettings::OUTPUT, [
+        $this->formBuilder->add(
+            (new RadioGroupInput(LabelSettings::OUTPUT))
+                ->withOptions([
                     LabelSettings::OUTPUT_OPEN,
                     LabelSettings::OUTPUT_DOWNLOAD,
                 ]),
-            ]),
-            new InteractiveElement(LabelSettings::FORMAT, Components::INPUT_RADIO_GROUP, [
-                'options' => $this->createSelectOptions(LabelSettings::FORMAT, [
+
+            (new RadioGroupInput(LabelSettings::FORMAT))
+                ->withOptions([
                     LabelSettings::FORMAT_A4,
                     LabelSettings::FORMAT_A6,
                 ]),
-            ]),
-            (new InteractiveElement(LabelSettings::POSITION, Components::INPUT_MULTI_SELECT, [
-                'options' => $this->createSelectOptions(LabelSettings::POSITION, [
+
+            (new MultiSelectInput(LabelSettings::POSITION))
+                ->withOptions([
                     LabelSettings::POSITION_1,
                     LabelSettings::POSITION_2,
                     LabelSettings::POSITION_3,
                     LabelSettings::POSITION_4,
-                ]),
-            ]))->builder(function (FormOperationBuilder $builder) {
-                $builder->visibleWhen(LabelSettings::FORMAT, LabelSettings::FORMAT_A4);
-            }),
-        ];
+                ])
+                ->visibleWhen(LabelSettings::FORMAT, LabelSettings::FORMAT_A4)
+        );
     }
 
     /**
      * @return string
      */
-    protected function getSettingsId(): string
+    protected function getPrefix(): string
     {
         return 'print';
     }

@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Frontend\Form;
+namespace MyParcelNL\Pdk\Frontend\Form\Element;
 
-/**
- * @todo remove when forms are converted to new format
- */
-class SettingsDivider extends PlainElement
+use MyParcelNL\Pdk\Frontend\Form\Components;
+
+final class SettingsDivider extends AbstractPlainElement
 {
     public const LEVEL_1       = 1;
     public const LEVEL_2       = 2;
@@ -24,13 +23,17 @@ class SettingsDivider extends PlainElement
      */
     public function __construct(string $translation, ?int $level = null, array $props = [])
     {
-        parent::__construct(
-            Components::SETTINGS_DIVIDER,
-            $props + [
+        $this->withProps(
+            array_replace([
+                'level'   => $level ?? self::DEFAULT_LEVEL,
                 'content' => "{$translation}_description",
                 'heading' => "{$translation}_title",
-                'level'   => $level ?? self::DEFAULT_LEVEL,
-            ]
+            ], $props)
         );
+    }
+
+    protected function getComponent(): string
+    {
+        return Components::SETTINGS_DIVIDER;
     }
 }

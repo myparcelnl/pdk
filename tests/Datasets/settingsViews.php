@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Frontend\View\CustomsSettingsView;
 use MyParcelNL\Pdk\Frontend\View\GeneralSettingsView;
 use MyParcelNL\Pdk\Frontend\View\LabelSettingsView;
 use MyParcelNL\Pdk\Frontend\View\OrderSettingsView;
+use MyParcelNL\Pdk\Frontend\View\PrintOptionsView;
 use MyParcelNL\Pdk\Frontend\View\ProductSettingsView;
 
 dataset('settingsViews', [
@@ -17,5 +18,6 @@ dataset('settingsViews', [
     'general settings'  => [GeneralSettingsView::class],
     'label settings'    => [LabelSettingsView::class],
     'order settings'    => [OrderSettingsView::class],
+    'print options'     => [PrintOptionsView::class],
     'product settings'  => [ProductSettingsView::class],
 ]);
