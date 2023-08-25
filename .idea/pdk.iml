@@ -109,6 +109,7 @@
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludePattern pattern=".tmp" />
       <excludePattern pattern=".cache" />
+      <excludePattern pattern="phpstan-baseline.php" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
