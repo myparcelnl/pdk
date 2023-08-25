@@ -105,7 +105,7 @@ return [
      * Callback to generate a settings key.
      */
 
-    'createSettingsKey'           => factory(function () {
+    'createSettingsKey' => factory(function () {
         return static function (string $key) {
             return sprintf('%s%s', PdkFacade::get('settingKeyPrefix'), $key);
         };
@@ -114,6 +114,7 @@ return [
     /**
      * Callback to generate a barcode note identifier
      */
+
     'createBarcodeNoteIdentifier' => factory(function () {
         return static function (int $shipmentId) {
             return "barcode-$shipmentId";
