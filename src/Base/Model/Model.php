@@ -7,13 +7,14 @@ namespace MyParcelNL\Pdk\Base\Model;
 use ArrayAccess;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class Model implements Arrayable, ArrayAccess
+class Model implements Arrayable, ArrayAccess, ModelInterface
 {
     use HasAttributes;
 

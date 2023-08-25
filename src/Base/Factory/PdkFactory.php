@@ -8,11 +8,12 @@ use DI\Container;
 use DI\ContainerBuilder;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
+use MyParcelNL\Pdk\Base\Contract\PdkFactoryInterface;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Pdk;
 use function DI\value;
 
-class PdkFactory
+class PdkFactory implements PdkFactoryInterface
 {
     private const MODES       = [Pdk::MODE_PRODUCTION, Pdk::MODE_DEVELOPMENT];
     private const CONFIG_PATH = __DIR__ . '/../../../config';
@@ -21,6 +22,8 @@ class PdkFactory
      * @var string
      */
     protected static $mode;
+
+    public function __construct() { }
 
     /**
      * @param  array[]|string[] $config
