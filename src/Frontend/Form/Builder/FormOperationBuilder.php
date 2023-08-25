@@ -39,7 +39,7 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
         $array = $this->createArray();
 
         $array[] = array_map(static function (FormSubOperationBuilderInterface $builder) {
-            return $builder->build();
+            return $builder->createArray();
         }, $this->builders);
 
         return array_filter($array);

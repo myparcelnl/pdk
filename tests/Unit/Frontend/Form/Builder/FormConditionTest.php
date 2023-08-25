@@ -35,3 +35,110 @@ it('throws error when unsetting a property', function () {
 
     unset($formCondition->property);
 })->throws(BadMethodCallException::class);
+
+dataset('matchers', [
+    'eq' => [
+        'method' => 'eq',
+        'args'   => ['foo'],
+        'output' => [
+            '$eq' => 'foo',
+        ],
+    ],
+
+    'ne' => [
+        'method' => 'ne',
+        'args'   => ['foo'],
+        'output' => [
+            '$ne' => 'foo',
+        ],
+    ],
+
+    'gt' => [
+        'method' => 'gt',
+        'args'   => ['foo'],
+        'output' => [
+            '$gt' => 'foo',
+        ],
+    ],
+
+    'gte' => [
+        'method' => 'gte',
+        'args'   => ['foo'],
+        'output' => [
+            '$gte' => 'foo',
+        ],
+    ],
+
+    'lt' => [
+        'method' => 'lt',
+        'args'   => ['foo'],
+        'output' => [
+            '$lt' => 'foo',
+        ],
+    ],
+
+    'lte' => [
+        'method' => 'lte',
+        'args'   => ['foo'],
+        'output' => [
+            '$lte' => 'foo',
+        ],
+    ],
+
+    'in' => [
+        'method' => 'in',
+        'args'   => [['foo', 'bar']],
+        'output' => [
+            '$in' => ['foo', 'bar'],
+        ],
+    ],
+
+    'nin' => [
+        'method' => 'nin',
+        'args'   => [['foo', 'bar']],
+        'output' => [
+            '$nin' => ['foo', 'bar'],
+        ],
+    ],
+]);
+
+it('uses matchers', function (string $method, array $args, array $output) {
+    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $formCondition */
+    $condition = new FormCondition(new FormOperationBuilder());
+
+    $condition->{$method}(...$args);
+
+    expect($condition->toArray())->toBe($output);
+})->with('matchers');
+
+it('can chain matchers with and', function (string $method, array $args, array $output) {
+    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $formCondition */
+    $condition = new FormCondition(new FormOperationBuilder());
+
+    $condition->eq('boo')->and->{$method}(...$args);
+
+    expect($condition->toArray())->toBe([
+        '$and' => [
+            [
+                '$eq' => 'boo',
+            ],
+            $output,
+        ],
+    ]);
+})->with('matchers');
+
+it('can chain matchers with or', function (string $method, array $args, array $output) {
+    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $formCondition */
+    $condition = new FormCondition(new FormOperationBuilder());
+
+    $condition->eq('boo')->or->{$method}(...$args);
+
+    expect($condition->toArray())->toBe([
+        '$or' => [
+            [
+                '$eq' => 'boo',
+            ],
+            $output,
+        ],
+    ]);
+})->with('matchers');

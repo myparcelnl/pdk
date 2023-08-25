@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Frontend\Form\Builder\Concern\HasFormOperationBuilderParent;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\ChainableFormOperationBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface;
-use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetValueOperation;
 
 abstract class AbstractFormOperationBuilder implements ChainableFormOperationBuilderInterface
 {
@@ -18,17 +17,6 @@ abstract class AbstractFormOperationBuilder implements ChainableFormOperationBui
      * @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface[]
      */
     protected $operations = [];
-
-    /**
-     * @param  scalar        $value
-     * @param  null|callable $callback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetValueOperation
-     */
-    public function setValue($value, ?callable $callback = null): FormOperationInterface
-    {
-        return $this->addOperation(new FormSetValueOperation($this, $value), $callback);
-    }
 
     /**
      * @param  FormOperationInterface $operation

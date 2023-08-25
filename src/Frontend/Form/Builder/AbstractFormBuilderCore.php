@@ -8,11 +8,7 @@ use BadMethodCallException;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Concern\HasFormOperationBuilderParent;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
-use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface;
 
-/**
- * @property RootFormOperationBuilderInterface $then
- */
 abstract class AbstractFormBuilderCore implements FormOperationBuilderInterface
 {
     use HasFormOperationBuilderParent;
@@ -20,7 +16,7 @@ abstract class AbstractFormBuilderCore implements FormOperationBuilderInterface
     /**
      * @var string[]
      */
-    protected $magicMethods = ['then'];
+    protected $magicMethods = [];
 
     /**
      * @param $name
@@ -49,14 +45,6 @@ abstract class AbstractFormBuilderCore implements FormOperationBuilderInterface
     public function __unset($name)
     {
         $this->throwOnAccessorMethod();
-    }
-
-    /**
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface
-     */
-    protected function then(): RootFormOperationBuilderInterface
-    {
-        return $this->getRoot();
     }
 
     /**
