@@ -6,6 +6,7 @@ services:
   php:
     image: *image
     command: [ 'composer', 'install', '--no-interaction', '--no-progress', '--no-suggest' ]
+    init: true
     env_file:
       - .env.local
     volumes:
@@ -14,6 +15,7 @@ services:
   console:
     image: *image
     command: [ ]
+    init: true
     entrypoint: [ 'php', 'bin/console' ]
     volumes:
       - ./:/app
