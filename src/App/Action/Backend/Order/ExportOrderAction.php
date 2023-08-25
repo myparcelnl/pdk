@@ -159,13 +159,13 @@ class ExportOrderAction extends AbstractOrderAction
         if (! Settings::get(GeneralSettings::CONCEPT_SHIPMENTS, GeneralSettings::ID)) {
             $this->shipmentRepository->fetchLabelLink($concepts, 'a4');
 
-            $ordersWithBarcode =
+            $shipmentsWithBarcode =
                 $this->shipmentRepository->getShipments(
                     $concepts->pluck('id')
                         ->toArray()
                 );
 
-            $orders->updateShipments($ordersWithBarcode);
+            $orders->updateShipments($shipmentsWithBarcode);
         }
 
         return $orders;

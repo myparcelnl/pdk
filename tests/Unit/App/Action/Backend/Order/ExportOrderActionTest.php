@@ -18,6 +18,8 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
@@ -37,6 +39,11 @@ usesShared(new UsesMockPdkInstance(), new UsesApiMock(), new UsesNotificationsMo
 dataset('orderModeToggle', [
     'default'    => [false],
     'order mode' => [true],
+]);
+
+dataset('conceptShipmentsToggle', [
+    'default'           => [false],
+    'concept shipments' => [false],
 ]);
 
 it('exports order', function (
@@ -206,3 +213,47 @@ it('adds notification if shipment export fails', function () {
             'timeout'  => false,
         ]);
 });
+
+it('exports order and directly returns barcode if concept shipments is off', function (
+    bool  $conceptShipments,
+    array $orders
+) {
+    /** @var MockPdkOrderRepository $pdkOrderRepository */
+    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
+    /** @var MockSettingsRepository $settingsRepository */
+    $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
+
+    $collection = new PdkOrderCollection($orders);
+
+    $pdkOrderRepository->updateMany($collection);
+    $settingsRepository->storeSettings(
+        new GeneralSettings([
+            GeneralSettings::CONCEPT_SHIPMENTS => $conceptShipments,
+        ])
+    );
+
+    MockApi::enqueue(
+        new ExamplePostShipmentsResponse(),
+        new ExampleGetShipmentLabelsLinkV2Response(),
+        new ExampleGetShipmentsResponse()
+    );
+
+    $orders = json_decode(
+        Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+            'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
+        ])
+            ->getContent()
+    );
+
+    $orders = new PdkOrderCollection($orders->data->orders);
+
+    foreach ($orders as $order) {
+        expect($order->shipments)->toHaveLength(1);
+    }
+})
+    ->with([
+        'concept shipments off' => [
+            'conceptShipments' => false,
+        ],
+    ])
+    ->with('pdkOrdersDomestic');
