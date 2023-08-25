@@ -1,0 +1,10 @@
+includes:
+  - phpstan-baseline.php
+
+parameters:
+  level: 1
+  tmpDir: .cache/phpstan
+  parallel:
+    maximumNumberOfProcesses: 4
+  paths:
+    - src

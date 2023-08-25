@@ -21,6 +21,10 @@ jobs:
     uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
+  analyse:
+    uses: ./.github/workflows/--analyse.yml
+    secrets: inherit
+
   quality:
     uses: ./.github/workflows/--quality.yml
     with:
