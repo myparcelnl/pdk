@@ -124,7 +124,7 @@ final class PhpSourceParser
         $fileName = $reflectionClass->getFileName();
 
         return sprintf(
-            '%s.tmp/console/_%s.txt',
+            '%s.cache/console/_%s.txt',
             Pdk::get('rootDir'),
             $fileName
                 ? md5_file($fileName) . filemtime($fileName)
