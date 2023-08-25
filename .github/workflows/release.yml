@@ -56,6 +56,7 @@ jobs:
     needs:
       - test-unit
       - test-integration
+      - analyse
       - quality
     outputs:
       released: ${{ steps.semantic-release.outputs.released }}

@@ -35,6 +35,7 @@ jobs:
     needs:
       - test-unit
       - test-integration
+      - analyse
       - quality
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit
