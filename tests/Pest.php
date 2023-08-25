@@ -28,11 +28,19 @@ usesShared(new ClearContainerCache())->in(__DIR__);
 
 uses()
     ->group('frontend')
-    ->in(__DIR__ . '/Unit/Frontend');
+    ->in(
+        __DIR__ . '/Unit/App/Action',
+        __DIR__ . '/Unit/Context',
+        __DIR__ . '/Unit/Frontend'
+    );
 
 uses()
     ->group('settings')
-    ->in(__DIR__ . '/Unit/Settings');
+    ->in(
+        __DIR__ . '/Unit/App/Action/Backend/Settings',
+        __DIR__ . '/Unit/Frontend/View',
+        __DIR__ . '/Unit/Settings'
+    );
 
 uses()
     ->afterEach(function () {

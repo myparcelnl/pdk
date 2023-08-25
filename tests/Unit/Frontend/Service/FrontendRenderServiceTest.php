@@ -13,8 +13,6 @@ use function DI\autowire;
 use function Spatie\Snapshots\assertMatchesHtmlSnapshot;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-uses()->group('frontend');
-
 it('renders component', function (callable $callback) {
     PdkFactory::create(MockPdkConfig::create());
 

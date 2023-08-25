@@ -15,8 +15,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-uses()->group('frontend');
-
 usesShared(
     new UsesMockPdkInstance([
         FrontendRenderServiceInterface::class => autowire(MockFrontendRenderService::class),

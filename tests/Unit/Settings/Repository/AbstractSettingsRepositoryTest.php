@@ -17,8 +17,6 @@ use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-uses()->group('settings');
-
 usesShared(
     new UsesMockPdkInstance([
         SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([

@@ -17,8 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-uses()->group('settings');
-
 usesShared(
     new UsesMockPdkInstance([
         PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
