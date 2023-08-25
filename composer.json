@@ -13,6 +13,8 @@
         "symfony/http-foundation": ">= 2 || >= 3 || >= 4 || >= 5"
     },
     "scripts": {
+        "analyse": "php -dmemory_limit=-1 vendor/bin/phpstan analyse --no-interaction",
+        "analyze": "composer run analyse",
         "console": "php bin/console",
         "post-autoload-dump": "composer console generate:ide-helper",
         "quality": "rector process --dry-run",
@@ -21,7 +23,7 @@
         "test:integration": "behat",
         "test:unit": "pest",
         "test:unit:coverage": "php -dpcov.enabled=1 vendor/bin/pest --coverage-clover clover.xml",
-        "test:unit:snapshot": "pest -d  --update-snapshots"
+        "test:unit:snapshot": "pest -d --update-snapshots"
     },
     "require-dev": {
         "behat/behat": "^3.13",
@@ -31,6 +33,7 @@
         "nette/robot-loader": ">= 3",
         "pestphp/pest": ">= 1",
         "phpdocumentor/reflection-docblock": "^5",
+        "phpstan/phpstan": ">= 1",
         "rector/rector": "^0.16.0",
         "spatie/pest-plugin-snapshots": ">= 1",
         "symfony/console": "*"
