@@ -37,4 +37,4 @@ jobs:
         shell: bash
         #language=sh
         run: |
-          docker compose run php composer analyse
+          docker compose run php php -dmemory_limit=-1 vendor/bin/phpstan analyse --no-progress --no-interaction
