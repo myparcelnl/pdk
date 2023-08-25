@@ -7,13 +7,6 @@ namespace MyParcelNL\Pdk\Frontend\Form\Builder\Contract;
 interface FormSubOperationBuilderInterface extends FormOperationBuilderInterface
 {
     /**
-     * @param  string $id
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface
-     */
-    public function fetchContext(string $id): FormOperationInterface;
-
-    /**
      * @return string
      */
     public function getKey(): string;

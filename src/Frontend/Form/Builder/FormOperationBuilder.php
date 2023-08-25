@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSingletonOperationInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormDisabledWhenOperation;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormReadOnlyWhenOperation;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormVisibleWhenOperation;
 
@@ -43,6 +44,17 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
         }, $this->builders);
 
         return array_filter($array);
+    }
+
+    /**
+     * @param  null|string     $target
+     * @param  scalar|callable $valueOrCallback
+     *
+     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
+     */
+    public function disabledWhen(?string $target = null, $valueOrCallback = null): FormConditionInterface
+    {
+        return $this->addConditionalOperation(new FormDisabledWhenOperation($this), $target, $valueOrCallback);
     }
 
     /**
