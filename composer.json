@@ -14,7 +14,9 @@
     },
     "scripts": {
         "analyse": "php -dmemory_limit=-1 vendor/bin/phpstan analyse",
+        "analyse:generate": "composer run analyse -- --generate-baseline phpstan-baseline.php --allow-empty-baseline",
         "analyze": "composer run analyse",
+        "analyze:generate": "composer run analyse:generate",
         "console": "php bin/console",
         "post-autoload-dump": "composer console generate:ide-helper",
         "quality": "rector process --dry-run",
