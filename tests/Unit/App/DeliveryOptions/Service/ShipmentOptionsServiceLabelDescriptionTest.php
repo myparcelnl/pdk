@@ -6,8 +6,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
@@ -19,6 +21,17 @@ usesShared(new UsesMockPdkInstance());
 it('formats label description', function (string $labelDescription, string $output) {
     /** @var MockPdkProductRepository $repository */
     $repository = Pdk::get(PdkProductRepositoryInterface::class);
+
+    $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
+    $orderNoteRepository->add(
+        new PdkOrderNote(
+            [
+                'author'          => OrderNote::AUTHOR_CUSTOMER,
+                'note'            => 'Hello',
+                'orderIdentifier' => '123',
+            ]
+        )
+    );
 
     $order = new PdkOrder([
         'externalIdentifier' => '123',
@@ -35,12 +48,6 @@ it('formats label description', function (string $labelDescription, string $outp
             [
                 'quantity' => 3,
                 'product'  => $repository->getProduct('789'),
-            ],
-        ],
-        'notes'              => [
-            [
-                'author' => OrderNote::AUTHOR_CUSTOMER,
-                'note'   => 'Hello',
             ],
         ],
     ]);

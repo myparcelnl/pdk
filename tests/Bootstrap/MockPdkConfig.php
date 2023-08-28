@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface;
@@ -78,6 +79,7 @@ class MockPdkConfig
             PdkAccountRepositoryInterface::class        => get(MockPdkAccountRepository::class),
             PdkCartRepositoryInterface::class           => get(MockPdkCartRepository::class),
             PdkInterface::class                         => get(MockPdk::class),
+            PdkOrderNoteRepositoryInterface::class      => get(MockPdkOrderNoteRepository::class),
             PdkOrderRepositoryInterface::class          => get(MockPdkOrderRepository::class),
             PdkProductRepositoryInterface::class        => get(MockPdkProductRepository::class),
             PdkShippingMethodRepositoryInterface::class => get(MockPdkShippingMethodRepository::class),

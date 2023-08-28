@@ -112,6 +112,16 @@ return [
     }),
 
     /**
+     * Callback to generate a barcode note identifier
+     */
+
+    'createBarcodeNoteIdentifier' => factory(function () {
+        return static function (int $shipmentId) {
+            return "barcode-$shipmentId";
+        };
+    }),
+
+    /**
      * Settings key where the installed version of the plugin is saved.
      */
 

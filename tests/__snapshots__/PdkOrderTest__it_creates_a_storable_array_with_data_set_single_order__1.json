@@ -10,21 +10,6 @@
             },
             "deliveryType": "standard",
             "packageType": "package"
-        },
-        "notes": [
-            {
-                "apiIdentifier": "90001",
-                "author": "webshop",
-                "note": "test note",
-                "createdAt": "2023-01-01 12:00:00",
-                "updatedAt": "2023-01-01 12:00:00"
-            },
-            {
-                "author": "customer",
-                "note": "hello",
-                "createdAt": "2023-01-01 12:00:00",
-                "updatedAt": "2023-01-02 12:00:00"
-            }
-        ]
+        }
     }
 ]

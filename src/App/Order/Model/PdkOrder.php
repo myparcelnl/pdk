@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -63,7 +64,7 @@ class PdkOrder extends Model implements StorableArrayable
         'customsDeclaration' => null,
         'physicalProperties' => PhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
-        'notes'              => PdkOrderNoteCollection::class,
+        'notes'              => null,
 
         /**
          * Timestamp of when the order was placed.
@@ -193,6 +194,18 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
+     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
+     * @noinspection PhpUnused
+     */
+    public function getNotesAttribute(): PdkOrderNoteCollection
+    {
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $orderNoteRepository */
+        $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
+
+        return $orderNoteRepository->getFromOrder($this);
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Validation\Validator\OrderValidator
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -226,7 +239,6 @@ class PdkOrder extends Model implements StorableArrayable
             'apiIdentifier'   => $this->apiIdentifier,
             'exported'        => $this->exported,
             'deliveryOptions' => $this->deliveryOptions->toStorableArray(),
-            'notes'           => $this->notes->toStorableArray(),
         ];
     }
 
@@ -240,6 +252,7 @@ class PdkOrder extends Model implements StorableArrayable
     {
         $this->attributes['deliveryOptions'] = $deliveryOptions;
         $this->updateShipments();
+
         return $this;
     }
 
@@ -253,6 +266,7 @@ class PdkOrder extends Model implements StorableArrayable
     {
         $this->attributes['lines'] = $orderLines;
         $this->updateTotals();
+
         return $this;
     }
 
@@ -266,6 +280,7 @@ class PdkOrder extends Model implements StorableArrayable
     {
         $this->attributes['shipments'] = $shipments;
         $this->updateShipments();
+
         return $this;
     }
 

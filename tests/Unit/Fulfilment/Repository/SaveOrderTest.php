@@ -21,7 +21,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesMockPdkInstance());
 
-const DEFAULT_INPUT_RECIPIENT = [
+const DEFAULT_INPUT_RECIPIENT_SAVE_ORDER = [
     'cc'         => 'NL',
     'city'       => 'Hoofddorp',
     'person'     => 'Jaap Krekel',
@@ -29,7 +29,7 @@ const DEFAULT_INPUT_RECIPIENT = [
     'address1'   => 'Antareslaan 31',
 ];
 
-const DEFAULT_INPUT_SENDER = [
+const DEFAULT_INPUT_SENDER_SAVE_ORDER = [
     'cc'         => 'NL',
     'city'       => 'Amsterdam',
     'person'     => 'Willem Wever',
@@ -125,8 +125,8 @@ it('creates a valid order collection from api data', function (array $input) {
                     'physicalProperties' => [
                         'weight' => 3500,
                     ],
-                    'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                    'sender'             => DEFAULT_INPUT_SENDER,
+                    'recipient'          => DEFAULT_INPUT_RECIPIENT_SAVE_ORDER,
+                    'sender'             => DEFAULT_INPUT_SENDER_SAVE_ORDER,
                 ],
                 'shopId'         => null,
                 'status'         => null,
@@ -193,8 +193,8 @@ it('creates a valid order collection from api data', function (array $input) {
                     'physicalProperties' => [
                         'weight' => 3500,
                     ],
-                    'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                    'sender'             => DEFAULT_INPUT_SENDER,
+                    'recipient'          => DEFAULT_INPUT_RECIPIENT_SAVE_ORDER,
+                    'sender'             => DEFAULT_INPUT_SENDER_SAVE_ORDER,
                 ],
                 'shopId'         => null,
                 'status'         => null,

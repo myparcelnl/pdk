@@ -8,8 +8,7 @@
             "shipmentOptions": [],
             "deliveryType": "standard",
             "packageType": "mailbox"
-        },
-        "notes": []
+        }
     },
     {
         "apiIdentifier": null,
@@ -25,8 +24,7 @@
             },
             "deliveryType": "evening",
             "packageType": "package"
-        },
-        "notes": []
+        }
     },
     {
         "apiIdentifier": null,
@@ -46,7 +44,6 @@
             },
             "deliveryType": "standard",
             "packageType": "package"
-        },
-        "notes": []
+        }
     }
 ]
