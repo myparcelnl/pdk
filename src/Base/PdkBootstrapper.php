@@ -6,11 +6,12 @@ namespace MyParcelNL\Pdk\Base;
 
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
+use MyParcelNL\Pdk\Base\Contract\PdkBootstrapperInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use function DI\value;
 
-class PdkBootstrapper
+class PdkBootstrapper implements PdkBootstrapperInterface
 {
     /**
      * @var bool
@@ -21,6 +22,8 @@ class PdkBootstrapper
      * @var \MyParcelNL\Pdk\Base\Pdk
      */
     protected static $pdk;
+
+    public function __construct() { }
 
     /**
      * @param  string $name
