@@ -93,8 +93,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
      */
     final public static function beforeSuite(BeforeSuiteScope $scope): void
     {
-        require_once __DIR__ . '/../../functions.php';
-
         self::executeHooks(self::BEFORE_SUITE, $scope);
     }
 
