@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class PostShipmentsRequest extends Request
 {
@@ -195,10 +196,10 @@ class PostShipmentsRequest extends Request
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
-     * @return null|array
+     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getOptions(Shipment $shipment): ?array
+    private function getOptions(Shipment $shipment): array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
 
@@ -206,12 +207,14 @@ class PostShipmentsRequest extends Request
             return $this->triStateService->resolve($item);
         }, $shipmentOptions->toSnakeCaseArray());
 
+        $hasInsurance = $shipmentOptions->insurance > TriStateService::DISABLED;
+
         return array_filter(
             [
                 'package_type'  => $shipment->deliveryOptions->getPackageTypeId(),
                 'delivery_type' => $shipment->deliveryOptions->getDeliveryTypeId(),
                 'delivery_date' => $shipment->deliveryOptions->getDateAsString(),
-                'insurance'     => $shipmentOptions->insurance
+                'insurance'     => $hasInsurance
                     ? [
                         'amount'   => $shipmentOptions->insurance,
                         'currency' => 'EUR',
