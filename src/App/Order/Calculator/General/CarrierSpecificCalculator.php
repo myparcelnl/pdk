@@ -7,12 +7,13 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlForYou\DhlForYouCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\PostNl\PostNLCalculator;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
     /**
-     * @var array<string, class-string<\MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface>>
+     * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
     private const CARRIER_CALCULATOR_MAP = [
         Carrier::CARRIER_POSTNL_NAME      => PostNLCalculator::class,
@@ -28,7 +29,7 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
-        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface $calculator */
+        /** @var PdkOrderOptionCalculatorInterface $calculator */
         $calculator = new $calculator($this->order);
 
         $calculator->calculate();

@@ -9,7 +9,7 @@ interface OptionDefinitionHelperInterface
     /**
      * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
      *
-     * @return mixed|int<-1|0|1>
+     * @return mixed|int
      */
     public function get(OrderOptionDefinitionInterface $definition);
 }

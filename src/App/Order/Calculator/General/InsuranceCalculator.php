@@ -128,7 +128,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      * @param  int[] $insuranceAmount
      * @param  int   $orderAmount
      *
-     * @return void
+     * @return int
      */
     private function getMinimumInsuranceAmount(array $insuranceAmount, int $orderAmount): int
     {

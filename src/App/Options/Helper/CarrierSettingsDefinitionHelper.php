@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 final class CarrierSettingsDefinitionHelper extends AbstractOptionDefinitionHelper
 {
     /**
-     * @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings
+     * @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings|null
      */
     private $model;
 

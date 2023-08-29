@@ -20,7 +20,7 @@ final class DhlForYouDeliveryTypeCalculator extends AbstractPdkOrderOptionCalcul
         $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
 
         if (CountryCodes::CC_NL !== $this->order->shippingAddress->cc) {
-            $this->order->deliveryOptions = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
+            $this->order->deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
             return;
         }
 
