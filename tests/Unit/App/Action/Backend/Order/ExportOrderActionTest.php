@@ -31,6 +31,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
 use Symfony\Component\HttpFoundation\Response;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -214,23 +215,21 @@ it('adds notification if shipment export fails', function () {
         ]);
 });
 
-it('exports order and directly returns barcode if concept shipments is off', function (
-    bool  $conceptShipments,
-    array $orders
-) {
-    /** @var MockPdkOrderRepository $pdkOrderRepository */
-    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    /** @var MockSettingsRepository $settingsRepository */
-    $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
+it('exports order and directly returns barcode if concept shipments is off', function () {
+    factory(GeneralSettings::class)
+        ->withConceptShipments(false)
+        ->store();
 
-    $collection = new PdkOrderCollection($orders);
+    /** @var PdkOrderRepositoryInterface $pdkOrderRepository */
+    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
+
+    $collection   = new PdkOrderCollection();
+    $defaultOrder = factory(PdkOrder::class)
+        ->withShipments()
+        ->make();
+    $collection->push($defaultOrder);
 
     $pdkOrderRepository->updateMany($collection);
-    $settingsRepository->storeSettings(
-        new GeneralSettings([
-            GeneralSettings::CONCEPT_SHIPMENTS => $conceptShipments,
-        ])
-    );
 
     MockApi::enqueue(
         new ExamplePostShipmentsResponse(),
@@ -238,22 +237,21 @@ it('exports order and directly returns barcode if concept shipments is off', fun
         new ExampleGetShipmentsResponse()
     );
 
-    $orders = json_decode(
-        Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
-            'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
-        ])
-            ->getContent()
-    );
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
 
-    $orders = new PdkOrderCollection($orders->data->orders);
+    $content = json_decode($response->getContent(), true);
 
-    foreach ($orders as $order) {
-        expect($order->shipments)->toHaveLength(1);
-    }
-})
-    ->with([
-        'concept shipments off' => [
-            'conceptShipments' => false,
-        ],
-    ])
-    ->with('pdkOrdersDomestic');
+    $responseOrders    = $content['data']['orders'];
+    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($responseOrders)
+        ->toHaveLength(count($responseOrders))
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        ->and($responseShipments)->each->toHaveLength(1)
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+});
