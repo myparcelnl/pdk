@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -155,6 +156,18 @@ class ExportOrderAction extends AbstractOrderAction
         $orders->each(function (PdkOrder $order) {
             $order->shipments = [$order->shipments->last()];
         });
+
+        if (! Settings::get(GeneralSettings::CONCEPT_SHIPMENTS, GeneralSettings::ID)) {
+            $this->shipmentRepository->fetchLabelLink($concepts, LabelSettings::FORMAT_A4);
+
+            $shipmentsWithBarcode =
+                $this->shipmentRepository->getShipments(
+                    $concepts->pluck('id')
+                        ->toArray()
+                );
+
+            $orders->updateShipments($shipmentsWithBarcode);
+        }
 
         return $orders;
     }
