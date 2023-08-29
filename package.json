@@ -8,7 +8,7 @@
         "analyze": "yarn docker composer analyze",
         "analyze:generate": "yarn docker composer analyze:generate",
         "console": "yarn docker composer console",
-        "docker": "docker compose run --rm -it php",
+        "docker": "docker compose run --rm -T php",
         "prepare": "is-ci || husky install",
         "quality": "yarn docker composer quality",
         "quality:fix": "yarn docker composer quality:fix",
@@ -18,7 +18,7 @@
         "test:unit": "yarn docker composer test:unit",
         "test:unit:coverage": "yarn docker composer test:unit:coverage",
         "test:unit:snapshot": "yarn docker composertest:unit:snapshot",
-        "test:watch": "npx -q nodemon --exec 'docker compose run --rm -T php composer run test || exit 1' --watch 'src,tests' --ext 'php'"
+        "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
     },
     "lint-staged": {
         "*.md": "prettier --write",
