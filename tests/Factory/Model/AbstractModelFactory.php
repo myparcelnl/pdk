@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Factory\Model;
 
 use BadMethodCallException;
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Tests\Factory\AbstractFactory;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
@@ -35,14 +34,6 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
         if (Str::startsWith($name, 'with')) {
             $attribute = Str::camel(Str::after($name, 'with'));
             $value     = $arguments[0];
-
-            if ($value instanceof FactoryInterface) {
-                $value = $value->make();
-            }
-
-            if ($value instanceof Arrayable) {
-                $value = $value->toArray();
-            }
 
             return $this->with([$attribute => $value]);
         }
