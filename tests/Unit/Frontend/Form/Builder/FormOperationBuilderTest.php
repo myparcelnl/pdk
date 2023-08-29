@@ -40,6 +40,26 @@ it('builds form operation arrays', function (array $args) {
             ];
         },
 
+        'disabledWhen' => function () {
+            return [
+                'builder' => (new FormOperationBuilder())
+                    ->disabledWhen('target', true),
+
+                'output' => [
+                    [
+                        '$disabledWhen' => [
+                            '$if' => [
+                                [
+                                    '$target' => 'target',
+                                    '$eq'     => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        },
+
         'visibleWhen' => function () {
             return [
                 'builder' => (new FormOperationBuilder())
@@ -250,6 +270,28 @@ it('builds form operation arrays', function (array $args) {
                                 ],
                                 [
                                     '$target' => 'target',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        },
+
+        'setProp' => function () {
+            return [
+                'builder' => (new FormOperationBuilder())
+                    ->afterUpdate(function (FormSubOperationBuilderInterface $builder) {
+                        $builder->setProp('foo', 'bar');
+                    }),
+
+                'output' => [
+                    [
+                        '$afterUpdate' => [
+                            [
+                                '$setProp' => [
+                                    '$prop'  => 'foo',
+                                    '$value' => 'bar',
                                 ],
                             ],
                         ],

@@ -6,9 +6,13 @@ namespace MyParcelNL\Pdk\Frontend\Form\Builder\Operation;
 
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\Concern\HasFormTarget;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\Contract\FormOperationWithTargetInterface;
 
-final class FormSetValueOperation extends AbstractFormOperation
+final class FormSetValueOperation extends AbstractFormOperation implements FormOperationWithTargetInterface
 {
+    use HasFormTarget;
+
     /**
      * @var scalar
      */

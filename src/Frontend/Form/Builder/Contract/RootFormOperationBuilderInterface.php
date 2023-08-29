@@ -15,6 +15,14 @@ interface RootFormOperationBuilderInterface extends FormOperationBuilderInterfac
 
     /**
      * @param  null|string     $target
+     * @param  scalar|callable $valueOrCallback
+     *
+     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
+     */
+    public function disabledWhen(?string $target = null, $valueOrCallback = null): FormConditionInterface;
+
+    /**
+     * @param  null|string     $target
      * @param  callable|scalar $valueOrCallback
      *
      * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
