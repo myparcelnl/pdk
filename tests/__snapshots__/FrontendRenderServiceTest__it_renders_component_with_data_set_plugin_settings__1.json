@@ -52,8 +52,6 @@
                 {
                     "name": "sendReturnEmail",
                     "$component": "ToggleInput",
-                    "$slot": null,
-                    "$wrapper": null,
                     "label": "settings_general_send_return_email",
                     "description": "settings_general_send_return_email_description"
                 },
