@@ -3,13 +3,22 @@
     "private": true,
     "license": "MIT",
     "scripts": {
-        "docker": "docker compose run --rm php",
+        "analyse": "yarn docker composer analyse",
+        "analyse:generate": "yarn docker composer analyse:generate",
+        "analyze": "yarn docker composer analyze",
+        "analyze:generate": "yarn docker composer analyze:generate",
+        "console": "yarn docker composer console",
+        "docker": "docker compose run --rm -it php",
         "prepare": "is-ci || husky install",
         "quality": "yarn docker composer quality",
         "quality:fix": "yarn docker composer quality:fix",
         "test": "yarn docker composer test",
-        "test:coverage": "yarn docker composer test:coverage",
-        "test:watch": "npx -q nodemon --exec 'docker compose exec -T php vendor/bin/pest || exit 1' --watch 'src,tests' --ext 'php'"
+        "test:coverage": "yarn test:unit:coverage",
+        "test:integration": "yarn docker composer test:integration",
+        "test:unit": "yarn docker composer test:unit",
+        "test:unit:coverage": "yarn docker composer test:unit:coverage",
+        "test:unit:snapshot": "yarn docker composertest:unit:snapshot",
+        "test:watch": "npx -q nodemon --exec 'docker compose run --rm -T php composer run test || exit 1' --watch 'src,tests' --ext 'php'"
     },
     "lint-staged": {
         "*.md": "prettier --write",
