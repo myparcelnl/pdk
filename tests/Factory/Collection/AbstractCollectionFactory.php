@@ -91,13 +91,13 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
     }
 
     /**
-     * @param  ...mixed $item
+     * @param  mixed ...$items
      *
-     * @return self
+     * @return $this
      */
     public function push(...$items): CollectionFactoryInterface
     {
-        $this->entries->push(...$items);
+        $this->entries->push(...array_map([$this, 'coerceToFactory'], $items));
 
         return $this;
     }
@@ -137,5 +137,33 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
         return $this->entries->filter(function ($item) {
             return $item instanceof ModelFactoryInterface;
         });
+    }
+
+    /**
+     * @template T of array|FactoryInterface|mixed
+     * @param  array|FactoryInterface|mixed $item
+     *
+     * @return ModelFactoryInterface|T
+     */
+    private function coerceToFactory($item)
+    {
+        if ($item instanceof FactoryInterface) {
+            return $item;
+        }
+
+        $modelFactory = $this->getModelFactory();
+
+        /** @var \MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface $modelFactory */
+        $modelFactory = new $modelFactory();
+
+        if (get_class($item) === $modelFactory->getModel()) {
+            return $modelFactory->with($item->getAttributes());
+        }
+
+        if (is_array($item)) {
+            return $modelFactory->with($item);
+        }
+
+        return $item;
     }
 }
