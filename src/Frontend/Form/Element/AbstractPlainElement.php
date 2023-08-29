@@ -48,45 +48,11 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     abstract protected function getComponent(): string;
 
     /**
-     * @param  null|string     $target
-     * @param  scalar|callable $valueOrCallback
-     *
-     * @return $this
-     */
-    public function disabledWhen(?string $target = null, $valueOrCallback = null): ElementBuilderInterface
-    {
-        $this->getBuilder()
-            ->disabledWhen($target, $valueOrCallback);
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getName(): ?string
     {
-        return $this->getProp('name');
-    }
-
-    /**
-     * @param  string $key
-     *
-     * @return null|mixed
-     */
-    public function getProp(string $key)
-    {
-        return $this->props[$key] ?? null;
-    }
-
-    /**
-     * @param  string $key
-     *
-     * @return bool
-     */
-    public function hasProp(string $key): bool
-    {
-        return isset($this->props[$key]);
+        return $this->name;
     }
 
     /**
@@ -95,7 +61,9 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     public function make(): ElementInterface
     {
         return (new PlainElement($this->getComponent(), $this->getProps(), $this->getContent()))
-            ->setBuilder($this->builder);
+            ->setBuilder(
+                $this->builder
+            );
     }
 
     /**
@@ -142,7 +110,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
      */
     public function withName(string $name): ElementBuilderInterface
     {
-        $this->withProp('name', $name);
+        $this->name = $name;
 
         return $this;
     }
@@ -213,6 +181,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
             array_merge(
                 $this->props,
                 [
+                    'name'        => $this->name,
                     '$attributes' => array_filter($this->attributes),
                 ]
             )

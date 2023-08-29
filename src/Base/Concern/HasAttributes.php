@@ -809,24 +809,6 @@ trait HasAttributes
     }
 
     /**
-     * @param  mixed $value
-     *
-     * @return int<-1,1>
-     */
-    protected function toTriState($value): int
-    {
-        $int = $this->toInt($value);
-
-        if (TriStateService::INHERIT === $value) {
-            return $value;
-        }
-
-        return $int
-            ? TriStateService::ENABLED
-            : TriStateService::DISABLED;
-    }
-
-    /**
      * @param  string $key
      * @param  mixed  $value
      *

@@ -34,6 +34,11 @@ abstract class NewAbstractSettingsView implements Arrayable
     }
 
     /**
+     * @return void
+     */
+    abstract protected function addElements(): void;
+
+    /**
      * @return array
      */
     public function all(): array
@@ -59,18 +64,13 @@ abstract class NewAbstractSettingsView implements Arrayable
     }
 
     /**
-     * @return void
-     */
-    abstract protected function addElements(): void;
-
-    /**
      * @param  string ...$parts
      *
      * @return string
      */
     protected function createLabel(string ...$parts): string
     {
-        return Str::snake(implode('_', array_filter($parts, 'strlen')));
+        return Str::snake(implode('_', $parts));
     }
 
     /**
@@ -125,7 +125,7 @@ abstract class NewAbstractSettingsView implements Arrayable
     {
         return $elements->map(function (ElementBuilderInterface $builder): ElementInterface {
             if ($builder instanceof InteractiveElementBuilderInterface) {
-                $label       = $builder->getProp('label') ?? $this->label($builder->getName());
+                $label       = $this->label($builder->getName());
                 $description = "{$label}_description";
 
                 $builder->withProp('label', $label);

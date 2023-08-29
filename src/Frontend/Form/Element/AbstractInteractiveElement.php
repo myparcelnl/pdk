@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\InteractiveElementBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
-use MyParcelNL\Sdk\src\Support\Str;
 
 abstract class AbstractInteractiveElement extends AbstractPlainElement implements InteractiveElementBuilderInterface
 {
@@ -16,7 +15,7 @@ abstract class AbstractInteractiveElement extends AbstractPlainElement implement
      */
     public function __construct(string $name)
     {
-        $this->withName($name);
+        $this->name = $name;
     }
 
     /**
@@ -37,7 +36,7 @@ abstract class AbstractInteractiveElement extends AbstractPlainElement implement
      */
     public function make(): ElementInterface
     {
-        return (new InteractiveElement($this->getProp('name'), $this->getComponent(), $this->getProps()))
+        return (new InteractiveElement($this->name, $this->getComponent(), $this->getProps()))
             ->setBuilder($this->builder);
     }
 
@@ -62,6 +61,6 @@ abstract class AbstractInteractiveElement extends AbstractPlainElement implement
      */
     protected function createLabel(string ...$parts): string
     {
-        return Str::snake(implode('_', array_filter(array_merge($this->prefixes, $parts), 'strlen')));
+        return implode('_', array_merge($this->prefixes, $parts));
     }
 }

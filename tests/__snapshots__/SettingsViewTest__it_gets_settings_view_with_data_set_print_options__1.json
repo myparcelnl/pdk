@@ -7,8 +7,8 @@
         {
             "name": "output",
             "$component": "RadioGroup",
-            "label": "settings_label_output",
-            "description": "settings_label_output_description",
+            "label": "settings_print_output",
+            "description": "settings_print_output_description",
             "options": [
                 {
                     "label": "settings_label_output_option_open",
@@ -23,8 +23,8 @@
         {
             "name": "format",
             "$component": "RadioGroup",
-            "label": "settings_label_format",
-            "description": "settings_label_format_description",
+            "label": "settings_print_format",
+            "description": "settings_print_format_description",
             "options": [
                 {
                     "label": "settings_label_format_option_a4",
@@ -51,8 +51,8 @@
                 }
             ],
             "$component": "MultiSelectInput",
-            "label": "settings_label_position",
-            "description": "settings_label_position_description",
+            "label": "settings_print_position",
+            "description": "settings_print_position_description",
             "options": [
                 {
                     "label": "settings_label_position_option_1",

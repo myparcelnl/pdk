@@ -90,9 +90,9 @@ it('sets name', function () {
 });
 
 it('adds visibleWhen hook', function () {
-    $element = new Element('test');
+    $element = new Input('test');
 
-    $element->visibleWhen('test', 'hello');
+    $element->readOnlyWhen('test', 'hello');
 
     $created = $element->make()
         ->toArray();
@@ -100,5 +100,5 @@ it('adds visibleWhen hook', function () {
     expect($created)
         ->toHaveKey('$builders')
         ->and($created['$builders'][0])
-        ->toHaveKey('$visibleWhen');
+        ->toHaveKey('$readOnlyWhen');
 });;

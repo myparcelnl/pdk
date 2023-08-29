@@ -59,64 +59,12 @@ it('adds options', function (array $options, int $flags, array $result, string $
             ],
         ],
 
-        'plain array of associative arrays should not be transformed' => [
-            'options' => [
-                [
-                    'label' => 'broccoli',
-                    'value' => 'bc',
-                ],
-                [
-                    'label' => 'bloemkool',
-                    'value' => 'bk',
-                ],
-            ],
-            'flags'   => 0,
-            'result'  => [
-                [
-                    'label' => 'broccoli',
-                    'value' => 'bc',
-                ],
-                [
-                    'label' => 'bloemkool',
-                    'value' => 'bk',
-                ],
-            ],
-        ],
-
-        'plain array of associative arrays can use flags' => [
-            'options' => [
-                [
-                    'label' => 'broccoli',
-                    'value' => 'bc',
-                ],
-                [
-                    'label' => 'bloemkool',
-                    'value' => 'bk',
-                ],
-            ],
-            'flags'   => ElementBuilderWithOptionsInterface::ADD_DEFAULT,
-            'result'  => [
-                [
-                    'label' => 'option_default',
-                    'value' => -1,
-                ],
-                [
-                    'label' => 'broccoli',
-                    'value' => 'bc',
-                ],
-                [
-                    'label' => 'bloemkool',
-                    'value' => 'bk',
-                ],
-            ],
-        ],
-
         'include none' => [
             'options' => ['broccoli', 'bloemkool'],
             'flags'   => ElementBuilderWithOptionsInterface::ADD_NONE,
             'result'  => [
                 [
-                    'label' => 'option_none',
+                    'label' => '_none',
                     'value' => -1,
                 ],
                 [
@@ -135,7 +83,7 @@ it('adds options', function (array $options, int $flags, array $result, string $
             'flags'   => ElementBuilderWithOptionsInterface::ADD_DEFAULT,
             'result'  => [
                 [
-                    'label' => 'option_default',
+                    'label' => '_default',
                     'value' => -1,
                 ],
                 [
@@ -169,11 +117,11 @@ it('adds options', function (array $options, int $flags, array $result, string $
             'flags'   => ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL | ElementBuilderWithOptionsInterface::ADD_DEFAULT | ElementBuilderWithOptionsInterface::ADD_NONE,
             'result'  => [
                 [
-                    'label' => 'option_none',
+                    'label' => '_none',
                     'value' => -1,
                 ],
                 [
-                    'label' => 'option_default',
+                    'label' => '_default',
                     'value' => -1,
                 ],
                 [
@@ -211,7 +159,7 @@ it('handles prefixes from the wrapping form builder', function (string $class, s
                 '$component' => $component,
                 'options'    => [
                     [
-                        'label' => 'option_default',
+                        'label' => 'one_default',
                         'value' => -1,
                     ],
                     [

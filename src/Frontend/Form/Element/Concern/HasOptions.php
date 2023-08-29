@@ -46,14 +46,14 @@ trait HasOptions
         if ($flags & ElementBuilderWithOptionsInterface::ADD_DEFAULT) {
             array_unshift($options, [
                 'value' => ElementBuilderWithOptionsInterface::VALUE_DEFAULT,
-                'label' => 'option_default',
+                'label' => sprintf('%s_default', Arr::first($this->prefixes)),
             ]);
         }
 
         if ($flags & ElementBuilderWithOptionsInterface::ADD_NONE) {
             array_unshift($options, [
-                'value' => ElementBuilderWithOptionsInterface::VALUE_NONE,
-                'label' => 'option_none',
+                'value' => ElementBuilderWithOptionsInterface::VALUE_DEFAULT,
+                'label' => sprintf('%s_none', Arr::first($this->prefixes)),
             ]);
         }
 
@@ -68,10 +68,6 @@ trait HasOptions
      */
     protected function toSelectOptions(array $array, int $flags = 0): array
     {
-        if (! Arr::isAssoc($array) && is_array(Arr::first($array))) {
-            return $this->addDefaultOption($array, $flags);
-        }
-
         $associativeArray = (Arr::isAssoc($array) ? $array : array_combine($array, $array)) ?? [];
 
         $options = array_map(function ($value, string $key) use ($flags) {
