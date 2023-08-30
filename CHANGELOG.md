@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.1](https://github.com/myparcelnl/pdk/compare/v2.17.0...v2.17.1) (2023-08-30)
+
+
+### :bug: Bug Fixes
+
+* **shipments:** prevent error in barcode note identifier ([#168](https://github.com/myparcelnl/pdk/issues/168)) ([f5f5551](https://github.com/myparcelnl/pdk/commit/f5f5551a2fde6e669a980d38c4b85105440d9442))
+
 ## [2.17.0](https://github.com/myparcelnl/pdk/compare/v2.16.2...v2.17.0) (2023-08-30)
 
 
