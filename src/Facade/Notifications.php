@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
  * @method static void clear()
  * @method static bool isEmpty()
  * @method static bool isNotEmpty()
- * @implements \MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface
+ * @see \MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface
  */
 final class Notifications extends Facade
 {

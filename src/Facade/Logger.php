@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
  * @method static void info($message, array $context = [])
  * @method static void notice($message, array $context = [])
  * @method static void warning($message, array $context = [])
- * @implements \Psr\Log\LoggerInterface
+ * @see \Psr\Log\LoggerInterface
  */
 final class Logger extends Facade
 {

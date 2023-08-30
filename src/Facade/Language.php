@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
  * @method static string translate(string $string, string $language = null)
  * @method static array translateArray(array $array, string $language = null)
  * @method static string hasTranslation(string $string, string $language = null)
- * @implements \MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface
+ * @see \MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface
  */
 final class Language extends Facade
 {

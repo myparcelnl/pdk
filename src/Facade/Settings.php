@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
  * @method static \MyParcelNL\Pdk\Settings\Model\Settings all()
  * @method static void persist()
  * @method static array getDefaults()
- * @implements \MyParcelNL\Pdk\Settings\SettingsManager
+ * @see \MyParcelNL\Pdk\Settings\SettingsManager
  */
 final class Settings extends Facade
 {

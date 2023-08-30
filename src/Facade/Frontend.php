@@ -20,7 +20,7 @@ use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
  * @method static string renderOrderListItem(PdkOrder $order)
  * @method static string renderPluginSettings()
  * @method static string renderProductSettings(PdkProduct $product)
- * @implements FrontendRenderServiceInterface
+ * @see FrontendRenderServiceInterface
  */
 final class Frontend extends Facade
 {

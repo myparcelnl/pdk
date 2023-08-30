@@ -172,61 +172,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Context/Service/ContextService.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Account\\\\Contract\\\\AccountSettingsServiceInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 396$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/AccountSettings.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(PdkActions\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 112$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Actions.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Base\\\\Contract\\\\ConfigInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 105$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Config.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(FrontendRenderServiceInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 550$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Frontend.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(InstallerServiceInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 128$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Installer.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Language\\\\Contract\\\\LanguageServiceInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 490$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Language.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\Psr\\\\Log\\\\LoggerInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 598$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Logger.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Notification\\\\Contract\\\\NotificationServiceInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 595$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Notifications.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Base\\\\Concern\\\\PdkInterface\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 326$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Pdk.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Platform\\\\PlatformManager\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 169$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Platform.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @implements has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Settings\\\\SettingsManager\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 278$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Facade/Settings.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Frontend\\\\Form\\\\Builder\\\\AbstractFormBuilderCore\\:\\:__isset\\(\\) should return bool but return statement is missing\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Frontend/Form/Builder/AbstractFormBuilderCore.php',

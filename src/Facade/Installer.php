@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Base\Facade;
 /**
  * @method static void install(...$args)
  * @method static void uninstall(...$args)
- * @implements InstallerServiceInterface
+ * @see InstallerServiceInterface
  */
 final class Installer extends Facade
 {

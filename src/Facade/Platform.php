@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Platform\PlatformManager;
  * @method static array all()
  * @method static mixed get(string $key)
  * @method static string getPlatform()
- * @implements \MyParcelNL\Pdk\Platform\PlatformManager
+ * @see \MyParcelNL\Pdk\Platform\PlatformManager
  */
 final class Platform extends Facade
 {

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method static Response execute(string|Request $action, array $parameters = [])
- * @implements PdkActions
+ * @see PdkActions
  */
 final class Actions extends Facade
 {

@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Base\Facade;
 
 /**
  * @method static mixed get(string $key)
- * @implements \MyParcelNL\Pdk\Base\Contract\ConfigInterface
+ * @see \MyParcelNL\Pdk\Base\Contract\ConfigInterface
  */
 final class Config extends Facade
 {

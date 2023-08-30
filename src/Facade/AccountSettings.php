@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
  * @method static bool hasCarrier(string $name)
  * @method static bool hasTaxFields()
  * @method static bool usesOrderMode()
- * @implements \MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface
+ * @see \MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface
  */
 final class AccountSettings extends Facade
 {
