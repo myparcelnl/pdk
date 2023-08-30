@@ -44,6 +44,12 @@ jobs:
     uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
+  analyse:
+    needs: prepare
+    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
+    uses: ./.github/workflows/--analyse.yml
+    secrets: inherit
+
   quality:
     needs: prepare
     if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
