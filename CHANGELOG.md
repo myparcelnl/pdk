@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.17.0](https://github.com/myparcelnl/pdk/compare/v2.16.2...v2.17.0) (2023-08-30)
+
+
+### :sparkles: New Features
+
+* **form-builder:** add more builder operations ([#165](https://github.com/myparcelnl/pdk/issues/165)) ([0132e01](https://github.com/myparcelnl/pdk/commit/0132e01b20a81d625c6e502f9cc95ab8379882c1))
+* **shipments:** save barcode in order note ([#155](https://github.com/myparcelnl/pdk/issues/155)) ([2c74dbf](https://github.com/myparcelnl/pdk/commit/2c74dbfa71f4091146ca5f88eee5d48ec065f950))
+
+
+### :bug: Bug Fixes
+
+* **shipments:** fix non-concept shipments not returning barcode instantly ([#163](https://github.com/myparcelnl/pdk/issues/163)) ([b7726a4](https://github.com/myparcelnl/pdk/commit/b7726a45791ffef5e975fb6e9634262514a9557d))
+
 ## [2.16.2](https://github.com/myparcelnl/pdk/compare/v2.16.1...v2.16.2) (2023-08-24)
 
 
