@@ -39,6 +39,7 @@ class ProductSettings extends AbstractSettingsModel
     public const EXPORT_RETURN            = 'exportReturn';
     public const EXPORT_SIGNATURE         = 'exportSignature';
     public const FIT_IN_MAILBOX           = 'fitInMailbox';
+    public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
     public const PACKAGE_TYPE             = 'packageType';
 
     protected $attributes = [
@@ -56,6 +57,7 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_RETURN            => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
         self::EXPORT_SIGNATURE         => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
         self::FIT_IN_MAILBOX           => 0,
+        self::FIT_IN_DIGITAL_STAMP     => 0,
         self::PACKAGE_TYPE             => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
     ];
 
@@ -72,6 +74,7 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_RETURN            => 'int',
         self::EXPORT_SIGNATURE         => 'int',
         self::FIT_IN_MAILBOX           => 'int',
+        self::FIT_IN_DIGITAL_STAMP     => 'int',
         self::PACKAGE_TYPE             => 'string',
     ];
 }

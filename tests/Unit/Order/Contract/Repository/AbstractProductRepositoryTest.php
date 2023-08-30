@@ -39,6 +39,7 @@ it('has correct default values', function () {
             'settings.exportInsurance'              => -1,
             'settings.exportLargeFormat'            => -1,
             'settings.fitInMailbox'                 => 0,
+            'settings.fitInDigitalStamp'            => 0,
             'settings.packageType'                  => 'package',
             'externalIdentifier'                    => '123',
             'weight'                                => 4000,
@@ -66,6 +67,7 @@ it('has correct default values', function () {
             'mergedSettings.exportReturn'           => -1,
             'mergedSettings.exportSignature'        => -1,
             'mergedSettings.fitInMailbox'           => 0,
+            'mergedSettings.fitInDigitalStamp'      => 0,
             'mergedSettings.packageType'            => 'package',
         ]);
 });
