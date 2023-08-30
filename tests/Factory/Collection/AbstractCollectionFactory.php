@@ -156,7 +156,7 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
         /** @var \MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface $modelFactory */
         $modelFactory = new $modelFactory();
 
-        if (get_class($item) === $modelFactory->getModel()) {
+        if (is_object($item) && get_class($item) === $modelFactory->getModel()) {
             return $modelFactory->with($item->getAttributes());
         }
 
