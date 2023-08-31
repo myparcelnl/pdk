@@ -372,11 +372,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Shipment/Service/DropOffService.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Negated boolean expression is always false\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Validation/Validator/OrderValidator.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type bool\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Webhook/Repository/WebhookSubscriptionRepository.php',
