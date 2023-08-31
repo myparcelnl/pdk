@@ -267,11 +267,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Fulfilment/Collection/OrderCollection.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Order\\:\\:fromPdkOrder\\(\\) should return static\\(MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Order\\) but returns MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Order\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Fulfilment/Model/Order.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Product\\:\\:fromPdkProduct\\(\\) should return static\\(MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Product\\) but returns MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Product\\.$#',
 	'count' => 2,
 	'path' => __DIR__ . '/src/Fulfilment/Model/Product.php',
