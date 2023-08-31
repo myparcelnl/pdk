@@ -427,7 +427,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                             'max' => Pdk::get('insuranceFactorMax'),
                         ],
                     ]
-                ),
+                )
             ),
         ];
     }
