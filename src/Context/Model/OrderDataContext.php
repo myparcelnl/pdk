@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
-use MyParcelNL\Pdk\App\Options\Helper\CarrierSettingsDefinitionHelper;
-use MyParcelNL\Pdk\App\Options\Helper\ProductSettingsDefinitionHelper;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Context\Context;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 
 /**
  * @property null|string                                                 $externalIdentifier
@@ -34,7 +35,7 @@ use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
  * @property int                                                         $totalPrice
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
- * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $inheritedDeliveryOptions
+ * @property Collection<DeliveryOptions>                                 $inheritedDeliveryOptions
  */
 class OrderDataContext extends PdkOrder
 {
@@ -43,7 +44,6 @@ class OrderDataContext extends PdkOrder
     public function __construct(?array $data = null)
     {
         $this->attributes['inheritedDeliveryOptions'] = null;
-        $this->casts['inheritedDeliveryOptions']      = DeliveryOptions::class;
 
         parent::__construct($data);
     }
@@ -72,34 +72,33 @@ class OrderDataContext extends PdkOrder
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions
+     * Get the inherited delivery options from product and carrier settings for all available carriers.
+     *
+     * @return Collection<DeliveryOptions>
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
-    protected function getInheritedDeliveryOptionsAttribute(): DeliveryOptions
+    protected function getInheritedDeliveryOptionsAttribute(): Collection
     {
-        /** @var TriStateServiceInterface $triStateService */
-        $triStateService = Pdk::get(TriStateServiceInterface::class);
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+        $service = Pdk::get(PdkOrderOptionsServiceInterface::class);
 
-        $deliveryOptions = new DeliveryOptions([
-            'carrier' => [
-                'name' => $this->deliveryOptions->carrier->name,
-                'id'   => $this->deliveryOptions->carrier->id,
-            ],
-        ]);
+        $carriers = AccountSettings::getCarriers();
 
-        $productHelper = new ProductSettingsDefinitionHelper($this);
-        $carrierHelper = new CarrierSettingsDefinitionHelper($this);
+        return (new Collection($carriers))->mapWithKeys(function (Carrier $carrier) use ($service): array {
+            $clonedOrder = new PdkOrder($this->only(['deliveryOptions', 'lines']));
+            $newCarrier  = new Carrier($carrier->except(['capabilities', 'returnCapabilities']));
 
-        /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition */
-        foreach (Pdk::get('orderOptionDefinitions') as $definition) {
-            $inheritedValue = $triStateService->resolve(
-                $productHelper->get($definition),
-                $carrierHelper->get($definition)
+            $clonedOrder->deliveryOptions->carrier = $newCarrier;
+
+            $clonedOrder = $service->calculateShipmentOptions(
+                $clonedOrder,
+                PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS
             );
 
-            $deliveryOptions->shipmentOptions->setAttribute($definition->getShipmentOptionsKey(), $inheritedValue);
-        }
+            $clonedOrder->deliveryOptions->offsetUnset('carrier');
 
-        return $deliveryOptions;
+            return [$carrier->externalIdentifier => $clonedOrder->deliveryOptions->toArrayWithoutNull()];
+        });
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use InvalidArgumentException;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -230,7 +229,7 @@ class CarrierSettings extends AbstractSettingsModel
         $settings = Settings::all()->carrier->get($carrier);
 
         if (! $settings) {
-            throw new InvalidArgumentException("No settings found for $carrier");
+            return new CarrierSettings();
         }
 
         return clone $settings;
