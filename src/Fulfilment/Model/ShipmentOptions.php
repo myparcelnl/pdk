@@ -4,61 +4,88 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
- * @property bool   $age_check
+ * @property bool   $ageCheck
  * @property bool   $collect
- * @property bool   $cooled_delivery
- * @property string $delivery_date
- * @property int    $delivery_type
- * @property bool   $drop_off_at_postal_point
- * @property bool   $hide_sender
+ * @property bool   $cooledDelivery
+ * @property string $deliveryDate
+ * @property int    $deliveryType
+ * @property bool   $dropOffAtPostalPoint
+ * @property bool   $hideSender
  * @property int    $insurance
- * @property string $label_description
- * @property bool   $large_format
- * @property bool   $only_recipient
- * @property int    $package_type
+ * @property string $labelDescription
+ * @property bool   $largeFormat
+ * @property bool   $onlyRecipient
+ * @property int    $packageType
  * @property bool   $return
- * @property bool   $same_day_delivery
- * @property bool   $saturday_delivery
+ * @property bool   $sameDayDelivery
+ * @property bool   $saturdayDelivery
  * @property bool   $signature
  */
 class ShipmentOptions extends Model
 {
     public $attributes = [
-        'age_check'         => null,
-        'collect'           => null,
-        'cooled_delivery'   => null,
-        'delivery_date'     => null,
-        'delivery_type'     => null,
-        'hide_sender'       => null,
-        'insurance'         => null,
-        'label_description' => '',
-        'large_format'      => null,
-        'only_recipient'    => null,
-        'package_type'      => null,
-        'return'            => null,
-        'same_day_delivery' => null,
-        'saturday_delivery' => null,
-        'signature'         => null,
+        'ageCheck'         => null,
+        'collect'          => null,
+        'cooledDelivery'   => null,
+        'deliveryDate'     => null,
+        'deliveryType'     => null,
+        'hideSender'       => null,
+        'insurance'        => null,
+        'labelDescription' => '',
+        'largeFormat'      => null,
+        'onlyRecipient'    => null,
+        'packageType'      => null,
+        'return'           => null,
+        'sameDayDelivery'  => null,
+        'saturdayDelivery' => null,
+        'signature'        => null,
     ];
 
     public $casts      = [
-        'age_check'         => 'bool',
-        'collect'           => 'bool',
-        'cooled_delivery'   => 'bool',
-        'delivery_date'     => 'string',
-        'delivery_type'     => 'int',
-        'hide_sender'       => 'bool',
-        'insurance'         => 'int',
-        'label_description' => 'string',
-        'large_format'      => 'bool',
-        'only_recipient'    => 'bool',
-        'package_type'      => 'int',
-        'return'            => 'bool',
-        'same_day_delivery' => 'bool',
-        'saturday_delivery' => 'bool',
-        'signature'         => 'bool',
+        'ageCheck'         => 'bool',
+        'collect'          => 'bool',
+        'cooledDelivery'   => 'bool',
+        'deliveryDate'     => 'string',
+        'deliveryType'     => 'int',
+        'hideSender'       => 'bool',
+        'insurance'        => 'int',
+        'labelDescription' => 'string',
+        'largeFormat'      => 'bool',
+        'onlyRecipient'    => 'bool',
+        'packageType'      => 'int',
+        'return'           => 'bool',
+        'sameDayDelivery'  => 'bool',
+        'saturdayDelivery' => 'bool',
+        'signature'        => 'bool',
     ];
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $pdkDeliveryOptions
+     *
+     * @return static
+     */
+    public static function fromPdkDeliveryOptions(DeliveryOptions $pdkDeliveryOptions): self
+    {
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $orderOptionsService */
+        $orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
+
+        $calculated = $orderOptionsService->calculateShipmentOptions(
+            new PdkOrder(['deliveryOptions' => $pdkDeliveryOptions]),
+            PdkOrderOptionsServiceInterface::EXCLUDE_PRODUCT_SETTINGS | PdkOrderOptionsServiceInterface::EXCLUDE_CARRIER_SETTINGS
+        );
+
+        return new static(
+            array_replace($calculated->deliveryOptions->shipmentOptions->getAttributes(), [
+                'packageType'  => $pdkDeliveryOptions->getPackageTypeId(),
+                'deliveryType' => $pdkDeliveryOptions->getDeliveryTypeId(),
+            ])
+        );
+    }
 }

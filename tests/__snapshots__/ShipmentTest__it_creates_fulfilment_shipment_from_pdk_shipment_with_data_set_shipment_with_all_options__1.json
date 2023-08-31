@@ -20,21 +20,21 @@
         "weight": 1000
     },
     "options": {
-        "ageCheck": true,
+        "ageCheck": false,
         "collect": null,
         "cooledDelivery": null,
         "deliveryDate": null,
         "deliveryType": 2,
-        "hideSender": true,
-        "insurance": -1,
+        "hideSender": false,
+        "insurance": 0,
         "labelDescription": "",
-        "largeFormat": true,
-        "onlyRecipient": true,
+        "largeFormat": false,
+        "onlyRecipient": false,
         "packageType": 1,
-        "return": true,
-        "sameDayDelivery": true,
+        "return": false,
+        "sameDayDelivery": false,
         "saturdayDelivery": null,
-        "signature": true
+        "signature": false
     },
     "pickup": {
         "locationCode": "34653",

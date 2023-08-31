@@ -92,7 +92,6 @@ it('exposes inherited options', function () {
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                 DeliveryOptions::SHIPMENT_OPTIONS => [
-                    ShipmentOptions::LABEL_DESCRIPTION => '',
                     ShipmentOptions::INSURANCE         => TriStateService::DISABLED,
                     // Enabled by carrier, but disabled by product
                     ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
@@ -111,7 +110,6 @@ it('exposes inherited options', function () {
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                 DeliveryOptions::SHIPMENT_OPTIONS => [
-                    ShipmentOptions::LABEL_DESCRIPTION => '',
                     ShipmentOptions::INSURANCE         => TriStateService::DISABLED,
                     ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
                     ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,

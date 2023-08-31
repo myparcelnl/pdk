@@ -6,7 +6,6 @@ use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\LabelDescriptionDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
@@ -62,7 +61,6 @@ return [
             new DirectReturnDefinition(),
             new HideSenderDefinition(),
             new InsuranceDefinition(),
-            new LabelDescriptionDefinition(),
             new LargeFormatDefinition(),
             new OnlyRecipientDefinition(),
             new SameDayDeliveryDefinition(),

@@ -66,16 +66,11 @@ class Shipment extends Model
             return new self();
         }
 
-        $options = $pdkShipment->deliveryOptions->shipmentOptions;
-
-        $options['packageType']  = $pdkShipment->deliveryOptions->getPackageTypeId();
-        $options['deliveryType'] = $pdkShipment->deliveryOptions->getDeliveryTypeId();
-
         return new self([
             'carrier'            => $pdkShipment->carrier->id,
             'contractId'         => $pdkShipment->carrier->subscriptionId,
             'customsDeclaration' => $pdkShipment->customsDeclaration,
-            'options'            => $options,
+            'options'            => ShipmentOptions::fromPdkDeliveryOptions($pdkShipment->deliveryOptions),
             'pickup'             => $pdkShipment->deliveryOptions->pickupLocation,
             'recipient'          => $pdkShipment->recipient,
             'dropOffPoint'       => $pdkShipment->dropOffPoint,
