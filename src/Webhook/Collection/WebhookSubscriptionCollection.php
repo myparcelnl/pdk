@@ -22,7 +22,6 @@ class WebhookSubscriptionCollection extends Collection
     public function addIds(Collection $ids): self
     {
         $this->each(function (WebhookSubscription $shipment, int $index) use ($ids) {
-            $hallo = $ids->offsetGet($index);
             $shipment->fill($ids->offsetGet($index) ?? []);
             return $shipment;
         });
