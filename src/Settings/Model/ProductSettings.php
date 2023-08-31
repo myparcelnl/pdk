@@ -63,6 +63,7 @@ class ProductSettings extends AbstractSettingsModel
         self::COUNTRY_OF_ORIGIN        => TriStateService::TYPE_COERCED,
         self::CUSTOMS_CODE             => TriStateService::TYPE_COERCED,
         self::DISABLE_DELIVERY_OPTIONS => TriStateService::TYPE_STRICT,
+        self::DROP_OFF_DELAY           => 'int',
         self::EXPORT_AGE_CHECK         => TriStateService::TYPE_STRICT,
         self::EXPORT_HIDE_SENDER       => TriStateService::TYPE_STRICT,
         self::EXPORT_INSURANCE         => TriStateService::TYPE_STRICT,
@@ -70,6 +71,8 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
         self::EXPORT_RETURN            => TriStateService::TYPE_STRICT,
         self::EXPORT_SIGNATURE         => TriStateService::TYPE_STRICT,
+        self::FIT_IN_DIGITAL_STAMP     => 'int',
+        self::FIT_IN_MAILBOX           => 'int',
         self::PACKAGE_TYPE             => TriStateService::TYPE_COERCED,
     ];
 }

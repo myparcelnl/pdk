@@ -29,6 +29,7 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
+                "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
             },
@@ -45,6 +46,7 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
+                "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
             },

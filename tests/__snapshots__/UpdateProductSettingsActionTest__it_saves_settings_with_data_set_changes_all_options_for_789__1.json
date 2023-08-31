@@ -13,8 +13,8 @@
             "exportOnlyRecipient": 1,
             "exportReturn": 1,
             "exportSignature": 1,
+            "fitInDigitalStamp": -1,
             "fitInMailbox": 10,
-            "fitInDigitalStamp": 0,
             "packageType": "mailbox"
         }
     }
