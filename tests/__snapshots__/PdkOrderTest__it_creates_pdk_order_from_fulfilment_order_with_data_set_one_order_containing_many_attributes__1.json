@@ -126,6 +126,7 @@
                         "exportReturn": -1,
                         "exportSignature": -1,
                         "fitInMailbox": 0,
+                        "fitInDigitalStamp": 0,
                         "packageType": "package"
                     },
                     "mergedSettings": {
@@ -142,6 +143,7 @@
                         "exportReturn": -1,
                         "exportSignature": -1,
                         "fitInMailbox": 0,
+                        "fitInDigitalStamp": 0,
                         "packageType": "package"
                     },
                     "parent": null
