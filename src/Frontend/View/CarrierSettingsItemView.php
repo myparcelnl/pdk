@@ -126,15 +126,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
     /**
      * @param  string $name
      *
-     * @return null|\MyParcelNL\Pdk\Frontend\Form\InteractiveElement
+     * @return \MyParcelNL\Pdk\Frontend\Form\InteractiveElement
      */
-    private function createInsuranceElement(string $name): ?InteractiveElement
+    private function createInsuranceElement(string $name): InteractiveElement
     {
         $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
-
-        if (! count($insuranceAmounts)) {
-            return null;
-        }
 
         $options = array_map(function (int $amount) {
             return $this->currencyService->format($amount);
@@ -431,7 +427,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                             'max' => Pdk::get('insuranceFactorMax'),
                         ],
                     ]
-                )
+                ),
             ),
         ];
     }

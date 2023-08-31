@@ -6,11 +6,20 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 
 use BadMethodCallException;
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
+use Throwable;
 
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {
@@ -44,19 +53,9 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
-     *
-     * @return bool
-     */
-    public function canHave(OrderOptionDefinitionInterface $definition): bool
-    {
-        return (bool) $this->getShipmentOption($definition->getShipmentOptionsKey());
-    }
-
     public function canHaveAgeCheck(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::AGE_CHECK);
+        return $this->canHave(AgeCheckDefinition::class);
     }
 
     public function canHaveDate(): bool
@@ -66,7 +65,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function canHaveDirectReturn(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::DIRECT_RETURN);
+        return $this->canHave(DirectReturnDefinition::class);
     }
 
     public function canHaveEveningDelivery(): bool
@@ -79,7 +78,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function canHaveHideSender(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::HIDE_SENDER);
+        return $this->canHave(HideSenderDefinition::class);
     }
 
     /**
@@ -91,12 +90,12 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function canHaveInsurance(?int $amount = 0): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::INSURANCE);
+        return $this->canHave(InsuranceDefinition::class);
     }
 
     public function canHaveLargeFormat(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::LARGE_FORMAT);
+        return $this->canHave(LargeFormatDefinition::class);
     }
 
     public function canHaveMorningDelivery(): bool
@@ -111,7 +110,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function canHaveOnlyRecipient(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::ONLY_RECIPIENT);
+        return $this->canHave(OnlyRecipientDefinition::class);
     }
 
     public function canHavePickup(): bool
@@ -121,12 +120,12 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function canHaveSameDayDelivery(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::SAME_DAY_DELIVERY);
+        return $this->canHave(SameDayDeliveryDefinition::class);
     }
 
     public function canHaveSignature(): bool
     {
-        return (bool) $this->getShipmentOption(ShipmentOptions::SIGNATURE);
+        return $this->canHave(SignatureDefinition::class);
     }
 
     public function canHaveWeight(?int $weight): bool
@@ -136,7 +135,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function getAllowedInsuranceAmounts(): array
     {
-        return $this->getShipmentOption(ShipmentOptions::INSURANCE) ?: [];
+        return $this->getShipmentOption(InsuranceDefinition::class) ?: [];
     }
 
     public function getAllowedPackageTypes(): array
@@ -146,7 +145,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getSchema(): array
     {
@@ -194,12 +192,26 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
+     * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
+     *
+     * @return bool
+     */
+    private function canHave($definition): bool
+    {
+        return (bool) $this->getShipmentOption($definition);
+    }
+
+    /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function createSchema(): array
     {
-        return $this->getCarrier()->capabilities->toArray();
+        try {
+            return $this->getCarrier()->capabilities->toArray();
+        } catch (Throwable $e) {
+            Logger::error('Could not get capabilities from carrier', ['exception' => $e]);
+            return [];
+        }
     }
 
     /**
@@ -223,13 +235,15 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
-     * @param  string $shipmentOption
+     * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
      *
      * @return mixed
      */
-    private function getShipmentOption(string $shipmentOption)
+    private function getShipmentOption($definition)
     {
-        return $this->getFromSchema(sprintf('shipmentOptions.%s', $shipmentOption));
+        $resolvedDefinition = $this->resolveDefinition($definition);
+
+        return $this->getFromSchema(sprintf('shipmentOptions.%s', $resolvedDefinition->getShipmentOptionsKey()));
     }
 
     /**
@@ -240,5 +254,20 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     private function hasDeliveryType(string $deliveryType): bool
     {
         return in_array($deliveryType, $this->getFromSchema('deliveryTypes') ?? [], true);
+    }
+
+    /**
+     * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
+     *
+     * @return \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface
+     */
+    private function resolveDefinition($definition): OrderOptionDefinitionInterface
+    {
+        /** @var OrderOptionDefinitionInterface $resolvedDefinition */
+        $resolvedDefinition = $definition instanceof OrderOptionDefinitionInterface
+            ? $definition
+            : new $definition();
+
+        return $resolvedDefinition;
     }
 }

@@ -19,7 +19,10 @@ class TriStateService implements TriStateServiceInterface
      * This type is cast to -1 if the value is falsy, but is preserved otherwise.
      */
     public const TYPE_COERCED = 'triStateCoerced';
-    public const TYPE_STRING  = 'triStateString';
+    /**
+     * Replaces falsy values with '' and casts others to string.
+     */
+    public const TYPE_STRING = 'triStateString';
 
     /**
      * @param  mixed $value

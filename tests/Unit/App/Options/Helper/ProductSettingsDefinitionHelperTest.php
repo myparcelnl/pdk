@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DropOffDelayDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
@@ -46,6 +47,7 @@ it('gets value from product settings', function (string $definitionClass, $resul
     'customs code'             => [CustomsCodeDefinition::class, TriStateService::INHERIT],
     'disable delivery options' => [DisableDeliveryOptionsDefinition::class, TriStateService::INHERIT],
     'drop off delay'           => [DropOffDelayDefinition::class, TriStateService::INHERIT],
+    'fit in digital stamp'     => [FitInDigitalStampDefinition::class, TriStateService::INHERIT],
     'fit in mailbox'           => [FitInMailboxDefinition::class, TriStateService::INHERIT],
     'package type'             => [PackageTypeDefinition::class, TriStateService::INHERIT],
 ]);
