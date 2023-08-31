@@ -62,6 +62,12 @@ it('merges parent settings correctly', function (
     ])
     ->with('triState3');
 
+it('creates a storable array', function () {
+    $product = factory(PdkProduct::class)->make();
+
+    expect($product->toStorableArray())->toHaveKeys(['externalIdentifier', 'settings']);
+});
+
 it('calculates other options for child products', function (string $definitionClass, $input, $output) {
     /** @var OrderOptionDefinitionInterface $definition */
     $definition = new $definitionClass();
