@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.18.0](https://github.com/myparcelnl/pdk/compare/v2.17.1...v2.18.0) (2023-08-31)
+
+
+### :sparkles: New Features
+
+* **product-settings:** add fit in digital stamp ([#170](https://github.com/myparcelnl/pdk/issues/170)) ([8040855](https://github.com/myparcelnl/pdk/commit/8040855954b2ac3e4aa358923c72f508d7bb80a0))
+* **settings:** implement send return email setting ([#153](https://github.com/myparcelnl/pdk/issues/153)) ([52ce7e1](https://github.com/myparcelnl/pdk/commit/52ce7e1e2fa5af15c48882b5f20bc6eeaa831355))
+
 ## [2.17.1](https://github.com/myparcelnl/pdk/compare/v2.17.0...v2.17.1) (2023-08-30)
 
 
