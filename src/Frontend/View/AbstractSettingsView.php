@@ -241,7 +241,7 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function toSelectOptions(array $array, int $displayOptions = 0): array
     {
-        $associativeArray = (Arr::isAssoc($array) ? $array : array_combine($array, $array)) ?? [];
+        $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
 
         $options = array_map(static function ($value, $key) use ($displayOptions) {
             $labelKey = $displayOptions & self::SELECT_USE_PLAIN_LABEL ? 'plainLabel' : 'label';
@@ -252,9 +252,7 @@ abstract class AbstractSettingsView implements Arrayable
             ];
         }, $associativeArray, array_keys($associativeArray));
 
-        $options = $this->addDefaultOption($options, $displayOptions);
-
-        return $options;
+        return $this->addDefaultOption($options, $displayOptions);
     }
 
     /**
@@ -328,7 +326,7 @@ abstract class AbstractSettingsView implements Arrayable
      * @param  string   $key
      * @param  callable $closure
      *
-     * @return void
+     * @return array|null
      */
     private function cacheToArray(string $key, callable $closure): ?array
     {

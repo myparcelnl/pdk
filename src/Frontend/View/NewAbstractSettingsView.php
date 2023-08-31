@@ -56,7 +56,6 @@ abstract class NewAbstractSettingsView implements Arrayable
         return [
             'id'          => $this->getPrefix(),
             'title'       => $this->label('title'),
-            'titleSuffix' => $this->getTitleSuffix(),
             'description' => $this->label('description'),
             'elements'    => $this->getElements(),
             'children'    => $this->getChildren(),
@@ -137,14 +136,6 @@ abstract class NewAbstractSettingsView implements Arrayable
 
             return $builder->make();
         });
-    }
-
-    /**
-     * @return null|string
-     */
-    private function getTitleSuffix(): ?string
-    {
-        return null;
     }
 
     /**

@@ -80,10 +80,11 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface $builder
-     * @param  null|callable                                                                   $callback
+     * @template T of FormSubOperationBuilderInterface
+     * @param  T             $builder
+     * @param  null|callable $callback
      *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface
+     * @return T
      */
     protected function addBuilder(
         FormSubOperationBuilderInterface $builder,
@@ -97,7 +98,7 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     /**
      * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSingletonOperationInterface $operation
      * @param  null|string                                                                    $target
-     * @param  null                                                                           $valueOrCallback
+     * @param  callable|scalar                                                                $valueOrCallback
      *
      * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */

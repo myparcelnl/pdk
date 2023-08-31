@@ -24,7 +24,7 @@ class PlainElement implements ElementInterface
     public $props;
 
     /**
-     * @var \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder
+     * @var null|\MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder
      */
     private $builder;
 

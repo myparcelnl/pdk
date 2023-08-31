@@ -16,7 +16,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     use HasHooks;
 
     /**
-     * @var \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder
+     * @var null|\MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder
      */
     protected $builder;
 
@@ -94,7 +94,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     /**
      * @param  array $attributes
      *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface
+     * @return $this
      */
     public function withAttributes(array $attributes): ElementBuilderInterface
     {

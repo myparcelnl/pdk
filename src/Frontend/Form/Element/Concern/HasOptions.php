@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
 
 /**
- * @implements ElementBuilderWithOptionsInterface
+ * @see ElementBuilderWithOptionsInterface
  */
 trait HasOptions
 {
@@ -68,7 +68,7 @@ trait HasOptions
      */
     protected function toSelectOptions(array $array, int $flags = 0): array
     {
-        $associativeArray = (Arr::isAssoc($array) ? $array : array_combine($array, $array)) ?? [];
+        $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
 
         $options = array_map(function ($value, string $key) use ($flags) {
             $usePlainLabel = $flags & ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL;

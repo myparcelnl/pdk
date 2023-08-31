@@ -34,7 +34,7 @@ abstract class AbstractFormBuilderCore implements FormOperationBuilderInterface
 
     public function __isset($name)
     {
-        $this->throwOnAccessorMethod();
+        return false;
     }
 
     public function __set($name, $value)

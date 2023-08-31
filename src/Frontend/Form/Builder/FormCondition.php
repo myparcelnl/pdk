@@ -30,7 +30,7 @@ final class FormCondition extends AbstractFormBuilderCore implements FormConditi
     protected $target;
 
     /**
-     * @var scalar
+     * @var scalar|scalar[]
      */
     protected $value;
 

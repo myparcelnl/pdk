@@ -30,6 +30,26 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
     abstract protected function getOperationKey(): string;
 
     /**
+     * @return null[]|string[]
+     */
+    public function createArray(): array
+    {
+        $array = [
+            '$target' => $this->target,
+        ];
+
+        if (! empty($this->conditions)) {
+            $array['$if'] = array_filter(
+                array_map(static function (FormConditionInterface $condition) {
+                    return $condition->toArray();
+                }, $this->conditions)
+            );
+        }
+
+        return $array;
+    }
+
+    /**
      * @param  null|string   $target
      * @param  null|callable $callable
      *
@@ -55,25 +75,5 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
         return [
             $this->getOperationKey() => Utils::filterNull(array_filter($this->createArray())),
         ];
-    }
-
-    /**
-     * @return null[]|string[]
-     */
-    protected function createArray(): array
-    {
-        $array = [
-            '$target' => $this->target,
-        ];
-
-        if (! empty($this->conditions)) {
-            $array['$if'] = array_filter(
-                array_map(static function (FormConditionInterface $condition) {
-                    return $condition->toArray();
-                }, $this->conditions)
-            );
-        }
-
-        return $array;
     }
 }
