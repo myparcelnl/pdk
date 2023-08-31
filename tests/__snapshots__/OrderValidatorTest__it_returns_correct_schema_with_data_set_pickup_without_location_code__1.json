@@ -59,10 +59,6 @@
                     "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
                 },
                 "deliveryType": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
                     "enum": [
                         "morning",
                         "standard",
@@ -75,10 +71,10 @@
                     "type": [
                         "integer",
                         "null"
-                    ]
+                    ],
+                    "minimum": 1
                 },
                 "packageType": {
-                    "type": "string",
                     "enum": [
                         "digital_stamp",
                         "letter",
@@ -256,7 +252,6 @@
             }
         },
         "multiCollo": {
-            "type": "boolean",
             "enum": [
                 1
             ]

@@ -13,7 +13,7 @@ use RuntimeException;
 class OrderValidator extends OrderPropertiesValidator implements OrderValidatorInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\App\Order\Model\PdkOrder
+     * @var null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
     protected $order;
 

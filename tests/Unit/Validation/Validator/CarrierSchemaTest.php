@@ -15,7 +15,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-function setup(): CarrierSchema
+function createSchema(): CarrierSchema
 {
     $carrier = factory(Carrier::class)
         ->withName('fake')
@@ -35,73 +35,73 @@ it('throws error if carrier is not set', function () {
 })->throws(BadMethodCallException::class);
 
 it('can be digital stamp', function () {
-    expect(setup()->canBeDigitalStamp())->toBeTrue();
+    expect(createSchema()->canBeDigitalStamp())->toBeTrue();
 });
 
 it('can be letter', function () {
-    expect(setup()->canBeLetter())->toBeTrue();
+    expect(createSchema()->canBeLetter())->toBeTrue();
 });
 
 it('can be mailbox', function () {
-    expect(setup()->canBeMailbox())->toBeTrue();
+    expect(createSchema()->canBeMailbox())->toBeTrue();
 });
 
 it('can be package', function () {
-    expect(setup()->canBePackage())->toBeTrue();
+    expect(createSchema()->canBePackage())->toBeTrue();
 });
 
 it('can have age check', function () {
-    expect(setup()->canHaveAgeCheck())->toBeTrue();
+    expect(createSchema()->canHaveAgeCheck())->toBeTrue();
 });
 
 it('can have date', function () {
-    expect(setup()->canHaveDate())->toBeTrue();
+    expect(createSchema()->canHaveDate())->toBeTrue();
 });
 
 it('can have direct return', function () {
-    expect(setup()->canHaveDirectReturn())->toBeTrue();
+    expect(createSchema()->canHaveDirectReturn())->toBeTrue();
 });
 
 it('can have evening delivery', function () {
-    expect(setup()->canHaveEveningDelivery())->toBeTrue();
+    expect(createSchema()->canHaveEveningDelivery())->toBeTrue();
 });
 
 it('can have hide sender', function () {
-    expect(setup()->canHaveHideSender())->toBeTrue();
+    expect(createSchema()->canHaveHideSender())->toBeTrue();
 });
 
 it('can have insurance', function () {
-    expect(setup()->canHaveInsurance())->toBeTrue();
+    expect(createSchema()->canHaveInsurance())->toBeTrue();
 });
 
 it('can have large format', function () {
-    expect(setup()->canHaveLargeFormat())->toBeTrue();
+    expect(createSchema()->canHaveLargeFormat())->toBeTrue();
 });
 
 it('can have morning delivery', function () {
-    expect(setup()->canHaveMorningDelivery())->toBeTrue();
+    expect(createSchema()->canHaveMorningDelivery())->toBeTrue();
 });
 
 it('can have multi collo', function () {
-    expect(setup()->canHaveMultiCollo())->toBeTrue();
+    expect(createSchema()->canHaveMultiCollo())->toBeTrue();
 });
 
 it('can have only recipient', function () {
-    expect(setup()->canHaveOnlyRecipient())->toBeTrue();
+    expect(createSchema()->canHaveOnlyRecipient())->toBeTrue();
 });
 
 it('can have pickup', function () {
-    expect(setup()->canHavePickup())->toBeTrue();
+    expect(createSchema()->canHavePickup())->toBeTrue();
 });
 
 it('can have same day delivery', function () {
-    expect(setup()->canHaveSameDayDelivery())->toBeTrue();
+    expect(createSchema()->canHaveSameDayDelivery())->toBeTrue();
 });
 
 it('can have signature', function () {
-    expect(setup()->canHaveSignature())->toBeTrue();
+    expect(createSchema()->canHaveSignature())->toBeTrue();
 });
 
 it('can have weight', function () {
-    expect(setup()->canHaveWeight(100))->toBeTrue();
+    expect(createSchema()->canHaveWeight(100))->toBeTrue();
 });

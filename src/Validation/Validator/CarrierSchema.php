@@ -16,10 +16,8 @@ use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
-use Throwable;
 
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {
@@ -133,6 +131,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return true;
     }
 
+    public function getAllowedDeliveryTypes(): array
+    {
+        return $this->getFromSchema('deliveryTypes') ?: [];
+    }
+
     public function getAllowedInsuranceAmounts(): array
     {
         return $this->getShipmentOption(InsuranceDefinition::class) ?: [];
@@ -201,17 +204,10 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return (bool) $this->getShipmentOption($definition);
     }
 
-    /**
-     * @return array
-     */
     private function createSchema(): array
     {
-        try {
-            return $this->getCarrier()->capabilities->toArray();
-        } catch (Throwable $e) {
-            Logger::error('Could not get capabilities from carrier', ['exception' => $e]);
-            return [];
-        }
+        /** @noinspection PhpUnhandledExceptionInspection */
+        return $this->getCarrier()->capabilities->toArray();
     }
 
     /**
@@ -253,7 +249,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     private function hasDeliveryType(string $deliveryType): bool
     {
-        return in_array($deliveryType, $this->getFromSchema('deliveryTypes') ?? [], true);
+        return in_array($deliveryType, $this->getAllowedDeliveryTypes(), true);
     }
 
     /**

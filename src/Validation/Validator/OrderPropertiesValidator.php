@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation\Validator;
 
+use DateTimeImmutable;
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
@@ -13,7 +14,9 @@ use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 use MyParcelNL\Pdk\Validation\Contract\SchemaInterface;
@@ -58,7 +61,9 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveDate(): bool
     {
-        return $this->canHaveOption(sprintf('%s.date', self::DELIVERY_OPTIONS_KEY), null);
+        $testDate = (new DateTimeImmutable())->format(Pdk::get('defaultDateFormat'));
+
+        return $this->canHaveOption([self::DELIVERY_OPTIONS_KEY, DeliveryOptions::DATE], $testDate);
     }
 
     /**
@@ -74,7 +79,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveEveningDelivery(): bool
     {
-        return $this->canHaveOption(sprintf('%s.eveningDelivery', self::DELIVERY_OPTIONS_KEY));
+        return in_array(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME, $this->getAllowedDeliveryTypes(), true);
     }
 
     /**
@@ -108,15 +113,17 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveMorningDelivery(): bool
     {
-        return $this->canHaveOption(sprintf('%s.morningDelivery', self::DELIVERY_OPTIONS_KEY));
+        return in_array(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME, $this->getAllowedDeliveryTypes(), true);
     }
 
     /**
+     * Check if label amount can be more than 1
+     *
      * @return bool
      */
     public function canHaveMultiCollo(): bool
     {
-        return $this->canHaveOption('properties.multiCollo', true);
+        return $this->canHaveOption([self::DELIVERY_OPTIONS_KEY, DeliveryOptions::LABEL_AMOUNT], 2);
     }
 
     /**
@@ -132,7 +139,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHavePickup(): bool
     {
-        return $this->canHaveOption(sprintf('%s.pickup', self::DELIVERY_OPTIONS_KEY));
+        return in_array(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME, $this->getAllowedDeliveryTypes(), true);
     }
 
     /**
@@ -140,7 +147,7 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
      */
     public function canHaveSameDayDelivery(): bool
     {
-        return $this->canHaveOptionDef(SameDayDeliveryDefinition::class, self::DELIVERY_OPTIONS_KEY);
+        return $this->canHaveOptionDef(SameDayDeliveryDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**
@@ -164,20 +171,19 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     /**
      * @return array
      */
+    public function getAllowedDeliveryTypes(): array
+    {
+        return $this->getValidOptions(sprintf('%s.deliveryType', self::DELIVERY_OPTIONS_KEY));
+    }
+
     public function getAllowedInsuranceAmounts(): array
     {
-        return $this->repository->getValidOptions(
-            $this->getSchema(),
-            $this->getKey(InsuranceDefinition::class, self::SHIPMENT_OPTIONS_KEY)
-        );
+        return $this->getValidOptions($this->getKey(InsuranceDefinition::class, self::SHIPMENT_OPTIONS_KEY));
     }
 
     public function getAllowedPackageTypes(): array
     {
-        return $this->repository->getValidOptions(
-            $this->getSchema(),
-            self::SHIPMENT_OPTIONS_KEY . '.properties.packageType'
-        );
+        return $this->getValidOptions(sprintf('%s.properties.packageType', self::SHIPMENT_OPTIONS_KEY));
     }
 
     /**
@@ -197,14 +203,14 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     }
 
     /**
-     * @param  string $option
-     * @param  mixed  $value
+     * @param  string|string[] $option
+     * @param  mixed           $value
      *
      * @return bool
      */
-    protected function canHaveOption(string $option, $value = TriStateService::ENABLED): bool
+    protected function canHaveOption($option, $value = TriStateService::ENABLED): bool
     {
-        return $this->repository->validateOption($this->getSchema(), $option, $value);
+        return $this->repository->validateOption($this->getSchema(), implode('.', Arr::wrap($option)), $value);
     }
 
     /**
@@ -234,5 +240,15 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
         $instance = new $definitionClass();
 
         return sprintf('%s.%s', $prefix, $instance->getShipmentOptionsKey());
+    }
+
+    /**
+     * @param  string $key
+     *
+     * @return array
+     */
+    private function getValidOptions(string $key): array
+    {
+        return $this->repository->getValidOptions($this->getSchema(), $key);
     }
 }
