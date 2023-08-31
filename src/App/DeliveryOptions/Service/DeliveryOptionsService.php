@@ -107,7 +107,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         foreach ($carriers->all() as $carrier) {
             $identifier                               = $carrier->externalIdentifier;
             $settings['carrierSettings'][$identifier] =
-                $this->createCarrierSettings($carrier, $cart, $showPriceSurcharge);
+                $this->createCarrierSettings($carrier, $cart);
         }
 
         return $settings;
@@ -116,12 +116,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     * @param  bool                                   $showPriceSurcharge
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(Carrier $carrier, PdkCart $cart, bool $showPriceSurcharge): array
+    private function createCarrierSettings(Carrier $carrier, PdkCart $cart): array
     {
         $carrierSettings = new CarrierSettings(
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
@@ -130,7 +129,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $dropOff             = $this->dropOffService->getForDate($carrierSettings);
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
-        $settings = $this->getBaseSettings($carrierSettings, $cart, $showPriceSurcharge);
+        $settings = $this->getBaseSettings($carrierSettings, $cart);
 
         return array_merge(
             $settings,
@@ -147,13 +146,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart         $cart
-     * @param  bool                                           $showPriceSurcharge
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getBaseSettings(CarrierSettings $carrierSettings, PdkCart $cart, bool $showPriceSurcharge): array
+    private function getBaseSettings(CarrierSettings $carrierSettings, PdkCart $cart): array
     {
+        $showPriceSurcharge =
+            Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID) === CheckoutSettings::PRICE_TYPE_INCLUDED;
+
         return array_map(function ($key) use ($carrierSettings, $cart, $showPriceSurcharge) {
             $value = $carrierSettings->getAttribute($key);
 
