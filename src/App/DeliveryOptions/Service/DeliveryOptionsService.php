@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -93,14 +94,20 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         [$packageType, $carriers] = $this->getValidCarrierOptions($cart);
 
+        $showPriceSurcharge =
+            Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID) === CheckoutSettings::PRICE_TYPE_INCLUDED;
+
         $settings = [
-            'packageType'     => $packageType,
-            'carrierSettings' => [],
+            'packageType'           => $packageType,
+            'carrierSettings'       => [],
+            'basePrice'             => $cart->shipmentPrice,
+            'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
         foreach ($carriers->all() as $carrier) {
             $identifier                               = $carrier->externalIdentifier;
-            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart);
+            $settings['carrierSettings'][$identifier] =
+                $this->createCarrierSettings($carrier, $cart, $showPriceSurcharge);
         }
 
         return $settings;
@@ -109,11 +116,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     * @param  bool                                   $showPriceSurcharge
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(Carrier $carrier, PdkCart $cart): array
+    private function createCarrierSettings(Carrier $carrier, PdkCart $cart, bool $showPriceSurcharge): array
     {
         $carrierSettings = new CarrierSettings(
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
@@ -122,7 +130,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $dropOff             = $this->dropOffService->getForDate($carrierSettings);
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
-        $settings = $this->getBaseSettings($carrierSettings);
+        $settings = $this->getBaseSettings($carrierSettings, $cart, $showPriceSurcharge);
 
         return array_merge(
             $settings,
@@ -138,17 +146,21 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart         $cart
+     * @param  bool                                           $showPriceSurcharge
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getBaseSettings(CarrierSettings $carrierSettings): array
+    private function getBaseSettings(CarrierSettings $carrierSettings, PdkCart $cart, bool $showPriceSurcharge): array
     {
-        return array_map(function ($key) use ($carrierSettings) {
+        return array_map(function ($key) use ($carrierSettings, $cart, $showPriceSurcharge) {
             $value = $carrierSettings->getAttribute($key);
 
             if (Str::startsWith($key, 'price')) {
-                return $this->taxService->getShippingDisplayPrice((float) $value);
+                $subtotal = $this->taxService->getShippingDisplayPrice((float) $value);
+
+                return $showPriceSurcharge ? $subtotal + $cart->shipmentPrice / 100 : $subtotal;
             }
 
             return $value;
@@ -173,7 +185,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             $filteredCarriers = $allCarriers
                 ->filter(
                     function (Carrier $carrier) use ($cart, $weight, $packageType, $carrierSettings): bool {
-                        $hasDeliveryOptions = $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
+                        $hasDeliveryOptions =
+                            $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
 
                         if (! $hasDeliveryOptions) {
                             return false;

@@ -46,6 +46,7 @@ it('can be instantiated', function () {
             'pickupLocationsDefaultView' => $pickupLocationsDefaultView,
             'platform'                   => 'myparcel',
             'showPriceSurcharge'         => false,
+            'priceStandardDelivery'      => 0,
         ]);
 });
 
@@ -134,5 +135,6 @@ it('can be instantiated from a cart', function () {
             'platform'                   => 'myparcel',
             'showPriceSurcharge'         => false,
             'apiBaseUrl'                 => 'https://api.myparcel.nl',
+            'priceStandardDelivery'      => 0,
         ]);
 });

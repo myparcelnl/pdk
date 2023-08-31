@@ -26,5 +26,7 @@
             "cutoffTime": null,
             "cutoffTimeSameDay": null
         }
-    }
+    },
+    "basePrice": 0,
+    "priceStandardDelivery": 0
 }
