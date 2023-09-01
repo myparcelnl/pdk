@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -95,3 +96,16 @@ it('gets carriers in correct order', function () {
             Carrier::CARRIER_DHL_EUROPLUS_NAME,
         ]);
 });
+
+it('checks subscription features in non-existent account', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
+    $repository = Pdk::get(PdkAccountRepositoryInterface::class);
+
+    $repository->store(null);
+
+    $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
+
+    expect($result)->toBeFalse();
+});
+
+

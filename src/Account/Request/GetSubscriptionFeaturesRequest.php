@@ -15,9 +15,4 @@ class GetSubscriptionFeaturesRequest extends Request
     {
         return '/acl';
     }
-
-    public function getResponseProperty(): ?string
-    {
-        return 'subscription_features';
-    }
 }
