@@ -11,7 +11,9 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -106,6 +108,20 @@ it('checks subscription features in non-existent account', function () {
     $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
 
     expect($result)->toBeFalse();
+});
+
+it('checks subscription features in account', function () {
+    TestBootstrapper::hasAccount();
+
+    factory(Account::class)
+        ->withSubscriptionFeatures([
+            Account::FEATURE_ORDER_NOTES,
+        ])
+        ->store();
+
+    $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
+
+    expect($result)->toBeTrue();
 });
 
 
