@@ -80,7 +80,7 @@ class ExportOrderAction extends AbstractOrderAction
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
         if (! Settings::get(GeneralSettings::ORDER_MODE, GeneralSettings::ID)) {
-            return $this->exportShipments($orders, $request);
+            return $this->exportShipments($orders);
         }
 
         $response = $this->exportOrders($orders);
@@ -133,15 +133,13 @@ class ExportOrderAction extends AbstractOrderAction
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     * @param  \Symfony\Component\HttpFoundation\Request               $request
      *
      * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      * @throws \Exception
      */
-    protected function exportShipments(PdkOrderCollection $orders, Request $request): PdkOrderCollection
+    protected function exportShipments(PdkOrderCollection $orders): PdkOrderCollection
     {
-        $data      = json_decode($request->getContent(), true);
-        $shipments = $orders->generateShipments($data['data']['orders'][0] ?? []);
+        $shipments = $orders->generateShipments();
 
         if ($shipments->isEmpty()) {
             return $orders;

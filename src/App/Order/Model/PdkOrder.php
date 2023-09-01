@@ -168,30 +168,23 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @param  array $data
-     *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      * @throws \Exception
      */
-    public function createShipment(array $data = []): Shipment
+    public function createShipment(): Shipment
     {
-        $deliveryOptions = $data['deliveryOptions'] ?? $this->deliveryOptions;
+        $deliveryOptions = $this->deliveryOptions;
 
-        return new Shipment(
-            array_replace_recursive(
-                [
-                    'customsDeclaration'  => $this->customsDeclaration,
-                    'deliveryOptions'     => $deliveryOptions,
-                    'recipient'           => $this->shippingAddress,
-                    'sender'              => $this->senderAddress,
-                    'referenceIdentifier' => $this->externalIdentifier,
-                    'carrier'             => $deliveryOptions->carrier,
-                    'orderId'             => $this->externalIdentifier,
-                    'dropOffPoint'        => null,
-                ],
-                $data
-            )
-        );
+        return new Shipment([
+            'customsDeclaration'  => $this->customsDeclaration,
+            'deliveryOptions'     => $deliveryOptions,
+            'recipient'           => $this->shippingAddress,
+            'sender'              => $this->senderAddress,
+            'referenceIdentifier' => $this->externalIdentifier,
+            'carrier'             => $deliveryOptions->carrier,
+            'orderId'             => $this->externalIdentifier,
+            'dropOffPoint'        => null,
+        ]);
     }
 
     /**

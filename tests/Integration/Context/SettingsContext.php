@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
 
 /**
@@ -90,6 +91,22 @@ final class SettingsContext extends AbstractContext
     }
 
     /**
+     * @Given the :category setting :setting is :value
+     */
+    public function theSettingIsValue(string $category, string $setting, $value): void
+    {
+        $resolvedValue = $this->resolveSettingValue($value);
+
+        factory(\MyParcelNL\Pdk\Settings\Model\Settings::class)
+            ->with([
+                $category => [
+                    $setting => $resolvedValue,
+                ],
+            ])
+            ->store();
+    }
+
+    /**
      * @param  bool $valid
      *
      * @return void
@@ -104,5 +121,24 @@ final class SettingsContext extends AbstractContext
         }
 
         self::assertFalse($isValid, 'API key is not marked as invalid');
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return mixed
+     */
+    private function resolveSettingValue($value)
+    {
+        switch ($value) {
+            case 'enabled':
+                return true;
+
+            case 'disabled':
+                return false;
+
+            default:
+                return $value;
+        }
     }
 }

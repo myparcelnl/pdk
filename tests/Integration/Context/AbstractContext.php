@@ -10,19 +10,25 @@ use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeStepScope;
+use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Hook\Scope\HookScope;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
+use MyParcelNL\Pdk\Tests\Integration\Context\Concern\ResolvesModels;
 use MyParcelNL\Pdk\Tests\Integration\Context\Concern\ValidatesValues;
 use MyParcelNL\Pdk\Tests\Integration\Context\Contract\ContextInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractContext extends TestCase implements ContextInterface
 {
     use ValidatesValues;
+    use ResolvesModels;
 
     private const BEFORE_STEP     = 'beforeStep';
     private const BEFORE_SUITE    = 'beforeSuite';
@@ -94,6 +100,20 @@ abstract class AbstractContext extends TestCase implements ContextInterface
     final public static function beforeSuite(BeforeSuiteScope $scope): void
     {
         self::executeHooks(self::BEFORE_SUITE, $scope);
+    }
+
+    /**
+     * @param  string $message
+     *
+     * @return string
+     */
+    protected static function withLogs(string $message): string
+    {
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+        $logger   = Pdk::get(LoggerInterface::class);
+        $logsJson = json_encode($logger->getLogs(), JSON_PRETTY_PRINT);
+
+        return trim(sprintf('%s Logs: %s', $message, $logsJson));
     }
 
     /**
@@ -275,6 +295,31 @@ abstract class AbstractContext extends TestCase implements ContextInterface
     protected function onBeforeSuite(callable $callable): void
     {
         $this->addHook(self::BEFORE_SUITE, $callable);
+    }
+
+    /**
+     * @param  null|\Behat\Gherkin\Node\TableNode $table
+     *
+     * @return array
+     */
+    protected function parseTable(?TableNode $table): ?array
+    {
+        if (! $table) {
+            return null;
+        }
+
+        $collection = new Collection($table->getRows());
+
+        return $collection
+            ->mapWithKeys(static function (array $item): array {
+                [$key, $value] = $item;
+
+                return [$key => $value];
+            })
+            ->filter(static function ($value, string $key): bool {
+                return 'key' !== $key;
+            })
+            ->toArray();
     }
 
     /**

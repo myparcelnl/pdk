@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * @extends \MyParcelNL\Pdk\Tests\Bootstrap\TestCase
+ * @extends \MyParcelNL\Pdk\Tests\Integration\Context\Concern\ResolvesModels
  */
 trait ValidatesValues
 {
@@ -43,7 +43,7 @@ trait ValidatesValues
 
         $actualValue = Arr::get($body, $key);
 
-        $this->validateByType($type, $entity, $key, $actualValue);
+        $this->validateByType($value, $key, $actualValue);
     }
 
     /**
@@ -94,29 +94,26 @@ trait ValidatesValues
     }
 
     /**
-     * @param  string $type
-     * @param  string $entity
+     * @param  string $entityResolver
      * @param  string $key
      * @param  mixed  $actualValue
      *
      * @return void
      */
-    protected function validateByType(string $type, string $entity, string $key, $actualValue): void
+    protected function validateByType(string $entityResolver, string $key, $actualValue): void
     {
+        $entity = $this->resolveModel($entityResolver);
+
         $match = preg_replace_callback_array([
-            '/ACCOUNT_(\w+)/' => function ($matches) {
-                return $this->matchModelProperty(AccountSettings::getAccount(), $matches[1]);
-            },
-
-            '/SHOP_(\w+)/' => function ($matches) {
-                return $this->matchModelProperty(AccountSettings::getShop(), $matches[1]);
-            },
-
             '/PLATFORM_(\w+)/' => static function ($matches) {
                 return Platform::get(strtolower($matches[1]));
             },
 
-        ], $entity);
+            // Matches models defined in ResolvesModels
+            '/\w+:(\w+)/'      => function ($matches) use ($entity) {
+                return $this->matchModelProperty($entity, $matches[1]);
+            },
+        ], $entityResolver);
 
         self::assertEquals((string) $match, (string) $actualValue, "Value for key '$key' does not match");
     }

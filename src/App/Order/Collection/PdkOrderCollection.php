@@ -34,17 +34,15 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @param  array $data Data to pass into each created shipment.
-     *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @throws \Exception
      */
-    public function generateShipments(array $data = []): ShipmentCollection
+    public function generateShipments(): ShipmentCollection
     {
         $newShipments = new ShipmentCollection();
 
-        $this->each(function (PdkOrder $order) use ($newShipments, $data) {
-            $newShipment = $order->createShipment($data);
+        $this->each(function (PdkOrder $order) use ($newShipments) {
+            $newShipment = $order->createShipment();
             $newShipments->push($newShipment);
             $order->shipments->push($newShipment);
         });
