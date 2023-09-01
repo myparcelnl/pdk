@@ -5,8 +5,8 @@
     "scripts": {
         "analyse": "yarn docker composer analyse",
         "analyse:generate": "yarn docker composer analyse:generate",
-        "analyze": "yarn docker composer analyze",
-        "analyze:generate": "yarn docker composer analyze:generate",
+        "analyze": "yarn analyse",
+        "analyze:generate": "yarn analyse:generate",
         "console": "yarn docker composer console",
         "docker": "docker compose run --rm -T php",
         "prepare": "is-ci || husky install",
@@ -17,7 +17,7 @@
         "test:integration": "yarn docker composer test:integration",
         "test:unit": "yarn docker composer test:unit",
         "test:unit:coverage": "yarn docker composer test:unit:coverage",
-        "test:unit:snapshot": "yarn docker composertest:unit:snapshot",
+        "test:unit:snapshot": "yarn docker composer test:unit:snapshot",
         "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
     },
     "lint-staged": {
