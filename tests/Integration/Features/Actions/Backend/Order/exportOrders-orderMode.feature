@@ -15,6 +15,17 @@ Feature: As a user I want to be able to export an order in order mode
       | data.orders             | array,LENGTH:1 |
       | data.orders.0.shipments | array,LENGTH:0 |
       | data.orders.0.exported  | true           |
+    # Expect not to have been changed
+    And I expect order 12 to have the following delivery options:
+      | key                             | value |
+      | shipmentOptions.ageCheck        | -1    |
+      | shipmentOptions.hideSender      | -1    |
+      | shipmentOptions.insurance       | -1    |
+      | shipmentOptions.largeFormat     | -1    |
+      | shipmentOptions.onlyRecipient   | -1    |
+      | shipmentOptions.return          | -1    |
+      | shipmentOptions.sameDayDelivery | -1    |
+      | shipmentOptions.signature       | -1    |
 
   Scenario: Export order after changing settings in the form
     When I do a POST request to action "exportOrders" with parameters "orderIds=42" and content:

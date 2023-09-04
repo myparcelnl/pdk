@@ -87,6 +87,21 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
+     * @template T of (null|mixed|object)
+     * @param  T $input
+     *
+     * @return T
+     */
+    public static function clone($input)
+    {
+        if (is_object($input)) {
+            return clone $input;
+        }
+
+        return $input;
+    }
+
+    /**
      * @param  string|int $name
      * @param  array      $namesToIdsMap
      *

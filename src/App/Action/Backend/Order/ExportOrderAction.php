@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
@@ -21,6 +22,7 @@ use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,11 +61,11 @@ class ExportOrderAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        $orders      = $this->updateOrders($request);
-        $validOrders = $this->validateOrders($orders);
-        $newOrders   = $this->export($validOrders, $request);
+        $originalOrders = $this->updateOrders($request);
+        $validOrders    = $this->validateOrders($originalOrders);
+        $exportedOrders = $this->export($validOrders, $request);
 
-        $this->pdkOrderRepository->updateMany($newOrders);
+        $this->saveOrders($exportedOrders, $originalOrders);
 
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, [
             'orderIds' => $this->getOrderIds($request),
@@ -123,11 +125,6 @@ class ExportOrderAction extends AbstractOrderAction
 
         $orders->addApiIdentifiers($apiOrders);
 
-        // TODO: remove this as soon as saving to repository is fixed
-        $orders->each(function (PdkOrder $order) {
-            $this->pdkOrderRepository->save($order->externalIdentifier, $order);
-        });
-
         return $orders;
     }
 
@@ -163,11 +160,10 @@ class ExportOrderAction extends AbstractOrderAction
         if (! Settings::get(GeneralSettings::CONCEPT_SHIPMENTS, GeneralSettings::ID)) {
             $this->shipmentRepository->fetchLabelLink($concepts, LabelSettings::FORMAT_A4);
 
-            $shipmentsWithBarcode =
-                $this->shipmentRepository->getShipments(
-                    $concepts->pluck('id')
-                        ->toArray()
-                );
+            $shipmentsWithBarcode = $this->shipmentRepository->getShipments(
+                $concepts->pluck('id')
+                    ->toArray()
+            );
 
             $orders->updateShipments($shipmentsWithBarcode);
         }
@@ -221,6 +217,41 @@ class ExportOrderAction extends AbstractOrderAction
 
                 return false;
             });
+    }
+
+    /**
+     * Reset shipment options that were originally set to "inherit" because they've been modified by the PdkOrderOptionsService.
+     *
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $originalOrders
+     *
+     * @return void
+     */
+    private function saveOrders(PdkOrderCollection $orders, PdkOrderCollection $originalOrders): void
+    {
+        $orders->each(function (PdkOrder $order) use ($originalOrders) {
+            $originalOrder = $originalOrders->firstWhere('externalIdentifier', $order->externalIdentifier);
+
+            if (! $originalOrder) {
+                return;
+            }
+
+            $inheritedAttributes = Arr::where(
+                $originalOrder->deliveryOptions->shipmentOptions->getAttributes(),
+                static function ($value) {
+                    return TriStateService::INHERIT === $value;
+                }
+            );
+
+            $order->deliveryOptions->shipmentOptions->fill($inheritedAttributes);
+        });
+
+        // TODO: remove this as soon as saving to repository is fixed
+        $orders->each(function (PdkOrder $order) {
+            $this->pdkOrderRepository->save($order->externalIdentifier, $order);
+        });
+
+        $this->pdkOrderRepository->updateMany($orders);
     }
 }
 

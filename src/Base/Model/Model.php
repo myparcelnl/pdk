@@ -67,6 +67,8 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     public function __clone()
     {
         $this->cloned = true;
+
+        $this->attributes = array_map([Utils::class, 'clone'], $this->getAttributes());
     }
 
     /**
