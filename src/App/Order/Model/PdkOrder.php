@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -167,38 +168,36 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @param  array $data
-     *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      * @throws \Exception
      */
-    public function createShipment(array $data = []): Shipment
+    public function createShipment(): Shipment
     {
-        $deliveryOptions = $data['deliveryOptions'] ?? $this->deliveryOptions;
+        $deliveryOptions = $this->deliveryOptions;
 
-        return new Shipment(
-            array_replace_recursive(
-                [
-                    'customsDeclaration'  => $this->customsDeclaration,
-                    'deliveryOptions'     => $deliveryOptions,
-                    'recipient'           => $this->shippingAddress,
-                    'sender'              => $this->senderAddress,
-                    'referenceIdentifier' => $this->externalIdentifier,
-                    'carrier'             => $deliveryOptions->carrier,
-                    'orderId'             => $this->externalIdentifier,
-                    'dropOffPoint'        => null,
-                ],
-                $data
-            )
-        );
+        return new Shipment([
+            'customsDeclaration'  => $this->customsDeclaration,
+            'deliveryOptions'     => $deliveryOptions,
+            'recipient'           => $this->shippingAddress,
+            'sender'              => $this->senderAddress,
+            'referenceIdentifier' => $this->externalIdentifier,
+            'carrier'             => $deliveryOptions->carrier,
+            'orderId'             => $this->externalIdentifier,
+            'dropOffPoint'        => null,
+        ]);
     }
 
     /**
      * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
     public function getNotesAttribute(): PdkOrderNoteCollection
     {
+        if (isset($this->attributes['notes'])) {
+            return $this->getCastAttribute('notes');
+        }
+
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $orderNoteRepository */
         $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
 
@@ -207,7 +206,6 @@ class PdkOrder extends Model implements StorableArrayable
 
     /**
      * @return \MyParcelNL\Pdk\Validation\Validator\OrderValidator
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getValidator(): OrderValidator
     {
@@ -305,9 +303,11 @@ class PdkOrder extends Model implements StorableArrayable
     {
         [$price, $vat, $priceAfterVat] = $this->lines->reduce(
             function (array $carry, $line) {
-                $carry[0] += $line['quantity'] * $line['price'];
-                $carry[1] += $line['quantity'] * $line['vat'];
-                $carry[2] += $line['quantity'] * $line['priceAfterVat'];
+                $quantity = Arr::get($line, 'quantity', 1);
+
+                $carry[0] += $quantity * $line['price'];
+                $carry[1] += $quantity * $line['vat'];
+                $carry[2] += $quantity * $line['priceAfterVat'];
 
                 return $carry;
             },

@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
- * @property bool|null   $ageCheck
- * @property int|null    $insurance
- * @property string|null $labelDescription
- * @property bool|null   $hideSender
- * @property bool|null   $largeFormat
- * @property bool|null   $onlyRecipient
- * @property bool|null   $return
- * @property bool|null   $sameDayDelivery
- * @property bool|null   $signature
+ * @property int<-1>|string|null $labelDescription
+ * @property int                 $insurance
+ * @property int<-1|0|1>         $ageCheck
+ * @property int<-1|0|1>         $hideSender
+ * @property int<-1|0|1>         $largeFormat
+ * @property int<-1|0|1>         $onlyRecipient
+ * @property int<-1|0|1>         $return
+ * @property int<-1|0|1>         $sameDayDelivery
+ * @property int<-1|0|1>         $signature
  */
 class ShipmentOptions extends Model
 {
@@ -25,31 +26,31 @@ class ShipmentOptions extends Model
     public const LABEL_DESCRIPTION = 'labelDescription';
     public const LARGE_FORMAT      = 'largeFormat';
     public const ONLY_RECIPIENT    = 'onlyRecipient';
-    public const RETURN            = 'return';
+    public const DIRECT_RETURN     = 'return';
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
     public const SIGNATURE         = 'signature';
 
     protected $attributes = [
-        self::AGE_CHECK         => null,
-        self::HIDE_SENDER       => null,
-        self::INSURANCE         => null,
         self::LABEL_DESCRIPTION => null,
-        self::LARGE_FORMAT      => null,
-        self::ONLY_RECIPIENT    => null,
-        self::RETURN            => null,
-        self::SAME_DAY_DELIVERY => null,
-        self::SIGNATURE         => null,
+        self::INSURANCE         => TriStateService::INHERIT,
+        self::AGE_CHECK         => TriStateService::INHERIT,
+        self::HIDE_SENDER       => TriStateService::INHERIT,
+        self::LARGE_FORMAT      => TriStateService::INHERIT,
+        self::ONLY_RECIPIENT    => TriStateService::INHERIT,
+        self::DIRECT_RETURN     => TriStateService::INHERIT,
+        self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
+        self::SIGNATURE         => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
-        self::AGE_CHECK         => 'bool',
-        self::HIDE_SENDER       => 'bool',
+        self::LABEL_DESCRIPTION => TriStateService::TYPE_STRING,
         self::INSURANCE         => 'int',
-        self::LABEL_DESCRIPTION => 'string',
-        self::LARGE_FORMAT      => 'bool',
-        self::ONLY_RECIPIENT    => 'bool',
-        self::RETURN            => 'bool',
-        self::SAME_DAY_DELIVERY => 'bool',
-        self::SIGNATURE         => 'bool',
+        self::AGE_CHECK         => TriStateService::TYPE_STRICT,
+        self::HIDE_SENDER       => TriStateService::TYPE_STRICT,
+        self::LARGE_FORMAT      => TriStateService::TYPE_STRICT,
+        self::ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
+        self::DIRECT_RETURN     => TriStateService::TYPE_STRICT,
+        self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
+        self::SIGNATURE         => TriStateService::TYPE_STRICT,
     ];
 }

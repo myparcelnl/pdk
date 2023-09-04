@@ -5,44 +5,21 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation\Validator;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use RuntimeException;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesEachMockPdkInstance());
 
-/**
- * array_merge overwrites entire keys, array_merge_recursive only adds to them, thereby corrupting the array.
- * This function only overwrites the keys within the keys that are present, and leaves the rest as is.
- *
- * @param  array ...$arrays
- *
- * @return array
- */
-function arrayMergeOrder(array ...$arrays): array
-{
-    if (! isset($arrays[0])) {
-        return [];
-    }
-
-    return Arr::undot(
-        array_reduce($arrays, static function (array $carry, array $merge) {
-            foreach (Arr::dot($merge) as $key => $value) {
-                $carry[$key] = $value;
-            }
-            return $carry;
-        }, [])
-    );
-}
-
-$defaultOrderData = [
+const DEFAULT_ORDER_DATA = [
     'externalIdentifier' => '1',
     'shippingAddress'    => [
         'cc'         => 'NL',
@@ -73,8 +50,8 @@ $defaultOrderData = [
     'shipments'          => null,
 ];
 
-$createOrder = function (array $input = []) use ($defaultOrderData): PdkOrder {
-    return new PdkOrder(arrayMergeOrder($defaultOrderData, $input));
+$createOrder = function (array $input = []): PdkOrder {
+    return new PdkOrder(array_replace_recursive(DEFAULT_ORDER_DATA, $input));
 };
 
 it('returns correct schema', function (array $order) use ($createOrder) {
@@ -375,7 +352,165 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
 );
 
 it('throws error when trying to validate without an order', function () {
+    /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
     $validator = Pdk::get(OrderValidator::class);
 
     $validator->validate();
 })->throws(RuntimeException::class);
+
+it('throws error when trying to get schema without an order', function () {
+    /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
+    $validator = Pdk::get(OrderValidator::class);
+
+    $validator->getSchema();
+})->throws(RuntimeException::class);
+
+function createValidator(string $carrierName): OrderValidator
+{
+    $order = factory(PdkOrder::class)
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($carrierName))
+        ->make();
+
+    return $order->getValidator();
+}
+
+it('can have age check', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveAgeCheck())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have date', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveDate())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have direct return', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveDirectReturn())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have evening delivery', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveEveningDelivery())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have hide sender', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveHideSender())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have insurance', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveInsurance())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have large format', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveLargeFormat())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have morning delivery', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveMorningDelivery())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have multi collo', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveMultiCollo())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have only recipient', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveOnlyRecipient())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have pickup', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHavePickup())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have same day delivery', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveSameDayDelivery())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have signature', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveSignature())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have weight', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveWeight())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+

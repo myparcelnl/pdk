@@ -1,21 +1,21 @@
 [
-  {
-    "carrier": 1,
-    "general_settings": {
-      "save_recipient_address": 0
-    },
-    "options": {
-      "package_type": 1,
-      "delivery_type": 2
-    },
-    "physical_properties": {
-      "weight": 0
-    },
-    "recipient": {
-      "cc": "NL",
-      "city": "Hoofddorp",
-      "person": "Jaap Krekel",
-      "postal_code": "2132JE"
+    {
+        "carrier": 1,
+        "general_settings": {
+            "save_recipient_address": 0
+        },
+        "options": {
+            "package_type": 1,
+            "delivery_type": 2
+        },
+        "physical_properties": {
+            "weight": 0
+        },
+        "recipient": {
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "person": "Jaap Krekel",
+            "postal_code": "2132JE"
+        }
     }
-  }
 ]

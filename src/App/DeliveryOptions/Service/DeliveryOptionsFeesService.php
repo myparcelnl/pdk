@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
@@ -64,7 +65,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
     {
         $deliveryType = $deliveryOptions->deliveryType;
 
-        if ($deliveryOptions->shipmentOptions->sameDayDelivery) {
+        if (TriStateService::ENABLED === $deliveryOptions->shipmentOptions->sameDayDelivery) {
             $deliveryType = 'same_day';
         }
 
@@ -86,7 +87,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
                 continue;
             }
 
-            if (false === $option) {
+            if (TriStateService::ENABLED !== $option) {
                 continue;
             }
 

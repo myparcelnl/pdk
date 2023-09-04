@@ -1,7 +1,7 @@
 {
-  "0.property": "shippingAddress.cc",
-  "0.pointer": "/shippingAddress/cc",
-  "0.message": "NULL value found, but a string is required",
-  "0.constraint": "type",
-  "0.context": 1
+    "0.property": "shippingAddress.cc",
+    "0.pointer": "\/shippingAddress\/cc",
+    "0.message": "NULL value found, but a string is required",
+    "0.constraint": "type",
+    "0.context": 1
 }

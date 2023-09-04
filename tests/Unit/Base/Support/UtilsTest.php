@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
+use stdClass;
 
 it('gets parents of class recursively', function () {
     expect(Utils::getClassParentsRecursive(new MockClassWithTrait()))
@@ -95,4 +96,20 @@ it('converts array to collection recursively', function (array $array) {
     'nested array'                             => [[1, 2, [3, 4, 5]]],
     'nested array with assoc'                  => [[1, 2, ['a' => 3, 'b' => 4, 'c' => 5]]],
     'nested array with assoc and nested array' => [[1, 2, ['a' => 3, 'b' => 4, 'c' => [5, 6, 7]]]],
+]);
+
+it('clones objects', function ($input, bool $cloned) {
+    $result = Utils::clone($input);
+
+    if ($cloned) {
+        expect($result)->not->toBe($input);
+    } else {
+        expect($result)->toBe($input);
+    }
+})->with([
+    'object' => [new stdClass(), true],
+    'array'  => [[], false],
+    'null'   => [null, false],
+    'int'    => [1, false],
+    'string' => ['string', false],
 ]);

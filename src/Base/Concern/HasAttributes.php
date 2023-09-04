@@ -15,6 +15,8 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
@@ -43,6 +45,7 @@ trait HasAttributes
         'int',
         'string',
         'timestamp',
+        TriStateService::TYPE_STRICT,
     ];
 
     /**
@@ -468,6 +471,11 @@ trait HasAttributes
             case 'date':
                 $value = $this->asDate($value);
                 break;
+            case TriStateService::TYPE_COERCED:
+            case TriStateService::TYPE_STRICT:
+            case TriStateService::TYPE_STRING:
+                $value = $this->resolveTriStateValue($castType, $value);
+                break;
             case 'datetime':
             case DateTime::class:
             case DateTimeImmutable::class:
@@ -871,6 +879,33 @@ trait HasAttributes
     private function isStringBoolean($value): bool
     {
         return in_array($value, ['true', 'false'], true);
+    }
+
+    /**
+     * @param  string $castType
+     * @param  mixed  $value
+     *
+     * @return mixed
+     */
+    private function resolveTriStateValue(string $castType, $value)
+    {
+        $service = Pdk::get(TriStateServiceInterface::class);
+
+        switch ($castType) {
+            case TriStateService::TYPE_COERCED:
+                $value = $service->coerce($value);
+                break;
+
+            case TriStateService::TYPE_STRICT:
+                $value = $service->cast($value);
+                break;
+
+            case TriStateService::TYPE_STRING:
+                $value = empty($value) ? '' : (string) $value;
+                break;
+        }
+
+        return $value;
     }
 
     /**

@@ -12,6 +12,7 @@ use Psr\Http\Message\RequestInterface;
 
 /**
  * @method static RequestInterface ensureLastRequest()
+ * @method static array|null getLastRequestBody()
  * @method static string getBaseUrl()
  * @method static null|RequestInterface getLastRequest()
  * @method static MockHandler getMock()

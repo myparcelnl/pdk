@@ -45,15 +45,15 @@
         "labelAmount": 1,
         "pickupLocation": null,
         "shipmentOptions": {
-            "ageCheck": null,
-            "hideSender": null,
-            "insurance": 0,
             "labelDescription": null,
-            "largeFormat": null,
-            "onlyRecipient": null,
-            "return": null,
-            "sameDayDelivery": null,
-            "signature": null
+            "insurance": 0,
+            "ageCheck": -1,
+            "hideSender": -1,
+            "largeFormat": -1,
+            "onlyRecipient": -1,
+            "return": -1,
+            "sameDayDelivery": -1,
+            "signature": -1
         },
         "deliveryType": "standard",
         "packageType": "package"

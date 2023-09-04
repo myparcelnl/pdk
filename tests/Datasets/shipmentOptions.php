@@ -1,61 +1,53 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Datasets;
 
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DropOffDelayDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PackageTypeDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 
-const KEY_DEFAULT          = 'defaultSetting';
-const KEY_PRODUCT          = 'productSetting';
-const KEY_DELIVERY_OPTIONS = 'deliveryOption';
+function getFrontendShipmentOptions(): array
+{
+    return [
+        'only recipient' => new OnlyRecipientDefinition(),
+        'signature'      => new SignatureDefinition(),
+    ];
+}
 
-$frontendShipmentOptions = [
-    'only recipient' => [
-        [
-            KEY_DEFAULT          => CarrierSettings::EXPORT_ONLY_RECIPIENT,
-            KEY_PRODUCT          => ProductSettings::EXPORT_ONLY_RECIPIENT,
-            KEY_DELIVERY_OPTIONS => ShipmentOptions::ONLY_RECIPIENT,
-        ],
-    ],
+function getAllShipmentOptions(): array
+{
+    return array_merge(getFrontendShipmentOptions(), [
+        'age check'     => new AgeCheckDefinition(),
+        'large format'  => new LargeFormatDefinition(),
+        'direct return' => new DirectReturnDefinition(),
+    ]);
+}
 
-    'signature' => [
-        [
-            KEY_DEFAULT          => CarrierSettings::EXPORT_SIGNATURE,
-            KEY_PRODUCT          => ProductSettings::EXPORT_SIGNATURE,
-            KEY_DELIVERY_OPTIONS => ShipmentOptions::SIGNATURE,
-        ],
-    ],
-];
+function getProductOptions(): array
+{
+    return array_merge(getAllShipmentOptions(), [
+        'country of origin'        => new CountryOfOriginDefinition(),
+        'customs code'             => new CustomsCodeDefinition(),
+        'disable delivery options' => new DisableDeliveryOptionsDefinition(),
+        'drop off delay'           => new DropOffDelayDefinition(),
+        'fit in digital stamp'     => new FitInDigitalStampDefinition(),
+        'fit in mailbox'           => new FitInMailboxDefinition(),
+        'package type'             => new PackageTypeDefinition(),
+    ]);
+}
 
-dataset('frontend shipment options', $frontendShipmentOptions);
-
-dataset(
-    'all shipment options',
-    [
-        'age check'    => [
-            [
-                KEY_DEFAULT          => CarrierSettings::EXPORT_AGE_CHECK,
-                KEY_PRODUCT          => ProductSettings::EXPORT_AGE_CHECK,
-                KEY_DELIVERY_OPTIONS => ShipmentOptions::AGE_CHECK,
-            ],
-        ],
-        'large format' => [
-            [
-                KEY_DEFAULT          => CarrierSettings::EXPORT_LARGE_FORMAT,
-                KEY_PRODUCT          => ProductSettings::EXPORT_LARGE_FORMAT,
-                KEY_DELIVERY_OPTIONS => ShipmentOptions::LARGE_FORMAT,
-            ],
-        ],
-        'return'       => [
-            [
-                KEY_DELIVERY_OPTIONS => ShipmentOptions::RETURN,
-                KEY_DEFAULT          => CarrierSettings::EXPORT_RETURN,
-                KEY_PRODUCT          => ProductSettings::EXPORT_RETURN,
-            ],
-        ],
-    ] + $frontendShipmentOptions
-);
-
+dataset('frontend shipment options', function () { return getFrontendShipmentOptions(); });
+dataset('all shipment options', function () { return getAllShipmentOptions(); });
+dataset('product options', function () { return getProductOptions(); });

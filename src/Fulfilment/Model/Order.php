@@ -92,7 +92,7 @@ class Order extends Model
     public static function fromPdkOrder(?PdkOrder $pdkOrder): self
     {
         if (! $pdkOrder) {
-            return new self();
+            return new static();
         }
 
         $shipment = Shipment::fromPdkShipment($pdkOrder->createShipment());

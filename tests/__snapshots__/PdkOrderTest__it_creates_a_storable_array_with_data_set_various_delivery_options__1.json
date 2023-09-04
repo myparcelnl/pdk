@@ -5,7 +5,16 @@
         "deliveryOptions": {
             "carrier": "postnl",
             "labelAmount": 1,
-            "shipmentOptions": [],
+            "shipmentOptions": {
+                "insurance": -1,
+                "ageCheck": -1,
+                "hideSender": -1,
+                "largeFormat": -1,
+                "onlyRecipient": -1,
+                "return": -1,
+                "sameDayDelivery": -1,
+                "signature": -1
+            },
             "deliveryType": "standard",
             "packageType": "mailbox"
         }
@@ -18,9 +27,14 @@
             "carrier": "postnl",
             "labelAmount": 1,
             "shipmentOptions": {
-                "ageCheck": false,
-                "onlyRecipient": true,
-                "signature": true
+                "insurance": -1,
+                "ageCheck": 0,
+                "hideSender": -1,
+                "largeFormat": -1,
+                "onlyRecipient": 1,
+                "return": -1,
+                "sameDayDelivery": -1,
+                "signature": 1
             },
             "deliveryType": "evening",
             "packageType": "package"
@@ -33,14 +47,15 @@
             "carrier": "dhlforyou",
             "labelAmount": 1,
             "shipmentOptions": {
-                "ageCheck": true,
-                "hideSender": true,
-                "insurance": 1,
                 "labelDescription": "1",
-                "largeFormat": true,
-                "onlyRecipient": true,
-                "return": true,
-                "signature": true
+                "insurance": 1,
+                "ageCheck": 1,
+                "hideSender": 1,
+                "largeFormat": 1,
+                "onlyRecipient": 1,
+                "return": 1,
+                "sameDayDelivery": -1,
+                "signature": 1
             },
             "deliveryType": "standard",
             "packageType": "package"

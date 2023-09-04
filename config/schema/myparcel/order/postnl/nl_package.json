@@ -28,7 +28,7 @@
       }
     },
     "multiCollo": {
-      "enum": [true]
+      "enum": [1]
     }
   }
 }

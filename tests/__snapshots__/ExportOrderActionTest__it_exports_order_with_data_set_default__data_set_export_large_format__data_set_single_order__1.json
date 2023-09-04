@@ -9,6 +9,7 @@
                 "options": {
                     "package_type": 1,
                     "delivery_type": 2,
+                    "large_format": 1,
                     "signature": 1
                 },
                 "physical_properties": {

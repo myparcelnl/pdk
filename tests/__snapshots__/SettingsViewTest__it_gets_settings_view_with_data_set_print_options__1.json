@@ -11,12 +11,12 @@
             "description": "settings_print_output_description",
             "options": [
                 {
-                    "value": "open",
-                    "label": "settings_label_output_option_open"
+                    "label": "settings_label_output_option_open",
+                    "value": "open"
                 },
                 {
-                    "value": "download",
-                    "label": "settings_label_output_option_download"
+                    "label": "settings_label_output_option_download",
+                    "value": "download"
                 }
             ]
         },
@@ -27,12 +27,12 @@
             "description": "settings_print_format_description",
             "options": [
                 {
-                    "value": "a4",
-                    "label": "settings_label_format_option_a4"
+                    "label": "settings_label_format_option_a4",
+                    "value": "a4"
                 },
                 {
-                    "value": "a6",
-                    "label": "settings_label_format_option_a6"
+                    "label": "settings_label_format_option_a6",
+                    "value": "a6"
                 }
             ]
         },
@@ -55,20 +55,20 @@
             "description": "settings_print_position_description",
             "options": [
                 {
-                    "value": 1,
-                    "label": "settings_label_position_option_1"
+                    "label": "settings_label_position_option_1",
+                    "value": 1
                 },
                 {
-                    "value": 2,
-                    "label": "settings_label_position_option_2"
+                    "label": "settings_label_position_option_2",
+                    "value": 2
                 },
                 {
-                    "value": 3,
-                    "label": "settings_label_position_option_3"
+                    "label": "settings_label_position_option_3",
+                    "value": 3
                 },
                 {
-                    "value": 4,
-                    "label": "settings_label_position_option_4"
+                    "label": "settings_label_position_option_4",
+                    "value": 4
                 }
             ]
         }

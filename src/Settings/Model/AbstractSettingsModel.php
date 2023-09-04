@@ -17,10 +17,6 @@ use MyParcelNL\Pdk\Facade\Platform;
  */
 abstract class AbstractSettingsModel extends Model implements StorableArrayable
 {
-    public const TRISTATE_VALUE_DEFAULT  = -1;
-    public const TRISTATE_VALUE_DISABLED = 0;
-    public const TRISTATE_VALUE_ENABLED  = 1;
-
     /**
      * @param  null|array $data
      */

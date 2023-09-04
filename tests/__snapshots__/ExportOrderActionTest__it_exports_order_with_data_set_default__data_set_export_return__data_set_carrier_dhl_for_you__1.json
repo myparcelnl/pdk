@@ -8,7 +8,8 @@
                 },
                 "options": {
                     "package_type": 1,
-                    "delivery_type": 2
+                    "delivery_type": 2,
+                    "return": 1
                 },
                 "physical_properties": {
                     "weight": 0

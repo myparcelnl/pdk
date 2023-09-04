@@ -2,7 +2,23 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\App\Order\Calculator\General\AgeCheckCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use function DI\factory;
 use function DI\value;
 
 /**
@@ -34,4 +50,32 @@ return [
     'insuranceFactorMin'  => value(0.0),
     'insuranceFactorStep' => value(0.01),
     'insuranceFactorMax'  => value(1.0),
+
+    /**
+     * Options definitions
+     */
+
+    'orderOptionDefinitions' => factory(function (): array {
+        return [
+            new AgeCheckDefinition(),
+            new DirectReturnDefinition(),
+            new HideSenderDefinition(),
+            new InsuranceDefinition(),
+            new LargeFormatDefinition(),
+            new OnlyRecipientDefinition(),
+            new SameDayDeliveryDefinition(),
+            new SignatureDefinition(),
+        ];
+    }),
+
+    'orderCalculators' => factory(function () {
+        return [
+            TriStateOptionCalculator::class,
+            AllowedInCarrierCalculator::class,
+            PackageTypeShipmentOptionsCalculator::class,
+            LabelDescriptionCalculator::class,
+            InsuranceCalculator::class,
+            CarrierSpecificCalculator::class,
+        ];
+    }),
 ];

@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
+ * @property string               $id
  * @property bool                 $allowDeliveryOptions
  * @property bool                 $allowEveningDelivery
  * @property bool                 $allowMondayDelivery
@@ -224,8 +225,13 @@ class CarrierSettings extends AbstractSettingsModel
             $carrier = $carrier->externalIdentifier;
         }
 
-        $settings = Settings::get(sprintf('%s.%s', self::ID, $carrier));
+        /** @var null|\MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings */
+        $settings = Settings::all()->carrier->get($carrier);
 
-        return new self($settings);
+        if (! $settings) {
+            return new CarrierSettings();
+        }
+
+        return clone $settings;
     }
 }

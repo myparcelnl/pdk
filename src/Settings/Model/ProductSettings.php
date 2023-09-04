@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
- * @property string     $countryOfOrigin
- * @property string     $customsCode
- * @property bool       $disableDeliveryOptions
- * @property int        $dropOffDelay
- * @property int<-1, 1> $exportAgeCheck
- * @property int<-1, 1> $exportHideSender
- * @property int<-1, 1> $exportInsurance
- * @property int<-1, 1> $exportLargeFormat
- * @property int<-1, 1> $exportOnlyRecipient
- * @property int<-1, 1> $exportSignature
- * @property int        $fitInDigitalStamp
- * @property int        $fitInMailbox
- * @property string     $packageType
- * @property int<-1, 1> $returnShipments
+ * @property int<-1>|string $countryOfOrigin
+ * @property int<-1>|string $customsCode
+ * @property int<-1|0|1>    $disableDeliveryOptions
+ * @property int            $dropOffDelay
+ * @property int<-1|0|1>    $exportAgeCheck
+ * @property int<-1|0|1>    $exportHideSender
+ * @property int<-1|0|1>    $exportInsurance
+ * @property int<-1|0|1>    $exportLargeFormat
+ * @property int<-1|0|1>    $exportOnlyRecipient
+ * @property int<-1|0|1>    $exportReturn
+ * @property int<-1|0|1>    $exportSignature
+ * @property int            $fitInDigitalStamp
+ * @property int            $fitInMailbox
+ * @property int<-1>|string $packageType
  */
 class ProductSettings extends AbstractSettingsModel
 {
@@ -38,43 +36,43 @@ class ProductSettings extends AbstractSettingsModel
     public const EXPORT_ONLY_RECIPIENT    = 'exportOnlyRecipient';
     public const EXPORT_RETURN            = 'exportReturn';
     public const EXPORT_SIGNATURE         = 'exportSignature';
-    public const FIT_IN_MAILBOX           = 'fitInMailbox';
     public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
+    public const FIT_IN_MAILBOX           = 'fitInMailbox';
     public const PACKAGE_TYPE             = 'packageType';
 
     protected $attributes = [
         'id' => self::ID,
 
-        self::COUNTRY_OF_ORIGIN        => CountryCodes::CC_NL,
-        self::CUSTOMS_CODE             => CustomsDeclarationItem::DEFAULT_CLASSIFICATION,
-        self::DISABLE_DELIVERY_OPTIONS => false,
-        self::DROP_OFF_DELAY           => 0,
-        self::EXPORT_AGE_CHECK         => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::EXPORT_HIDE_SENDER       => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::EXPORT_INSURANCE         => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::EXPORT_LARGE_FORMAT      => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::EXPORT_ONLY_RECIPIENT    => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::EXPORT_RETURN            => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::EXPORT_SIGNATURE         => AbstractSettingsModel::TRISTATE_VALUE_DEFAULT,
-        self::FIT_IN_MAILBOX           => 0,
-        self::FIT_IN_DIGITAL_STAMP     => 0,
-        self::PACKAGE_TYPE             => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        self::COUNTRY_OF_ORIGIN        => TriStateService::INHERIT,
+        self::CUSTOMS_CODE             => TriStateService::INHERIT,
+        self::DISABLE_DELIVERY_OPTIONS => TriStateService::INHERIT,
+        self::DROP_OFF_DELAY           => TriStateService::INHERIT,
+        self::EXPORT_AGE_CHECK         => TriStateService::INHERIT,
+        self::EXPORT_HIDE_SENDER       => TriStateService::INHERIT,
+        self::EXPORT_INSURANCE         => TriStateService::INHERIT,
+        self::EXPORT_LARGE_FORMAT      => TriStateService::INHERIT,
+        self::EXPORT_ONLY_RECIPIENT    => TriStateService::INHERIT,
+        self::EXPORT_RETURN            => TriStateService::INHERIT,
+        self::EXPORT_SIGNATURE         => TriStateService::INHERIT,
+        self::FIT_IN_DIGITAL_STAMP     => TriStateService::INHERIT,
+        self::FIT_IN_MAILBOX           => TriStateService::INHERIT,
+        self::PACKAGE_TYPE             => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
-        self::COUNTRY_OF_ORIGIN        => 'string',
-        self::CUSTOMS_CODE             => 'string',
-        self::DISABLE_DELIVERY_OPTIONS => 'boolean',
+        self::COUNTRY_OF_ORIGIN        => TriStateService::TYPE_COERCED,
+        self::CUSTOMS_CODE             => TriStateService::TYPE_COERCED,
+        self::DISABLE_DELIVERY_OPTIONS => TriStateService::TYPE_STRICT,
         self::DROP_OFF_DELAY           => 'int',
-        self::EXPORT_AGE_CHECK         => 'int',
-        self::EXPORT_HIDE_SENDER       => 'int',
-        self::EXPORT_INSURANCE         => 'int',
-        self::EXPORT_LARGE_FORMAT      => 'int',
-        self::EXPORT_ONLY_RECIPIENT    => 'int',
-        self::EXPORT_RETURN            => 'int',
-        self::EXPORT_SIGNATURE         => 'int',
-        self::FIT_IN_MAILBOX           => 'int',
+        self::EXPORT_AGE_CHECK         => TriStateService::TYPE_STRICT,
+        self::EXPORT_HIDE_SENDER       => TriStateService::TYPE_STRICT,
+        self::EXPORT_INSURANCE         => TriStateService::TYPE_STRICT,
+        self::EXPORT_LARGE_FORMAT      => TriStateService::TYPE_STRICT,
+        self::EXPORT_ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
+        self::EXPORT_RETURN            => TriStateService::TYPE_STRICT,
+        self::EXPORT_SIGNATURE         => TriStateService::TYPE_STRICT,
         self::FIT_IN_DIGITAL_STAMP     => 'int',
-        self::PACKAGE_TYPE             => 'string',
+        self::FIT_IN_MAILBOX           => 'int',
+        self::PACKAGE_TYPE             => TriStateService::TYPE_COERCED,
     ];
 }

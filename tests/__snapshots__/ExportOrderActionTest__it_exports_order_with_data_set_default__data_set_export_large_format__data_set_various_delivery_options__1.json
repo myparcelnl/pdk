@@ -10,6 +10,7 @@
                     "package_type": 1,
                     "delivery_type": 3,
                     "delivery_date": "2077-10-23 09:47:51",
+                    "large_format": 1,
                     "only_recipient": 1,
                     "signature": 1
                 },
@@ -33,6 +34,7 @@
                     "package_type": 1,
                     "delivery_type": 3,
                     "delivery_date": "2077-10-23 09:47:51",
+                    "large_format": 1,
                     "only_recipient": 1,
                     "signature": 1
                 },
@@ -55,11 +57,9 @@
                 "options": {
                     "package_type": 1,
                     "delivery_type": 2,
+                    "label_description": "1",
                     "age_check": 1,
                     "hide_sender": 1,
-                    "label_description": "1",
-                    "large_format": 1,
-                    "only_recipient": 1,
                     "return": 1,
                     "signature": 1
                 },

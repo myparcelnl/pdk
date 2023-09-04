@@ -8,9 +8,7 @@ namespace MyParcelNL\Pdk\Tests\Integration\Context;
 use Behat\Gherkin\Node\TableNode;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Integration\Context\Concern\MakesPdkHttpRequests;
-use Psr\Log\LoggerInterface;
 
 /**
  * This context is for tests that do requests to the PDK API.
@@ -60,13 +58,15 @@ final class RequestContext extends AbstractContext
     }
 
     /**
-     * @Then I expect the response code to be :responseCode
+     * @Then I expect the response code to be :statusCode
      */
-    public function IExpectTheResponseCodeToBe(int $responseCode): void
+    public function IExpectTheResponseCodeToBe(int $statusCode): void
     {
         $this->IExpectTheResponseToBeSuccessful();
 
-        self::assertEquals($this->response->getStatusCode(), $responseCode, 'Response code does not match');
+        $actualStatusCode = $this->response->getStatusCode();
+
+        self::assertEquals($actualStatusCode, $statusCode, self::withLogs('Response code does not match.'));
     }
 
     /**
@@ -76,10 +76,7 @@ final class RequestContext extends AbstractContext
     public function IExpectTheResponseToBeSuccessful(): void
     {
         if (! $this->response instanceof ApiResponse) {
-            /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-            $logger = Pdk::get(LoggerInterface::class);
-
-            self::fail(sprintf("Response is null. Logs:\n%s", json_encode($logger->getLogs(), JSON_PRETTY_PRINT)));
+            self::fail(self::withLogs('Response is null.'));
         }
     }
 

@@ -16,16 +16,16 @@
         "shipmentOptions": {
           "properties": {
             "ageCheck": {
-              "enum": [false]
+              "enum": [0]
             },
             "largeFormat": {
-              "enum": [false]
+              "enum": [0]
             },
             "onlyRecipient": {
-              "enum": [false]
+              "enum": [0]
             },
             "return": {
-              "enum": [false]
+              "enum": [0]
             }
           }
         }

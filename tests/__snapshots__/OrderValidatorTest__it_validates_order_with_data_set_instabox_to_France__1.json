@@ -1,1 +1,79 @@
-[]
+[
+    {
+        "property": "deliveryOptions.shipmentOptions.ageCheck",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
+        "message": "Does not have a value in the enumeration [0,1]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            1
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.hideSender",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/hideSender",
+        "message": "Does not have a value in the enumeration [0,1]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            1
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.largeFormat",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/largeFormat",
+        "message": "Does not have a value in the enumeration [0,1]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            1
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.onlyRecipient",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/onlyRecipient",
+        "message": "Does not have a value in the enumeration [0,1]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            1
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.return",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/return",
+        "message": "Does not have a value in the enumeration [0,1]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            1
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.sameDayDelivery",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/sameDayDelivery",
+        "message": "Does not have a value in the enumeration [0,1]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            1
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.signature",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
+        "message": "Does not have a value in the enumeration [false,null]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            false,
+            null
+        ]
+    }
+]

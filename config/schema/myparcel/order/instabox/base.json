@@ -12,7 +12,7 @@
                   "required": ["largeFormat"],
                   "properties": {
                     "largeFormat": {
-                      "enum": [true]
+                      "enum": [1]
                     }
                   }
                 }

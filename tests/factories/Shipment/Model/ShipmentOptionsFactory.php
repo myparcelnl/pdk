@@ -6,19 +6,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @template T of ShipmentOptions
  * @method ShipmentOptions make()
- * @method $this withAgeCheck(bool $ageCheck)
- * @method $this withHideSender(bool $hideSender)
+ * @method $this withAgeCheck(int $ageCheck)
+ * @method $this withHideSender(int $hideSender)
  * @method $this withInsurance(int $insurance)
- * @method $this withLabelDescription(string $labelDescription)
- * @method $this withLargeFormat(bool $largeFormat)
- * @method $this withOnlyRecipient(bool $onlyRecipient)
- * @method $this withReturn(bool $return)
- * @method $this withSameDayDelivery(bool $sameDayDelivery)
- * @method $this withSignature(bool $signature)
+ * @method $this withLabelDescription(int|string $labelDescription)
+ * @method $this withLargeFormat(int $largeFormat)
+ * @method $this withOnlyRecipient(int $onlyRecipient)
+ * @method $this withReturn(int $return)
+ * @method $this withSameDayDelivery(int $sameDayDelivery)
+ * @method $this withSignature(int $signature)
  */
 final class ShipmentOptionsFactory extends AbstractModelFactory
 {
@@ -30,14 +31,14 @@ final class ShipmentOptionsFactory extends AbstractModelFactory
     public function withAllOptions(): self
     {
         return $this
-            ->withAgeCheck(true)
-            ->withHideSender(true)
+            ->withAgeCheck(TriStateService::ENABLED)
+            ->withHideSender(TriStateService::ENABLED)
             ->withInsurance(100)
             ->withLabelDescription('test')
-            ->withLargeFormat(true)
-            ->withOnlyRecipient(true)
-            ->withReturn(true)
-            ->withSameDayDelivery(true)
-            ->withSignature(true);
+            ->withLargeFormat(TriStateService::ENABLED)
+            ->withOnlyRecipient(TriStateService::ENABLED)
+            ->withReturn(TriStateService::ENABLED)
+            ->withSameDayDelivery(TriStateService::ENABLED)
+            ->withSignature(TriStateService::ENABLED);
     }
 }

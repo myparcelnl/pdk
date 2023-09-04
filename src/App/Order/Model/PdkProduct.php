@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Model;
 
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @property null|string                                     $externalIdentifier
@@ -24,7 +27,7 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
  * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $mergedSettings
  * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $parent
  */
-class PdkProduct extends Model
+class PdkProduct extends Model implements StorableArrayable
 {
     /**
      * @var array
@@ -65,24 +68,74 @@ class PdkProduct extends Model
     ];
 
     /**
+     * @var null|ProductSettings
+     */
+    private $cachedMergedSettings;
+
+    /**
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        return [
+            'externalIdentifier' => $this->externalIdentifier,
+            'settings'           => $this->settings->toStorableArray(),
+        ];
+    }
+
+    /**
      * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
-    public function getMergedSettingsAttribute(): ProductSettings
+    protected function getMergedSettingsAttribute(): ProductSettings
     {
-        if (! $this->parent instanceof self) {
-            return $this->settings;
+        if (! isset($this->cachedMergedSettings)) {
+            $this->cachedMergedSettings = $this->resolveMergedSettings();
         }
 
-        $settings = $this->parent->mergedSettings;
+        return $this->cachedMergedSettings;
+    }
+
+    /**
+     * Clear the cached merged settings on update.
+     *
+     * @param  \MyParcelNL\Pdk\Settings\Model\ProductSettings|array $settings
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     */
+    protected function setSettingsAttribute($settings): self
+    {
+        $this->cachedMergedSettings   = null;
+        $this->attributes['settings'] = $settings;
+
+        return $this;
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function resolveMergedSettings(): ProductSettings
+    {
+        $settings = clone $this->settings;
+
+        if (! $this->parent instanceof self) {
+            return $settings;
+        }
+
+        $triStateService = Pdk::get(TriStateServiceInterface::class);
 
         foreach ($settings->getAttributes() as $key => $value) {
-            if (AbstractSettingsModel::TRISTATE_VALUE_DEFAULT !== (int) $value && '' !== $value) {
+            $coerced = $triStateService->coerce($settings->getAttribute($key));
+
+            if (TriStateService::INHERIT !== $coerced) {
                 continue;
             }
 
-            $settings->setAttribute($key, $this->settings->getAttribute($key));
+            $settings->setAttribute($key, $this->parent->mergedSettings->getAttribute($key));
         }
 
         return $settings;

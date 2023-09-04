@@ -93,6 +93,12 @@
                         "null"
                     ],
                     "additionalProperties": false,
+                    "required": [
+                        "city",
+                        "locationName",
+                        "postalCode",
+                        "street"
+                    ],
                     "properties": {
                         "postalCode": {
                             "type": "string"
@@ -101,10 +107,10 @@
                             "type": "string"
                         },
                         "city": {
-                            "type": "string"
-                        },
-                        "fullStreet": {
-                            "type": "string"
+                            "type": [
+                                "null",
+                                "string"
+                            ]
                         },
                         "street": {
                             "type": "string"
@@ -132,22 +138,34 @@
                             "maxLength": 8
                         },
                         "region": {
-                            "type": "string",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
                             "maxLength": 35
                         },
                         "state": {
-                            "type": "string"
+                            "type": [
+                                "null",
+                                "string"
+                            ]
                         },
                         "cc": {
                             "type": "string",
                             "pattern": "^[A-z]{2}$"
                         },
                         "locationCode": {
-                            "type": "string",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
                             "minLength": 1
                         },
                         "retailNetworkId": {
-                            "type": "string"
+                            "type": [
+                                "null",
+                                "string"
+                            ]
                         }
                     }
                 },
@@ -156,21 +174,20 @@
                     "additionalProperties": false,
                     "properties": {
                         "ageCheck": {
-                            "type": [
-                                "boolean",
-                                "null"
+                            "enum": [
+                                0,
+                                1
                             ]
                         },
                         "hideSender": {
-                            "type": [
-                                "boolean",
-                                "null"
+                            "enum": [
+                                0,
+                                1
                             ]
                         },
                         "insurance": {
                             "type": [
-                                "integer",
-                                "null"
+                                "integer"
                             ],
                             "enum": [
                                 0,
@@ -190,43 +207,48 @@
                             ]
                         },
                         "labelDescription": {
-                            "type": [
-                                "string",
-                                "null"
+                            "oneOf": [
+                                {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                },
+                                {
+                                    "enum": [
+                                        -1
+                                    ]
+                                }
                             ],
                             "maxLength": 50
                         },
                         "largeFormat": {
-                            "type": [
-                                "boolean",
-                                "null"
+                            "enum": [
+                                0,
+                                1
                             ]
                         },
                         "onlyRecipient": {
-                            "type": [
-                                "boolean",
-                                "null"
+                            "enum": [
+                                0,
+                                1
                             ]
                         },
                         "return": {
-                            "type": [
-                                "boolean",
-                                "null"
+                            "enum": [
+                                0,
+                                1
                             ]
                         },
                         "sameDayDelivery": {
-                            "type": [
-                                "boolean",
-                                "null"
-                            ],
                             "enum": [
-                                false
+                                0
                             ]
                         },
                         "signature": {
-                            "type": [
-                                "boolean",
-                                "null"
+                            "enum": [
+                                0,
+                                1
                             ]
                         }
                     }
@@ -236,7 +258,7 @@
         "multiCollo": {
             "type": "boolean",
             "enum": [
-                true
+                1
             ]
         }
     },
@@ -256,17 +278,17 @@
                                     "properties": {
                                         "ageCheck": {
                                             "enum": [
-                                                true
+                                                1
                                             ]
                                         },
                                         "onlyRecipient": {
                                             "enum": [
-                                                true
+                                                1
                                             ]
                                         },
                                         "signature": {
                                             "enum": [
-                                                true
+                                                1
                                             ]
                                         }
                                     }
@@ -285,8 +307,7 @@
                                     "properties": {
                                         "ageCheck": {
                                             "enum": [
-                                                null,
-                                                false
+                                                0
                                             ]
                                         }
                                     }
@@ -310,7 +331,7 @@
                                     "properties": {
                                         "largeFormat": {
                                             "enum": [
-                                                true
+                                                1
                                             ]
                                         }
                                     }
@@ -402,17 +423,17 @@
                                     "properties": {
                                         "onlyRecipient": {
                                             "enum": [
-                                                false
+                                                0
                                             ]
                                         },
                                         "signature": {
                                             "enum": [
-                                                true
+                                                1
                                             ]
                                         },
                                         "return": {
                                             "enum": [
-                                                false
+                                                0
                                             ]
                                         }
                                     }

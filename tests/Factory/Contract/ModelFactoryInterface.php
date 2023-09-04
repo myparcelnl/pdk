@@ -22,7 +22,7 @@ interface ModelFactoryInterface extends FactoryInterface
     public function make(): Model;
 
     /**
-     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface
+     * @return self
      */
     public function store(): ModelFactoryInterface;
 

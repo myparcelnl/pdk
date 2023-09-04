@@ -76,7 +76,7 @@
                     "largeFormat": true,
                     "onlyRecipient": true,
                     "return": true,
-                    "sameDayDelivery": true,
+                    "sameDayDelivery": false,
                     "signature": true,
                     "insurance": [
                         0,
@@ -125,7 +125,7 @@
                     "return": true,
                     "ageCheck": true,
                     "onlyRecipient": true,
-                    "sameDayDelivery": true,
+                    "sameDayDelivery": false,
                     "largeFormat": true
                 }
             }
@@ -134,15 +134,15 @@
         "labelAmount": 1,
         "pickupLocation": null,
         "shipmentOptions": {
-            "ageCheck": false,
-            "hideSender": null,
-            "insurance": 20000,
             "labelDescription": "standaard kenmerk",
-            "largeFormat": false,
-            "onlyRecipient": false,
-            "return": false,
-            "sameDayDelivery": null,
-            "signature": false
+            "insurance": 20000,
+            "ageCheck": 0,
+            "hideSender": -1,
+            "largeFormat": 0,
+            "onlyRecipient": 0,
+            "return": 0,
+            "sameDayDelivery": -1,
+            "signature": 0
         },
         "deliveryType": "standard",
         "packageType": "package"

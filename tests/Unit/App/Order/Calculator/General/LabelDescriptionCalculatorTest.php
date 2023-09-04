@@ -3,60 +3,55 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
+namespace MyParcelNL\Pdk\App\Order\Calculator;
 
-use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
-use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
+use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
+function createOrder(string $labelDescription): PdkOrder
+{
+    return factory(PdkOrder::class)
+        ->withExternalIdentifier('123')
+        ->withDeliveryOptions(['shipmentOptions' => ['labelDescription' => $labelDescription]])
+        ->withLines([
+            factory(PdkOrderLine::class)
+                ->withQuantity(2)
+                ->withProduct('456'),
+            factory(PdkOrderLine::class)
+                ->withQuantity(3)
+                ->withProduct('789'),
+        ])
+        ->withNotes([
+            factory(PdkOrderNote::class)
+                ->withAuthor(OrderNote::AUTHOR_CUSTOMER)
+                ->withNote('Hello'),
+        ])
+        ->store()
+        ->make();
+}
+
 it('formats label description', function (string $labelDescription, string $output) {
-    /** @var MockPdkProductRepository $repository */
-    $repository = Pdk::get(PdkProductRepositoryInterface::class);
+    $reset = mockPdkProperty('orderCalculators', [LabelDescriptionCalculator::class]);
+    $order = createOrder($labelDescription);
 
-    $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
-    $orderNoteRepository->add(
-        new PdkOrderNote(
-            [
-                'author'          => OrderNote::AUTHOR_CUSTOMER,
-                'note'            => 'Hello',
-                'orderIdentifier' => '123',
-            ]
-        )
-    );
-
-    $order = new PdkOrder([
-        'externalIdentifier' => '123',
-        'deliveryOptions'    => [
-            'shipmentOptions' => [
-                'labelDescription' => $labelDescription,
-            ],
-        ],
-        'lines'              => [
-            [
-                'quantity' => 2,
-                'product'  => $repository->getProduct('456'),
-            ],
-            [
-                'quantity' => 3,
-                'product'  => $repository->getProduct('789'),
-            ],
-        ],
-    ]);
-
-    /** @var ShipmentOptionsServiceInterface $service */
-    $service  = Pdk::get(ShipmentOptionsServiceInterface::class);
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsService::class);
     $newOrder = $service->calculate($order);
 
     expect($newOrder->deliveryOptions->shipmentOptions->labelDescription)->toBe($output);
+
+    $reset();
 })
     ->with([
         'order with label description CUSTOMER_NOTE'         => [

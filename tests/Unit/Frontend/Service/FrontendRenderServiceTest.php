@@ -5,17 +5,25 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Service;
 
-use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Mocks\ExceptionThrowingContextService;
-use function DI\autowire;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function DI\get;
+use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
+use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesHtmlSnapshot;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-it('renders component', function (callable $callback) {
-    PdkFactory::create(MockPdkConfig::create());
+usesShared(new UsesMockPdkInstance());
 
+beforeEach(function () {
+    factory(Settings::class)->store();
+});
+
+it('renders component', function (callable $callback) {
     $result = $callback();
 
     // Replace the randomly generated id with a placeholder.
@@ -28,21 +36,22 @@ it('renders component', function (callable $callback) {
 
     if ('[]' !== $decodedContext) {
         $replacedContent = strtr($replacedContent, [$context[1] => '__CONTEXT__']);
+        $filteredContext = (new Collection(json_decode($decodedContext, true)))->toArrayWithoutNull();
 
-        assertMatchesJsonSnapshot($decodedContext);
+        assertMatchesJsonSnapshot(json_encode($filteredContext));
     }
 
     assertMatchesHtmlSnapshot($replacedContent);
 })->with('components');
 
 it('does not throw errors', function (callable $callback) {
-    PdkFactory::create(
-        MockPdkConfig::create([
-            ContextServiceInterface::class => autowire(ExceptionThrowingContextService::class),
-        ])
-    );
+    $reset = mockPdkProperties([
+        ContextServiceInterface::class => get(ExceptionThrowingContextService::class),
+    ]);
 
     $callback();
 
     expect(true)->toBeTrue();
+
+    $reset();
 })->with('components');

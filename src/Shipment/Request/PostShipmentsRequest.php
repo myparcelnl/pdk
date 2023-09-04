@@ -12,6 +12,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class PostShipmentsRequest extends Request
 {
@@ -21,12 +23,19 @@ class PostShipmentsRequest extends Request
     private $collection;
 
     /**
+     * @var \MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface
+     */
+    private $triStateService;
+
+    /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
      */
     public function __construct(ShipmentCollection $collection)
     {
         parent::__construct();
         $this->collection = $collection;
+
+        $this->triStateService = Pdk::get(TriStateServiceInterface::class);
     }
 
     /**
@@ -187,23 +196,25 @@ class PostShipmentsRequest extends Request
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
-     * @return null|array
+     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getOptions(Shipment $shipment): ?array
+    private function getOptions(Shipment $shipment): array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
 
-        $options = array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
+        $options = array_map(function ($item) {
+            return $this->triStateService->resolve($item);
         }, $shipmentOptions->toSnakeCaseArray());
+
+        $hasInsurance = $shipmentOptions->insurance > TriStateService::DISABLED;
 
         return array_filter(
             [
                 'package_type'  => $shipment->deliveryOptions->getPackageTypeId(),
                 'delivery_type' => $shipment->deliveryOptions->getDeliveryTypeId(),
                 'delivery_date' => $shipment->deliveryOptions->getDateAsString(),
-                'insurance'     => $shipmentOptions->insurance
+                'insurance'     => $hasInsurance
                     ? [
                         'amount'   => $shipmentOptions->insurance,
                         'currency' => 'EUR',

@@ -1,0 +1,76 @@
+[
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\AgeCheckDefinition",
+        "carrierSettingsKey": "exportAgeCheck",
+        "productSettingsKey": "exportAgeCheck",
+        "shipmentOptionsKey": "ageCheck"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\CountryOfOriginDefinition",
+        "productSettingsKey": "countryOfOrigin"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\CustomsCodeDefinition",
+        "productSettingsKey": "customsCode"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\DirectReturnDefinition",
+        "carrierSettingsKey": "exportReturn",
+        "productSettingsKey": "exportReturn",
+        "shipmentOptionsKey": "return"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\DisableDeliveryOptionsDefinition",
+        "productSettingsKey": "disableDeliveryOptions"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\DropOffDelayDefinition",
+        "productSettingsKey": "dropOffDelay"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\FitInDigitalStampDefinition",
+        "productSettingsKey": "fitInDigitalStamp"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\FitInMailboxDefinition",
+        "productSettingsKey": "fitInMailbox"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\HideSenderDefinition",
+        "carrierSettingsKey": "exportHideSender",
+        "productSettingsKey": "exportHideSender",
+        "shipmentOptionsKey": "hideSender"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\InsuranceDefinition",
+        "carrierSettingsKey": "exportInsurance",
+        "productSettingsKey": "exportInsurance",
+        "shipmentOptionsKey": "insurance"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\LargeFormatDefinition",
+        "carrierSettingsKey": "exportLargeFormat",
+        "productSettingsKey": "exportLargeFormat",
+        "shipmentOptionsKey": "largeFormat"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\OnlyRecipientDefinition",
+        "carrierSettingsKey": "exportOnlyRecipient",
+        "productSettingsKey": "exportOnlyRecipient",
+        "shipmentOptionsKey": "onlyRecipient"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\PackageTypeDefinition",
+        "productSettingsKey": "packageType"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\SameDayDeliveryDefinition",
+        "shipmentOptionsKey": "sameDayDelivery"
+    },
+    {
+        "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\SignatureDefinition",
+        "carrierSettingsKey": "exportSignature",
+        "productSettingsKey": "exportSignature",
+        "shipmentOptionsKey": "signature"
+    }
+]

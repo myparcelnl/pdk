@@ -5,12 +5,17 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation;
 
+use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
+use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -107,36 +112,52 @@ const STANDARD_INPUT = [
 
 usesShared(new UsesMockPdkInstance());
 
-it('returns correct schema', function (array $input) {
-    $pdkOrder = new PdkOrder($input);
+it('returns correct schema', function (string $platform, string $carrier, string $packageType, string $expectedSchema) {
+    $reset = mockPlatform($platform);
+
+    $pdkOrder = factory(PdkOrder::class)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withPackageType($packageType)
+        )
+        ->make();
+
     /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
     $validator = Pdk::get(OrderValidator::class);
     $validator->setOrder($pdkOrder);
 
     $schema = $validator->getSchema();
 
-    assertMatchesJsonSnapshot(json_encode($schema));
+    expect($schema['description'])->toBe($expectedSchema);
+
+    $reset();
 })->with([
-    'pickup without location code' => [
-        'input' => arrayMergeOrder(
-            STANDARD_INPUT,
-            [
-                'deliveryOptions' => [
-                    'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                    'pickupLocation' => [
-                        'state' => 'Drenthe',
-                    ],
-                ],
-            ]
-        ),
+    'myparcel, postnl, package' => [
+        Platform::MYPARCEL_NAME,
+        Carrier::CARRIER_POSTNL_NAME,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        'myparcel/order/postnl/nl_package',
+    ],
+
+    'myparcel, postnl, mailbox' => [
+        Platform::MYPARCEL_NAME,
+        Carrier::CARRIER_POSTNL_NAME,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'myparcel/order/postnl/mailbox',
     ],
 ]);
 
 it('validates order', function (array $input, array $errors = []) {
     $pdkOrder = new PdkOrder($input);
+
+    /** @var PdkOrderOptionsServiceInterface $orderOptionsService */
+    $orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder            = $orderOptionsService->calculateShipmentOptions($pdkOrder);
+
     /** @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator $validator */
     $validator = Pdk::get(OrderValidator::class);
-    $validator->setOrder($pdkOrder);
+    $validator->setOrder($newOrder);
 
     $isValid = $validator->validate();
 

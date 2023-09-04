@@ -7,15 +7,14 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Notification\Model\Notification;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
@@ -24,8 +23,6 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
@@ -42,34 +39,21 @@ dataset('orderModeToggle', [
     'order mode' => [true],
 ]);
 
-dataset('conceptShipmentsToggle', [
-    'default'           => [false],
-    'concept shipments' => [false],
-]);
-
 it('exports order', function (
-    bool  $orderMode,
-    array $carrierSettings,
-    array $orders
+    bool                   $orderMode,
+    CarrierSettingsFactory $carrierSettingsFactory,
+    array                  $orders
 ) {
-    /** @var MockPdkOrderRepository $pdkOrderRepository */
-    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    /** @var MockSettingsRepository $settingsRepository */
-    $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
+    $carriers = Arr::pluck($orders, 'deliveryOptions.carrier.externalIdentifier');
 
-    $collection = new PdkOrderCollection($orders);
-    $pdkOrderRepository->updateMany($collection);
-    $settingsRepository->storeAllSettings(
-        new Settings([
-            GeneralSettings::ID => [GeneralSettings::ORDER_MODE => $orderMode],
-            CarrierSettings::ID => $collection->pluck('deliveryOptions.carrier.externalIdentifier')
-                ->unique()
-                ->mapWithKeys(static function ($carrier) use ($carrierSettings) {
-                    return [$carrier => $carrierSettings];
-                })
-                ->all(),
-        ])
-    );
+    factory(Settings::class)
+        ->withGeneral(factory(GeneralSettings::class)->withOrderMode($orderMode))
+        ->withCarriers($carriers, $carrierSettingsFactory)
+        ->store();
+
+    factory(PdkOrderCollection::class)
+        ->push(...$orders)
+        ->store();
 
     MockApi::enqueue(
         ...$orderMode
@@ -93,12 +77,20 @@ it('exports order', function (
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
+    $errors = Notifications::all()
+        ->filter(function (Notification $notification) {
+            return $notification->variant === Notification::VARIANT_ERROR;
+        });
+
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($responseOrders)
         ->toHaveLength(count($orders))
         ->and($response->getStatusCode())
-        ->toBe(200);
+        ->toBe(200)
+        // Expect no errors to have been added to notifications
+        ->and($errors->toArrayWithoutNull())
+        ->toBe([]);
 
     if ($orderMode) {
         expect($responseShipments)->each->toHaveLength(0);
@@ -116,20 +108,21 @@ it('exports order without customer information if setting is false', function (
     bool  $orderMode,
     array $orders
 ) {
-    /** @var MockPdkOrderRepository $pdkOrderRepository */
-    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    /** @var MockSettingsRepository $settingsRepository */
-    $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
+    $carriers = Arr::pluck($orders, 'deliveryOptions.carrier.externalIdentifier');
 
-    $collection = new PdkOrderCollection($orders);
+    factory(Settings::class)
+        ->withGeneral(
+            factory(GeneralSettings::class)
+                ->withOrderMode($orderMode)
+                ->withShareCustomerInformation($share)
+        )
+        ->withCarriers($carriers)
+        ->store();
 
-    $pdkOrderRepository->updateMany($collection);
-    $settingsRepository->storeSettings(
-        new GeneralSettings([
-            GeneralSettings::ORDER_MODE                 => $orderMode,
-            GeneralSettings::SHARE_CUSTOMER_INFORMATION => $share,
-        ])
-    );
+    $collection = factory(PdkOrderCollection::class)
+        ->push(...$orders)
+        ->store()
+        ->make();
 
     MockApi::enqueue($orderMode ? new ExamplePostOrdersResponse() : new ExamplePostShipmentsResponse());
 
@@ -189,11 +182,13 @@ it('exports order without customer information if setting is false', function (
     ->with('pdkOrdersDomestic');
 
 it('adds notification if shipment export fails', function () {
-    /** @var MockPdkOrderRepository $pdkOrderRepository */
-    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
     MockApi::enqueue(new ExamplePostShipmentsResponse());
 
-    $pdkOrderRepository->update(new PdkOrder(['externalIdentifier' => 'error', 'shippingAddress' => ['cc' => null]]));
+    factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)->store();
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('error')
+        ->withShippingAddress(['cc' => null])
+        ->store();
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => 'error']);
 
@@ -216,20 +211,14 @@ it('adds notification if shipment export fails', function () {
 });
 
 it('exports order and directly returns barcode if concept shipments is off', function () {
-    factory(GeneralSettings::class)
-        ->withConceptShipments(false)
+    factory(Settings::class)
+        ->withGeneral(factory(GeneralSettings::class)->withConceptShipments(false))
+        ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
         ->store();
 
-    /** @var PdkOrderRepositoryInterface $pdkOrderRepository */
-    $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-
-    $collection   = new PdkOrderCollection();
-    $defaultOrder = factory(PdkOrder::class)
-        ->withShipments()
+    $collection = factory(PdkOrderCollection::class, 1)
+        ->store()
         ->make();
-    $collection->push($defaultOrder);
-
-    $pdkOrderRepository->updateMany($collection);
 
     MockApi::enqueue(
         new ExamplePostShipmentsResponse(),

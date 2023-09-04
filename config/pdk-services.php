@@ -12,14 +12,14 @@ use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Service\CartCalculationService;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsFeesServiceInterface;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
-use MyParcelNL\Pdk\App\DeliveryOptions\Contract\ShipmentOptionsServiceInterface;
 use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsFeesService;
 use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
-use MyParcelNL\Pdk\App\DeliveryOptions\Service\ShipmentOptionsService;
 use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Service\InstallerService;
 use MyParcelNL\Pdk\App\Installer\Service\MigrationService;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\PdkWebhookManager;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
@@ -52,6 +52,8 @@ use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\autowire;
 use function DI\factory;
 
@@ -160,11 +162,6 @@ return [
     SettingsManagerInterface::class            => autowire(SettingsManager::class),
 
     /**
-     * Calculates shipment options from defaults and product settings.
-     */
-    ShipmentOptionsServiceInterface::class     => autowire(ShipmentOptionsService::class),
-
-    /**
      * Default storage driver for all repositories. Defaults to in-memory storage. Can be replaced with a proper cache driver.
      */
     StorageInterface::class                    => autowire(MemoryCacheStorage::class),
@@ -175,11 +172,21 @@ return [
     WeightServiceInterface::class              => autowire(WeightService::class),
 
     /**
+     * Handles tri-state values
+     */
+    TriStateServiceInterface::class            => autowire(TriStateService::class),
+
+    /**
      * @todo remove in v3.0.0
      */
     PdkAccountRepositoryInterface::class       => factory(function () {
         return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
     }),
+
+    /**
+     * Handles order options calculation.
+     */
+    PdkOrderOptionsServiceInterface::class     => autowire(PdkOrderOptionsService::class),
 
     /**
      * Handles executing webhooks.

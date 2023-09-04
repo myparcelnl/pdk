@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -25,18 +26,18 @@ it('instantiates default delivery options', function () {
         ->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME)
         ->and($deliveryOptions->pickupLocation)
         ->toBeNull()
-        ->and($deliveryOptions->shipmentOptions->ageCheck)
-        ->toBeNull()
-        ->and($deliveryOptions->shipmentOptions->insurance)
-        ->toBeNull()
         ->and($deliveryOptions->shipmentOptions->labelDescription)
         ->toBeNull()
+        ->and($deliveryOptions->shipmentOptions->ageCheck)
+        ->toBe(TriStateService::INHERIT)
+        ->and($deliveryOptions->shipmentOptions->insurance)
+        ->toBe(TriStateService::INHERIT)
         ->and($deliveryOptions->shipmentOptions->largeFormat)
-        ->toBeNull()
+        ->toBe(TriStateService::INHERIT)
         ->and($deliveryOptions->shipmentOptions->onlyRecipient)
-        ->toBeNull()
+        ->toBe(TriStateService::INHERIT)
         ->and($deliveryOptions->shipmentOptions->signature)
-        ->toBeNull()
+        ->toBe(TriStateService::INHERIT)
         ->and($deliveryOptions->isPickup())
         ->toBeFalse();
 });

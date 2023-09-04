@@ -22,12 +22,32 @@
               ]
             },
             "hideSender": {
-              "enum": [
-                true,
-                false
-              ]
+              "enum": [1, 0]
+            },
+            "ageCheck": {
+              "enum": [1, 0]
             }
-          }
+          },
+          "anyOf": [
+            {
+              "properties": {
+                "ageCheck": {"enum": [0]},
+                "onlyRecipient": {"enum": [0]}
+              }
+            },
+            {
+              "properties": {
+                "ageCheck": {"enum": [1]},
+                "onlyRecipient": {"enum": [0]}
+              }
+            },
+            {
+              "properties": {
+                "onlyRecipient": {"enum": [1]},
+                "ageCheck": {"enum": [0]}
+              }
+            }
+          ]
         }
       }
     }

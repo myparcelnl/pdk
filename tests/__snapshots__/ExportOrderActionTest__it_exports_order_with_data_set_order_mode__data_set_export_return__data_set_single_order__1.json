@@ -48,7 +48,8 @@
                         "large_format": 0,
                         "only_recipient": 0,
                         "package_type": 1,
-                        "return": 0,
+                        "return": 1,
+                        "same_day_delivery": 0,
                         "signature": 1
                     },
                     "physical_properties": {

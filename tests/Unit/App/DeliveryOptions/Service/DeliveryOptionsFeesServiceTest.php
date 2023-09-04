@@ -47,7 +47,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
 
     $fees = $service->getFees(new DeliveryOptions($input));
 
-    expect($fees->toArray())->toEqual($expectation);
+    expect($fees->toArray())->toBe($expectation);
 })->with([
     'none' => [
         'input'       => [],
@@ -77,7 +77,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
             [
                 'id'          => 'delivery_type_evening',
                 'translation' => 'delivery_options_delivery_type_evening_title',
-                'amount'      => 3,
+                'amount'      => 3.0,
             ],
         ],
     ],

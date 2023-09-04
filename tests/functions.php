@@ -11,18 +11,29 @@ use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\FactoryFactory;
 
-function mockPdkProperty(string $property, $value): callable
+function mockPdkProperties(array $properties): callable
 {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $mockPdk */
     $mockPdk = Pdk::get(PdkInterface::class);
 
-    $oldValue = $mockPdk->get($property);
+    $oldValues = [];
 
-    $mockPdk->set($property, $value);
+    foreach ($properties as $property => $value) {
+        $oldValues[$property] = $mockPdk->get($property);
 
-    return static function () use ($mockPdk, $oldValue, $property) {
-        $mockPdk->set($property, $oldValue);
+        $mockPdk->set($property, $value);
+    }
+
+    return static function () use ($mockPdk, $oldValues) {
+        foreach ($oldValues as $property => $value) {
+            $mockPdk->set($property, $value);
+        }
     };
+}
+
+function mockPdkProperty(string $property, $value): callable
+{
+    return mockPdkProperties([$property => $value]);
 }
 
 function mockPlatform(string $platform): callable

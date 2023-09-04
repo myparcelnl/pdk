@@ -306,7 +306,7 @@
                                     "largeFormat": true,
                                     "onlyRecipient": true,
                                     "return": true,
-                                    "sameDayDelivery": true,
+                                    "sameDayDelivery": false,
                                     "signature": true,
                                     "insurance": [
                                         0,
@@ -355,7 +355,7 @@
                                     "return": true,
                                     "ageCheck": true,
                                     "onlyRecipient": true,
-                                    "sameDayDelivery": true,
+                                    "sameDayDelivery": false,
                                     "largeFormat": true
                                 }
                             }
@@ -472,7 +472,7 @@
                         "largeFormat": true,
                         "onlyRecipient": true,
                         "return": true,
-                        "sameDayDelivery": true,
+                        "sameDayDelivery": false,
                         "signature": true,
                         "insurance": [
                             0,
@@ -521,7 +521,7 @@
                         "return": true,
                         "ageCheck": true,
                         "onlyRecipient": true,
-                        "sameDayDelivery": true,
+                        "sameDayDelivery": false,
                         "largeFormat": true
                     }
                 }
@@ -648,7 +648,60 @@
                 "enableDeliveryOptionsWhenNotInStock": true,
                 "useSeparateAddressFields": false
             },
-            "carrier": []
+            "carrier": {
+                "postnl": {
+                    "id": "postnl",
+                    "carrierName": null,
+                    "allowDeliveryOptions": false,
+                    "allowEveningDelivery": false,
+                    "allowMondayDelivery": false,
+                    "allowMorningDelivery": false,
+                    "allowOnlyRecipient": false,
+                    "allowPickupLocations": false,
+                    "allowSameDayDelivery": false,
+                    "allowSaturdayDelivery": false,
+                    "allowSignature": false,
+                    "cutoffTime": "16:00",
+                    "cutoffTimeSameDay": "10:00",
+                    "defaultPackageType": "package",
+                    "deliveryDaysWindow": 7,
+                    "deliveryOptionsEnabled": false,
+                    "deliveryOptionsEnabledForBackorders": false,
+                    "digitalStampDefaultWeight": 0,
+                    "dropOffDelay": 0,
+                    "dropOffPossibilities": {
+                        "dropOffDays": [],
+                        "dropOffDaysDeviations": []
+                    },
+                    "exportAgeCheck": false,
+                    "exportHideSender": false,
+                    "exportInsurance": false,
+                    "exportInsuranceFromAmount": 0,
+                    "exportInsurancePriceFactor": 1,
+                    "exportInsuranceUpTo": 0,
+                    "exportInsuranceUpToEu": 0,
+                    "exportInsuranceUpToRow": 0,
+                    "exportInsuranceUpToUnique": 0,
+                    "exportLargeFormat": false,
+                    "exportOnlyRecipient": false,
+                    "exportReturn": false,
+                    "exportReturnLargeFormat": false,
+                    "exportReturnPackageType": "package",
+                    "exportSignature": false,
+                    "priceDeliveryTypeEvening": 0,
+                    "priceDeliveryTypeMonday": 0,
+                    "priceDeliveryTypeMorning": 0,
+                    "priceDeliveryTypePickup": 0,
+                    "priceDeliveryTypeSameDay": 0,
+                    "priceDeliveryTypeSaturday": 0,
+                    "priceDeliveryTypeStandard": 0,
+                    "priceOnlyRecipient": 0,
+                    "pricePackageTypeDigitalStamp": 0,
+                    "pricePackageTypeMailbox": 0,
+                    "priceSignature": 0,
+                    "showDeliveryDay": true
+                }
+            }
         },
         "shop": {
             "id": 23999,
@@ -696,7 +749,7 @@
                             "largeFormat": true,
                             "onlyRecipient": true,
                             "return": true,
-                            "sameDayDelivery": true,
+                            "sameDayDelivery": false,
                             "signature": true,
                             "insurance": [
                                 0,
@@ -745,7 +798,7 @@
                             "return": true,
                             "ageCheck": true,
                             "onlyRecipient": true,
-                            "sameDayDelivery": true,
+                            "sameDayDelivery": false,
                             "largeFormat": true
                         }
                     }

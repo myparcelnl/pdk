@@ -12,7 +12,7 @@
                   "required": ["largeFormat"],
                   "properties": {
                     "largeFormat": {
-                      "enum": [true]
+                      "enum": [1]
                     }
                   }
                 }
@@ -91,7 +91,7 @@
                 "shipmentOptions": {
                   "properties": {
                     "signature": {
-                      "enum": [true]
+                      "enum": [1]
                     }
                   }
                 }
@@ -125,10 +125,10 @@
                       "enum": [500]
                     },
                     "onlyRecipient": {
-                      "enum": [true]
+                      "enum": [1]
                     },
                     "signature": {
-                      "enum": [true]
+                      "enum": [1]
                     }
                   }
                 }
@@ -174,7 +174,7 @@
               "maxLength": 50
             },
             "sameDayDelivery": {
-              "enum": [false]
+              "enum": [0]
             }
           }
         }

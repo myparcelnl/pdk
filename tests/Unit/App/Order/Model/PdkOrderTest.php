@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -127,14 +128,11 @@ it('creates pdk order from fulfilment order', function (array $orders) {
 })->with('fulfilmentOrders');
 
 it('creates a storable array', function (array $orders) {
-    $pdkOrders = new PdkOrderCollection($orders);
-    $result    = [];
+    $collection = factory(PdkOrderCollection::class)
+        ->push(...$orders)
+        ->make();
 
-    foreach ($pdkOrders->all() as $pdkOrder) {
-        $result[] = $pdkOrder->toStorableArray();
-    }
-
-    assertMatchesJsonSnapshot(json_encode($result));
+    assertMatchesJsonSnapshot(json_encode($collection->toStorableArray()));
 })->with('pdkOrdersDomestic');
 
 it('can check whether an order is deliverable', function (array $lines, bool $result) {

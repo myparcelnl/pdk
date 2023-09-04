@@ -52,21 +52,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/DeliveryOptionsService.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @return with type void is incompatible with native type int\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/ShipmentOptionsService.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Variable \\$carrierSettings on left side of \\?\\? always exists and is not nullable\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/ShipmentOptionsService.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Variable \\$productSettings on left side of \\?\\? always exists and is not nullable\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/ShipmentOptionsService.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method MyParcelNL\\\\Pdk\\\\App\\\\Order\\\\Collection\\\\PdkOrderCollection\\:\\:mergeShipmentsByOrder\\(\\) should return MyParcelNL\\\\Pdk\\\\Shipment\\\\Collection\\\\ShipmentCollection but returns MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/App/Order/Collection/PdkOrderCollection.php',
@@ -282,11 +267,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Fulfilment/Collection/OrderCollection.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Order\\:\\:fromPdkOrder\\(\\) should return static\\(MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Order\\) but returns MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Order\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Fulfilment/Model/Order.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Product\\:\\:fromPdkProduct\\(\\) should return static\\(MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Product\\) but returns MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Model\\\\Product\\.$#',
 	'count' => 2,
 	'path' => __DIR__ . '/src/Fulfilment/Model/Product.php',
@@ -362,11 +342,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Shipment/Request/GetLabelsRequest.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Shipment\\\\Request\\\\PostShipmentsRequest\\:\\:getOptions\\(\\) never returns null so it can be removed from the return type\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Shipment/Request/PostShipmentsRequest.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type string\\|null is not subtype of native type string\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Shipment/Request/PostShipmentsRequest.php',
@@ -395,11 +370,6 @@ $ignoreErrors[] = [
 	'message' => '#^Ternary operator condition is always true\\.$#',
 	'count' => 2,
 	'path' => __DIR__ . '/src/Shipment/Service/DropOffService.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Negated boolean expression is always false\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Validation/Validator/OrderValidator.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type bool\\.$#',

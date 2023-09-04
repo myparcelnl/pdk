@@ -239,7 +239,7 @@ dataset('pdkOrdersDomestic', [
                         ShipmentOptions::LABEL_DESCRIPTION => true,
                         ShipmentOptions::LARGE_FORMAT      => true,
                         ShipmentOptions::ONLY_RECIPIENT    => true,
-                        ShipmentOptions::RETURN            => true,
+                        ShipmentOptions::DIRECT_RETURN     => true,
                         ShipmentOptions::SIGNATURE         => true,
                     ],
                 ],

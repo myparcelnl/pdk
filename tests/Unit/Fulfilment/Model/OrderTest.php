@@ -11,6 +11,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesMockPdkInstance());
+
 it('creates fulfilment order from pdk order', function (array $input) {
     $pdkOrder = new PdkOrder($input);
 

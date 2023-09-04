@@ -34,6 +34,8 @@ interface DeliveryOptionsValidatorInterface
 
     public function canHaveWeight(?int $weight): bool;
 
+    public function getAllowedDeliveryTypes(): array;
+
     public function getAllowedInsuranceAmounts(): array;
 
     public function getAllowedPackageTypes(): array;

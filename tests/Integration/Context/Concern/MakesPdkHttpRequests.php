@@ -5,12 +5,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
-use Behat\Gherkin\Node\TableNode;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatPdkApiService;
 use MyParcelNL\Pdk\Tests\Integration\Exception\NoExampleException;
@@ -83,31 +81,6 @@ trait MakesPdkHttpRequests
         self::assertNotEmpty($array, 'Parsed response body is empty');
 
         return $array;
-    }
-
-    /**
-     * @param  null|\Behat\Gherkin\Node\TableNode $table
-     *
-     * @return array[]
-     */
-    protected function parseTable(?TableNode $table): ?array
-    {
-        if (! $table) {
-            return null;
-        }
-
-        $collection = new Collection($table->getRows());
-
-        return $collection
-            ->mapWithKeys(static function (array $item): array {
-                [$key, $value] = $item;
-
-                return [$key => $value];
-            })
-            ->filter(static function ($value, string $key): bool {
-                return 'key' !== $key;
-            })
-            ->toArray();
     }
 
     /**

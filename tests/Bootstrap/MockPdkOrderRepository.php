@@ -42,4 +42,9 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
             return new PdkOrder($orderData);
         });
     }
+
+    protected function getKeyPrefix(): string
+    {
+        return static::class;
+    }
 }
