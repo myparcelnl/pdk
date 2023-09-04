@@ -39,6 +39,10 @@ class WebhookSubscription extends Model
      */
     public const SHOP_CARRIER_CONFIGURATION_UPDATED = 'shop_carrier_configuration_updated';
     /**
+     * Called when a subscription is created or updated.
+     */
+    public const SUBSCRIPTION_CREATED_OR_UPDATED = 'subscription_created_or_updated';
+    /**
      * All possible hooks.
      */
     public const ALL = [
@@ -48,6 +52,7 @@ class WebhookSubscription extends Model
         self::SHOP_UPDATED,
         self::SHOP_CARRIER_ACCESSIBILITY_UPDATED,
         self::SHOP_CARRIER_CONFIGURATION_UPDATED,
+        self::SUBSCRIPTION_CREATED_OR_UPDATED,
     ];
 
     public    $attributes = [

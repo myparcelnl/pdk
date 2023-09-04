@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
+use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
@@ -27,6 +28,7 @@ use MyParcelNL\Pdk\App\Api\PdkEndpoint;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\App\Request\Account\DeleteAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Account\UpdateSubscriptionFeaturesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
@@ -69,7 +71,7 @@ return [
         /**
          * Delete account.
          */
-        PdkBackendActions::DELETE_ACCOUNT          => [
+        PdkBackendActions::DELETE_ACCOUNT               => [
             'request' => DeleteAccountEndpointRequest::class,
             'action'  => DeleteAccountAction::class,
         ],
@@ -77,15 +79,23 @@ return [
         /**
          * Update account.
          */
-        PdkBackendActions::UPDATE_ACCOUNT     => [
+        PdkBackendActions::UPDATE_ACCOUNT               => [
             'request' => UpdateAccountEndpointRequest::class,
             'action'  => UpdateAccountAction::class,
         ],
 
         /**
+         * Fetch subscription features from the API.
+         */
+        PdkBackendActions::UPDATE_SUBSCRIPTION_FEATURES => [
+            'request' => UpdateSubscriptionFeaturesEndpointRequest::class,
+            'action'  => UpdateSubscriptionFeaturesAction::class,
+        ],
+
+        /**
          * Synchronize orders with the API.
          */
-        PdkBackendActions::SYNCHRONIZE_ORDERS => [
+        PdkBackendActions::SYNCHRONIZE_ORDERS           => [
             'request' => SynchronizeOrdersEndpointRequest::class,
             'action'  => SynchronizeOrdersAction::class,
         ],
@@ -93,7 +103,7 @@ return [
         /**
          * Exports an order to MyParcel as order or shipment, depending on "mode" setting.
          */
-        PdkBackendActions::EXPORT_ORDERS      => [
+        PdkBackendActions::EXPORT_ORDERS                => [
             'request' => ExportOrdersEndpointRequest::class,
             'action'  => ExportOrderAction::class,
         ],

@@ -5,11 +5,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -22,23 +26,31 @@ use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesApiMock());
 
 it('posts order notes if order has notes', function (PdkOrderCollection $orders, PdkOrderNoteCollection $notes) {
     MockPdkFactory::create([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor([
             GeneralSettings::ID => [
                 GeneralSettings::ORDER_MODE => true,
             ],
         ]),
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
+        PdkOrderRepositoryInterface::class   => autowire(MockPdkOrderRepository::class)->constructor($orders),
+        PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)->constructor([
+            'subscriptionFeatures' => [
+                Account::FEATURE_ORDER_NOTES,
+            ],
+        ]),
     ]);
 
     MockApi::enqueue(new ExamplePostOrderNotesResponse());
@@ -51,7 +63,6 @@ it('posts order notes if order has notes', function (PdkOrderCollection $orders,
     $orderCollection = new Collection($orders);
 
     Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
-        'OVERRIDE' => true,
         'orderIds' => $orderCollection
             ->pluck('externalIdentifier')
             ->toArray(),
@@ -64,7 +75,7 @@ it('posts order notes if order has notes', function (PdkOrderCollection $orders,
         return;
     }
 
-    expect($request)->toBeTruthy();
+    expect($request)->not->toBeNull();
 })->with([
     'single order' => [
         new PdkOrderCollection([
@@ -170,4 +181,35 @@ it('posts order notes if order has notes', function (PdkOrderCollection $orders,
             ],
         ]),
     ],
+]);
+
+it('does not post order notes if account does not have feature', function (PdkOrderCollectionFactory $factory) {
+    TestBootstrapper::hasAccount();
+
+    $orderCollection = $factory->store()
+        ->make();
+
+    factory(GeneralSettings::class)
+        ->withOrderMode(true)
+        ->store();
+
+    MockApi::enqueue(new ExamplePostOrderNotesResponse());
+
+    Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
+        'orderIds' => (new Collection($orderCollection))
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    $request = MockApi::getLastRequest();
+
+    expect($request)->toBeNull();
+})->with([
+    'single exported order with one order note' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withApiIdentifier('90001')
+                ->withNotes()
+        );
+    },
 ]);

@@ -46,7 +46,7 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
      */
     public function updateMany(PdkOrderCollection $collection): PdkOrderCollection
     {
-        return $collection->map(function (PdkOrder $order) {
+        return $collection->map(function ($order) {
             return $this->update($order);
         });
     }

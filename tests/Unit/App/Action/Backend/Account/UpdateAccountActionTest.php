@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleAclResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
@@ -32,7 +33,8 @@ function executeUpdateAccount(?array $settings, array $accounts = null): Respons
     MockApi::enqueue(
         new ExampleGetAccountsResponse($accounts),
         new ExampleGetCarrierConfigurationResponse(),
-        new ExampleGetCarrierOptionsResponse()
+        new ExampleGetCarrierOptionsResponse(),
+        new ExampleAclResponse()
     );
 
     $request = new Request(
@@ -85,15 +87,5 @@ it('fetches new account and carrier data from api when called with empty array',
 
     $currentAccount = AccountSettings::getAccount();
 
-    expect($currentAccount->toStorableArray())
-        ->toBe($existingAccount->toStorableArray())
-        // Expect last api call to have been to the carrier options endpoint, as
-        // posting an empty array should trigger a fetch of the current account
-        // and its carrier configuration and options
-        ->and(
-            MockApi::ensureLastRequest()
-                ->getUri()
-                ->getPath()
-        )
-        ->toEndWith('/carrier_management/shops/2100/carrier_options');
+    expect($currentAccount->toStorableArray())->toBe($existingAccount->toStorableArray());
 });

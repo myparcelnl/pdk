@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\ContactDetailsFactory;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
@@ -26,6 +27,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withId(int $id)
  * @method $this withPlatformId(int $platformId)
  * @method $this withStatus(int $status)
+ * @method $this withSubscriptionFeatures(array|Collection $features)
  */
 final class AccountFactory extends AbstractModelFactory
 {
