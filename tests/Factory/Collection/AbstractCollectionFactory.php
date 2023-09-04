@@ -81,13 +81,13 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
     {
         $collection = $this->getCollection();
 
-        $mapped = $this->entries->map(function ($item) {
-            return $item instanceof FactoryInterface
-                ? $item->make()
-                : $item;
-        });
-
-        return new $collection($mapped->all());
+        return new $collection(
+            $this->entries->map(function ($item) {
+                return $item instanceof FactoryInterface
+                    ? $item->make()
+                    : $item;
+            })
+        );
     }
 
     /**
