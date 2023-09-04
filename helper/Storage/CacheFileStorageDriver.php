@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Helper\Storage;
 
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use RuntimeException;
 
-final class CacheFileStorage implements StorageInterface
+final class CacheFileStorageDriver implements StorageDriverInterface
 {
     public function delete(string $storageKey): void
     {
@@ -29,7 +29,7 @@ final class CacheFileStorage implements StorageInterface
         return file_exists($storageKey);
     }
 
-    public function set(string $storageKey, $value): void
+    public function put(string $storageKey, $value): void
     {
         $this->mkdirp($storageKey);
 

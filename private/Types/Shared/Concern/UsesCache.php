@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Concern;
 
-use MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorage;
+use MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorageDriver;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
 use MyParcelNL\Sdk\src\Support\Str;
 
 trait UsesCache
 {
     /**
-     * @var \MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorage
+     * @var \MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorageDriver
      */
     private static $cacheFileStorage;
 
     /**
-     * @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage
+     * @var \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver
      */
     private static $memoryCache;
 
@@ -62,18 +62,18 @@ trait UsesCache
     /**
      * @param  string $driverName
      *
-     * @return \MyParcelNL\Pdk\Storage\Contract\StorageInterface
+     * @return \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface
      */
-    private function getDriver(string $driverName): StorageInterface
+    private function getDriver(string $driverName): StorageDriverInterface
     {
         switch ($driverName) {
             case 'file':
-                self::$cacheFileStorage = self::$cacheFileStorage ?? Pdk::get(CacheFileStorage::class);
+                self::$cacheFileStorage = self::$cacheFileStorage ?? Pdk::get(CacheFileStorageDriver::class);
                 $driver                 = self::$cacheFileStorage;
                 break;
 
             default:
-                self::$memoryCache = self::$memoryCache ?? Pdk::get(MemoryCacheStorage::class);
+                self::$memoryCache = self::$memoryCache ?? Pdk::get(MemoryCacheStorageDriver::class);
                 $driver            = self::$memoryCache;
                 break;
         }

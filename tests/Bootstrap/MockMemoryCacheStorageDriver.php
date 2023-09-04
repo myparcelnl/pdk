@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
+use Symfony\Contracts\Service\ResetInterface;
 
-final class MockStorage extends MemoryCacheStorage
+class MockMemoryCacheStorageDriver extends MemoryCacheStorageDriver implements ResetInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Base\Support\Collection
@@ -72,9 +73,14 @@ final class MockStorage extends MemoryCacheStorage
         return $this->writes;
     }
 
-    public function set(string $storageKey, $value): void
+    public function put(string $storageKey, $value): void
     {
         $this->writes->push(compact('storageKey', 'value'));
-        parent::set($storageKey, $value);
+        parent::put($storageKey, $value);
+    }
+
+    public function reset(): void
+    {
+        $this->clear();
     }
 }

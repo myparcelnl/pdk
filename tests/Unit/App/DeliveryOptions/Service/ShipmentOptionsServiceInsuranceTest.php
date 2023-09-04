@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -29,7 +29,7 @@ afterEach(function () {
 });
 
 it('calculates insurance', function (array $input) {
-    /** @var MockSettingsRepository $settingsRepository */
+    /** @var MockPdkSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
     /** @var MockPdkProductRepository $productRepository */
     $productRepository = Pdk::get(PdkProductRepositoryInterface::class);

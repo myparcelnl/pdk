@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkPdkProductRepository;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
 use RuntimeException;
 
 class MockPdkProductRepository extends AbstractPdkPdkProductRepository
@@ -88,12 +88,12 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     private $saved;
 
     /**
-     * @param  array                                      $products
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
+     * @param  array                                            $products
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver $storage
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(array $products = self::DEFAULT_PRODUCTS, MemoryCacheStorage $storage)
+    public function __construct(array $products = self::DEFAULT_PRODUCTS, MemoryCacheStorageDriver $storage)
     {
         parent::__construct($storage);
         $this->reset($products);

@@ -12,8 +12,8 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('can get and set items', function () {
-    /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage */
-    $storage = Pdk::get(MemoryCacheStorage::class);
+    /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver $storage */
+    $storage = Pdk::get(MemoryCacheStorageDriver::class);
 
     $storage->set('foo', 'bar');
 
@@ -21,8 +21,8 @@ it('can get and set items', function () {
 });
 
 it('can delete items', function () {
-    /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage */
-    $storage = Pdk::get(MemoryCacheStorage::class);
+    /** @var \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver $storage */
+    $storage = Pdk::get(MemoryCacheStorageDriver::class);
 
     $storage->set('foo', 'bar');
     $storage->delete('foo');

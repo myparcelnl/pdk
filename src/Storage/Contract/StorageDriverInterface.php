@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Storage\Contract;
 
-interface WritableStorageInterface extends ReadOnlyStorageInterface
+interface StorageDriverInterface extends ReadOnlyStorageDriverInterface
 {
     /**
      * Delete an item from the storage.
@@ -14,5 +14,5 @@ interface WritableStorageInterface extends ReadOnlyStorageInterface
     /**
      * Store an item in the storage.
      */
-    public function set(string $storageKey, $value): void;
+    public function put(string $storageKey, $value): void;
 }

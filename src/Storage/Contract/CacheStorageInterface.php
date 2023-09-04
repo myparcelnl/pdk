@@ -7,8 +7,8 @@ namespace MyParcelNL\Pdk\Storage\Contract;
 /**
  * This interface is used for caching. This can be the memory cache (default), or any other cache storage.
  *
- * @see \MyParcelNL\Pdk\Storage\MemoryCacheStorage
+ * @see \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver
  */
-interface CacheStorageInterface extends StorageInterface
+interface CacheStorageInterface extends MemoryStorageInterface
 {
 }

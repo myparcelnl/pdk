@@ -6,7 +6,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorageDriver;
 use MyParcelNL\Pdk\Tests\Factory\SharedFactoryState;
 use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
 use Symfony\Contracts\Service\ResetInterface;
@@ -43,7 +43,7 @@ uses()
         }
 
         $services = [
-            MockMemoryCacheStorage::class,
+            MockMemoryCacheStorageDriver::class,
             SharedFactoryState::class,
         ];
 

@@ -6,11 +6,11 @@ namespace MyParcelNL\Pdk\Console\Types\Storage;
 
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use RuntimeException;
 use Throwable;
 
-final class CacheFileStorage implements StorageInterface
+final class CacheFileStorageDriver implements StorageDriverInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Base\FileSystemInterface
@@ -57,27 +57,26 @@ final class CacheFileStorage implements StorageInterface
 
     /**
      * @param  string $storageKey
-     * @param  mixed  $item
+     * @param  mixed  $value
      *
      * @return void
-     * @throws \Exception
      */
-    public function set(string $storageKey, $item): void
+    public function put(string $storageKey, $value): void
     {
         $this->fileSystem->mkdir($this->fileSystem->dirname($storageKey), true);
 
-        if (! is_scalar($item)) {
-            if ($item instanceof StorableArrayable) {
-                $item = $item->toStorableArray();
+        if (! is_scalar($value)) {
+            if ($value instanceof StorableArrayable) {
+                $value = $value->toStorableArray();
             }
 
             try {
-                $item = serialize($item);
+                $value = serialize($value);
             } catch (Throwable $th) {
                 throw new RuntimeException("Error serializing item: {$th->getMessage()}", 1);
             }
         }
 
-        $this->fileSystem->put($storageKey, $item);
+        $this->fileSystem->put($storageKey, $value);
     }
 }

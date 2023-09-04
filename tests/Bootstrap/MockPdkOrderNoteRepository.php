@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderNoteRepository;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 
 class MockPdkOrderNoteRepository extends AbstractPdkOrderNoteRepository
 {
@@ -19,12 +19,12 @@ class MockPdkOrderNoteRepository extends AbstractPdkOrderNoteRepository
     private $notes;
 
     /**
-     * @param  array                                             $orderNotes
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
+     * @param  array                                                   $orderNotes
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface $storage
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct($orderNotes = [], StorageInterface $storage)
+    public function __construct($orderNotes = [], StorageDriverInterface $storage)
     {
         parent::__construct($storage);
 

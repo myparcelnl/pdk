@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Account\Response\GetShopsResponse;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
 
 class MockRepository extends ApiRepository
 {
@@ -22,10 +22,10 @@ class MockRepository extends ApiRepository
     private $values;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage       $cache
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver $cache
      * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api
      */
-    public function __construct(MemoryCacheStorage $cache, ApiServiceInterface $api)
+    public function __construct(MemoryCacheStorageDriver $cache, ApiServiceInterface $api)
     {
         parent::__construct($cache, $api);
 

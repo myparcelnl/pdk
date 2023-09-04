@@ -54,8 +54,8 @@ use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
 use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use function DI\autowire;
 use function MyParcelNL\Pdk\linkDeprecatedInterface;
@@ -174,12 +174,12 @@ return [
      *
      * @todo remove default in v3.0.0
      */
-    StorageInterface::class                    => autowire(MemoryCacheStorage::class),
+    StorageDriverInterface::class              => autowire(MemoryCacheStorageDriver::class),
 
     /**
      * Cache storage driver for all repositories. Defaults to in-memory storage. Can be replaced with a proper cache driver.
      */
-    CacheStorageInterface::class               => autowire(MemoryCacheStorage::class),
+    CacheStorageInterface::class               => autowire(MemoryCacheStorageDriver::class),
 
     /**
      * Handles weight calculations and unit conversions.

@@ -15,8 +15,6 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 
 class SettingsManager implements SettingsManagerInterface
 {
-    public const KEY_ALL = 'all';
-
     /**
      * This key is used to store global settings that apply to all sub items of a collection settings group. Currently
      * only applies to carrier settings.

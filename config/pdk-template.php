@@ -17,7 +17,7 @@ use MyParcelNL\Pdk\Base\Contract\LoggerInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use function DI\autowire;
 use function DI\value;
 
@@ -114,10 +114,10 @@ return [
     /**
      * Storage. Should be persistent.
      *
-     * @see \MyParcelNL\Pdk\Storage\MemoryCacheStorage for an example of a non-persistent storage.
+     * @see \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver for an example of a non-persistent storage.
      */
 
-    StorageInterface::class => autowire(),
+    StorageDriverInterface::class => autowire(),
 
     /**
      * Adapter to make requests with.

@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -19,7 +19,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(
     new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        SettingsRepositoryInterface::class => autowire(MockPdkSettingsRepository::class)->constructor([
             AccountSettings::ID => [
                 AccountSettings::API_KEY => '1234567890',
             ],
@@ -59,7 +59,7 @@ it('retrieves a single setting from a category', function (string $key, $expecte
 ]);
 
 it('updates settings', function () {
-    /** @var MockSettingsRepository $repository */
+    /** @var MockPdkSettingsRepository $repository */
     $repository        = Pdk::get(SettingsRepositoryInterface::class);
     $createSettingsKey = Pdk::get('createSettingsKey');
 

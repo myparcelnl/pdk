@@ -25,7 +25,7 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
@@ -54,7 +54,7 @@ it('exports order', function (
 ) {
     /** @var MockPdkOrderRepository $pdkOrderRepository */
     $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    /** @var MockSettingsRepository $settingsRepository */
+    /** @var MockPdkSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
 
     $collection = new PdkOrderCollection($orders);
@@ -118,7 +118,7 @@ it('exports order without customer information if setting is false', function (
 ) {
     /** @var MockPdkOrderRepository $pdkOrderRepository */
     $pdkOrderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
-    /** @var MockSettingsRepository $settingsRepository */
+    /** @var MockPdkSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
 
     $collection = new PdkOrderCollection($orders);

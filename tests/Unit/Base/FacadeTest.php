@@ -8,14 +8,14 @@ namespace MyParcelNL\Pdk\Base;
 use DI\NotFoundException;
 use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
 it('can call instance behind facade', function () {
-    expect(Pdk::has(StorageInterface::class))->toEqual(true);
+    expect(Pdk::has(StorageDriverInterface::class))->toEqual(true);
 });
 
 it('throws error if facade points to nonexistent container item', function () {
@@ -34,5 +34,5 @@ it('throws error if facade points to nonexistent container item', function () {
 it('throws error when facade accessor is not set', function () {
     Facade::setPdkInstance(null);
 
-    Pdk::get(StorageInterface::class);
+    Pdk::get(StorageDriverInterface::class);
 })->throws(InvalidFacadeException::class);

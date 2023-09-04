@@ -7,8 +7,8 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Repository\AbstractPdkAccountRepository;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
 
 final class MockPdkAccountRepository extends AbstractPdkAccountRepository
 {
@@ -56,18 +56,18 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     private $storedAccount;
 
     /**
-     * @param  null|array                                                    $data
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
+     * @param  null|array                                                       $data
+     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface           $storage
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository             $accountRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
     public function __construct(
-        ?array                      $data = [],
-        StorageInterface            $storage,
-        AccountRepository           $accountRepository,
-        SettingsRepositoryInterface $settingsRepository
+        ?array                         $data = [],
+        CacheStorageInterface          $storage,
+        AccountRepository              $accountRepository,
+        PdkSettingsRepositoryInterface $settingsRepository
     ) {
         parent::__construct($storage, $accountRepository, $settingsRepository);
         $this->storedAccount = null === $data ? null : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
@@ -84,8 +84,7 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     /**
      * @param  null|\MyParcelNL\Pdk\Account\Model\Account $key
      *
-     * @return void
-     * @noinspection PhpOverridingMethodVisibilityInspection
+     * @return null|\MyParcelNL\Pdk\Account\Model\Account
      */
     public function store(?Account $key): ?Account
     {

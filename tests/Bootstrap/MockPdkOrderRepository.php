@@ -8,17 +8,17 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderRepository;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 
 class MockPdkOrderRepository extends AbstractPdkOrderRepository
 {
     /**
-     * @param  PdkOrder|PdkOrder[]|PdkOrderCollection            $orders
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
+     * @param  PdkOrder|PdkOrder[]|PdkOrderCollection                  $orders
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface $storage
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct($orders = [], StorageInterface $storage)
+    public function __construct($orders = [], StorageDriverInterface $storage)
     {
         parent::__construct($storage);
 

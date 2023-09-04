@@ -18,6 +18,9 @@ use Psr\Log\LoggerInterface;
  * @method static void info($message, array $context = [])
  * @method static void notice($message, array $context = [])
  * @method static void warning($message, array $context = [])
+ * @method static void reportDeprecatedClass(string $class, ?string $replacement = null)
+ * @method static void reportDeprecatedInterface(string $interface, ?string $replacement = null)
+ * @method static void reportDeprecatedMethod(string $method, ?string $replacement = null)
  * @see \Psr\Log\LoggerInterface
  */
 final class Logger extends Facade

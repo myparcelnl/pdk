@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
 
 class MockAbstractSettingsRepository extends AbstractSettingsRepository
 {
@@ -16,12 +16,12 @@ class MockAbstractSettingsRepository extends AbstractSettingsRepository
     private $settings = [];
 
     /**
-     * @param  array                                      $settings
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
+     * @param  array                                            $settings
+     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver $storage
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(array $settings = [], MemoryCacheStorage $storage)
+    public function __construct(array $settings = [], MemoryCacheStorageDriver $storage)
     {
         parent::__construct($storage);
 

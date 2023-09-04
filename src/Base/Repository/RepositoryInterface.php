@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Repository;
 
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 
 interface RepositoryInterface
 {
@@ -28,23 +28,23 @@ interface RepositoryInterface
      * @return T
      */
     public function retrieve(
-        string           $key,
-        ?callable        $callback = null,
-        bool             $force = false,
-        StorageInterface $storage = null
+        string                 $key,
+        ?callable              $callback = null,
+        bool                   $force = false,
+        StorageDriverInterface $storage = null
     );
 
     /**
      * @template T
-     * @param  string                                                 $key
-     * @param  null|T                                                 $value
-     * @param  null|\MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
+     * @param  string                                                       $key
+     * @param  null|T                                                       $value
+     * @param  null|\MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface $storage
      *
      * @return T
      */
     public function store(
-        string           $key,
-                         $value,
-        StorageInterface $storage = null
+        string                 $key,
+                               $value,
+        StorageDriverInterface $storage = null
     );
 }

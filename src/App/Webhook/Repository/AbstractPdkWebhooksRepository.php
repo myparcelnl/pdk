@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Repository;
 
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Repository\Repository;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
 
@@ -18,10 +18,10 @@ abstract class AbstractPdkWebhooksRepository extends Repository implements PdkWe
     protected $apiRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $cache
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface          $cache
      * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $subscriptionRepository
      */
-    public function __construct(StorageInterface $cache, WebhookSubscriptionRepository $subscriptionRepository)
+    public function __construct(StorageDriverInterface $cache, WebhookSubscriptionRepository $subscriptionRepository)
     {
         parent::__construct($cache);
         $this->apiRepository = $subscriptionRepository;

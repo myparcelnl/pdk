@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
  * @method static bool has(string $id)
  * @method static bool isDevelopment()
  * @method static bool isProduction()
+ * @method static mixed make(string $id, array $parameters = [])
  * @see \MyParcelNL\Pdk\Base\Concern\PdkInterface
  */
 final class Pdk extends Facade

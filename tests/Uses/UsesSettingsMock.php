@@ -11,7 +11,7 @@ final class UsesSettingsMock implements BaseMock
 {
     public function afterEach(): void
     {
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository $settingsRepository */
         $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
 
         $settingsRepository->reset();

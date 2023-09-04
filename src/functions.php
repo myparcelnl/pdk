@@ -9,13 +9,11 @@ use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use function DI\factory;
 
-if (! function_exists('MyParcelNL\Pdk\linkDeprecatedInterface')) {
-    function linkDeprecatedInterface(string $deprecated, string $replacement): FactoryDefinitionHelper
-    {
-        return factory(function () use ($deprecated, $replacement) {
-            Logger::reportDeprecatedInterface($deprecated, $replacement);
+function linkDeprecatedInterface(string $deprecated, string $replacement): FactoryDefinitionHelper
+{
+    return factory(function () use ($deprecated, $replacement) {
+        Logger::reportDeprecatedInterface($deprecated, $replacement);
 
-            return Pdk::get($replacement);
-        });
-    }
+        return Pdk::get($replacement);
+    });
 }

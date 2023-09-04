@@ -58,6 +58,16 @@ abstract class AbstractPdkAccountRepository extends Repository implements
      *
      * @return null|\MyParcelNL\Pdk\Account\Model\Account
      */
+    public function get(bool $force = false): ?Account
+    {
+        return $this->getAccount($force);
+    }
+
+    /**
+     * @param  bool $force
+     *
+     * @return null|\MyParcelNL\Pdk\Account\Model\Account
+     */
     public function getAccount(bool $force = false): ?Account
     {
         $account = $this->getFromStorage();

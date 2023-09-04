@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use Throwable;
 
 class PdkAccountRepository extends StorageRepository implements PdkAccountRepositoryInterface
@@ -23,14 +23,14 @@ class PdkAccountRepository extends StorageRepository implements PdkAccountReposi
     private $accountRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface $cache
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface      $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository   $accountRepository
+     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface  $cache
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface $storage
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository    $accountRepository
      */
     public function __construct(
-        CacheStorageInterface $cache,
-        StorageInterface      $storage,
-        AccountRepository     $accountRepository
+        CacheStorageInterface  $cache,
+        StorageDriverInterface $storage,
+        AccountRepository      $accountRepository
     ) {
         parent::__construct($cache, $storage);
         $this->accountRepository = $accountRepository;

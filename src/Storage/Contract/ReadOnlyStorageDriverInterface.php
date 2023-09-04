@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Storage\Contract;
 
-interface ReadOnlyStorageInterface
+interface ReadOnlyStorageDriverInterface
 {
     /**
      * Retrieve an item from the storage.

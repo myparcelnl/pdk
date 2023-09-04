@@ -76,4 +76,14 @@ return [
      * Allowed positions for the delivery options in the checkout.
      */
     'deliveryOptionsPositions' => value([]),
+
+    'storage' => value([
+        'cache' => [
+            'driver' => 'memory',
+        ],
+
+        'persistent' => [
+            'driver' => 'memory',
+        ],
+    ]),
 ];

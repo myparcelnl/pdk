@@ -128,4 +128,17 @@ class Pdk implements PdkInterface
     {
         return self::MODE_PRODUCTION === $this->getMode();
     }
+
+    /**
+     * @param  string $key
+     * @param  array  $parameters
+     *
+     * @return mixed|string
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     */
+    public function make(string $key, array $parameters = [])
+    {
+        return $this->container->make($key, $parameters);
+    }
 }

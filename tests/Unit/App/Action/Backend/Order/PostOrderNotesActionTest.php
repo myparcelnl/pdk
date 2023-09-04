@@ -29,7 +29,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use function DI\autowire;
@@ -40,7 +40,7 @@ usesShared(new UsesApiMock());
 
 it('posts order notes if order has notes', function (PdkOrderCollection $orders, PdkOrderNoteCollection $notes) {
     MockPdkFactory::create([
-        SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor([
+        SettingsRepositoryInterface::class   => autowire(MockPdkSettingsRepository::class)->constructor([
             GeneralSettings::ID => [
                 GeneralSettings::ORDER_MODE => true,
             ],

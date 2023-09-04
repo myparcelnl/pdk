@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
@@ -23,7 +23,7 @@ uses()->group('frontend', 'settings');
 
 usesShared(
     new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        SettingsRepositoryInterface::class => autowire(MockPdkSettingsRepository::class)->constructor([
             LabelSettings::ID => [
                 LabelSettings::DESCRIPTION => 'description',
             ],

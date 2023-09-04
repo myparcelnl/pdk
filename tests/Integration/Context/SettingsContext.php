@@ -18,7 +18,7 @@ use function MyParcelNL\Pdk\Tests\mockPlatform;
 final class SettingsContext extends AbstractContext
 {
     /**
-     * @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository
+     * @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkSettingsRepository
      */
     protected $settingsRepository;
 

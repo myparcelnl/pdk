@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\App\Webhook\Repository\AbstractPdkWebhooksRepository;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
@@ -37,14 +37,14 @@ final class MockPdkWebhooksRepository extends AbstractPdkWebhooksRepository
 
     /**
      * @param  array                                                            $subscriptions
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $cache
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface          $cache
      * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $subscriptionRepository
      *
      * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
     public function __construct(
         array                         $subscriptions = self::DEFAULT_SUBSCRIPTIONS,
-        StorageInterface              $cache,
+        StorageDriverInterface        $cache,
         WebhookSubscriptionRepository $subscriptionRepository
     ) {
         parent::__construct($cache, $subscriptionRepository);

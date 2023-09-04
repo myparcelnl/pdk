@@ -6,13 +6,12 @@ namespace MyParcelNL\Pdk\Base\Repository;
 
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
 
 class StorageRepository extends Repository
 {
     /**
-     * @var \MyParcelNL\Pdk\Storage\Contract\StorageInterface
+     * @var \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface
      */
     protected $storage;
 
@@ -21,15 +20,22 @@ class StorageRepository extends Repository
      */
     protected $storageHashMap = [];
 
-    /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface $cache
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface      $storage
-     */
-    public function __construct(CacheStorageInterface $cache, StorageInterface $storage)
-    {
-        parent::__construct($cache);
-        $this->storage = $storage;
-    }
+    //    /**
+    //     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageStackInterface $stack
+    //     */
+    //    public function __construct(StorageStackInterface $stack)
+    //    {
+    //
+    //    }
+    //    /**
+    //     * @param  \MyParcelNL\Pdk\Storage\Contract\CacheStorageInterface $cache
+    //     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface      $storage
+    //     */
+    //    public function __construct(CacheStorageInterface $cache, StorageDriverInterface $storage)
+    //    {
+    //        parent::__construct($cache);
+    //        $this->storage = $storage;
+    //    }
 
     /**
      * @param  string $key
@@ -58,28 +64,28 @@ class StorageRepository extends Repository
     /**
      * Try to get the value from cache, if not found, try to get it from storage.
      *
-     * @param  string                                                 $key
-     * @param  null|callable                                          $callback
-     * @param  bool                                                   $force
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface|null $storage
+     * @param  string                                                       $key
+     * @param  null|callable                                                $callback
+     * @param  bool                                                         $skipCache
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface|null $storage
      *
      * @return mixed
      */
     protected function retrieve(
-        string           $key,
-        ?callable        $callback = null,
-        bool             $force = false,
-        StorageInterface $storage = null
+        string                 $key,
+        ?callable              $callback = null,
+        bool                   $skipCache = false,
+        StorageDriverInterface $storage = null
     ) {
         if ($storage) {
-            return parent::retrieve($key, $callback, $force, $storage);
+            return parent::retrieve($key, $callback, $skipCache, $storage);
         }
 
-        return parent::retrieve($key, function () use ($key, $callback, $force) {
+        return parent::retrieve($key, function () use ($key, $callback, $skipCache) {
             $storageKey = Pdk::get('createSettingsStorageKey')($key);
 
-            return $this->transformData($key, parent::retrieve($storageKey, $callback, $force, $this->storage));
-        }, $force, $storage);
+            return $this->transformData($key, parent::retrieve($storageKey, $callback, $skipCache, $this->storage));
+        }, $skipCache, $storage);
     }
 
     /**
@@ -99,7 +105,7 @@ class StorageRepository extends Repository
             return $data;
         }
 
-        $this->storage->set($fullKey, $data);
+        $this->storage->put($fullKey, $data);
 
         $this->storageHashMap[$fullKey] = $newHash;
 

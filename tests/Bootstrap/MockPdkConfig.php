@@ -26,8 +26,8 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Storage\Contract\StorageDriverInterface;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorageDriver;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
 use Psr\Log\LoggerInterface;
 use function DI\factory;
@@ -84,12 +84,12 @@ class MockPdkConfig
             PdkProductRepositoryInterface::class        => get(MockPdkProductRepository::class),
             PdkShippingMethodRepositoryInterface::class => get(MockPdkShippingMethodRepository::class),
             PdkWebhooksRepositoryInterface::class       => get(MockPdkWebhooksRepository::class),
-            SettingsRepositoryInterface::class          => get(MockSettingsRepository::class),
-            StorageInterface::class                     => get(MockMemoryCacheStorage::class),
+            SettingsRepositoryInterface::class          => get(MockPdkSettingsRepository::class),
+            StorageDriverInterface::class               => get(MockMemoryCacheStorageDriver::class),
             TaxServiceInterface::class                  => get(MockTaxService::class),
             ViewServiceInterface::class                 => get(MockViewService::class),
 
-            MemoryCacheStorage::class => get(MockMemoryCacheStorage::class),
+            MemoryCacheStorageDriver::class => get(MockMemoryCacheStorageDriver::class),
         ];
     }
 }
