@@ -18,7 +18,7 @@ jobs:
     outputs:
       new-commits: ${{ steps.check-release.outputs.new-commits }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -67,7 +67,7 @@ jobs:
     outputs:
       released: ${{ steps.semantic-release.outputs.released }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -78,7 +78,7 @@ jobs:
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_REPO_TOKEN }}
