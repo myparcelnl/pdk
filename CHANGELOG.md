@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.0](https://github.com/myparcelnl/pdk/compare/v2.18.0...v2.19.0) (2023-09-04)
+
+
+### :sparkles: New Features
+
+* **account:** add action to update subscription features ([#133](https://github.com/myparcelnl/pdk/issues/133)) ([1c856ba](https://github.com/myparcelnl/pdk/commit/1c856ba505531d43638c6c58ea212f6a6bb32b0e))
+* **orders:** improve order validation ([#169](https://github.com/myparcelnl/pdk/issues/169)) ([694437b](https://github.com/myparcelnl/pdk/commit/694437bcc12ca192035b4350f789aba51f6d035a))
+
 ## [2.18.0](https://github.com/myparcelnl/pdk/compare/v2.17.1...v2.18.0) (2023-08-31)
 
 
