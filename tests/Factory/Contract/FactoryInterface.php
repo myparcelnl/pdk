@@ -10,4 +10,9 @@ interface FactoryInterface
      * @return $this
      */
     public function fromScratch(): FactoryInterface;
+
+    /**
+     * @return mixed
+     */
+    public function make();
 }

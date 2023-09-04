@@ -6,12 +6,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Model;
 
 use DateTime;
-use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
-use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of PdkOrderNote
@@ -56,8 +56,8 @@ final class PdkOrderNoteFactory extends AbstractModelFactory
      */
     protected function save(Model $model): void
     {
-        factory(PdkOrder::class)
-            ->withLines(factory(PdkOrderLineCollection::class)->push($model))
-            ->store();
+        $repository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
+
+        $repository->add($model);
     }
 }

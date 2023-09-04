@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
+use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
 /**
@@ -28,5 +29,23 @@ final class RetailLocationFactory extends AbstractModelFactory
     public function getModel(): string
     {
         return RetailLocation::class;
+    }
+
+    public function inTheNetherlands(): self
+    {
+        return $this
+            ->withCc('NL')
+            ->withCity('AALSMEER')
+            ->withPostalCode('1431ED')
+            ->withStreet('Zijdstraat')
+            ->withNumber('38')
+            ->withLocationCode('215795')
+            ->withLocationName('Phone House Aalsmeer')
+            ->withRetailNetworkId('PNPNL-01');
+    }
+
+    protected function createDefault(): FactoryInterface
+    {
+        return $this->inTheNetherlands();
     }
 }

@@ -43,14 +43,16 @@ final class ProductSettingsFactory extends AbstractSettingsModelFactory
             ->withCustomsCode('123456')
             ->withDisableDeliveryOptions(true)
             ->withDropOffDelay(3)
-            ->withExportAgeCheck(TriStateService::ENABLED)
-            ->withExportHideSender(TriStateService::ENABLED)
-            ->withExportInsurance(TriStateService::ENABLED)
-            ->withExportLargeFormat(TriStateService::ENABLED)
-            ->withExportOnlyRecipient(TriStateService::ENABLED)
-            ->withExportReturn(TriStateService::ENABLED)
-            ->withExportSignature(TriStateService::ENABLED)
-            ->withFitInMailbox(0);
+            ->withExportAgeCheck(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withExportHideSender(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withExportInsurance(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withExportLargeFormat(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withExportOnlyRecipient(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withExportReturn(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withExportSignature(AbstractSettingsModel::TRISTATE_VALUE_ENABLED)
+            ->withFitInMailbox(0)
+            ->withFitInMailbox(0)
+            ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
     }
 
     /**

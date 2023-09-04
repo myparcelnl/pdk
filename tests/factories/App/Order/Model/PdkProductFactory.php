@@ -41,13 +41,13 @@ final class PdkProductFactory extends AbstractModelFactory
     }
 
     /**
-     * @param  int|Currency|CurrencyFactory $price
+     * @param  int|array|Currency|CurrencyFactory $price
      *
-     * @return void
+     * @return $this
      */
     public function withPrice($price): self
     {
-        if (is_int($price)) {
+        if (is_numeric($price)) {
             $price = factory(Currency::class)->withAmount($price);
         }
 

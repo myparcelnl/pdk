@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationFactory;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptionsFactory;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentFactory;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
@@ -51,6 +52,41 @@ final class PdkOrderFactory extends AbstractModelFactory
         return PdkOrder::class;
     }
 
+    public function toAddressWithDifficultStreet(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->withDifficultStreet());
+    }
+
+    public function toBelgium(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->inBelgium());
+    }
+
+    public function toFrance(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->inFrance());
+    }
+
+    public function toGermany(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->inGermany());
+    }
+
+    public function toTheNetherlands(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->inTheNetherlands());
+    }
+
+    public function toTheUnitedKingdom(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->inTheUnitedKingdom());
+    }
+
+    public function toTheUnitedStates(): self
+    {
+        return $this->from(factory(ShippingAddress::class)->inTheUnitedStates());
+    }
+
     /**
      * @param  array|DeliveryOptions|DeliveryOptionsFactory $deliveryOptions
      *
@@ -64,6 +100,19 @@ final class PdkOrderFactory extends AbstractModelFactory
     public function withDeliveryOptionsWithAllOptions(): self
     {
         return $this->withDeliveryOptions(factory(DeliveryOptions::class)->withAllShipmentOptions());
+    }
+
+    /**
+     * @param  array|\MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory $pickupLocation
+     *
+     * @return self
+     */
+    public function withDeliveryOptionsWithPickupLocation($pickupLocation = null): self
+    {
+        return $this->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withPickupLocation($pickupLocation ?? factory(RetailLocation::class))
+        );
     }
 
     /**
@@ -119,7 +168,8 @@ final class PdkOrderFactory extends AbstractModelFactory
             ->withTotalPrice(1100)
             ->withTotalPriceAfterVat(1331)
             ->withTotalVat(231)
-            ->withOrderDate('2030-01-01 12:00:00');
+            ->withOrderDate('2030-01-01 12:00:00')
+            ->withLines();
     }
 
     /**

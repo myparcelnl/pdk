@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Carrier
@@ -34,6 +35,9 @@ final class CarrierFactory extends AbstractModelFactory
 
     protected function createDefault(): FactoryInterface
     {
-        return $this->withId(Carrier::CARRIER_POSTNL_ID);
+        return $this
+            ->withName(Carrier::CARRIER_POSTNL_NAME)
+            ->withEnabled(true)
+            ->withCapabilities(factory(CarrierCapabilities::class));
     }
 }

@@ -5,6 +5,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
+use MyParcelNL\Pdk\Base\Model\Model;
+use function MyParcelNL\Pdk\Tests\factory;
+
 /**
  * @template T of CarrierSettings
  * @method $this withAllowDeliveryOptions(bool $allowDeliveryOptions)
@@ -80,5 +83,12 @@ final class CarrierSettingsFactory extends AbstractSettingsModelFactory
     public function withId(string $id): self
     {
         return $this->with(['id' => $id]);
+    }
+
+    protected function save(Model $model): void
+    {
+        factory(Settings::class)
+            ->withCarrier($this->attributes['id'], $model)
+            ->store();
     }
 }

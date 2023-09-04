@@ -32,9 +32,39 @@ final class ContactDetailsFactory extends AbstractModelFactory
         return ContactDetails::class;
     }
 
-    public function inTheNetherlands()
+    public function inBelgium(): self
+    {
+        return $this->from(factory(Address::class)->inBelgium());
+    }
+
+    public function inFrance(): self
+    {
+        return $this->from(factory(Address::class)->inFrance());
+    }
+
+    public function inGermany(): self
+    {
+        return $this->from(factory(Address::class)->inGermany());
+    }
+
+    public function inTheNetherlands(): self
     {
         return $this->from(factory(Address::class)->inTheNetherlands());
+    }
+
+    public function inTheUnitedKingdom(): self
+    {
+        return $this->from(factory(Address::class)->inTheUnitedKingdom());
+    }
+
+    public function inTheUnitedStates(): self
+    {
+        return $this->from(factory(Address::class)->inTheUnitedStates());
+    }
+
+    public function withDifficultStreet(): self
+    {
+        return $this->from(factory(Address::class)->withDifficultStreet());
     }
 
     protected function createDefault(): FactoryInterface

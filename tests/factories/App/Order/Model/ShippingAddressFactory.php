@@ -35,9 +35,39 @@ final class ShippingAddressFactory extends AbstractModelFactory
         return ShippingAddress::class;
     }
 
-    public function inTheNetherlands()
+    public function inBelgium(): self
+    {
+        return $this->from(factory(ContactDetails::class)->inBelgium());
+    }
+
+    public function inFrance(): self
+    {
+        return $this->from(factory(ContactDetails::class)->inFrance());
+    }
+
+    public function inGermany(): self
+    {
+        return $this->from(factory(ContactDetails::class)->inGermany());
+    }
+
+    public function inTheNetherlands(): self
     {
         return $this->from(factory(ContactDetails::class)->inTheNetherlands());
+    }
+
+    public function inTheUnitedKingdom(): self
+    {
+        return $this->from(factory(ContactDetails::class)->inTheUnitedKingdom());
+    }
+
+    public function inTheUnitedStates(): self
+    {
+        return $this->from(factory(ContactDetails::class)->inTheUnitedStates());
+    }
+
+    public function withDifficultStreet(): self
+    {
+        return $this->from(factory(ContactDetails::class)->withDifficultStreet());
     }
 
     protected function createDefault(): FactoryInterface
