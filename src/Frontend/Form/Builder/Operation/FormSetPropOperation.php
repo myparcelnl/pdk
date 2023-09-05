@@ -32,7 +32,7 @@ final class FormSetPropOperation extends AbstractFormOperation implements FormOp
     /**
      * @return array
      */
-    protected function createArray(): array
+    public function createArray(): array
     {
         return [
                 '$prop'  => $this->prop,

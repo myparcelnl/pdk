@@ -22,13 +22,14 @@ it('throws error when setting a property', function () {
     $formCondition->property = 'foo';
 })->throws(BadMethodCallException::class);
 
-it('throws error when checking if a property is set', function () {
+it('returns false when checking if a property is set', function () {
     $formCondition = new FormCondition(new FormOperationBuilder());
 
-    /** @noinspection PhpUndefinedFieldInspection */
-    /** @noinspection PhpExpressionResultUnusedInspection */
-    isset($formCondition->property);
-})->throws(BadMethodCallException::class);
+    expect(isset($formCondition->property))
+        ->toBeFalse()
+        ->and(isset($formCondition->target))
+        ->toBeFalse();
+});
 
 it('throws error when unsetting a property', function () {
     $formCondition = new FormCondition(new FormOperationBuilder());

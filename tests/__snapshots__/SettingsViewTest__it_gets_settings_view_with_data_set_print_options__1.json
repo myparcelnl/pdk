@@ -1,7 +1,6 @@
 {
     "id": "print",
     "title": "settings_print_title",
-    "titleSuffix": null,
     "description": "settings_print_description",
     "elements": [
         {

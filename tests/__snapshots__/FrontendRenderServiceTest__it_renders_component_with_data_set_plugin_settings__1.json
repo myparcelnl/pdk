@@ -330,7 +330,6 @@
         "label": {
             "id": "label",
             "title": "settings_label_title",
-            "titleSuffix": null,
             "description": "settings_label_description",
             "elements": [
                 {

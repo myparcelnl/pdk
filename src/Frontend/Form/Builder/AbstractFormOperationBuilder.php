@@ -19,10 +19,21 @@ abstract class AbstractFormOperationBuilder implements ChainableFormOperationBui
     protected $operations = [];
 
     /**
-     * @param  FormOperationInterface $operation
-     * @param  null|callable          $callback
+     * @return array
+     */
+    public function createArray(): array
+    {
+        return array_map(static function (FormOperationInterface $operation) {
+            return $operation->toArray();
+        }, $this->operations);
+    }
+
+    /**
+     * @template T of FormOperationInterface
+     * @param  T             $operation
+     * @param  null|callable $callback
      *
-     * @return FormOperationInterface
+     * @return T
      */
     protected function addOperation(
         FormOperationInterface $operation,
@@ -34,20 +45,11 @@ abstract class AbstractFormOperationBuilder implements ChainableFormOperationBui
     }
 
     /**
-     * @return array
-     */
-    protected function createArray(): array
-    {
-        return array_map(static function (FormOperationInterface $operation) {
-            return $operation->toArray();
-        }, $this->operations);
-    }
-
-    /**
-     * @param  FormSubOperationBuilderInterface|FormOperationInterface $item
-     * @param  null|callable                                           $callback
+     * @template T of (FormOperationInterface|FormSubOperationBuilderInterface)
+     * @param  T             $item
+     * @param  null|callable $callback
      *
-     * @return FormSubOperationBuilderInterface|FormOperationInterface
+     * @return T
      */
     protected function executeCallback($item, ?callable $callback = null)
     {

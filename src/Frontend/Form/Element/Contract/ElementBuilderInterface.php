@@ -24,7 +24,7 @@ interface ElementBuilderInterface
      *
      * @return $this
      */
-    public function visibleWhen(?string $target = null, $valueOrCallback = null): ElementBuilderInterface;
+    public function visibleWhen(?string $target = null, $valueOrCallback = null): self;
 
     /**
      * @param  string $key
@@ -32,21 +32,21 @@ interface ElementBuilderInterface
      *
      * @return $this
      */
-    public function withAttribute(string $key, $value): ElementBuilderInterface;
+    public function withAttribute(string $key, $value): self;
 
     /**
      * @param  array $attributes
      *
      * @return $this
      */
-    public function withAttributes(array $attributes): ElementBuilderInterface;
+    public function withAttributes(array $attributes): self;
 
     /**
      * @param  string ...$prefixes
      *
      * @return $this
      */
-    public function withPrefixes(string ...$prefixes): ElementBuilderInterface;
+    public function withPrefixes(string ...$prefixes): self;
 
     /**
      * @param  string $key
@@ -54,12 +54,12 @@ interface ElementBuilderInterface
      *
      * @return $this
      */
-    public function withProp(string $key, $value): ElementBuilderInterface;
+    public function withProp(string $key, $value): self;
 
     /**
      * @param  array $props
      *
      * @return $this
      */
-    public function withProps(array $props): ElementBuilderInterface;
+    public function withProps(array $props): self;
 }

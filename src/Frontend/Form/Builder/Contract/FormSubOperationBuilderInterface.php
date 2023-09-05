@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Form\Builder\Contract;
 
+use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetPropOperation;
+use MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetValueOperation;
+
 interface FormSubOperationBuilderInterface extends FormOperationBuilderInterface
 {
+    /**
+     * @return array
+     */
+    public function createArray(): array;
+
     /**
      * @return string
      */
@@ -13,12 +21,12 @@ interface FormSubOperationBuilderInterface extends FormOperationBuilderInterface
 
     /**
      * @param  string        $prop
-     * @param                $value
+     * @param  mixed         $value
      * @param  null|callable $callback
      *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface
+     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetPropOperation
      */
-    public function setProp(string $prop, $value, ?callable $callback = null): FormOperationInterface;
+    public function setProp(string $prop, $value, ?callable $callback = null): FormSetPropOperation;
 
     /**
      * @param  scalar        $value
@@ -26,5 +34,5 @@ interface FormSubOperationBuilderInterface extends FormOperationBuilderInterface
      *
      * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetValueOperation
      */
-    public function setValue($value, ?callable $callback = null): FormOperationInterface;
+    public function setValue($value, ?callable $callback = null): FormSetValueOperation;
 }
