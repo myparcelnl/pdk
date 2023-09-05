@@ -163,7 +163,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     }
 
     /**
-     * @return void
+     * @return array
      */
     private function gatherElements(): array
     {
