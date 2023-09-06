@@ -75,7 +75,7 @@ it('can be instantiated from a cart', function () {
         ->and($config->toArray())
         ->toEqual([
             'allowRetry'                 => false,
-            'basePrice'                  => 695,
+            'basePrice'                  => 6.95,
             'carrierSettings'            => [
                 'postnl'         => [
                     'allowDeliveryOptions'         => false,
@@ -135,6 +135,6 @@ it('can be instantiated from a cart', function () {
             'platform'                   => 'myparcel',
             'showPriceSurcharge'         => false,
             'apiBaseUrl'                 => 'https://api.myparcel.nl',
-            'priceStandardDelivery'      => 0,
+            'priceStandardDelivery'      => 0.0,
         ]);
 });
