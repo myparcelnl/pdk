@@ -63,7 +63,11 @@ class OrderSettingsView extends AbstractSettingsView
                 ['options' => $orderStatusesWithNone]
             ),
 
-            new InteractiveElement(OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMP, Components::INPUT_TOGGLE),
+            new InteractiveElement(
+                OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMP,
+                Components::INPUT_SELECT,
+                ['options' => $orderStatusesWithNone]
+            ),
 
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'weight')),
 
