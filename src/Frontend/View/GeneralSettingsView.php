@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Components;
@@ -17,10 +18,32 @@ use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 class GeneralSettingsView extends AbstractSettingsView
 {
     /**
+     * @var \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface
+     */
+    private $orderStatusService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
+     */
+    public function __construct(OrderStatusServiceInterface $orderStatusService)
+    {
+        $this->orderStatusService = $orderStatusService;
+    }
+
+    /**
      * @return null|array
      */
     protected function createElements(): ?array
     {
+        $orderStatuses         = $this->toSelectOptions(
+            $this->orderStatusService->all(),
+            AbstractSettingsView::SELECT_USE_PLAIN_LABEL
+        );
+        $orderStatusesWithNone = $this->addDefaultOption(
+            $orderStatuses,
+            AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
+        );
+
         return [
             (new InteractiveElement(
                 GeneralSettings::ORDER_MODE,
@@ -52,6 +75,16 @@ class GeneralSettingsView extends AbstractSettingsView
 
             new InteractiveElement(GeneralSettings::TRACK_TRACE_IN_EMAIL, Components::INPUT_TOGGLE),
             new InteractiveElement(GeneralSettings::TRACK_TRACE_IN_ACCOUNT, Components::INPUT_TOGGLE),
+            new InteractiveElement(GeneralSettings::ORDER_STATUS_MAIL, Components::INPUT_TOGGLE),
+            (new InteractiveElement(
+                GeneralSettings::SEND_NOTIFICATION_AFTER,
+                Components::INPUT_SELECT,
+                [
+                    'options' => $orderStatusesWithNone,
+                ]
+            ))->builder(function (FormOperationBuilder $builder) {
+                $builder->visibleWhen(GeneralSettings::ORDER_STATUS_MAIL);
+            }),
 
             new SettingsDivider($this->createLabel($this->getLabelPrefix(), 'order_notes')),
 

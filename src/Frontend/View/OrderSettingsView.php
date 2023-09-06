@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
-use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
@@ -63,16 +62,6 @@ class OrderSettingsView extends AbstractSettingsView
                 Components::INPUT_SELECT,
                 ['options' => $orderStatusesWithNone]
             ),
-            new InteractiveElement(OrderSettings::ORDER_STATUS_MAIL, Components::INPUT_TOGGLE),
-            (new InteractiveElement(
-                OrderSettings::SEND_NOTIFICATION_AFTER,
-                Components::INPUT_SELECT,
-                [
-                    'options' => $orderStatusesWithNone,
-                ]
-            ))->builder(function (FormOperationBuilder $builder) {
-                $builder->visibleWhen(OrderSettings::ORDER_STATUS_MAIL);
-            }),
 
             new InteractiveElement(OrderSettings::SEND_ORDER_STATE_FOR_DIGITAL_STAMP, Components::INPUT_TOGGLE),
 
