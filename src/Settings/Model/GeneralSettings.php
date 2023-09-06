@@ -36,6 +36,8 @@ class GeneralSettings extends AbstractSettingsModel
     public const SHARE_CUSTOMER_INFORMATION   = 'shareCustomerInformation';
     public const TRACK_TRACE_IN_ACCOUNT       = 'trackTraceInAccount';
     public const TRACK_TRACE_IN_EMAIL         = 'trackTraceInEmail';
+    public const ORDER_STATUS_MAIL            = 'orderStatusMail';
+    public const SEND_NOTIFICATION_AFTER      = 'sendNotificationAfter';
 
     protected $attributes = [
         'id' => self::ID,
@@ -50,6 +52,8 @@ class GeneralSettings extends AbstractSettingsModel
         self::SHARE_CUSTOMER_INFORMATION   => false,
         self::TRACK_TRACE_IN_ACCOUNT       => false,
         self::TRACK_TRACE_IN_EMAIL         => false,
+        self::ORDER_STATUS_MAIL            => true,
+        self::SEND_NOTIFICATION_AFTER      => null,
     ];
 
     protected $casts      = [
@@ -63,5 +67,7 @@ class GeneralSettings extends AbstractSettingsModel
         self::SHARE_CUSTOMER_INFORMATION   => 'bool',
         self::TRACK_TRACE_IN_ACCOUNT       => 'bool',
         self::TRACK_TRACE_IN_EMAIL         => 'bool',
+        self::ORDER_STATUS_MAIL            => 'bool',
+        self::SEND_NOTIFICATION_AFTER      => 'string',
     ];
 }
