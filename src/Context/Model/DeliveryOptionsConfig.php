@@ -43,14 +43,14 @@ class DeliveryOptionsConfig extends Model
 
     protected $casts      = [
         'allowRetry'                 => 'boolean',
-        'basePrice'                  => 'integer',
+        'basePrice'                  => 'int',
         'carrierSettings'            => 'array',
         'currency'                   => 'string',
         'locale'                     => 'string',
         'packageType'                => 'string',
         'pickupLocationsDefaultView' => 'string',
         'platform'                   => 'string',
-        'priceStandardDelivery'      => 'integer',
+        'priceStandardDelivery'      => 'int',
         'showPriceSurcharge'         => 'boolean',
     ];
 

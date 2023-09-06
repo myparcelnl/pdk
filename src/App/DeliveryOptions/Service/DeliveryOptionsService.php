@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -51,6 +52,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     ];
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
+     */
+    private $currencyService;
+
+    /**
      * @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface
      */
     private $dropOffService;
@@ -71,13 +77,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
-        DropOffServiceInterface $dropOffService,
-        TaxServiceInterface     $taxService,
-        SchemaRepository        $schemaRepository
+        DropOffServiceInterface  $dropOffService,
+        TaxServiceInterface      $taxService,
+        SchemaRepository         $schemaRepository,
+        CurrencyServiceInterface $currencyService
     ) {
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
         $this->schemaRepository = $schemaRepository;
+        $this->currencyService  = $currencyService;
     }
 
     /**
@@ -100,7 +108,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $settings = [
             'packageType'           => $packageType,
             'carrierSettings'       => [],
-            'basePrice'             => $cart->shipmentPrice,
+            'basePrice'             => $this->currencyService->convertToCents($cart->shipmentPrice),
             'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
@@ -159,9 +167,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             $value = $carrierSettings->getAttribute($key);
 
             if (Str::startsWith($key, 'price')) {
-                $subtotal = $this->taxService->getShippingDisplayPrice((float) $value);
+                $subtotal = $showPriceSurcharge
+                    ? $value + $this->currencyService->convertToCents($cart->shipmentPrice)
+                    : $value;
 
-                return $showPriceSurcharge ? $subtotal + $cart->shipmentPrice / 100 : $subtotal;
+                return $this->taxService->getShippingDisplayPrice((float) $subtotal);
             }
 
             return $value;
