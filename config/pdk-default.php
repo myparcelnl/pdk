@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\env;
 use function DI\factory;
@@ -76,4 +80,34 @@ return [
      * Allowed positions for the delivery options in the checkout.
      */
     'deliveryOptionsPositions' => value([]),
+
+    /**
+     * All carriers, merged with the root carrier definitions.
+     */
+
+    'allCarriers' => factory(function (): CarrierCollection {
+        $platformCarriers = new Collection(Platform::get('carriers'));
+        $carriers         = new Collection(Config::get('carriers'));
+
+        $result = $platformCarriers
+            ->map(function (array $carrier) use ($carriers): array {
+                $carrierDefinition = $carriers->firstWhere('name', $carrier['name']);
+
+                return array_replace($carrier, $carrierDefinition);
+            });
+
+        return new CarrierCollection($result);
+    }),
+
+    /**
+     * Carriers filtered by those allowed in the current platform.
+     */
+
+    'carriers' => factory(function (): CarrierCollection {
+        /** @var CarrierCollection $allCarriers */
+        $allCarriers      = Pdk::get('allCarriers');
+        $platformCarriers = new Collection(Platform::get('carriers'));
+
+        return $allCarriers->whereIn('name', $platformCarriers->pluck('name'));
+    }),
 ];

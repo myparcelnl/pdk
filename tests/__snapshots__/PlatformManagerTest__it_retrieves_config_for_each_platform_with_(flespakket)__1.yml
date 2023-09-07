@@ -4,10 +4,7 @@ backofficeUrl: 'https://backoffice.flespakket.nl'
 localCountry: NL
 defaultCarrier: postnl
 defaultCarrierId: 1
-allowedCarriers:
-    - dhleuroplus
-    - dhlforyou
-    - dhlparcelconnect
-    - postnl
 defaultSettings:
     checkout: { pickupLocationsDefaultView: list }
+carriers:
+    - { name: postnl, capabilities: { packageTypes: [package, mailbox, letter, digital_stamp], deliveryTypes: [morning, standard, evening, pickup], shipmentOptions: { ageCheck: true, largeFormat: true, onlyRecipient: true, return: true, sameDayDelivery: false, signature: true, insurance: [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000] }, features: { labelDescriptionLength: 45 } }, returnCapabilities: { packageTypes: [package], deliveryTypes: [standard], shipmentOptions: { signature: true, insurance: [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000], return: true, ageCheck: true, onlyRecipient: true, sameDayDelivery: false, largeFormat: true }, features: { labelDescriptionLength: 45 } } }

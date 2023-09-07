@@ -70,6 +70,19 @@ class GlobalContext extends Model
 
         $this->attributes['baseUrl']   = $endpointActions->getBaseUrl();
         $this->attributes['endpoints'] = $endpointActions->toArray();
-        $this->attributes['platform']  = Platform::all();
+
+        $platform = Platform::all();
+
+        $this->attributes['platform'] = array_intersect_key(
+            $platform,
+            array_flip([
+                'name',
+                'human',
+                'backofficeUrl',
+                'localCountry',
+                'defaultCarrier',
+                'defaultCarrierId',
+            ])
+        );
     }
 }

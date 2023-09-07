@@ -87,8 +87,11 @@ class SettingsManager implements SettingsManagerInterface
         /** @var Collection $carrierSettings */
         $carrierSettings = $defaults->get(CarrierSettings::ID);
 
+        $keyedCarriers = Platform::getCarriers()
+            ->keyBy('name');
+
         // add any keys that are not present yet from allowed carriers to $carrierSettings
-        (new Collection(Platform::get('allowedCarriers') ?? []))
+        (new Collection($keyedCarriers))->keys()
             ->diff($carrierSettings->keys())
             ->each(function ($carrier) use ($carrierSettings) {
                 $carrierSettings->put($carrier, new Collection());

@@ -230,18 +230,7 @@
             "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
             "localCountry": "NL",
             "defaultCarrier": "postnl",
-            "defaultCarrierId": 1,
-            "allowedCarriers": [
-                "postnl",
-                "dhlforyou",
-                "dhlparcelconnect",
-                "dhleuroplus"
-            ],
-            "defaultSettings": {
-                "checkout": {
-                    "pickupLocationsDefaultView": "list"
-                }
-            }
+            "defaultCarrierId": 1
         },
         "translations": {
             "apple_tree": "Appelboom"
@@ -367,11 +356,11 @@
                             "human": "DHL For You",
                             "subscriptionId": "8277",
                             "enabled": true,
-                            "isDefault": true,
+                            "isDefault": false,
                             "label": null,
                             "optional": false,
                             "primary": false,
-                            "type": "main",
+                            "type": "custom",
                             "capabilities": {
                                 "deliveryTypes": [
                                     "standard",
@@ -533,11 +522,11 @@
                 "human": "DHL For You",
                 "subscriptionId": "8277",
                 "enabled": true,
-                "isDefault": true,
+                "isDefault": false,
                 "label": null,
                 "optional": false,
                 "primary": false,
-                "type": "main",
+                "type": "custom",
                 "capabilities": {
                     "deliveryTypes": [
                         "standard",
@@ -810,11 +799,11 @@
                     "human": "DHL For You",
                     "subscriptionId": "8277",
                     "enabled": true,
-                    "isDefault": true,
+                    "isDefault": false,
                     "label": null,
                     "optional": false,
                     "primary": false,
-                    "type": "main",
+                    "type": "custom",
                     "capabilities": {
                         "deliveryTypes": [
                             "standard",

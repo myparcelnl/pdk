@@ -53,21 +53,26 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         $shop = $this->getShop();
 
-        if (! $shop || ! $shop->carriers) {
+        if (! $shop || $shop->carriers->isEmpty()) {
             return new CarrierCollection();
         }
 
-        $allowedCarriers = Platform::get('allowedCarriers');
+        $allowedCarriers = Platform::getCarriers();
 
         return $shop->carriers
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {
-                $isAllowed = in_array($carrier->name, $allowedCarriers, true);
+                $isAllowed = $allowedCarriers->contains('name', $carrier->name);
 
                 return $isAllowed && $carrier->enabled && $carrier->capabilities;
             })
             ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
-                $aIndex = array_search($carrierA->name, $allowedCarriers, true);
-                $bIndex = array_search($carrierB->name, $allowedCarriers, true);
+                $aIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierA) {
+                    return $allowedCarrier->name === $carrierA->name;
+                }, true);
+
+                $bIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierB) {
+                    return $allowedCarrier->name === $carrierB->name;
+                }, true);
 
                 return $aIndex === $bIndex
                     ? $carrierA->subscriptionId <=> $carrierB->subscriptionId

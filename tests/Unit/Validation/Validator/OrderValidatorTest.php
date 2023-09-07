@@ -82,13 +82,13 @@ it('validates order', function (array $order) use ($createOrder) {
 
     assertMatchesJsonSnapshot(json_encode($errors));
 })->with([
-        'instabox to France'                          => [
+        'dhlforyou to France'                         => [
             'order' => [
                 'shippingAddress' => [
                     'cc' => 'FR',
                 ],
                 'deliveryOptions' => [
-                    'carrier' => 'instabox',
+                    'carrier' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
                 ],
             ],
         ],

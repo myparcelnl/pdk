@@ -29,7 +29,15 @@ it('creates shipment collection from queried data', function (string $responseCl
     $array    = $shipment->toArray();
 
     // No need to test this data here.
-    $arrayWithoutCapabilities = Arr::except($array, ['carrier.capabilities', 'carrier.returnCapabilities']);
+    $arrayWithoutCapabilities = Arr::except(
+        $array,
+        [
+            'carrier.capabilities',
+            'carrier.returnCapabilities',
+            'deliveryOptions.carrier.capabilities',
+            'deliveryOptions.carrier.returnCapabilities',
+        ]
+    );
 
     expect($response)
         ->and($shipment->deliveryOptions->carrier->externalIdentifier)
@@ -37,16 +45,16 @@ it('creates shipment collection from queried data', function (string $responseCl
 
     assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
 })->with([
-    'normal shipment'              => [
+    'normal shipment' => [
         'response' => ExampleGetShipmentsResponse::class,
     ],
     'shipment with drop-off point' => [
         'response' => ExampleGetShipmentsResponseWithDropOffPoint::class,
     ],
-    'shipment with pickup'         => [
+    'shipment with pickup' => [
         'response' => ExampleGetShipmentsResponseWithPickup::class,
     ],
-    'shipment with contract'       => [
+    'shipment with contract' => [
         'response' => ExampleGetShipmentsFromContractResponse::class,
     ],
 ]);

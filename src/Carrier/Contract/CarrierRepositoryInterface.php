@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Contract;
 
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 interface CarrierRepositoryInterface
 {
     /**
-     * @return array[]|Collection
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
-    public function all(): Collection;
+    public function all(): CarrierCollection;
 
     /**
      * @param  array $input
      *
-     * @return null|array
+     * @return null|\MyParcelNL\Pdk\Carrier\Model\Carrier
      */
-    public function get(array $input): ?array;
+    public function get(array $input): ?Carrier;
 }

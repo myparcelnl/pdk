@@ -5,35 +5,29 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Repository;
 
 use MyParcelNL\Pdk\Base\Repository\Repository;
-use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\Config;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 class CarrierRepository extends Repository implements CarrierRepositoryInterface
 {
-    private const ORDERED_CARRIER_GETTER = [
-        'subscriptionId' => Carrier::TYPE_CUSTOM,
-        'id'             => Carrier::TYPE_MAIN,
-        'name'           => Carrier::TYPE_MAIN,
-    ];
+    private const ORDERED_CARRIER_GETTER = ['id', 'name'];
 
     /**
-     * @return array[]|Collection
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
-    public function all(): Collection
+    public function all(): CarrierCollection
     {
-        return $this->retrieve('carrier_collection', function () {
-            return new Collection(Config::get('carriers'));
-        });
+        return Pdk::get('allCarriers');
     }
 
     /**
      * @param  array $input
      *
-     * @return null|array
+     * @return null|\MyParcelNL\Pdk\Carrier\Model\Carrier
      */
-    public function get(array $input): ?array
+    public function get(array $input): ?Carrier
     {
         $hash       = md5(json_encode($input));
         $collection = $this->all();
@@ -41,14 +35,12 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
         return $this->retrieve("carrier_options_$hash", function () use ($input, $collection) {
             $carrier = null;
 
-            foreach (self::ORDERED_CARRIER_GETTER as $key => $type) {
+            foreach (self::ORDERED_CARRIER_GETTER as $key) {
                 if (! isset($input[$key])) {
                     continue;
                 }
 
-                $carrier = $collection
-                    ->where('type', $type)
-                    ->firstWhere($key, $input[$key]);
+                $carrier = $collection->firstWhere($key, $input[$key]);
 
                 if ($carrier) {
                     break;

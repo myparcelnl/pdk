@@ -148,7 +148,7 @@ it('returns correct schema', function (string $platform, string $carrier, string
     ],
 ]);
 
-it('validates order', function (array $input, array $errors = []) {
+it('validates order', function (array $input) {
     $pdkOrder = new PdkOrder($input);
 
     /** @var PdkOrderOptionsServiceInterface $orderOptionsService */
@@ -169,26 +169,18 @@ it('validates order', function (array $input, array $errors = []) {
         assertMatchesJsonSnapshot(json_encode($errors));
     }
 })->with([
-        'instabox to France'                          => [
-            'input'  => arrayMergeOrder(
+        'dhlforyou to France'                         => [
+            'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'recipient'       => [
                         'cc' => 'FR',
                     ],
                     'deliveryOptions' => [
-                        'carrier' => 'instabox',
+                        'carrier' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
                     ],
                 ]
             ),
-            'errors' => [
-                '0.property'   => 'recipient.cc',
-                '0.pointer'    => '/recipient/cc',
-                '0.message'    => 'Does not have a value in the enumeration ["NL"]',
-                '0.constraint' => 'enum',
-                '0.context'    => 1,
-                '0.enum.0'     => 'NL',
-            ],
         ],
         'postnl non-standard delivery without date'   => [
             'input' => arrayMergeOrder(

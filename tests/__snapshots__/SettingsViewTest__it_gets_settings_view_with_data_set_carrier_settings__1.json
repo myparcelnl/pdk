@@ -1149,6 +1149,7 @@
         {
             "id": "dhlforyou:8277",
             "title": "carrier_dhlforyou",
+            "titleSuffix": "carrier_type_custom",
             "description": "settings_view_carrier_dhlforyou_description",
             "elements": [
                 {
