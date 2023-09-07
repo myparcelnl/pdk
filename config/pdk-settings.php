@@ -53,7 +53,7 @@ return [
                     CarrierSettings::EXPORT_AGE_CHECK                        => false,
                     CarrierSettings::EXPORT_INSURANCE                        => false,
                     CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
-                    CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR           => 1.0,
+                    CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 1.0,
                     CarrierSettings::EXPORT_INSURANCE_UP_TO                  => 0,
                     CarrierSettings::EXPORT_INSURANCE_UP_TO_EU               => 0,
                     CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW              => 0,

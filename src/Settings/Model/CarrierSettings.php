@@ -33,7 +33,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool                 $exportHideSender
  * @property bool                 $exportInsurance
  * @property int                  $exportInsuranceFromAmount
- * @property float                $exportInsurancePriceFactor
+ * @property int                  $exportInsurancePricePercentage
  * @property int                  $exportInsuranceUpTo
  * @property int                  $exportInsuranceUpToEu
  * @property int                  $exportInsuranceUpToRow
@@ -89,7 +89,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const EXPORT_HIDE_SENDER                      = 'exportHideSender';
     public const EXPORT_INSURANCE                        = 'exportInsurance';
     public const EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
-    public const EXPORT_INSURANCE_PRICE_FACTOR           = 'exportInsurancePriceFactor';
+    public const EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
     public const EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
     public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
     public const EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
@@ -139,7 +139,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_HIDE_SENDER                      => false,
         self::EXPORT_INSURANCE                        => false,
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
-        self::EXPORT_INSURANCE_PRICE_FACTOR           => 1.0,
+        self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 100,
         self::EXPORT_INSURANCE_UP_TO                  => 0,
         self::EXPORT_INSURANCE_UP_TO_EU               => 0,
         self::EXPORT_INSURANCE_UP_TO_ROW              => 0,
@@ -189,7 +189,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_AGE_CHECK                        => 'bool',
         self::EXPORT_INSURANCE                        => 'bool',
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 'int',
-        self::EXPORT_INSURANCE_PRICE_FACTOR           => 'float',
+        self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 'float',
         self::EXPORT_INSURANCE_UP_TO                  => 'int',
         self::EXPORT_INSURANCE_UP_TO_EU               => 'int',
         self::EXPORT_INSURANCE_UP_TO_ROW              => 'int',

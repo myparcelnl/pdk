@@ -418,13 +418,13 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_EU),
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW),
                 new InteractiveElement(
-                    CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR,
+                    CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE,
                     Components::INPUT_NUMBER,
                     [
                         '$attributes' => [
-                            'min' => Pdk::get('insuranceFactorMin'),
-                            'step' => Pdk::get('insuranceFactorStep'),
-                            'max' => Pdk::get('insuranceFactorMax'),
+                            'min' => Pdk::get('insurancePercentageMin'),
+                            'step' => Pdk::get('insurancePercentageStep'),
+                            'max' => Pdk::get('insurancePercentageMax'),
                         ],
                     ]
                 )

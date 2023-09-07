@@ -39,13 +39,13 @@ it('calculates insurance', function (array $input, int $result) {
         ->withCarrier(
             $carrier,
             array_replace([
-                CarrierSettings::EXPORT_INSURANCE              => true,
-                CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT  => 0,
-                CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => 1,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO        => 5000,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE => 5000,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO_EU     => 5000,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW    => 5000,
+                CarrierSettings::EXPORT_INSURANCE                  => true,
+                CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
+                CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO            => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE     => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_EU         => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW        => 5000,
             ], $input['settings'] ?? [])
         )
         ->store();
@@ -110,7 +110,7 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 0,
         ],
 
-        'value €. 1 -> rounded up to € 100' => [
+        'value € 1 -> rounded up to € 100' => [
             [
                 'orderPrice' => 1,
             ],
@@ -198,53 +198,53 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 10000,
         ],
 
-        'value € 310, factor .5 -> rounded up to € 250' => [
+        'value € 310, percentage 50 -> rounded up to € 250' => [
             [
                 'orderPrice' => 31000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => .5],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 50],
             ],
             'result' => 25000,
         ],
 
-        'value € 550, factor .9 -> rounded up to € 500' => [
+        'value € 550, percentage 90 -> rounded up to € 500' => [
             [
                 'orderPrice' => 55000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => .9],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 90],
             ],
             'result' => 50000,
         ],
 
-        'value € 400, factor 1.5 -> rounded up to € 1000' => [
+        'value € 400, percentage 150 -> rounded up to € 1000' => [
             [
                 'orderPrice' => 40000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => 1.5],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 150],
             ],
             'result' => 100000,
         ],
 
-        'factor 0 -> € 0' => [
+        'percentage 0 -> € 0' => [
             [
                 'orderPrice' => 1000,
                 'settings'   => [
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO        => 100,
-                    CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => 0,
+                    CarrierSettings::EXPORT_INSURANCE_UP_TO            => 100,
+                    CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 0,
                 ],
             ],
             'result' => 0,
         ],
 
-        'factor -0.9 -> € 0' => [
+        'percentage -90 -> € 0' => [
             [
                 'orderPrice' => 5000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => -0.9],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => -90],
             ],
             'result' => 0,
         ],
 
-        'factor -5 -> € 0' => [
+        'percentage -500 -> € 0' => [
             [
                 'orderPrice' => 5000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_FACTOR => -5],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => -500],
             ],
             'result' => 0,
         ],

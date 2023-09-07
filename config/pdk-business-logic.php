@@ -47,9 +47,9 @@ return [
      * PDK
      */
 
-    'insuranceFactorMin'  => value(0.0),
-    'insuranceFactorStep' => value(0.01),
-    'insuranceFactorMax'  => value(1.0),
+    'insurancePercentageMin'  => value(0),
+    'insurancePercentageStep' => value(1),
+    'insurancePercentageMax'  => value(100),
 
     /**
      * Options definitions
