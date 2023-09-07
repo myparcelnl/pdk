@@ -28,9 +28,7 @@ class OrderSettings extends AbstractSettingsModel
     public const EMPTY_DIGITAL_STAMP_WEIGHT         = 'emptyDigitalStampWeight';
     public const EMPTY_MAILBOX_WEIGHT               = 'emptyMailboxWeight';
     public const EMPTY_PARCEL_WEIGHT                = 'emptyParcelWeight';
-    public const ORDER_STATUS_MAIL                  = 'orderStatusMail';
     public const SAVE_CUSTOMER_ADDRESS              = 'saveCustomerAddress';
-    public const SEND_NOTIFICATION_AFTER            = 'sendNotificationAfter';
     public const SEND_ORDER_STATE_FOR_DIGITAL_STAMP = 'sendOrderStateForDigitalStamp';
     public const STATUS_ON_LABEL_CREATE             = 'statusOnLabelCreate';
     public const STATUS_WHEN_DELIVERED              = 'statusWhenDelivered';
@@ -42,9 +40,7 @@ class OrderSettings extends AbstractSettingsModel
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => 0,
         self::EMPTY_MAILBOX_WEIGHT               => 0,
         self::EMPTY_PARCEL_WEIGHT                => 0,
-        self::ORDER_STATUS_MAIL                  => true,
         self::SAVE_CUSTOMER_ADDRESS              => false,
-        self::SEND_NOTIFICATION_AFTER            => null,
         self::SEND_ORDER_STATE_FOR_DIGITAL_STAMP => true,
         self::STATUS_ON_LABEL_CREATE             => null,
         self::STATUS_WHEN_DELIVERED              => null,
@@ -55,9 +51,7 @@ class OrderSettings extends AbstractSettingsModel
         self::EMPTY_DIGITAL_STAMP_WEIGHT         => 'int',
         self::EMPTY_MAILBOX_WEIGHT               => 'int',
         self::EMPTY_PARCEL_WEIGHT                => 'int',
-        self::ORDER_STATUS_MAIL                  => 'bool',
         self::SAVE_CUSTOMER_ADDRESS              => 'bool',
-        self::SEND_NOTIFICATION_AFTER            => 'string',
         self::SEND_ORDER_STATE_FOR_DIGITAL_STAMP => 'bool',
         self::STATUS_ON_LABEL_CREATE             => 'string',
         self::STATUS_WHEN_DELIVERED              => 'string',
