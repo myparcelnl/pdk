@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.1](https://github.com/myparcelnl/pdk/compare/v2.19.0...v2.19.1) (2023-09-07)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** distinguish carrier capabilities by platform ([#178](https://github.com/myparcelnl/pdk/issues/178)) ([619c9da](https://github.com/myparcelnl/pdk/commit/619c9da8256e9fa5b6f5b1a0c67025bcbc5d735e))
+* **settings:** move order status mail and notification to general ([#175](https://github.com/myparcelnl/pdk/issues/175)) ([a5725c2](https://github.com/myparcelnl/pdk/commit/a5725c223c048dfb96810a1013019ea8d34d27ce))
+
 ## [2.19.0](https://github.com/myparcelnl/pdk/compare/v2.18.0...v2.19.0) (2023-09-04)
 
 
