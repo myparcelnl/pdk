@@ -108,7 +108,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $settings = [
             'packageType'           => $packageType,
             'carrierSettings'       => [],
-            'basePrice'             => $this->currencyService->convertToEuro($cart->shipmentPrice),
+            'basePrice'             => $this->currencyService->convertToEuros($cart->shipmentPrice),
             'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
@@ -168,7 +168,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
             if (Str::startsWith($key, 'price')) {
                 $subtotal = $showPriceSurcharge
-                    ? $value + $this->currencyService->convertToEuro($cart->shipmentPrice)
+                    ? $value + $this->currencyService->convertToEuros($cart->shipmentPrice)
                     : $value;
 
                 return $this->taxService->getShippingDisplayPrice((float) $subtotal);

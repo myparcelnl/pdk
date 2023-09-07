@@ -135,6 +135,25 @@ it('converts to cents', function ($input, int $expected) {
     ],
 ]);
 
+it('converts to euros', function ($input, $expected) {
+    /** @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface $currencyService */
+    $currencyService = Pdk::get(CurrencyServiceInterface::class);
+    expect($currencyService->convertToEuros($input))->toEqual($expected);
+})->with([
+    'int 250'        => [
+        'input'  => 250,
+        'output' => 2.50,
+    ],
+    'float 10000.00' => [
+        'input'  => 10000.00,
+        'output' => 100.00,
+    ],
+    'string 3500.00' => [
+        'input'  => '3500.00',
+        'output' => 35.00,
+    ],
+]);
+
 it('formats currencies', function (string $language, int $input, string $expected) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService $languageService */
     $languageService = Pdk::get(LanguageServiceInterface::class);

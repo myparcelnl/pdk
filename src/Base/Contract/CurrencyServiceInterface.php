@@ -32,7 +32,7 @@ interface CurrencyServiceInterface
      *
      * @return float
      */
-    public function convertToEuro($amount): float;
+    public function convertToEuros($amount): float;
 
     /**
      * @param  int $amount - amount in cents
