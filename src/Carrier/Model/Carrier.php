@@ -118,14 +118,17 @@ class Carrier extends Model
         }
 
         if (! isset($data['name'], $data['id'])) {
-            $foundCarrier = $repository->get([
-                'subscriptionId' => $data['subscriptionId'] ?? null,
-                'id'             => $data['id'] ?? null,
-                'name'           => $data['name'] ?? Platform::get('defaultCarrier'),
+            $found = $repository->get([
+                'id'   => $data['id'] ?? null,
+                'name' => $data['name'] ?? Platform::get('defaultCarrier'),
             ]);
+
+            if ($found) {
+                $existing = $found->getAttributes();
+            }
         }
 
-        parent::__construct(array_merge($foundCarrier ?? [], $data ?? []));
+        parent::__construct(array_replace($existing ?? [], $data ?? []));
     }
 
     /**
@@ -158,6 +161,6 @@ class Carrier extends Model
      */
     public function getTypeAttribute(): string
     {
-        return $this->attributes['type'] ?? ($this->attributes['subscriptionId'] ? self::TYPE_CUSTOM : self::TYPE_MAIN);
+        return $this->subscriptionId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Platform;
 
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 
@@ -25,6 +26,14 @@ class PlatformManager implements PlatformManagerInterface
     public function get(string $key)
     {
         return Config::get(sprintf('platform/%s.%s', $this->getPlatform(), $key));
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    public function getCarriers(): CarrierCollection
+    {
+        return Pdk::get('carriers');
     }
 
     /**

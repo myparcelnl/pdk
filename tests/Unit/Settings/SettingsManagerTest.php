@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -77,7 +78,9 @@ it('retrieves default settings', function (string $platform) {
 
 it('retrieves default carrier settings', function (string $platform) {
     $resetPlatform = mockPlatform($platform);
-    $carriers      = Platform::get('allowedCarriers') ?? [];
+    $carriers      = (new Collection(Platform::getCarriers()))
+        ->pluck('name')
+        ->toArray();
 
     $defaults        = Settings::getDefaults();
     $carrierSettings = $defaults[CarrierSettings::ID];

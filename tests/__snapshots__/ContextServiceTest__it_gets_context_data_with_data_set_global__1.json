@@ -230,18 +230,7 @@
             "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
             "localCountry": "NL",
             "defaultCarrier": "postnl",
-            "defaultCarrierId": 1,
-            "allowedCarriers": [
-                "postnl",
-                "dhlforyou",
-                "dhlparcelconnect",
-                "dhleuroplus"
-            ],
-            "defaultSettings": {
-                "checkout": {
-                    "pickupLocationsDefaultView": "list"
-                }
-            }
+            "defaultCarrierId": 1
         },
         "translations": {
             "apple_tree": "Appelboom"

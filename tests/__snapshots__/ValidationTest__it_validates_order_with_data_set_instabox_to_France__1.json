@@ -1,9 +1,0 @@
-{
-    "0.property": "deliveryOptions.shipmentOptions.signature",
-    "0.pointer": "\/deliveryOptions\/shipmentOptions\/signature",
-    "0.message": "Does not have a value in the enumeration [false,null]",
-    "0.constraint": "enum",
-    "0.context": 1,
-    "0.enum.0": false,
-    "0.enum.1": null
-}

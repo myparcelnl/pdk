@@ -1,0 +1,116 @@
+[
+    {
+        "id": 1,
+        "name": "postnl",
+        "human": "PostNL",
+        "enabled": false,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "standard",
+                "pickup"
+            ],
+            "features": {
+                "labelDescriptionLength": 45
+            },
+            "packageTypes": [
+                "package"
+            ],
+            "shipmentOptions": {
+                "signature": true,
+                "onlyRecipient": true,
+                "largeFormat": true,
+                "insurance": [
+                    0,
+                    10000,
+                    25000,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000
+                ]
+            }
+        },
+        "returnCapabilities": {
+            "deliveryTypes": [],
+            "features": [],
+            "packageTypes": [],
+            "shipmentOptions": []
+        }
+    },
+    {
+        "id": 2,
+        "name": "bpost",
+        "human": "bpost",
+        "enabled": false,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "standard"
+            ],
+            "features": {
+                "labelDescriptionLength": 45,
+                "multiCollo": true
+            },
+            "packageTypes": [
+                "package",
+                "mailbox"
+            ],
+            "shipmentOptions": {
+                "saturdayDelivery": true,
+                "signature": true,
+                "insurance": [
+                    0,
+                    50000
+                ]
+            }
+        }
+    },
+    {
+        "id": 4,
+        "name": "dpd",
+        "human": "DPD",
+        "enabled": false,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "standard"
+            ],
+            "features": {
+                "dropOffAtPostalPoint": true,
+                "labelDescriptionLength": 45,
+                "multiCollo": true
+            },
+            "packageTypes": [
+                "package"
+            ],
+            "shipmentOptions": {
+                "insurance": [
+                    0,
+                    52000
+                ]
+            }
+        },
+        "returnCapabilities": {
+            "deliveryTypes": [],
+            "features": [],
+            "packageTypes": [],
+            "shipmentOptions": []
+        }
+    }
+]
