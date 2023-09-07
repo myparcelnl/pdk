@@ -15,16 +15,16 @@
         "sendReturnEmail": false,
         "shareCustomerInformation": false,
         "trackTraceInAccount": false,
-        "trackTraceInEmail": false
+        "trackTraceInEmail": false,
+        "orderStatusMail": true,
+        "sendNotificationAfter": null
     },
     "order": {
         "id": "order",
         "emptyDigitalStampWeight": 0,
         "emptyMailboxWeight": 0,
         "emptyParcelWeight": 0,
-        "orderStatusMail": true,
         "saveCustomerAddress": false,
-        "sendNotificationAfter": null,
         "sendOrderStateForDigitalStamp": true,
         "statusOnLabelCreate": null,
         "statusWhenDelivered": null,

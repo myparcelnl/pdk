@@ -81,6 +81,59 @@
                     "description": "settings_general_track_trace_in_account_description"
                 },
                 {
+                    "name": "orderStatusMail",
+                    "$component": "ToggleInput",
+                    "label": "settings_general_order_status_mail",
+                    "description": "settings_general_order_status_mail_description"
+                },
+                {
+                    "name": "sendNotificationAfter",
+                    "$builders": [
+                        {
+                            "$visibleWhen": {
+                                "$if": [
+                                    {
+                                        "$target": "orderStatusMail"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "$component": "SelectInput",
+                    "options": [
+                        {
+                            "value": -1,
+                            "label": "settings_none"
+                        },
+                        {
+                            "value": "pending",
+                            "plainLabel": "Pending"
+                        },
+                        {
+                            "value": "paid",
+                            "plainLabel": "Paid"
+                        },
+                        {
+                            "value": "shipped",
+                            "plainLabel": "Shipped"
+                        },
+                        {
+                            "value": "completed",
+                            "plainLabel": "Completed"
+                        },
+                        {
+                            "value": "cancelled",
+                            "plainLabel": "Cancelled"
+                        },
+                        {
+                            "value": "refunded",
+                            "plainLabel": "Refunded"
+                        }
+                    ],
+                    "label": "settings_general_send_notification_after",
+                    "description": "settings_general_send_notification_after_description"
+                },
+                {
                     "$component": "SettingsDivider",
                     "$wrapper": false,
                     "content": "settings_general_order_notes_description",
@@ -239,59 +292,6 @@
                     ],
                     "label": "settings_order_status_when_delivered",
                     "description": "settings_order_status_when_delivered_description"
-                },
-                {
-                    "name": "orderStatusMail",
-                    "$component": "ToggleInput",
-                    "label": "settings_order_order_status_mail",
-                    "description": "settings_order_order_status_mail_description"
-                },
-                {
-                    "name": "sendNotificationAfter",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$target": "orderStatusMail"
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "SelectInput",
-                    "options": [
-                        {
-                            "value": -1,
-                            "label": "settings_none"
-                        },
-                        {
-                            "value": "pending",
-                            "plainLabel": "Pending"
-                        },
-                        {
-                            "value": "paid",
-                            "plainLabel": "Paid"
-                        },
-                        {
-                            "value": "shipped",
-                            "plainLabel": "Shipped"
-                        },
-                        {
-                            "value": "completed",
-                            "plainLabel": "Completed"
-                        },
-                        {
-                            "value": "cancelled",
-                            "plainLabel": "Cancelled"
-                        },
-                        {
-                            "value": "refunded",
-                            "plainLabel": "Refunded"
-                        }
-                    ],
-                    "label": "settings_order_send_notification_after",
-                    "description": "settings_order_send_notification_after_description"
                 },
                 {
                     "name": "sendOrderStateForDigitalStamp",

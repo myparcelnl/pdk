@@ -69,26 +69,79 @@
         {
             "name": "trackTraceInEmail",
             "$component": "ToggleInput",
-            "label": "settings_general_track_trace_in_email",
-            "description": "settings_general_track_trace_in_email_description"
+          "label": "settings_general_track_trace_in_email",
+          "description": "settings_general_track_trace_in_email_description"
         },
-        {
-            "name": "trackTraceInAccount",
-            "$component": "ToggleInput",
-            "label": "settings_general_track_trace_in_account",
-            "description": "settings_general_track_trace_in_account_description"
-        },
-        {
-            "$component": "SettingsDivider",
-            "$wrapper": false,
-            "content": "settings_general_order_notes_description",
-            "heading": "settings_general_order_notes_title",
-            "level": 2
-        },
-        {
-            "name": "barcodeInNote",
-            "$component": "ToggleInput",
-            "label": "settings_general_barcode_in_note",
+      {
+        "name": "trackTraceInAccount",
+        "$component": "ToggleInput",
+        "label": "settings_general_track_trace_in_account",
+        "description": "settings_general_track_trace_in_account_description"
+      },
+      {
+        "name": "orderStatusMail",
+        "$component": "ToggleInput",
+        "label": "settings_general_order_status_mail",
+        "description": "settings_general_order_status_mail_description"
+      },
+      {
+        "name": "sendNotificationAfter",
+        "$builders": [
+          {
+            "$visibleWhen": {
+              "$if": [
+                {
+                  "$target": "orderStatusMail"
+                }
+              ]
+            }
+          }
+        ],
+        "$component": "SelectInput",
+        "options": [
+          {
+            "value": -1,
+            "label": "settings_none"
+          },
+          {
+            "value": "pending",
+            "plainLabel": "Pending"
+          },
+          {
+            "value": "paid",
+            "plainLabel": "Paid"
+          },
+          {
+            "value": "shipped",
+            "plainLabel": "Shipped"
+          },
+          {
+            "value": "completed",
+            "plainLabel": "Completed"
+          },
+          {
+            "value": "cancelled",
+            "plainLabel": "Cancelled"
+          },
+          {
+            "value": "refunded",
+            "plainLabel": "Refunded"
+          }
+        ],
+        "label": "settings_general_send_notification_after",
+        "description": "settings_general_send_notification_after_description"
+      },
+      {
+        "$component": "SettingsDivider",
+        "$wrapper": false,
+        "content": "settings_general_order_notes_description",
+        "heading": "settings_general_order_notes_title",
+        "level": 2
+      },
+      {
+        "name": "barcodeInNote",
+        "$component": "ToggleInput",
+        "label": "settings_general_barcode_in_note",
             "description": "settings_general_barcode_in_note_description"
         },
         {

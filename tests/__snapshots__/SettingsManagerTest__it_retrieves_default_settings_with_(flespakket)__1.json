@@ -12,14 +12,14 @@
         "sendReturnEmail": false,
         "shareCustomerInformation": false,
         "trackTraceInAccount": false,
-        "trackTraceInEmail": false
+        "trackTraceInEmail": false,
+        "orderStatusMail": true
     },
     "order": {
         "id": "order",
         "emptyDigitalStampWeight": 0,
         "emptyMailboxWeight": 0,
         "emptyParcelWeight": 0,
-        "orderStatusMail": true,
         "saveCustomerAddress": false,
         "sendOrderStateForDigitalStamp": true
     },
