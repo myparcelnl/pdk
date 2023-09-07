@@ -620,8 +620,7 @@
                 "emptyMailboxWeight": 0,
                 "emptyParcelWeight": 0,
                 "orderStatusMail": true,
-                "saveCustomerAddress": false,
-                "sendOrderStateForDigitalStamp": true
+                "saveCustomerAddress": false
             },
             "label": {
                 "id": "label",

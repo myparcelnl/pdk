@@ -18,17 +18,17 @@
         "trackTraceInEmail": false
     },
     "order": {
-        "id": "order",
-        "emptyDigitalStampWeight": 0,
-        "emptyMailboxWeight": 0,
-        "emptyParcelWeight": 0,
-        "orderStatusMail": true,
-        "saveCustomerAddress": false,
-        "sendNotificationAfter": null,
-        "sendOrderStateForDigitalStamp": true,
-        "statusOnLabelCreate": null,
-        "statusWhenDelivered": null,
-        "statusWhenLabelScanned": null
+      "id": "order",
+      "emptyDigitalStampWeight": 0,
+      "emptyMailboxWeight": 0,
+      "emptyParcelWeight": 0,
+      "orderStatusMail": true,
+      "saveCustomerAddress": false,
+      "sendNotificationAfter": null,
+      "sendOrderStateForDigitalStamp": null,
+      "statusOnLabelCreate": null,
+      "statusWhenDelivered": null,
+      "statusWhenLabelScanned": null
     },
     "label": {
         "id": "label",

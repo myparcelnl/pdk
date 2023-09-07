@@ -179,10 +179,40 @@
             "description": "settings_order_send_notification_after_description"
         },
         {
-            "name": "sendOrderStateForDigitalStamp",
-            "$component": "ToggleInput",
-            "label": "settings_order_send_order_state_for_digital_stamp",
-            "description": "settings_order_send_order_state_for_digital_stamp_description"
+          "name": "sendOrderStateForDigitalStamp",
+          "$component": "SelectInput",
+          "options": [
+            {
+              "value": -1,
+              "label": "settings_none"
+            },
+            {
+              "value": "pending",
+              "plainLabel": "Pending"
+            },
+            {
+              "value": "paid",
+              "plainLabel": "Paid"
+            },
+            {
+              "value": "shipped",
+              "plainLabel": "Shipped"
+            },
+            {
+              "value": "completed",
+              "plainLabel": "Completed"
+            },
+            {
+              "value": "cancelled",
+              "plainLabel": "Cancelled"
+            },
+            {
+              "value": "refunded",
+              "plainLabel": "Refunded"
+            }
+          ],
+          "label": "settings_order_send_order_state_for_digital_stamp",
+          "description": "settings_order_send_order_state_for_digital_stamp_description"
         },
         {
             "$component": "SettingsDivider",
