@@ -31,6 +31,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
@@ -184,6 +185,7 @@ class PdkOrder extends Model implements StorableArrayable
             'carrier'             => $deliveryOptions->carrier,
             'orderId'             => $this->externalIdentifier,
             'dropOffPoint'        => null,
+            'physicalProperties'  => $this->physicalProperties,
         ]);
     }
 
