@@ -2,11 +2,6 @@
 
 $ignoreErrors = [];
 $ignoreErrors[] = [
-	'message' => '#^Negated boolean expression is always false\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Account/Service/AccountSettingsService.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Call to an undefined method MyParcelNL\\\\Pdk\\\\App\\\\Order\\\\Contract\\\\PdkOrderRepositoryInterface\\:\\:save\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/App/Action/Backend/Order/ExportOrderAction.php',
