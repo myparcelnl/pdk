@@ -51,12 +51,12 @@ it('adds options', function (array $options, int $flags, array $result, string $
             'flags'   => 0,
             'result'  => [
                 [
-                    'label' => 'test_option_bc',
-                    'value' => 'broccoli',
+                    'label' => 'test_option_broccoli',
+                    'value' => 'bc',
                 ],
                 [
-                    'label' => 'test_option_bk',
-                    'value' => 'bloemkool',
+                    'label' => 'test_option_bloemkool',
+                    'value' => 'bk',
                 ],
             ],
         ],

@@ -80,7 +80,7 @@ trait HasOptions
     {
         $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
 
-        $options = array_map(function ($value, string $key) use ($flags) {
+        $options = array_map(function (string $key, $value) use ($flags) {
             $usePlainLabel = $flags & ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL;
             $labelKey      = $usePlainLabel ? 'plainLabel' : 'label';
 
@@ -88,7 +88,7 @@ trait HasOptions
                 $labelKey => $usePlainLabel ? $key : $this->createOptionLabel($key),
                 'value'   => $value,
             ];
-        }, $associativeArray, array_keys($associativeArray));
+        }, array_values($associativeArray), array_keys($associativeArray));
 
         return $this->addDefaultOption($options, $flags);
     }
