@@ -592,25 +592,24 @@
                 "id": "account",
                 "apiKeyValid": true
             },
-            "general": {
-                "id": "general",
-                "barcodeInNote": false,
-                "conceptShipments": true,
-                "orderMode": false,
-                "processDirectly": false,
-                "sendReturnEmail": false,
-                "shareCustomerInformation": false,
-                "trackTraceInAccount": false,
-                "trackTraceInEmail": false,
-                "orderStatusMail": true
-            },
             "order": {
                 "id": "order",
+                "barcodeInNote": false,
+                "conceptShipments": true,
                 "emptyDigitalStampWeight": 0,
                 "emptyMailboxWeight": 0,
                 "emptyParcelWeight": 0,
+                "orderMode": false,
+                "orderStatusMail": -1,
+                "processDirectly": false,
                 "saveCustomerAddress": false,
-                "sendOrderStateForDigitalStamp": true
+                "sendReturnEmail": false,
+                "shareCustomerInformation": false,
+                "statusOnLabelCreate": "-1",
+                "statusWhenDelivered": "-1",
+                "statusWhenLabelScanned": "-1",
+                "trackTraceInAccount": false,
+                "trackTraceInEmail": false
             },
             "label": {
                 "id": "label",

@@ -18,8 +18,8 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
-use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -81,7 +81,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
-        if (! Settings::get(GeneralSettings::ORDER_MODE, GeneralSettings::ID)) {
+        if (! Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID)) {
             return $this->exportShipments($orders);
         }
 
@@ -157,7 +157,7 @@ class ExportOrderAction extends AbstractOrderAction
             $order->shipments = [$order->shipments->last()];
         });
 
-        if (! Settings::get(GeneralSettings::CONCEPT_SHIPMENTS, GeneralSettings::ID)) {
+        if (! Settings::get(OrderSettings::CONCEPT_SHIPMENTS, OrderSettings::ID)) {
             $this->shipmentRepository->fetchLabelLink($concepts, LabelSettings::FORMAT_A4);
 
             $shipmentsWithBarcode = $this->shipmentRepository->getShipments(
@@ -176,7 +176,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function notSharingCustomerInformation(): bool
     {
-        return ! Settings::get(GeneralSettings::SHARE_CUSTOMER_INFORMATION, GeneralSettings::ID);
+        return ! Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
     }
 
     /**

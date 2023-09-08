@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\src\Support\Str;
 
@@ -21,7 +22,6 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 abstract class AbstractSettingsView implements Arrayable
 {
-    public const  OPTIONS_VALUE_DEFAULT         = -1;
     public const  SELECT_INCLUDE_OPTION_DEFAULT = 4;
     public const  SELECT_INCLUDE_OPTION_NONE    = 2;
     public const  SELECT_USE_PLAIN_LABEL        = 1;
@@ -116,14 +116,14 @@ abstract class AbstractSettingsView implements Arrayable
 
         if ($displayOptions & self::SELECT_INCLUDE_OPTION_DEFAULT) {
             array_unshift($options, [
-                'value'   => self::OPTIONS_VALUE_DEFAULT,
+                'value'   => Settings::OPTION_DEFAULT,
                 $labelKey => sprintf('%s_default', self::KEY_PREFIX),
             ]);
         }
 
         if ($displayOptions & self::SELECT_INCLUDE_OPTION_NONE) {
             array_unshift($options, [
-                'value'   => self::OPTIONS_VALUE_DEFAULT,
+                'value'   => Settings::OPTION_DEFAULT,
                 $labelKey => sprintf('%s_none', self::KEY_PREFIX),
             ]);
         }

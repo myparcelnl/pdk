@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\autowire;
@@ -27,7 +26,7 @@ it('saves settings', function (array $data) {
     $content = json_encode([
         'data' => [
             'plugin_settings' => [
-                'general' => [
+                'order' => [
                     'order_mode' => $data['order_mode'],
                 ],
             ],
@@ -37,17 +36,13 @@ it('saves settings', function (array $data) {
 
     $response = Actions::execute($request);
 
-    if (! $response) {
-        throw new RuntimeException('Response is empty');
-    }
-
     $content = json_decode($response->getContent(), true);
 
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and(Arr::dot($content))
         ->toHaveKeysAndValues([
-            'data.plugin_settings.general.orderMode' => $data['order_mode'],
+            'data.plugin_settings.order.orderMode' => $data['order_mode'],
         ])
         ->and($response->getStatusCode())
         ->toBe(200);

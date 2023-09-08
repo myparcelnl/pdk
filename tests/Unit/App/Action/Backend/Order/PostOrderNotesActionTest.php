@@ -22,7 +22,7 @@ use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
-use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
@@ -41,8 +41,8 @@ usesShared(new UsesApiMock());
 it('posts order notes if order has notes', function (PdkOrderCollection $orders, PdkOrderNoteCollection $notes) {
     MockPdkFactory::create([
         SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor([
-            GeneralSettings::ID => [
-                GeneralSettings::ORDER_MODE => true,
+            OrderSettings::ID => [
+                OrderSettings::ORDER_MODE => true,
             ],
         ]),
         PdkOrderRepositoryInterface::class   => autowire(MockPdkOrderRepository::class)->constructor($orders),
@@ -189,7 +189,7 @@ it('does not post order notes if account does not have feature', function (PdkOr
     $orderCollection = $factory->store()
         ->make();
 
-    factory(GeneralSettings::class)
+    factory(OrderSettings::class)
         ->withOrderMode(true)
         ->store();
 
