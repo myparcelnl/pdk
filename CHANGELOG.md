@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.19.2](https://github.com/myparcelnl/pdk/compare/v2.19.1...v2.19.2) (2023-09-08)
+
+
+### :bug: Bug Fixes
+
+* **delivery-options:** fix price surcharge ([#171](https://github.com/myparcelnl/pdk/issues/171)) ([f1b8e11](https://github.com/myparcelnl/pdk/commit/f1b8e1124789110f97ead79fbfb9204638e36035))
+* **frontend:** fix options label and value when passed as associative array ([#182](https://github.com/myparcelnl/pdk/issues/182)) ([29d0fd3](https://github.com/myparcelnl/pdk/commit/29d0fd3199f41bc6dd4311cb7df3d9d9223cb24d))
+* **product-settings:** allow default drop off delay value ([#183](https://github.com/myparcelnl/pdk/issues/183)) ([6c9d27e](https://github.com/myparcelnl/pdk/commit/6c9d27ea617281f5d1d53b5a4116f563dad8a798))
+* **settings:** change insurance factor to percentage ([#179](https://github.com/myparcelnl/pdk/issues/179)) ([83a6edd](https://github.com/myparcelnl/pdk/commit/83a6eddff45127c3bef80c81912892bd9f5d5aa4))
+* **settings:** move general settings to order settings ([#184](https://github.com/myparcelnl/pdk/issues/184)) ([4faf0af](https://github.com/myparcelnl/pdk/commit/4faf0af63e515c888e37f37c141de5bd2fb5c31e))
+* **settings:** sort settings options ([#180](https://github.com/myparcelnl/pdk/issues/180)) ([1512b23](https://github.com/myparcelnl/pdk/commit/1512b238cb073e2dd4224de790fc8d5c0faa21f2))
+* **shipments:** correctly pass physical properties ([#181](https://github.com/myparcelnl/pdk/issues/181)) ([f2564fe](https://github.com/myparcelnl/pdk/commit/f2564fe92b2a6399606d5c0b2674fe52b9a6ba76))
+
 ## [2.19.1](https://github.com/myparcelnl/pdk/compare/v2.19.0...v2.19.1) (2023-09-07)
 
 
