@@ -15,6 +15,7 @@ it('adds options', function (array $options, int $flags, array $result, string $
     $element = new $class('test');
 
     $element->withOptions($options, $flags);
+    $element->withSort(ElementBuilderWithOptionsInterface::SORT_ASC);
 
     $created = $element->make()
         ->toArray();
@@ -23,6 +24,7 @@ it('adds options', function (array $options, int $flags, array $result, string $
         'name'       => 'test',
         '$component' => $component,
         'options'    => $result,
+        'sort'       => 'asc',
     ]);
 })
     ->with([
