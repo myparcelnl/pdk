@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
@@ -135,6 +136,13 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         );
 
         $dropOff             = $this->dropOffService->getForDate($carrierSettings);
+        $dropOffCollection   = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
+        $dropOffDays         = $dropOffCollection->map(
+            function (DropOffDay $dropOffDay) {
+                return $dropOffDay->date;
+            }
+        )
+            ->toArray();
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
         $settings = $this->getBaseSettings($carrierSettings, $cart);
@@ -147,6 +155,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) && 0 === $minimumDropOffDelay,
                 'cutoffTime'           => $dropOff->cutoffTime ?? null,
                 'cutoffTimeSameDay'    => $dropOff->sameDayCutoffTime ?? null,
+                'dropOffDays'          => $dropOffDays,
             ]
         );
     }
