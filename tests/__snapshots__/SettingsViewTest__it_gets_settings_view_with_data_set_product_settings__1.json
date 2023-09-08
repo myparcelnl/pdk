@@ -57,7 +57,7 @@
             "name": "dropOffDelay",
             "$component": "NumberInput",
             "$attributes": {
-                "min": 0,
+                "min": -1,
                 "max": 14
             },
             "label": "settings_product_drop_off_delay",

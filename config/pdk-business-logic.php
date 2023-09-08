@@ -32,7 +32,7 @@ return [
     // Shipments
     'customsCodeMaxLength'    => value(10),
     'dropOffDelayMaximum'     => value(14),
-    'dropOffDelayMinimum'     => value(0),
+    'dropOffDelayMinimum'     => value(-1),
     'numberSuffixMaxLength'   => value(6),
     'packageTypeWeightLimits' => value([
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 2000,
