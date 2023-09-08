@@ -3,7 +3,7 @@ Feature: As a user I want to be able to export an order in order mode
   Background:
     Given a valid API key is set
     And an order with id 42 exists
-    And the general setting orderMode is enabled
+    And the order setting orderMode is enabled
 
   Scenario: Export entire order
     When I do a POST request to action "exportOrders" with parameters "orderIds=42"
