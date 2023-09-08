@@ -180,10 +180,10 @@
             ]
         },
         {
-            "name": "orderStatusMail",
+            "name": "sendNotificationAfter",
             "$component": "SelectInput",
-            "label": "settings_order_order_status_mail",
-            "description": "settings_order_order_status_mail_description",
+            "label": "settings_order_send_notification_after",
+            "description": "settings_order_send_notification_after_description",
             "options": [
                 {
                     "value": -1,
