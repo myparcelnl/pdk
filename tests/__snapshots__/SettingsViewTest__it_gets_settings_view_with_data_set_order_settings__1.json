@@ -1,9 +1,57 @@
 {
     "id": "order",
-    "title": "settings_view_order_title",
-    "titleSuffix": null,
-    "description": "settings_view_order_description",
+    "title": "settings_order_title",
+    "description": "settings_order_description",
     "elements": [
+        {
+            "$component": "SettingsDivider",
+            "$wrapper": false,
+            "level": 2,
+            "content": "settings_order_general_description",
+            "heading": "settings_order_general_title"
+        },
+        {
+            "name": "orderMode",
+            "$builders": [
+                {
+                    "$readOnlyWhen": []
+                }
+            ],
+            "$component": "ToggleInput",
+            "subtext": "hint_enable_order_mode_backoffice",
+            "label": "settings_order_order_mode",
+            "description": "settings_order_order_mode_description"
+        },
+        {
+            "name": "conceptShipments",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "orderMode",
+                                "$eq": false
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "ToggleInput",
+            "label": "settings_order_concept_shipments",
+            "description": "settings_order_concept_shipments_description"
+        },
+        {
+            "name": "processDirectly",
+            "$component": "ToggleInput",
+            "label": "settings_order_process_directly",
+            "description": "settings_order_process_directly_description"
+        },
+        {
+            "name": "sendReturnEmail",
+            "$component": "ToggleInput",
+            "label": "settings_order_send_return_email",
+            "description": "settings_order_send_return_email_description"
+        },
         {
             "name": "saveCustomerAddress",
             "$component": "ToggleInput",
@@ -11,132 +59,187 @@
             "description": "settings_order_save_customer_address_description"
         },
         {
+            "name": "shareCustomerInformation",
+            "$component": "ToggleInput",
+            "label": "settings_order_share_customer_information",
+            "description": "settings_order_share_customer_information_description"
+        },
+        {
             "$component": "SettingsDivider",
             "$wrapper": false,
+            "level": 2,
             "content": "settings_order_status_description",
-            "heading": "settings_order_status_title",
-            "level": 2
+            "heading": "settings_order_status_title"
         },
         {
             "name": "statusOnLabelCreate",
             "$component": "SelectInput",
+            "label": "settings_order_status_on_label_create",
+            "description": "settings_order_status_on_label_create_description",
             "options": [
                 {
                     "value": -1,
                     "label": "settings_none"
                 },
                 {
-                    "value": "pending",
-                    "plainLabel": "Pending"
+                    "plainLabel": "Pending",
+                    "value": "pending"
                 },
                 {
-                    "value": "paid",
-                    "plainLabel": "Paid"
+                    "plainLabel": "Paid",
+                    "value": "paid"
                 },
                 {
-                    "value": "shipped",
-                    "plainLabel": "Shipped"
+                    "plainLabel": "Shipped",
+                    "value": "shipped"
                 },
                 {
-                    "value": "completed",
-                    "plainLabel": "Completed"
+                    "plainLabel": "Completed",
+                    "value": "completed"
                 },
                 {
-                    "value": "cancelled",
-                    "plainLabel": "Cancelled"
+                    "plainLabel": "Cancelled",
+                    "value": "cancelled"
                 },
                 {
-                    "value": "refunded",
-                    "plainLabel": "Refunded"
+                    "plainLabel": "Refunded",
+                    "value": "refunded"
                 }
-            ],
-            "label": "settings_order_status_on_label_create",
-            "description": "settings_order_status_on_label_create_description"
+            ]
         },
         {
             "name": "statusWhenLabelScanned",
             "$component": "SelectInput",
+            "label": "settings_order_status_when_label_scanned",
+            "description": "settings_order_status_when_label_scanned_description",
             "options": [
                 {
                     "value": -1,
                     "label": "settings_none"
                 },
                 {
-                    "value": "pending",
-                    "plainLabel": "Pending"
+                    "plainLabel": "Pending",
+                    "value": "pending"
                 },
                 {
-                    "value": "paid",
-                    "plainLabel": "Paid"
+                    "plainLabel": "Paid",
+                    "value": "paid"
                 },
                 {
-                    "value": "shipped",
-                    "plainLabel": "Shipped"
+                    "plainLabel": "Shipped",
+                    "value": "shipped"
                 },
                 {
-                    "value": "completed",
-                    "plainLabel": "Completed"
+                    "plainLabel": "Completed",
+                    "value": "completed"
                 },
                 {
-                    "value": "cancelled",
-                    "plainLabel": "Cancelled"
+                    "plainLabel": "Cancelled",
+                    "value": "cancelled"
                 },
                 {
-                    "value": "refunded",
-                    "plainLabel": "Refunded"
+                    "plainLabel": "Refunded",
+                    "value": "refunded"
                 }
-            ],
-            "label": "settings_order_status_when_label_scanned",
-            "description": "settings_order_status_when_label_scanned_description"
+            ]
         },
         {
             "name": "statusWhenDelivered",
             "$component": "SelectInput",
+            "label": "settings_order_status_when_delivered",
+            "description": "settings_order_status_when_delivered_description",
             "options": [
                 {
                     "value": -1,
                     "label": "settings_none"
                 },
                 {
-                    "value": "pending",
-                    "plainLabel": "Pending"
+                    "plainLabel": "Pending",
+                    "value": "pending"
                 },
                 {
-                    "value": "paid",
-                    "plainLabel": "Paid"
+                    "plainLabel": "Paid",
+                    "value": "paid"
                 },
                 {
-                    "value": "shipped",
-                    "plainLabel": "Shipped"
+                    "plainLabel": "Shipped",
+                    "value": "shipped"
                 },
                 {
-                    "value": "completed",
-                    "plainLabel": "Completed"
+                    "plainLabel": "Completed",
+                    "value": "completed"
                 },
                 {
-                    "value": "cancelled",
-                    "plainLabel": "Cancelled"
+                    "plainLabel": "Cancelled",
+                    "value": "cancelled"
                 },
                 {
-                    "value": "refunded",
-                    "plainLabel": "Refunded"
+                    "plainLabel": "Refunded",
+                    "value": "refunded"
                 }
-            ],
-            "label": "settings_order_status_when_delivered",
-            "description": "settings_order_status_when_delivered_description"
+            ]
         },
         {
-            "name": "sendOrderStateForDigitalStamp",
-            "$component": "ToggleInput",
-            "label": "settings_order_send_order_state_for_digital_stamp",
-            "description": "settings_order_send_order_state_for_digital_stamp_description"
+            "name": "sendNotificationAfter",
+            "$component": "SelectInput",
+            "label": "settings_order_send_notification_after",
+            "description": "settings_order_send_notification_after_description",
+            "options": [
+                {
+                    "value": -1,
+                    "label": "settings_none"
+                },
+                {
+                    "plainLabel": "Pending",
+                    "value": "pending"
+                },
+                {
+                    "plainLabel": "Paid",
+                    "value": "paid"
+                },
+                {
+                    "plainLabel": "Shipped",
+                    "value": "shipped"
+                },
+                {
+                    "plainLabel": "Completed",
+                    "value": "completed"
+                },
+                {
+                    "plainLabel": "Cancelled",
+                    "value": "cancelled"
+                },
+                {
+                    "plainLabel": "Refunded",
+                    "value": "refunded"
+                }
+            ]
         },
         {
             "$component": "SettingsDivider",
             "$wrapper": false,
+            "level": 2,
+            "content": "settings_order_track_trace_description",
+            "heading": "settings_order_track_trace_title"
+        },
+        {
+            "name": "trackTraceInEmail",
+            "$component": "ToggleInput",
+            "label": "settings_order_track_trace_in_email",
+            "description": "settings_order_track_trace_in_email_description"
+        },
+        {
+            "name": "trackTraceInAccount",
+            "$component": "ToggleInput",
+            "label": "settings_order_track_trace_in_account",
+            "description": "settings_order_track_trace_in_account_description"
+        },
+        {
+            "$component": "SettingsDivider",
+            "$wrapper": false,
+            "level": 2,
             "content": "settings_order_weight_description",
-            "heading": "settings_order_weight_title",
-            "level": 2
+            "heading": "settings_order_weight_title"
         },
         {
             "name": "emptyParcelWeight",
@@ -155,6 +258,36 @@
             "$component": "NumberInput",
             "label": "settings_order_empty_digital_stamp_weight",
             "description": "settings_order_empty_digital_stamp_weight_description"
+        },
+        {
+            "$component": "SettingsDivider",
+            "$wrapper": false,
+            "level": 2,
+            "content": "settings_order_order_notes_description",
+            "heading": "settings_order_order_notes_title"
+        },
+        {
+            "name": "barcodeInNote",
+            "$component": "ToggleInput",
+            "label": "settings_order_barcode_in_note",
+            "description": "settings_order_barcode_in_note_description"
+        },
+        {
+            "name": "barcodeInNoteTitle",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "barcodeInNote"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "TextInput",
+            "label": "settings_order_barcode_in_note_title",
+            "description": "settings_order_barcode_in_note_title_description"
         }
     ],
     "children": null

@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 
 /**
  * @property AccountSettings                           $account
- * @property GeneralSettings                           $general
  * @property OrderSettings                             $order
  * @property LabelSettings                             $label
  * @property CustomsSettings                           $customs
@@ -18,9 +17,11 @@ use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
  */
 class Settings extends Model
 {
+    public const OPTION_NONE    = -1;
+    public const OPTION_DEFAULT = -1;
+
     public $attributes = [
         AccountSettings::ID  => AccountSettings::class,
-        GeneralSettings::ID  => GeneralSettings::class,
         OrderSettings::ID    => OrderSettings::class,
         LabelSettings::ID    => LabelSettings::class,
         CustomsSettings::ID  => CustomsSettings::class,

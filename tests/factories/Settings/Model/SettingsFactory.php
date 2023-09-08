@@ -21,7 +21,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withAccount(array|AccountSettings|AccountSettingsFactory $account)
  * @method $this withCheckout(array|CheckoutSettings|CheckoutSettingsFactory $checkout)
  * @method $this withCustoms(array|CustomsSettings|CustomsSettingsFactory $customs)
- * @method $this withGeneral(array|GeneralSettings|GeneralSettingsFactory $general)
  * @method $this withLabel(array|LabelSettings|LabelSettingsFactory $label)
  * @method $this withOrder(array|OrderSettings|OrderSettingsFactory $order)
  */

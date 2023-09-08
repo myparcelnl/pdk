@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 use MyParcelNL\Pdk\Api\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Request\FetchShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsAsPdfRequest;
@@ -47,7 +47,10 @@ class ShipmentRepository extends ApiRepository
      */
     public function createReturnShipments(ShipmentCollection $collection): ShipmentCollection
     {
-        $sendReturnEmail = Settings::get(GeneralSettings::SEND_RETURN_EMAIL, GeneralSettings::ID) ? 1 : 0;
+        $sendReturnEmail = Settings::get(
+            OrderSettings::SEND_RETURN_EMAIL,
+            OrderSettings::ID
+        ) ? 1 : 0;
         /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
         $response = $this->api->doRequest(
             new PostReturnShipmentsRequest($collection, ['send_return_mail' => $sendReturnEmail]),

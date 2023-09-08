@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
-use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
@@ -47,7 +47,7 @@ it('exports order', function (
     $carriers = Arr::pluck($orders, 'deliveryOptions.carrier.externalIdentifier');
 
     factory(Settings::class)
-        ->withGeneral(factory(GeneralSettings::class)->withOrderMode($orderMode))
+        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
@@ -111,8 +111,8 @@ it('exports order without customer information if setting is false', function (
     $carriers = Arr::pluck($orders, 'deliveryOptions.carrier.externalIdentifier');
 
     factory(Settings::class)
-        ->withGeneral(
-            factory(GeneralSettings::class)
+        ->withOrder(
+            factory(OrderSettings::class)
                 ->withOrderMode($orderMode)
                 ->withShareCustomerInformation($share)
         )
@@ -212,7 +212,7 @@ it('adds notification if shipment export fails', function () {
 
 it('exports order and directly returns barcode if concept shipments is off', function () {
     factory(Settings::class)
-        ->withGeneral(factory(GeneralSettings::class)->withConceptShipments(false))
+        ->withOrder(factory(OrderSettings::class)->withConceptShipments(false))
         ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
         ->store();
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Frontend\View\CarrierSettingsView;
 use MyParcelNL\Pdk\Frontend\View\CheckoutSettingsView;
 use MyParcelNL\Pdk\Frontend\View\CustomsSettingsView;
-use MyParcelNL\Pdk\Frontend\View\GeneralSettingsView;
 use MyParcelNL\Pdk\Frontend\View\LabelSettingsView;
 use MyParcelNL\Pdk\Frontend\View\OrderSettingsView;
 use MyParcelNL\Pdk\Frontend\View\PrintOptionsView;
@@ -15,7 +14,6 @@ dataset('settingsViews', [
     'carrier settings'  => [CarrierSettingsView::class],
     'checkout settings' => [CheckoutSettingsView::class],
     'customs settings'  => [CustomsSettingsView::class],
-    'general settings'  => [GeneralSettingsView::class],
     'label settings'    => [LabelSettingsView::class],
     'order settings'    => [OrderSettingsView::class],
     'print options'     => [PrintOptionsView::class],

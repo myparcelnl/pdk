@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Model\GeneralSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
@@ -74,11 +74,11 @@ class UpdateShipmentsAction extends AbstractOrderAction
      */
     private function addBarcodeNotes(ShipmentCollection $shipments): void
     {
-        if (! Settings::get(GeneralSettings::BARCODE_IN_NOTE, GeneralSettings::ID)) {
+        if (! Settings::get(OrderSettings::BARCODE_IN_NOTE, OrderSettings::ID)) {
             return;
         }
 
-        $prefix = Settings::get(GeneralSettings::BARCODE_IN_NOTE_TITLE, GeneralSettings::ID);
+        $prefix = Settings::get(OrderSettings::BARCODE_IN_NOTE_TITLE, OrderSettings::ID);
 
         $shipments
             ->each(function (Shipment $shipment) use ($prefix) {

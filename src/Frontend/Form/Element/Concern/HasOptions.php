@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element\Concern;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 
 /**
  * @see ElementBuilderWithOptionsInterface
@@ -55,14 +56,14 @@ trait HasOptions
     {
         if ($flags & ElementBuilderWithOptionsInterface::ADD_DEFAULT) {
             array_unshift($options, [
-                'value' => ElementBuilderWithOptionsInterface::VALUE_DEFAULT,
+                'value' => Settings::OPTION_DEFAULT,
                 'label' => sprintf('%s_default', Arr::first($this->prefixes)),
             ]);
         }
 
         if ($flags & ElementBuilderWithOptionsInterface::ADD_NONE) {
             array_unshift($options, [
-                'value' => ElementBuilderWithOptionsInterface::VALUE_DEFAULT,
+                'value' => Settings::OPTION_NONE,
                 'label' => sprintf('%s_none', Arr::first($this->prefixes)),
             ]);
         }
