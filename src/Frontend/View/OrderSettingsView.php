@@ -107,8 +107,4 @@ final class OrderSettingsView extends NewAbstractSettingsView
 
         return $orderModeToggle;
     }
-
-    private function createOrderStatusSelectInput(string $setting)
-    {
-    }
 }
