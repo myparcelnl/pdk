@@ -8,6 +8,7 @@
             "locale": "nl-NL",
             "packageType": "package",
             "platform": "myparcel",
+            "priceStandardDelivery": 0,
             "showPriceSurcharge": false,
             "apiBaseUrl": "https:\/\/api.myparcel.nl"
         },

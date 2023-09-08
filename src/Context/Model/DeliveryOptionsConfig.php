@@ -23,7 +23,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
  * @property string $platform
- * @property int    $priceDeliveryTypeTypeStandard
+ * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
  */
 class DeliveryOptionsConfig extends Model
@@ -37,18 +37,20 @@ class DeliveryOptionsConfig extends Model
         'packageType'                => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView' => null,
         'platform'                   => null,
+        'priceStandardDelivery'      => 0,
         'showPriceSurcharge'         => false,
     ];
 
     protected $casts      = [
         'allowRetry'                 => 'boolean',
-        'basePrice'                  => 'integer',
+        'basePrice'                  => 'float',
         'carrierSettings'            => 'array',
         'currency'                   => 'string',
         'locale'                     => 'string',
         'packageType'                => 'string',
         'pickupLocationsDefaultView' => 'string',
         'platform'                   => 'string',
+        'priceStandardDelivery'      => 'float',
         'showPriceSurcharge'         => 'boolean',
     ];
 
@@ -82,13 +84,6 @@ class DeliveryOptionsConfig extends Model
         /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
-        return new self(
-            array_merge(
-                $service->createAllCarrierSettings($cart),
-                [
-                    'basePrice' => $cart->shipmentPrice,
-                ]
-            )
-        );
+        return new self($service->createAllCarrierSettings($cart));
     }
 }

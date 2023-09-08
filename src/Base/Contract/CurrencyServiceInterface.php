@@ -26,6 +26,15 @@ interface CurrencyServiceInterface
     public function convertToCents($amount): int;
 
     /**
+     * Convert cents to euros.
+     *
+     * @param  int|float|string $amount
+     *
+     * @return float
+     */
+    public function convertToEuros($amount): float;
+
+    /**
      * @param  int $amount - amount in cents
      *
      * @return string

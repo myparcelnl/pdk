@@ -53,6 +53,16 @@ class CurrencyService implements CurrencyServiceInterface
     }
 
     /**
+     * @param  int|float|string $amount
+     *
+     * @return float
+     */
+    public function convertToEuros($amount): float
+    {
+        return (float) $amount / 100;
+    }
+
+    /**
      * @param  int $amount
      *
      * @return string

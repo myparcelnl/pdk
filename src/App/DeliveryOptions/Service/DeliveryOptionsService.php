@@ -8,10 +8,12 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -50,6 +52,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     ];
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
+     */
+    private $currencyService;
+
+    /**
      * @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface
      */
     private $dropOffService;
@@ -70,13 +77,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
-        DropOffServiceInterface $dropOffService,
-        TaxServiceInterface     $taxService,
-        SchemaRepository        $schemaRepository
+        DropOffServiceInterface  $dropOffService,
+        TaxServiceInterface      $taxService,
+        SchemaRepository         $schemaRepository,
+        CurrencyServiceInterface $currencyService
     ) {
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
         $this->schemaRepository = $schemaRepository;
+        $this->currencyService  = $currencyService;
     }
 
     /**
@@ -93,14 +102,20 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         [$packageType, $carriers] = $this->getValidCarrierOptions($cart);
 
+        $showPriceSurcharge =
+            Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID) === CheckoutSettings::PRICE_TYPE_INCLUDED;
+
         $settings = [
-            'packageType'     => $packageType,
-            'carrierSettings' => [],
+            'packageType'           => $packageType,
+            'carrierSettings'       => [],
+            'basePrice'             => $this->currencyService->convertToEuros($cart->shipmentPrice),
+            'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
         foreach ($carriers->all() as $carrier) {
             $identifier                               = $carrier->externalIdentifier;
-            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart);
+            $settings['carrierSettings'][$identifier] =
+                $this->createCarrierSettings($carrier, $cart);
         }
 
         return $settings;
@@ -122,7 +137,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $dropOff             = $this->dropOffService->getForDate($carrierSettings);
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
-        $settings = $this->getBaseSettings($carrierSettings);
+        $settings = $this->getBaseSettings($carrierSettings, $cart);
 
         return array_merge(
             $settings,
@@ -138,17 +153,25 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart         $cart
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getBaseSettings(CarrierSettings $carrierSettings): array
+    private function getBaseSettings(CarrierSettings $carrierSettings, PdkCart $cart): array
     {
-        return array_map(function ($key) use ($carrierSettings) {
+        $showPriceSurcharge =
+            Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID) === CheckoutSettings::PRICE_TYPE_INCLUDED;
+
+        return array_map(function ($key) use ($carrierSettings, $cart, $showPriceSurcharge) {
             $value = $carrierSettings->getAttribute($key);
 
             if (Str::startsWith($key, 'price')) {
-                return $this->taxService->getShippingDisplayPrice((float) $value);
+                $subtotal = $showPriceSurcharge
+                    ? $value + $this->currencyService->convertToEuros($cart->shipmentPrice)
+                    : $value;
+
+                return $this->taxService->getShippingDisplayPrice((float) $subtotal);
             }
 
             return $value;
@@ -173,7 +196,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             $filteredCarriers = $allCarriers
                 ->filter(
                     function (Carrier $carrier) use ($cart, $weight, $packageType, $carrierSettings): bool {
-                        $hasDeliveryOptions = $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
+                        $hasDeliveryOptions =
+                            $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
 
                         if (! $hasDeliveryOptions) {
                             return false;
