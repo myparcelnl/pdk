@@ -36,6 +36,16 @@ trait HasOptions
     }
 
     /**
+     * @param  string $sort
+     *
+     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface
+     */
+    public function withSort(string $sort): ElementBuilderWithOptionsInterface
+    {
+        return $this->withProp('sort', $sort);
+    }
+
+    /**
      * @param  array $options
      * @param  int   $flags
      *

@@ -34,7 +34,7 @@ final class LabelSettingsView extends NewAbstractSettingsView
         $this->formBuilder->add(
             new TextInput(LabelSettings::DESCRIPTION),
             new ToggleInput(LabelSettings::PROMPT),
-            new SettingsDivider($this->label('defaults'))
+            new SettingsDivider($this->label('defaults')),
         );
 
         $this->formBuilder->add(...$this->printOptionsView->all());

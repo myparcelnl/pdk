@@ -15,6 +15,8 @@ interface ElementBuilderWithOptionsInterface extends ElementBuilderInterface
     public const ADD_NONE        = 2;
     public const ADD_DEFAULT     = 4;
     public const VALUE_DEFAULT   = -1;
+    public const SORT_ASC        = 'asc';
+    public const SORT_DESC       = 'desc';
 
     /**
      * @param  array $options
@@ -23,4 +25,11 @@ interface ElementBuilderWithOptionsInterface extends ElementBuilderInterface
      * @return $this
      */
     public function withOptions(array $options, int $flags = 0): ElementBuilderWithOptionsInterface;
+
+    /**
+     * @param  string $sort
+     *
+     * @return $this
+     */
+    public function withSort(string $sort): ElementBuilderWithOptionsInterface;
 }
