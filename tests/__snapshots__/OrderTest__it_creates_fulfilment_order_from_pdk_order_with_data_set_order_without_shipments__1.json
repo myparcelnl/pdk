@@ -84,10 +84,10 @@
             "company": "MyParcel"
         },
         "physicalProperties": {
-            "height": 0,
-            "length": 0,
-            "weight": 0,
-            "width": 0
+            "height": 100,
+            "length": 100,
+            "weight": 1000,
+            "width": 100
         },
         "dropOffPoint": null
     },
