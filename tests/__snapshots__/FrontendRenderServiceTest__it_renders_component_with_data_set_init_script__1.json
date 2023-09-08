@@ -666,7 +666,7 @@
                     "exportHideSender": false,
                     "exportInsurance": false,
                     "exportInsuranceFromAmount": 0,
-                    "exportInsurancePriceFactor": 1,
+                    "exportInsurancePricePercentage": 100,
                     "exportInsuranceUpTo": 0,
                     "exportInsuranceUpToEu": 0,
                     "exportInsuranceUpToRow": 0,

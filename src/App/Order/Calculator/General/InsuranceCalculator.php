@@ -65,7 +65,9 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $this->getMaxInsurance($carrierSettings, $amount);
         }
 
-        $orderAmount = (int) ceil($carrierSettings->exportInsurancePriceFactor * $this->order->orderPriceAfterVat);
+        $orderAmount = (int) ceil(
+            $carrierSettings->exportInsurancePricePercentage * $this->order->orderPriceAfterVat / 100
+        );
         $fromAmount  = $this->currencyService->convertToCents($carrierSettings->exportInsuranceFromAmount);
 
         if ($orderAmount < $fromAmount) {
