@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use function DI\factory;
+use function DI\value;
 
 /**
  * Values related to settings.
@@ -92,6 +93,12 @@ return [
             PdkFacade::get('defaultSettings') ?? []
         );
     }),
+
+    /**
+     * Settings that are disabled and not shown.
+     */
+
+    'disabledSettings' => value([]),
 
     /**
      * Prefix for all settings keys.
