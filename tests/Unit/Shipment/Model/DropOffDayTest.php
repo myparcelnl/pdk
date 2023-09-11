@@ -230,3 +230,14 @@ it('returns correct amount of delivery days', function (array $settingsOverrides
 it('throws exception when drop off day does not have weekday or date', function () {
     new DropOffDay();
 })->throws(InvalidArgumentException::class);
+
+it('returns empty array when no drop off days are set', function () {
+    $carrierSettings = new CarrierSettings(['dropOffPossibilities' => ['dropOffDays' => []]]);
+
+    /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
+    $service = Pdk::get(DropOffServiceInterface::class);
+
+    $deliveryDays = $service->getPossibleDropOffDays($carrierSettings, new DateTimeImmutable('2022-01-03 00:00:00'));
+
+    expect($deliveryDays->toArray())->toBeEmpty();
+});

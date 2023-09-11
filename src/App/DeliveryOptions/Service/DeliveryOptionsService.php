@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -17,7 +18,6 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
@@ -135,14 +135,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
         );
 
-        $dropOff             = $this->dropOffService->getForDate($carrierSettings);
-        $dropOffCollection   = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
-        $dropOffDays         = $dropOffCollection->map(
-            function (DropOffDay $dropOffDay) {
-                return $dropOffDay->date;
-            }
-        )
+        $dropOff           = $this->dropOffService->getForDate($carrierSettings);
+        $dropOffCollection = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
+        $dropOffDays       = (new Collection($dropOffCollection))
+            ->pluck('weekday')
             ->toArray();
+
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
         $settings = $this->getBaseSettings($carrierSettings, $cart);
