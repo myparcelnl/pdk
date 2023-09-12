@@ -89,9 +89,9 @@ return [
         $platformCarriers = new Collection(Platform::get('carriers'));
         $carriers         = new Collection(Config::get('carriers'));
 
-        $result = $platformCarriers
-            ->map(function (array $carrier) use ($carriers): array {
-                $carrierDefinition = $carriers->firstWhere('name', $carrier['name']);
+        $result = $carriers
+            ->map(function (array $carrier) use ($platformCarriers): array {
+                $carrierDefinition = $platformCarriers->firstWhere('name', $carrier['name']) ?? [];
 
                 return array_replace($carrier, $carrierDefinition);
             });
@@ -108,6 +108,8 @@ return [
         $allCarriers      = Pdk::get('allCarriers');
         $platformCarriers = new Collection(Platform::get('carriers'));
 
-        return $allCarriers->whereIn('name', $platformCarriers->pluck('name'));
+        return $allCarriers
+            ->whereIn('name', $platformCarriers->pluck('name'))
+            ->values();
     }),
 ];

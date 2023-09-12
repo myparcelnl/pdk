@@ -7,8 +7,6 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 final class MockConfig extends Config
@@ -30,20 +28,7 @@ final class MockConfig extends Config
 
         $carriers = $this->getFromRealConfig('carriers');
 
-        $defaultDhl = (new Collection($carriers))->firstWhere('id', Carrier::CARRIER_DHL_FOR_YOU_ID);
-
-        // Add a custom carrier to the config
-        $carrierConfig = array_merge($carriers, [
-            array_merge(
-                $defaultDhl,
-                [
-                    'subscriptionId' => self::SUBSCRIPTION_ID_DHL_FOR_YOU,
-                    'type'           => Carrier::TYPE_CUSTOM,
-                ]
-            ),
-        ]);
-
-        $this->config = array_replace_recursive(['carriers' => $carrierConfig], $data);
+        $this->config = array_replace_recursive(['carriers' => $carriers], $data);
     }
 
     /**
