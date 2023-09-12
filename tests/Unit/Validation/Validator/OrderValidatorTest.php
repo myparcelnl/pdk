@@ -73,7 +73,8 @@ it('returns correct schema', function (array $order) use ($createOrder) {
 
 it('validates order', function (array $order) use ($createOrder) {
     $validator = $createOrder($order)->getValidator();
-
+    //    var_dump($validator);
+    //    die('wegwet');
     $isValid = $validator->validate();
     $errors  = $validator->getErrors();
 
@@ -223,8 +224,28 @@ it('validates order', function (array $order) use ($createOrder) {
             'order' => [
                 'shippingAddress'    => ['cc' => 'US'],
                 'customsDeclaration' => [
-                    'invoice' => '1',
-                    'items'   => [
+                    'invoice'  => '1',
+                    'contents' => 2,
+                    'items'    => [
+                        [
+                            'amount' => 1,
+                            'weight' => 1000,
+                        ],
+                    ],
+                ],
+                'deliveryOptions'    => [
+                    'shipmentOptions' => [
+                        'insurance' => 20000,
+                    ],
+                ],
+            ],
+        ],
+        'ROW package without invoice'                 => [
+            'order' => [
+                'shippingAddress'    => ['cc' => 'US'],
+                'customsDeclaration' => [
+                    'contents' => 3,
+                    'items'    => [
                         [
                             'amount' => 1,
                             'weight' => 1000,

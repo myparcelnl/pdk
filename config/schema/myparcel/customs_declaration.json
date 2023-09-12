@@ -5,40 +5,6 @@
   "required": [
     "customsDeclaration"
   ],
-  "anyOf": [
-    {
-      "properties": {
-        "customsDeclaration": {
-          "required": [
-            "invoice"
-          ],
-          "properties": {
-            "contents": {
-              "enum": [
-                1,
-                2,
-                5
-              ]
-            }
-          }
-        }
-      }
-    },
-    {
-      "properties": {
-        "customsDeclaration": {
-          "properties": {
-            "contents": {
-              "enum": [
-                3,
-                4
-              ]
-            }
-          }
-        }
-      }
-    }
-  ],
   "properties": {
     "customsDeclaration": {
       "type": "object",
@@ -60,7 +26,10 @@
           ]
         },
         "invoice": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "items": {
           "type": "array"
@@ -69,7 +38,39 @@
           "type": "integer",
           "minimum": 1
         }
-      }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "contents": {
+              "enum": [
+                3,
+                4
+              ]
+            },
+            "invoice": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "required": [
+            "invoice"
+          ],
+          "properties": {
+            "contents": {
+              "enum": [
+                1,
+                2,
+                5
+              ]
+            },
+            "invoice": {
+              "type": "string"
+            }
+          }
+        }
+      ]
     }
   }
 }
