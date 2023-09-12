@@ -14,6 +14,8 @@ use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 
 class DropOffService implements DropOffServiceInterface
 {
+    private const DELIVERY_DAYS_WINDOW_MAXIMUM = 14;
+
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings
      * @param  \DateTimeImmutable|null                        $date
@@ -52,6 +54,10 @@ class DropOffService implements DropOffServiceInterface
 
         if ($settings->dropOffPossibilities->dropOffDays->isNotEmpty()) {
             do {
+                if (self::DELIVERY_DAYS_WINDOW_MAXIMUM < $day) {
+                    break;
+                }
+
                 $dropOffDate = $fromDate->modify("+$day day");
                 $weekday     = (int) $dropOffDate->format('w');
 

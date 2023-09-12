@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -134,7 +135,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
         );
 
-        $dropOff             = $this->dropOffService->getForDate($carrierSettings);
+        $dropOff           = $this->dropOffService->getForDate($carrierSettings);
+        $dropOffCollection = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
+        $dropOffDays       = (new Collection($dropOffCollection))
+            ->pluck('weekday')
+            ->toArray();
+
         $minimumDropOffDelay = $cart->shippingMethod->minimumDropOffDelay;
 
         $settings = $this->getBaseSettings($carrierSettings, $cart);
@@ -147,6 +153,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) && 0 === $minimumDropOffDelay,
                 'cutoffTime'           => $dropOff->cutoffTime ?? null,
                 'cutoffTimeSameDay'    => $dropOff->sameDayCutoffTime ?? null,
+                'dropOffDays'          => $dropOffDays,
             ]
         );
     }

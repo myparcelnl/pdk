@@ -24,7 +24,8 @@
             "deliveryDaysWindow": 7,
             "dropOffDelay": 0,
             "cutoffTime": null,
-            "cutoffTimeSameDay": null
+            "cutoffTimeSameDay": null,
+            "dropOffDays": []
         }
     },
     "basePrice": 0,

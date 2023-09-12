@@ -73,6 +73,16 @@ const DROP_OFF_DAYS = [
     ],
 ];
 
+const DROP_OFF_DAY_WITHOUT_DISPATCH = [
+    '0' => [
+        'cutOffTime'        => '17:00',
+        'date'              => '2022-01-03 00:00:00',
+        'dispatch'          => false,
+        'sameDayCutOffTime' => '10:00',
+        'weekday'           => 1,
+    ],
+];
+
 usesShared(new UsesMockPdkInstance());
 
 it('returns correct delivery days using a specific date', function (
@@ -230,3 +240,20 @@ it('returns correct amount of delivery days', function (array $settingsOverrides
 it('throws exception when drop off day does not have weekday or date', function () {
     new DropOffDay();
 })->throws(InvalidArgumentException::class);
+
+it('returns empty array when no drop off days are set', function () {
+    $carrierSettings = new CarrierSettings(
+        [
+            'dropOffPossibilities' => [
+                'dropOffDays' => DROP_OFF_DAY_WITHOUT_DISPATCH,
+            ],
+        ]
+    );
+
+    /** @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $service */
+    $service = Pdk::get(DropOffServiceInterface::class);
+
+    $deliveryDays = $service->getPossibleDropOffDays($carrierSettings, new DateTimeImmutable('2022-01-03 00:00:00'));
+
+    expect($deliveryDays->toArray())->toBeEmpty();
+});
