@@ -33,7 +33,6 @@ final class PdkOrderCalculator
 
             $calculator->calculate();
         }
-        $__AAAAA = $this->order->customsDeclaration->items[0];
 
         return $this->order;
     }

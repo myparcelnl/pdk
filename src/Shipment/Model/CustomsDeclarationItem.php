@@ -8,7 +8,11 @@ use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
+use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 
 /**
  * @property int                                 $amount
@@ -52,8 +56,17 @@ class CustomsDeclarationItem extends Model
      */
     public static function fromProduct(PdkProduct $product, array $additionalFields = []): self
     {
-        $classification = $product->settings->customsCode ?? Settings::get('customs.customsCode');
-        $country        = $product->settings->countryOfOrigin ?? Settings::get('customs.countryOfOrigin');
+        $triStateService = Pdk::get(TriStateServiceInterface::class);
+        $countryOfOrigin = Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID);
+        $customsCode     = Settings::get(CustomsSettings::CUSTOMS_CODE, CustomsSettings::ID);
+
+        $classification = $triStateService->resolveForString($product->settings->customsCode, $customsCode);
+        $country        =
+            $triStateService->resolveForString(
+                $product->settings->countryOfOrigin,
+                $countryOfOrigin,
+                Platform::get('localCountry')
+            );
 
         return new static(
             array_merge(

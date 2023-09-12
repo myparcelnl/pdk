@@ -63,6 +63,24 @@ class TriStateService implements TriStateServiceInterface
     }
 
     /**
+     * @param ...$values
+     *
+     * @return null|string
+     */
+    public function resolveForString(...$values): ?string
+    {
+        foreach ($values as $value) {
+            if (self::INHERIT === (int) $value) {
+                continue;
+            }
+
+            return (string) $value;
+        }
+
+        return null;
+    }
+
+    /**
      * @param  array $values
      *
      * @return null|int|mixed
