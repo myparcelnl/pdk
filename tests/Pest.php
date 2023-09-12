@@ -3,14 +3,9 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
-use MyParcelNL\Pdk\Tests\Factory\SharedFactoryState;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
 use MyParcelNL\Pdk\Tests\Uses\ClearContainerCache;
-use Symfony\Contracts\Service\ResetInterface;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 /**
@@ -20,6 +15,8 @@ use function MyParcelNL\Pdk\Tests\usesShared;
  */
 
 usesShared(new ClearContainerCache())->in(__DIR__);
+
+uses(TestCase::class)->in(__DIR__);
 
 uses()
     ->group('frontend')
@@ -36,34 +33,6 @@ uses()
         __DIR__ . '/Unit/Frontend/View',
         __DIR__ . '/Unit/Settings'
     );
-
-uses()
-    ->afterEach(function () {
-        if (! Facade::getPdkInstance()) {
-            return;
-        }
-
-        $services = [
-            MockCarrierSchema::class,
-            MockMemoryCacheStorage::class,
-            SharedFactoryState::class,
-        ];
-
-        foreach ($services as $service) {
-            try {
-                $instance = Pdk::get($service);
-
-                if (! $instance instanceof ResetInterface) {
-                    continue;
-                }
-
-                $instance->reset();
-            } catch (Exception $e) {
-                // Ignore
-            }
-        }
-    })
-    ->in(__DIR__);
 
 expect()
     ->extend('toHaveKeysAndValues', function (array $array) {
