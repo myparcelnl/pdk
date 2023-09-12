@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Language;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface;
@@ -45,7 +46,17 @@ abstract class NewAbstractSettingsView implements Arrayable
     {
         $this->initialize();
 
-        return $this->formBuilder->all();
+        $filtered = array_filter($this->formBuilder->all(), function (ElementBuilderInterface $elementBuilder): bool {
+            $name = $elementBuilder->getName();
+
+            if (! $name) {
+                return true;
+            }
+
+            return $this->isNotDisabled($name);
+        });
+
+        return array_values($filtered);
     }
 
     /**
@@ -103,6 +114,20 @@ abstract class NewAbstractSettingsView implements Arrayable
     protected function getRootPrefix(): string
     {
         return 'settings';
+    }
+
+    /**
+     * @param  string $name
+     *
+     * @return bool
+     */
+    protected function isNotDisabled(string $name): bool
+    {
+        /** @var array[] $disabledSettings */
+        $disabledSettings = Pdk::get('disabledSettings');
+        $category         = $disabledSettings[$this->getPrefix()] ?? [];
+
+        return ! in_array($name, $category, true);
     }
 
     /**
