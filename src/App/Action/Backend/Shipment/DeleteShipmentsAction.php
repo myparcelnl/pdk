@@ -50,6 +50,7 @@ class DeleteShipmentsAction extends AbstractOrderAction
             ->map(function (Shipment $shipment) {
                 $shipment->deleted = new DateTime();
                 $shipment->updated = null;
+
                 return $shipment;
             });
     }

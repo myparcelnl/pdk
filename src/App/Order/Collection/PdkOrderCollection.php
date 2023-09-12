@@ -62,6 +62,7 @@ class PdkOrderCollection extends Collection
             });
 
             $acc->push(...$order->shipments->filterNotDeleted());
+
             return $acc;
         }, new ShipmentCollection());
 

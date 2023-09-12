@@ -287,6 +287,7 @@ trait HasAttributes
         }
 
         $this->attributes[$key] = $value;
+
         return $this;
     }
 
@@ -322,8 +323,7 @@ trait HasAttributes
                 $attributes[$key] = $this->serializeDate($attributes[$key]);
             }
 
-            if ($attributes[$key] instanceof DateTimeInterface
-                && $this->isClassCastable($originalKey)) {
+            if ($attributes[$key] instanceof DateTimeInterface && $this->isClassCastable($originalKey)) {
                 $attributes[$key] = $this->serializeDate($attributes[$key]);
             }
 

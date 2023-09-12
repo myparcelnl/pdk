@@ -28,6 +28,7 @@ class ShipmentCollection extends Collection
     {
         $this->each(function (Shipment $shipment, int $index) use ($ids) {
             $shipment->fill($ids->offsetGet($index) ?? []);
+
             return $shipment;
         });
 

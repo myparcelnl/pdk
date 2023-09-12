@@ -97,6 +97,7 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     {
         if (! $settings instanceof SettingsModelCollection) {
             $this->store($this->createSettingsKey($settings->id), $settings->toStorableArray());
+
             return;
         }
 

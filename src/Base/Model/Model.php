@@ -122,10 +122,12 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
                 continue;
             }
 
-            if (is_string($value)
+            if (
+                is_string($value)
                 && class_exists($value)
                 && $this->isClassCastable($key)
-                && Str::contains($value, '\\')) {
+                && Str::contains($value, '\\')
+            ) {
                 $value = new $value();
             }
 

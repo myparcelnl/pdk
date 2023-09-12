@@ -13,7 +13,7 @@ final class Context
     public const ID_PLUGIN_SETTINGS_VIEW  = 'pluginSettingsView';
     public const ID_PRODUCT_DATA          = 'productData';
     public const ID_PRODUCT_SETTINGS_VIEW = 'productSettingsView';
-    public const ALL = [
+    public const ALL                      = [
         self::ID_GLOBAL,
         self::ID_DYNAMIC,
         self::ID_CHECKOUT,

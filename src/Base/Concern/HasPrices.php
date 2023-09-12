@@ -46,6 +46,7 @@ trait HasPrices
     {
         $this->attributes['priceAfterVat'] = $priceAfterVat;
         $this->calculateVatTotals();
+
         return $this;
     }
 
@@ -59,6 +60,7 @@ trait HasPrices
     {
         $this->attributes['price'] = $price;
         $this->calculateVatTotals();
+
         return $this;
     }
 
@@ -72,6 +74,7 @@ trait HasPrices
     {
         $this->attributes['vat'] = $vat;
         $this->calculateVatTotals();
+
         return $this;
     }
 }

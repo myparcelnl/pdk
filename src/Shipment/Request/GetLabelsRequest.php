@@ -57,6 +57,7 @@ class GetLabelsRequest extends Request
     {
         $parameters              = $this->parameters;
         $parameters['positions'] = implode(';', $parameters['positions'] ?? []);
+
         return array_filter($parameters);
     }
 

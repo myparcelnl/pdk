@@ -53,6 +53,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
 
         if (self::CONTEXT_WEBHOOK !== $context || ! $input instanceof Request) {
             Logger::error('Webhook called with invalid input', compact('input', 'context'));
+
             return $response;
         }
 
@@ -73,6 +74,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
 
         if ($request->getRequestUri() !== $requiredPath) {
             Logger::error('Webhook received with invalid url', $logContext);
+
             return;
         }
 
@@ -122,6 +124,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
     private function getHooks(Request $request): array
     {
         $body = json_decode($request->getContent(), true);
+
         return $body['data']['hooks'] ?? [];
     }
 }

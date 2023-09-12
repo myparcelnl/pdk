@@ -174,6 +174,7 @@ class ContextService implements ContextServiceInterface
         }
 
         Logger::alert('Invalid context key passed.', compact('contextId', 'data'));
+
         return null;
     }
 }

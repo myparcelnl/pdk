@@ -75,6 +75,7 @@ class PdkCart extends Model
     {
         $this->attributes['shippingMethod'] = $value;
         $this->updateShippingMethod();
+
         return $this;
     }
 

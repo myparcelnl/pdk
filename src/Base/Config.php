@@ -67,6 +67,7 @@ class Config implements ConfigInterface
 
         if (count($pathParts)) {
             array_shift($pathParts);
+
             return Arr::get($data, implode('.', $pathParts));
         }
 

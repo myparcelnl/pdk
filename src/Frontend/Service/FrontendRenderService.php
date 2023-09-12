@@ -289,6 +289,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
                         'contextArguments'
                     ))
             );
+
             return '';
         }
     }

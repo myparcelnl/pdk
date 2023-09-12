@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 
 class PostOrdersResponse extends ApiResponseWithBody

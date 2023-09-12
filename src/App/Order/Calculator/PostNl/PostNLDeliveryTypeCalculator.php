@@ -21,6 +21,7 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
 
         if (CountryCodes::CC_NL !== $this->order->shippingAddress->cc) {
             $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
+
             return;
         }
 
