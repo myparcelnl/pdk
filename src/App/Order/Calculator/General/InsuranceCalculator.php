@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
@@ -35,7 +34,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 
         $this->countryService  = Pdk::get(CountryServiceInterface::class);
         $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
-        $this->triStateService = Pdk::get(TriStateServiceInterface::class);
     }
 
     /**
