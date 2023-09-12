@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.20.0](https://github.com/myparcelnl/pdk/compare/v2.19.2...v2.20.0) (2023-09-12)
+
+
+### :bug: Bug Fixes
+
+* **delivery-options:** add drop off days to config ([#185](https://github.com/myparcelnl/pdk/issues/185)) ([47c8d7e](https://github.com/myparcelnl/pdk/commit/47c8d7e13268a858f585bcac637f9465d3c1c9c2))
+
+
+### :sparkles: New Features
+
+* **settings:** allow hiding settings via config ([#187](https://github.com/myparcelnl/pdk/issues/187)) ([7fc2d0b](https://github.com/myparcelnl/pdk/commit/7fc2d0b920b9df2e1c5a013a91e30793d9f0f3b1))
+
 ## [2.19.2](https://github.com/myparcelnl/pdk/compare/v2.19.1...v2.19.2) (2023-09-08)
 
 
