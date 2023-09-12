@@ -17,6 +17,7 @@ interface TriStateServiceInterface
 
     /**
      * Coerces empty values to -1, but preserves other values.
+     *
      * @template T of mixed
      *
      * @param  T ...$values
@@ -33,4 +34,13 @@ interface TriStateServiceInterface
      * @return mixed
      */
     public function resolve(...$values);
+
+    /**
+     * Resolves to the first value that is not -1 or '-1'
+     *
+     * @param ...$values
+     *
+     * @return null|string
+     */
+    public function resolveForString(...$values): ?string;
 }
