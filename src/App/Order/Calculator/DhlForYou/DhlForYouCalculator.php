@@ -12,6 +12,7 @@ final class DhlForYouCalculator extends AbstractCarrierOptionsCalculator
     protected function getCalculators(): array
     {
         return [
+            DhlForYouCountryShipmentOptionsCalculator::class,
             DhlForYouDeliveryTypeCalculator::class,
             DhlForYouShipmentOptionsCalculator::class,
         ];

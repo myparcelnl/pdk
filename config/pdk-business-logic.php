@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AgeCheckCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CustomsDeclarationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
@@ -77,6 +78,7 @@ return [
             PackageTypeShipmentOptionsCalculator::class,
             LabelDescriptionCalculator::class,
             InsuranceCalculator::class,
+            CustomsDeclarationCalculator::class,
             CarrierSpecificCalculator::class,
         ];
     }),
