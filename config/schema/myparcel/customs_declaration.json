@@ -2,15 +2,23 @@
   "description": "/order/customs_declaration",
   "type": "object",
   "additionalItems": false,
-  "required": ["customsDeclaration"],
+  "required": [
+    "customsDeclaration"
+  ],
   "anyOf": [
     {
       "properties": {
         "customsDeclaration": {
-          "required": ["invoice"],
+          "required": [
+            "invoice"
+          ],
           "properties": {
             "contents": {
-              "enum": [1, 2, 5]
+              "enum": [
+                1,
+                2,
+                5
+              ]
             }
           }
         }
@@ -21,7 +29,10 @@
         "customsDeclaration": {
           "properties": {
             "contents": {
-              "enum": [3, 4]
+              "enum": [
+                3,
+                4
+              ]
             }
           }
         }
@@ -32,11 +43,21 @@
     "customsDeclaration": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["contents", "weight", "items"],
+      "required": [
+        "contents",
+        "weight",
+        "items"
+      ],
       "properties": {
         "contents": {
           "type": "integer",
-          "enum": [1, 2, 3, 4, 5]
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
         },
         "invoice": {
           "type": "string"

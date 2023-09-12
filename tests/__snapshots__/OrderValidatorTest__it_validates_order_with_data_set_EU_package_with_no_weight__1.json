@@ -54,6 +54,27 @@
         "context": 1
     },
     {
+        "property": "deliveryOptions.shipmentOptions.insurance",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/insurance",
+        "message": "Does not have a value in the enumeration [0,null]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0,
+            null
+        ]
+    },
+    {
+        "property": "deliveryOptions.shipmentOptions.signature",
+        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
+        "message": "Does not have a value in the enumeration [0]",
+        "constraint": "enum",
+        "context": 1,
+        "enum": [
+            0
+        ]
+    },
+    {
         "property": "deliveryOptions.shipmentOptions.ageCheck",
         "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
         "message": "Does not have a value in the enumeration [0,1]",

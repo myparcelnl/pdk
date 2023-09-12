@@ -24,6 +24,10 @@ final class PostNLCountryShipmentOptionsCalculator extends AbstractPdkOrderOptio
     {
         $cc = $this->order->shippingAddress->cc;
 
+        if (null === $cc) {
+            return;
+        }
+
         if ($this->countryService->isRow($cc)) {
             $this->order->deliveryOptions->shipmentOptions->largeFormat = false;
         }

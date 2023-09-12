@@ -18,6 +18,14 @@
         },
         "shipmentOptions": {
           "properties": {
+            "insurance": {
+              "enum": [
+                0,
+                5000,
+                50000,
+                null
+              ]
+            },
             "largeFormat": {
               "enum": [
                 0
