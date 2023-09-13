@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Frontend\View\AbstractSettingsView;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('frontend', 'settings');
@@ -132,3 +133,25 @@ it('can render a settings view', function (array $data) {
         ];
     },
 ]);
+
+it('does not render disabled elements', function () {
+    $reset = mockPdkProperty('disabledSettings', ['test' => ['test2']]);
+
+    $view = new MockSettingsView(null, [
+        new InteractiveElement('test1', 'test'),
+        new InteractiveElement('test2', 'test'),
+        new InteractiveElement('test3', 'test'),
+    ]);
+
+    $elements = new Collection($view->getElements());
+
+    $keys  = $elements->keys();
+    $names = $elements->pluck('name');
+
+    expect($keys->toArray())
+        ->toBe([0, 1])
+        ->and($names->all())
+        ->toBe(['test1', 'test3']);
+
+    $reset();
+});
