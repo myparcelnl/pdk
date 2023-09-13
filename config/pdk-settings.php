@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
@@ -90,6 +91,11 @@ return [
         return array_replace_recursive(
             PdkFacade::get('builtInDefaultSettings') ?? [],
             Platform::get('defaultSettings') ?? [],
+            [
+                CustomsSettings::ID => [
+                    CustomsSettings::COUNTRY_OF_ORIGIN => Platform::get('localCountry'),
+                ],
+            ],
             PdkFacade::get('defaultSettings') ?? []
         );
     }),
