@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.20.1](https://github.com/myparcelnl/pdk/compare/v2.20.0...v2.20.1) (2023-09-13)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** fix non-platform carriers being turned into postnl ([#188](https://github.com/myparcelnl/pdk/issues/188)) ([dc4d402](https://github.com/myparcelnl/pdk/commit/dc4d40244d96e5146ad32622fc0ec89c9739297c))
+
 ## [2.20.0](https://github.com/myparcelnl/pdk/compare/v2.19.2...v2.20.0) (2023-09-12)
 
 
