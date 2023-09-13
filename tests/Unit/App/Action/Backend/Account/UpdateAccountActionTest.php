@@ -23,13 +23,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(
-    new UsesMockPdkInstance(),
-    new UsesApiMock()
-);
+usesShared(new UsesMockPdkInstance(), new UsesApiMock());
 
-function executeUpdateAccount(?array $settings, array $accounts = null): Response
-{
+function executeUpdateAccount(
+    ?array $settings,
+    array  $accounts = null
+): Response {
     MockApi::enqueue(
         new ExampleGetAccountsResponse($accounts),
         new ExampleGetCarrierConfigurationResponse(),
@@ -73,7 +72,7 @@ it('fetches account with carrier configurations and options', function () {
         ->and($account->shops->all())
         ->toHaveLength(1)
         ->and($firstShop->carriers->all())
-        ->toHaveLength(1)
+        ->toHaveLength(9)
         ->and($firstShop->carrierConfigurations->all())
         ->toHaveLength(1);
 });
@@ -88,4 +87,26 @@ it('fetches new account and carrier data from api when called with empty array',
     $currentAccount = AccountSettings::getAccount();
 
     expect($currentAccount->toStorableArray())->toBe($existingAccount->toStorableArray());
+});
+
+it('maps carriers correctly', function () {
+    executeUpdateAccount(['apiKey' => 'test-api-key']);
+
+    $firstShop = AccountSettings::getAccount()->shops->first();
+
+    expect(
+        $firstShop->carriers->pluck('externalIdentifier')
+            ->toArray()
+    )
+        ->toBe([
+            'cheapcargo',
+            'bol.com',
+            'ups',
+            'dhlforyou',
+            'postnl',
+            'postnl:8123',
+            'dhlparcelconnect',
+            'dhleuroplus',
+            'dhlforyou:677',
+        ]);
 });

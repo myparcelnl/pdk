@@ -1,5 +1,6 @@
 [
     {
+        "carrier": 5,
         "drop_off_point": {
             "location_code": "45678",
             "postal_code": "",

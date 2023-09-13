@@ -38,13 +38,13 @@ it('generates external identifier', function (array $input, string $identifier) 
         ->toBe($identifier);
 })->with([
     'id' => [
-        'input'      => ['id' => Carrier::CARRIER_DHL_FOR_YOU_ID],
-        'identifier' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'input'      => ['id' => Carrier::CARRIER_DPD_ID],
+        'identifier' => Carrier::CARRIER_DPD_NAME,
     ],
 
     'name' => [
-        'input'      => ['name' => Carrier::CARRIER_DHL_FOR_YOU_NAME],
-        'identifier' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'input'      => ['name' => Carrier::CARRIER_BPOST_NAME],
+        'identifier' => Carrier::CARRIER_BPOST_NAME,
     ],
 
     'name and subscriptionId' => [
