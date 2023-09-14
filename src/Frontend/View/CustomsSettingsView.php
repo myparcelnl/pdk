@@ -42,10 +42,7 @@ class CustomsSettingsView extends AbstractSettingsView
                 CustomsSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions(
-                        $this->countryService->getAllTranslatable(),
-                        AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
-                    ),
+                    'options' => $this->toSelectOptions($this->countryService->getAllTranslatable()),
                     'sort'    => ElementBuilderWithOptionsInterface::SORT_ASC,
                 ]
             ),

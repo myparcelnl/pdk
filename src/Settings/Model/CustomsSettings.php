@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
+
 /**
  * @property null|string $countryOfOrigin
  * @property string      $customsCode
@@ -24,8 +26,9 @@ class CustomsSettings extends AbstractSettingsModel
     /**
      * Default values.
      */
-    public const DEFAULT_PACKAGE_CONTENTS = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
-    public const DEFAULT_CUSTOMS_CODE     = '0';
+    public const DEFAULT_COUNTRY_OF_ORIGIN = CountryCodes::CC_NL;
+    public const DEFAULT_PACKAGE_CONTENTS  = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
+    public const DEFAULT_CUSTOMS_CODE      = '0';
     /**
      * Available package contents.
      */
@@ -45,7 +48,7 @@ class CustomsSettings extends AbstractSettingsModel
     protected $attributes = [
         'id' => self::ID,
 
-        self::COUNTRY_OF_ORIGIN => null,
+        self::COUNTRY_OF_ORIGIN => self::DEFAULT_COUNTRY_OF_ORIGIN,
         self::CUSTOMS_CODE      => self::DEFAULT_CUSTOMS_CODE,
         self::PACKAGE_CONTENTS  => self::DEFAULT_PACKAGE_CONTENTS,
     ];

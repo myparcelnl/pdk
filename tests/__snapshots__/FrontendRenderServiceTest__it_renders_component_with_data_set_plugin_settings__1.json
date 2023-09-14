@@ -434,10 +434,6 @@
                     "$component": "SelectInput",
                     "options": [
                         {
-                            "value": -1,
-                            "label": "settings_none"
-                        },
-                        {
                             "value": "AD",
                             "label": "country_ad"
                         },

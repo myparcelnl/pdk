@@ -625,6 +625,7 @@
             },
             "customs": {
                 "id": "customs",
+                "countryOfOrigin": "NL",
                 "customsCode": "0",
                 "packageContents": "1"
             },
