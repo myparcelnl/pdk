@@ -46,7 +46,7 @@ class CustomsSettingsView extends AbstractSettingsView
                         $this->countryService->getAllTranslatable(),
                         AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
                     ),
-                    'sort'    => ElementBuilderWithOptionsInterface::SORT_ASC,
+                    'sort'    => ElementBuilderWithOptionsInterface::SORT_ASC_VALUE,
                 ]
             ),
         ];
