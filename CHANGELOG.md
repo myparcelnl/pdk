@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.21.0](https://github.com/myparcelnl/pdk/compare/v2.20.1...v2.21.0) (2023-09-15)
+
+
+### :sparkles: New Features
+
+* **settings:** add sort prop to order status fields ([#194](https://github.com/myparcelnl/pdk/issues/194)) ([144d6c9](https://github.com/myparcelnl/pdk/commit/144d6c90446b711d46df80a388fb92d533d43e05))
+
+
+### :bug: Bug Fixes
+
+* **settings:** hide disabled settings on all form views ([#189](https://github.com/myparcelnl/pdk/issues/189)) ([84429ab](https://github.com/myparcelnl/pdk/commit/84429ab8d1a7864dc89061bec6e7f7515ceb24d0))
+* **shipments:** allow exporting eu and row shipments ([#186](https://github.com/myparcelnl/pdk/issues/186)) ([41b1bef](https://github.com/myparcelnl/pdk/commit/41b1bef73220338b2f27622cb5ce19908fe03b31))
+
 ## [2.20.1](https://github.com/myparcelnl/pdk/compare/v2.20.0...v2.20.1) (2023-09-13)
 
 
