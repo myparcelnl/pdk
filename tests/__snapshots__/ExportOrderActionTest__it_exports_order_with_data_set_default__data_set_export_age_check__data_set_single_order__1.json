@@ -19,11 +19,12 @@
                 "recipient": {
                     "cc": "NL",
                     "city": "Hoofddorp",
+                    "company": "MyParcel",
                     "person": "Felicia Parcel",
                     "postal_code": "2132 JE",
                     "street": "Antareslaan 31"
                 },
-                "reference_identifier": "247"
+                "reference_identifier": "PDK-1"
             }
         ]
     }

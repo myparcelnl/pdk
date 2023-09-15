@@ -6,12 +6,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -127,10 +127,8 @@ it('creates pdk order from fulfilment order', function (array $orders) {
     assertMatchesJsonSnapshot(json_encode($pdkOrders->toArrayWithoutNull()));
 })->with('fulfilmentOrders');
 
-it('creates a storable array', function (array $orders) {
-    $collection = factory(PdkOrderCollection::class)
-        ->push(...$orders)
-        ->make();
+it('creates a storable array', function (PdkOrderCollectionFactory $orderFactory) {
+    $collection = $orderFactory->make();
 
     assertMatchesJsonSnapshot(json_encode($collection->toStorableArray()));
 })->with('pdkOrdersDomestic');

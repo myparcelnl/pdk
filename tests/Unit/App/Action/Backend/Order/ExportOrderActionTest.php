@@ -7,9 +7,11 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
@@ -41,19 +43,21 @@ dataset('orderModeToggle', [
 ]);
 
 it('exports order', function (
-    bool                   $orderMode,
-    CarrierSettingsFactory $carrierSettingsFactory,
-    array                  $orders
+    bool                      $orderMode,
+    CarrierSettingsFactory    $carrierSettingsFactory,
+    PdkOrderCollectionFactory $orderFactory
 ) {
-    $carriers = Arr::pluck($orders, 'deliveryOptions.carrier.externalIdentifier');
+    $orders = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    $carriers = $orders
+        ->pluck('deliveryOptions.carrier.externalIdentifier')
+        ->toArray();
 
     factory(Settings::class)
         ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
-        ->store();
-
-    factory(PdkOrderCollection::class)
-        ->push(...$orders)
         ->store();
 
     MockApi::enqueue(
@@ -63,7 +67,9 @@ it('exports order', function (
     );
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
-        'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
+        'orderIds' => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
     ]);
 
     $lastRequest = MockApi::ensureLastRequest();
@@ -105,11 +111,17 @@ it('exports order', function (
     ->with('pdkOrdersDomestic');
 
 it('exports order without customer information if setting is false', function (
-    bool  $share,
-    bool  $orderMode,
-    array $orders
+    bool                      $share,
+    bool                      $orderMode,
+    PdkOrderCollectionFactory $orderFactory
 ) {
-    $carriers = Arr::pluck($orders, 'deliveryOptions.carrier.externalIdentifier');
+    $orders = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    $carriers = $orders
+        ->pluck('deliveryOptions.carrier.externalIdentifier')
+        ->toArray();
 
     factory(Settings::class)
         ->withOrder(
@@ -128,7 +140,9 @@ it('exports order without customer information if setting is false', function (
     MockApi::enqueue($orderMode ? new ExamplePostOrdersResponse() : new ExamplePostShipmentsResponse());
 
     Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
-        'orderIds' => Arr::pluck($orders, 'externalIdentifier'),
+        'orderIds' => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
     ]);
 
     $lastRequest = MockApi::ensureLastRequest();

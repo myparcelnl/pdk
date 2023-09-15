@@ -2,21 +2,97 @@
     "data": {
         "orders": [
             {
-                "external_identifier": "250",
+                "external_identifier": "PDK-1",
                 "fulfilment_partner_identifier": null,
-                "invoice_address": null,
-                "order_date": null,
+                "invoice_address": {
+                    "street": "Antareslaan 31 ",
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "cc": "NL",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE"
+                },
+                "order_date": "2030-01-01 12:00:00",
                 "order_lines": [
                     {
                         "uuid": null,
-                        "quantity": 2,
+                        "quantity": 5,
                         "price": 0,
                         "price_after_vat": 0,
                         "product": {
                             "uuid": null,
                             "sku": "test",
                             "ean": null,
-                            "external_identifier": "123",
+                            "external_identifier": "PDK-2",
+                            "name": "test",
+                            "description": null,
+                            "width": 0,
+                            "length": 0,
+                            "height": 0,
+                            "weight": 0
+                        }
+                    }
+                ],
+                "shipment": {
+                    "carrier": 1,
+                    "customs_declaration": null,
+                    "drop_off_point": null,
+                    "options": {
+                        "age_check": 0,
+                        "delivery_type": 2,
+                        "hide_sender": 0,
+                        "insurance": {
+                            "amount": 0,
+                            "currency": "EUR"
+                        },
+                        "label_description": "",
+                        "large_format": 0,
+                        "only_recipient": 0,
+                        "package_type": 2,
+                        "return": 0,
+                        "same_day_delivery": 0,
+                        "signature": 0
+                    },
+                    "physical_properties": {
+                        "height": 0,
+                        "length": 0,
+                        "weight": 0,
+                        "width": 0
+                    },
+                    "pickup": null,
+                    "recipient": {
+                        "street": "Antareslaan 31 ",
+                        "city": "Hoofddorp",
+                        "company": "MyParcel",
+                        "cc": "NL",
+                        "person": "Felicia Parcel",
+                        "postal_code": "2132 JE"
+                    }
+                }
+            },
+            {
+                "external_identifier": "PDK-2",
+                "fulfilment_partner_identifier": null,
+                "invoice_address": {
+                    "street": "Antareslaan 31 ",
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "cc": "NL",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE"
+                },
+                "order_date": "2030-01-01 12:00:00",
+                "order_lines": [
+                    {
+                        "uuid": null,
+                        "quantity": 1,
+                        "price": 0,
+                        "price_after_vat": 0,
+                        "product": {
+                            "uuid": null,
+                            "sku": "test",
+                            "ean": null,
+                            "external_identifier": "PDK-3",
                             "name": "test",
                             "description": null,
                             "width": 0,
@@ -54,89 +130,38 @@
                     },
                     "pickup": null,
                     "recipient": {
-                        "street": "Pietjestraat 35 ",
-                        "city": "Bikinibroek",
+                        "street": "Antareslaan 31 ",
+                        "city": "Hoofddorp",
+                        "company": "MyParcel",
                         "cc": "NL",
-                        "postal_code": "2771BW"
+                        "person": "Felicia Parcel",
+                        "postal_code": "2132 JE"
                     }
                 }
             },
             {
-                "external_identifier": "250",
+                "external_identifier": "PDK-3",
                 "fulfilment_partner_identifier": null,
-                "invoice_address": null,
-                "order_date": null,
+                "invoice_address": {
+                    "street": "Antareslaan 31 ",
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "cc": "NL",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE"
+                },
+                "order_date": "2030-01-01 12:00:00",
                 "order_lines": [
                     {
                         "uuid": null,
-                        "quantity": 2,
+                        "quantity": 1,
                         "price": 0,
                         "price_after_vat": 0,
                         "product": {
                             "uuid": null,
                             "sku": "test",
                             "ean": null,
-                            "external_identifier": "123",
-                            "name": "test",
-                            "description": null,
-                            "width": 0,
-                            "length": 0,
-                            "height": 0,
-                            "weight": 0
-                        }
-                    }
-                ],
-                "shipment": {
-                    "carrier": 1,
-                    "customs_declaration": null,
-                    "drop_off_point": null,
-                    "options": {
-                        "age_check": 0,
-                        "delivery_type": 3,
-                        "hide_sender": 0,
-                        "insurance": {
-                            "amount": 0,
-                            "currency": "EUR"
-                        },
-                        "label_description": "",
-                        "large_format": 0,
-                        "only_recipient": 1,
-                        "package_type": 1,
-                        "return": 0,
-                        "same_day_delivery": 0,
-                        "signature": 1
-                    },
-                    "physical_properties": {
-                        "height": 0,
-                        "length": 0,
-                        "weight": 0,
-                        "width": 0
-                    },
-                    "pickup": null,
-                    "recipient": {
-                        "street": "Pietjestraat 35 ",
-                        "city": "Bikinibroek",
-                        "cc": "NL",
-                        "postal_code": "2771BW"
-                    }
-                }
-            },
-            {
-                "external_identifier": "251",
-                "fulfilment_partner_identifier": null,
-                "invoice_address": null,
-                "order_date": null,
-                "order_lines": [
-                    {
-                        "uuid": null,
-                        "quantity": 2,
-                        "price": 0,
-                        "price_after_vat": 0,
-                        "product": {
-                            "uuid": null,
-                            "sku": "test",
-                            "ean": null,
-                            "external_identifier": "123",
+                            "external_identifier": "PDK-4",
                             "name": "test",
                             "description": null,
                             "width": 0,
@@ -158,7 +183,7 @@
                             "amount": 0,
                             "currency": "EUR"
                         },
-                        "label_description": "1",
+                        "label_description": "",
                         "large_format": 0,
                         "only_recipient": 0,
                         "package_type": 1,
@@ -174,10 +199,12 @@
                     },
                     "pickup": null,
                     "recipient": {
-                        "street": "Pietjestraat 35 ",
-                        "city": "Bikinibroek",
+                        "street": "Antareslaan 31 ",
+                        "city": "Hoofddorp",
+                        "company": "MyParcel",
                         "cc": "NL",
-                        "postal_code": "2771BW"
+                        "person": "Felicia Parcel",
+                        "postal_code": "2132 JE"
                     }
                 }
             }

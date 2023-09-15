@@ -2,11 +2,37 @@
     "data": {
         "orders": [
             {
-                "external_identifier": "249",
+                "external_identifier": "PDK-1",
                 "fulfilment_partner_identifier": null,
-                "invoice_address": null,
-                "order_date": null,
-                "order_lines": [],
+                "invoice_address": {
+                    "street": "Antareslaan 31 ",
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "cc": "NL",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE"
+                },
+                "order_date": "2030-01-01 12:00:00",
+                "order_lines": [
+                    {
+                        "uuid": null,
+                        "quantity": 1,
+                        "price": 0,
+                        "price_after_vat": 0,
+                        "product": {
+                            "uuid": null,
+                            "sku": "test",
+                            "ean": null,
+                            "external_identifier": "PDK-1",
+                            "name": "test",
+                            "description": null,
+                            "width": 0,
+                            "length": 0,
+                            "height": 0,
+                            "weight": 0
+                        }
+                    }
+                ],
                 "shipment": {
                     "carrier": 9,
                     "customs_declaration": null,
@@ -35,10 +61,12 @@
                     },
                     "pickup": null,
                     "recipient": {
-                        "street": "Pietjestraat 35 ",
-                        "city": "Bikinibroek",
+                        "street": "Antareslaan 31 ",
+                        "city": "Hoofddorp",
+                        "company": "MyParcel",
                         "cc": "NL",
-                        "postal_code": "2771BW"
+                        "person": "Felicia Parcel",
+                        "postal_code": "2132 JE"
                     }
                 }
             }

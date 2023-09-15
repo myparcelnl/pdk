@@ -2,27 +2,28 @@
     "data": {
         "orders": [
             {
-                "external_identifier": "247",
+                "external_identifier": "PDK-1",
                 "fulfilment_partner_identifier": null,
                 "invoice_address": {
                     "street": "Antareslaan 31 ",
                     "city": "Hoofddorp",
+                    "company": "MyParcel",
                     "cc": "NL",
                     "person": "Felicia Parcel",
                     "postal_code": "2132 JE"
                 },
-                "order_date": null,
+                "order_date": "2030-01-01 12:00:00",
                 "order_lines": [
                     {
                         "uuid": null,
-                        "quantity": 2,
+                        "quantity": 1,
                         "price": 0,
                         "price_after_vat": 0,
                         "product": {
                             "uuid": null,
                             "sku": "test",
                             "ean": null,
-                            "external_identifier": "123",
+                            "external_identifier": "PDK-1",
                             "name": "test",
                             "description": null,
                             "width": 0,
@@ -62,6 +63,7 @@
                     "recipient": {
                         "street": "Antareslaan 31 ",
                         "city": "Hoofddorp",
+                        "company": "MyParcel",
                         "cc": "NL",
                         "person": "Felicia Parcel",
                         "postal_code": "2132 JE"

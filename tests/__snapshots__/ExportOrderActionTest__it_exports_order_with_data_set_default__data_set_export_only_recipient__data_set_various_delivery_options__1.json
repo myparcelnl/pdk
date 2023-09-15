@@ -7,22 +7,21 @@
                     "save_recipient_address": 0
                 },
                 "options": {
-                    "package_type": 1,
-                    "delivery_type": 3,
-                    "delivery_date": "2077-10-23 09:47:51",
-                    "only_recipient": 1,
-                    "signature": 1
+                    "package_type": 2,
+                    "delivery_type": 2
                 },
                 "physical_properties": {
                     "weight": 0
                 },
                 "recipient": {
                     "cc": "NL",
-                    "city": "Bikinibroek",
-                    "postal_code": "2771BW",
-                    "street": "Pietjestraat 35"
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE",
+                    "street": "Antareslaan 31"
                 },
-                "reference_identifier": "250"
+                "reference_identifier": "PDK-1"
             },
             {
                 "carrier": 1,
@@ -41,11 +40,13 @@
                 },
                 "recipient": {
                     "cc": "NL",
-                    "city": "Bikinibroek",
-                    "postal_code": "2771BW",
-                    "street": "Pietjestraat 35"
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE",
+                    "street": "Antareslaan 31"
                 },
-                "reference_identifier": "250"
+                "reference_identifier": "PDK-2"
             },
             {
                 "carrier": 9,
@@ -55,7 +56,6 @@
                 "options": {
                     "package_type": 1,
                     "delivery_type": 2,
-                    "label_description": "1",
                     "age_check": 1,
                     "hide_sender": 1,
                     "return": 1,
@@ -66,11 +66,13 @@
                 },
                 "recipient": {
                     "cc": "NL",
-                    "city": "Bikinibroek",
-                    "postal_code": "2771BW",
-                    "street": "Pietjestraat 35"
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE",
+                    "street": "Antareslaan 31"
                 },
-                "reference_identifier": "251"
+                "reference_identifier": "PDK-3"
             }
         ]
     }

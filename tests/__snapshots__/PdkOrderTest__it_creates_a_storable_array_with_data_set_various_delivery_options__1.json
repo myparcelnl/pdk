@@ -47,7 +47,6 @@
             "carrier": "dhlforyou",
             "labelAmount": 1,
             "shipmentOptions": {
-                "labelDescription": "1",
                 "insurance": 1,
                 "ageCheck": 1,
                 "hideSender": 1,
