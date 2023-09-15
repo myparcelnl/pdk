@@ -62,7 +62,8 @@ final class DhlForYouShipmentOptionsCalculator extends AbstractPdkOrderOptionCal
             return;
         }
 
-        $this->order->deliveryOptions->shipmentOptions->ageCheck      = TriStateService::DISABLED;
-        $this->order->deliveryOptions->shipmentOptions->onlyRecipient = TriStateService::DISABLED;
+        $this->order->deliveryOptions->shipmentOptions->ageCheck        = TriStateService::DISABLED;
+        $this->order->deliveryOptions->shipmentOptions->onlyRecipient   = TriStateService::DISABLED;
+        $this->order->deliveryOptions->shipmentOptions->sameDayDelivery = TriStateService::DISABLED;
     }
 }

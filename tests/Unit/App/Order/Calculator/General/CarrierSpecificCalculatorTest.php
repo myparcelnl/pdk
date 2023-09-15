@@ -8,6 +8,8 @@ namespace MyParcelNL\Pdk\App\Order\Calculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderFactory;
+use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -21,33 +23,42 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-function doTest(string $carrier, ShipmentOptionsFactory $shipmentOptions, array $result): void
-{
+function doTest(
+    string                  $carrier,
+    ?callable               $orderCallback,
+    ?ShipmentOptionsFactory $shipmentOptions,
+    array                   $result
+): void {
     $reset = mockPdkProperty('orderCalculators', [CarrierSpecificCalculator::class]);
 
-    $order = factory(PdkOrder::class)
+    $shipmentOptionsFactory = $shipmentOptions ?? factory(ShipmentOptions::class);
+
+    $orderFactory = factory(PdkOrder::class)
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withShipmentOptions($shipmentOptions)
-        )
-        ->make();
+                ->withShipmentOptions($shipmentOptionsFactory)
+        );
+
+    if ($orderCallback) {
+        $orderFactory = $orderCallback($orderFactory);
+    }
+
+    $order = $orderFactory->make();
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    $options = $newOrder->deliveryOptions->shipmentOptions->only(
-        [ShipmentOptions::AGE_CHECK, ShipmentOptions::SIGNATURE, ShipmentOptions::ONLY_RECIPIENT]
-    );
+    $options = $newOrder->deliveryOptions->shipmentOptions->toArray();
 
-    expect($options)->toEqual($result);
+    expect($options)->toHaveKeysAndValues($result);
 
     $reset();
 }
 
-it('calculates age check for postnl', function (ShipmentOptionsFactory $shipmentOptions, array $result) {
-    doTest(Carrier::CARRIER_POSTNL_NAME, $shipmentOptions, $result);
+it('calculates options for postnl', function (ShipmentOptionsFactory $shipmentOptions, array $result) {
+    doTest(Carrier::CARRIER_POSTNL_NAME, null, $shipmentOptions, $result);
 })->with([
     'age check enabled should enable signature and age check' => [
         function () {
@@ -78,10 +89,15 @@ it('calculates age check for postnl', function (ShipmentOptionsFactory $shipment
     ],
 ]);
 
-it('calculates age check for dhlforyou', function (ShipmentOptionsFactory $shipmentOptions, array $result) {
-    doTest(Carrier::CARRIER_DHL_FOR_YOU_NAME, $shipmentOptions, $result);
+it('calculates options for dhlforyou', function (
+    ?callable              $orderCallback,
+    ShipmentOptionsFactory $shipmentOptions,
+    array                  $result
+) {
+    doTest(Carrier::CARRIER_DHL_FOR_YOU_NAME, $orderCallback, $shipmentOptions, $result);
 })->with([
     'when age check and only recipient are enabled, age check wins' => [
+        null,
         function () {
             return factory(ShipmentOptions::class)
                 ->withAgeCheck(TriStateService::ENABLED)
@@ -94,7 +110,8 @@ it('calculates age check for dhlforyou', function (ShipmentOptionsFactory $shipm
         ],
     ],
 
-    'when both are disabled, nothing happens' => [
+    'when age check and only recipient both are disabled, nothing happens' => [
+        null,
         function () {
             return factory(ShipmentOptions::class)
                 ->withAgeCheck(TriStateService::DISABLED)
@@ -106,21 +123,36 @@ it('calculates age check for dhlforyou', function (ShipmentOptionsFactory $shipm
             ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
         ],
     ],
+
+    'when country is not local, age check, only recipient and same day delivery are turned off' => [
+        function () {
+            return function (PdkOrderFactory $orderFactory) {
+                return $orderFactory->withShippingAddress(factory(ShippingAddress::class)->inFrance());
+            };
+        },
+        function () {
+            return factory(ShipmentOptions::class)
+                ->withAgeCheck(TriStateService::ENABLED)
+                ->withSameDayDelivery(TriStateService::ENABLED)
+                ->withOnlyRecipient(TriStateService::ENABLED);
+        },
+        [
+            ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
+            ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
+            ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
+            ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
+        ],
+    ],
 ]);
 
 it('should do nothing for other carriers', function (string $carrierName) {
-    doTest(
-        $carrierName,
-        factory(ShipmentOptions::class)
-            ->withAgeCheck(TriStateService::ENABLED)
-            ->withSignature(TriStateService::ENABLED)
-            ->withOnlyRecipient(TriStateService::ENABLED),
-        [
-            ShipmentOptions::AGE_CHECK      => TriStateService::ENABLED,
-            ShipmentOptions::SIGNATURE      => TriStateService::ENABLED,
-            ShipmentOptions::ONLY_RECIPIENT => TriStateService::ENABLED,
-        ]
-    );
+    $result = [
+        ShipmentOptions::AGE_CHECK      => TriStateService::ENABLED,
+        ShipmentOptions::SIGNATURE      => TriStateService::ENABLED,
+        ShipmentOptions::ONLY_RECIPIENT => TriStateService::ENABLED,
+    ];
+
+    doTest($carrierName, null, factory(ShipmentOptions::class)->withAllOptions(), $result);
 })->with([
     Carrier::CARRIER_BPOST_NAME,
     Carrier::CARRIER_DHL_EUROPLUS_NAME,
