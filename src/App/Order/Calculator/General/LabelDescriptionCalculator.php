@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Sdk\src\Support\Str;
 
 final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -32,39 +33,37 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
             return implode(', ', Utils::filterNull(Arr::pluck($this->order->lines->all(), $key)));
         };
 
-        return substr(
-            preg_replace_callback_array([
-                '/\[ORDER_ID\]/' => function () {
-                    return $this->order->externalIdentifier;
-                },
+        $labelDescription = preg_replace_callback_array([
+            '/\[ORDER_ID\]/' => function () {
+                return $this->order->externalIdentifier;
+            },
 
-                '/\[CUSTOMER_NOTE\]/' => function () {
-                    return $this->order->notes->firstWhere('author', OrderNote::AUTHOR_CUSTOMER)->note ?? '';
-                },
+            '/\[CUSTOMER_NOTE\]/' => function () {
+                return $this->order->notes->firstWhere('author', OrderNote::AUTHOR_CUSTOMER)->note ?? '';
+            },
 
-                '/\[PRODUCT_ID\]/' => static function () use ($createString) {
-                    return $createString('product.externalIdentifier');
-                },
+            '/\[PRODUCT_ID\]/' => static function () use ($createString) {
+                return $createString('product.externalIdentifier');
+            },
 
-                '/\[PRODUCT_NAME\]/' => static function () use ($createString) {
-                    return $createString('product.name');
-                },
+            '/\[PRODUCT_NAME\]/' => static function () use ($createString) {
+                return $createString('product.name');
+            },
 
-                '/\[PRODUCT_SKU\]/' => static function () use ($createString) {
-                    return $createString('product.sku');
-                },
+            '/\[PRODUCT_SKU\]/' => static function () use ($createString) {
+                return $createString('product.sku');
+            },
 
-                '/\[PRODUCT_EAN\]/' => static function () use ($createString) {
-                    return $createString('product.ean');
-                },
+            '/\[PRODUCT_EAN\]/' => static function () use ($createString) {
+                return $createString('product.ean');
+            },
 
-                '/\[PRODUCT_QTY\]/' => function () {
-                    return $this->order->lines->sum('quantity');
-                },
-            ], $description),
-            0,
-            Pdk::get('labelDescriptionMaxLength')
-        );
+            '/\[PRODUCT_QTY\]/' => function () {
+                return $this->order->lines->sum('quantity');
+            },
+        ], $description);
+
+        return Str::limit($labelDescription, Pdk::get('labelDescriptionMaxLength'));
     }
 
     /**
