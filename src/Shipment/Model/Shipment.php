@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeZone;
-use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
@@ -126,7 +125,7 @@ class Shipment extends Model implements StorableArrayable
         /**
          * The recipient of the shipment.
          */
-        'recipient'          => ShippingAddress::class,
+        'recipient'          => ContactDetails::class,
         /**
          * The sender of the shipment.
          */

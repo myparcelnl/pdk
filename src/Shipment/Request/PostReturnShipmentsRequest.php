@@ -83,8 +83,12 @@ class PostReturnShipmentsRequest extends Request
 
         return array_filter(
             [
-                'package_type' => $shipment->deliveryOptions->getPackageTypeId(),
-                'insurance'    => $shipmentOptions->insurance
+                'hide_sender'       => $shipmentOptions->hideSender,
+                'large_format'      => $shipmentOptions->largeFormat,
+                'return'            => $shipmentOptions->return,
+                'same_day_delivery' => $shipmentOptions->sameDayDelivery,
+                'package_type'      => $shipment->deliveryOptions->getPackageTypeId(),
+                'insurance'         => $shipmentOptions->insurance
                     ? [
                         'amount'   => $shipmentOptions->insurance * 100,
                         'currency' => 'EUR',
@@ -103,7 +107,7 @@ class PostReturnShipmentsRequest extends Request
                 'parent'               => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
                 'carrier'              => $shipment->carrier->id,
-                'email'                => $shipment->recipient->email,
+                'email'                => $shipment->recipient->email ?? '',
                 'name'                 => $shipment->recipient->person,
                 'options'              => $this->encodeReturnOptions($shipment),
             ];
