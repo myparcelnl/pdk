@@ -13,10 +13,10 @@ use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
-use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -64,7 +64,7 @@ it('retrieves a specific setting by key and namespace', function () {
 });
 
 it('retrieves default settings', function (string $platform) {
-    $resetPlatform = mockPlatform($platform);
+    MockPdkFactory::create(['platform' => $platform]);
 
     $defaults = Settings::getDefaults();
 
@@ -72,13 +72,11 @@ it('retrieves default settings', function (string $platform) {
 
     // Carrier settings are tested separately
     assertMatchesJsonSnapshot(json_encode($array));
-
-    $resetPlatform();
 })->with('platforms');
 
 it('retrieves default carrier settings', function (string $platform) {
-    $resetPlatform = mockPlatform($platform);
-    $carriers      = (new Collection(Platform::getCarriers()))
+    MockPdkFactory::create(['platform' => $platform]);
+    $carriers = (new Collection(Platform::getCarriers()))
         ->pluck('name')
         ->toArray();
 
@@ -104,6 +102,4 @@ it('retrieves default carrier settings', function (string $platform) {
         ->carrier->toArrayWithoutNull();
 
     assertMatchesJsonSnapshot(json_encode($array));
-
-    $resetPlatform();
 })->with('platforms');
