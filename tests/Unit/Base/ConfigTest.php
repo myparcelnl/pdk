@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRealConfig;
-use function DI\autowire;
+use function DI\get;
 
 function getFiles(): array
 {
@@ -27,7 +27,7 @@ function getFiles(): array
 
 beforeEach(function () {
     MockPdkFactory::create([
-        ConfigInterface::class => autowire(MockRealConfig::class),
+        ConfigInterface::class => get(MockRealConfig::class),
     ]);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockFileSystem $fileSystem */

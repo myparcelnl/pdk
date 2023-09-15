@@ -11,6 +11,8 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface;
+use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
+use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
@@ -66,7 +68,8 @@ class MockPdkConfig
                 ]);
             }),
 
-            'platform'                                  => value(Platform::MYPARCEL_NAME),
+            'platform' => value(Platform::MYPARCEL_NAME),
+
             ApiServiceInterface::class                  => get(MockApiService::class),
             BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
             CarrierSchema::class                        => get(MockCarrierSchema::class),
@@ -75,8 +78,10 @@ class MockPdkConfig
             CronServiceInterface::class                 => get(MockCronService::class),
             FileSystemInterface::class                  => get(MockFileSystem::class),
             FrontendEndpointServiceInterface::class     => get(MockFrontendEndpointService::class),
+            InstallerServiceInterface::class            => get(MockInstallerService::class),
             LanguageServiceInterface::class             => get(MockLanguageService::class),
             LoggerInterface::class                      => get(MockLogger::class),
+            MigrationServiceInterface::class            => get(MockMigrationService::class),
             OrderStatusServiceInterface::class          => get(MockOrderStatusService::class),
             PdkAccountRepositoryInterface::class        => get(MockPdkAccountRepository::class),
             PdkCartRepositoryInterface::class           => get(MockPdkCartRepository::class),

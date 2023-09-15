@@ -6,19 +6,14 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
 use MyParcelNL\Pdk\Account\Platform;
-use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
-use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockInstallerService;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Log\LoggerInterface;
-use function DI\autowire;
 use function DI\factory;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -32,9 +27,6 @@ usesShared(
                 'version' => '1.2.0',
             ]);
         }),
-
-        InstallerServiceInterface::class => autowire(MockInstallerService::class),
-        MigrationServiceInterface::class => autowire(MockMigrationService::class),
 
         'defaultSettings' => value([
             CheckoutSettings::ID => [

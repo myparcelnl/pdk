@@ -33,7 +33,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
+use function DI\get;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -41,24 +41,24 @@ uses()->group('endpoints');
 
 usesShared(
     new UsesEachMockPdkInstance([
-        CreateWebhooksAction::class        => autowire(MockAction::class),
-        DeleteAccountAction::class         => autowire(MockAction::class),
-        DeleteShipmentsAction::class       => autowire(MockAction::class),
-        DeleteWebhooksAction::class        => autowire(MockAction::class),
-        ExportOrderAction::class           => autowire(MockAction::class),
-        ExportReturnAction::class          => autowire(MockAction::class),
-        FetchContextAction::class          => autowire(MockAction::class),
-        FetchOrdersAction::class           => autowire(MockAction::class),
-        FetchWebhooksAction::class         => autowire(MockAction::class),
-        PostOrderNotesAction::class        => autowire(MockAction::class),
-        PrintOrdersAction::class           => autowire(MockAction::class),
-        PrintShipmentsAction::class        => autowire(MockAction::class),
-        SynchronizeOrdersAction::class     => autowire(MockAction::class),
-        UpdateAccountAction::class         => autowire(MockAction::class),
-        UpdateOrderAction::class           => autowire(MockAction::class),
-        UpdatePluginSettingsAction::class  => autowire(MockAction::class),
-        UpdateProductSettingsAction::class => autowire(MockAction::class),
-        UpdateShipmentsAction::class       => autowire(MockAction::class),
+        CreateWebhooksAction::class        => get(MockAction::class),
+        DeleteAccountAction::class         => get(MockAction::class),
+        DeleteShipmentsAction::class       => get(MockAction::class),
+        DeleteWebhooksAction::class        => get(MockAction::class),
+        ExportOrderAction::class           => get(MockAction::class),
+        ExportReturnAction::class          => get(MockAction::class),
+        FetchContextAction::class          => get(MockAction::class),
+        FetchOrdersAction::class           => get(MockAction::class),
+        FetchWebhooksAction::class         => get(MockAction::class),
+        PostOrderNotesAction::class        => get(MockAction::class),
+        PrintOrdersAction::class           => get(MockAction::class),
+        PrintShipmentsAction::class        => get(MockAction::class),
+        SynchronizeOrdersAction::class     => get(MockAction::class),
+        UpdateAccountAction::class         => get(MockAction::class),
+        UpdateOrderAction::class           => get(MockAction::class),
+        UpdatePluginSettingsAction::class  => get(MockAction::class),
+        UpdateProductSettingsAction::class => get(MockAction::class),
+        UpdateShipmentsAction::class       => get(MockAction::class),
     ])
 );
 

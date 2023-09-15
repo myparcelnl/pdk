@@ -8,16 +8,10 @@ namespace MyParcelNL\Pdk\App\Order\Repository;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(
-    new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
-    ])
-);
+usesShared(new UsesMockPdkInstance());
 
 it('gets a single order', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $repository */

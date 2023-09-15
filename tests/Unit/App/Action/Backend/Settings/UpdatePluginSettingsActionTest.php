@@ -6,21 +6,14 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Settings;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(
-    new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
-    ])
-);
+usesShared(new UsesMockPdkInstance());
 
 it('saves settings', function (array $data) {
     $content = json_encode([
