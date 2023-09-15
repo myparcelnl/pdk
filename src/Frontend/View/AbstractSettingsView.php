@@ -279,7 +279,7 @@ abstract class AbstractSettingsView implements Arrayable
     {
         return $elements
             ->filter(function ($element): bool {
-                if (! $element instanceof InteractiveElement || ! isset($element->name)) {
+                if (! isset($element->name) || ! $element instanceof InteractiveElement) {
                     return true;
                 }
 
