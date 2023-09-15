@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
@@ -187,7 +188,7 @@ it('adds notification if shipment export fails', function () {
     factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)->store();
     factory(PdkOrder::class)
         ->withExternalIdentifier('error')
-        ->withShippingAddress(['cc' => null])
+        ->withShippingAddress(['cc' => CountryCodes::CC_ZW])
         ->store();
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => 'error']);
@@ -202,7 +203,7 @@ it('adds notification if shipment export fails', function () {
         ->and($notifications)->each->toEqual([
             'title'    => 'Failed to export order error',
             'content'  => [
-                'shippingAddress.cc: NULL value found, but a string is required',
+                'customsDeclaration: NULL value found, but an object is required',
             ],
             'variant'  => Notification::VARIANT_ERROR,
             'category' => 'api',

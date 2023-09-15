@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\DhlForYou;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
@@ -16,14 +18,21 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 final class DhlForYouShipmentOptionsCalculator extends AbstractPdkOrderOptionCalculator
 {
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
      */
-    private $shipmentOptions;
+    private $countryService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
+     */
+    public function __construct(PdkOrder $order)
+    {
+        parent::__construct($order);
+        $this->countryService = Pdk::get(CountryServiceInterface::class);
+    }
 
     public function calculate(): void
     {
-        $this->shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
-
         $this->calculateOptionsForCountry();
         $this->calculateAgeCheckAndOnlyRecipient();
     }
@@ -49,11 +58,11 @@ final class DhlForYouShipmentOptionsCalculator extends AbstractPdkOrderOptionCal
      */
     private function calculateOptionsForCountry(): void
     {
-        if (CountryCodes::CC_NL === $this->order->shippingAddress->cc) {
+        if ($this->countryService->isLocalCountry($this->order->shippingAddress->cc)) {
             return;
         }
 
-        $this->shipmentOptions->ageCheck      = TriStateService::DISABLED;
-        $this->shipmentOptions->onlyRecipient = TriStateService::DISABLED;
+        $this->order->deliveryOptions->shipmentOptions->ageCheck      = TriStateService::DISABLED;
+        $this->order->deliveryOptions->shipmentOptions->onlyRecipient = TriStateService::DISABLED;
     }
 }

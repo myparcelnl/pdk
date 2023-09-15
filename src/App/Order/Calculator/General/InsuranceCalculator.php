@@ -59,19 +59,18 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return 0;
         }
 
-        $carrierSettings = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
-        if (TriStateService::INHERIT === $amount && $carrierSettings->exportInsurance) {
-            $amount = TriStateService::ENABLED;
-        }
+        $carrierSettings   = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
+        $enabledViaCarrier = TriStateService::INHERIT === $amount && $carrierSettings->exportInsurance;
 
-        if ($amount > TriStateService::ENABLED) {
+        if ($amount > TriStateService::ENABLED && ! $enabledViaCarrier) {
             return $this->getMaxInsurance($carrierSettings, $amount);
         }
 
         $orderAmount = (int) ceil(
             $carrierSettings->exportInsurancePricePercentage * $this->order->orderPriceAfterVat / 100
         );
-        $fromAmount  = $this->currencyService->convertToCents($carrierSettings->exportInsuranceFromAmount);
+
+        $fromAmount = $this->currencyService->convertToCents($carrierSettings->exportInsuranceFromAmount);
 
         if ($orderAmount < $fromAmount) {
             return 0;
