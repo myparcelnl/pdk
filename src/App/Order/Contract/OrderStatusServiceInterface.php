@@ -12,4 +12,14 @@ interface OrderStatusServiceInterface
      * @return array<string, string>
      */
     public function all(): array;
+
+    /**
+     * Update the status of the given order ids with the given status.
+     *
+     * @param  array $orderIds
+     * @param        $status
+     *
+     * @return mixed
+     */
+    public function updateStatus(array $orderIds, $status);
 }

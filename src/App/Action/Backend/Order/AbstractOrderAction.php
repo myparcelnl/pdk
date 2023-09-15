@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Utils;
@@ -15,6 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class AbstractOrderAction implements ActionInterface
 {
     /**
+     * @var \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface
+     */
+    protected $orderStatusService;
+
+    /**
      * @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface
      */
     protected $pdkOrderRepository;
@@ -22,9 +28,12 @@ abstract class AbstractOrderAction implements ActionInterface
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      */
-    public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository)
-    {
+    public function __construct(
+        PdkOrderRepositoryInterface $pdkOrderRepository,
+        OrderStatusServiceInterface $orderStatusService
+    ) {
         $this->pdkOrderRepository = $pdkOrderRepository;
+        $this->orderStatusService = $orderStatusService;
     }
 
     /**
