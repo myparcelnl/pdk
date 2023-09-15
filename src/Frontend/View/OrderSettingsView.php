@@ -36,7 +36,9 @@ final class OrderSettingsView extends NewAbstractSettingsView
     protected function addElements(): void
     {
         $orderStatusOptions      = $this->orderStatusService->all();
-        $orderStatusOptionsFlags = ElementBuilderWithOptionsInterface::ADD_NONE | ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL;
+        $orderStatusOptionsFlags = ElementBuilderWithOptionsInterface::ADD_NONE
+            | ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL
+            | ElementBuilderWithOptionsInterface::SORT_DESC;
 
         $this->formBuilder->add(
             new SettingsDivider($this->label('general')),

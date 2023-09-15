@@ -30,6 +30,14 @@ trait HasOptions
             ElementBuilderInterface::HOOK_PROPS,
             function () use ($options, $flags) {
                 $this->withProp('options', $this->toSelectOptions($options, $flags));
+
+                if ($flags & ElementBuilderWithOptionsInterface::SORT_ASC) {
+                    $this->withSort(ElementBuilderWithOptionsInterface::SORT_ASC_VALUE);
+                }
+
+                if ($flags & ElementBuilderWithOptionsInterface::SORT_DESC) {
+                    $this->withSort(ElementBuilderWithOptionsInterface::SORT_DESC_VALUE);
+                }
             }
         );
 

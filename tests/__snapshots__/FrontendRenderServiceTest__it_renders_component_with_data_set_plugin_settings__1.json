@@ -107,7 +107,8 @@
                             "plainLabel": "Refunded",
                             "value": "refunded"
                         }
-                    ]
+                    ],
+                    "sort": "desc"
                 },
                 {
                     "name": "statusWhenLabelScanned",
@@ -143,7 +144,8 @@
                             "plainLabel": "Refunded",
                             "value": "refunded"
                         }
-                    ]
+                    ],
+                    "sort": "desc"
                 },
                 {
                     "name": "statusWhenDelivered",
@@ -179,7 +181,8 @@
                             "plainLabel": "Refunded",
                             "value": "refunded"
                         }
-                    ]
+                    ],
+                    "sort": "desc"
                 },
                 {
                     "name": "sendNotificationAfter",
@@ -215,7 +218,8 @@
                             "plainLabel": "Refunded",
                             "value": "refunded"
                         }
-                    ]
+                    ],
+                    "sort": "desc"
                 },
                 {
                     "$component": "SettingsDivider",
