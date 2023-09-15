@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -52,6 +53,8 @@ it('can be instantiated', function () {
 });
 
 it('can be instantiated from a cart', function () {
+    TestBootstrapper::hasAccount();
+
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */
     $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
 
@@ -73,38 +76,12 @@ it('can be instantiated from a cart', function () {
 
     expect($config)
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
-        ->and($config->toArray())
+        ->and($config->toArrayWithoutNull())
         ->toEqual([
-            'allowRetry'                 => false,
-            'basePrice'                  => 6.95,
-            'carrierSettings'            => [
-                'postnl'         => [
-                    'allowDeliveryOptions'         => false,
-                    'allowEveningDelivery'         => false,
-                    'allowMondayDelivery'          => false,
-                    'allowMorningDelivery'         => false,
-                    'allowOnlyRecipient'           => false,
-                    'allowPickupLocations'         => false,
-                    'allowSameDayDelivery'         => false,
-                    'allowSaturdayDelivery'        => false,
-                    'allowSignature'               => false,
-                    'dropOffDays'                  => [],
-                    'featureShowDeliveryDate'      => true,
-                    'priceEveningDelivery'         => 0.0,
-                    'priceMorningDelivery'         => 0.0,
-                    'priceOnlyRecipient'           => 0.0,
-                    'pricePackageTypeDigitalStamp' => 0.0,
-                    'pricePackageTypeMailbox'      => 0.0,
-                    'pricePickup'                  => 0.0,
-                    'priceSameDayDelivery'         => 0.0,
-                    'priceSignature'               => 0.0,
-                    'priceStandardDelivery'        => 0.0,
-                    'deliveryDaysWindow'           => 7,
-                    'dropOffDelay'                 => 0,
-                    'cutoffTime'                   => null,
-                    'cutoffTimeSameDay'            => null,
-                ],
-                'dhlforyou:8277' => [
+            'allowRetry'            => false,
+            'basePrice'             => 6.95,
+            'carrierSettings'       => [
+                'postnl' => [
                     'allowDeliveryOptions'         => false,
                     'allowEveningDelivery'         => false,
                     'allowMondayDelivery'          => false,
@@ -131,18 +108,19 @@ it('can be instantiated from a cart', function () {
                     'cutoffTimeSameDay'            => null,
                 ],
             ],
-            'currency'                   => 'EUR',
-            'locale'                     => 'nl-NL',
-            'packageType'                => 'package',
-            'pickupLocationsDefaultView' => null,
-            'platform'                   => 'myparcel',
-            'showPriceSurcharge'         => false,
-            'apiBaseUrl'                 => 'https://api.myparcel.nl',
-            'priceStandardDelivery'      => 0.0,
+            'currency'              => 'EUR',
+            'locale'                => 'nl-NL',
+            'packageType'           => 'package',
+            'platform'              => 'myparcel',
+            'showPriceSurcharge'    => false,
+            'apiBaseUrl'            => 'https://api.myparcel.nl',
+            'priceStandardDelivery' => 0.0,
         ]);
 });
 
 it('uses correct price when price is shown as surcharge', function () {
+    TestBootstrapper::hasAccount();
+
     factory(CheckoutSettings::class)
         ->withPriceType(CheckoutSettings::PRICE_TYPE_INCLUDED)
         ->store();
@@ -168,38 +146,12 @@ it('uses correct price when price is shown as surcharge', function () {
 
     expect($config)
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
-        ->and($config->toArray())
+        ->and($config->toArrayWithoutNull())
         ->toEqual([
-            'allowRetry'                 => false,
-            'basePrice'                  => 6.95,
-            'carrierSettings'            => [
-                'postnl'         => [
-                    'allowDeliveryOptions'         => false,
-                    'allowEveningDelivery'         => false,
-                    'allowMondayDelivery'          => false,
-                    'allowMorningDelivery'         => false,
-                    'allowOnlyRecipient'           => false,
-                    'allowPickupLocations'         => false,
-                    'allowSameDayDelivery'         => false,
-                    'allowSaturdayDelivery'        => false,
-                    'allowSignature'               => false,
-                    'dropOffDays'                  => [],
-                    'featureShowDeliveryDate'      => true,
-                    'priceEveningDelivery'         => 1.4595,
-                    'priceMorningDelivery'         => 1.4595,
-                    'priceOnlyRecipient'           => 1.4595,
-                    'pricePackageTypeDigitalStamp' => 1.4595,
-                    'pricePackageTypeMailbox'      => 1.4595,
-                    'pricePickup'                  => 1.4595,
-                    'priceSameDayDelivery'         => 1.4595,
-                    'priceSignature'               => 1.4595,
-                    'priceStandardDelivery'        => 1.4595,
-                    'deliveryDaysWindow'           => 7,
-                    'dropOffDelay'                 => 0,
-                    'cutoffTime'                   => null,
-                    'cutoffTimeSameDay'            => null,
-                ],
-                'dhlforyou:8277' => [
+            'allowRetry'            => false,
+            'basePrice'             => 6.95,
+            'carrierSettings'       => [
+                'postnl' => [
                     'allowDeliveryOptions'         => false,
                     'allowEveningDelivery'         => false,
                     'allowMondayDelivery'          => false,
@@ -226,13 +178,12 @@ it('uses correct price when price is shown as surcharge', function () {
                     'cutoffTimeSameDay'            => null,
                 ],
             ],
-            'currency'                   => 'EUR',
-            'locale'                     => 'nl-NL',
-            'packageType'                => 'package',
-            'pickupLocationsDefaultView' => null,
-            'platform'                   => 'myparcel',
-            'showPriceSurcharge'         => false,
-            'apiBaseUrl'                 => 'https://api.myparcel.nl',
-            'priceStandardDelivery'      => 695.0,
+            'currency'              => 'EUR',
+            'locale'                => 'nl-NL',
+            'packageType'           => 'package',
+            'platform'              => 'myparcel',
+            'showPriceSurcharge'    => false,
+            'apiBaseUrl'            => 'https://api.myparcel.nl',
+            'priceStandardDelivery' => 695.0,
         ]);
 });

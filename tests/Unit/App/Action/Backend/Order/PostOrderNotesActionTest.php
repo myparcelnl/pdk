@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
@@ -26,7 +25,6 @@ use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
@@ -40,18 +38,19 @@ usesShared(new UsesApiMock());
 
 it('posts order notes if order has notes', function (PdkOrderCollection $orders, PdkOrderNoteCollection $notes) {
     MockPdkFactory::create([
-        SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor([
+        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
             OrderSettings::ID => [
                 OrderSettings::ORDER_MODE => true,
             ],
         ]),
-        PdkOrderRepositoryInterface::class   => autowire(MockPdkOrderRepository::class)->constructor($orders),
-        PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)->constructor([
-            'subscriptionFeatures' => [
-                Account::FEATURE_ORDER_NOTES,
-            ],
-        ]),
+        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
     ]);
+
+    TestBootstrapper::hasApiKey();
+
+    factory(Account::class)
+        ->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES])
+        ->store();
 
     MockApi::enqueue(new ExamplePostOrderNotesResponse());
 

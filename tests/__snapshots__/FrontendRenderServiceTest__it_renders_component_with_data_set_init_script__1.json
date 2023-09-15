@@ -238,10 +238,16 @@
     },
     "dynamic": {
         "account": {
-            "id": 21000,
-            "platformId": 1,
+            "id": 1,
+            "platformId": 3,
             "contactInfo": {
-                "email": "test@myparcel.nl"
+                "address1": "Antareslaan 31",
+                "cc": "NL",
+                "city": "Hoofddorp",
+                "postalCode": "2132 JE",
+                "email": "support@myparcel.nl",
+                "person": "Felicia Parcel",
+                "company": "MyParcel"
             },
             "generalSettings": {
                 "isTest": false,
@@ -250,13 +256,26 @@
             },
             "shops": [
                 {
-                    "id": 23999,
-                    "accountId": 21000,
-                    "platformId": 1,
-                    "name": "MyParcel",
+                    "id": null,
+                    "accountId": 1,
+                    "platformId": 3,
+                    "name": null,
                     "hidden": false,
                     "billing": [],
-                    "deliveryAddress": [],
+                    "deliveryAddress": {
+                        "address1": "Antareslaan 31",
+                        "address2": null,
+                        "area": null,
+                        "cc": "NL",
+                        "city": "Hoofddorp",
+                        "postalCode": "2132 JE",
+                        "region": null,
+                        "state": null,
+                        "email": "support@myparcel.nl",
+                        "phone": null,
+                        "person": "Felicia Parcel",
+                        "company": "MyParcel"
+                    },
                     "generalSettings": [],
                     "return": [],
                     "shipmentOptions": [],
@@ -275,44 +294,10 @@
                             "primary": false,
                             "type": "main",
                             "capabilities": {
-                                "deliveryTypes": [
-                                    "morning",
-                                    "standard",
-                                    "evening",
-                                    "pickup"
-                                ],
-                                "features": {
-                                    "labelDescriptionLength": 45
-                                },
-                                "packageTypes": [
-                                    "package",
-                                    "mailbox",
-                                    "letter",
-                                    "digital_stamp"
-                                ],
-                                "shipmentOptions": {
-                                    "ageCheck": true,
-                                    "largeFormat": true,
-                                    "onlyRecipient": true,
-                                    "return": true,
-                                    "sameDayDelivery": false,
-                                    "signature": true,
-                                    "insurance": [
-                                        0,
-                                        10000,
-                                        25000,
-                                        50000,
-                                        100000,
-                                        150000,
-                                        200000,
-                                        250000,
-                                        300000,
-                                        350000,
-                                        400000,
-                                        450000,
-                                        500000
-                                    ]
-                                }
+                                "deliveryTypes": [],
+                                "features": [],
+                                "packageTypes": [],
+                                "shipmentOptions": []
                             },
                             "returnCapabilities": {
                                 "deliveryTypes": [
@@ -345,77 +330,6 @@
                                     "ageCheck": true,
                                     "onlyRecipient": true,
                                     "sameDayDelivery": false,
-                                    "largeFormat": true
-                                }
-                            }
-                        },
-                        {
-                            "externalIdentifier": "dhlforyou:8277",
-                            "id": 9,
-                            "name": "dhlforyou",
-                            "human": "DHL For You",
-                            "subscriptionId": "8277",
-                            "enabled": true,
-                            "isDefault": false,
-                            "label": null,
-                            "optional": false,
-                            "primary": false,
-                            "type": "custom",
-                            "capabilities": {
-                                "deliveryTypes": [
-                                    "standard",
-                                    "pickup"
-                                ],
-                                "features": {
-                                    "labelDescriptionLength": 45
-                                },
-                                "packageTypes": [
-                                    "package",
-                                    "mailbox"
-                                ],
-                                "shipmentOptions": {
-                                    "ageCheck": true,
-                                    "largeFormat": false,
-                                    "onlyRecipient": true,
-                                    "return": true,
-                                    "sameDayDelivery": true,
-                                    "signature": true,
-                                    "saturdayDelivery": true,
-                                    "hideSender": true,
-                                    "insurance": [
-                                        0,
-                                        50000,
-                                        100000,
-                                        150000,
-                                        200000,
-                                        250000,
-                                        300000,
-                                        350000,
-                                        400000,
-                                        450000,
-                                        500000
-                                    ]
-                                }
-                            },
-                            "returnCapabilities": {
-                                "deliveryTypes": [
-                                    "standard"
-                                ],
-                                "features": {
-                                    "labelDescriptionLength": 45
-                                },
-                                "packageTypes": [
-                                    "package"
-                                ],
-                                "shipmentOptions": {
-                                    "signature": true,
-                                    "insurance": [
-                                        0
-                                    ],
-                                    "return": true,
-                                    "ageCheck": true,
-                                    "onlyRecipient": true,
-                                    "sameDayDelivery": true,
                                     "largeFormat": true
                                 }
                             }
@@ -441,44 +355,10 @@
                 "primary": false,
                 "type": "main",
                 "capabilities": {
-                    "deliveryTypes": [
-                        "morning",
-                        "standard",
-                        "evening",
-                        "pickup"
-                    ],
-                    "features": {
-                        "labelDescriptionLength": 45
-                    },
-                    "packageTypes": [
-                        "package",
-                        "mailbox",
-                        "letter",
-                        "digital_stamp"
-                    ],
-                    "shipmentOptions": {
-                        "ageCheck": true,
-                        "largeFormat": true,
-                        "onlyRecipient": true,
-                        "return": true,
-                        "sameDayDelivery": false,
-                        "signature": true,
-                        "insurance": [
-                            0,
-                            10000,
-                            25000,
-                            50000,
-                            100000,
-                            150000,
-                            200000,
-                            250000,
-                            300000,
-                            350000,
-                            400000,
-                            450000,
-                            500000
-                        ]
-                    }
+                    "deliveryTypes": [],
+                    "features": [],
+                    "packageTypes": [],
+                    "shipmentOptions": []
                 },
                 "returnCapabilities": {
                     "deliveryTypes": [
@@ -511,77 +391,6 @@
                         "ageCheck": true,
                         "onlyRecipient": true,
                         "sameDayDelivery": false,
-                        "largeFormat": true
-                    }
-                }
-            },
-            {
-                "externalIdentifier": "dhlforyou:8277",
-                "id": 9,
-                "name": "dhlforyou",
-                "human": "DHL For You",
-                "subscriptionId": "8277",
-                "enabled": true,
-                "isDefault": false,
-                "label": null,
-                "optional": false,
-                "primary": false,
-                "type": "custom",
-                "capabilities": {
-                    "deliveryTypes": [
-                        "standard",
-                        "pickup"
-                    ],
-                    "features": {
-                        "labelDescriptionLength": 45
-                    },
-                    "packageTypes": [
-                        "package",
-                        "mailbox"
-                    ],
-                    "shipmentOptions": {
-                        "ageCheck": true,
-                        "largeFormat": false,
-                        "onlyRecipient": true,
-                        "return": true,
-                        "sameDayDelivery": true,
-                        "signature": true,
-                        "saturdayDelivery": true,
-                        "hideSender": true,
-                        "insurance": [
-                            0,
-                            50000,
-                            100000,
-                            150000,
-                            200000,
-                            250000,
-                            300000,
-                            350000,
-                            400000,
-                            450000,
-                            500000
-                        ]
-                    }
-                },
-                "returnCapabilities": {
-                    "deliveryTypes": [
-                        "standard"
-                    ],
-                    "features": {
-                        "labelDescriptionLength": 45
-                    },
-                    "packageTypes": [
-                        "package"
-                    ],
-                    "shipmentOptions": {
-                        "signature": true,
-                        "insurance": [
-                            0
-                        ],
-                        "return": true,
-                        "ageCheck": true,
-                        "onlyRecipient": true,
-                        "sameDayDelivery": true,
                         "largeFormat": true
                     }
                 }
@@ -692,13 +501,24 @@
             }
         },
         "shop": {
-            "id": 23999,
-            "accountId": 21000,
-            "platformId": 1,
-            "name": "MyParcel",
+            "accountId": 1,
+            "platformId": 3,
             "hidden": false,
             "billing": [],
-            "deliveryAddress": [],
+            "deliveryAddress": {
+                "address1": "Antareslaan 31",
+                "address2": null,
+                "area": null,
+                "cc": "NL",
+                "city": "Hoofddorp",
+                "postalCode": "2132 JE",
+                "region": null,
+                "state": null,
+                "email": "support@myparcel.nl",
+                "phone": null,
+                "person": "Felicia Parcel",
+                "company": "MyParcel"
+            },
             "generalSettings": [],
             "return": [],
             "shipmentOptions": [],
@@ -717,44 +537,10 @@
                     "primary": false,
                     "type": "main",
                     "capabilities": {
-                        "deliveryTypes": [
-                            "morning",
-                            "standard",
-                            "evening",
-                            "pickup"
-                        ],
-                        "features": {
-                            "labelDescriptionLength": 45
-                        },
-                        "packageTypes": [
-                            "package",
-                            "mailbox",
-                            "letter",
-                            "digital_stamp"
-                        ],
-                        "shipmentOptions": {
-                            "ageCheck": true,
-                            "largeFormat": true,
-                            "onlyRecipient": true,
-                            "return": true,
-                            "sameDayDelivery": false,
-                            "signature": true,
-                            "insurance": [
-                                0,
-                                10000,
-                                25000,
-                                50000,
-                                100000,
-                                150000,
-                                200000,
-                                250000,
-                                300000,
-                                350000,
-                                400000,
-                                450000,
-                                500000
-                            ]
-                        }
+                        "deliveryTypes": [],
+                        "features": [],
+                        "packageTypes": [],
+                        "shipmentOptions": []
                     },
                     "returnCapabilities": {
                         "deliveryTypes": [
@@ -787,77 +573,6 @@
                             "ageCheck": true,
                             "onlyRecipient": true,
                             "sameDayDelivery": false,
-                            "largeFormat": true
-                        }
-                    }
-                },
-                {
-                    "externalIdentifier": "dhlforyou:8277",
-                    "id": 9,
-                    "name": "dhlforyou",
-                    "human": "DHL For You",
-                    "subscriptionId": "8277",
-                    "enabled": true,
-                    "isDefault": false,
-                    "label": null,
-                    "optional": false,
-                    "primary": false,
-                    "type": "custom",
-                    "capabilities": {
-                        "deliveryTypes": [
-                            "standard",
-                            "pickup"
-                        ],
-                        "features": {
-                            "labelDescriptionLength": 45
-                        },
-                        "packageTypes": [
-                            "package",
-                            "mailbox"
-                        ],
-                        "shipmentOptions": {
-                            "ageCheck": true,
-                            "largeFormat": false,
-                            "onlyRecipient": true,
-                            "return": true,
-                            "sameDayDelivery": true,
-                            "signature": true,
-                            "saturdayDelivery": true,
-                            "hideSender": true,
-                            "insurance": [
-                                0,
-                                50000,
-                                100000,
-                                150000,
-                                200000,
-                                250000,
-                                300000,
-                                350000,
-                                400000,
-                                450000,
-                                500000
-                            ]
-                        }
-                    },
-                    "returnCapabilities": {
-                        "deliveryTypes": [
-                            "standard"
-                        ],
-                        "features": {
-                            "labelDescriptionLength": 45
-                        },
-                        "packageTypes": [
-                            "package"
-                        ],
-                        "shipmentOptions": {
-                            "signature": true,
-                            "insurance": [
-                                0
-                            ],
-                            "return": true,
-                            "ageCheck": true,
-                            "onlyRecipient": true,
-                            "sameDayDelivery": true,
                             "largeFormat": true
                         }
                     }

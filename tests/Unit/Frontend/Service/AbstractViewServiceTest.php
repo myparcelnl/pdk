@@ -11,16 +11,21 @@ use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockFrontendRenderService;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
+use function DI\get;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        FrontendRenderServiceInterface::class => autowire(MockFrontendRenderService::class),
-        ViewServiceInterface::class           => autowire(MockAbstractViewService::class),
+        FrontendRenderServiceInterface::class => get(MockFrontendRenderService::class),
+        ViewServiceInterface::class           => get(MockAbstractViewService::class),
     ])
 );
+
+beforeEach(function () {
+    TestBootstrapper::hasAccount();
+});
 
 it('renders component on correct pages', function (callable $callback, array $views, string $page) {
     global $currentPage;

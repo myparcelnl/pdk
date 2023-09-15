@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Frontend\Service;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\Settings;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Mocks\ExceptionThrowingContextService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\get;
@@ -20,6 +21,8 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 usesShared(new UsesMockPdkInstance());
 
 beforeEach(function () {
+    TestBootstrapper::hasAccount();
+
     factory(Settings::class)->store();
 });
 

@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Integration\Api\Adapter\BehatMyParcelClientAdapter;
 use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatMyParcelApiService;
 use MyParcelNL\Pdk\Tests\Integration\Base\BehatConfig;
-use function DI\autowire;
+use function DI\get;
 use function DI\value;
 
 final class PdkContext extends AbstractContext
@@ -43,10 +43,10 @@ final class PdkContext extends AbstractContext
 
             'behatExamplesDir' => value(self::EXAMPLES_DIR),
 
-            ApiServiceInterface::class           => autowire(BehatMyParcelApiService::class),
-            ClientAdapterInterface::class        => autowire(BehatMyParcelClientAdapter::class),
-            ConfigInterface::class               => autowire(BehatConfig::class),
-            PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)->constructor(null),
+            ApiServiceInterface::class           => get(BehatMyParcelApiService::class),
+            ClientAdapterInterface::class        => get(BehatMyParcelClientAdapter::class),
+            ConfigInterface::class               => get(BehatConfig::class),
+            PdkAccountRepositoryInterface::class => get(MockPdkAccountRepository::class),
         ]);
     }
 

@@ -165,21 +165,6 @@
                     },
                     "deliveryType": "standard",
                     "packageType": "package"
-                },
-                "dhlforyou:8277": {
-                    "labelAmount": 1,
-                    "shipmentOptions": {
-                        "insurance": 0,
-                        "ageCheck": 0,
-                        "hideSender": 0,
-                        "largeFormat": 0,
-                        "onlyRecipient": 0,
-                        "return": 0,
-                        "sameDayDelivery": 0,
-                        "signature": 0
-                    },
-                    "deliveryType": "standard",
-                    "packageType": "package"
                 }
             }
         },
@@ -332,21 +317,6 @@
             "totalPriceAfterVat": 0,
             "inheritedDeliveryOptions": {
                 "postnl": {
-                    "labelAmount": 1,
-                    "shipmentOptions": {
-                        "insurance": 0,
-                        "ageCheck": 0,
-                        "hideSender": 0,
-                        "largeFormat": 0,
-                        "onlyRecipient": 0,
-                        "return": 0,
-                        "sameDayDelivery": 0,
-                        "signature": 0
-                    },
-                    "deliveryType": "standard",
-                    "packageType": "package"
-                },
-                "dhlforyou:8277": {
                     "labelAmount": 1,
                     "shipmentOptions": {
                         "insurance": 0,
