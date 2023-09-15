@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\App\Installer\Contract;
 interface InstallerServiceInterface
 {
     /**
-     * Install the app, or upgrade it if it is already installed.
+     * Install the app, or up it if it is already installed.
      */
     public function install(...$args): void;
 

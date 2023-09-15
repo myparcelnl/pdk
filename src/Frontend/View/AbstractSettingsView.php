@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Language;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
@@ -234,6 +235,20 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
+     * @param  string $name
+     *
+     * @return bool
+     */
+    protected function isNotDisabled(string $name): bool
+    {
+        /** @var array[] $disabledSettings */
+        $disabledSettings = Pdk::get('disabledSettings');
+        $category         = $disabledSettings[$this->getSettingsId()] ?? [];
+
+        return ! in_array($name, $category, true);
+    }
+
+    /**
      * @param  array $array
      * @param  int   $displayOptions
      *
@@ -262,20 +277,29 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function updateElements(FormElementCollection $elements): FormElementCollection
     {
-        return $elements->map(function ($element): PlainElement {
-            if ($element instanceof InteractiveElement) {
-                $label       = $this->createLabel($this->getLabelPrefix(), $element->name);
-                $description = "{$label}_description";
-
-                $element->props['label'] = $label;
-
-                if (Language::hasTranslation($description)) {
-                    $element->props['description'] = $description;
+        return $elements
+            ->filter(function ($element): bool {
+                if (! isset($element->name) || ! $element instanceof InteractiveElement) {
+                    return true;
                 }
-            }
 
-            return $element;
-        });
+                return $this->isNotDisabled($element->name);
+            })
+            ->map(function ($element): PlainElement {
+                if ($element instanceof InteractiveElement) {
+                    $label       = $this->createLabel($this->getLabelPrefix(), $element->name);
+                    $description = "{$label}_description";
+
+                    $element->props['label'] = $label;
+
+                    if (Language::hasTranslation($description)) {
+                        $element->props['description'] = $description;
+                    }
+                }
+
+                return $element;
+            })
+            ->values();
     }
 
     /**
