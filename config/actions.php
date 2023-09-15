@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PrintOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\SynchronizeOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderAction;
+use MyParcelNL\Pdk\App\Action\Backend\Order\UpdateOrderStatusAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdatePluginSettingsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdateProductSettingsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Shipment\DeleteShipmentsAction;
@@ -36,6 +37,7 @@ use MyParcelNL\Pdk\App\Request\Orders\PostOrderNotesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PrintOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\SynchronizeOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\UpdateOrdersEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Orders\UpdateOrderStatusEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Settings\UpdatePluginSettingsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Settings\UpdateProductSettingsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Shipment\DeleteShipmentsEndpointRequest;
@@ -108,7 +110,7 @@ return [
             'action'  => ExportOrderAction::class,
         ],
 
-        PdkBackendActions::POST_ORDER_NOTES        => [
+        PdkBackendActions::POST_ORDER_NOTES => [
             'request' => PostOrderNotesEndpointRequest::class,
             'action'  => PostOrderNotesAction::class,
         ],
@@ -116,7 +118,7 @@ return [
         /**
          * Retrieve orders from the plugin.
          */
-        PdkBackendActions::FETCH_ORDERS            => [
+        PdkBackendActions::FETCH_ORDERS     => [
             'request' => FetchOrdersEndpointRequest::class,
             'action'  => FetchOrdersAction::class,
         ],
@@ -124,7 +126,7 @@ return [
         /**
          * Prints the order.
          */
-        PdkBackendActions::PRINT_ORDERS            => [
+        PdkBackendActions::PRINT_ORDERS     => [
             'request' => PrintOrdersEndpointRequest::class,
             'action'  => PrintOrdersAction::class,
         ],
@@ -132,9 +134,14 @@ return [
         /**
          * Update the order in the plugin.
          */
-        PdkBackendActions::UPDATE_ORDERS           => [
+        PdkBackendActions::UPDATE_ORDERS    => [
             'request' => UpdateOrdersEndpointRequest::class,
             'action'  => UpdateOrderAction::class,
+        ],
+
+        PdkBackendActions::UPDATE_ORDER_STATUS     => [
+            'request' => UpdateOrderStatusEndpointRequest::class,
+            'action'  => UpdateOrderStatusAction::class,
         ],
 
         /**

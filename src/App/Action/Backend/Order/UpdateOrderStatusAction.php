@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Facade\Actions;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UpdateOrderAction extends AbstractOrderAction
+class UpdateOrderStatusAction extends AbstractOrderAction
 {
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request

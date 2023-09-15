@@ -7,12 +7,13 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Shipment;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Backend\Order\AbstractOrderAction;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Status\Contract\StatusServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,10 +66,7 @@ class PrintShipmentsAction extends AbstractOrderAction
             ? $orders->getShipmentsByIds($shipmentIds)
             : $orders->getLastShipments();
 
-        $this->statusService->changeOrderStatus(
-            $orderIds,
-            Settings::get(OrderSettings::STATUS_ON_LABEL_CREATE, OrderSettings::ID)
-        );
+        Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, $orderIds);
 
         switch ($output) {
             case LabelSettings::OUTPUT_OPEN:
