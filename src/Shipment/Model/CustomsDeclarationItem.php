@@ -60,13 +60,12 @@ class CustomsDeclarationItem extends Model
         $countryOfOrigin = Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID);
         $customsCode     = Settings::get(CustomsSettings::CUSTOMS_CODE, CustomsSettings::ID);
 
-        $classification = $triStateService->resolveForString($product->settings->customsCode, $customsCode);
-        $country        =
-            $triStateService->resolveForString(
-                $product->settings->countryOfOrigin,
-                $countryOfOrigin,
-                Platform::get('localCountry')
-            );
+        $classification = $triStateService->resolveString($product->settings->customsCode, $customsCode);
+        $country        = $triStateService->resolveString(
+            $product->settings->countryOfOrigin,
+            $countryOfOrigin,
+            Platform::get('localCountry')
+        );
 
         return new static(
             array_merge(
