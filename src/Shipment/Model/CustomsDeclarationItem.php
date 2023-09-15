@@ -24,8 +24,7 @@ use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
  */
 class CustomsDeclarationItem extends Model
 {
-    public const  DEFAULT_CLASSIFICATION = '0000';
-    private const DEFAULTS               = [
+    protected $attributes = [
         'amount'         => 1,
         'classification' => null,
         'country'        => null,
@@ -36,8 +35,6 @@ class CustomsDeclarationItem extends Model
         'itemValue'      => Currency::class,
         'weight'         => 0,
     ];
-
-    protected $attributes = self::DEFAULTS;
 
     protected $casts      = [
         'amount'         => 'int',
@@ -57,19 +54,20 @@ class CustomsDeclarationItem extends Model
     public static function fromProduct(PdkProduct $product, array $additionalFields = []): self
     {
         $triStateService = Pdk::get(TriStateServiceInterface::class);
-        $countryOfOrigin = Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID);
-        $customsCode     = Settings::get(CustomsSettings::CUSTOMS_CODE, CustomsSettings::ID);
 
-        $classification = $triStateService->resolveString($product->settings->customsCode, $customsCode);
-        $country        = $triStateService->resolveString(
+        $classification = $triStateService->resolveString(
+            $product->settings->customsCode,
+            Settings::get(CustomsSettings::CUSTOMS_CODE, CustomsSettings::ID)
+        );
+
+        $country = $triStateService->resolveString(
             $product->settings->countryOfOrigin,
-            $countryOfOrigin,
+            Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID),
             Platform::get('localCountry')
         );
 
         return new static(
-            array_merge(
-                self::DEFAULTS,
+            array_replace(
                 Utils::filterNull([
                     'classification' => $classification,
                     'country'        => $country,
