@@ -24,7 +24,7 @@ it('returns correct weight', function (array $input, int $expectedWeight) {
             'items'    => [
                 [
                     'amount'         => 2,
-                    'classification' => CustomsDeclarationItem::DEFAULT_CLASSIFICATION,
+                    'classification' => '0000',
                     'country'        => 'NL',
                     'description'    => null,
                     'itemValue'      => [
@@ -44,7 +44,7 @@ it('returns correct weight', function (array $input, int $expectedWeight) {
             'items'    => [
                 [
                     'amount'         => 1,
-                    'classification' => CustomsDeclarationItem::DEFAULT_CLASSIFICATION,
+                    'classification' => '0000',
                     'country'        => 'FR',
                     'description'    => null,
                     'itemValue'      => [
@@ -55,7 +55,7 @@ it('returns correct weight', function (array $input, int $expectedWeight) {
                 ],
                 [
                     'amount'         => 3,
-                    'classification' => CustomsDeclarationItem::DEFAULT_CLASSIFICATION,
+                    'classification' => '0000',
                     'country'        => 'BE',
                     'description'    => null,
                     'itemValue'      => [
@@ -76,7 +76,7 @@ it('returns correct weight', function (array $input, int $expectedWeight) {
             'items'    => [
                 [
                     'amount'         => 3,
-                    'classification' => CustomsDeclarationItem::DEFAULT_CLASSIFICATION,
+                    'classification' => '0000',
                     'country'        => 'BE',
                     'description'    => null,
                     'itemValue'      => [

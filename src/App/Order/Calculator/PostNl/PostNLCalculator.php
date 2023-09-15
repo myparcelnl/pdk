@@ -12,6 +12,7 @@ final class PostNLCalculator extends AbstractCarrierOptionsCalculator
     protected function getCalculators(): array
     {
         return [
+            PostNLCountryShipmentOptionsCalculator::class,
             PostNLAgeCheckCalculator::class,
             PostNLDeliveryTypeCalculator::class,
         ];

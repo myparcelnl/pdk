@@ -78,6 +78,7 @@ it('calculates insurance', function (array $input, int $result) {
     $reset();
 })
     ->with([
+
         'amount passed in manually via delivery options' => [
             [
                 'deliveryOptions' => [

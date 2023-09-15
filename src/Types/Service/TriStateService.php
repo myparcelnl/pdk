@@ -63,6 +63,18 @@ class TriStateService implements TriStateServiceInterface
     }
 
     /**
+     * @param  mixed ...$values
+     *
+     * @return null|string
+     */
+    public function resolveString(...$values): ?string
+    {
+        $value = $this->resolveValues($values);
+
+        return null === $value ? null : (string) $value;
+    }
+
+    /**
      * @param  array $values
      *
      * @return null|int|mixed

@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -70,6 +71,7 @@ return [
 
     'orderCalculators' => factory(function () {
         return [
+            PackageTypeCalculator::class,
             TriStateOptionCalculator::class,
             AllowedInCarrierCalculator::class,
             PackageTypeShipmentOptionsCalculator::class,
