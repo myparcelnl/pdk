@@ -19,8 +19,6 @@ abstract class AbstractSettingsModelFactory extends AbstractModelFactory
 
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

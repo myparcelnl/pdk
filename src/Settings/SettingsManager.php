@@ -19,31 +19,24 @@ class SettingsManager implements SettingsManagerInterface
      * This key is used to store global settings that apply to all sub items of a collection settings group. Currently
      * only applies to carrier settings.
      */
-    public const KEY_ALL = '*';
+    final public const KEY_ALL = '*';
 
     /**
      * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
      */
     protected $repository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository
-     */
     public function __construct(SettingsRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Settings\Model\Settings
-     */
     public function all(): Settings
     {
         return $this->repository->all();
     }
 
     /**
-     * @param  string      $key
      * @param  null|string $namespace
      * @param  mixed       $default
      *
@@ -59,7 +52,6 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * @return array
      * @noinspection PhpUnused
      */
     public function getDefaults(): array
@@ -73,10 +65,6 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * Fill the carrier settings array with defaults for all allowed carriers.
-     *
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $defaults
-     *
-     * @return void
      */
     protected function applyCarrierDefaults(Collection $defaults): void
     {

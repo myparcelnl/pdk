@@ -41,9 +41,7 @@ it('does not render settings that are disabled', function () {
     /** @var \MyParcelNL\Pdk\Frontend\View\LabelSettingsView $view */
     $view = new MockView();
 
-    $elements = array_map(static function (ElementBuilderInterface $builder) {
-        return $builder->getName();
-    }, $view->all());
+    $elements = array_map(static fn(ElementBuilderInterface $builder) => $builder->getName(), $view->all());
 
     expect($elements)->toEqual(['test2']);
 

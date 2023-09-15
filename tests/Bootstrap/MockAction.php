@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MockAction implements ActionInterface
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         return new JsonResponse(['success' => true]);

@@ -147,21 +147,21 @@ it('calculates insurance', function (array $input, int $result) {
 
         'value € 10000 -> rounded up to € 5000' => [
             [
-                'orderPrice' => 1000000,
+                'orderPrice' => 1_000_000,
             ],
             'result' => 500000,
         ],
 
         'value € 10000.01 -> rounded up to € 5000' => [
             [
-                'orderPrice' => 1000001,
+                'orderPrice' => 1_000_001,
             ],
             'result' => 500000,
         ],
 
         'value € 10005 -> rounded up to € 5000' => [
             [
-                'orderPrice' => 1000500,
+                'orderPrice' => 1_000_500,
             ],
             'result' => 500000,
         ],

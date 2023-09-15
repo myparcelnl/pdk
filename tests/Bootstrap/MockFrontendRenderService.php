@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 
 class MockFrontendRenderService extends FrontendRenderService
 {
-    public const RENDERED_CONTENT = '(content)';
+    final public const RENDERED_CONTENT = '(content)';
 
     public function renderSomething(string $component): string
     {
@@ -21,13 +21,6 @@ class MockFrontendRenderService extends FrontendRenderService
 
     /**
      * Skips all rendering stuff.
-     *
-     * @param  string $template
-     * @param  array  $templateParameters
-     * @param  array  $contexts
-     * @param  array  $contextArguments
-     *
-     * @return string
      */
     protected function renderTemplate(
         string $template,

@@ -28,20 +28,12 @@ class ContextService implements ContextServiceInterface
 {
     /**
      * @param  null|\MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return \MyParcelNL\Pdk\Context\Model\CheckoutContext
      */
     public function createCheckoutContext(?PdkCart $cart): CheckoutContext
     {
         return $cart ? CheckoutContext::fromCart($cart) : new CheckoutContext();
     }
 
-    /**
-     * @param  array $contexts
-     * @param  array $data
-     *
-     * @return \MyParcelNL\Pdk\Context\Model\ContextBag
-     */
     public function createContexts(array $contexts, array $data = []): ContextBag
     {
         $context = array_reduce($contexts, function (array $acc, string $id) use ($data) {
@@ -53,17 +45,11 @@ class ContextService implements ContextServiceInterface
         return new ContextBag($context);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\DynamicContext
-     */
     public function createDynamicContext(): DynamicContext
     {
         return new DynamicContext();
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\GlobalContext
-     */
     public function createGlobalContext(): GlobalContext
     {
         return new GlobalContext();
@@ -71,8 +57,6 @@ class ContextService implements ContextServiceInterface
 
     /**
      * @param  null|array|PdkOrder|PdkOrderCollection $orderData
-     *
-     * @return \MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection
      */
     public function createOrderDataContext($orderData): OrderDataContextCollection
     {
@@ -84,9 +68,6 @@ class ContextService implements ContextServiceInterface
         );
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\PluginSettingsViewContext
-     */
     public function createPluginSettingsViewContext(): PluginSettingsViewContext
     {
         return new PluginSettingsViewContext();
@@ -94,8 +75,6 @@ class ContextService implements ContextServiceInterface
 
     /**
      * @param  null|PdkProduct|PdkProductCollection $productData
-     *
-     * @return \MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection
      */
     public function createProductDataContext($productData): ProductDataContextCollection
     {
@@ -107,9 +86,6 @@ class ContextService implements ContextServiceInterface
         );
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext
-     */
     public function createProductSettingsViewContext(): ProductSettingsViewContext
     {
         return new ProductSettingsViewContext();
@@ -142,9 +118,6 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
-     * @param  string $contextId
-     * @param  array  $data
-     *
      * @return null|CheckoutContext|DynamicContext|GlobalContext|OrderDataContextCollection|PluginSettingsViewContext|ProductDataContextCollection|ProductSettingsViewContext
      * @noinspection MultipleReturnStatementsInspection
      */

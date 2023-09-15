@@ -21,10 +21,6 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
      */
     protected $repository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Language\Repository\LanguageRepository $repository
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface               $fileSystem
-     */
     public function __construct(LanguageRepository $repository, FileSystemInterface $fileSystem)
     {
         $this->repository = $repository;
@@ -33,15 +29,11 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
 
     /**
      * @param  null|string $language
-     *
-     * @return string
      */
     abstract protected function getFilePath(?string $language = null): string;
 
     /**
      * @param  null|string $language
-     *
-     * @return string
      */
     public function getIso2(?string $language = null): string
     {
@@ -56,16 +48,14 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
         $lang = $language ?? $this->getLanguage();
         $iso2 = substr($lang, 0, 2);
 
-        return $this->repository->getTranslations($iso2, function () use ($iso2) {
-            return json_decode($this->fileSystem->get($this->getFilePath($iso2)), true);
-        });
+        return $this->repository->getTranslations(
+            $iso2,
+            fn() => json_decode($this->fileSystem->get($this->getFilePath($iso2)), true)
+        );
     }
 
     /**
-     * @param  string      $key
      * @param  null|string $language
-     *
-     * @return bool
      */
     public function hasTranslation(string $key, ?string $language = null): bool
     {
@@ -73,10 +63,7 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
     }
 
     /**
-     * @param  string      $key
      * @param  null|string $language
-     *
-     * @return string
      */
     public function translate(string $key, ?string $language = null): string
     {
@@ -90,10 +77,7 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
     }
 
     /**
-     * @param  array       $array
      * @param  null|string $language
-     *
-     * @return array
      */
     public function translateArray(array $array, ?string $language = null): array
     {

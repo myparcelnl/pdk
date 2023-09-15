@@ -51,8 +51,6 @@ final class PdkOrderNoteFactory extends AbstractModelFactory
 
     /**
      * @param  T $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

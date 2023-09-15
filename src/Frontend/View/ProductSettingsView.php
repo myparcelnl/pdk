@@ -16,22 +16,10 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
  */
 class ProductSettingsView extends AbstractSettingsView
 {
-    /**
-     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
-     */
-    private $countryService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService
-     */
-    public function __construct(CountryServiceInterface $countryService)
+    public function __construct(private readonly CountryServiceInterface $countryService)
     {
-        $this->countryService = $countryService;
     }
 
-    /**
-     * @return null|array
-     */
     protected function createElements(): ?array
     {
         return [
@@ -96,9 +84,6 @@ class ProductSettingsView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getSettingsId(): string
     {
         return ProductSettings::ID;

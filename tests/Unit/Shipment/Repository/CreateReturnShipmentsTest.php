@@ -53,12 +53,12 @@ it('creates return shipment', function (array $input) {
     expect($createdReturnShipments)
         ->toBeInstanceOf(ShipmentCollection::class);
 
-    assertMatchesJsonSnapshot(json_encode($array));
+    assertMatchesJsonSnapshot(json_encode($array, JSON_THROW_ON_ERROR));
 })->with([
     'simple domestic shipment' => [
         'input' => [
             [
-                'id'                  => 65435213,
+                'id'                  => 65_435_213,
                 'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'     => [
                     'date'            => '2022-07-10 16:00:00',
@@ -106,7 +106,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
     'single shipment' => [
         'input' => [
             [
-                'id'                  => 65435213,
+                'id'                  => 65_435_213,
                 'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
                 'deliveryOptions'     => [
                     'date'            => '2022-07-10 16:00:00',

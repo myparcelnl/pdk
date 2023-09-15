@@ -9,21 +9,14 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
 
 class PostOrderNotesResponse extends ApiResponseWithBody
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
-     */
-    private $orderNotes;
+    private ?OrderNoteCollection $orderNotes = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
-     */
     public function getOrderNotes(): OrderNoteCollection
     {
         return $this->orderNotes;
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     protected function parseResponseBody(): void
@@ -35,23 +28,18 @@ class PostOrderNotesResponse extends ApiResponseWithBody
     }
 
     /**
-     * @param  array $orderNotes
-     *
-     * @return void
      * @throws \Exception
      */
     private function createOrderNotes(array $orderNotes): void
     {
         $this->orderNotes = new OrderNoteCollection(
-            array_map(static function (array $orderNote) {
-                return [
-                    'uuid'      => $orderNote['uuid'],
-                    'author'    => $orderNote['author'],
-                    'note'      => $orderNote['note'],
-                    'createdAt' => $orderNote['created'],
-                    'updatedAt' => $orderNote['updated'],
-                ];
-            }, $orderNotes)
+            array_map(static fn(array $orderNote) => [
+                'uuid'      => $orderNote['uuid'],
+                'author'    => $orderNote['author'],
+                'note'      => $orderNote['note'],
+                'createdAt' => $orderNote['created'],
+                'updatedAt' => $orderNote['updated'],
+            ], $orderNotes)
         );
     }
 }

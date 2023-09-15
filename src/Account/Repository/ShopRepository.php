@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 class ShopRepository extends ApiRepository
 {
     /**
-     * @return \MyParcelNL\Pdk\Account\Model\Shop
      * @noinspection PhpUnused
      */
     public function getShop(): Shop

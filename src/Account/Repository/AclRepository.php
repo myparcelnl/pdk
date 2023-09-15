@@ -11,9 +11,6 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 
 final class AclRepository extends ApiRepository
 {
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function getSubscriptionFeatures(): Collection
     {
         return $this->retrieve('acl', function () {

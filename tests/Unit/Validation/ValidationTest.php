@@ -22,8 +22,6 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 /**
  * From Laravel 8
  *
- * @param  array $dotted
- *
  * @return array
  */
 function arrayUndot(array $dotted): array
@@ -57,8 +55,6 @@ function arrayUndot(array $dotted): array
 /**
  * array_merge overwrites entire keys, array_merge_recursive only adds to them, thereby corrupting the array.
  * This function only overwrites the keys within the keys that are present, and leaves the rest as is.
- *
- * @param  array ...$arrays
  *
  * @return array
  */
@@ -166,7 +162,7 @@ it('validates order', function (array $input) {
     expect($isValid)->toBe(empty($errors));
 
     if (! empty($errors)) {
-        assertMatchesJsonSnapshot(json_encode($errors));
+        assertMatchesJsonSnapshot(json_encode($errors, JSON_THROW_ON_ERROR));
     }
 })->with([
         'dhlforyou to France'                         => [

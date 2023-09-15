@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use function DI\factory;
@@ -107,7 +109,5 @@ return [
      * The name of the hidden input in the checkout where delivery options are stored.
      */
 
-    'checkoutHiddenInputName' => factory(function () {
-        return sprintf('%s_checkout_data', PdkFacade::getAppInfo()->name);
-    }),
+    'checkoutHiddenInputName' => factory(fn() => sprintf('%s_checkout_data', PdkFacade::getAppInfo()->name)),
 ];

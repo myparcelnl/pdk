@@ -14,33 +14,21 @@ use Throwable;
 
 class PdkEndpoint implements PdkApiInterface
 {
-    public const CONTEXT_BACKEND  = 'backend';
-    public const CONTEXT_FRONTEND = 'frontend';
-    public const CONTEXT_SHARED   = 'shared';
-    public const CONTEXTS         = [
+    final public const CONTEXT_BACKEND  = 'backend';
+    final public const CONTEXT_FRONTEND = 'frontend';
+    final public const CONTEXT_SHARED   = 'shared';
+    final public const CONTEXTS         = [
         self::CONTEXT_BACKEND,
         self::CONTEXT_FRONTEND,
         self::CONTEXT_SHARED,
     ];
 
-    /**
-     * @var \MyParcelNL\Pdk\App\Api\PdkActions
-     */
-    private $actions;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Api\PdkActions $actions
-     */
-    public function __construct(PdkActions $actions)
+    public function __construct(private readonly PdkActions $actions)
     {
-        $this->actions = $actions;
     }
 
     /**
      * @param  string|\Symfony\Component\HttpFoundation\Request $input
-     * @param  string                                           $context
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function call($input, string $context): Response
     {
@@ -57,11 +45,6 @@ class PdkEndpoint implements PdkApiInterface
         }
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Api\Exception\ApiException $exception
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function createApiErrorResponse(ApiException $exception): JsonResponse
     {
         return new JsonResponse(
@@ -74,12 +57,6 @@ class PdkEndpoint implements PdkApiInterface
         );
     }
 
-    /**
-     * @param  \Throwable $throwable
-     * @param  int        $statusCode
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     protected function createErrorResponse(
         Throwable $throwable,
         int       $statusCode = Response::HTTP_BAD_REQUEST

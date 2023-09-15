@@ -13,9 +13,6 @@ class PostOrderNotesEndpointRequest extends AbstractEndpointRequest
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return 'orderNotes';

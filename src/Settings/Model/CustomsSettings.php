@@ -14,27 +14,27 @@ class CustomsSettings extends AbstractSettingsModel
     /**
      * Settings category ID.
      */
-    public const ID = 'customs';
+    final public const ID = 'customs';
     /**
      * Settings in this category.
      */
-    public const COUNTRY_OF_ORIGIN = 'countryOfOrigin';
-    public const CUSTOMS_CODE      = 'customsCode';
-    public const PACKAGE_CONTENTS  = 'packageContents';
+    final public const COUNTRY_OF_ORIGIN = 'countryOfOrigin';
+    final public const CUSTOMS_CODE      = 'customsCode';
+    final public const PACKAGE_CONTENTS  = 'packageContents';
     /**
      * Default values.
      */
-    public const DEFAULT_PACKAGE_CONTENTS = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
-    public const DEFAULT_CUSTOMS_CODE     = '0';
+    final public const DEFAULT_PACKAGE_CONTENTS = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
+    final public const DEFAULT_CUSTOMS_CODE     = '0';
     /**
      * Available package contents.
      */
-    public const PACKAGE_CONTENTS_COMMERCIAL_GOODS   = 1;
-    public const PACKAGE_CONTENTS_COMMERCIAL_SAMPLES = 2;
-    public const PACKAGE_CONTENTS_DOCUMENTS          = 3;
-    public const PACKAGE_CONTENTS_GIFTS              = 4;
-    public const PACKAGE_CONTENTS_RETURN_SHIPMENT    = 5;
-    public const PACKAGE_CONTENTS_LIST               = [
+    final public const PACKAGE_CONTENTS_COMMERCIAL_GOODS   = 1;
+    final public const PACKAGE_CONTENTS_COMMERCIAL_SAMPLES = 2;
+    final public const PACKAGE_CONTENTS_DOCUMENTS          = 3;
+    final public const PACKAGE_CONTENTS_GIFTS              = 4;
+    final public const PACKAGE_CONTENTS_RETURN_SHIPMENT    = 5;
+    final public const PACKAGE_CONTENTS_LIST               = [
         self::PACKAGE_CONTENTS_COMMERCIAL_GOODS   => 'customs_package_contents_commercial_goods',
         self::PACKAGE_CONTENTS_COMMERCIAL_SAMPLES => 'customs_package_contents_commercial_samples',
         self::PACKAGE_CONTENTS_DOCUMENTS          => 'customs_package_contents_documents',

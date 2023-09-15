@@ -18,22 +18,13 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 class PostShipmentsRequest extends Request
 {
     /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
-    private $collection;
-
-    /**
      * @var \MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface
      */
     private $triStateService;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     */
-    public function __construct(ShipmentCollection $collection)
+    public function __construct(private readonly ShipmentCollection $collection)
     {
         parent::__construct();
-        $this->collection = $collection;
 
         $this->triStateService = Pdk::get(TriStateServiceInterface::class);
     }
@@ -46,9 +37,11 @@ class PostShipmentsRequest extends Request
         return json_encode([
             'data' => [
                 'shipments' => $this->groupByMultiCollo()
-                    ->flatMap(function (Collection $groupedShipments) {
-                        return [$this->encodeShipmentWithSecondaryShipments($groupedShipments)];
-                    })
+                    ->flatMap(
+                        fn(Collection $groupedShipments) => [
+                            $this->encodeShipmentWithSecondaryShipments($groupedShipments),
+                        ]
+                    )
                     ->toArrayWithoutNull(),
             ],
         ]);
@@ -64,26 +57,17 @@ class PostShipmentsRequest extends Request
             ] + parent::getHeaders();
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/shipments';
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function encodeShipment(Shipment $shipment): array
@@ -106,8 +90,6 @@ class PostShipmentsRequest extends Request
 
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
-     *
-     * @return null|array
      */
     private function encodeSecondaryShipments(Collection $groupedShipments): ?array
     {
@@ -123,18 +105,13 @@ class PostShipmentsRequest extends Request
          * Turn grouped shipments into regular collection to avoid all shipment properties being added.
          */
         return $clonedCollection
-            ->map(function (Shipment $shipment) {
-                return [
-                    'reference_identifier' => $shipment->externalIdentifier,
-                ];
-            })
+            ->map(fn(Shipment $shipment) => [
+                'reference_identifier' => $shipment->externalIdentifier,
+            ])
             ->toArray();
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeShipmentWithSecondaryShipments(Collection $groupedShipments): array
@@ -146,9 +123,6 @@ class PostShipmentsRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getCustomsDeclaration(Shipment $shipment): ?array
@@ -167,9 +141,6 @@ class PostShipmentsRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getDropOffPoint(Shipment $shipment): ?array
@@ -194,18 +165,13 @@ class PostShipmentsRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getOptions(Shipment $shipment): array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
 
-        $options = array_map(function ($item) {
-            return $this->triStateService->resolve($item);
-        }, $shipmentOptions->toSnakeCaseArray());
+        $options = array_map(fn($item) => $this->triStateService->resolve($item), $shipmentOptions->toSnakeCaseArray());
 
         $hasInsurance = $shipmentOptions->insurance > TriStateService::DISABLED;
 
@@ -223,11 +189,6 @@ class PostShipmentsRequest extends Request
         );
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     */
     private function getPickupLocation(Shipment $shipment): ?array
     {
         if (! $shipment->deliveryOptions->isPickup()) {
@@ -252,11 +213,6 @@ class PostShipmentsRequest extends Request
         ]);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     */
     private function getRecipient(Shipment $shipment): array
     {
         $recipient = $shipment->recipient;
@@ -279,19 +235,11 @@ class PostShipmentsRequest extends Request
         ]);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return int
-     */
     private function getWeight(Shipment $shipment): int
     {
         return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     private function groupByMultiCollo(): Collection
     {
         return (new Collection($this->collection->all()))->groupBy(function ($shipment) {

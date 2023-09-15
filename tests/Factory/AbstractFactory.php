@@ -47,11 +47,9 @@ abstract class AbstractFactory implements FactoryInterface
     }
 
     /**
-     * @param  mixed $attribute
-     *
      * @return mixed
      */
-    protected function resolveAttribute($attribute)
+    protected function resolveAttribute(mixed $attribute)
     {
         if ($attribute instanceof FactoryInterface) {
             return $attribute->make();
@@ -60,11 +58,8 @@ abstract class AbstractFactory implements FactoryInterface
         return $attribute;
     }
 
-    /**
-     * @return array
-     */
     protected function resolveAttributes(): array
     {
-        return array_map([$this, 'resolveAttribute'], $this->attributes->all());
+        return array_map($this->resolveAttribute(...), $this->attributes->all());
     }
 }

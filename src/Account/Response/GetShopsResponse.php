@@ -9,14 +9,8 @@ use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 
 class GetShopsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var mixed
-     */
-    private $shop;
+    private ?Shop $shop = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Account\Model\Shop
-     */
     public function getShop(): Shop
     {
         return $this->shop;

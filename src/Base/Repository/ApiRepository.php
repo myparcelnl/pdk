@@ -14,10 +14,6 @@ class ApiRepository extends Repository
      */
     protected $api;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface  $api
-     */
     public function __construct(StorageInterface $storage, ApiServiceInterface $api)
     {
         parent::__construct($storage);
@@ -25,9 +21,6 @@ class ApiRepository extends Repository
         $this->api = $api;
     }
 
-    /**
-     * @return string
-     */
     protected function getKeyPrefix(): string
     {
         return 'api:';

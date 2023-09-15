@@ -52,8 +52,6 @@ final class ShopFactory extends AbstractModelFactory
 
     /**
      * @param  \MyParcelNL\Pdk\Account\Model\Shop $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

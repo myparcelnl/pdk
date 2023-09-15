@@ -18,5 +18,5 @@ it('gets settings view', function (string $class) {
     /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
     $view = Pdk::get($class);
 
-    assertMatchesJsonSnapshot(json_encode($view->toArray()));
+    assertMatchesJsonSnapshot(json_encode($view->toArray(), JSON_THROW_ON_ERROR));
 })->with('settingsViews');

@@ -14,11 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeleteShipmentsAction extends AbstractOrderAction
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $orderIds = $request->get('orderIds');
@@ -36,10 +31,7 @@ class DeleteShipmentsAction extends AbstractOrderAction
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     * @param  string[]                                                $shipmentIds
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @param  string[] $shipmentIds
      */
     protected function markShipmentsForDeletion(
         PdkOrderCollection $orders,

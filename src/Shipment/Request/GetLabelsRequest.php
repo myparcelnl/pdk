@@ -13,32 +13,16 @@ class GetLabelsRequest extends Request
     private const PATH_V2         = 'v2/shipment_labels/:ids';
     private const LIMIT_TO_USE_V2 = 25;
 
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
-    private $collection;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipmentCollection
-     * @param  array                                                  $parameters
-     */
-    public function __construct(ShipmentCollection $shipmentCollection, array $parameters)
+    public function __construct(private readonly ShipmentCollection $collection, array $parameters)
     {
-        $this->collection = $shipmentCollection;
         parent::__construct(['parameters' => $parameters]);
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return $this->headers + ['Accept' => 'application/json;charset=utf8'];
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         $usesV2Endpoint = $this->hasBulkPrepare();
@@ -50,9 +34,6 @@ class GetLabelsRequest extends Request
         return strtr($path, [':ids' => implode(';', $ids)]);
     }
 
-    /**
-     * @return array
-     */
     protected function getParameters(): array
     {
         $parameters              = $this->parameters;
@@ -61,9 +42,6 @@ class GetLabelsRequest extends Request
         return array_filter($parameters);
     }
 
-    /**
-     * @return bool
-     */
     private function hasBulkPrepare(): bool
     {
         return $this->collection->count() >= self::LIMIT_TO_USE_V2;

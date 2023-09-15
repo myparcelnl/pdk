@@ -17,16 +17,10 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
     /**
      * @var null|string
      */
-    protected $target;
+    protected     $target;
 
-    /**
-     * @var array
-     */
-    private $conditions = [];
+    private array $conditions = [];
 
-    /**
-     * @return string
-     */
     abstract protected function getOperationKey(): string;
 
     /**
@@ -40,9 +34,7 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
 
         if (! empty($this->conditions)) {
             $array['$if'] = array_filter(
-                array_map(static function (FormConditionInterface $condition) {
-                    return $condition->toArray();
-                }, $this->conditions)
+                array_map(static fn(FormConditionInterface $condition) => $condition->toArray(), $this->conditions)
             );
         }
 
@@ -52,8 +44,6 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
     /**
      * @param  null|string   $target
      * @param  null|callable $callable
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */
     public function if(?string $target = null, ?callable $callable = null): FormConditionInterface
     {
@@ -67,9 +57,6 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
         return $condition;
     }
 
-    /**
-     * @return array
-     */
     final public function toArray(): array
     {
         return [

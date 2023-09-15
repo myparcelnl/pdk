@@ -18,10 +18,7 @@ class ExampleJsonResponse extends Response
 
     /**
      * @param  null|array  $responseContent
-     * @param  int         $status
-     * @param  array       $headers
      * @param  null        $body
-     * @param  string      $version
      * @param  string|null $reason
      */
     public function __construct(
@@ -36,24 +33,18 @@ class ExampleJsonResponse extends Response
         $this->setResponseContent($responseContent);
     }
 
-    /**
-     * @return \Psr\Http\Message\StreamInterface
-     */
     public function getBody(): StreamInterface
     {
         $content = $this->getContent();
         $body    = null;
 
         if (! empty($content)) {
-            $body = json_encode($content);
+            $body = json_encode($content, JSON_THROW_ON_ERROR);
         }
 
         return Utils::streamFor($body);
     }
 
-    /**
-     * @return array
-     */
     public function getContent(): array
     {
         return [
@@ -71,9 +62,6 @@ class ExampleJsonResponse extends Response
         return ['Content-Type' => 'application/json'];
     }
 
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return \Symfony\Component\HttpFoundation\Response::HTTP_OK;
@@ -81,8 +69,6 @@ class ExampleJsonResponse extends Response
 
     /**
      * @param  null|array $responseContent
-     *
-     * @return self
      */
     public function setResponseContent(?array $responseContent): self
     {
@@ -91,17 +77,11 @@ class ExampleJsonResponse extends Response
         return $this;
     }
 
-    /**
-     * @return array
-     */
     protected function getDefaultResponseContent(): array
     {
         return $this->responseContent ?? [];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         throw new BadMethodCallException('This method should be overridden when not overriding getContent()');

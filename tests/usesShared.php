@@ -7,21 +7,16 @@ namespace MyParcelNL\Pdk\Tests;
 
 use MyParcelNL\Pdk\Tests\Uses\BaseMock;
 use MyParcelNL\Sdk\src\Support\Str;
-use Pest\PendingObjects\UsesCall;
+use Pest\PendingCalls\UsesCall;
 use Pest\Support\Backtrace;
 
 /**
- * @param  array  $mocks
- * @param  string $name
- *
  * @return void
  * @internal
  */
 function getCallable(array $mocks, string $name): ?callable
 {
-    $hooks = array_filter($mocks, static function ($mock) use ($name) {
-        return method_exists($mock, $name);
-    });
+    $hooks = array_filter($mocks, static fn($mock) => method_exists($mock, $name));
 
     if (empty($hooks)) {
         return null;
@@ -39,8 +34,6 @@ function getCallable(array $mocks, string $name): ?callable
 }
 
 /**
- * @param  \MyParcelNL\Pdk\Tests\Uses\BaseMock ...$classes
- *
  * @return UsesCall
  */
 function usesShared(BaseMock ...$classes): UsesCall

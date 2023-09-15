@@ -14,29 +14,15 @@ abstract class AbstractPdkPdkProductRepository extends Repository implements Pdk
 {
     /**
      * @param  mixed $identifier
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkProduct
      */
     abstract public function getProduct($identifier): PdkProduct;
 
     /**
      * @param  mixed $identifier
-     *
-     * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
      */
     abstract public function getProductSettings($identifier): ProductSettings;
 
-    /**
-     * @param  array $identifiers
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection
-     */
     abstract public function getProducts(array $identifiers = []): PdkProductCollection;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
-     *
-     * @return void
-     */
     abstract public function update(PdkProduct $product): void;
 }

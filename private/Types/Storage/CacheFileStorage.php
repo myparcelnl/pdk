@@ -10,56 +10,30 @@ use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use RuntimeException;
 use Throwable;
 
-final class CacheFileStorage implements StorageInterface
+final readonly class CacheFileStorage implements StorageInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
-     */
-    private $fileSystem;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
-     */
-    public function __construct(FileSystemInterface $fileSystem)
+    public function __construct(private FileSystemInterface $fileSystem)
     {
-        $this->fileSystem = $fileSystem;
     }
 
-    /**
-     * @param  string $storageKey
-     *
-     * @return void
-     */
     public function delete(string $storageKey): void
     {
         $this->fileSystem->unlink($storageKey);
     }
 
-    /**
-     * @param  string $storageKey
-     *
-     * @return string
-     */
     public function get(string $storageKey): string
     {
         return $this->fileSystem->get($storageKey);
     }
 
-    /**
-     * @param  string $storageKey
-     *
-     * @return bool
-     */
     public function has(string $storageKey): bool
     {
         return $this->fileSystem->fileExists($storageKey);
     }
 
     /**
-     * @param  string $storageKey
-     * @param  mixed  $item
+     * @param  mixed $item
      *
-     * @return void
      * @throws \Exception
      */
     public function set(string $storageKey, $item): void

@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Repository\AbstractPdkAccountRepository;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
 final class MockPdkAccountRepository extends AbstractPdkAccountRepository
 {
@@ -50,32 +47,8 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
         ],
     ];
 
-    /**
-     * @var \MyParcelNL\Pdk\Account\Model\Account|null
-     */
-    private $storedAccount;
+    private ?Account $storedAccount = null;
 
-    /**
-     * @param  null|array                                                    $data
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
-     */
-    public function __construct(
-        ?array                      $data = [],
-        StorageInterface            $storage,
-        AccountRepository           $accountRepository,
-        SettingsRepositoryInterface $settingsRepository
-    ) {
-        parent::__construct($storage, $accountRepository, $settingsRepository);
-        $this->storedAccount = null === $data ? null : new Account(array_replace_recursive(self::DEFAULT_DATA, $data));
-    }
-
-    /**
-     * @return void
-     */
     public function deleteAccount(): void
     {
         $this->store(null);
@@ -84,8 +57,7 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
     /**
      * @param  null|\MyParcelNL\Pdk\Account\Model\Account $account
      *
-     * @return void
-     * @noinspection PhpOverridingMethodVisibilityInspection
+     * @return null|\MyParcelNL\Pdk\Account\Model\Account
      */
     public function store(?Account $account): ?Account
     {
@@ -94,9 +66,6 @@ final class MockPdkAccountRepository extends AbstractPdkAccountRepository
         return $this->save('account', $account);
     }
 
-    /**
-     * @return null|\MyParcelNL\Pdk\Account\Model\Account
-     */
     protected function getFromStorage(): ?Account
     {
         return $this->storedAccount;

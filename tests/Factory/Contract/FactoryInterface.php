@@ -6,9 +6,6 @@ namespace MyParcelNL\Pdk\Tests\Factory\Contract;
 
 interface FactoryInterface
 {
-    /**
-     * @return $this
-     */
     public function fromScratch(): FactoryInterface;
 
     /**

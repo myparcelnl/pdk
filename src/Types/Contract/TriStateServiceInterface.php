@@ -10,8 +10,6 @@ interface TriStateServiceInterface
      * Casts a value to -1, 0 or 1.
      *
      * @param  mixed $value
-     *
-     * @return int
      */
     public function cast($value): int;
 

@@ -16,9 +16,6 @@ final class TriStateOptionCalculator extends AbstractPdkOrderOptionCalculator
      */
     private $orderOptionsService;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
     public function __construct(PdkOrder $order)
     {
         parent::__construct($order);
@@ -26,9 +23,6 @@ final class TriStateOptionCalculator extends AbstractPdkOrderOptionCalculator
         $this->orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
     }
 
-    /**
-     * @return void
-     */
     public function calculate(): void
     {
         $this->orderOptionsService->calculateShipmentOptions($this->order);

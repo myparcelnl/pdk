@@ -20,9 +20,6 @@ final class AllowedInCarrierCalculator extends AbstractPdkOrderOptionCalculator
      */
     private $carrierSchema;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
     public function __construct(PdkOrder $order)
     {
         parent::__construct($order);
@@ -33,9 +30,6 @@ final class AllowedInCarrierCalculator extends AbstractPdkOrderOptionCalculator
         $this->carrierSchema = $schema->setCarrier($this->order->deliveryOptions->carrier);
     }
 
-    /**
-     * @return void
-     */
     public function calculate(): void
     {
         /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[] $definitions */

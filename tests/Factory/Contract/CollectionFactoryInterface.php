@@ -16,8 +16,6 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 interface CollectionFactoryInterface extends FactoryInterface
 {
     /**
-     * @param  int $amount
-     *
      * @return GCollectionFactory
      */
     public function amount(int $amount): CollectionFactoryInterface;
@@ -47,8 +45,7 @@ interface CollectionFactoryInterface extends FactoryInterface
     public function push(...$items): CollectionFactoryInterface;
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  mixed $value
      *
      * @return GCollectionFactory
      */

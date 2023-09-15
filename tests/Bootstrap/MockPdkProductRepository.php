@@ -51,48 +51,26 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     /**
      * @var \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection
      */
-    private $products;
+    private                      $products;
 
-    /**
-     * @var \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection
-     */
-    private $saved;
+    private PdkProductCollection $saved;
 
-    /**
-     * @param  array                                      $products
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
-     */
-    public function __construct(array $products = self::DEFAULT_PRODUCTS, MemoryCacheStorage $storage)
+    public function __construct(MemoryCacheStorage $storage)
     {
         parent::__construct($storage);
-        $this->reset($products);
+        $this->reset();
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection $products
-     *
-     * @return void
-     */
     public function add(PdkProductCollection $products): void
     {
         $this->products = $this->products->merge($products);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection
-     */
     public function getFromStorage(): PdkProductCollection
     {
         return $this->saved;
     }
 
-    /**
-     * @param $identifier
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkProduct
-     */
     public function getProduct($identifier): PdkProduct
     {
         $product = $this->products->firstWhere('externalIdentifier', $identifier);
@@ -106,19 +84,12 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
 
     /**
      * @param  mixed $identifier
-     *
-     * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
      */
     public function getProductSettings($identifier): ProductSettings
     {
         return $this->getProduct($identifier)['settings'];
     }
 
-    /**
-     * @param  array $identifiers
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection
-     */
     public function getProducts(array $identifiers = []): PdkProductCollection
     {
         if (empty($identifiers)) {
@@ -128,11 +99,6 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
         return $this->products->whereIn('externalIdentifier', $identifiers);
     }
 
-    /**
-     * @param  array $products
-     *
-     * @return void
-     */
     public function reset(array $products = self::DEFAULT_PRODUCTS): void
     {
         $this->saved    = new PdkProductCollection($products);
@@ -140,8 +106,7 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $data
+     * @param  mixed $data
      *
      * @return mixed
      */
@@ -153,9 +118,6 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
-     *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function update(PdkProduct $product): void

@@ -18,9 +18,6 @@ class ExampleGetShipmentLabelsLinkV2Response extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'pdf';

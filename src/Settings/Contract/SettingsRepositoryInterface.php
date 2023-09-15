@@ -29,17 +29,10 @@ interface SettingsRepositoryInterface
      */
     public function store(string $key, $value): void;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
-     *
-     * @return void
-     */
     public function storeAllSettings(Settings $settings): void;
 
     /**
      * @param  SettingsModelCollection|AbstractSettingsModel $settings
-     *
-     * @return void
      */
     public function storeSettings($settings): void;
 }

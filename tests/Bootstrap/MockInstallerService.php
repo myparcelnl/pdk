@@ -11,8 +11,6 @@ final class MockInstallerService extends InstallerService
 {
     /**
      * @param ...$args
-     *
-     * @return void
      */
     protected function executeInstallation(...$args): void
     {
@@ -23,8 +21,6 @@ final class MockInstallerService extends InstallerService
 
     /**
      * @param ...$args
-     *
-     * @return void
      */
     protected function executeUninstallation(...$args): void
     {

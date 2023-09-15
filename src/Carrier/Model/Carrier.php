@@ -26,32 +26,32 @@ use MyParcelNL\Pdk\Facade\Platform;
  */
 class Carrier extends Model
 {
-    public const CARRIER_POSTNL_ID               = 1;
-    public const CARRIER_POSTNL_NAME             = 'postnl';
-    public const CARRIER_BPOST_ID                = 2;
-    public const CARRIER_BPOST_NAME              = 'bpost';
-    public const CARRIER_CHEAP_CARGO_ID          = 3;
-    public const CARRIER_CHEAP_CARGO_NAME        = 'cheapcargo';
-    public const CARRIER_DPD_ID                  = 4;
-    public const CARRIER_DPD_NAME                = 'dpd';
-    public const CARRIER_INSTABOX_ID             = 5;
-    public const CARRIER_INSTABOX_NAME           = 'instabox';
-    public const CARRIER_DHL_ID                  = 6;
-    public const CARRIER_DHL_NAME                = 'dhl';
-    public const CARRIER_BOL_COM_ID              = 7;
-    public const CARRIER_BOL_COM_NAME            = 'bol.com';
-    public const CARRIER_UPS_ID                  = 8;
-    public const CARRIER_UPS_NAME                = 'ups';
-    public const CARRIER_DHL_FOR_YOU_ID          = 9;
-    public const CARRIER_DHL_FOR_YOU_NAME        = 'dhlforyou';
-    public const CARRIER_DHL_PARCEL_CONNECT_ID   = 10;
-    public const CARRIER_DHL_PARCEL_CONNECT_NAME = 'dhlparcelconnect';
-    public const CARRIER_DHL_EUROPLUS_ID         = 11;
-    public const CARRIER_DHL_EUROPLUS_NAME       = 'dhleuroplus';
+    final public const CARRIER_POSTNL_ID               = 1;
+    final public const CARRIER_POSTNL_NAME             = 'postnl';
+    final public const CARRIER_BPOST_ID                = 2;
+    final public const CARRIER_BPOST_NAME              = 'bpost';
+    final public const CARRIER_CHEAP_CARGO_ID          = 3;
+    final public const CARRIER_CHEAP_CARGO_NAME        = 'cheapcargo';
+    final public const CARRIER_DPD_ID                  = 4;
+    final public const CARRIER_DPD_NAME                = 'dpd';
+    final public const CARRIER_INSTABOX_ID             = 5;
+    final public const CARRIER_INSTABOX_NAME           = 'instabox';
+    final public const CARRIER_DHL_ID                  = 6;
+    final public const CARRIER_DHL_NAME                = 'dhl';
+    final public const CARRIER_BOL_COM_ID              = 7;
+    final public const CARRIER_BOL_COM_NAME            = 'bol.com';
+    final public const CARRIER_UPS_ID                  = 8;
+    final public const CARRIER_UPS_NAME                = 'ups';
+    final public const CARRIER_DHL_FOR_YOU_ID          = 9;
+    final public const CARRIER_DHL_FOR_YOU_NAME        = 'dhlforyou';
+    final public const CARRIER_DHL_PARCEL_CONNECT_ID   = 10;
+    final public const CARRIER_DHL_PARCEL_CONNECT_NAME = 'dhlparcelconnect';
+    final public const CARRIER_DHL_EUROPLUS_ID         = 11;
+    final public const CARRIER_DHL_EUROPLUS_NAME       = 'dhleuroplus';
     /**
      * Names to ids
      */
-    public const CARRIER_NAME_ID_MAP = [
+    final public const CARRIER_NAME_ID_MAP = [
         self::CARRIER_BOL_COM_NAME            => self::CARRIER_BOL_COM_ID,
         self::CARRIER_BPOST_NAME              => self::CARRIER_BPOST_ID,
         self::CARRIER_CHEAP_CARGO_NAME        => self::CARRIER_CHEAP_CARGO_ID,
@@ -67,8 +67,8 @@ class Carrier extends Model
     /**
      * Types
      */
-    public const  TYPE_CUSTOM = 'custom';
-    public const  TYPE_MAIN   = 'main';
+    final public const  TYPE_CUSTOM = 'custom';
+    final public const  TYPE_MAIN   = 'main';
 
     protected $attributes = [
         'externalIdentifier' => null,
@@ -111,7 +111,7 @@ class Carrier extends Model
         $repository = Pdk::get(CarrierRepositoryInterface::class);
 
         if (isset($data['externalIdentifier']) && ! isset($data['name'], $data['id'])) {
-            $parts = explode(':', $data['externalIdentifier']);
+            $parts = explode(':', (string) $data['externalIdentifier']);
 
             $data['name']           = $parts[0] ?? null;
             $data['subscriptionId'] = $parts[1] ?? null;
@@ -132,7 +132,6 @@ class Carrier extends Model
     }
 
     /**
-     * @return string
      * @noinspection PhpUnused
      */
     public function getExternalIdentifierAttribute(): string
@@ -147,7 +146,6 @@ class Carrier extends Model
     }
 
     /**
-     * @return bool
      * @noinspection PhpUnused
      */
     public function getIsDefaultAttribute(): bool
@@ -156,7 +154,6 @@ class Carrier extends Model
     }
 
     /**
-     * @return string
      * @noinspection PhpUnused
      */
     public function getTypeAttribute(): string

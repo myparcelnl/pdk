@@ -24,12 +24,6 @@ abstract class AbstractGenerateTypesCommand extends AbstractCommand
         $this->registerFilesArgument($this->getDefaultSourceDirectories());
     }
 
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
-     */
     final protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);

@@ -13,26 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class SynchronizeOrdersAction extends AbstractOrderAction
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository
-     */
-    private $orderRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
-     */
-    public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository, OrderRepository $orderRepository)
-    {
+    public function __construct(PdkOrderRepositoryInterface      $pdkOrderRepository,
+                                private readonly OrderRepository $orderRepository
+    ) {
         parent::__construct($pdkOrderRepository);
-        $this->orderRepository = $orderRepository;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $orderIds = $this->getOrderIds($request);

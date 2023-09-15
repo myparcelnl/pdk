@@ -21,9 +21,6 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
  */
 final class Pdk extends Facade
 {
-    /**
-     * @return string
-     */
     protected static function getFacadeAccessor(): string
     {
         return PdkInterface::class;

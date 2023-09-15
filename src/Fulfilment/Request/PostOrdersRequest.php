@@ -16,18 +16,9 @@ use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 
 class PostOrdersRequest extends Request
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     */
-    private $collection;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $collection
-     */
-    public function __construct(OrderCollection $collection)
+    public function __construct(private readonly OrderCollection $collection)
     {
         parent::__construct();
-        $this->collection = $collection;
     }
 
     /**
@@ -38,33 +29,22 @@ class PostOrdersRequest extends Request
     {
         return json_encode([
             'data' => [
-                'orders' => array_map(function (Order $order) {
-                    return $this->encodeOrder($order);
-                }, $this->collection->all()),
+                'orders' => array_map(fn(Order $order) => $this->encodeOrder($order), $this->collection->all()),
             ],
         ]);
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/fulfilment/orders';
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeOrder(Order $order): array
@@ -90,8 +70,6 @@ class PostOrdersRequest extends Request
 
     /**
      * @param  null|\MyParcelNL\Pdk\Base\Model\ContactDetails $address
-     *
-     * @return null|array
      */
     private function getAddress(?ContactDetails $address): ?array
     {
@@ -140,9 +118,6 @@ class PostOrdersRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getShipmentOptions(Shipment $shipment): array
@@ -154,8 +129,6 @@ class PostOrdersRequest extends Request
             'currency' => 'EUR',
         ];
 
-        return array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
-        }, $options);
+        return array_map(static fn($item) => is_bool($item) ? (int) $item : $item, $options);
     }
 }

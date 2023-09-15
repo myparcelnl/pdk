@@ -22,9 +22,6 @@ abstract class AbstractOptionDefinitionHelper implements OptionDefinitionHelperI
      */
     protected $triStateService;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
     public function __construct(PdkOrder $order)
     {
         $this->order = $order;
@@ -32,23 +29,14 @@ abstract class AbstractOptionDefinitionHelper implements OptionDefinitionHelperI
         $this->triStateService = Pdk::get(TriStateService::class);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
-     *
-     * @return null|string
-     */
     abstract protected function getDefinitionKey(OrderOptionDefinitionInterface $definition): ?string;
 
     /**
-     * @param  string $attribute
-     *
      * @return mixed
      */
     abstract protected function getValue(string $attribute);
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
-     *
      * @return mixed
      */
     public function get(OrderOptionDefinitionInterface $definition)

@@ -17,9 +17,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 $array              = array_fill(0, 30, 'appelboom');
-$bulkShipmentsArray = array_map(function ($item, $index) {
-    return ['id' => (int) $index + 1];
-}, $array, array_keys($array));
+$bulkShipmentsArray = array_map(fn($item, $index) => ['id' => (int) $index + 1], $array, array_keys($array));
 
 dataset('collections', [
     'single shipment id'                => [

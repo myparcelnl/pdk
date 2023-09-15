@@ -13,14 +13,10 @@ final class FormSetValueOperation extends AbstractFormOperation implements FormO
 {
     use HasFormTarget;
 
-    /**
-     * @var scalar
-     */
-    private $value;
+    private readonly int|float|string|bool $value;
 
     /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface $parent
-     * @param  scalar                                                                       $value
+     * @param  scalar $value
      */
     public function __construct(FormOperationBuilderInterface $parent, $value)
     {
@@ -33,17 +29,11 @@ final class FormSetValueOperation extends AbstractFormOperation implements FormO
         $this->value = $value;
     }
 
-    /**
-     * @return array
-     */
     public function createArray(): array
     {
         return ['$value' => $this->value] + parent::createArray();
     }
 
-    /**
-     * @return string
-     */
     protected function getOperationKey(): string
     {
         return '$setValue';

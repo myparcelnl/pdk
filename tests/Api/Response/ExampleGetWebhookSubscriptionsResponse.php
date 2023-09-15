@@ -19,9 +19,6 @@ class ExampleGetWebhookSubscriptionsResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'webhook_subscriptions';

@@ -18,35 +18,15 @@ use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 
 class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface
-     */
-    private $triStateService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface $triStateService
-     */
-    public function __construct(TriStateServiceInterface $triStateService)
+    public function __construct(private readonly TriStateServiceInterface $triStateService)
     {
-        $this->triStateService = $triStateService;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
     public function calculate(PdkOrder $order): PdkOrder
     {
         return (new PdkOrderCalculator($order))->calculateAll();
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     * @param  int                                      $flags
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
     public function calculateShipmentOptions(PdkOrder $order, int $flags = 0): PdkOrder
     {
         $helpers = Arr::flatten([
@@ -59,9 +39,8 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
         $definitions = Pdk::get('orderOptionDefinitions');
 
         foreach ($definitions as $definition) {
-            $values = array_map(static function (OptionDefinitionHelperInterface $helper) use ($definition) {
-                return $helper->get($definition);
-            }, $helpers);
+            $values = array_map(static fn(OptionDefinitionHelperInterface $helper) => $helper->get($definition),
+                $helpers);
 
             $value = $this->triStateService->resolve(...$values);
 

@@ -32,19 +32,14 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
      */
     protected $typeParser;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface                     $fileSystem
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpSourceParser $sourceParser
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser   $typeParser
-     */
     public function __construct(
         FileSystemInterface $fileSystem,
         PhpSourceParser     $sourceParser,
         PhpTypeParser       $typeParser
     ) {
-        $this->fileSystem   = $fileSystem;
+        $this->fileSystem = $fileSystem;
         $this->sourceParser = $sourceParser;
-        $this->typeParser   = $typeParser;
+        $this->typeParser = $typeParser;
     }
 
     /**
@@ -52,16 +47,8 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
      */
     abstract protected function getClass(): string;
 
-    /**
-     * @return string
-     */
     abstract protected function getTemplateFilename(): string;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return void
-     */
     final public function generate(ClassDefinition $definition): void
     {
         $path = $this->generateFilename($definition);
@@ -82,31 +69,16 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
         $this->log(sprintf('<success>Generated %s</success>', $path));
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     protected function createComments(ClassDefinition $definition): Collection
     {
         return new Collection();
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return string
-     */
     protected function createContent(ClassDefinition $definition): string
     {
         return strtr($this->getTemplate(), $this->getTemplateReplacers($definition));
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return string
-     */
     protected function createNamespace(ClassDefinition $definition): string
     {
         $basename = Utils::classBasename($this->getClass());
@@ -118,8 +90,6 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
      * @return array|string|string[]
      */
     protected function generateFilename(ClassDefinition $definition): string
@@ -133,9 +103,6 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getTemplate(): string
     {
         return $this->fileSystem->get(
@@ -143,11 +110,6 @@ abstract class AbstractFactoryGeneratorService implements FactoryServiceInterfac
         );
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return array
-     */
     protected function getTemplateReplacers(ClassDefinition $definition): array
     {
         return [

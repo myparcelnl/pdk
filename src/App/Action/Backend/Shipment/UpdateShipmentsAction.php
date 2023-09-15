@@ -20,36 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateShipmentsAction extends AbstractOrderAction
 {
-    /**
-     * @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface
-     */
-    private $pdkOrderNoteRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository
-     */
-    private $shipmentRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface     $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository             $shipmentRepository
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository
-     */
     public function __construct(
-        PdkOrderRepositoryInterface     $pdkOrderRepository,
-        ShipmentRepository              $shipmentRepository,
-        PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository
+        PdkOrderRepositoryInterface                      $pdkOrderRepository,
+        private readonly ShipmentRepository              $shipmentRepository,
+        private readonly PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->shipmentRepository     = $shipmentRepository;
-        $this->pdkOrderNoteRepository = $pdkOrderNoteRepository;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $orders    = $this->pdkOrderRepository->getMany($this->getOrderIds($request));
@@ -67,11 +45,6 @@ class UpdateShipmentsAction extends AbstractOrderAction
         ]);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     *
-     * @return void
-     */
     private function addBarcodeNotes(ShipmentCollection $shipments): void
     {
         if (! Settings::get(OrderSettings::BARCODE_IN_NOTE, OrderSettings::ID)) {

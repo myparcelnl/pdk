@@ -8,22 +8,13 @@ use MyParcelNL\Pdk\Logger\AbstractLogger;
 
 class MockLogger extends AbstractLogger
 {
-    /**
-     * @var array
-     */
-    private $logs = [];
+    private array $logs = [];
 
-    /**
-     * @return void
-     */
     public function clear(): void
     {
         $this->logs = [];
     }
 
-    /**
-     * @return void
-     */
     public function getLogs(): array
     {
         return $this->logs;
@@ -32,9 +23,6 @@ class MockLogger extends AbstractLogger
     /**
      * @param        $level
      * @param        $message
-     * @param  array $context
-     *
-     * @return void
      */
     public function log($level, $message, array $context = []): void
     {

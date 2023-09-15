@@ -12,24 +12,13 @@ final class FormBuilder implements FormBuilderInterface
     /**
      * @var \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface[]
      */
-    private $elements = [];
+    private array $elements = [];
 
-    /**
-     * @var array
-     */
-    private $prefixes;
-
-    /**
-     * @param  array $prefixes
-     */
-    public function __construct(array $prefixes = [])
+    public function __construct(private readonly array $prefixes = [])
     {
-        $this->prefixes = $prefixes;
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface ...$builders
-     *
      * @return $this
      */
     public function add(ElementBuilderInterface ...$builders): FormBuilderInterface
@@ -42,9 +31,6 @@ final class FormBuilder implements FormBuilderInterface
     }
 
     /**
-     * @param  callable                                                               $callback
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface ...$builders
-     *
      * @return $this
      */
     public function addWith(callable $callback, ElementBuilderInterface ...$builders): FormBuilderInterface
@@ -66,26 +52,16 @@ final class FormBuilder implements FormBuilderInterface
         return $this->elements;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
-     */
     public function build(): FormElementCollection
     {
         return new FormElementCollection(
             array_map(
-                static function (ElementBuilderInterface $builder) {
-                    return $builder->make();
-                },
+                static fn(ElementBuilderInterface $builder) => $builder->make(),
                 $this->elements
             )
         );
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface $builder
-     *
-     * @return void
-     */
     private function addBuilder(ElementBuilderInterface $builder): void
     {
         $this->elements[] = $builder->withPrefixes(...$this->prefixes);

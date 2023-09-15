@@ -39,27 +39,10 @@ abstract class AbstractContext extends TestCase implements ContextInterface
     private const AFTER_FEATURE   = 'afterFeature';
     private const BEFORE_FEATURE  = 'beforeFeature';
 
-    /**
-     * @var array
-     */
-    private static $hooks = [];
-
-    /**
-     * @param  null|string $name
-     * @param  array       $data
-     * @param  string      $dataName
-     */
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-    }
+    private static array $hooks = [];
 
     /**
      * @AfterFeature
-     *
-     * @param  \Behat\Behat\Hook\Scope\AfterFeatureScope $scope
-     *
-     * @return void
      */
     final public static function afterFeature(AfterFeatureScope $scope): void
     {
@@ -68,10 +51,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @AfterSuite
-     *
-     * @param  \Behat\Testwork\Hook\Scope\AfterSuiteScope $scope
-     *
-     * @return void
      */
     final public static function afterSuite(AfterSuiteScope $scope): void
     {
@@ -80,10 +59,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @BeforeFeature
-     *
-     * @param  \Behat\Behat\Hook\Scope\BeforeFeatureScope $scope
-     *
-     * @return void
      */
     final public static function beforeFeature(BeforeFeatureScope $scope): void
     {
@@ -92,21 +67,12 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @BeforeSuite
-     *
-     * @param  \Behat\Testwork\Hook\Scope\BeforeSuiteScope $scope
-     *
-     * @return void
      */
     final public static function beforeSuite(BeforeSuiteScope $scope): void
     {
         self::executeHooks(self::BEFORE_SUITE, $scope);
     }
 
-    /**
-     * @param  string $message
-     *
-     * @return string
-     */
     protected static function withLogs(string $message): string
     {
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
@@ -116,12 +82,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
         return trim(sprintf('%s Logs: %s', $message, $logsJson));
     }
 
-    /**
-     * @param  string                               $hook
-     * @param  \Behat\Testwork\Hook\Scope\HookScope $scope
-     *
-     * @return void
-     */
     private static function executeHooks(string $hook, HookScope $scope): void
     {
         foreach (self::$hooks[$hook] ?? [] as $callable) {
@@ -129,11 +89,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
         }
     }
 
-    /**
-     * @param  string $hook
-     *
-     * @return void
-     */
     private static function resetHooks(string $hook): void
     {
         self::$hooks[$hook] = [];
@@ -141,10 +96,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @AfterScenario
-     *
-     * @param  \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
-     *
-     * @return void
      */
     final public function afterScenario(AfterScenarioScope $scope): void
     {
@@ -153,10 +104,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @AfterStep
-     *
-     * @param  \Behat\Behat\Hook\Scope\AfterStepScope $scope
-     *
-     * @return void
      */
     final public function afterStep(AfterStepScope $scope): void
     {
@@ -165,10 +112,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @BeforeScenario
-     *
-     * @param  \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
-     *
-     * @return void
      */
     final public function beforeScenario(BeforeScenarioScope $scope): void
     {
@@ -177,29 +120,17 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @BeforeStep
-     *
-     * @param  \Behat\Behat\Hook\Scope\BeforeStepScope $scope
-     *
-     * @return void
      */
     final public function beforeStep(BeforeStepScope $scope): void
     {
         self::executeHooks(self::BEFORE_STEP, $scope);
     }
 
-    /**
-     * @return string
-     */
     protected function getValidApiKey(): string
     {
         return getenv(sprintf('API_KEY_%s', strtoupper(Platform::getPlatform()))) ?: TestBootstrapper::API_KEY_VALID;
     }
 
-    /**
-     * @param  string $method
-     *
-     * @return void
-     */
     protected function markDebugMethod(string $method): void
     {
         self::markTestIncomplete(sprintf('Step %s is only for debugging purposes. Remove it when done.', $method));
@@ -207,7 +138,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
     /**
      * @param  null|\MyParcelNL\Pdk\Account\Model\Account $model
-     * @param  string                                     $key
      *
      * @return null|mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
@@ -217,81 +147,41 @@ abstract class AbstractContext extends TestCase implements ContextInterface
         return $model->getAttribute(strtolower($key));
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onAfterFeature(callable $callable): void
     {
         $this->addHook(self::AFTER_FEATURE, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onAfterScenario(callable $callable): void
     {
         $this->addHook(self::AFTER_SCENARIO, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onAfterStep(callable $callable): void
     {
         $this->addHook(self::AFTER_STEP, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onAfterSuite(callable $callable): void
     {
         $this->addHook(self::AFTER_SUITE, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onBeforeFeature(callable $callable): void
     {
         $this->addHook(self::BEFORE_FEATURE, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onBeforeScenario(callable $callable): void
     {
         $this->addHook(self::BEFORE_SCENARIO, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onBeforeStep(callable $callable): void
     {
         $this->addHook(self::BEFORE_STEP, $callable);
     }
 
-    /**
-     * @param  callable $callable
-     *
-     * @return void
-     */
     protected function onBeforeSuite(callable $callable): void
     {
         $this->addHook(self::BEFORE_SUITE, $callable);
@@ -316,18 +206,10 @@ abstract class AbstractContext extends TestCase implements ContextInterface
 
                 return [$key => $value];
             })
-            ->filter(static function ($value, string $key): bool {
-                return 'key' !== $key;
-            })
+            ->filter(static fn($value, string $key): bool => 'key' !== $key)
             ->toArray();
     }
 
-    /**
-     * @param  string   $hook
-     * @param  callable $callable
-     *
-     * @return void
-     */
     private function addHook(string $hook, callable $callable): void
     {
         if (! isset(self::$hooks[$hook])) {

@@ -16,11 +16,6 @@ use MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse;
 
 class OrderRepository extends ApiRepository
 {
-    /**
-     * @param  string $uuid
-     *
-     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
-     */
     public function get(string $uuid): Order
     {
         $request = new GetOrderRequest($uuid);
@@ -34,9 +29,6 @@ class OrderRepository extends ApiRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $collection
-     *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      * @noinspection PhpUnused
      */
     public function postOrders(OrderCollection $collection): OrderCollection
@@ -48,9 +40,6 @@ class OrderRepository extends ApiRepository
     }
 
     /**
-     * @param  array $parameters
-     *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      * @noinspection PhpUnused
      */
     public function query(array $parameters): OrderCollection

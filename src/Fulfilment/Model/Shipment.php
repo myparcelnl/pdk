@@ -52,13 +52,11 @@ class Shipment extends Model
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
-        $this->attributes['carrier'] = $this->attributes['carrier'] ?? Platform::get('defaultCarrierId');
+        $this->attributes['carrier'] ??= Platform::get('defaultCarrierId');
     }
 
     /**
      * @param  null|\MyParcelNL\Pdk\Shipment\Model\Shipment $pdkShipment
-     *
-     * @return \MyParcelNL\Pdk\Fulfilment\Model\Shipment
      */
     public static function fromPdkShipment(?PdkShipment $pdkShipment): self
     {

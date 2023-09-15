@@ -12,24 +12,19 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 class Config implements ConfigInterface
 {
-    private static $cache = [];
+    private static array $cache = [];
 
     /**
      * @var \MyParcelNL\Pdk\Base\FileSystemInterface
      */
     protected $fileSystem;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
-     */
     public function __construct(FileSystemInterface $fileSystem)
     {
         $this->fileSystem = $fileSystem;
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      */
     public function get(string $key)
@@ -48,8 +43,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      */
     protected function getFileByKey(string $key)
@@ -80,15 +73,13 @@ class Config implements ConfigInterface
     protected function getFilenameParserMap(): array
     {
         return [
-            '.php' => [$this, 'parsePhp'],
-            '.inc' => [$this, 'parsePhp'],
-            '.json' => [$this, 'parseJson'],
+            '.php' => $this->parsePhp(...),
+            '.inc' => $this->parsePhp(...),
+            '.json' => $this->parseJson(...),
         ];
     }
 
     /**
-     * @param  string $filename
-     *
      * @return null|mixed
      * @noinspection MultipleReturnStatementsInspection
      */
@@ -106,8 +97,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param  string $filename
-     *
      * @return mixed
      */
     protected function loadByKey(string $filename)
@@ -133,28 +122,17 @@ class Config implements ConfigInterface
         throw new InvalidArgumentException(sprintf('File "%s" not found.', $filename));
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return array
-     */
     protected function loadDirectory(string $path): array
     {
-        $files = array_filter($this->fileSystem->scandir($path), static function ($file) {
-            return ! in_array($file, ['.', '..']);
-        });
+        $files = array_filter($this->fileSystem->scandir($path), static fn($file) => ! in_array($file, ['.', '..']));
 
         return array_combine(
             $files,
-            array_map(function ($file) use ($path) {
-                return $this->loadFileCached("$path/$file");
-            }, $files)
+            array_map(fn($file) => $this->loadFileCached("$path/$file"), $files)
         );
     }
 
     /**
-     * @param  string $path
-     *
      * @return mixed
      */
     protected function loadFile(string $path)
@@ -163,17 +141,13 @@ class Config implements ConfigInterface
 
         $parser = array_reduce(
             array_keys($map),
-            static function ($carry, $extension) use ($map, $path) {
-                return Str::endsWith($path, $extension) ? $map[$extension] : $carry;
-            }
+            static fn($carry, $extension) => Str::endsWith($path, $extension) ? $map[$extension] : $carry
         );
 
         return $parser ? $parser($path) : null;
     }
 
     /**
-     * @param  string $filename
-     *
      * @return mixed
      */
     protected function loadFileCached(string $filename)
@@ -185,21 +159,11 @@ class Config implements ConfigInterface
         return self::$cache[$filename];
     }
 
-    /**
-     * @param  string $filename
-     *
-     * @return array
-     */
     protected function parseJson(string $filename): array
     {
         return json_decode($this->fileSystem->get($filename), true);
     }
 
-    /**
-     * @param  string $filename
-     *
-     * @return array
-     */
     protected function parsePhp(string $filename): array
     {
         return require $filename;

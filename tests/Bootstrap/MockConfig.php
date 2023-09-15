@@ -13,15 +13,8 @@ final class MockConfig extends Config
 {
     public const SUBSCRIPTION_ID_DHL_FOR_YOU = 23182;
 
-    /**
-     * @var array
-     */
-    private $config;
+    private readonly array $config;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
-     * @param  array                                    $data
-     */
     public function __construct(FileSystemInterface $fileSystem, array $data = [])
     {
         parent::__construct($fileSystem);
@@ -32,8 +25,6 @@ final class MockConfig extends Config
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      */
     public function get(string $key)
@@ -46,8 +37,6 @@ final class MockConfig extends Config
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      */
     private function getFromRealConfig(string $key)

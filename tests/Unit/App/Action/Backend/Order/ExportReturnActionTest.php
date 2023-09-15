@@ -23,35 +23,36 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor([
-            [
-                'externalIdentifier' => '701',
-                'shipments'          => [
-                    [
-                        'id'                  => 100001,
-                        'referenceIdentifier' => '1',
-                    ],
-                    [
-                        'id'                  => 100002,
-                        'referenceIdentifier' => '2',
-                        'deliveryOptions'     => [
-                            'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
-                            'shipmentOptions' => [
-                                'signature' => true,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'externalIdentifier' => '247',
-                'deliveryOptions'    => [
-                    'carrier'      => Carrier::CARRIER_POSTNL_NAME,
-                    'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
-                ],
-            ],
-        ]),
+        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
+        //            ->constructor([
+        //                [
+        //                    'externalIdentifier' => '701',
+        //                    'shipments'          => [
+        //                        [
+        //                            'id'                  => 100001,
+        //                            'referenceIdentifier' => '1',
+        //                        ],
+        //                        [
+        //                            'id'                  => 100002,
+        //                            'referenceIdentifier' => '2',
+        //                            'deliveryOptions'     => [
+        //                                'carrier'         => Carrier::CARRIER_POSTNL_NAME,
+        //                                'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+        //                                'shipmentOptions' => [
+        //                                    'signature' => true,
+        //                                ],
+        //                            ],
+        //                        ],
+        //                    ],
+        //                ],
+        //                [
+        //                    'externalIdentifier' => '247',
+        //                    'deliveryOptions'    => [
+        //                        'carrier'      => Carrier::CARRIER_POSTNL_NAME,
+        //                        'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+        //                    ],
+        //                ],
+        //            ]),
     ]),
     new UsesApiMock()
 );
@@ -66,7 +67,7 @@ it('exports return', function () {
         'orderIds' => ['701', '247'],
     ]);
 
-    $content = json_decode($response->getContent(), true);
+    $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     expect($response)
         ->toBeInstanceOf(Response::class)

@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class ShipmentLabelCreatedWebhook extends AbstractHook
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     public function handle(Request $request): void
     {
         $content = $this->getHookBody($request);
@@ -26,9 +21,6 @@ final class ShipmentLabelCreatedWebhook extends AbstractHook
         ]);
     }
 
-    /**
-     * @return string
-     */
     protected function getHookEvent(): string
     {
         return WebhookSubscription::SHIPMENT_LABEL_CREATED;

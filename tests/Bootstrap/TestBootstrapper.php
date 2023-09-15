@@ -17,10 +17,7 @@ final class TestBootstrapper
     public const API_KEY_VALID = 'valid-api-key';
 
     /**
-     * @param  string                                                                $apiKey
      * @param  int|ShopCollection|CollectionFactoryInterface|ModelFactoryInterface[] $shops
-     *
-     * @return void
      */
     public static function hasAccount(string $apiKey = self::API_KEY_VALID, $shops = 1): void
     {

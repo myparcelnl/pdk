@@ -8,9 +8,6 @@ use MyParcelNL\Pdk\Api\Request\Request;
 
 class GetSubscriptionFeaturesRequest extends Request
 {
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/acl';

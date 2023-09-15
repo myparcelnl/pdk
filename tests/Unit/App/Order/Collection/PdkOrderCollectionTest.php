@@ -22,9 +22,7 @@ it('holds PdkOrders', function () {
     expect($pdkOrderCollection->count())
         ->toBe(2)
         ->and(
-            $pdkOrderCollection->every(function ($pdkOrder) {
-                return $pdkOrder instanceof PdkOrder;
-            })
+            $pdkOrderCollection->every(fn($pdkOrder) => $pdkOrder instanceof PdkOrder)
         )
         ->toBeTrue()
         ->and($pdkOrderCollection->every('externalIdentifier', '!=', null))
@@ -43,9 +41,7 @@ it('can generate a shipment on each order', function () {
     expect($pdkOrderCollection->count())
         ->toBe(2)
         ->and(
-            $pdkOrderCollection->every(function (PdkOrder $order) {
-                return 2 === $order->shipments->count();
-            })
+            $pdkOrderCollection->every(fn(PdkOrder $order) => 2 === $order->shipments->count())
         )
         ->toBeTrue();
 });
@@ -132,9 +128,7 @@ it('updates order shipments by shipment ids', function () {
     );
 
     // TODO: simplify when collections support "only" method
-    $shipments = array_map(function (array $shipment) {
-        return Arr::only($shipment, ['id', 'orderId', 'status']);
-    },
+    $shipments = array_map(fn(array $shipment) => Arr::only($shipment, ['id', 'orderId', 'status']),
         $orders->getAllShipments()
             ->toArray());
 
@@ -183,9 +177,7 @@ it('updates order shipments by order ids', function () {
     );
 
     // TODO: simplify when collections support "only" method
-    $shipments = array_map(function (array $shipment) {
-        return Arr::only($shipment, ['id', 'orderId', 'status']);
-    },
+    $shipments = array_map(fn(array $shipment) => Arr::only($shipment, ['id', 'orderId', 'status']),
         $orders->getAllShipments()
             ->toArray());
 

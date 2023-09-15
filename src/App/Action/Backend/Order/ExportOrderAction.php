@@ -28,35 +28,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportOrderAction extends AbstractOrderAction
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository
-     */
-    private $orderRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository
-     */
-    private $shipmentRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
-     */
     public function __construct(
-        PdkOrderRepositoryInterface $pdkOrderRepository,
-        OrderRepository             $orderRepository,
-        ShipmentRepository          $shipmentRepository
+        PdkOrderRepositoryInterface         $pdkOrderRepository,
+        private readonly OrderRepository    $orderRepository,
+        private readonly ShipmentRepository $shipmentRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->orderRepository    = $orderRepository;
-        $this->shipmentRepository = $shipmentRepository;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
     public function handle(Request $request): Response
@@ -73,10 +53,6 @@ class ExportOrderAction extends AbstractOrderAction
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     * @param  \Symfony\Component\HttpFoundation\Request               $request
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      * @throws \Exception
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
@@ -94,11 +70,6 @@ class ExportOrderAction extends AbstractOrderAction
         return $response;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
-     */
     protected function exportOrders(PdkOrderCollection $orders): PdkOrderCollection
     {
         $fulfilmentOrders = new OrderCollection(
@@ -129,9 +100,6 @@ class ExportOrderAction extends AbstractOrderAction
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      * @throws \Exception
      */
     protected function exportShipments(PdkOrderCollection $orders): PdkOrderCollection
@@ -171,28 +139,18 @@ class ExportOrderAction extends AbstractOrderAction
         return $orders;
     }
 
-    /**
-     * @return bool
-     */
     protected function notSharingCustomerInformation(): bool
     {
         return ! Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
-     */
     protected function validateOrders(PdkOrderCollection $orders): PdkOrderCollection
     {
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $orderService */
         $orderService = Pdk::get(PdkOrderOptionsServiceInterface::class);
 
         return $orders
-            ->map(static function (PdkOrder $order) use ($orderService) {
-                return $orderService->calculate($order);
-            })
+            ->map(static fn(PdkOrder $order) => $orderService->calculate($order))
             ->filter(static function (PdkOrder $order) {
                 $validator = $order->getValidator();
 
@@ -210,9 +168,8 @@ class ExportOrderAction extends AbstractOrderAction
 
                 Notifications::error(
                     "Failed to export order $order->externalIdentifier",
-                    array_map(static function (array $error) {
-                        return sprintf('%s: %s', $error['property'], $error['message']);
-                    }, $validatorErrors)
+                    array_map(static fn(array $error) => sprintf('%s: %s', $error['property'], $error['message']),
+                        $validatorErrors)
                 );
 
                 return false;
@@ -221,11 +178,6 @@ class ExportOrderAction extends AbstractOrderAction
 
     /**
      * Reset shipment options that were originally set to "inherit" because they've been modified by the PdkOrderOptionsService.
-     *
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $originalOrders
-     *
-     * @return void
      */
     private function saveOrders(PdkOrderCollection $orders, PdkOrderCollection $originalOrders): void
     {
@@ -238,9 +190,7 @@ class ExportOrderAction extends AbstractOrderAction
 
             $inheritedAttributes = Arr::where(
                 $originalOrder->deliveryOptions->shipmentOptions->getAttributes(),
-                static function ($value) {
-                    return TriStateService::INHERIT === $value;
-                }
+                static fn($value) => TriStateService::INHERIT === $value
             );
 
             $order->deliveryOptions->shipmentOptions->fill($inheritedAttributes);

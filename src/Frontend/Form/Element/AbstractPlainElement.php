@@ -38,26 +38,17 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     /**
      * @var mixed
      */
-    private $attributes = [];
+    private array $attributes = [];
 
-    /**
-     * @var array
-     */
-    private $props = [];
+    private array $props      = [];
 
     abstract protected function getComponent(): string;
 
-    /**
-     * @return null|string
-     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface
-     */
     public function make(): ElementInterface
     {
         return (new PlainElement($this->getComponent(), $this->getProps(), $this->getContent()))
@@ -81,8 +72,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  mixed $value
      *
      * @return $this
      */
@@ -92,8 +82,6 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     }
 
     /**
-     * @param  array $attributes
-     *
      * @return $this
      */
     public function withAttributes(array $attributes): ElementBuilderInterface
@@ -104,8 +92,6 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     }
 
     /**
-     * @param  string $name
-     *
      * @return $this
      */
     public function withName(string $name): ElementBuilderInterface
@@ -115,11 +101,6 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
         return $this;
     }
 
-    /**
-     * @param  string ...$prefixes
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface
-     */
     public function withPrefixes(string ...$prefixes): ElementBuilderInterface
     {
         $this->prefixes = $prefixes;
@@ -128,8 +109,7 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  mixed $value
      *
      * @return $this
      */
@@ -139,8 +119,6 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
     }
 
     /**
-     * @param  array $props
-     *
      * @return $this
      */
     public function withProps(array $props): ElementBuilderInterface
@@ -150,9 +128,6 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
         return $this;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder
-     */
     protected function getBuilder(): FormOperationBuilder
     {
         if (! isset($this->builder)) {
@@ -162,17 +137,11 @@ abstract class AbstractPlainElement implements PlainElementBuilderInterface
         return $this->builder;
     }
 
-    /**
-     * @return null|string
-     */
     protected function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @return array
-     */
     protected function getProps(): array
     {
         $this->executeHooks(ElementBuilderInterface::HOOK_PROPS);

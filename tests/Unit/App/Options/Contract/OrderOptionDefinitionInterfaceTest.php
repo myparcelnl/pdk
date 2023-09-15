@@ -63,7 +63,7 @@ it('snapshots all definitions', function () use ($definitions) {
         ];
     }, $definitions);
 
-    assertMatchesJsonSnapshot(json_encode((new Collection($items))->toArrayWithoutNull()));
+    assertMatchesJsonSnapshot(json_encode((new Collection($items))->toArrayWithoutNull(), JSON_THROW_ON_ERROR));
 });
 
 it('can validate', function () use ($definitions) {

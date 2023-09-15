@@ -72,15 +72,13 @@ it('exports order', function (
             ->getContents()
     );
 
-    $content = json_decode($response->getContent(), true);
+    $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
     $errors = Notifications::all()
-        ->filter(function (Notification $notification) {
-            return $notification->variant === Notification::VARIANT_ERROR;
-        });
+        ->filter(fn(Notification $notification) => $notification->variant === Notification::VARIANT_ERROR);
 
     expect($response)
         ->toBeInstanceOf(Response::class)
@@ -135,7 +133,9 @@ it('exports order without customer information if setting is false', function (
     $content = json_decode(
         $lastRequest->getBody()
             ->getContents(),
-        true
+        true,
+        512,
+        JSON_THROW_ON_ERROR
     );
 
     $postedAddress = Arr::get(
@@ -230,7 +230,7 @@ it('exports order and directly returns barcode if concept shipments is off', fun
         'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
     ]);
 
-    $content = json_decode($response->getContent(), true);
+    $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
@@ -238,7 +238,7 @@ it('exports order and directly returns barcode if concept shipments is off', fun
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($responseOrders)
-        ->toHaveLength(count($responseOrders))
+        ->toHaveLength(is_countable($responseOrders) ? count($responseOrders) : 0)
         ->and($response->getStatusCode())
         ->toBe(200)
         ->and($responseShipments)->each->toHaveLength(1)

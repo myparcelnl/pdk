@@ -43,7 +43,7 @@ it('creates shipment collection from queried data', function (string $responseCl
         ->and($shipment->deliveryOptions->carrier->externalIdentifier)
         ->toBe($shipment->carrier->externalIdentifier);
 
-    assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
+    assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities, JSON_THROW_ON_ERROR));
 })->with([
     'normal shipment' => [
         'response' => ExampleGetShipmentsResponse::class,

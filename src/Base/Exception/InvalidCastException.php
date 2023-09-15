@@ -10,18 +10,16 @@ use Throwable;
 class InvalidCastException extends Exception
 {
     /**
-     * @param  string          $key
-     * @param  mixed           $castType
-     * @param  mixed           $arguments
      * @param  null|\Throwable $exception
      */
-    public function __construct(string $key, $castType, $arguments = null, Throwable $exception = null)
+    public function __construct(string $key, mixed $castType, mixed $arguments = null, Throwable $exception = null)
     {
         $this->message = sprintf(
             'Failed to cast "%s" to "%s"%s.%s',
             $key,
             $castType,
-            $arguments ? sprintf(' with the following arguments: %s', json_encode($arguments)) : '',
+            $arguments ? sprintf(' with the following arguments: %s', json_encode($arguments, JSON_THROW_ON_ERROR))
+                : '',
             $exception ? sprintf(' Reason: %s', $exception->getMessage()) : ''
         );
 

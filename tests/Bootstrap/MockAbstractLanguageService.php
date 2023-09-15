@@ -10,15 +10,8 @@ use MyParcelNL\Pdk\Language\Service\AbstractLanguageService;
 
 class MockAbstractLanguageService extends AbstractLanguageService
 {
-    /**
-     * @var string
-     */
-    private $language = 'en-GB';
+    private string $language = 'en-GB';
 
-    /**
-     * @param  \MyParcelNL\Pdk\Language\Repository\LanguageRepository $repository
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface               $fileSystem
-     */
     public function __construct(LanguageRepository $repository, FileSystemInterface $fileSystem)
     {
         parent::__construct($repository, $fileSystem);
@@ -48,17 +41,12 @@ class MockAbstractLanguageService extends AbstractLanguageService
         );
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
     }
 
     /**
-     * @param  string $language
-     *
      * @return $this
      * @noinspection PhpUnused
      */
@@ -70,8 +58,6 @@ class MockAbstractLanguageService extends AbstractLanguageService
 
     /**
      * @param  null|string $language
-     *
-     * @return string
      */
     protected function getFilePath(?string $language = null): string
     {

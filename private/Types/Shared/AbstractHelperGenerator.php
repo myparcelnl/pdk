@@ -41,14 +41,8 @@ abstract class AbstractHelperGenerator
     /**
      * @var array<string,resource>
      */
-    private $handles;
+    private ?array $handles = null;
 
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
-     * @param  string                                                                    $baseDir
-     */
     public function __construct(
         InputInterface            $input,
         OutputInterface           $output,
@@ -58,17 +52,12 @@ abstract class AbstractHelperGenerator
         $this->setCommandContext($input, $output);
 
         $this->definitions = $definitions
-            ->filter(function (ClassDefinition $definition): bool {
-                return $this->classAllowed($definition);
-            });
+            ->filter(fn(ClassDefinition $definition): bool => $this->classAllowed($definition));
 
         $this->baseDir    = $baseDir;
         $this->fileSystem = Pdk::get(FileSystemInterface::class);
     }
 
-    /**
-     * @return void
-     */
     abstract protected function generate(): void;
 
     /**
@@ -87,9 +76,6 @@ abstract class AbstractHelperGenerator
         return $this->handles[$filename];
     }
 
-    /**
-     * @return void
-     */
     public function run(): void
     {
         $time          = $this->getTime();
@@ -102,11 +88,6 @@ abstract class AbstractHelperGenerator
         $this->output->writeln(sprintf('🏁 Finished running %s in %s', $classBasename, $this->printTimeSince($time)));
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return bool
-     */
     protected function classAllowed(ClassDefinition $definition): bool
     {
         $whitelist = $this->getAllowedClasses();
@@ -115,16 +96,11 @@ abstract class AbstractHelperGenerator
             return true;
         }
 
-        return (bool) Arr::first($whitelist, static function (string $class) use ($definition): bool {
-            return $definition->isSubclassOf($class);
-        });
+        return (bool) Arr::first($whitelist, static fn(string $class): bool => $definition->isSubclassOf($class));
     }
 
     /**
      * @param  resource $handle
-     * @param  string   $filename
-     *
-     * @return void
      */
     protected function close($handle, string $filename): void
     {
@@ -143,9 +119,6 @@ abstract class AbstractHelperGenerator
 
     /**
      * @param  resource $handle
-     * @param  string   $content
-     *
-     * @return void
      */
     protected function write($handle, string $content): void
     {
@@ -154,9 +127,6 @@ abstract class AbstractHelperGenerator
 
     /**
      * @param  resource $handle
-     * @param  array    $lines
-     *
-     * @return void
      */
     protected function writeLines($handle, array $lines): void
     {

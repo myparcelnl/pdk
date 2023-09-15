@@ -39,7 +39,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class OrderDataContext extends PdkOrder
 {
-    public const ID = Context::ID_ORDER_DATA;
+    final public const ID = Context::ID_ORDER_DATA;
 
     public function __construct(?array $data = null)
     {
@@ -53,7 +53,6 @@ class OrderDataContext extends PdkOrder
      *
      * @param  null|int $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toArray(?int $flags = null): array

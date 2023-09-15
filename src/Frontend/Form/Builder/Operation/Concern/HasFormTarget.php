@@ -13,8 +13,6 @@ trait HasFormTarget
 {
     /**
      * @param  null|string $target
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationInterface
      */
     public function on(?string $target): FormOperationInterface
     {

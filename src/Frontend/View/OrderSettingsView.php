@@ -19,18 +19,9 @@ use MyParcelNL\Pdk\Settings\Model\OrderSettings;
  */
 final class OrderSettingsView extends NewAbstractSettingsView
 {
-    /**
-     * @var \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface
-     */
-    private $orderStatusService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
-     */
-    public function __construct(OrderStatusServiceInterface $orderStatusService)
+    public function __construct(private readonly OrderStatusServiceInterface $orderStatusService)
     {
         parent::__construct();
-        $this->orderStatusService = $orderStatusService;
     }
 
     protected function addElements(): void

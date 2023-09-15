@@ -8,10 +8,7 @@ use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 
 class GetLabelsPdfResponse extends ApiResponseWithBody
 {
-    /**
-     * @var string
-     */
-    private $pdf;
+    private ?string $pdf = null;
 
     /**
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection

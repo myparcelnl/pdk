@@ -13,14 +13,8 @@ class MockMigration110 implements MigrationInterface
 {
     private const SETTING_KEY = LabelSettings::ID . '.' . LabelSettings::DESCRIPTION;
 
-    /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
-     */
-    private $settingsRepository;
-
-    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    public function __construct(private readonly SettingsRepositoryInterface $settingsRepository)
     {
-        $this->settingsRepository = $settingsRepository;
     }
 
     public function down(): void
@@ -38,9 +32,6 @@ class MockMigration110 implements MigrationInterface
         $this->settingsRepository->store($this->getSettingKey(), 'new-description');
     }
 
-    /**
-     * @return string
-     */
     private function getSettingKey(): string
     {
         return Pdk::get('createSettingsKey')(self::SETTING_KEY);

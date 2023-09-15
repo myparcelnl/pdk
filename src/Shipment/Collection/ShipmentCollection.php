@@ -20,8 +20,6 @@ class ShipmentCollection extends Collection
     /**
      * Set ID and reference ID of shipment from API response.
      *
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
-     *
      * @return $this
      */
     public function addIds(Collection $ids): self
@@ -35,24 +33,16 @@ class ShipmentCollection extends Collection
         return $this;
     }
 
-    /**
-     * @return self
-     */
     public function filterNotDeleted(): self
     {
         return $this->where('deleted', null);
     }
 
-    /**
-     * @return void
-     */
     public function toStorableArray(): array
     {
         return $this
             ->filterNotDeleted()
-            ->map(function (Shipment $shipment) {
-                return $shipment->toStorableArray();
-            })
+            ->map(fn(Shipment $shipment) => $shipment->toStorableArray())
             ->toArrayWithoutNull();
     }
 }

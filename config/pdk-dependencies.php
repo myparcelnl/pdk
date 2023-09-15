@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use function DI\factory;
@@ -9,7 +11,7 @@ use function DI\value;
 
 return [
     'pdkVersion'                => factory(function (FileSystemInterface $fileSystem): string {
-        $composerJson = json_decode($fileSystem->get(__DIR__ . '/../composer.json'), true);
+        $composerJson = json_decode($fileSystem->get(__DIR__ . '/../composer.json'), true, 512, JSON_THROW_ON_ERROR);
 
         return $composerJson['version'];
     }),
@@ -44,7 +46,7 @@ return [
     /**
      * Whether the current php version is supported.
      */
-    'isPhpVersionSupported'     => factory(function (): bool {
-        return version_compare(PHP_VERSION, Pdk::get('minimumPhpVersion'), '>=');
-    }),
+    'isPhpVersionSupported'     => factory(
+        fn(): bool => version_compare(PHP_VERSION, Pdk::get('minimumPhpVersion'), '>=')
+    ),
 ];

@@ -8,9 +8,6 @@ use MyParcelNL\Pdk\Api\Request\Request;
 
 class GetWebhookSubscriptionsRequest extends Request
 {
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/webhook_subscriptions';

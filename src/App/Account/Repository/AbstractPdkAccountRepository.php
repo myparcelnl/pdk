@@ -16,29 +16,12 @@ use Throwable;
 
 abstract class AbstractPdkAccountRepository extends Repository implements PdkAccountRepositoryInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Account\Repository\AccountRepository
-     */
-    private $accountRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
-     */
-    private $settingsRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
-     */
     public function __construct(
-        StorageInterface            $storage,
-        AccountRepository           $accountRepository,
-        SettingsRepositoryInterface $settingsRepository
+        StorageInterface                             $storage,
+        private readonly AccountRepository           $accountRepository,
+        private readonly SettingsRepositoryInterface $settingsRepository
     ) {
         parent::__construct($storage);
-        $this->accountRepository  = $accountRepository;
-        $this->settingsRepository = $settingsRepository;
     }
 
     /**
@@ -46,11 +29,6 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
      */
     abstract protected function getFromStorage(): ?Account;
 
-    /**
-     * @param  bool $force
-     *
-     * @return null|\MyParcelNL\Pdk\Account\Model\Account
-     */
     public function getAccount(bool $force = false): ?Account
     {
         $account = $this->getFromStorage();
@@ -81,8 +59,6 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
 
     /**
      * @param  null|string $apiKey
-     *
-     * @return bool
      */
     protected function isInvalidApiKey(?string $apiKey): bool
     {
@@ -95,11 +71,6 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
         return $accountSettings->apiKey === $apiKey && ! $accountSettings->apiKeyValid;
     }
 
-    /**
-     * @param  bool $apiKeyIsValid
-     *
-     * @return void
-     */
     protected function setApiKeyValidity(bool $apiKeyIsValid): void
     {
         $accountSettings = $this->settingsRepository->all()->account

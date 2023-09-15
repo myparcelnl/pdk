@@ -55,12 +55,10 @@ it('gets a config file', function (string $input) {
                 'sub1' => 1,
             ],
         ]);
-})->with(function () {
-    return [
-        'key'       => ['tmp-config-1'],
-        'full path' => ['/tmp/config/tmp-config-1.php'],
-    ];
-});
+})->with(fn() => [
+    'key'       => ['tmp-config-1'],
+    'full path' => ['/tmp/config/tmp-config-1.php'],
+]);
 
 it('gets a directory', function (string $input) {
     $value = Config::get($input);
@@ -69,12 +67,10 @@ it('gets a directory', function (string $input) {
         'tmp-config-3.php' => ['value3' => ['sub3' => 3]],
         'tmp-config-4.php' => ['value4' => ['sub4' => 4]],
     ]);
-})->with(function () {
-    return [
-        'key'       => ['nested'],
-        'full path' => ['/tmp/config/nested'],
-    ];
-});
+})->with(fn() => [
+    'key'       => ['nested'],
+    'full path' => ['/tmp/config/nested'],
+]);
 
 it('gets key from config file', function () {
     $value = Config::get('tmp-config-1.value1.sub1');

@@ -23,10 +23,6 @@ class ShipmentRepository extends ApiRepository
 {
     /**
      * @noinspection PhpUnused
-     *
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @noinspection PhpUnused
      */
     public function createConcepts(ShipmentCollection $collection): ShipmentCollection
@@ -39,10 +35,6 @@ class ShipmentRepository extends ApiRepository
 
     /**
      * @noinspection PhpUnused
-     *
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @throws \Exception
      */
     public function createReturnShipments(ShipmentCollection $collection): ShipmentCollection
@@ -69,11 +61,8 @@ class ShipmentRepository extends ApiRepository
      *
      * @noinspection PhpUnused
      *
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     * @param  null|string                                            $format
-     * @param  null|array                                             $position
-     *
-     * @return string
+     * @param  null|string $format
+     * @param  null|array  $position
      */
     public function fetchLabelLink(
         ShipmentCollection $collection,
@@ -98,9 +87,8 @@ class ShipmentRepository extends ApiRepository
      *
      * @noinspection PhpUnused
      *
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     * @param  null|string                                            $format
-     * @param  null|array                                             $position
+     * @param  null|string $format
+     * @param  null|array  $position
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @noinspection PhpUnused
@@ -124,10 +112,8 @@ class ShipmentRepository extends ApiRepository
     }
 
     /**
-     * @param  array    $referenceIdentifiers
      * @param  null|int $size
      *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @noinspection PhpUnused
      */
     public function getByReferenceIdentifiers(array $referenceIdentifiers, ?int $size = null): ShipmentCollection
@@ -135,11 +121,6 @@ class ShipmentRepository extends ApiRepository
         return $this->query(['reference_identifier' => $referenceIdentifiers, 'size' => $size]);
     }
 
-    /**
-     * @param  array $ids
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
     public function getShipments(array $ids): ShipmentCollection
     {
         $request = new GetShipmentsRequest($ids);
@@ -153,9 +134,6 @@ class ShipmentRepository extends ApiRepository
     }
 
     /**
-     * @param  array $parameters
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @noinspection PhpUnused
      */
     public function query(array $parameters): ShipmentCollection
@@ -171,10 +149,8 @@ class ShipmentRepository extends ApiRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
-     * @param  null|int                                               $size
+     * @param  null|int $size
      *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @noinspection PhpUnused
      */
     public function update(ShipmentCollection $collection, ?int $size = null): ShipmentCollection

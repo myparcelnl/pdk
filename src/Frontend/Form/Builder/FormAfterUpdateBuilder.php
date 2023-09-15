@@ -6,9 +6,6 @@ namespace MyParcelNL\Pdk\Frontend\Form\Builder;
 
 final class FormAfterUpdateBuilder extends AbstractFormSubOperationBuilder
 {
-    /**
-     * @return string
-     */
     public function getKey(): string
     {
         return '$afterUpdate';

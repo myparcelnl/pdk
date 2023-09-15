@@ -14,34 +14,14 @@ use MyParcelNL\Pdk\Tests\Integration\Exception\NoExampleException;
 
 final class BehatMyParcelClientAdapter extends Guzzle7ClientAdapter
 {
-    /**
-     * @var \MyParcelNL\Pdk\Tests\Integration\Base\BehatConfig
-     */
-    private $config;
-
-    /**
-     * @var \MyParcelNL\Pdk\Tests\Integration\Adapter\SymfonyRequestAdapter
-     */
-    private $requestAdapter;
-
-    /**
-     * @param  \GuzzleHttp\Client                                              $client
-     * @param  \MyParcelNL\Pdk\Base\Contract\ConfigInterface                   $config
-     * @param  \MyParcelNL\Pdk\Tests\Integration\Adapter\SymfonyRequestAdapter $requestAdapter
-     */
-    public function __construct(Client $client, ConfigInterface $config, SymfonyRequestAdapter $requestAdapter)
-    {
+    public function __construct(Client                                 $client,
+                                private readonly ConfigInterface       $config,
+                                private readonly SymfonyRequestAdapter $requestAdapter
+    ) {
         parent::__construct($client);
-        $this->config         = $config;
-        $this->requestAdapter = $requestAdapter;
     }
 
     /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
-     *
-     * @return void
      * @throws \Brick\VarExporter\ExportException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -53,11 +33,6 @@ final class BehatMyParcelClientAdapter extends Guzzle7ClientAdapter
     }
 
     /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
-     *
-     * @return \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
      * @throws \Brick\VarExporter\ExportException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \MyParcelNL\Pdk\Tests\Integration\Exception\NoExampleException
@@ -81,13 +56,6 @@ final class BehatMyParcelClientAdapter extends Guzzle7ClientAdapter
         );
     }
 
-    /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
-     *
-     * @return null|\MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
-     */
     public function getMockedResponse(string $httpMethod, string $uri, array $options): ?ClientResponseInterface
     {
         $examples = $this->config->get(Pdk::get('behatExamplesDir'));
@@ -106,12 +74,7 @@ final class BehatMyParcelClientAdapter extends Guzzle7ClientAdapter
         return null;
     }
 
-    /**
-     * @param  mixed $example
-     *
-     * @return bool
-     */
-    protected function validateExample($example): bool
+    protected function validateExample(mixed $example): bool
     {
         return is_array($example)
             && array_key_exists('match', $example)

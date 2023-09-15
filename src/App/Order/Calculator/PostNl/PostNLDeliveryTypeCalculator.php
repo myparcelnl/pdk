@@ -36,9 +36,6 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
         $shipmentOptions->signature     = TriStateService::ENABLED;
     }
 
-    /**
-     * @return bool
-     */
     private function isMorningOrEveningDelivery(): bool
     {
         return in_array(

@@ -25,7 +25,7 @@ it('creates default carrier for platform', function (string $platform) {
     $carrier = new Carrier();
 
     assertMatchesJsonSnapshot(
-        json_encode($carrier->except(['capabilities', 'returnCapabilities'], Arrayable::SKIP_NULL))
+        json_encode($carrier->except(['capabilities', 'returnCapabilities'], Arrayable::SKIP_NULL), JSON_THROW_ON_ERROR)
     );
 
     $reset();
@@ -122,18 +122,16 @@ it('instantiates carriers from name', function (string $platform) {
     $reset = mockPlatform($platform);
 
     $carriers    = new Collection(Platform::getCarriers());
-    $newCarriers = $carriers->map(function (Carrier $carrier) {
-        return new Carrier(['name' => $carrier->name]);
-    });
+    $newCarriers = $carriers->map(fn(Carrier $carrier) => new Carrier(['name' => $carrier->name]));
 
-    assertMatchesJsonSnapshot(json_encode($newCarriers->toArrayWithoutNull()));
+    assertMatchesJsonSnapshot(json_encode($newCarriers->toArrayWithoutNull(), JSON_THROW_ON_ERROR));
     $reset();
 })->with('platforms');
 
 it('instantiates carrier from external identifier', function (string $identifier) {
     $carrier = new Carrier(['externalIdentifier' => $identifier]);
 
-    assertMatchesJsonSnapshot(json_encode($carrier->toArrayWithoutNull()));
+    assertMatchesJsonSnapshot(json_encode($carrier->toArrayWithoutNull(), JSON_THROW_ON_ERROR));
 })->with([
     'subscription carrier' => [DHL_FOR_YOU_CUSTOM_IDENTIFIER],
     'default carrier'      => [Carrier::CARRIER_DHL_FOR_YOU_NAME],

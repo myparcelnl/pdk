@@ -26,12 +26,10 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(
     new UsesMockPdkInstance([
         'platform' => value(Platform::SENDMYPARCEL_NAME),
-        'appInfo'  => factory(function (): AppInfo {
-            return new AppInfo([
-                'name'    => 'test',
-                'version' => '1.2.0',
-            ]);
-        }),
+        'appInfo'  => factory(fn(): AppInfo => new AppInfo([
+            'name'    => 'test',
+            'version' => '1.2.0',
+        ])),
 
         InstallerServiceInterface::class => autowire(MockInstallerService::class),
         MigrationServiceInterface::class => autowire(MockMigrationService::class),

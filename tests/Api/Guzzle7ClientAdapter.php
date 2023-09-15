@@ -12,25 +12,11 @@ use MyParcelNL\Pdk\Api\Response\ClientResponse;
 
 class Guzzle7ClientAdapter implements ClientAdapterInterface
 {
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    private $client;
-
-    /**
-     * @param  \GuzzleHttp\Client $client
-     */
-    public function __construct(Client $client)
+    public function __construct(private Client $client)
     {
-        $this->client = $client;
     }
 
     /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
-     *
-     * @return \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function doRequest(string $httpMethod, string $uri, array $options = []): ClientResponseInterface
@@ -55,8 +41,6 @@ class Guzzle7ClientAdapter implements ClientAdapterInterface
     }
 
     /**
-     * @param  \GuzzleHttp\Client $client
-     *
      * @return $this
      */
     public function setClient(Client $client): self

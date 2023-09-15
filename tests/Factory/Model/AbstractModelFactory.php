@@ -18,18 +18,12 @@ use ReflectionClass;
 
 abstract class AbstractModelFactory extends AbstractFactory implements ModelFactoryInterface
 {
-    /**
-     * @var array
-     */
-    private $cache = [];
+    private array $cache = [];
 
     /**
-     * @param  mixed $name
-     * @param  mixed $arguments
-     *
      * @return $this
      */
-    public function __call($name, $arguments)
+    public function __call(mixed $name, mixed $arguments)
     {
         if (Str::startsWith($name, 'with')) {
             $attribute = Str::camel(Str::after($name, 'with'));
@@ -41,15 +35,12 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
         throw new BadMethodCallException(sprintf('Method %s does not exist', $name));
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Base\Model\Model
-     */
     public function make(): Model
     {
         $model      = $this->getModel();
         $attributes = $this->resolveAttributes();
 
-        $cacheKey = sprintf('%s::%s', $model, md5(json_encode($attributes)));
+        $cacheKey = sprintf('%s::%s', $model, md5(json_encode($attributes, JSON_THROW_ON_ERROR)));
 
         if (! isset($this->cache[$cacheKey])) {
             $this->cache[$cacheKey] = new $model($attributes);
@@ -58,9 +49,6 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
         return $this->cache[$cacheKey];
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface
-     */
     public function store(): ModelFactoryInterface
     {
         $result = $this->make();
@@ -84,8 +72,6 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
     }
 
     /**
-     * @param  string $key
-     *
      * @return \MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface|\MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface
      * @throws \MyParcelNL\Pdk\Tests\Factory\Exception\InvalidFactoryException
      * @throws \ReflectionException
@@ -111,8 +97,6 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface $factory
-     *
      * @return $this
      */
     protected function from(FactoryInterface $factory): FactoryInterface
@@ -124,21 +108,14 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
 
     /**
      * @param  string|null $key
-     *
-     * @return int
      */
     protected function getNextId(string $key = null): int
     {
-        $key = $key ?? $this->getModel();
+        $key ??= $this->getModel();
 
         return $this->state->getNextId($key);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Model\Model $model
-     *
-     * @return void
-     */
     protected function save(Model $model): void
     {
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -146,13 +123,11 @@ abstract class AbstractModelFactory extends AbstractFactory implements ModelFact
     }
 
     /**
-     * @param  string        $key
-     * @param  mixed         $items
      * @param  null|callable $callback
      *
      * @return $this
      */
-    protected function withCollection(string $key, $items, ?callable $callback = null): ModelFactoryInterface
+    protected function withCollection(string $key, mixed $items, ?callable $callback = null): ModelFactoryInterface
     {
         $factoryCallback = function ($factoryOrPlain) use ($callback) {
             if ($callback && $factoryOrPlain instanceof ModelFactoryInterface) {

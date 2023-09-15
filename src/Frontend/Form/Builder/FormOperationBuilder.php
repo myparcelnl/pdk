@@ -24,24 +24,18 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
 
     /**
      * @param  null|callable $callback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSubOperationBuilderInterface
      */
     public function afterUpdate(?callable $callback = null): FormSubOperationBuilderInterface
     {
         return $this->addBuilder(new FormAfterUpdateBuilder($this), $callback);
     }
 
-    /**
-     * @return array
-     */
     public function build(): array
     {
         $array = $this->createArray();
 
-        $array[] = array_map(static function (FormSubOperationBuilderInterface $builder) {
-            return $builder->createArray();
-        }, $this->builders);
+        $array[] = array_map(static fn(FormSubOperationBuilderInterface $builder) => $builder->createArray(),
+            $this->builders);
 
         return array_filter($array);
     }
@@ -49,8 +43,6 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     /**
      * @param  null|string     $target
      * @param  scalar|callable $valueOrCallback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */
     public function disabledWhen(?string $target = null, $valueOrCallback = null): FormConditionInterface
     {
@@ -60,8 +52,6 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     /**
      * @param  null|string     $target
      * @param  callable|scalar $valueOrCallback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */
     public function readOnlyWhen(?string $target = null, $valueOrCallback = null): FormConditionInterface
     {
@@ -71,8 +61,6 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     /**
      * @param  null|string     $target
      * @param  scalar|callable $valueOrCallback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */
     public function visibleWhen(?string $target = null, $valueOrCallback = null): FormConditionInterface
     {
@@ -96,11 +84,8 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSingletonOperationInterface $operation
-     * @param  null|string                                                                    $target
-     * @param  callable|scalar                                                                $valueOrCallback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
+     * @param  null|string     $target
+     * @param  callable|scalar $valueOrCallback
      */
     protected function addConditionalOperation(
         FormSingletonOperationInterface $operation,
@@ -129,10 +114,7 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormSingletonOperationInterface $operation
-     * @param  null|string                                                                    $target
-     *
-     * @return null|\MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
+     * @param  null|string $target
      */
     private function hasExistingSingletonOperation(
         FormSingletonOperationInterface $operation,
@@ -140,9 +122,8 @@ final class FormOperationBuilder extends AbstractFormOperationBuilder implements
     ): ?FormConditionInterface {
         $existingOperation = Arr::first(
             $this->operations,
-            static function (FormSingletonOperationInterface $existingOperation) use ($operation) {
-                return get_class($existingOperation) === get_class($operation);
-            }
+            static fn(FormSingletonOperationInterface $existingOperation
+            ) => $existingOperation::class === $operation::class
         );
 
         if ($existingOperation) {

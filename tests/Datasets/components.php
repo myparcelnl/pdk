@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -17,20 +20,12 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractViewService;
  */
 dataset('components', [
     'init script' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderInitScript();
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderInitScript(),
         'views'    => MockAbstractViewService::ALL_PDK_PAGES,
     ],
 
     'modals' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderModals();
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderModals(),
         'views'    => [
             MockAbstractViewService::PAGE_ORDER_LIST,
             MockAbstractViewService::PAGE_ORDER,
@@ -38,65 +33,41 @@ dataset('components', [
     ],
 
     'notifications' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderNotifications();
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderNotifications(),
         'views'    => MockAbstractViewService::ALL_PDK_PAGES,
     ],
 
     'order box' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderOrderBox(new PdkOrder(['externalIdentifier' => 'P00924872']));
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderOrderBox(new PdkOrder(['externalIdentifier' => 'P00924872'])),
         'views'    => [MockAbstractViewService::PAGE_ORDER],
     ],
 
     'order list column' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderOrderListItem(new PdkOrder(['externalIdentifier' => 'P00924878']));
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderOrderListItem(
+            new PdkOrder(['externalIdentifier' => 'P00924878'])
+        ),
         'views'    => [MockAbstractViewService::PAGE_ORDER_LIST],
     ],
 
     'plugin settings' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderPluginSettings();
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderPluginSettings(),
         'views'    => [MockAbstractViewService::PAGE_PLUGIN_SETTINGS],
     ],
 
     'product settings' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderProductSettings(new PdkProduct());
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderProductSettings(new PdkProduct()),
         'views'    => [MockAbstractViewService::PAGE_PRODUCT],
     ],
 
     'child product settings' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderChildProductSettings(new PdkProduct(['parent' => new PdkProduct()]));
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderChildProductSettings(
+            new PdkProduct(['parent' => new PdkProduct()])
+        ),
         'views'    => [MockAbstractViewService::PAGE_CHILD_PRODUCT],
     ],
 
     'delivery options' => [
-        'callback' => function () {
-            return function () {
-                return Frontend::renderDeliveryOptions(new PdkCart());
-            };
-        },
+        'callback' => fn() => fn() => Frontend::renderDeliveryOptions(new PdkCart()),
         'views'    => [MockAbstractViewService::PAGE_CHECKOUT],
     ],
 ]);

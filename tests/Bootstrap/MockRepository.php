@@ -21,10 +21,6 @@ class MockRepository extends ApiRepository
      */
     private $values;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage       $storage
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $api
-     */
     public function __construct(MemoryCacheStorage $storage, ApiServiceInterface $api)
     {
         parent::__construct($storage, $api);
@@ -35,44 +31,29 @@ class MockRepository extends ApiRepository
         ]);
     }
 
-    /**
-     * @param  string $key
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function get(string $key): Collection
     {
         return $this->values->firstWhere('key', $key);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Account\Model\Account
-     */
     public function getAccount(): Account
     {
-        return $this->retrieve('account', function () {
-            return new Account([
-                'id'          => 4,
-                'platform_id' => Platform::MYPARCEL_ID,
-                'shops'       => (new Collection([
-                    [
-                        'id'   => 1,
-                        'name' => 'Potlodenshop',
-                    ],
-                    [
-                        'id'   => 2,
-                        'name' => 'MijnBoekenShop',
-                    ],
-                ])),
-            ]);
-        });
+        return $this->retrieve('account', fn() => new Account([
+            'id'          => 4,
+            'platform_id' => Platform::MYPARCEL_ID,
+            'shops'       => (new Collection([
+                [
+                    'id'   => 1,
+                    'name' => 'Potlodenshop',
+                ],
+                [
+                    'id'   => 2,
+                    'name' => 'MijnBoekenShop',
+                ],
+            ])),
+        ]));
     }
 
-    /**
-     * @param  int $shopId
-     *
-     * @return \MyParcelNL\Pdk\Account\Model\Shop
-     */
     public function getShopWithParameters(int $shopId): Shop
     {
         return $this->retrieve('shop', function () use ($shopId) {
@@ -83,13 +64,7 @@ class MockRepository extends ApiRepository
         });
     }
 
-    /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return void
-     */
-    public function mockReturnValue(string $key, $value): void
+    public function mockReturnValue(string $key, mixed $value): void
     {
         $this->values = $this->values
             ->where('key', '!=', $key)

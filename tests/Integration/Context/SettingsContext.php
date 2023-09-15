@@ -25,8 +25,6 @@ final class SettingsContext extends AbstractContext
 
     /**
      * @param  null|string $name
-     * @param  array       $data
-     * @param  string      $dataName
      */
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
@@ -106,11 +104,6 @@ final class SettingsContext extends AbstractContext
             ->store();
     }
 
-    /**
-     * @param  bool $valid
-     *
-     * @return void
-     */
     protected function assertApiKeyValidity(bool $valid): void
     {
         $isValid = Settings::get(AccountSettings::API_KEY_VALID, AccountSettings::ID);
@@ -124,21 +117,14 @@ final class SettingsContext extends AbstractContext
     }
 
     /**
-     * @param  mixed $value
-     *
      * @return mixed
      */
-    private function resolveSettingValue($value)
+    private function resolveSettingValue(mixed $value)
     {
-        switch ($value) {
-            case 'enabled':
-                return true;
-
-            case 'disabled':
-                return false;
-
-            default:
-                return $value;
-        }
+        return match ($value) {
+            'enabled' => true,
+            'disabled' => false,
+            default => $value,
+        };
     }
 }

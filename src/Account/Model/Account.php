@@ -21,7 +21,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  */
 class Account extends Model implements StorableArrayable
 {
-    public const FEATURE_ORDER_NOTES = 'allow_order_notes';
+    final public const FEATURE_ORDER_NOTES = 'allow_order_notes';
 
     public $attributes = [
         'id'                   => null,

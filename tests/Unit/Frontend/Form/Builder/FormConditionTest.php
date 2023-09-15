@@ -104,7 +104,6 @@ dataset('matchers', [
 ]);
 
 it('uses matchers', function (string $method, array $args, array $output) {
-    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $formCondition */
     $condition = new FormCondition(new FormOperationBuilder());
 
     $condition->{$method}(...$args);
@@ -113,7 +112,6 @@ it('uses matchers', function (string $method, array $args, array $output) {
 })->with('matchers');
 
 it('can chain matchers with and', function (string $method, array $args, array $output) {
-    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $formCondition */
     $condition = new FormCondition(new FormOperationBuilder());
 
     $condition->eq('boo')->and->{$method}(...$args);
@@ -129,7 +127,6 @@ it('can chain matchers with and', function (string $method, array $args, array $
 })->with('matchers');
 
 it('can chain matchers with or', function (string $method, array $args, array $output) {
-    /** @var \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface $formCondition */
     $condition = new FormCondition(new FormOperationBuilder());
 
     $condition->eq('boo')->or->{$method}(...$args);

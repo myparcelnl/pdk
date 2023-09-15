@@ -32,7 +32,6 @@ final class SettingsFactory extends AbstractModelFactory
     }
 
     /**
-     * @param  string                                       $carrier
      * @param  array|CarrierSettings|CarrierSettingsFactory $data
      *
      * @return $this
@@ -143,7 +142,6 @@ final class SettingsFactory extends AbstractModelFactory
     /**
      * @param  T $model
      *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function save(Model $model): void

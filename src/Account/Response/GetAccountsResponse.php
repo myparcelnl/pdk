@@ -9,14 +9,8 @@ use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 
 class GetAccountsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var mixed
-     */
-    private $account;
+    private ?Account $account = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Account\Model\Account
-     */
     public function getAccount(): Account
     {
         return $this->account;
@@ -25,21 +19,19 @@ class GetAccountsResponse extends ApiResponseWithBody
     protected function parseResponseBody(): void
     {
         $data  = json_decode($this->getBody(), true)['data']['accounts'][0];
-        $shops = array_map(static function (array $shop) {
-            return [
-                'id'              => $shop['id'] ?? null,
-                'accountId'       => $shop['account_id'] ?? null,
-                'platformId'      => $shop['platform_id'] ?? null,
-                'name'            => $shop['name'] ?? null,
-                'hidden'          => $shop['hidden'] ?? false,
-                'billing'         => $shop['billing'] ?? null,
-                'deliveryAddress' => $shop['delivery_address'] ?? null,
-                'generalSettings' => $shop['general_settings'] ?? null,
-                'return'          => $shop['return'] ?? null,
-                'shipmentOptions' => $shop['shipment_options'] ?? null,
-                'trackTrace'      => $shop['track_trace'] ?? null,
-            ];
-        }, $data['shops'] ?? []);
+        $shops = array_map(static fn(array $shop) => [
+            'id'              => $shop['id'] ?? null,
+            'accountId'       => $shop['account_id'] ?? null,
+            'platformId'      => $shop['platform_id'] ?? null,
+            'name'            => $shop['name'] ?? null,
+            'hidden'          => $shop['hidden'] ?? false,
+            'billing'         => $shop['billing'] ?? null,
+            'deliveryAddress' => $shop['delivery_address'] ?? null,
+            'generalSettings' => $shop['general_settings'] ?? null,
+            'return'          => $shop['return'] ?? null,
+            'shipmentOptions' => $shop['shipment_options'] ?? null,
+            'trackTrace'      => $shop['track_trace'] ?? null,
+        ], $data['shops'] ?? []);
 
         $this->account = new Account([
             'id'              => $data['id'] ?? null,

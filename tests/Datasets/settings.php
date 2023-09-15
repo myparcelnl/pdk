@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -7,31 +10,19 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use function MyParcelNL\Pdk\Tests\factory;
 
 dataset('carrierExportSettings', [
-    'export age check' => function () {
-        return factory(CarrierSettings::class)->withExportAgeCheck(true);
-    },
+    'export age check' => fn() => factory(CarrierSettings::class)->withExportAgeCheck(true),
 
-    'export large format' => function () {
-        return factory(CarrierSettings::class)->withExportLargeFormat(true);
-    },
+    'export large format' => fn() => factory(CarrierSettings::class)->withExportLargeFormat(true),
 
-    'export only recipient' => function () {
-        return factory(CarrierSettings::class)->withExportOnlyRecipient(true);
-    },
+    'export only recipient' => fn() => factory(CarrierSettings::class)->withExportOnlyRecipient(true),
 
-    'export return' => function () {
-        return factory(CarrierSettings::class)->withExportReturn(true);
-    },
+    'export return' => fn() => factory(CarrierSettings::class)->withExportReturn(true),
 
-    'export signature' => function () {
-        return factory(CarrierSettings::class)->withExportSignature(true);
-    },
+    'export signature' => fn() => factory(CarrierSettings::class)->withExportSignature(true),
 
-    'export insurance' => function () {
-        return factory(CarrierSettings::class)
-            ->withExportInsurance(true)
-            ->withExportInsuranceFromAmount(0);
-    },
+    'export insurance' => fn() => factory(CarrierSettings::class)
+        ->withExportInsurance(true)
+        ->withExportInsuranceFromAmount(0),
 ]);
 
 function getTriState2Data(bool $coerce): array

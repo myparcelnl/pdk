@@ -22,10 +22,11 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor([
-            ['externalIdentifier' => '263'],
-            ['externalIdentifier' => '264'],
-        ]),
+        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class),
+        //            ->constructor([
+        //                ['externalIdentifier' => '263'],
+        //                ['externalIdentifier' => '264'],
+        //            ]),
     ]),
     new UsesApiMock()
 );
@@ -43,7 +44,7 @@ it('prints order', function () {
         'orderIds' => ['263', '264'],
     ]);
 
-    $content = json_decode($response->getContent(), true);
+    $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     expect($response)
         ->toBeInstanceOf(Response::class)

@@ -76,8 +76,6 @@ final class CarrierSettingsFactory extends AbstractSettingsModelFactory
     }
 
     /**
-     * @param  string $id
-     *
      * @return $this
      */
     public function withId(string $id): self

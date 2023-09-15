@@ -25,11 +25,6 @@ trait ResolvesModels
 
     private $typeModifiers  = ['FIRST', 'LAST', 'CURRENT'];
 
-    /**
-     * @param  string $identifier
-     *
-     * @return null|\MyParcelNL\Pdk\Base\Model\Model
-     */
     protected function resolveModel(string $identifier): ?Model
     {
         if (Str::startsWith($identifier, $this->typeModifiers)) {
@@ -47,13 +42,10 @@ trait ResolvesModels
 
     /**
      * @param  null|string $type
-     * @param  string      $entityName
-     * @param  mixed       $input
      *
-     * @return null|\MyParcelNL\Pdk\Base\Model\Model
      * @todo implement type, resolve by FIRST or LAST
      */
-    private function resolve(?string $type, string $entityName, $input): ?Model
+    private function resolve(?string $type, string $entityName, mixed $input): ?Model
     {
         $class = $this->resolveEntityClass($entityName);
 
@@ -75,22 +67,12 @@ trait ResolvesModels
         return null;
     }
 
-    /**
-     * @param  string $entityName
-     *
-     * @return null|string
-     */
     private function resolveEntityClass(string $entityName): ?string
     {
         return $this->entityClassMap[$entityName] ?? null;
     }
 
-    /**
-     * @param  mixed $input
-     *
-     * @return null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
-    private function resolveOrder($input): ?PdkOrder
+    private function resolveOrder(mixed $input): ?PdkOrder
     {
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $repository */
         $repository = Pdk::get(PdkOrderRepositoryInterface::class);

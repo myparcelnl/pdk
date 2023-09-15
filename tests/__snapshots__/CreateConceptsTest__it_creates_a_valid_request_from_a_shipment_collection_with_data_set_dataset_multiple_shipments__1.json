@@ -1,0 +1,52 @@
+[
+    {
+        "carrier": 1,
+        "general_settings": {
+            "save_recipient_address": 0
+        },
+        "options": {
+            "package_type": 1,
+            "delivery_type": 2,
+            "delivery_date": "2038-07-20 16:00:00",
+            "label_description": "order 204829",
+            "age_check": 1,
+            "only_recipient": 1
+        },
+        "physical_properties": {
+            "weight": 2000
+        },
+        "recipient": {
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "person": "Jaap Krekel",
+            "postal_code": "2132JE"
+        }
+    },
+    {
+        "carrier": 5,
+        "general_settings": {
+            "save_recipient_address": 0
+        },
+        "options": {
+            "package_type": 1,
+            "delivery_type": 2,
+            "delivery_date": "2038-07-20 16:00:00",
+            "insurance": {
+                "amount": 500,
+                "currency": "EUR"
+            },
+            "label_description": "order 204829",
+            "age_check": 1,
+            "only_recipient": 1
+        },
+        "physical_properties": {
+            "weight": 2000
+        },
+        "recipient": {
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "person": "Jaap Krekel",
+            "postal_code": "2132JE"
+        }
+    }
+]

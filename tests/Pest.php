@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -43,7 +46,7 @@ expect()
 
 expect()
     ->extend('toEqualIgnoringNull', function (array $array) {
-        $this->value = array_filter($this->value, static function ($item) { return null !== $item; });
+        $this->value = array_filter($this->value, static fn($item) => null !== $item);
 
         return $this->toEqual($array);
     });

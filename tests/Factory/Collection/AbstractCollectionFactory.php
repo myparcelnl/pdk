@@ -20,9 +20,6 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
      */
     protected $entries;
 
-    /**
-     * @param  int $amount
-     */
     public function __construct(int $amount = 0)
     {
         parent::__construct();
@@ -40,8 +37,6 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
     abstract protected function getModelFactory(): string;
 
     /**
-     * @param  int $amount
-     *
      * @return $this
      */
     public function amount(int $amount): CollectionFactoryInterface
@@ -74,19 +69,14 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
         return $this;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function make(): Collection
     {
         $collection = $this->getCollection();
 
         return new $collection(
-            $this->entries->map(function ($item) {
-                return $item instanceof FactoryInterface
-                    ? $item->make()
-                    : $item;
-            })
+            $this->entries->map(fn($item) => $item instanceof FactoryInterface
+                ? $item->make()
+                : $item)
         );
     }
 
@@ -97,14 +87,13 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
      */
     public function push(...$items): CollectionFactoryInterface
     {
-        $this->entries->push(...array_map([$this, 'coerceToFactory'], $items));
+        $this->entries->push(...array_map($this->coerceToFactory(...), $items));
 
         return $this;
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
+     * @param  mixed $value
      *
      * @return $this
      */
@@ -134,9 +123,7 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
      */
     protected function models(): Collection
     {
-        return $this->entries->filter(function ($item) {
-            return $item instanceof ModelFactoryInterface;
-        });
+        return $this->entries->filter(fn($item) => $item instanceof ModelFactoryInterface);
     }
 
     /**
@@ -156,7 +143,7 @@ abstract class AbstractCollectionFactory extends AbstractFactory implements Coll
         /** @var \MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface $modelFactory */
         $modelFactory = new $modelFactory();
 
-        if (is_object($item) && get_class($item) === $modelFactory->getModel()) {
+        if (is_object($item) && $item::class === $modelFactory->getModel()) {
             return $modelFactory->with($item->getAttributes());
         }
 

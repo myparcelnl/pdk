@@ -9,11 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FetchWebhooksAction extends AbstractWebhooksAction
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $subscriptions = $this->getExistingSubscriptions();

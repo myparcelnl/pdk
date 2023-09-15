@@ -9,14 +9,9 @@ use Throwable;
 
 class PdkEndpointException extends Exception
 {
-    /**
-     * @var int
-     */
-    private $statusCode;
+    private int $statusCode;
 
     /**
-     * @param  string          $message
-     * @param  int             $statusCode
      * @param  \Throwable|null $previous
      */
     public function __construct(string $message, int $statusCode = 0, Throwable $previous = null)
@@ -25,17 +20,11 @@ class PdkEndpointException extends Exception
         $this->setStatusCode($statusCode);
     }
 
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return $this->statusCode;
     }
 
-    /**
-     * @param  int $statusCode
-     */
     public function setStatusCode(int $statusCode): void
     {
         $this->statusCode = $statusCode;

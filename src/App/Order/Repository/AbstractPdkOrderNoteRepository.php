@@ -18,12 +18,10 @@ abstract class AbstractPdkOrderNoteRepository extends Repository implements PdkO
 
     /**
      * @param  (string|PdkOrderNote)[] $input
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      */
     public function getMany(array $input): PdkOrderNoteCollection
     {
-        return new PdkOrderNoteCollection(array_map([$this, 'get'], $input));
+        return new PdkOrderNoteCollection(array_map($this->get(...), $input));
     }
 
     public function updateMany(PdkOrderNoteCollection $notes): void

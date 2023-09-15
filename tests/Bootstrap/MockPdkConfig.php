@@ -40,31 +40,21 @@ use function DI\value;
  */
 class MockPdkConfig
 {
-    /**
-     * @param  array $config
-     *
-     * @return array
-     */
     public static function create(array $config = []): array
     {
         return array_replace(self::getDefaultConfig(), $config);
     }
 
-    /**
-     * @return array
-     */
     private static function getDefaultConfig(): array
     {
         return [
-            'appInfo' => factory(function () {
-                return new AppInfo([
-                    'name'    => 'pest',
-                    'title'   => 'Pest',
-                    'version' => '1.0.0',
-                    'path'    => 'APP_PATH',
-                    'url'     => 'APP_URL',
-                ]);
-            }),
+            'appInfo' => factory(fn() => new AppInfo([
+                'name'    => 'pest',
+                'title'   => 'Pest',
+                'version' => '1.0.0',
+                'path'    => 'APP_PATH',
+                'url'     => 'APP_URL',
+            ])),
 
             'platform'                                  => value(Platform::MYPARCEL_NAME),
             ApiServiceInterface::class                  => get(MockApiService::class),

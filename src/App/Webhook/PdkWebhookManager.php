@@ -31,10 +31,6 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     protected $webhooksRepository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Contract\CronServiceInterface                  $cronService
-     * @param  \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $webhooksRepository
-     */
     public function __construct(CronServiceInterface $cronService, PdkWebhooksRepositoryInterface $webhooksRepository)
     {
         $this->cronService        = $cronService;
@@ -43,9 +39,6 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
 
     /**
      * @param  Request $input
-     * @param  string  $context
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function call($input, string $context = self::CONTEXT_WEBHOOK): Response
     {
@@ -57,16 +50,11 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
             return $response;
         }
 
-        $this->cronService->dispatch([$this, 'processWebhook'], $input);
+        $this->cronService->dispatch($this->processWebhook(...), $input);
 
         return $response;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     public function processWebhook(Request $request): void
     {
         $requiredPath = parse_url($this->webhooksRepository->getHashedUrl(), PHP_URL_PATH);
@@ -83,7 +71,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
         foreach ($this->getHooks($request) as $hook) {
             try {
                 $hook               = $this->resolveHook($hook['event'] ?? null);
-                $logContext['hook'] = get_class($hook);
+                $logContext['hook'] = $hook::class;
 
                 if (! $hook->validate($request)) {
                     Logger::debug('Webhook skipped', $logContext);
@@ -93,17 +81,12 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
                 $hook->handle($request);
 
                 Logger::debug('Webhook processed', $logContext);
-            } catch (Throwable $exception) {
+            } catch (Throwable) {
                 Logger::error('Webhook failed', $logContext);
             }
         }
     }
 
-    /**
-     * @param  string $event
-     *
-     * @return \MyParcelNL\Pdk\App\Webhook\Contract\HookInterface
-     */
     protected function resolveHook(string $event): HookInterface
     {
         $supportedWebhooks = Config::get('webhooks');
@@ -116,11 +99,6 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
         return Pdk::get($hookClass);
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return array
-     */
     private function getHooks(Request $request): array
     {
         $body = json_decode($request->getContent(), true);

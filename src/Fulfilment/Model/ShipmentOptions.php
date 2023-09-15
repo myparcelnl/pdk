@@ -67,8 +67,6 @@ class ShipmentOptions extends Model
     ];
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $pdkDeliveryOptions
-     *
      * @return static
      */
     public static function fromPdkDeliveryOptions(DeliveryOptions $pdkDeliveryOptions): self

@@ -62,35 +62,31 @@ usesShared(
     ])
 );
 
-dataset('backendActions', function () {
-    return [
-        PdkBackendActions::CREATE_WEBHOOKS,
-        PdkBackendActions::DELETE_ACCOUNT,
-        PdkBackendActions::DELETE_SHIPMENTS,
-        PdkBackendActions::DELETE_WEBHOOKS,
-        PdkBackendActions::EXPORT_ORDERS,
-        PdkBackendActions::EXPORT_RETURN,
-        PdkBackendActions::FETCH_ORDERS,
-        PdkBackendActions::FETCH_WEBHOOKS,
-        PdkBackendActions::POST_ORDER_NOTES,
-        PdkBackendActions::PRINT_ORDERS,
-        PdkBackendActions::PRINT_SHIPMENTS,
-        PdkBackendActions::SYNCHRONIZE_ORDERS,
-        PdkBackendActions::UPDATE_ACCOUNT,
-        PdkBackendActions::UPDATE_ORDERS,
-        PdkBackendActions::UPDATE_PLUGIN_SETTINGS,
-        PdkBackendActions::UPDATE_PRODUCT_SETTINGS,
-        PdkBackendActions::UPDATE_SHIPMENTS,
-        PdkSharedActions::FETCH_CONTEXT,
-    ];
-});
+dataset('backendActions', fn() => [
+    PdkBackendActions::CREATE_WEBHOOKS,
+    PdkBackendActions::DELETE_ACCOUNT,
+    PdkBackendActions::DELETE_SHIPMENTS,
+    PdkBackendActions::DELETE_WEBHOOKS,
+    PdkBackendActions::EXPORT_ORDERS,
+    PdkBackendActions::EXPORT_RETURN,
+    PdkBackendActions::FETCH_ORDERS,
+    PdkBackendActions::FETCH_WEBHOOKS,
+    PdkBackendActions::POST_ORDER_NOTES,
+    PdkBackendActions::PRINT_ORDERS,
+    PdkBackendActions::PRINT_SHIPMENTS,
+    PdkBackendActions::SYNCHRONIZE_ORDERS,
+    PdkBackendActions::UPDATE_ACCOUNT,
+    PdkBackendActions::UPDATE_ORDERS,
+    PdkBackendActions::UPDATE_PLUGIN_SETTINGS,
+    PdkBackendActions::UPDATE_PRODUCT_SETTINGS,
+    PdkBackendActions::UPDATE_SHIPMENTS,
+    PdkSharedActions::FETCH_CONTEXT,
+]);
 
-dataset('frontendActions', function () {
-    return [
-        PdkFrontendActions::FETCH_CHECKOUT_CONTEXT,
-        PdkSharedActions::FETCH_CONTEXT,
-    ];
-});
+dataset('frontendActions', fn() => [
+    PdkFrontendActions::FETCH_CHECKOUT_CONTEXT,
+    PdkSharedActions::FETCH_CONTEXT,
+]);
 
 function testEndpoint(string $action, string $context): void
 {
@@ -100,7 +96,7 @@ function testEndpoint(string $action, string $context): void
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_OK)
-        ->and(json_decode($response->getContent(), true))
+        ->and(json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR))
         ->toBe(['data' => ['success' => true]]);
 }
 
@@ -121,7 +117,7 @@ it('returns error response on nonexistent action', function () {
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and(json_decode($response->getContent(), true))
+        ->and(json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR))
         ->toBe([
             'message' => 'Action "nonexistent" does not exist.',
             'errors'  => [
@@ -144,7 +140,7 @@ it('shows stack trace in development mode', function () {
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and(json_decode($response->getContent(), true)['errors'][0]['trace'])
+        ->and(json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR)['errors'][0]['trace'])
         ->toBeArray();
 });
 
@@ -160,7 +156,7 @@ it('throws exception when using the wrong context', function (string $action) {
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and(json_decode($response->getContent(), true))
+        ->and(json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR))
         ->toBe([
             'message' => "Action \"$action\" does not exist.",
             'errors'  => [

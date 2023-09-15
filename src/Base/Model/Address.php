@@ -55,7 +55,7 @@ class Address extends Model
      *
      * @var string[]
      */
-    private $additionalDeprecated = [
+    private array $additionalDeprecated = [
         self::FIELD_STREET,
         self::FIELD_NUMBER,
         self::FIELD_NUMBER_SUFFIX,
@@ -74,8 +74,6 @@ class Address extends Model
 
     /**
      * @param  null|array $data
-     *
-     * @return null|array
      */
     private function handleDeprecatedFields(?array $data): ?array
     {

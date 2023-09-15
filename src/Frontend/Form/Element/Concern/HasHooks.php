@@ -12,9 +12,6 @@ trait HasHooks
     protected $hooks = [];
 
     /**
-     * @param  string   $hook
-     * @param  callable $callback
-     *
      * @return $this
      */
     protected function addHook(string $hook, callable $callback): self
@@ -28,13 +25,7 @@ trait HasHooks
         return $this;
     }
 
-    /**
-     * @param  string $hook
-     * @param  mixed  ...$args
-     *
-     * @return void
-     */
-    protected function executeHooks(string $hook, ...$args): void
+    protected function executeHooks(string $hook, mixed ...$args): void
     {
         if (! isset($this->hooks[$hook])) {
             return;

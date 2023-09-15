@@ -10,31 +10,21 @@ interface OrderOptionDefinitionInterface
 {
     /**
      * Get the key that represents the option in the carrier settings.
-     *
-     * @return null|string
      */
     public function getCarrierSettingsKey(): ?string;
 
     /**
      * Get the key that represents the option in the product settings.
-     *
-     * @return null|string
      */
     public function getProductSettingsKey(): ?string;
 
     /**
      * Get the key that represents the option in the shipment options.
-     *
-     * @return null|string
      */
     public function getShipmentOptionsKey(): ?string;
 
     /**
      * Validates if the option is allowed for the current carrier.
-     *
-     * @param  \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $carrierSchema
-     *
-     * @return bool
      */
     public function validate(CarrierSchema $carrierSchema): bool;
 }

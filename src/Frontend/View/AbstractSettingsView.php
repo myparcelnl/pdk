@@ -22,38 +22,26 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 abstract class AbstractSettingsView implements Arrayable
 {
-    public const  SELECT_INCLUDE_OPTION_DEFAULT = 4;
-    public const  SELECT_INCLUDE_OPTION_NONE    = 2;
-    public const  SELECT_USE_PLAIN_LABEL        = 1;
-    private const CACHE_KEY_CHILDREN            = 'children';
-    private const CACHE_KEY_CHILDREN_ARRAY      = 'children_array';
-    private const CACHE_KEY_ELEMENTS            = 'elements';
-    private const CACHE_KEY_ELEMENTS_ARRAY      = 'elements_array';
-    private const KEY_PREFIX                    = 'settings';
+    final public const  SELECT_INCLUDE_OPTION_DEFAULT = 4;
+    final public const  SELECT_INCLUDE_OPTION_NONE    = 2;
+    final public const  SELECT_USE_PLAIN_LABEL        = 1;
+    private const       CACHE_KEY_CHILDREN            = 'children';
+    private const       CACHE_KEY_CHILDREN_ARRAY      = 'children_array';
+    private const       CACHE_KEY_ELEMENTS            = 'elements';
+    private const       CACHE_KEY_ELEMENTS_ARRAY      = 'elements_array';
+    private const       KEY_PREFIX                    = 'settings';
 
     protected $cache = [];
 
-    /**
-     * @return null|array
-     */
     abstract protected function createElements(): ?array;
 
-    /**
-     * @return string
-     */
     abstract protected function getSettingsId(): string;
 
-    /**
-     * @return null|\MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function getChildren(): ?Collection
     {
-        return $this->cacheValue(self::CACHE_KEY_CHILDREN, [$this, 'createChildren']);
+        return $this->cacheValue(self::CACHE_KEY_CHILDREN, $this->createChildren(...));
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->createLabel('view', $this->getLabelPrefix(), 'description');
@@ -73,25 +61,16 @@ abstract class AbstractSettingsView implements Arrayable
         });
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->createLabel('view', $this->getLabelPrefix(), 'title');
     }
 
-    /**
-     * @return null|string
-     */
     public function getTitleSuffix(): ?string
     {
         return null;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -99,17 +78,11 @@ abstract class AbstractSettingsView implements Arrayable
             'title'       => $this->getTitle(),
             'titleSuffix' => $this->getTitleSuffix(),
             'description' => $this->getDescription(),
-            'elements'    => $this->cacheToArray(self::CACHE_KEY_ELEMENTS_ARRAY, [$this, 'getElements']),
-            'children'    => $this->cacheToArray(self::CACHE_KEY_CHILDREN_ARRAY, [$this, 'getChildren']),
+            'elements'    => $this->cacheToArray(self::CACHE_KEY_ELEMENTS_ARRAY, $this->getElements(...)),
+            'children'    => $this->cacheToArray(self::CACHE_KEY_CHILDREN_ARRAY, $this->getChildren(...)),
         ];
     }
 
-    /**
-     * @param  array $options
-     * @param  int   $displayOptions
-     *
-     * @return array
-     */
     protected function addDefaultOption(array $options, int $displayOptions): array
     {
         $labelKey = $displayOptions & self::SELECT_USE_PLAIN_LABEL ? 'plainLabel' : 'label';
@@ -139,59 +112,33 @@ abstract class AbstractSettingsView implements Arrayable
         return null;
     }
 
-    /**
-     * @param  string ...$keys
-     *
-     * @return string
-     */
     protected function createLabel(string ...$keys): string
     {
         return Str::snake(implode('_', array_merge([self::KEY_PREFIX], $keys)));
     }
 
-    /**
-     * @param  string $setting
-     * @param  string $option
-     *
-     * @return string
-     */
     protected function createOptionLabel(string $setting, string $option): string
     {
         return Str::snake(sprintf('%s_option_%s', $this->getSettingKey($setting), $option));
     }
 
-    /**
-     * @param  array $packageTypes
-     *
-     * @return array
-     */
     protected function createPackageTypeOptions(array $packageTypes = DeliveryOptions::PACKAGE_TYPES_NAMES): array
     {
         return $this->toSelectOptions(
             array_combine(
                 array_values($packageTypes),
-                array_map(static function ($packageType) {
-                    return sprintf('package_type_%s', $packageType);
-                }, $packageTypes)
+                array_map(static fn($packageType) => sprintf('package_type_%s', $packageType), $packageTypes)
             ),
             self::SELECT_INCLUDE_OPTION_DEFAULT
         );
     }
 
-    /**
-     * @param  string $settingsKey
-     * @param  array  $options
-     *
-     * @return array
-     */
     protected function createSelectOptions(string $settingsKey, array $options): array
     {
         return $this->toSelectOptions(
             array_combine(
                 array_values($options),
-                array_map(function ($option) use ($settingsKey) {
-                    return $this->createOptionLabel($settingsKey, (string) $option);
-                }, $options)
+                array_map(fn($option) => $this->createOptionLabel($settingsKey, (string) $option), $options)
             )
         );
     }
@@ -199,8 +146,6 @@ abstract class AbstractSettingsView implements Arrayable
     /**
      * @param  PlainElement[]|PlainElement[][] $elements
      * @param  null|callable                   $callback
-     *
-     * @return array
      */
     protected function flattenElements(array $elements, ?callable $callback = null): array
     {
@@ -215,30 +160,16 @@ abstract class AbstractSettingsView implements Arrayable
         }, []);
     }
 
-    /**
-     * @return string
-     */
     protected function getLabelPrefix(): string
     {
         return $this->getSettingsId();
     }
 
-    /**
-     * @param  string $name
-     *
-     * @return string
-     */
     protected function getSettingKey(string $name): string
     {
         return Str::snake(sprintf('%s_%s_%s', self::KEY_PREFIX, $this->getSettingsId(), $name));
     }
 
-    /**
-     * @param  array $array
-     * @param  int   $displayOptions
-     *
-     * @return array
-     */
     protected function toSelectOptions(array $array, int $displayOptions = 0): array
     {
         $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
@@ -255,11 +186,6 @@ abstract class AbstractSettingsView implements Arrayable
         return $this->addDefaultOption($options, $displayOptions);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection $elements
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
-     */
     protected function updateElements(FormElementCollection $elements): FormElementCollection
     {
         return $elements->map(function ($element): PlainElement {
@@ -278,9 +204,6 @@ abstract class AbstractSettingsView implements Arrayable
         });
     }
 
-    /**
-     * @param  array $item
-     */
     protected function validate(array $item): void
     {
         if (isset($item['type'])) {
@@ -293,10 +216,7 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @param  callable                    $callback
      * @param  PlainElement[]|PlainElement ...$fields
-     *
-     * @return array
      */
     protected function withOperation(callable $callback, ...$fields): array
     {
@@ -308,10 +228,7 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @param  array                       $props
      * @param  PlainElement[]|PlainElement ...$fields
-     *
-     * @return array
      */
     protected function withProps(array $props, ...$fields): array
     {
@@ -322,12 +239,6 @@ abstract class AbstractSettingsView implements Arrayable
         });
     }
 
-    /**
-     * @param  string   $key
-     * @param  callable $closure
-     *
-     * @return array|null
-     */
     private function cacheToArray(string $key, callable $closure): ?array
     {
         return $this->cacheValue($key, function () use ($closure): ?array {
@@ -339,9 +250,6 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @param  string   $key
-     * @param  callable $closure
-     *
      * @return mixed
      */
     private function cacheValue(string $key, callable $closure)

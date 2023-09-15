@@ -9,23 +9,11 @@ use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 
 class PostWebhookSubscriptionsRequest extends Request
 {
-    /**
-     * @var \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
-     */
-    private $collection;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection $collection
-     */
-    public function __construct(WebhookSubscriptionCollection $collection)
+    public function __construct(private readonly WebhookSubscriptionCollection $collection)
     {
         parent::__construct();
-        $this->collection = $collection;
     }
 
-    /**
-     * @return string
-     */
     public function getBody(): string
     {
         $array = [];
@@ -44,17 +32,11 @@ class PostWebhookSubscriptionsRequest extends Request
         ]);
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/webhook_subscriptions';

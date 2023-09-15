@@ -9,21 +9,14 @@ use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 
 class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var mixed
-     */
-    private $configurations;
+    private ?ShopCarrierConfigurationCollection $configurations = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection
-     */
     public function getCarrierConfigurations(): ShopCarrierConfigurationCollection
     {
         return $this->configurations;
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     protected function parseResponseBody(): void
@@ -32,11 +25,9 @@ class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
         $configurations = $parsedBody['data']['carrier_configurations'] ?? [];
 
         $this->configurations = new ShopCarrierConfigurationCollection(
-            array_map(static function (array $configuration) {
-                return ($configuration['configuration'] ?? []) + [
-                        'carrier' => $configuration['carrier_id'],
-                    ];
-            }, $configurations)
+            array_map(static fn(array $configuration) => ($configuration['configuration'] ?? []) + [
+                    'carrier' => $configuration['carrier_id'],
+                ], $configurations)
         );
     }
 }

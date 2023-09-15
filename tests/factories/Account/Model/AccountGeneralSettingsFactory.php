@@ -25,8 +25,6 @@ final class AccountGeneralSettingsFactory extends AbstractModelFactory
 
     /**
      * @param  \MyParcelNL\Pdk\Account\Model\AccountGeneralSettings $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

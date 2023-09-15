@@ -20,15 +20,15 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  */
 class ShipmentOptions extends Model
 {
-    public const AGE_CHECK         = 'ageCheck';
-    public const HIDE_SENDER       = 'hideSender';
-    public const INSURANCE         = 'insurance';
-    public const LABEL_DESCRIPTION = 'labelDescription';
-    public const LARGE_FORMAT      = 'largeFormat';
-    public const ONLY_RECIPIENT    = 'onlyRecipient';
-    public const DIRECT_RETURN     = 'return';
-    public const SAME_DAY_DELIVERY = 'sameDayDelivery';
-    public const SIGNATURE         = 'signature';
+    final public const AGE_CHECK         = 'ageCheck';
+    final public const HIDE_SENDER       = 'hideSender';
+    final public const INSURANCE         = 'insurance';
+    final public const LABEL_DESCRIPTION = 'labelDescription';
+    final public const LARGE_FORMAT      = 'largeFormat';
+    final public const ONLY_RECIPIENT    = 'onlyRecipient';
+    final public const DIRECT_RETURN     = 'return';
+    final public const SAME_DAY_DELIVERY = 'sameDayDelivery';
+    final public const SIGNATURE         = 'signature';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,

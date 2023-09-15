@@ -55,8 +55,6 @@ final class PdkOrderLineFactory extends AbstractModelFactory
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderLine $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

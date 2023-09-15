@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Config;
@@ -51,15 +53,13 @@ return [
     /**
      * Supported date formats.
      */
-    'dateFormats'              => factory(function () {
-        return [
-            'Y-m-d\TH:i:s.uP',
-            'Y-m-d\TH:i:sP',
-            'Y-m-d H:i:s.u',
-            Pdk::get('defaultDateFormat'),
-            Pdk::get('defaultDateFormatShort'),
-        ];
-    }),
+    'dateFormats'              => factory(fn() => [
+        'Y-m-d\TH:i:s.uP',
+        'Y-m-d\TH:i:sP',
+        'Y-m-d H:i:s.u',
+        Pdk::get('defaultDateFormat'),
+        Pdk::get('defaultDateFormatShort'),
+    ]),
 
     /**
      * The default time zone to use for date and time functions.

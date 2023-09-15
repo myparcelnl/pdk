@@ -18,22 +18,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TypescriptHelperGenerator extends AbstractHelperGenerator
 {
-    public const  UNDEFINED     = 'undefined';
-    public const  SPACES_AMOUNT = 2;
-    public const  UNKNOWN       = 'unknown';
-    private const FALLBACK_TYPE = 'Record<string, ' . self::UNKNOWN . '>';
+    final public const  UNDEFINED     = 'undefined';
+    final public const  SPACES_AMOUNT = 2;
+    final public const  UNKNOWN       = 'unknown';
+    private const       FALLBACK_TYPE = 'Record<string, ' . self::UNKNOWN . '>';
 
-    /**
-     * @var \MyParcelNL\Pdk\Console\Types\TypeScript\TsTypeParser
-     */
-    private $parser;
+    private readonly TsTypeParser $parser;
 
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
-     * @param  string                                                                    $baseDir
-     */
     public function __construct(
         InputInterface            $input,
         OutputInterface           $output,
@@ -46,18 +37,13 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
 
     /**
      * @param         $item
-     * @param  string $spaces
-     *
-     * @return string
      */
     public function createPropertiesString($item, string $spaces): string
     {
         $string = '';
 
         // filter properties, removing items without the name key
-        $properties = Arr::where($item['properties'] ?? [], static function ($value, $name) {
-            return (bool) $name;
-        });
+        $properties = Arr::where($item['properties'] ?? [], static fn($value, $name) => (bool) $name);
 
         if (count($properties)) {
             if ($item['extends']) {
@@ -70,9 +56,7 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
                 $hasUndefined = in_array(self::UNDEFINED, $types, true);
 
                 if ($hasUndefined && count($types)) {
-                    $types = array_filter($types, static function ($item) {
-                        return self::UNDEFINED !== $item;
-                    });
+                    $types = array_filter($types, static fn($item) => self::UNDEFINED !== $item);
                 }
 
                 $fallbackType = $hasUndefined ? [self::UNDEFINED] : [self::UNKNOWN];
@@ -86,9 +70,7 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
                 );
             }
 
-            $string .= PHP_EOL . str_repeat(' ', self::SPACES_AMOUNT) . '}';
-
-            return $string;
+            return $string . (PHP_EOL . str_repeat(' ', self::SPACES_AMOUNT) . '}');
         }
 
         if (! $item['extends']) {
@@ -100,9 +82,6 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
 
     /**
      * @param         $item
-     * @param  string $spaces
-     *
-     * @return string
      */
     public function createTypeString($item, string $spaces): string
     {
@@ -121,17 +100,13 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
 
     /**
      * @param  null|\ReflectionClass $ref
-     * @param  string                $baseProperty
-     * @param  array                 $types
-     *
-     * @return array
      */
     public function getPropertyTypesRecursive(
         ?ReflectionClass $ref,
         string           $baseProperty,
         array            $types = []
     ): array {
-        $types = $types ?? [];
+        $types ??= [];
 
         if ($ref && $ref->hasProperty($baseProperty)) {
             $property = $ref->getProperty($baseProperty);
@@ -149,9 +124,6 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
         return $types;
     }
 
-    /**
-     * @return array
-     */
     protected function gatherContent(): array
     {
         $items = [];
@@ -159,7 +131,7 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
         foreach ($this->definitions->all() as $definition) {
             $parentRef = $definition->ref->getParentClass() ?: null;
 
-            $parts = explode('\\', $definition->ref->getName());
+            $parts = explode('\\', (string) $definition->ref->getName());
             $group = null;
 
             if (count($parts) > 3) {
@@ -178,9 +150,10 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
                     continue;
                 }
 
-                $item['properties'][$property['name']] = array_map(function (string $type) {
-                    return $this->parser->getType($type, true);
-                }, $property['types']);
+                $item['properties'][$property['name']] = array_map(
+                    fn(string $type) => $this->parser->getType($type, true),
+                    $property['types']
+                );
             }
 
             foreach ($definition->properties->all() as $property) {
@@ -198,9 +171,6 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
         return $items;
     }
 
-    /**
-     * @return void
-     */
     protected function generate(): void
     {
         $handle  = $this->getHandle($this->getFilename());
@@ -269,9 +239,6 @@ class TypescriptHelperGenerator extends AbstractHelperGenerator
         ];
     }
 
-    /**
-     * @return string
-     */
     private function getFilename(): string
     {
         return "$this->baseDir/types/typescript/myparcel-pdk.d.ts";

@@ -10,12 +10,6 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 
 class WeightService implements WeightServiceInterface
 {
-    /**
-     * @param  int   $weight
-     * @param  array $ranges
-     *
-     * @return int
-     */
     public function convertToDigitalStamp(int $weight, array $ranges = self::DIGITAL_STAMP_RANGES): int
     {
         if ($weight > Arr::last($ranges)['max']) {
@@ -28,9 +22,7 @@ class WeightService implements WeightServiceInterface
             );
         }
 
-        $results = Arr::where($ranges, static function ($range) use ($weight) {
-            return $weight > $range['min'];
-        });
+        $results = Arr::where($ranges, static fn($range) => $weight > $range['min']);
 
         if (empty($results)) {
             $rangeWeight = Arr::first($ranges)['average'];
@@ -43,9 +35,6 @@ class WeightService implements WeightServiceInterface
 
     /**
      * @param  int|float $weight
-     * @param  string    $unit
-     *
-     * @return int
      */
     public function convertToGrams($weight, string $unit): int
     {

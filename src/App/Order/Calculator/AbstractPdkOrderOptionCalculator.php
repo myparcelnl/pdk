@@ -14,9 +14,6 @@ abstract class AbstractPdkOrderOptionCalculator implements PdkOrderOptionCalcula
      */
     protected $order;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
     public function __construct(PdkOrder $order)
     {
         $this->order = $order;

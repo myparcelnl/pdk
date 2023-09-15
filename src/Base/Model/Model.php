@@ -39,9 +39,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     /**
      * Handle dynamic method calls into the model.
      *
-     * @param  string $method
-     * @param  array  $parameters
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -68,13 +65,11 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     {
         $this->cloned = true;
 
-        $this->attributes = array_map([Utils::class, 'clone'], $this->getAttributes());
+        $this->attributes = array_map(Utils::clone(...), $this->getAttributes());
     }
 
     /**
      * Dynamically retrieve attributes on the model.
-     *
-     * @param  string $key
      *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
@@ -87,8 +82,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     /**
      * Determine if an attribute or relation exists on the model.
      *
-     * @param  string $key
-     *
      * @return bool
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -100,19 +93,14 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     /**
      * Dynamically set attributes on the model.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return void
      */
-    public function __set(string $key, $value)
+    public function __set(string $key, mixed $value)
     {
         $this->setAttribute($key, $value);
     }
 
     /**
-     * @param  array $attributes
-     *
      * @return static
      */
     public function fill(array $attributes): self
@@ -144,12 +132,9 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     /**
      * Determine if the given attribute exists.
      *
-     * @param  mixed $offset
-     *
-     * @return bool
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return null !== $this->getAttribute($offset);
     }
@@ -157,37 +142,26 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     /**
      * Get the value for a given offset.
      *
-     * @param  mixed $offset
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset)
     {
         return $this->getAttribute($offset);
     }
 
     /**
      * Set the value for a given offset.
-     *
-     * @param  mixed $offset
-     * @param  mixed $value
-     *
-     * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->setAttribute($offset, $value);
     }
 
     /**
      * Unset the value for a given offset.
-     *
-     * @param  mixed $offset
-     *
-     * @return void
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->attributes[$this->convertAttributeCase($offset)]);
     }
@@ -197,7 +171,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
      *
      * @param  null|int $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toArray(?int $flags = null): array
@@ -214,7 +187,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     }
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toKebabCaseArray(): array
@@ -223,7 +195,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     }
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toSnakeCaseArray(): array
@@ -232,7 +203,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     }
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStudlyCaseArray(): array
@@ -240,11 +210,6 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
         return $this->toArray(Arrayable::CASE_STUDLY);
     }
 
-    /**
-     * @param  array $attributes
-     *
-     * @return array
-     */
     private function normalizeAttributes(array $attributes): array
     {
         $normalizedAttributes = [];

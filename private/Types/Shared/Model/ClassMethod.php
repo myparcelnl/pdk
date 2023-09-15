@@ -28,7 +28,6 @@ class ClassMethod extends Model implements StorableArrayable
     ];
 
     /**
-     * @return \ReflectionMethod
      * @throws \ReflectionException
      * @noinspection PhpUnused
      */
@@ -41,9 +40,6 @@ class ClassMethod extends Model implements StorableArrayable
         return new ReflectionMethod($this->attributes['ref']['class'], $this->attributes['ref']['name']);
     }
 
-    /**
-     * @return array
-     */
     public function toStorableArray(): array
     {
         $reflectionMethod = $this->ref;

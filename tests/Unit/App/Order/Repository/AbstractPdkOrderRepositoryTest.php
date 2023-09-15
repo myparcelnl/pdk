@@ -35,9 +35,7 @@ it('gets multiple orders', function () {
     expect($orders)
         ->toHaveLength(3)
         ->and(
-            $orders->every(function ($order) {
-                return is_a($order, PdkOrder::class);
-            })
+            $orders->every(fn($order) => is_a($order, PdkOrder::class))
         )
         ->toBeTrue();
 });

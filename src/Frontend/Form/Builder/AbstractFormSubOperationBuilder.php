@@ -12,11 +12,8 @@ abstract class AbstractFormSubOperationBuilder extends AbstractFormOperationBuil
     FormSubOperationBuilderInterface
 {
     /**
-     * @param  string        $prop
      * @param  mixed         $value
      * @param  null|callable $callback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetPropOperation
      */
     public function setProp(string $prop, $value, ?callable $callback = null): FormSetPropOperation
     {
@@ -26,8 +23,6 @@ abstract class AbstractFormSubOperationBuilder extends AbstractFormOperationBuil
     /**
      * @param  scalar        $value
      * @param  null|callable $callback
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Operation\FormSetValueOperation
      */
     public function setValue($value, ?callable $callback = null): FormSetValueOperation
     {

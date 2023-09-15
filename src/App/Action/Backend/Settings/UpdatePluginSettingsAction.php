@@ -14,23 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdatePluginSettingsAction implements ActionInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
-     */
-    private $settingsRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
-     */
-    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    public function __construct(private readonly SettingsRepositoryInterface $settingsRepository)
     {
-        $this->settingsRepository = $settingsRepository;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function handle(Request $request): Response

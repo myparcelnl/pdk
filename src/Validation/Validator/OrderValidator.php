@@ -17,9 +17,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
      */
     protected $order;
 
-    /**
-     * @return array
-     */
     public function getSchema(): array
     {
         $this->ensureOrder();
@@ -35,8 +32,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
      * @return $this
      */
     public function setOrder(PdkOrder $order): OrderValidatorInterface
@@ -47,7 +42,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
     }
 
     /**
-     * @return bool
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function validate(): bool
@@ -68,7 +62,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
     }
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function createOrderArray(): array
@@ -76,9 +69,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
         return $this->order->toArray();
     }
 
-    /**
-     * @return void
-     */
     protected function ensureOrder(): void
     {
         if (! $this->order) {

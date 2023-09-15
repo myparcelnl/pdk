@@ -16,32 +16,14 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 
 class InstallerService implements InstallerServiceInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface
-     */
-    private $migrationService;
-
-    /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
-     */
-    private $settingsRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface    $settingsRepository
-     * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface $migrationService
-     */
     public function __construct(
-        SettingsRepositoryInterface $settingsRepository,
-        MigrationServiceInterface   $migrationService
+        private readonly SettingsRepositoryInterface $settingsRepository,
+        private readonly MigrationServiceInterface   $migrationService
     ) {
-        $this->settingsRepository = $settingsRepository;
-        $this->migrationService   = $migrationService;
     }
 
     /**
      * @param  mixed ...$args
-     *
-     * @return void
      */
     public function install(...$args): void
     {
@@ -67,8 +49,6 @@ class InstallerService implements InstallerServiceInterface
 
     /**
      * @param  mixed ...$args
-     *
-     * @return void
      */
     public function uninstall(...$args): void
     {
@@ -84,67 +64,54 @@ class InstallerService implements InstallerServiceInterface
         }
     }
 
-    /**
-     * @param  mixed ...$args
-     *
-     * @return void
-     */
-    protected function executeInstallation(...$args): void
+    protected function executeInstallation(mixed ...$args): void
     {
         $this->setDefaultSettings();
     }
 
     /**
      * @param  array $args
-     *
-     * @return void
      */
     protected function executeUninstallation(...$args): void
     {
     }
 
-    /**
-     * @return null|string
-     */
     protected function getInstalledVersion(): ?string
     {
         return $this->settingsRepository->get(Pdk::get('settingKeyInstalledVersion'));
     }
 
-    /**
-     * @return void
-     */
     protected function migrateDown(): void
     {
         $this->getMigrations()
-            ->filter(function (MigrationInterface $migration) {
-                return version_compare($migration->getVersion(), $this->getInstalledVersion(), '<=');
-            })
+            ->filter(
+                fn(MigrationInterface $migration) => version_compare(
+                    $migration->getVersion(),
+                    $this->getInstalledVersion(),
+                    '<='
+                )
+            )
             ->each(function (MigrationInterface $migration) {
                 $migration->down();
             });
     }
 
-    /**
-     * @param  string $version
-     *
-     * @return void
-     */
     protected function migrateUp(string $version): void
     {
         $this->getMigrations()
-            ->filter(function (MigrationInterface $migration) use ($version) {
-                return version_compare($migration->getVersion(), $this->getInstalledVersion(), '>')
-                    && version_compare($migration->getVersion(), $version, '<=');
-            })
+            ->filter(
+                fn(MigrationInterface $migration) => version_compare(
+                        $migration->getVersion(),
+                        $this->getInstalledVersion(),
+                        '>'
+                    )
+                    && version_compare($migration->getVersion(), $version, '<=')
+            )
             ->each(function (MigrationInterface $migration) {
                 $migration->up();
             });
     }
 
-    /**
-     * @return void
-     */
     protected function setDefaultSettings(): void
     {
         $settings = new Settings(SettingsFacade::getDefaults());
@@ -154,8 +121,6 @@ class InstallerService implements InstallerServiceInterface
 
     /**
      * @param  null|string $version
-     *
-     * @return void
      */
     protected function updateInstalledVersion(?string $version): void
     {
@@ -168,8 +133,6 @@ class InstallerService implements InstallerServiceInterface
     private function getMigrations(): Collection
     {
         return Collection::make($this->migrationService->all())
-            ->map(function (string $className) {
-                return Pdk::get($className);
-            });
+            ->map(fn(string $className) => Pdk::get($className));
     }
 }

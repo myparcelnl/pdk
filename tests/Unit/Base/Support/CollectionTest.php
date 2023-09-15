@@ -60,39 +60,37 @@ it('can create a storable array', function (array $items, array $storable) {
     $collection = new Collection($items);
 
     expect($collection->toStorableArray())->toEqual($storable);
-})->with(function () {
-    return [
-        '1 storable model' => [
-            'items'    => [
-                new MockStorableModel(['property' => ['a' => 1]]),
-            ],
-            'storable' => [
-                [
-                    'property' => '{"a":1}',
-                ],
+})->with(fn() => [
+    '1 storable model' => [
+        'items'    => [
+            new MockStorableModel(['property' => ['a' => 1]]),
+        ],
+        'storable' => [
+            [
+                'property' => '{"a":1}',
             ],
         ],
+    ],
 
-        '1 non-storable model' => [
-            'items'    => [
-                new MockCastModel(['property' => 'test']),
-            ],
-            'storable' => [
-                ['property' => 'test'],
-            ],
+    '1 non-storable model' => [
+        'items'    => [
+            new MockCastModel(['property' => 'test']),
         ],
+        'storable' => [
+            ['property' => 'test'],
+        ],
+    ],
 
-        '2 storable models and 1 non-storable' => [
-            'items'    => [
-                new MockStorableModel(['property' => ['a' => 1]]),
-                new MockStorableModel(['property' => ['b' => 2]]),
-                'test',
-            ],
-            'storable' => [
-                ['property' => '{"a":1}'],
-                ['property' => '{"b":2}'],
-                'test',
-            ],
+    '2 storable models and 1 non-storable' => [
+        'items'    => [
+            new MockStorableModel(['property' => ['a' => 1]]),
+            new MockStorableModel(['property' => ['b' => 2]]),
+            'test',
         ],
-    ];
-});
+        'storable' => [
+            ['property' => '{"a":1}'],
+            ['property' => '{"b":2}'],
+            'test',
+        ],
+    ],
+]);

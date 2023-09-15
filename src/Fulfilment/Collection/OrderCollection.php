@@ -18,8 +18,6 @@ class OrderCollection extends Collection
     protected $cast = Order::class;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
-     *
      * @return $this
      */
     public function addIds(Collection $ids): self

@@ -71,9 +71,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME);
     }
 
-    /**
-     * @return bool
-     */
     public function canHaveHideSender(): bool
     {
         return $this->canHave(HideSenderDefinition::class);
@@ -83,8 +80,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      * We can safely ignore the amount here as it's not used in the capabilities.
      *
      * @param  null|int $amount
-     *
-     * @return bool
      */
     public function canHaveInsurance(?int $amount = 0): bool
     {
@@ -146,9 +141,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->getFromSchema('packageTypes') ?: [];
     }
 
-    /**
-     * @return array
-     */
     public function getSchema(): array
     {
         $identifier = $this->getCarrier()->externalIdentifier;
@@ -160,11 +152,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->cache[$identifier];
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
-     *
-     * @return self
-     */
     public function setCarrier(Carrier $carrier): self
     {
         $this->carrier = $carrier;
@@ -172,19 +159,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this;
     }
 
-    /**
-     * @param  string $packageType
-     *
-     * @return bool
-     */
     protected function canHavePackageType(string $packageType): bool
     {
         return in_array($packageType, $this->getAllowedPackageTypes(), true);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Carrier\Model\Carrier
-     */
     protected function getCarrier(): Carrier
     {
         if (! $this->carrier) {
@@ -196,8 +175,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     /**
      * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
-     *
-     * @return bool
      */
     private function canHave($definition): bool
     {
@@ -211,8 +188,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
-     * @param  string $feature
-     *
      * @return mixed
      */
     private function getFeature(string $feature)
@@ -221,8 +196,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      */
     private function getFromSchema(string $key)
@@ -242,11 +215,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->getFromSchema(sprintf('shipmentOptions.%s', $resolvedDefinition->getShipmentOptionsKey()));
     }
 
-    /**
-     * @param  string $deliveryType
-     *
-     * @return bool
-     */
     private function hasDeliveryType(string $deliveryType): bool
     {
         return in_array($deliveryType, $this->getAllowedDeliveryTypes(), true);
@@ -254,8 +222,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     /**
      * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
-     *
-     * @return \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface
      */
     private function resolveDefinition($definition): OrderOptionDefinitionInterface
     {

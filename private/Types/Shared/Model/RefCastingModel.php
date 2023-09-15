@@ -23,10 +23,6 @@ abstract class RefCastingModel extends Model
     //
     //        return new $class($value['name']);
     //    }
-
-    /**
-     * @return null|\Reflector
-     */
     protected function getRefAttribute(): ?Reflector
     {
         $ref = $this->attributes['ref'];

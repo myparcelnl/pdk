@@ -8,17 +8,11 @@ use MyParcelNL\Pdk\App\Request\AbstractEndpointRequest;
 
 class UpdatePluginSettingsEndpointRequest extends AbstractEndpointRequest
 {
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'PUT';
     }
 
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return 'plugin_settings';

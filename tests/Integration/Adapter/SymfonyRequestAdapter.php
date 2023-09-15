@@ -8,13 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class SymfonyRequestAdapter
 {
-    /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
-     *
-     * @return \Symfony\Component\HttpFoundation\Request
-     */
     public function fromParts(string $httpMethod, string $uri, array $options): Request
     {
         $symfonyRequest = Request::create(

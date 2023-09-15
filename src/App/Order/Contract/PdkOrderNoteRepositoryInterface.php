@@ -10,38 +10,19 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 
 interface PdkOrderNoteRepositoryInterface
 {
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderNote $note
-     *
-     * @return void
-     */
     public function add(PdkOrderNote $note): void;
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
      * @return mixed
      */
     public function getFromOrder(PdkOrder $order): PdkOrderNoteCollection;
 
     /**
      * @param  (string|PdkOrderNote)[] $input
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      */
     public function getMany(array $input): PdkOrderNoteCollection;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderNote $note
-     *
-     * @return void
-     */
     public function update(PdkOrderNote $note): void;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $note
-     *
-     * @return void
-     */
     public function updateMany(PdkOrderNoteCollection $note): void;
 }

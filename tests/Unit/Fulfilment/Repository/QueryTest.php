@@ -34,5 +34,5 @@ it('creates order collection from queried data', function () {
         ['shipment.carrier.capabilities', 'shipment.carrier.returnCapabilities']
     );
 
-    assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
+    assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities, JSON_THROW_ON_ERROR));
 });

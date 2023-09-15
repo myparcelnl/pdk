@@ -1,0 +1,12 @@
+name: belgie
+human: SendMyParcel
+backofficeUrl: 'https://backoffice.sendmyparcel.be'
+localCountry: BE
+defaultCarrier: bpost
+defaultCarrierId: 2
+defaultSettings:
+    checkout: { pickupLocationsDefaultView: map }
+carriers:
+    - { name: postnl, capabilities: { packageTypes: [package], deliveryTypes: [standard, pickup], shipmentOptions: { signature: true, onlyRecipient: true, largeFormat: true, insurance: [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000] }, features: { labelDescriptionLength: 45 } }, returnCapabilities: {  } }
+    - { name: bpost, capabilities: { packageTypes: [package, mailbox], deliveryTypes: [standard], shipmentOptions: { saturdayDelivery: true, signature: true, insurance: [0, 50000] }, features: { labelDescriptionLength: 45, multiCollo: true } } }
+    - { name: dpd, capabilities: { packageTypes: [package], deliveryTypes: [standard], shipmentOptions: { insurance: [0, 52000] }, features: { dropOffAtPostalPoint: true, labelDescriptionLength: 45, multiCollo: true } }, returnCapabilities: {  } }

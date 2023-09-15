@@ -48,6 +48,6 @@ function getProductOptions(): array
     ]);
 }
 
-dataset('frontend shipment options', function () { return getFrontendShipmentOptions(); });
-dataset('all shipment options', function () { return getAllShipmentOptions(); });
-dataset('product options', function () { return getProductOptions(); });
+dataset('frontend shipment options', fn() => getFrontendShipmentOptions());
+dataset('all shipment options', fn() => getAllShipmentOptions());
+dataset('product options', fn() => getProductOptions());

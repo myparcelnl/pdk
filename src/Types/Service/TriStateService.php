@@ -8,26 +8,24 @@ use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 
 class TriStateService implements TriStateServiceInterface
 {
-    public const INHERIT  = -1;
-    public const DISABLED = 0;
-    public const ENABLED  = 1;
+    final public const INHERIT  = -1;
+    final public const DISABLED = 0;
+    final public const ENABLED  = 1;
     /**
      * This type is cast to -1, 0 or 1.
      */
-    public const TYPE_STRICT = 'triState';
+    final public const TYPE_STRICT = 'triState';
     /**
      * This type is cast to -1 if the value is falsy, but is preserved otherwise.
      */
-    public const TYPE_COERCED = 'triStateCoerced';
+    final public const TYPE_COERCED = 'triStateCoerced';
     /**
      * Replaces falsy values with '' and casts others to string.
      */
-    public const TYPE_STRING = 'triStateString';
+    final public const TYPE_STRING = 'triStateString';
 
     /**
      * @param  mixed $value
-     *
-     * @return int
      */
     public function cast($value): int
     {
@@ -63,8 +61,6 @@ class TriStateService implements TriStateServiceInterface
     }
 
     /**
-     * @param  array $values
-     *
      * @return null|int|mixed
      */
     private function resolveValues(array $values)

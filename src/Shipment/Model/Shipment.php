@@ -51,14 +51,14 @@ use MyParcelNL\Pdk\Facade\Pdk;
  */
 class Shipment extends Model implements StorableArrayable
 {
-    public const SHIPMENT_TYPE_STANDARD       = 1;
-    public const SHIPMENT_TYPE_RETURN         = 2;
-    public const SHIPMENT_TYPE_MULTI_COLLO    = 3;
-    public const SHIPMENT_TYPE_LABEL_PACKAGE  = 4;
-    public const SHIPMENT_TYPE_RETURN_ERS     = 5;
-    public const SHIPMENT_TYPE_RETURN_SPECIAL = 6;
-    public const SHIPMENT_TYPE_EXPRESS        = 7;
-    public const RETURN_SHIPMENT_TYPES        = [
+    final public const SHIPMENT_TYPE_STANDARD       = 1;
+    final public const SHIPMENT_TYPE_RETURN         = 2;
+    final public const SHIPMENT_TYPE_MULTI_COLLO    = 3;
+    final public const SHIPMENT_TYPE_LABEL_PACKAGE  = 4;
+    final public const SHIPMENT_TYPE_RETURN_ERS     = 5;
+    final public const SHIPMENT_TYPE_RETURN_SPECIAL = 6;
+    final public const SHIPMENT_TYPE_EXPRESS        = 7;
+    final public const RETURN_SHIPMENT_TYPES        = [
         self::SHIPMENT_TYPE_RETURN,
         self::SHIPMENT_TYPE_RETURN_ERS,
         self::SHIPMENT_TYPE_RETURN_SPECIAL,
@@ -209,7 +209,6 @@ class Shipment extends Model implements StorableArrayable
     /**
      * Returns the model as an array that can be saved in a database.
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @throws \Exception
      */
@@ -257,7 +256,6 @@ class Shipment extends Model implements StorableArrayable
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     private function updateCarrier(): void

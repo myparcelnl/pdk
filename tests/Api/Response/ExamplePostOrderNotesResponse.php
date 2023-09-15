@@ -22,9 +22,6 @@ class ExamplePostOrderNotesResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'order_notes';

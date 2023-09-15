@@ -33,7 +33,7 @@ it('renders component on correct pages', function (callable $callback, array $vi
     expect($result)->toBe($shouldRender ? MockFrontendRenderService::RENDERED_CONTENT : '');
 })
     ->with('components')
-    ->with(array_merge(MockAbstractViewService::ALL_PDK_PAGES, ['not_a_pdk_page']));
+    ->with([...MockAbstractViewService::ALL_PDK_PAGES, 'not_a_pdk_page']);
 
 it('throws exception when trying to render an unrecognized component', function () {
     global $currentPage;

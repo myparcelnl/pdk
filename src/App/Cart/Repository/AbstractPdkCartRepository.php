@@ -14,18 +14,14 @@ abstract class AbstractPdkCartRepository extends Repository implements PdkCartRe
 {
     /**
      * @param  mixed $input
-     *
-     * @return \MyParcelNL\Pdk\App\Cart\Model\PdkCart
      */
     abstract public function get($input): PdkCart;
 
     /**
      * @param  mixed $input
-     *
-     * @return \MyParcelNL\Pdk\App\Cart\Collection\PdkCartCollection
      */
     public function getMany($input): PdkCartCollection
     {
-        return new PdkCartCollection(array_map([$this, 'get'], Utils::toArray($input)));
+        return new PdkCartCollection(array_map($this->get(...), Utils::toArray($input)));
     }
 }

@@ -14,40 +14,24 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
 {
     /**
      * @param  mixed $input
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
     abstract public function get($input): PdkOrder;
 
     /**
      * @param  string|string[] $orderIds
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      */
     public function getMany($orderIds): PdkOrderCollection
     {
-        return new PdkOrderCollection(array_map([$this, 'get'], Utils::toArray($orderIds)));
+        return new PdkOrderCollection(array_map($this->get(...), Utils::toArray($orderIds)));
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
     public function update(PdkOrder $order): PdkOrder
     {
         return $this->save($order->externalIdentifier, $order);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $collection
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
-     */
     public function updateMany(PdkOrderCollection $collection): PdkOrderCollection
     {
-        return $collection->map(function ($order) {
-            return $this->update($order);
-        });
+        return $collection->map(fn($order) => $this->update($order));
     }
 }

@@ -18,17 +18,11 @@ class Repository
      */
     protected $storageHashMap = [];
 
-    /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
-     */
     public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
 
-    /**
-     * @return void
-     */
     public function persist(): void
     {
         $prefix = $this->getKeyPrefix();
@@ -47,9 +41,7 @@ class Repository
     }
 
     /**
-     * @param  string        $key
      * @param  null|callable $callback
-     * @param  bool          $force
      *
      * @return mixed
      */
@@ -69,12 +61,9 @@ class Repository
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $data
-     *
      * @return mixed
      */
-    public function save(string $key, $data)
+    public function save(string $key, mixed $data)
     {
         $this->storage->set($this->getKeyPrefix() . $key, $data);
         $this->storage->delete($this->getKeyPrefix() . $this->getAllStorageKey());
@@ -82,12 +71,7 @@ class Repository
         return $data;
     }
 
-    /**
-     * @param  mixed $data
-     *
-     * @return null|string
-     */
-    protected function generateDataHash($data): ?string
+    protected function generateDataHash(mixed $data): ?string
     {
         if (! $data) {
             return null;
@@ -96,25 +80,17 @@ class Repository
         return md5(var_export($data, true));
     }
 
-    /**
-     * @return string
-     */
     protected function getAllStorageKey(): string
     {
         return 'all';
     }
 
-    /**
-     * @return string
-     */
     protected function getKeyPrefix(): string
     {
         return '';
     }
 
     /**
-     * @param  callable $callback
-     *
      * @return mixed
      */
     protected function retrieveAll(callable $callback)

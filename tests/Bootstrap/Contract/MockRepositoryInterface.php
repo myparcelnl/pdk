@@ -8,8 +8,5 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 
 interface MockRepositoryInterface
 {
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function all(): Collection;
 }

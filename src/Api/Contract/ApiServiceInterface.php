@@ -13,10 +13,7 @@ use MyParcelNL\Pdk\Api\Response\ApiResponse;
 interface ApiServiceInterface
 {
     /**
-     * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
-     * @param  class-string<ApiResponseInterface>           $responseClass
-     *
-     * @return \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface
+     * @param  class-string<ApiResponseInterface> $responseClass
      */
     public function doRequest(
         RequestInterface $request,

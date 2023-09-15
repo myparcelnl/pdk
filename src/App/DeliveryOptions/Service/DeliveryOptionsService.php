@@ -52,47 +52,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
     ];
 
-    /**
-     * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
-     */
-    private $currencyService;
-
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface
-     */
-    private $dropOffService;
-
-    /**
-     * @var \MyParcelNL\Pdk\Validation\Repository\SchemaRepository
-     */
-    private $schemaRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface
-     */
-    private $taxService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
-     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
-     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
-     */
     public function __construct(
-        DropOffServiceInterface  $dropOffService,
-        TaxServiceInterface      $taxService,
-        SchemaRepository         $schemaRepository,
-        CurrencyServiceInterface $currencyService
+        private readonly DropOffServiceInterface  $dropOffService,
+        private readonly TaxServiceInterface      $taxService,
+        private readonly SchemaRepository         $schemaRepository,
+        private readonly CurrencyServiceInterface $currencyService
     ) {
-        $this->dropOffService   = $dropOffService;
-        $this->taxService       = $taxService;
-        $this->schemaRepository = $schemaRepository;
-        $this->currencyService  = $currencyService;
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createAllCarrierSettings(PdkCart $cart): array
@@ -123,10 +91,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function createCarrierSettings(Carrier $carrier, PdkCart $cart): array
@@ -159,10 +123,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart         $cart
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getBaseSettings(CarrierSettings $carrierSettings, PdkCart $cart): array
@@ -187,8 +147,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
     /**
      * Filters all carrier options by the package type and weight.
-     *
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
      * @return array<string, \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection>
      */
@@ -231,17 +189,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart     $cart
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
-     *
-     * @return int
-     */
     private function getWeightByPackageType(PdkCart $cart, PackageType $packageType): int
     {
-        $cartWeight = (int) $cart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-            return $carry + $line->product->weight * $line->quantity;
-        }, 0);
+        $cartWeight = (int) $cart->lines->reduce(
+            fn(float $carry, PdkOrderLine $line) => $carry + $line->product->weight * $line->quantity,
+            0
+        );
 
         $fullWeight = $cartWeight;
 

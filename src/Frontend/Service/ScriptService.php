@@ -9,13 +9,6 @@ use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 
 class ScriptService implements ScriptServiceInterface
 {
-    /**
-     * @param  string $name
-     * @param  string $version
-     * @param  string $filename
-     *
-     * @return string
-     */
     public function createCdnUrl(string $name, string $version, string $filename): string
     {
         return strtr($this->getBaseCdnUrl(), [
@@ -25,9 +18,6 @@ class ScriptService implements ScriptServiceInterface
         ]);
     }
 
-    /**
-     * @return string
-     */
     public function getBaseCdnUrl(): string
     {
         return Pdk::get('baseCdnUrl');

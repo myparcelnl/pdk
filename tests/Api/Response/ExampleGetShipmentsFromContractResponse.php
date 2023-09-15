@@ -167,7 +167,7 @@ class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
                         'external_identifier'          => '3SMYPA637827684',
                         'delayed'                      => false,
                         'delivered'                    => false,
-                        'contract_id'                  => 10932623,
+                        'contract_id'                  => 10_932_623,
                     ],
                 ],
                 'collection_contact'           => null,
@@ -175,16 +175,13 @@ class ExampleGetShipmentsFromContractResponse extends ExampleJsonResponse
                 'external_identifier'          => '3SMYPA060119130',
                 'delayed'                      => false,
                 'delivered'                    => false,
-                'contract_id'                  => 10932623,
+                'contract_id'                  => 10_932_623,
                 'link_consumer_portal'         => 'https://demo.myparcel.me/track-trace/demo',
                 'partner_tracktraces'          => [],
             ],
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'shipments';

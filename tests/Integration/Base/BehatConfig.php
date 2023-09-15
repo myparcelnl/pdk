@@ -13,21 +13,12 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 final class BehatConfig extends Config
 {
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystem $fileSystem
-     */
     public function __construct(FileSystem $fileSystem)
     {
         parent::__construct($fileSystem);
     }
 
     /**
-     * @param  string                                               $httpMethod
-     * @param  string                                               $uri
-     * @param  array                                                $options
-     * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
-     *
-     * @return void
      * @throws \Brick\VarExporter\ExportException
      */
     public function writeExample(
@@ -43,7 +34,10 @@ final class BehatConfig extends Config
         $bodyString = 'null';
 
         if ($body) {
-            $bodyString = sprintf('json_encode(%s)', VarExporter::export(json_decode($body, true)));
+            $bodyString = sprintf(
+                'json_encode(%s)',
+                VarExporter::export(json_decode($body, true, 512, JSON_THROW_ON_ERROR))
+            );
         }
 
         $this->fileSystem->put(
@@ -52,16 +46,13 @@ final class BehatConfig extends Config
                 $this->getExampleTemplate(),
                 [
                     ':BODY'        => $bodyString,
-                    ':CONDITION'   => $this->buildCondition($httpMethod, $uri, $options),
+                    ':CONDITION'   => $this->buildCondition($httpMethod, $uri),
                     ':STATUS_CODE' => $response->getStatusCode(),
                 ]
             )
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getExampleTemplate(): string
     {
         return <<<'EOF'
@@ -84,24 +75,12 @@ return [
 EOF;
     }
 
-    /**
-     * @param  string $uri
-     *
-     * @return string
-     */
     protected function getPath(string $uri): string
     {
         return parse_url($uri, PHP_URL_PATH) ?: '';
     }
 
-    /**
-     * @param  string $httpMethod
-     * @param  string $uri
-     * @param  array  $options
-     *
-     * @return string
-     */
-    private function buildCondition(string $httpMethod, string $uri, array $options): string
+    private function buildCondition(string $httpMethod, string $uri): string
     {
         $conditions = [
             sprintf('\'%s\' === $request->getPathInfo()', $this->getPath($uri)),
@@ -112,11 +91,7 @@ EOF;
     }
 
     /**
-     * @param  string   $httpMethod
-     * @param  string   $uri
      * @param  null|int $increment
-     *
-     * @return string
      */
     private function generateExampleFilename(string $httpMethod, string $uri, ?int $increment = null): string
     {

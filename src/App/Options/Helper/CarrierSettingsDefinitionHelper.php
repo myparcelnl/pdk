@@ -9,24 +9,14 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 
 final class CarrierSettingsDefinitionHelper extends AbstractOptionDefinitionHelper
 {
-    /**
-     * @var \MyParcelNL\Pdk\Settings\Model\CarrierSettings|null
-     */
-    private $model;
+    private ?CarrierSettings $model = null;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
-     *
-     * @return null|string
-     */
     protected function getDefinitionKey(OrderOptionDefinitionInterface $definition): ?string
     {
         return $definition->getCarrierSettingsKey();
     }
 
     /**
-     * @param  string $attribute
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */

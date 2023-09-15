@@ -41,12 +41,6 @@ class UpdateAccountAction implements ActionInterface
      */
     protected $pdkSettingsRepository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository $carrierConfigurationRepository
-     * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository       $carrierOptionsRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface         $pdkSettingsRepository
-     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface    $pdkAccountRepository
-     */
     public function __construct(
         ShopCarrierConfigurationRepository $carrierConfigurationRepository,
         ShopCarrierOptionsRepository       $carrierOptionsRepository,
@@ -59,11 +53,6 @@ class UpdateAccountAction implements ActionInterface
         $this->pdkAccountRepository           = $pdkAccountRepository;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $body     = json_decode($request->getContent(), true);
@@ -83,11 +72,6 @@ class UpdateAccountAction implements ActionInterface
         ]);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Account\Model\Account $account
-     *
-     * @return void
-     */
     protected function fillAccount(Account $account): void
     {
         $shop = $account->shops->first();
@@ -96,9 +80,6 @@ class UpdateAccountAction implements ActionInterface
         $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Settings\Model\AccountSettings
-     */
     protected function getAccountSettings(): AccountSettings
     {
         /** @var null|AccountSettings $accountSettings */
@@ -111,11 +92,6 @@ class UpdateAccountAction implements ActionInterface
         return $accountSettings;
     }
 
-    /**
-     * @param  array $settings
-     *
-     * @return \MyParcelNL\Pdk\Settings\Model\AccountSettings
-     */
     protected function updateAccountSettings(array $settings): AccountSettings
     {
         $accountSettings = new AccountSettings($settings);
@@ -125,11 +101,6 @@ class UpdateAccountAction implements ActionInterface
         return $accountSettings;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\AccountSettings $accountSettings
-     *
-     * @return void
-     */
     protected function updateAndSaveAccount(AccountSettings $accountSettings): void
     {
         $foundAccount = $accountSettings->apiKey

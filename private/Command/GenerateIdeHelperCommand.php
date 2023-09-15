@@ -21,9 +21,6 @@ final class GenerateIdeHelperCommand extends AbstractGenerateTypesCommand
         return parent::getDefaultSourceDirectories() + ['private'];
     }
 
-    /**
-     * @return string
-     */
     protected function getGeneratorClass(): string
     {
         return IdeHelperGenerator::class;

@@ -11,16 +11,11 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
  */
 interface FormOperationInterface extends Arrayable
 {
-    /**
-     * @return array
-     */
     public function createArray(): array;
 
     /**
      * @param  null|string   $target
      * @param  null|callable $callable
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormConditionInterface
      */
     public function if(?string $target = null, ?callable $callable = null): FormConditionInterface;
 }

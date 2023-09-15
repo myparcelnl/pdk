@@ -10,24 +10,11 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class PostReturnShipmentsRequest extends Request
 {
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
-    private $collection;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipmentCollection
-     * @param  array                                                  $parameters
-     */
-    public function __construct(ShipmentCollection $shipmentCollection, array $parameters = [])
+    public function __construct(private readonly ShipmentCollection $collection, array $parameters = [])
     {
-        $this->collection = $shipmentCollection;
         parent::__construct(['parameters' => $parameters]);
     }
 
-    /**
-     * @return string
-     */
     public function getBody(): string
     {
         return json_encode([
@@ -37,9 +24,6 @@ class PostReturnShipmentsRequest extends Request
         ]);
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return [
@@ -47,34 +31,24 @@ class PostReturnShipmentsRequest extends Request
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/shipments';
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeReturnOptions(Shipment $shipment): array
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-        $options         = array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
-        }, $shipmentOptions->toSnakeCaseArray());
+        $options         = array_map(static fn($item) => is_bool($item) ? (int) $item : $item,
+            $shipmentOptions->toSnakeCaseArray());
 
         return array_filter(
             [
@@ -88,21 +62,16 @@ class PostReturnShipmentsRequest extends Request
         );
     }
 
-    /**
-     * @return array
-     */
     private function encodeReturnShipments(): array
     {
-        return $this->collection->map(function (Shipment $shipment) {
-            return [
-                'parent'               => $shipment->id,
-                'reference_identifier' => $shipment->referenceIdentifier,
-                'carrier'              => $shipment->carrier->id,
-                'email'                => $shipment->recipient->email,
-                'name'                 => $shipment->recipient->person,
-                'options'              => $this->encodeReturnOptions($shipment),
-            ];
-        })
+        return $this->collection->map(fn(Shipment $shipment) => [
+            'parent'               => $shipment->id,
+            'reference_identifier' => $shipment->referenceIdentifier,
+            'carrier'              => $shipment->carrier->id,
+            'email'                => $shipment->recipient->email,
+            'name'                 => $shipment->recipient->person,
+            'options'              => $this->encodeReturnOptions($shipment),
+        ])
             ->toArray();
     }
 }

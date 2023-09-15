@@ -43,8 +43,6 @@ interface WeightServiceInterface
      *
      * @param  int   $weight - Weight in grams.
      * @param  array $ranges - Ranges to convert to.
-     *
-     * @return int
      */
     public function convertToDigitalStamp(int $weight, array $ranges = self::DIGITAL_STAMP_RANGES): int;
 
@@ -53,8 +51,6 @@ interface WeightServiceInterface
      *
      * @param  int|float $weight - Weight in the unit specified in $unit
      * @param  string    $unit   - Unit of the weight
-     *
-     * @return int
      */
     public function convertToGrams($weight, string $unit): int;
 }

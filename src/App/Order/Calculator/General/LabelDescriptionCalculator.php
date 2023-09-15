@@ -18,47 +18,34 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
         $this->order->deliveryOptions->shipmentOptions->labelDescription = $this->calculateDescription();
     }
 
-    /**
-     * @return string
-     */
     private function calculateDescription(): string
     {
         $description = $this->order->deliveryOptions->shipmentOptions->labelDescription
             ?? Settings::get(LabelSettings::DESCRIPTION, LabelSettings::ID)
             ?? '';
 
-        $createString = function (string $key): string {
-            return implode(', ', Utils::filterNull(Arr::pluck($this->order->lines->all(), $key)));
-        };
+        $createString = fn(string $key): string => implode(
+            ', ',
+            Utils::filterNull(Arr::pluck($this->order->lines->all(), $key))
+        );
 
         return preg_replace_callback_array([
-            '/\[ORDER_ID\]/' => function () {
-                return $this->order->externalIdentifier;
-            },
+            '/\[ORDER_ID\]/' => fn() => $this->order->externalIdentifier,
 
-            '/\[CUSTOMER_NOTE\]/' => function () {
-                return $this->order->notes->firstWhere('author', OrderNote::AUTHOR_CUSTOMER)->note ?? '';
-            },
+            '/\[CUSTOMER_NOTE\]/' => fn() => $this->order->notes->firstWhere(
+                'author',
+                OrderNote::AUTHOR_CUSTOMER
+            )->note ?? '',
 
-            '/\[PRODUCT_ID\]/' => static function () use ($createString) {
-                return $createString('product.externalIdentifier');
-            },
+            '/\[PRODUCT_ID\]/' => static fn() => $createString('product.externalIdentifier'),
 
-            '/\[PRODUCT_NAME\]/' => static function () use ($createString) {
-                return $createString('product.name');
-            },
+            '/\[PRODUCT_NAME\]/' => static fn() => $createString('product.name'),
 
-            '/\[PRODUCT_SKU\]/' => static function () use ($createString) {
-                return $createString('product.sku');
-            },
+            '/\[PRODUCT_SKU\]/' => static fn() => $createString('product.sku'),
 
-            '/\[PRODUCT_EAN\]/' => static function () use ($createString) {
-                return $createString('product.ean');
-            },
+            '/\[PRODUCT_EAN\]/' => static fn() => $createString('product.ean'),
 
-            '/\[PRODUCT_QTY\]/' => function () {
-                return $this->order->lines->sum('quantity');
-            },
-        ], $description);
+            '/\[PRODUCT_QTY\]/' => fn() => $this->order->lines->sum('quantity'),
+        ], (string) $description);
     }
 }

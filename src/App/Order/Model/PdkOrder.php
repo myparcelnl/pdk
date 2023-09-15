@@ -143,11 +143,6 @@ class PdkOrder extends Model implements StorableArrayable
         $this->updateTotals();
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
-     *
-     * @return self
-     */
     public static function fromFulfilmentOrder(Order $order): self
     {
         return new self([
@@ -169,7 +164,6 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      * @throws \Exception
      */
     public function createShipment(): Shipment
@@ -190,7 +184,6 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
@@ -206,9 +199,6 @@ class PdkOrder extends Model implements StorableArrayable
         return $orderNoteRepository->getFromOrder($this);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Validation\Validator\OrderValidator
-     */
     public function getValidator(): OrderValidator
     {
         if (! $this->validator) {
@@ -219,9 +209,6 @@ class PdkOrder extends Model implements StorableArrayable
         return $this->validator;
     }
 
-    /**
-     * @return bool
-     */
     public function isDeliverable(): bool
     {
         return $this->lines->isDeliverable();
@@ -230,7 +217,6 @@ class PdkOrder extends Model implements StorableArrayable
     /**
      * Turns data into an array that should be stored in the plugin.
      *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
@@ -243,12 +229,9 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @param  mixed $deliveryOptions
-     *
-     * @return self
      * @noinspection PhpUnused
      */
-    protected function setDeliveryOptionsAttribute($deliveryOptions): self
+    protected function setDeliveryOptionsAttribute(mixed $deliveryOptions): self
     {
         $this->attributes['deliveryOptions'] = $deliveryOptions;
         $this->updateShipments();
@@ -257,12 +240,9 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @param  mixed $orderLines
-     *
-     * @return self
      * @noinspection PhpUnused
      */
-    protected function setLinesAttribute($orderLines): self
+    protected function setLinesAttribute(mixed $orderLines): self
     {
         $this->attributes['lines'] = $orderLines;
         $this->updateTotals();
@@ -271,12 +251,9 @@ class PdkOrder extends Model implements StorableArrayable
     }
 
     /**
-     * @param  mixed $shipments
-     *
-     * @return self
      * @noinspection PhpUnused
      */
-    protected function setShipmentsAttribute($shipments): self
+    protected function setShipmentsAttribute(mixed $shipments): self
     {
         $this->attributes['shipments'] = $shipments;
         $this->updateShipments();
@@ -284,23 +261,17 @@ class PdkOrder extends Model implements StorableArrayable
         return $this;
     }
 
-    /**
-     * @return void
-     */
     private function updateShipments(): void
     {
         $this->shipments->each(function (Shipment $shipment) {
             $shipment->orderId            = $this->externalIdentifier;
-            $shipment->customsDeclaration = $shipment->customsDeclaration ?? $this->customsDeclaration;
-            $shipment->deliveryOptions    = $shipment->deliveryOptions ?? $this->deliveryOptions;
-            $shipment->recipient          = $shipment->recipient ?? $this->shippingAddress;
-            $shipment->sender             = $shipment->sender ?? $this->senderAddress;
+            $shipment->customsDeclaration ??= $this->customsDeclaration;
+            $shipment->deliveryOptions    ??= $this->deliveryOptions;
+            $shipment->recipient          ??= $this->shippingAddress;
+            $shipment->sender             ??= $this->senderAddress;
         });
     }
 
-    /**
-     * @return void
-     */
     private function updateTotals(): void
     {
         [$price, $vat, $priceAfterVat] = $this->lines->reduce(

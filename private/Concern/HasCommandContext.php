@@ -24,12 +24,6 @@ trait HasCommandContext
      */
     protected $output;
 
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
-     */
     public function setCommandContext(InputInterface $input, OutputInterface $output): void
     {
         $this->input  = $input;
@@ -38,21 +32,11 @@ trait HasCommandContext
         $this->extendOutputStyles($output);
     }
 
-    /**
-     * @param  string $content
-     *
-     * @return void
-     */
     protected function log(string $content): void
     {
         $this->output->writeln(sprintf('<context>[%s]</context> %s', Utils::classBasename(static::class), $content));
     }
 
-    /**
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
-     */
     private function extendOutputStyles(OutputInterface $output): void
     {
         $formatter = $output->getFormatter();

@@ -31,12 +31,9 @@ class WebhookSubscriptionRepository extends ApiRepository
     /**
      * Support dynamic method calls to subscribe to a webhook.
      *
-     * @param  mixed $name
-     * @param  mixed $arguments
-     *
      * @return WebhookSubscription
      */
-    public function __call($name, $arguments)
+    public function __call(mixed $name, mixed $arguments)
     {
         if (! Str::startsWith($name, self::SHORTHAND_PREFIX)) {
             throw new BadMethodCallException("Method $name does not exist.");
@@ -49,10 +46,6 @@ class WebhookSubscriptionRepository extends ApiRepository
 
     /**
      * Get a webhook subscription by id.
-     *
-     * @param  int $id
-     *
-     * @return \MyParcelNL\Pdk\Webhook\Model\WebhookSubscription
      */
     public function get(int $id): WebhookSubscription
     {
@@ -70,8 +63,6 @@ class WebhookSubscriptionRepository extends ApiRepository
 
     /**
      * Retrieve all existing webhook subscriptions.
-     *
-     * @return \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
      */
     public function getAll(): WebhookSubscriptionCollection
     {
@@ -89,9 +80,6 @@ class WebhookSubscriptionRepository extends ApiRepository
     /**
      * Subscribe to a single webhook.
      *
-     * @param  \MyParcelNL\Pdk\Webhook\Model\WebhookSubscription $subscription
-     *
-     * @return \MyParcelNL\Pdk\Webhook\Model\WebhookSubscription
      * @see \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository::subscribeMany()
      */
     public function subscribe(WebhookSubscription $subscription): WebhookSubscription
@@ -104,10 +92,6 @@ class WebhookSubscriptionRepository extends ApiRepository
      * Subscribe to multiple webhooks. This will create new webhook subscriptions if they do not exist yet, or update
      * the existing ones if they do. Does not validate whether the hook exists on purpose, so future hooks are
      * supported automatically.
-     *
-     * @param  \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection $subscriptions
-     *
-     * @return \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
      */
     public function subscribeMany(WebhookSubscriptionCollection $subscriptions): WebhookSubscriptionCollection
     {
@@ -119,10 +103,6 @@ class WebhookSubscriptionRepository extends ApiRepository
 
     /**
      * Unsubscribe from a webhook by id.
-     *
-     * @param  int $id
-     *
-     * @return void
      */
     public function unsubscribe(int $id): bool
     {

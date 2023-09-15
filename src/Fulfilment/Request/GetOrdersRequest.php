@@ -8,9 +8,6 @@ use MyParcelNL\Pdk\Api\Request\Request;
 
 class GetOrdersRequest extends Request
 {
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return '/fulfilment/orders';

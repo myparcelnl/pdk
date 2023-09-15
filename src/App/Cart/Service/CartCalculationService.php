@@ -15,11 +15,6 @@ use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection
-     */
     public function calculateAllowedPackageTypes(PdkCart $cart): PackageTypeCollection
     {
         return PackageTypeCollection::fromAll()
@@ -42,27 +37,19 @@ class CartCalculationService implements CartCalculationServiceInterface
             });
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return float
-     */
     public function calculateMailboxPercentage(PdkCart $cart): float
     {
         if (! $cart->lines->every('product.settings.fitInMailbox', '>', 0)) {
             return INF;
         }
 
-        return $cart->lines->reduce(static function ($carry, $line) {
-            return $carry + $line->quantity * (100.0 / ($line->product->settings->fitInMailbox ?: 1));
-        }, 0.0);
+        return $cart->lines->reduce(
+            static fn($carry, $line) => $carry + $line->quantity * (100.0 / ($line->product->settings->fitInMailbox
+                        ?: 1)),
+            0.0
+        );
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return \MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod
-     */
     public function calculateShippingMethod(PdkCart $cart): PdkShippingMethod
     {
         $hasDeliveryOptions = $this->hasDeliveryOptions($cart);
@@ -77,11 +64,6 @@ class CartCalculationService implements CartCalculationServiceInterface
         return $shippingMethod;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return bool
-     */
     protected function hasDeliveryOptions(PdkCart $cart): bool
     {
         $deliveryOptionsDisabled = $cart->lines->containsStrict('product.settings.disableDeliveryOptions', true);
@@ -90,12 +72,6 @@ class CartCalculationService implements CartCalculationServiceInterface
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     * @param  string                                 $packageType
-     *
-     * @return bool
-     */
     private function isWeightUnderPackageTypeLimit(PdkCart $cart, string $packageType): bool
     {
         $limit = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);

@@ -58,17 +58,12 @@ final class AccountFactory extends AbstractModelFactory
      */
     public function withShops($shops = 1): ModelFactoryInterface
     {
-        return $this->withCollection('shops', $shops, function (ShopFactory $factory) {
-            return $factory
-                ->withPlatformId($this->attributes->get('platformId'))
-                ->withAccountId($this->attributes->get('id'))
-                ->withDeliveryAddress($this->attributes->get('contactInfo'));
-        });
+        return $this->withCollection('shops', $shops, fn(ShopFactory $factory) => $factory
+            ->withPlatformId($this->attributes->get('platformId'))
+            ->withAccountId($this->attributes->get('id'))
+            ->withDeliveryAddress($this->attributes->get('contactInfo')));
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface
-     */
     protected function createDefault(): FactoryInterface
     {
         return $this
@@ -83,7 +78,6 @@ final class AccountFactory extends AbstractModelFactory
     /**
      * @param  \MyParcelNL\Pdk\Account\Model\Account $model
      *
-     * @return void
      * @throws \MyParcelNL\Pdk\Tests\Factory\Exception\NotImplementedException
      */
     protected function save(Model $model): void

@@ -11,67 +11,37 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiResponse implements ApiResponseInterface
 {
-    /**
-     * @var array
-     */
-    private $errors = [];
+    private array $errors = [];
 
-    /**
-     * @var \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
-     */
-    private $response;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
-     */
-    public function __construct(ClientResponseInterface $response)
+    public function __construct(private readonly ClientResponseInterface $response)
     {
-        $this->response = $response;
     }
 
-    /**
-     * @return null|string
-     */
     public function getBody(): ?string
     {
         return null;
     }
 
-    /**
-     * @return array
-     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return $this->response->getStatusCode();
     }
 
-    /**
-     * @return bool
-     */
     public function isErrorResponse(): bool
     {
         return $this->getStatusCode() < Response::HTTP_OK || $this->getStatusCode() >= 299;
     }
 
-    /**
-     * @return bool
-     */
     public function isOkResponse(): bool
     {
         return ! $this->isErrorResponse();
     }
 
-    /**
-     * @return void
-     */
     protected function parseErrors(): void
     {
         $this->errors = [new ApiException($this->response)];

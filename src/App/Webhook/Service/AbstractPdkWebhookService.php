@@ -9,16 +9,12 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 
 abstract class AbstractPdkWebhookService implements PdkWebhookServiceInterface
 {
-    /**
-     * @return string
-     */
     public function createUrl(): string
     {
         return sprintf('%s/%s', $this->getBaseUrl(), $this->generateHash());
     }
 
     /**
-     * @return string
      * @noinspection PhpUnhandledExceptionInspection
      */
     protected function generateHash(): string

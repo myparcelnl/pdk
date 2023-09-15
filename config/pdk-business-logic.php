@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
@@ -55,27 +57,23 @@ return [
      * Options definitions
      */
 
-    'orderOptionDefinitions' => factory(function (): array {
-        return [
-            new AgeCheckDefinition(),
-            new DirectReturnDefinition(),
-            new HideSenderDefinition(),
-            new InsuranceDefinition(),
-            new LargeFormatDefinition(),
-            new OnlyRecipientDefinition(),
-            new SameDayDeliveryDefinition(),
-            new SignatureDefinition(),
-        ];
-    }),
+    'orderOptionDefinitions' => factory(fn(): array => [
+        new AgeCheckDefinition(),
+        new DirectReturnDefinition(),
+        new HideSenderDefinition(),
+        new InsuranceDefinition(),
+        new LargeFormatDefinition(),
+        new OnlyRecipientDefinition(),
+        new SameDayDeliveryDefinition(),
+        new SignatureDefinition(),
+    ]),
 
-    'orderCalculators' => factory(function () {
-        return [
-            TriStateOptionCalculator::class,
-            AllowedInCarrierCalculator::class,
-            PackageTypeShipmentOptionsCalculator::class,
-            LabelDescriptionCalculator::class,
-            InsuranceCalculator::class,
-            CarrierSpecificCalculator::class,
-        ];
-    }),
+    'orderCalculators' => factory(fn() => [
+        TriStateOptionCalculator::class,
+        AllowedInCarrierCalculator::class,
+        PackageTypeShipmentOptionsCalculator::class,
+        LabelDescriptionCalculator::class,
+        InsuranceCalculator::class,
+        CarrierSpecificCalculator::class,
+    ]),
 ];

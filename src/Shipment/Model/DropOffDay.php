@@ -18,14 +18,14 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class DropOffDay extends Model
 {
-    public const WEEKDAY_MONDAY    = 1;
-    public const WEEKDAY_TUESDAY   = 2;
-    public const WEEKDAY_WEDNESDAY = 3;
-    public const WEEKDAY_THURSDAY  = 4;
-    public const WEEKDAY_FRIDAY    = 5;
-    public const WEEKDAY_SATURDAY  = 6;
-    public const WEEKDAY_SUNDAY    = 0;
-    public const WEEKDAYS          = [
+    final public const WEEKDAY_MONDAY    = 1;
+    final public const WEEKDAY_TUESDAY   = 2;
+    final public const WEEKDAY_WEDNESDAY = 3;
+    final public const WEEKDAY_THURSDAY  = 4;
+    final public const WEEKDAY_FRIDAY    = 5;
+    final public const WEEKDAY_SATURDAY  = 6;
+    final public const WEEKDAY_SUNDAY    = 0;
+    final public const WEEKDAYS          = [
         self::WEEKDAY_MONDAY,
         self::WEEKDAY_TUESDAY,
         self::WEEKDAY_WEDNESDAY,

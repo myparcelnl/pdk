@@ -8,9 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ExampleAccessDeniedResponse extends ExampleJsonResponse
 {
-    /**
-     * @return array
-     */
     public function getContent(): array
     {
         return [
@@ -27,9 +24,6 @@ final class ExampleAccessDeniedResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return Response::HTTP_UNAUTHORIZED;

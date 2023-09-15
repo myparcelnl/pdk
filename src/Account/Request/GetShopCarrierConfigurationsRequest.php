@@ -13,15 +13,9 @@ class GetShopCarrierConfigurationsRequest extends Request
      */
     protected $path = '/shops/:shopId/carrier_configurations';
 
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    public function __construct(int $shopId)
+    public function __construct(private readonly int $shopId)
     {
         parent::__construct();
-        $this->shopId = $shopId;
     }
 
     public function getPath(): string

@@ -1,0 +1,11 @@
+{
+    "externalIdentifier": "postnl",
+    "id": 1,
+    "name": "postnl",
+    "human": "PostNL",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main"
+}

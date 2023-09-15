@@ -23,10 +23,6 @@ trait UsesCache
     private static $memoryCache;
 
     /**
-     * @param  string   $key
-     * @param  callable $callback
-     * @param  string   $driverName
-     *
      * @return mixed
      */
     protected function cache(string $key, callable $callback, string $driverName = 'memory')
@@ -47,33 +43,23 @@ trait UsesCache
     }
 
     /**
-     * @param  string   $key
-     * @param  callable $callback
-     *
      * @return mixed
      */
     protected function fileCache(string $key, callable $callback)
     {
-        return $this->cache($key, function () use ($key, $callback) {
-            return $this->cache($key, $callback, 'file');
-        });
+        return $this->cache($key, fn() => $this->cache($key, $callback, 'file'));
     }
 
-    /**
-     * @param  string $driverName
-     *
-     * @return \MyParcelNL\Pdk\Storage\Contract\StorageInterface
-     */
     private function getDriver(string $driverName): StorageInterface
     {
         switch ($driverName) {
             case 'file':
-                self::$cacheFileStorage = self::$cacheFileStorage ?? Pdk::get(CacheFileStorage::class);
+                self::$cacheFileStorage ??= Pdk::get(CacheFileStorage::class);
                 $driver                 = self::$cacheFileStorage;
                 break;
 
             default:
-                self::$memoryCache = self::$memoryCache ?? Pdk::get(MemoryCacheStorage::class);
+                self::$memoryCache ??= Pdk::get(MemoryCacheStorage::class);
                 $driver            = self::$memoryCache;
                 break;
         }
@@ -82,11 +68,9 @@ trait UsesCache
     }
 
     /**
-     * @param  mixed $contents
-     *
      * @return mixed|string
      */
-    private function tryUnserialize($contents)
+    private function tryUnserialize(mixed $contents)
     {
         if (is_string($contents) && Str::startsWith($contents, 'a:')) {
             $contents = unserialize($contents, ['allowed_classes' => true]);

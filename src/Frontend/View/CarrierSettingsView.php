@@ -37,17 +37,11 @@ class CarrierSettingsView extends AbstractSettingsView
         return new Collection($array);
     }
 
-    /**
-     * @return null|array
-     */
     protected function createElements(): ?array
     {
         return null;
     }
 
-    /**
-     * @return string
-     */
     protected function getSettingsId(): string
     {
         return CarrierSettings::ID;

@@ -21,26 +21,26 @@ class CheckoutSettings extends AbstractSettingsModel
     /**
      * Settings category ID.
      */
-    public const ID = 'checkout';
+    final public const ID = 'checkout';
     /**
      * Settings in this category.
      */
-    public const ALLOWED_SHIPPING_METHODS                  = 'allowedShippingMethods';
-    public const DELIVERY_OPTIONS_CUSTOM_CSS               = 'deliveryOptionsCustomCss';
-    public const DELIVERY_OPTIONS_HEADER                   = 'deliveryOptionsHeader';
-    public const DELIVERY_OPTIONS_POSITION                 = 'deliveryOptionsPosition';
-    public const PICKUP_LOCATIONS_DEFAULT_VIEW             = 'pickupLocationsDefaultView';
-    public const PRICE_TYPE                                = 'priceType';
-    public const ENABLE_DELIVERY_OPTIONS                   = 'enableDeliveryOptions';
-    public const ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK = 'enableDeliveryOptionsWhenNotInStock';
-    public const USE_SEPARATE_ADDRESS_FIELDS               = 'useSeparateAddressFields';
+    final public const ALLOWED_SHIPPING_METHODS                  = 'allowedShippingMethods';
+    final public const DELIVERY_OPTIONS_CUSTOM_CSS               = 'deliveryOptionsCustomCss';
+    final public const DELIVERY_OPTIONS_HEADER                   = 'deliveryOptionsHeader';
+    final public const DELIVERY_OPTIONS_POSITION                 = 'deliveryOptionsPosition';
+    final public const PICKUP_LOCATIONS_DEFAULT_VIEW             = 'pickupLocationsDefaultView';
+    final public const PRICE_TYPE                                = 'priceType';
+    final public const ENABLE_DELIVERY_OPTIONS                   = 'enableDeliveryOptions';
+    final public const ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK = 'enableDeliveryOptionsWhenNotInStock';
+    final public const USE_SEPARATE_ADDRESS_FIELDS               = 'useSeparateAddressFields';
     /** Pickup location views */
-    public const PICKUP_LOCATIONS_VIEW_LIST = 'list';
-    public const PICKUP_LOCATIONS_VIEW_MAP  = 'map';
+    final public const PICKUP_LOCATIONS_VIEW_LIST = 'list';
+    final public const PICKUP_LOCATIONS_VIEW_MAP  = 'map';
     /** Price types */
-    public const DEFAULT_PRICE_TYPE  = self::PRICE_TYPE_INCLUDED;
-    public const PRICE_TYPE_EXCLUDED = 'excluded';
-    public const PRICE_TYPE_INCLUDED = 'included';
+    final public const DEFAULT_PRICE_TYPE  = self::PRICE_TYPE_INCLUDED;
+    final public const PRICE_TYPE_EXCLUDED = 'excluded';
+    final public const PRICE_TYPE_INCLUDED = 'included';
 
     protected $attributes = [
         'id' => self::ID,

@@ -20,52 +20,25 @@ use MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext;
 
 interface ContextServiceInterface
 {
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return \MyParcelNL\Pdk\Context\Model\CheckoutContext
-     */
     public function createCheckoutContext(PdkCart $cart): CheckoutContext;
 
-    /**
-     * @param  array $contexts
-     * @param  array $data
-     *
-     * @return \MyParcelNL\Pdk\Context\Model\ContextBag
-     */
     public function createContexts(array $contexts, array $data = []): ContextBag;
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\DynamicContext
-     */
     public function createDynamicContext(): DynamicContext;
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\GlobalContext
-     */
     public function createGlobalContext(): GlobalContext;
 
     /**
      * @param  null|array|PdkOrder|PdkOrderCollection $orderData
-     *
-     * @return \MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection
      */
     public function createOrderDataContext($orderData): OrderDataContextCollection;
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\PluginSettingsViewContext
-     */
     public function createPluginSettingsViewContext(): PluginSettingsViewContext;
 
     /**
      * @param  null|array|PdkProduct|PdkProductCollection $productData
-     *
-     * @return \MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection
      */
     public function createProductDataContext($productData): ProductDataContextCollection;
 
-    /**
-     * @return \MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext
-     */
     public function createProductSettingsViewContext(): ProductSettingsViewContext;
 }

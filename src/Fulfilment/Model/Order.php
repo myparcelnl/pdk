@@ -106,13 +106,11 @@ class Order extends Model
                 'language'                    => Language::getIso2(),
                 'orderDate'                   => $pdkOrder->orderDate,
                 'lines'                       => $pdkOrder->lines
-                    ->map(function (PdkOrderLine $pdkOrderLine) {
-                        return new OrderLine(
-                            [
-                                'product' => Product::fromPdkProduct($pdkOrderLine->product),
-                            ] + $pdkOrderLine->toSnakeCaseArray()
-                        );
-                    })
+                    ->map(fn(PdkOrderLine $pdkOrderLine) => new OrderLine(
+                        [
+                            'product' => Product::fromPdkProduct($pdkOrderLine->product),
+                        ] + $pdkOrderLine->toSnakeCaseArray()
+                    ))
                     ->all(),
                 'notes'                       => $pdkOrder->notes,
                 'shipment'                    => $shipment,

@@ -7,8 +7,6 @@ namespace MyParcelNL\Pdk\Frontend\Form\Element\Contract;
 interface InteractiveElementBuilderInterface extends ElementBuilderInterface
 {
     /**
-     * @param  callable $callable
-     *
      * @return $this
      */
     public function afterUpdate(callable $callable): self;

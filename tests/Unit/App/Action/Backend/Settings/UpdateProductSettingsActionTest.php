@@ -39,14 +39,14 @@ it('saves settings', function (string $productId, array $settings) {
 
     $response = Actions::execute($request);
 
-    $content = json_decode($response->getContent(), true);
+    $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($response->getStatusCode())
         ->toBe(200);
 
-    assertMatchesJsonSnapshot(json_encode($content));
+    assertMatchesJsonSnapshot(json_encode($content, JSON_THROW_ON_ERROR));
 })->with([
     'enable export age check for 123' => [
         '123',

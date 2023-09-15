@@ -62,9 +62,6 @@ final class PdkProductFactory extends AbstractModelFactory
         return $this->withSettings(factory(ProductSettings::class)->withAllOptions());
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface
-     */
     protected function createDefault(): FactoryInterface
     {
         return $this
@@ -76,8 +73,6 @@ final class PdkProductFactory extends AbstractModelFactory
 
     /**
      * @param  T $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

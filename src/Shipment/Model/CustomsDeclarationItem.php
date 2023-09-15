@@ -20,8 +20,8 @@ use MyParcelNL\Pdk\Facade\Settings;
  */
 class CustomsDeclarationItem extends Model
 {
-    public const  DEFAULT_CLASSIFICATION = '0000';
-    private const DEFAULTS               = [
+    final public const  DEFAULT_CLASSIFICATION = '0000';
+    private const       DEFAULTS               = [
         'amount'         => 1,
         'classification' => null,
         'country'        => null,
@@ -45,9 +45,6 @@ class CustomsDeclarationItem extends Model
     ];
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
-     * @param  array                                      $additionalFields
-     *
      * @return static
      */
     public static function fromProduct(PdkProduct $product, array $additionalFields = []): self

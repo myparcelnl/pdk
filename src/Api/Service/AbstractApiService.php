@@ -27,19 +27,14 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     protected $clientAdapter;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface $clientAdapter
-     */
     public function __construct(ClientAdapterInterface $clientAdapter)
     {
         $this->clientAdapter = $clientAdapter;
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
-     * @param  class-string<ApiResponseInterface>           $responseClass
+     * @param  class-string<ApiResponseInterface> $responseClass
      *
-     * @return \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface
      * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
      */
     public function doRequest(
@@ -92,27 +87,16 @@ abstract class AbstractApiService implements ApiServiceInterface
         return $responseObject;
     }
 
-    /**
-     * @return string
-     */
     public function getBaseUrl(): string
     {
         return $this->baseUrl ?? Pdk::get('apiUrl');
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return [];
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
-     *
-     * @return string
-     */
     protected function buildUri(RequestInterface $request): string
     {
         $url = implode('/', [

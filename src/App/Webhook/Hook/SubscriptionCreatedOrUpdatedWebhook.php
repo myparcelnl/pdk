@@ -11,19 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class SubscriptionCreatedOrUpdatedWebhook extends AbstractHook
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     public function handle(Request $request): void
     {
         Actions::execute(PdkBackendActions::UPDATE_SUBSCRIPTION_FEATURES);
     }
 
-    /**
-     * @return string
-     */
     protected function getHookEvent(): string
     {
         return WebhookSubscription::SUBSCRIPTION_CREATED_OR_UPDATED;

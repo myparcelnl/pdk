@@ -17,9 +17,6 @@ use MyParcelNL\Pdk\Platform\PlatformManager;
  */
 final class Platform extends Facade
 {
-    /**
-     * @return string
-     */
     protected static function getFacadeAccessor(): string
     {
         return PlatformManager::class;

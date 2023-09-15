@@ -17,8 +17,8 @@ use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
  */
 class Settings extends Model
 {
-    public const OPTION_NONE    = -1;
-    public const OPTION_DEFAULT = -1;
+    final public const OPTION_NONE    = -1;
+    final public const OPTION_DEFAULT = -1;
 
     public $attributes = [
         AccountSettings::ID  => AccountSettings::class,

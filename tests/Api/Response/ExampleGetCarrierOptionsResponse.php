@@ -126,9 +126,6 @@ final class ExampleGetCarrierOptionsResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'carrier_options';

@@ -16,9 +16,6 @@ use Throwable;
 final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
 {
     /**
-     * @param  string                                                         $class
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection $types
-     *
      * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection
      */
     protected function addFactoryTypes(string $class, TypeCollection $types): TypeCollection
@@ -31,7 +28,7 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
 
                 return $types->push(
                     $this->typeParser->createType('array'),
-                    $this->typeParser->createType(get_class($modelFactory))
+                    $this->typeParser->createType($modelFactory::class)
                 );
             }
 
@@ -46,21 +43,16 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
 
                 return $types->push(
                     $this->typeParser->createType('array', false, true),
-                    $this->typeParser->createType(get_class($modelFactory), false, true)
+                    $this->typeParser->createType($modelFactory::class, false, true)
                 );
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // Silently ignore
         }
 
         return $types;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     protected function createComments(ClassDefinition $definition): Collection
     {
         return (new Collection($definition->properties->all()))
@@ -80,17 +72,12 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
             ->prepend(sprintf('@template T of %s', $definition->ref->getShortName()));
     }
 
-    /**
-     * @return string
-     */
     protected function getClass(): string
     {
         return Model::class;
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassProperty $property
-     *
      * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection
      */
     protected function getPropertyTypes(ClassProperty $property)
@@ -113,9 +100,6 @@ final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService
         return $this->addFactoryTypes($class, $types);
     }
 
-    /**
-     * @return string
-     */
     protected function getTemplateFilename(): string
     {
         return 'ModelFactory.php.stub';

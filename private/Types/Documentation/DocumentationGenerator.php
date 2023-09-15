@@ -15,30 +15,17 @@ final class DocumentationGenerator extends AbstractHelperGenerator
 {
     private const BRANCH = 'alpha';
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return bool
-     */
     protected function classAllowed(ClassDefinition $definition): bool
     {
         return $definition->ref->isInterface()
             || $definition->isSubclassOf(Facade::class);
     }
 
-    /**
-     * @param  \ReflectionClass $ref
-     *
-     * @return string
-     */
     protected function createFqcn(ReflectionClass $ref): string
     {
         return sprintf("\\%s\\%s", $ref->getNamespaceName(), $ref->getShortName());
     }
 
-    /**
-     * @return void
-     */
     protected function generate(): void
     {
         $filename = sprintf('%s/docs/README.md', $this->baseDir);
@@ -109,7 +96,7 @@ final class DocumentationGenerator extends AbstractHelperGenerator
 
                     $lines[] = '```php';
 
-                    if (count($parameters)) {
+                    if (is_countable($parameters) ? count($parameters) : 0) {
                         $lines[] = "public function {$method->ref->getName()}(";
 
                         foreach ($parameters as $parameter) {
@@ -136,11 +123,6 @@ final class DocumentationGenerator extends AbstractHelperGenerator
         $this->close($handle, $filename);
     }
 
-    /**
-     * @param  \ReflectionClass $ref
-     *
-     * @return string
-     */
     protected function getInternalLink(ReflectionClass $ref): string
     {
         return sprintf('[%s](%s)', $ref->getShortName(), $this->createPathToClass($ref->getName()));
@@ -179,24 +161,14 @@ final class DocumentationGenerator extends AbstractHelperGenerator
         return $baseUrl;
     }
 
-    /**
-     * @param  string $className
-     *
-     * @return string
-     */
     private function createPathToClass(string $className): string
     {
         $parts      = explode('\\', $className);
-        $kebabParts = array_map([Str::class, 'kebab'], array_slice($parts, 2));
+        $kebabParts = array_map(Str::kebab(...), array_slice($parts, 2));
 
         return implode('/', $kebabParts);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return array
-     */
     private function getRequired(ClassDefinition $definition): array
     {
         /** @var \MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue $required */
@@ -216,20 +188,12 @@ final class DocumentationGenerator extends AbstractHelperGenerator
         return [$icon, $text];
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue $required
-     *
-     * @return string
-     */
     private function getRequiredIcon(KeyValue $required): string
     {
-        switch ($required->value) {
-            case 'true':
-                return '🔴';
-            case 'false':
-                return '💚';
-            default:
-                return '🟨';
-        }
+        return match ($required->value) {
+            'true' => '🔴',
+            'false' => '💚',
+            default => '🟨',
+        };
     }
 }

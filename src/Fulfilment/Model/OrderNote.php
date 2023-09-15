@@ -17,8 +17,8 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class OrderNote extends Model
 {
-    public const AUTHOR_CUSTOMER = 'customer';
-    public const AUTHOR_WEBSHOP  = 'webshop';
+    final public const AUTHOR_CUSTOMER = 'customer';
+    final public const AUTHOR_WEBSHOP  = 'webshop';
 
     protected $attributes = [
         'uuid'      => null,
@@ -36,11 +36,6 @@ class OrderNote extends Model
         'updatedAt' => 'datetime',
     ];
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderNote $pdkOrderNote
-     *
-     * @return self
-     */
     public static function fromPdkOrderNote(PdkOrderNote $pdkOrderNote): self
     {
         return new self([

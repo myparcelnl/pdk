@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
@@ -179,9 +181,9 @@ return [
     /**
      * @todo remove in v3.0.0
      */
-    PdkAccountRepositoryInterface::class       => factory(function () {
-        return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
-    }),
+    PdkAccountRepositoryInterface::class       => factory(
+        fn() => \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class)
+    ),
 
     /**
      * Handles order options calculation.

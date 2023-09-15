@@ -8,9 +8,6 @@ use MyParcelNL\Pdk\Fulfilment\Model\Order;
 
 final class GetOrderResponse extends GetOrdersResponse
 {
-    /**
-     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
-     */
     public function getOrder(): Order
     {
         return $this

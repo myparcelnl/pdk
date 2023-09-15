@@ -15,32 +15,15 @@ use Throwable;
 
 final class CollectionFactoryGeneratorService extends AbstractFactoryGeneratorService
 {
-    /**
-     * @var \MyParcelNL\Pdk\Console\GenerateFactory\Service\ModelFactoryGeneratorService
-     */
-    private $modelService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface                                     $fileSystem
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpSourceParser                 $sourceParser
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser                   $typeParser
-     * @param  \MyParcelNL\Pdk\Console\GenerateFactory\Service\ModelFactoryGeneratorService $modelService
-     */
     public function __construct(
-        FileSystemInterface          $fileSystem,
-        PhpSourceParser              $sourceParser,
-        PhpTypeParser                $typeParser,
-        ModelFactoryGeneratorService $modelService
+        FileSystemInterface                           $fileSystem,
+        PhpSourceParser                               $sourceParser,
+        PhpTypeParser                                 $typeParser,
+        private readonly ModelFactoryGeneratorService $modelService
     ) {
         parent::__construct($fileSystem, $sourceParser, $typeParser);
-        $this->modelService = $modelService;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     protected function createComments(ClassDefinition $definition): Collection
     {
         return new Collection([
@@ -57,35 +40,22 @@ final class CollectionFactoryGeneratorService extends AbstractFactoryGeneratorSe
         return Collection::class;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return null|\MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition
-     */
     protected function getModelDefinition(ClassDefinition $definition): ?ClassDefinition
     {
         $collectionValueType = $definition->getCollectionValueType();
 
         try {
             return $this->sourceParser->getDefinitionByName($collectionValueType);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
     }
 
-    /**
-     * @return string
-     */
     protected function getTemplateFilename(): string
     {
         return 'CollectionFactory.php.stub';
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
-     * @return array
-     */
     protected function getTemplateReplacers(ClassDefinition $definition): array
     {
         $modelDefinition = $this->getModelDefinition($definition);

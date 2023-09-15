@@ -13,9 +13,7 @@ interface PdkApiInterface
      * actions are available to the endpoint.
      *
      * @param  string|\Symfony\Component\HttpFoundation\Request $input
-     * @param  string                                           $context
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @see \MyParcelNL\Pdk\App\Api\PdkEndpoint::CONTEXT_FRONTEND
      * @see \MyParcelNL\Pdk\App\Api\PdkEndpoint::CONTEXT_BACKEND
      */

@@ -8,18 +8,9 @@ use MyParcelNL\Pdk\Api\Request\Request;
 
 class GetShopRequest extends Request
 {
-    /**
-     * @var int
-     */
-    private $shopId;
-
-    /**
-     * @param  int $shopId
-     */
-    public function __construct(int $shopId)
+    public function __construct(private readonly int $shopId)
     {
         parent::__construct();
-        $this->shopId = $shopId;
     }
 
     public function getPath(): string

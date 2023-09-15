@@ -8,10 +8,5 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 
 interface ElementInterface extends Arrayable
 {
-    /**
-     * @param  callable $callback
-     *
-     * @return $this
-     */
     public function builder(callable $callback): ElementInterface;
 }

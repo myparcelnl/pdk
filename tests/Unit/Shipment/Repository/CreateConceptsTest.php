@@ -41,12 +41,10 @@ it('creates a valid request from a shipment collection', function (array $input)
     MockApi::enqueue(
         new ExamplePostIdsResponse(),
         new ExamplePostIdsResponse(
-            array_map(function (array $data) {
-                return [
-                    'id'                   => mt_rand(),
-                    'reference_identifier' => $data['reference_identifier'],
-                ];
-            }, $input)
+            array_map(fn(array $data) => [
+                'id'                   => random_int(0, mt_getrandmax()),
+                'reference_identifier' => $data['reference_identifier'],
+            ], $input)
         )
     );
 
@@ -61,7 +59,9 @@ it('creates a valid request from a shipment collection', function (array $input)
     $body = json_decode(
         $request->getBody()
             ->getContents(),
-        true
+        true,
+        512,
+        JSON_THROW_ON_ERROR
     );
 
     $shipments = Arr::get($body, 'data.shipments');
@@ -71,7 +71,7 @@ it('creates a valid request from a shipment collection', function (array $input)
         ->and($createdConcepts)
         ->toBeInstanceOf(ShipmentCollection::class);
 
-    assertMatchesJsonSnapshot(json_encode($shipments));
+    assertMatchesJsonSnapshot(json_encode($shipments, JSON_THROW_ON_ERROR));
 })->with([
     'bare minimum'                                => [
         'input' => [
@@ -170,7 +170,7 @@ it('creates a valid request from a shipment collection', function (array $input)
                         ],
                         [
                             'amount'         => 1,
-                            'classification' => 40169200,
+                            'classification' => 40_169_200,
                             'country'        => CountryCodes::CC_NL,
                             'description'    => 'beautiful eraser',
                             'itemValue'      => ['amount' => 10000, 'currency' => 'EUR'],

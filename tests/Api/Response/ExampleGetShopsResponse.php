@@ -19,9 +19,6 @@ class ExampleGetShopsResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'shops';

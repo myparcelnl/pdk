@@ -14,12 +14,10 @@ final class FactoryFactory
 {
     /**
      * @param  class-string<Model|Collection> $model
-     * @param  mixed                          ...$args
      *
-     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface
      * @throws \MyParcelNL\Pdk\Tests\Factory\Exception\InvalidFactoryException
      */
-    public static function create(string $model, ...$args): FactoryInterface
+    public static function create(string $model, mixed ...$args): FactoryInterface
     {
         $factory = "{$model}Factory";
 

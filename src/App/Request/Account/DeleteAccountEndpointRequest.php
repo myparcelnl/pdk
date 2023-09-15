@@ -8,17 +8,11 @@ use MyParcelNL\Pdk\App\Request\AbstractEndpointRequest;
 
 final class DeleteAccountEndpointRequest extends AbstractEndpointRequest
 {
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getResponseProperty(): string
     {
         return 'context';

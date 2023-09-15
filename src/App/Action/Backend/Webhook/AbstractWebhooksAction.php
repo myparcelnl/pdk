@@ -30,11 +30,6 @@ abstract class AbstractWebhooksAction implements ActionInterface
      */
     protected $webhookActions;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository    $repository
-     * @param  \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $pdkWebhooksRepository
-     * @param  \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface     $pdkWebhookActions
-     */
     public function __construct(
         WebhookSubscriptionRepository  $repository,
         PdkWebhooksRepositoryInterface $pdkWebhooksRepository,
@@ -47,8 +42,6 @@ abstract class AbstractWebhooksAction implements ActionInterface
 
     /**
      * @param  null|\MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection $subscriptions
-     *
-     * @return \MyParcelNL\Pdk\Api\Response\JsonResponse
      */
     protected function createResponse(?WebhookSubscriptionCollection $subscriptions = null): JsonResponse
     {
@@ -65,17 +58,12 @@ abstract class AbstractWebhooksAction implements ActionInterface
         ]);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
-     */
     protected function getExistingSubscriptions(): WebhookSubscriptionCollection
     {
         $url = $this->pdkWebhooksRepository->getHashedUrl();
 
         return $this->repository
             ->getAll()
-            ->filter(static function (WebhookSubscription $subscription) use ($url) {
-                return Str::startsWith($subscription->url, $url);
-            });
+            ->filter(static fn(WebhookSubscription $subscription) => Str::startsWith($subscription->url, $url));
     }
 }

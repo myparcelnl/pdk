@@ -90,8 +90,6 @@ final class PdkOrderFactory extends AbstractModelFactory
 
     /**
      * @param  array|DeliveryOptions|DeliveryOptionsFactory $deliveryOptions
-     *
-     * @return self
      */
     public function withDeliveryOptions($deliveryOptions = null): self
     {
@@ -105,8 +103,6 @@ final class PdkOrderFactory extends AbstractModelFactory
 
     /**
      * @param  array|\MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory $pickupLocation
-     *
-     * @return self
      */
     public function withDeliveryOptionsWithPickupLocation($pickupLocation = null): self
     {
@@ -118,8 +114,6 @@ final class PdkOrderFactory extends AbstractModelFactory
 
     /**
      * @param  int|array[]|PdkOrderLineCollection|PdkOrderLineFactory[] $lines
-     *
-     * @return self
      */
     public function withLines($lines = 1): self
     {
@@ -133,12 +127,10 @@ final class PdkOrderFactory extends AbstractModelFactory
 
     public function withShipments($shipments = 1): self
     {
-        return $this->withCollection('shipments', $shipments, function (ShipmentFactory $factory) {
-            return $factory
-                ->withShopId(AccountSettings::getShop()->id)
-                ->withOrderId($this->attributes->get('externalIdentifier'))
-                ->withPrice($this->attributes->get('shipmentPrice'));
-        });
+        return $this->withCollection('shipments', $shipments, fn(ShipmentFactory $factory) => $factory
+            ->withShopId(AccountSettings::getShop()->id)
+            ->withOrderId($this->attributes->get('externalIdentifier'))
+            ->withPrice($this->attributes->get('shipmentPrice')));
     }
 
     public function withSimpleDeliveryOptions(): self
@@ -175,8 +167,6 @@ final class PdkOrderFactory extends AbstractModelFactory
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

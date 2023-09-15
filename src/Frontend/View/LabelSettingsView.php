@@ -14,19 +14,9 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
  */
 final class LabelSettingsView extends NewAbstractSettingsView
 {
-    /**
-     * @var \MyParcelNL\Pdk\Frontend\View\PrintOptionsView
-     */
-    private $printOptionsView;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Frontend\View\PrintOptionsView $printOptionsView
-     */
-    public function __construct(PrintOptionsView $printOptionsView)
+    public function __construct(private readonly PrintOptionsView $printOptionsView)
     {
         parent::__construct();
-
-        $this->printOptionsView = $printOptionsView;
     }
 
     protected function addElements(): void

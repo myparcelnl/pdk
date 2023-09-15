@@ -22,26 +22,17 @@ abstract class NewAbstractSettingsView implements Arrayable
     /**
      * @var \MyParcelNL\Pdk\Frontend\Form\FormBuilder
      */
-    protected $formBuilder;
+    protected    $formBuilder;
 
-    /**
-     * @var bool
-     */
-    private $initialized = false;
+    private bool $initialized = false;
 
     public function __construct()
     {
         $this->formBuilder = new FormBuilder([$this->getRootPrefix(), $this->getPrefix()]);
     }
 
-    /**
-     * @return void
-     */
     abstract protected function addElements(): void;
 
-    /**
-     * @return array
-     */
     public function all(): array
     {
         $this->initialize();
@@ -59,9 +50,6 @@ abstract class NewAbstractSettingsView implements Arrayable
         return array_values($filtered);
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
@@ -73,27 +61,16 @@ abstract class NewAbstractSettingsView implements Arrayable
         ];
     }
 
-    /**
-     * @param  string ...$parts
-     *
-     * @return string
-     */
     protected function createLabel(string ...$parts): string
     {
         return Str::snake(implode('_', $parts));
     }
 
-    /**
-     * @return null|array
-     */
     protected function getChildren(): ?array
     {
         return null;
     }
 
-    /**
-     * @return null|array
-     */
     protected function getElements(): ?array
     {
         $this->updateElements(new FormElementCollection($this->all()));
@@ -103,9 +80,6 @@ abstract class NewAbstractSettingsView implements Arrayable
             ->toArrayWithoutNull();
     }
 
-    /**
-     * @return string
-     */
     protected function getPrefix(): string
     {
         return '';
@@ -116,11 +90,6 @@ abstract class NewAbstractSettingsView implements Arrayable
         return 'settings';
     }
 
-    /**
-     * @param  string $name
-     *
-     * @return bool
-     */
     protected function isNotDisabled(string $name): bool
     {
         /** @var array[] $disabledSettings */
@@ -130,21 +99,11 @@ abstract class NewAbstractSettingsView implements Arrayable
         return ! in_array($name, $category, true);
     }
 
-    /**
-     * @param  string ...$parts
-     *
-     * @return string
-     */
     protected function label(string ...$parts): string
     {
         return $this->createLabel($this->getRootPrefix(), $this->getPrefix(), ...$parts);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection $elements
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Collection\FormElementCollection
-     */
     protected function updateElements(FormElementCollection $elements): FormElementCollection
     {
         return $elements->map(function (ElementBuilderInterface $builder): ElementInterface {
@@ -163,9 +122,6 @@ abstract class NewAbstractSettingsView implements Arrayable
         });
     }
 
-    /**
-     * @return void
-     */
     private function initialize(): void
     {
         if ($this->initialized) {

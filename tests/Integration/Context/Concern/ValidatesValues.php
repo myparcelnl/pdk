@@ -29,17 +29,10 @@ trait ValidatesValues
         ];
     }
 
-    /**
-     * @param  string $value
-     * @param  array  $body
-     * @param  string $key
-     *
-     * @return void
-     */
     protected function validateByCurrentFirstOrLast(string $value, array $body, string $key): void
     {
-        $type   = Str::before($value, '_');
-        $entity = Str::after($value, "{$type}_");
+        $type = Str::before($value, '_');
+        Str::after($value, "{$type}_");
 
         $actualValue = Arr::get($body, $key);
 
@@ -49,13 +42,10 @@ trait ValidatesValues
     /**
      * @param         $value
      * @param         $body
-     * @param  string $key
-     *
-     * @return void
      */
     protected function validateByMatcher($value, $body, string $key): void
     {
-        $matchers    = explode(',', $value);
+        $matchers    = explode(',', (string) $value);
         $actualValue = Arr::get($body, $key);
 
         foreach ($matchers as $matcher) {
@@ -93,39 +83,21 @@ trait ValidatesValues
         }
     }
 
-    /**
-     * @param  string $entityResolver
-     * @param  string $key
-     * @param  mixed  $actualValue
-     *
-     * @return void
-     */
-    protected function validateByType(string $entityResolver, string $key, $actualValue): void
+    protected function validateByType(string $entityResolver, string $key, mixed $actualValue): void
     {
         $entity = $this->resolveModel($entityResolver);
 
         $match = preg_replace_callback_array([
-            '/PLATFORM_(\w+)/' => static function ($matches) {
-                return Platform::get(strtolower($matches[1]));
-            },
+            '/PLATFORM_(\w+)/' => static fn($matches) => Platform::get(strtolower((string) $matches[1])),
 
             // Matches models defined in ResolvesModels
-            '/\w+:(\w+)/'      => function ($matches) use ($entity) {
-                return $this->matchModelProperty($entity, $matches[1]);
-            },
+            '/\w+:(\w+)/'      => fn($matches) => $this->matchModelProperty($entity, $matches[1]),
         ], $entityResolver);
 
         self::assertEquals((string) $match, (string) $actualValue, "Value for key '$key' does not match");
     }
 
-    /**
-     * @param  mixed  $actualValue
-     * @param  int    $length
-     * @param  string $key
-     *
-     * @return void
-     */
-    protected function validateLength($actualValue, int $length, string $key): void
+    protected function validateLength(mixed $actualValue, int $length, string $key): void
     {
         if (is_array($actualValue)) {
             self::assertCount($length, $actualValue, "Value for key '$key' is not $length items long");
@@ -145,13 +117,6 @@ trait ValidatesValues
         self::fail("Value for key '$key' is not a string or array");
     }
 
-    /**
-     * @param  string $key
-     * @param  string $value
-     * @param  array  $body
-     *
-     * @return void
-     */
     protected function validateValue(string $key, string $value, array $body): void
     {
         if (Str::startsWith($value, ['CURRENT_', 'FIRST_', 'LAST_'])) {

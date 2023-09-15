@@ -25,9 +25,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private $currencyService;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
     public function __construct(PdkOrder $order)
     {
         parent::__construct($order);
@@ -37,7 +34,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function calculate(): void
@@ -50,7 +46,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * @param  null|int $amount
      *
-     * @return int
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function calculateInsurance(?int $amount): int
@@ -80,7 +75,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * @param  null|string $cc
      *
-     * @return string
      * @noinspection MultipleReturnStatementsInspection
      */
     private function getInsuranceUpToKey(?string $cc): string
@@ -103,9 +97,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
-     * @param  int                                            $amount
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -128,9 +119,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 
     /**
      * @param  int[] $insuranceAmount
-     * @param  int   $orderAmount
-     *
-     * @return int
      */
     private function getMinimumInsuranceAmount(array $insuranceAmount, int $orderAmount): int
     {

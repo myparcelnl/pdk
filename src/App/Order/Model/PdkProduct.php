@@ -51,7 +51,7 @@ class PdkProduct extends Model implements StorableArrayable
     /**
      * @var array
      */
-    protected $casts = [
+    protected                                               $casts                = [
         'externalIdentifier' => 'string',
         'sku'                => 'string',
         'ean'                => 'string',
@@ -67,13 +67,9 @@ class PdkProduct extends Model implements StorableArrayable
         'parent'             => self::class,
     ];
 
-    /**
-     * @var null|ProductSettings
-     */
-    private $cachedMergedSettings;
+    private ?ProductSettings $cachedMergedSettings = null;
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
@@ -85,7 +81,6 @@ class PdkProduct extends Model implements StorableArrayable
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
@@ -115,7 +110,6 @@ class PdkProduct extends Model implements StorableArrayable
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function resolveMergedSettings(): ProductSettings

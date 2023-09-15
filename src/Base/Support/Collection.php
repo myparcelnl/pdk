@@ -29,7 +29,6 @@ class Collection extends SdkCollection implements StorableArrayable
     }
 
     /**
-     * @param  string $key
      * @param         $default
      *
      * @return mixed
@@ -43,23 +42,14 @@ class Collection extends SdkCollection implements StorableArrayable
      * Map the values into a new class.
      *
      * @param  string $class
-     *
-     * @return self
      */
     public function mapInto($class): self
     {
-        return $this->map(function ($value, $key) use ($class) {
-            return Utils::cast($class, $value, $key);
-        });
+        return $this->map(fn($value, $key) => Utils::cast($class, $value, $key));
     }
 
     /**
      * Merge the collection with the given items where the keys and values match.
-     *
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $collection
-     * @param  string                                  $key
-     *
-     * @return self
      */
     public function mergeByKey(Collection $collection, string $key): self
     {
@@ -77,8 +67,6 @@ class Collection extends SdkCollection implements StorableArrayable
     /**
      * @param  mixed $key
      * @param  mixed $value
-     *
-     * @return void
      */
     public function offsetSet($key, $value): void
     {
@@ -103,8 +91,6 @@ class Collection extends SdkCollection implements StorableArrayable
 
     /**
      * @param  null|string $class
-     *
-     * @return self
      */
     public function setCast(?string $class): self
     {
@@ -114,9 +100,6 @@ class Collection extends SdkCollection implements StorableArrayable
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function toStorableArray(): array
     {
         return array_map(
@@ -135,23 +118,18 @@ class Collection extends SdkCollection implements StorableArrayable
         );
     }
 
-    /**
-     * @return void
-     */
     protected function castItems(): void
     {
         if (! $this->cast) {
             return;
         }
 
-        $itemsToCast = Arr::where($this->items, function ($item) {
-            return ! is_a($item, $this->cast);
-        });
+        $itemsToCast = Arr::where($this->items, fn($item) => ! is_a($item, $this->cast));
 
         foreach ($itemsToCast as $key => $item) {
             try {
                 $this->items[$key] = Utils::cast($this->cast, $item);
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 // Silently fail to allow methods like pluck() to work.
             }
         }

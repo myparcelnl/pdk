@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateOrderAction extends AbstractOrderAction
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $orders = $this->updateOrders($request);

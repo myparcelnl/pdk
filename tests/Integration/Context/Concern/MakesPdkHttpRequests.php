@@ -21,9 +21,6 @@ trait MakesPdkHttpRequests
     protected $response;
 
     /**
-     * @param  string $parameters
-     * @param  array  $initial
-     *
      * @return string[]
      */
     protected function createParameters(string $parameters, array $initial = []): array
@@ -34,12 +31,8 @@ trait MakesPdkHttpRequests
     }
 
     /**
-     * @param  string      $method
-     * @param  array       $parameters
-     * @param  array       $headers
      * @param  null|string $body
      *
-     * @return void
      * @noinspection PhpRedundantCatchClauseInspection
      */
     protected function doPdkRequest(
@@ -65,9 +58,6 @@ trait MakesPdkHttpRequests
         $this->setResponse($response);
     }
 
-    /**
-     * @return array
-     */
     protected function getDecodedBody(): array
     {
         $this->IExpectTheResponseToBeSuccessful();
@@ -75,7 +65,7 @@ trait MakesPdkHttpRequests
 
         self::assertIsString($body, 'Response body is not a string');
 
-        $array = json_decode($body, true);
+        $array = json_decode((string) $body, true, 512, JSON_THROW_ON_ERROR);
 
         self::assertIsArray($array, 'Parsed response body is not an array');
         self::assertNotEmpty($array, 'Parsed response body is empty');
@@ -83,11 +73,6 @@ trait MakesPdkHttpRequests
         return $array;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Api\Response\ApiResponse $response
-     *
-     * @return void
-     */
     private function setResponse(ApiResponse $response): void
     {
         $this->response = $response;

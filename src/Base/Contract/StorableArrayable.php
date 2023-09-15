@@ -6,8 +6,5 @@ namespace MyParcelNL\Pdk\Base\Contract;
 
 interface StorableArrayable extends Arrayable
 {
-    /**
-     * @return array
-     */
     public function toStorableArray(): array;
 }

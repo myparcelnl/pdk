@@ -18,14 +18,11 @@ trait ParsesPhpDocs
     private $phpDocExtractor;
 
     /**
-     * @param  string $refName
-     * @param  string $propertyName
-     *
      * @return \Symfony\Component\PropertyInfo\Type[]
      */
     protected function getPhpDocTypes(string $refName, string $propertyName): array
     {
-        $this->phpDocExtractor = $this->phpDocExtractor ?? new PhpDocExtractor();
+        $this->phpDocExtractor ??= new PhpDocExtractor();
 
         return $this->phpDocExtractor->getTypes($refName, $propertyName) ?? [];
     }
@@ -54,14 +51,11 @@ trait ParsesPhpDocs
     }
 
     /**
-     * @param  string $refName
-     * @param  string $propertyName
-     *
      * @return \Symfony\Component\PropertyInfo\Type[]
      */
     protected function getReflectionTypes(string $refName, string $propertyName): array
     {
-        $this->reflectionExtractor = $this->reflectionExtractor ?? new ReflectionExtractor();
+        $this->reflectionExtractor ??= new ReflectionExtractor();
 
         return $this->reflectionExtractor->getTypes($refName, $propertyName) ?? [];
     }

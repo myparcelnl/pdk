@@ -18,26 +18,16 @@ class CountryService implements CountryServiceInterface
         return CountryCodes::ALL;
     }
 
-    /**
-     * @return array
-     */
     public function getAllTranslatable(): array
     {
         $all = $this->getAll();
 
         return array_combine(
             $all,
-            array_map(static function (string $country) {
-                return sprintf('country_%s', Str::lower($country));
-            }, $all)
+            array_map(static fn(string $country) => sprintf('country_%s', Str::lower($country)), $all)
         );
     }
 
-    /**
-     * @param  string $country
-     *
-     * @return string
-     */
     public function getShippingZone(string $country): string
     {
         if (in_array($country, CountryCodes::UNIQUE_COUNTRIES, true)) {
@@ -51,41 +41,21 @@ class CountryService implements CountryServiceInterface
         return CountryCodes::ZONE_ROW;
     }
 
-    /**
-     * @param  string $country
-     *
-     * @return bool
-     */
     public function isEu(string $country): bool
     {
         return CountryCodes::ZONE_EU === $this->getShippingZone($country);
     }
 
-    /**
-     * @param  string $country
-     *
-     * @return bool
-     */
     public function isLocalCountry(string $country): bool
     {
         return Platform::get('localCountry') === $country;
     }
 
-    /**
-     * @param  string $country
-     *
-     * @return bool
-     */
     public function isRow(string $country): bool
     {
         return CountryCodes::ZONE_ROW === $this->getShippingZone($country);
     }
 
-    /**
-     * @param  string $country
-     *
-     * @return bool
-     */
     public function isUnique(string $country): bool
     {
         return $country === $this->getShippingZone($country);

@@ -8,19 +8,12 @@ use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 
 final class ProductSettingsDefinitionHelper extends AbstractOptionDefinitionHelper
 {
-    /**
-     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
-     *
-     * @return null|string
-     */
     protected function getDefinitionKey(OrderOptionDefinitionInterface $definition): ?string
     {
         return $definition->getProductSettingsKey();
     }
 
     /**
-     * @param  string $attribute
-     *
      * @return mixed
      */
     protected function getValue(string $attribute)

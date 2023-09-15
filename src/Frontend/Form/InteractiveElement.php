@@ -14,11 +14,6 @@ class InteractiveElement extends PlainElement
      */
     public $name;
 
-    /**
-     * @param  string $name
-     * @param  string $component
-     * @param  array  $props
-     */
     public function __construct(string $name, string $component, array $props = [])
     {
         parent::__construct($component, array_merge(['$wrapper' => null], $props));

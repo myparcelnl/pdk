@@ -22,9 +22,6 @@ trait HasFormOperationBuilderParent
         $this->parent = $parent;
     }
 
-    /**
-     * @return array
-     */
     public function build(): array
     {
         return $this
@@ -32,17 +29,11 @@ trait HasFormOperationBuilderParent
             ->build();
     }
 
-    /**
-     * @return null|\MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface
-     */
     public function getParent(): ?FormOperationBuilderInterface
     {
         return $this->parent;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\RootFormOperationBuilderInterface
-     */
     protected function getRoot(): RootFormOperationBuilderInterface
     {
         $root = $this->parent;

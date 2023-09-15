@@ -74,11 +74,6 @@ class DeliveryOptionsConfig extends Model
         parent::__construct($data);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return self
-     */
     public static function fromCart(PdkCart $cart): self
     {
         /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */

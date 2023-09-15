@@ -14,12 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 trait ParsesSource
 {
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection
-     */
     protected function parseSourceDirectories(InputInterface $input, OutputInterface $output): ClassDefinitionCollection
     {
         /** @var \MyParcelNL\Pdk\Console\PhpLoader $loader */
@@ -39,8 +33,6 @@ trait ParsesSource
 
     /**
      * @param  null|array $default
-     *
-     * @return void
      */
     protected function registerFilesArgument(array $default = ['src']): void
     {

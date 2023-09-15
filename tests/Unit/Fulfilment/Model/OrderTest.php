@@ -17,7 +17,7 @@ it('creates fulfilment order from pdk order', function (array $input) {
 
     $fulfilmentOrder = Order::fromPdkOrder($pdkOrder);
     expect($fulfilmentOrder)->toBeInstanceOf(Order::class);
-    assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArray()));
+    assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArray(), JSON_THROW_ON_ERROR));
 })->with([
     'empty order'             => [[]],
     'order without shipments' => [
@@ -125,6 +125,6 @@ it('creates fulfilment order from pdk order', function (array $input) {
 it('returns empty fulfilment order when no pdk order is passed', function () {
     $fulfilmentOrder = Order::fromPdkOrder(null);
     expect($fulfilmentOrder)->toBeInstanceOf(Order::class);
-    assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArray()));
+    assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArray(), JSON_THROW_ON_ERROR));
 });
 

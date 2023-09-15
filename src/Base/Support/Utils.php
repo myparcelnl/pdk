@@ -9,23 +9,14 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 {
-    /**
-     * @var array
-     */
-    private static $classBasenameCache = [];
+    private static array $classBasenameCache = [];
+
+    private static array $classCastCache     = [];
 
     /**
-     * @var array
-     */
-    private static $classCastCache = [];
-
-    /**
-     * @param  string $class
-     * @param  mixed  ...$args
-     *
      * @return mixed
      */
-    public static function cast(string $class, ...$args)
+    public static function cast(string $class, mixed ...$args)
     {
         if (is_a($args[0], $class)) {
             return $args[0];
@@ -41,10 +32,7 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
-     * @param  array       $array
      * @param  string|null $case
-     *
-     * @return array
      */
     public static function changeArrayKeysCase(array $array, string $case = null): array
     {
@@ -69,16 +57,12 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
     /**
      * Get the class "basename" of the given object / class.
-     *
-     * @param  mixed $class
-     *
-     * @return string
      */
-    public static function classBasename($class): string
+    public static function classBasename(mixed $class): string
     {
         if (! isset(self::$classBasenameCache[$class])) {
-            $class    = is_object($class) ? get_class($class) : $class;
-            $lastPart = strrchr('\\' . ltrim($class, '\\'), '\\');
+            $class    = is_object($class) ? $class::class : $class;
+            $lastPart = strrchr('\\' . ltrim((string) $class, '\\'), '\\');
 
             self::$classBasenameCache[$class] = substr($lastPart, 1);
         }
@@ -103,9 +87,6 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
     /**
      * @param  string|int $name
-     * @param  array      $namesToIdsMap
-     *
-     * @return null|int
      */
     public static function convertToId($name, array $namesToIdsMap): ?int
     {
@@ -118,9 +99,6 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
     /**
      * @param  string|int $id
-     * @param  array      $namesToIdsMap
-     *
-     * @return null|string
      */
     public static function convertToName($id, array $namesToIdsMap): ?string
     {
@@ -131,27 +109,18 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         return array_search((int) $id, $namesToIdsMap, true) ?: null;
     }
 
-    /**
-     * @param  array $array
-     *
-     * @return array
-     */
     public static function filterNull(array $array): array
     {
-        return array_filter($array, static function ($value) {
-            return null !== $value;
-        });
+        return array_filter($array, static fn($value) => null !== $value);
     }
 
     /**
      * @param $class
-     *
-     * @return array
      */
     public static function getClassParentsRecursive($class): array
     {
         if (is_object($class)) {
-            $class = get_class($class);
+            $class = $class::class;
         }
 
         $results = [];
@@ -183,12 +152,6 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         return $traits;
     }
 
-    /**
-     * @param  array $previous
-     * @param  array $current
-     *
-     * @return array
-     */
     public static function mergeArraysIgnoringNull(array $previous, array $current): array
     {
         $keys = array_keys($current);
@@ -210,8 +173,6 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 
     /**
      * @param  string|string[] $value
-     *
-     * @return array
      */
     public static function toArray($value): array
     {
@@ -227,11 +188,6 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         }, []);
     }
 
-    /**
-     * @param  array $array
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public static function toRecursiveCollection(array $array): Collection
     {
         $collection = new Collection($array);

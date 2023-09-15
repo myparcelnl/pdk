@@ -13,7 +13,7 @@ class ExampleGetShipmentsResponseWithPickup extends ExampleJsonResponse
     {
         return [
             [
-                'id'                           => 136464938,
+                'id'                           => 136_464_938,
                 'parent_id'                    => null,
                 'account_id'                   => 170402,
                 'shop_id'                      => 93683,
@@ -123,9 +123,6 @@ class ExampleGetShipmentsResponseWithPickup extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'shipments';

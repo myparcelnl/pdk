@@ -10,9 +10,6 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
 final class PrintOptionsView extends NewAbstractSettingsView
 {
-    /**
-     * @return void
-     */
     protected function addElements(): void
     {
         $this->formBuilder->add(
@@ -39,9 +36,6 @@ final class PrintOptionsView extends NewAbstractSettingsView
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getPrefix(): string
     {
         return 'print';

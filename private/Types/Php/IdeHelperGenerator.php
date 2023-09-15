@@ -26,12 +26,6 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
      */
     private $typeParser;
 
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
-     * @param  string                                                                    $baseDir
-     */
     public function __construct(
         InputInterface            $input,
         OutputInterface           $output,
@@ -43,9 +37,6 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
         $this->typeParser = Pdk::get(PhpTypeParser::class);
     }
 
-    /**
-     * @return void
-     */
     protected function generate(): void
     {
         $handle = $this->getHandle($this->getFilename());
@@ -58,9 +49,8 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
         /** @var ClassDefinition $definition */
         foreach ($this->definitions->all() as $definition) {
             if ($definition->isSubclassOf(Facade::class)) {
-                $properties = array_map(static function (KeyValue $comment) {
-                    return "@$comment->key $comment->value";
-                }, $definition->comments->all());
+                $properties = array_map(static fn(KeyValue $comment) => "@$comment->key $comment->value",
+                    $definition->comments->all());
             } else {
                 $properties = $this->getModelProperties($definition);
             }
@@ -90,17 +80,12 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
         return [Model::class, Collection::class, Facade::class];
     }
 
-    /**
-     * @return string
-     */
     private function getFilename(): string
     {
         return "$this->baseDir/.meta/pdk_ide_helper.php";
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition $definition
-     *
      * @return string[]
      */
     private function getModelProperties(ClassDefinition $definition): array
@@ -146,26 +131,17 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
             }
         }
 
-        return array_merge($modelGetters, $modelSetters, $modelProperties);
+        return [...$modelGetters, ...$modelSetters, ...$modelProperties];
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection $types
-     *
-     * @return string
-     */
     private function getTypeHint(TypeCollection $types): string
     {
         $singleType = null;
 
         if ($types->count() > 1) {
-            $collectionTypes = $types->filter(function (Type $type) {
-                return $this->typeParser->extendsCollection($type);
-            });
+            $collectionTypes = $types->filter(fn(Type $type) => $this->typeParser->extendsCollection($type));
 
-            $nullTypes = $types->filter(static function (Type $type) {
-                return $type->isNullable();
-            });
+            $nullTypes = $types->filter(static fn(Type $type) => $type->isNullable());
 
             if ($collectionTypes->isNotEmpty()) {
                 /** @var Type $type */
@@ -178,7 +154,7 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
             }
         }
 
-        $singleType = $singleType ?? $this->typeParser->getTypeAsString($types->first());
+        $singleType ??= $this->typeParser->getTypeAsString($types->first());
 
         if (Str::contains($singleType, '{')) {
             $singleType = Str::before($singleType, '{');

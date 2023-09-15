@@ -68,7 +68,6 @@ class PdkCart extends Model
     /**
      * @param  array|PdkShippingMethod $value
      *
-     * @return self
      * @noinspection PhpUnused
      */
     public function setShippingMethodAttribute($value): self
@@ -79,9 +78,6 @@ class PdkCart extends Model
         return $this;
     }
 
-    /**
-     * @return void
-     */
     private function updateShippingMethod(): void
     {
         /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */

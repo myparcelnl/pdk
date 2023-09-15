@@ -16,31 +16,25 @@ final class PackageTypeCollection extends Collection
 {
     protected $cast = PackageType::class;
 
-    /**
-     * @return self
-     */
     public static function fromAll(): self
     {
         $packageTypes = DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP;
 
         return new self(
-            array_map(static function (int $id, string $name) {
-                return compact('id', 'name');
-            }, $packageTypes, array_keys($packageTypes))
+            array_map(static fn(int $id, string $name) => compact('id', 'name'),
+                $packageTypes,
+                array_keys($packageTypes))
         );
     }
 
-    /**
-     * @param  bool $descending
-     *
-     * @return self
-     */
     public function sortBySize(bool $descending = false): self
     {
         $packageTypesBySize = Pdk::get('packageTypesBySize');
 
-        return $this->sortBy(function (PackageType $packageType) use ($packageTypesBySize) {
-            return array_search($packageType->name, $packageTypesBySize, true);
-        }, SORT_NATURAL, $descending);
+        return $this->sortBy(
+            fn(PackageType $packageType) => array_search($packageType->name, $packageTypesBySize, true),
+            SORT_NATURAL,
+            $descending
+        );
     }
 }

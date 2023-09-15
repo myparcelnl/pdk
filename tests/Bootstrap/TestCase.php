@@ -27,9 +27,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @return void
-     */
     protected function resetServices(): void
     {
         if (! Facade::getPdkInstance()) {
@@ -47,15 +44,12 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 }
 
                 $instance->reset();
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // Ignore
             }
         }
     }
 
-    /**
-     * @return void
-     */
     protected function tearDown(): void
     {
         $this->resetServices();

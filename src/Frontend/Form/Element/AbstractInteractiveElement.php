@@ -10,17 +10,12 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 
 abstract class AbstractInteractiveElement extends AbstractPlainElement implements InteractiveElementBuilderInterface
 {
-    /**
-     * @param  string $name
-     */
     public function __construct(string $name)
     {
         $this->name = $name;
     }
 
     /**
-     * @param  callable $callable
-     *
      * @return $this
      */
     public function afterUpdate(callable $callable): InteractiveElementBuilderInterface
@@ -31,9 +26,6 @@ abstract class AbstractInteractiveElement extends AbstractPlainElement implement
         return $this;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface
-     */
     public function make(): ElementInterface
     {
         return (new InteractiveElement($this->name, $this->getComponent(), $this->getProps()))
@@ -54,11 +46,6 @@ abstract class AbstractInteractiveElement extends AbstractPlainElement implement
         return $this;
     }
 
-    /**
-     * @param  string ...$parts
-     *
-     * @return string
-     */
     protected function createLabel(string ...$parts): string
     {
         return implode('_', array_merge($this->prefixes, $parts));

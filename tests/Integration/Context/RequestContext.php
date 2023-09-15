@@ -19,8 +19,6 @@ final class RequestContext extends AbstractContext
 
     /**
      * @param  null|string $name
-     * @param  array       $data
-     * @param  string      $dataName
      */
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
@@ -42,7 +40,7 @@ final class RequestContext extends AbstractContext
 
         self::assertNotNull($body, 'Response body is null');
 
-        $body = json_decode($body, true);
+        $body = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
 
         foreach ($this->parseTable($node) as $key => $value) {
             $exists = Arr::has($body, $key);
@@ -71,7 +69,6 @@ final class RequestContext extends AbstractContext
 
     /**
      * @Then I expect the response to be successful
-     * @return void
      */
     public function IExpectTheResponseToBeSuccessful(): void
     {
@@ -117,7 +114,7 @@ final class RequestContext extends AbstractContext
             $method,
             $this->createParameters($parameters, ['action' => $action]),
             ['Content-Type' => 'application/json'],
-            $body ? json_encode(Arr::undot($this->parseTable($body))) : null
+            $body ? json_encode(Arr::undot($this->parseTable($body)), JSON_THROW_ON_ERROR) : null
         );
     }
 
@@ -125,7 +122,6 @@ final class RequestContext extends AbstractContext
      * Debug step used to show the response in dot notation, for easy copy-pasting into a table in the feature file.
      *
      * @Then         show the response in dot notation
-     * @return void
      * @noinspection ForgottenDebugOutputInspection
      */
     public function showResponseInDotNotation(): void

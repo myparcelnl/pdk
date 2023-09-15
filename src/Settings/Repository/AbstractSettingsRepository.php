@@ -16,23 +16,15 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 abstract class AbstractSettingsRepository extends Repository implements SettingsRepositoryInterface
 {
     /**
-     * @param  string $namespace
-     *
      * @return array|\MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel
      */
     abstract public function getGroup(string $namespace);
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return void
+     * @param  mixed $value
      */
     abstract public function store(string $key, $value): void;
 
-    /**
-     * @return \MyParcelNL\Pdk\Settings\Model\Settings
-     */
     public function all(): Settings
     {
         return $this->retrieveAll(function () {
@@ -53,8 +45,6 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
@@ -75,9 +65,6 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
-     *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function storeAllSettings(Settings $settings): void
@@ -90,7 +77,6 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     /**
      * @param  AbstractSettingsModel|SettingsModelCollection $settings
      *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function storeSettings($settings): void
@@ -101,37 +87,23 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
             return;
         }
 
-        /** @var array $existing */
         $id       = $settings->first()->id ?? $settings->id;
         $existing = $this->get($this->createSettingsKey($id)) ?? [];
 
         $this->store($this->createSettingsKey($settings->id), array_replace($existing, $settings->toStorableArray()));
     }
 
-    /**
-     * @param  string $input
-     *
-     * @return string
-     */
     protected function createSettingsKey(string $input): string
     {
         return Pdk::get('createSettingsKey')($input);
     }
 
-    /**
-     * @return string
-     */
     protected function getKeyPrefix(): string
     {
         return 'settings_';
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\Settings                     $settings
-     * @param  \MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection $collection
-     * @param  string                                                      $settingsId
-     *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function updateSettingsFromCollection(
@@ -153,11 +125,8 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\Settings              $settings
-     * @param  \MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel $model
-     * @param  null|string                                          $id
+     * @param  null|string $id
      *
-     * @return Settings
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function updateSettingsFromModel(
@@ -165,12 +134,10 @@ abstract class AbstractSettingsRepository extends Repository implements Settings
         AbstractSettingsModel $model,
         string                $id = null
     ): Settings {
-        $id = $id ?? $model->id;
+        $id ??= $model->id;
 
         $keys   = array_keys(Arr::except($model->getAttributes(), 'id'));
-        $values = array_map(function ($key) use ($id) {
-            return $this->get($this->createSettingsKey(implode('.', [$id, $key])));
-        }, $keys);
+        $values = array_map(fn($key) => $this->get($this->createSettingsKey(implode('.', [$id, $key]))), $keys);
 
         $attributes = array_combine($keys, $values);
 

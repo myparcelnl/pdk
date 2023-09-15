@@ -12,10 +12,6 @@ use MyParcelNL\Pdk\Fulfilment\Response\PostOrderNotesResponse;
 class OrderNotesRepository extends ApiRepository
 {
     /**
-     * @param  string                                                    $uuid
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $orderNotes
-     *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
      * @noinspection PhpUnused
      */
     public function postOrderNotes(string $uuid, OrderNoteCollection $orderNotes): OrderNoteCollection

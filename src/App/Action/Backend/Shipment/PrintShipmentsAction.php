@@ -23,24 +23,17 @@ class PrintShipmentsAction extends AbstractOrderAction
      */
     protected $shipmentRepository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
-     */
     public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository, ShipmentRepository $shipmentRepository)
     {
         parent::__construct($pdkOrderRepository);
         $this->shipmentRepository = $shipmentRepository;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
-        $format    = strtoupper($this->getLabelOption($request, LabelSettings::FORMAT, LabelSettings::DEFAULT_FORMAT));
+        $format    = strtoupper(
+            (string) $this->getLabelOption($request, LabelSettings::FORMAT, LabelSettings::DEFAULT_FORMAT)
+        );
         $output    = $this->getLabelOption($request, LabelSettings::OUTPUT, LabelSettings::DEFAULT_OUTPUT);
         $positions = Utils::toArray(
             $this->getLabelOption($request, LabelSettings::POSITION, LabelSettings::DEFAULT_POSITION)
@@ -54,23 +47,14 @@ class PrintShipmentsAction extends AbstractOrderAction
             ? $orders->getShipmentsByIds($shipmentIds)
             : $orders->getLastShipments();
 
-        switch ($output) {
-            case LabelSettings::OUTPUT_OPEN:
-                return $this->getPdf($shipments, $format, $positions);
-
-            case LabelSettings::OUTPUT_DOWNLOAD:
-                return $this->getUrlToPdf($shipments, $format, $positions);
-
-            default:
-                throw new InvalidArgumentException("Invalid output type $output");
-        }
+        return match ($output) {
+            LabelSettings::OUTPUT_OPEN => $this->getPdf($shipments, $format, $positions),
+            LabelSettings::OUTPUT_DOWNLOAD => $this->getUrlToPdf($shipments, $format, $positions),
+            default => throw new InvalidArgumentException("Invalid output type $output"),
+        };
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  string                                                 $format
-     * @param  array                                                  $position
-     *
      * @return JsonResponse
      */
     protected function getPdf(ShipmentCollection $shipments, string $format, array $position): Response
@@ -84,13 +68,6 @@ class PrintShipmentsAction extends AbstractOrderAction
         ]);
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  string                                                 $format
-     * @param  array                                                  $position
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     protected function getUrlToPdf(ShipmentCollection $shipments, string $format, array $position): Response
     {
         return new JsonResponse([
@@ -101,13 +78,9 @@ class PrintShipmentsAction extends AbstractOrderAction
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     * @param  string                                    $name
-     * @param  mixed                                     $default
-     *
      * @return mixed
      */
-    private function getLabelOption(Request $request, string $name, $default = null)
+    private function getLabelOption(Request $request, string $name, mixed $default = null)
     {
         return $request->get($name, Settings::get($name, LabelSettings::ID, $default));
     }

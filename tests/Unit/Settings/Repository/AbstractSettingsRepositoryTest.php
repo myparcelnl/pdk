@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -19,23 +18,24 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(
     new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            AccountSettings::ID => [
-                AccountSettings::API_KEY => '1234567890',
-            ],
-            CarrierSettings::ID => [
-                'postnl' => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                    CarrierSettings::CUTOFF_TIME            => '17:00',
-                ],
-                'dhl'    => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => false,
-                ],
-                'bpost'  => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                ],
-            ],
-        ]),
+        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class),
+        //            ->constructor([
+        //                AccountSettings::ID => [
+        //                    AccountSettings::API_KEY => '1234567890',
+        //                ],
+        //                CarrierSettings::ID => [
+        //                    'postnl' => [
+        //                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+        //                        CarrierSettings::CUTOFF_TIME            => '17:00',
+        //                    ],
+        //                    'dhl'    => [
+        //                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => false,
+        //                    ],
+        //                    'bpost'  => [
+        //                        CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+        //                    ],
+        //                ],
+        //            ]),
     ])
 );
 
@@ -44,7 +44,7 @@ it('retrieves all categories and fields', function () {
     $repository = Pdk::get(SettingsRepositoryInterface::class);
     $settings   = $repository->all();
 
-    assertMatchesJsonSnapshot(json_encode($settings->toArray()));
+    assertMatchesJsonSnapshot(json_encode($settings->toArray(), JSON_THROW_ON_ERROR));
 });
 
 it('retrieves a single setting from a category', function (string $key, $expected) {

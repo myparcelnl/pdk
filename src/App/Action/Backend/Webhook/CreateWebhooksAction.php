@@ -12,20 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateWebhooksAction extends AbstractWebhooksAction
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $url   = $this->getWebhookUrl($request);
         $hooks = $this->getRequestHooks($request);
 
         $collection = new WebhookSubscriptionCollection(
-            array_map(static function (string $hook) use ($url) {
-                return compact('hook', 'url');
-            }, $hooks)
+            array_map(static fn(string $hook) => compact('hook', 'url'), $hooks)
         );
 
         $result = $this->repository->subscribeMany($collection);
@@ -36,20 +29,13 @@ class CreateWebhooksAction extends AbstractWebhooksAction
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return string[]
      */
     private function getRequestHooks(Request $request): array
     {
-        return explode(',', $request->get('hooks', [])) ?: [];
+        return explode(',', (string) $request->get('hooks', [])) ?: [];
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return null|string
-     */
     private function getWebhookUrl(Request $request): ?string
     {
         $url = $this->pdkWebhooksRepository->getHashedUrl();

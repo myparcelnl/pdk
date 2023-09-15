@@ -1,0 +1,101 @@
+{
+    "uuid": null,
+    "externalIdentifier": "ABC123456",
+    "fulfilmentPartnerIdentifier": null,
+    "shopId": null,
+    "accountId": null,
+    "dropOffPoint": null,
+    "invoiceAddress": null,
+    "language": "nl",
+    "orderDate": "2023-01-01 00:00:00",
+    "lines": [
+        {
+            "uuid": null,
+            "quantity": 10,
+            "price": 295,
+            "vat": 62,
+            "priceAfterVat": 357,
+            "product": {
+                "uuid": null,
+                "sku": "ABC123456",
+                "ean": "1234567890123",
+                "externalIdentifier": null,
+                "name": "Product name",
+                "description": null,
+                "width": 0,
+                "length": 0,
+                "height": 0,
+                "weight": 100
+            }
+        }
+    ],
+    "notes": [],
+    "shipment": {
+        "carrier": 1,
+        "contractId": null,
+        "customsDeclaration": {
+            "contents": 0,
+            "invoice": "ABC123456",
+            "items": [
+                {
+                    "amount": 10,
+                    "classification": "12345",
+                    "country": "NL",
+                    "description": "A word",
+                    "itemValue": {
+                        "amount": 100,
+                        "currency": "EUR"
+                    },
+                    "weight": 100
+                }
+            ],
+            "weight": 1000
+        },
+        "options": {
+            "ageCheck": false,
+            "collect": null,
+            "cooledDelivery": null,
+            "deliveryDate": null,
+            "deliveryType": 2,
+            "hideSender": false,
+            "insurance": 0,
+            "labelDescription": "",
+            "largeFormat": false,
+            "onlyRecipient": true,
+            "packageType": 1,
+            "return": false,
+            "sameDayDelivery": false,
+            "saturdayDelivery": null,
+            "signature": true
+        },
+        "pickup": null,
+        "recipient": {
+            "address1": "Antareslaan 31",
+            "address2": null,
+            "area": null,
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "postalCode": "2132JE",
+            "region": "Noord-Holland",
+            "state": "Noord-Holland",
+            "email": "test@myparcel.nl",
+            "phone": "0612356789",
+            "person": "Ms. Parcel",
+            "company": "MyParcel"
+        },
+        "physicalProperties": {
+            "height": 100,
+            "length": 100,
+            "weight": 1000,
+            "width": 100
+        },
+        "dropOffPoint": null
+    },
+    "status": null,
+    "type": null,
+    "price": 2950,
+    "vat": 620,
+    "priceAfterVat": 3570,
+    "createdAt": null,
+    "updatedAt": null
+}

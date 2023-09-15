@@ -53,9 +53,6 @@ abstract class AbstractCommand extends Command implements HasCommandContextInter
     }
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     *
      * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -64,7 +61,6 @@ abstract class AbstractCommand extends Command implements HasCommandContextInter
     }
 
     /**
-     * @return \DI\Container
      * @throws \Exception
      */
     private function buildContainer(): Container
@@ -86,7 +82,6 @@ abstract class AbstractCommand extends Command implements HasCommandContextInter
     /**
      * Set up a bare version of the pdk without the default included configs, so we can have dependency injection.
      *
-     * @return void
      * @throws \Exception
      */
     private function setupPdk(): void

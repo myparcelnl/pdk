@@ -16,9 +16,6 @@ final class GenerateTypeScriptTypesCommand extends AbstractGenerateTypesCommand
         $this->setDescription('Generate TypeScript types');
     }
 
-    /**
-     * @return string
-     */
     protected function getGeneratorClass(): string
     {
         return TypescriptHelperGenerator::class;

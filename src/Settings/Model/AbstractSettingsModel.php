@@ -42,7 +42,6 @@ abstract class AbstractSettingsModel extends Model implements StorableArrayable
     }
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
@@ -52,8 +51,6 @@ abstract class AbstractSettingsModel extends Model implements StorableArrayable
 
     /**
      * Set default values for settings that have a default of null, if present in platform configuration.
-     *
-     * @return void
      */
     protected function setPlatformDefaults(): void
     {

@@ -26,14 +26,6 @@ class PdkBootstrapper implements PdkBootstrapperInterface
     public function __construct() { }
 
     /**
-     * @param  string $name
-     * @param  string $title
-     * @param  string $version
-     * @param  string $path
-     * @param  string $url
-     * @param  string $mode
-     *
-     * @return \MyParcelNL\Pdk\Base\Pdk
      * @throws \Exception
      */
     final public static function boot(
@@ -55,13 +47,6 @@ class PdkBootstrapper implements PdkBootstrapperInterface
     }
 
     /**
-     * @param  string $name
-     * @param  string $title
-     * @param  string $version
-     * @param  string $path
-     * @param  string $url
-     *
-     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface
      * @throws \Exception
      */
     protected function createPdkInstance(
@@ -89,34 +74,16 @@ class PdkBootstrapper implements PdkBootstrapperInterface
         );
     }
 
-    /**
-     * @param  string $name
-     *
-     * @return string
-     */
     protected function determinePlatform(string $name): string
     {
-        switch ($name) {
-            case 'myparcelbe':
-            case Platform::SENDMYPARCEL_NAME:
-                return Platform::SENDMYPARCEL_NAME;
-
-            case Platform::FLESPAKKET_NAME:
-                return Platform::FLESPAKKET_NAME;
-
-            default:
-                return Platform::MYPARCEL_NAME;
-        }
+        return match ($name) {
+            'myparcelbe', Platform::SENDMYPARCEL_NAME => Platform::SENDMYPARCEL_NAME,
+            Platform::FLESPAKKET_NAME => Platform::FLESPAKKET_NAME,
+            default => Platform::MYPARCEL_NAME,
+        };
     }
 
     /**
-     * @param  string $name
-     * @param  string $title
-     * @param  string $version
-     * @param  string $path
-     * @param  string $url
-     *
-     * @return array
      * @codeCoverageIgnore
      */
     protected function getAdditionalConfig(
@@ -129,9 +96,6 @@ class PdkBootstrapper implements PdkBootstrapperInterface
         return [];
     }
 
-    /**
-     * @return string
-     */
     protected function getConfigPath(): string
     {
         return 'config/pdk.php';

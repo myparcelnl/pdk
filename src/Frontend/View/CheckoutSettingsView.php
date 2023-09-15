@@ -18,22 +18,10 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
  */
 class CheckoutSettingsView extends AbstractSettingsView
 {
-    /**
-     * @var \MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface
-     */
-    private $shippingMethodRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface $shippingMethodRepository
-     */
-    public function __construct(PdkShippingMethodRepositoryInterface $shippingMethodRepository)
+    public function __construct(private readonly PdkShippingMethodRepositoryInterface $shippingMethodRepository)
     {
-        $this->shippingMethodRepository = $shippingMethodRepository;
     }
 
-    /**
-     * @return null|array
-     */
     protected function createElements(): ?array
     {
         return [
@@ -81,17 +69,11 @@ class CheckoutSettingsView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getSettingsId(): string
     {
         return CheckoutSettings::ID;
     }
 
-    /**
-     * @return array
-     */
     private function getShippingMethodOptions(): array
     {
         $shippingMethods = $this->shippingMethodRepository->all();

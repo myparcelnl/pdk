@@ -12,9 +12,6 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 class ShopCarrierOptionsRepository extends ApiRepository
 {
     /**
-     * @param  int $carrierId
-     *
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      * @noinspection PhpUnused
      */
     public function getCarrierOptions(int $carrierId): CarrierCollection

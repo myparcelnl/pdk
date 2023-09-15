@@ -12,17 +12,17 @@ use Throwable;
 
 class Pdk implements PdkInterface
 {
-    public const PACKAGE_NAME     = 'myparcelnl/pdk';
-    public const MODE_DEVELOPMENT = 'development';
-    public const MODE_PRODUCTION  = 'production';
+    final public const PACKAGE_NAME     = 'myparcelnl/pdk';
+    final public const MODE_DEVELOPMENT = 'development';
+    final public const MODE_PRODUCTION  = 'production';
     /**
      * The directory where the container cache file will be stored.
      */
-    public const CACHE_DIR = __DIR__ . '/../../.cache';
+    final public const CACHE_DIR = __DIR__ . '/../../.cache';
     /**
      * The container cache class name.
      */
-    public const CACHE_CLASS_NAME = 'CompiledContainer';
+    final public const CACHE_CLASS_NAME = 'CompiledContainer';
     /**
      * The full path to the container cache file.
      */
@@ -43,8 +43,6 @@ class Pdk implements PdkInterface
 
     /**
      * Delete the container cache file if it exists.
-     *
-     * @return void
      */
     public function clearCache(): void
     {
@@ -56,8 +54,6 @@ class Pdk implements PdkInterface
     }
 
     /**
-     * @param  string $key
-     *
      * @return mixed
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
@@ -68,7 +64,6 @@ class Pdk implements PdkInterface
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Base\Model\AppInfo
      * @throws \MyParcelNL\Pdk\Base\Exception\PdkConfigException
      */
     public function getAppInfo(): AppInfo
@@ -76,7 +71,7 @@ class Pdk implements PdkInterface
         try {
             /** @var \MyParcelNL\Pdk\Base\Model\AppInfo $appInfo */
             $appInfo = $this->get('appInfo');
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             throw new PdkConfigException('The appInfo property is missing.');
         }
 
@@ -88,7 +83,6 @@ class Pdk implements PdkInterface
     }
 
     /**
-     * @return string
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      */
@@ -97,18 +91,12 @@ class Pdk implements PdkInterface
         return $this->get('mode');
     }
 
-    /**
-     * @param  string $key
-     *
-     * @return bool
-     */
     public function has(string $key): bool
     {
         return $this->container->has($key);
     }
 
     /**
-     * @return bool
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @noinspection PhpUnused
@@ -119,7 +107,6 @@ class Pdk implements PdkInterface
     }
 
     /**
-     * @return bool
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @noinspection PhpUnused

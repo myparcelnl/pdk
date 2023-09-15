@@ -20,13 +20,10 @@ class MockStorableModel extends Model implements StorableArrayable
         'property' => 'array',
     ];
 
-    /**
-     * @return array
-     */
     public function toStorableArray(): array
     {
         return [
-            'property' => json_encode($this->property),
+            'property' => json_encode($this->property, JSON_THROW_ON_ERROR),
         ];
     }
 }

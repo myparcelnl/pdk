@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Frontend\Form\Element\TextInput;
 it('builds multiple elements', function () {
     $formBuilder = new FormBuilder();
 
-    /** @var \MyParcelNL\Pdk\Frontend\Form\Element\Contract\InteractiveElementBuilderInterface $element */
     $elements = [
         new TextInput('test1'),
         new TextInput('test2'),
@@ -36,7 +35,6 @@ it('builds multiple elements', function () {
 it('adds elements with callback', function () {
     $formBuilder = new FormBuilder();
 
-    /** @var \MyParcelNL\Pdk\Frontend\Form\Element\Contract\InteractiveElementBuilderInterface $element */
     $elements = [
         new TextInput('test1'),
         new TextInput('test2'),

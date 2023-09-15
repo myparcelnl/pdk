@@ -21,15 +21,10 @@ interface ModelFactoryInterface extends FactoryInterface
      */
     public function make(): Model;
 
-    /**
-     * @return self
-     */
     public function store(): ModelFactoryInterface;
 
     /**
      * @param  array|\MyParcelNL\Pdk\Base\Support\Collection $data
-     *
-     * @return self
      */
     public function with($data): self;
 }

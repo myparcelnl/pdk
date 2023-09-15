@@ -13,50 +13,29 @@ use Symfony\Component\PropertyInfo\Type;
 class PhpTypeParser
 {
     /**
-     * @param  string $namespace
-     * @param  string $typeString
-     * @param  array  $uses
-     *
      * @return \Symfony\Component\PropertyInfo\Type[]
      */
     public function convertToTypes(string $namespace, string $typeString, array $uses = []): array
     {
         $isCollection = Str::contains($typeString, '[]');
 
-        $parts = array_map(static function (string $item) {
-            return Str::before(trim($item), '[]');
-        }, explode('|', $typeString));
+        $parts = array_map(static fn(string $item) => Str::before(trim($item), '[]'), explode('|', $typeString));
 
-        $filtered = array_filter($parts, static function (string $item) {
-            return 'null' !== $item;
-        });
+        $filtered = array_filter($parts, static fn(string $item) => 'null' !== $item);
 
         $nullable = count($filtered) !== count($parts);
 
         $classNames = $this->getFullyQualifiedClassNames($namespace, $filtered, $uses);
 
-        return array_map(function (string $typeString) use ($isCollection, $nullable) {
-            return $this->createType($typeString, $nullable, $isCollection);
-        }, $classNames);
+        return array_map(fn(string $typeString) => $this->createType($typeString, $nullable, $isCollection),
+            $classNames);
     }
 
-    /**
-     * @param  \Symfony\Component\PropertyInfo\Type $type
-     *
-     * @return string
-     */
     public function createFqcn(Type $type): string
     {
         return $type ? sprintf('%s ', $type->getName()) : '';
     }
 
-    /**
-     * @param  string $typeString
-     * @param  bool   $nullable
-     * @param  bool   $asCollection
-     *
-     * @return \Symfony\Component\PropertyInfo\Type
-     */
     public function createType(string $typeString, bool $nullable = false, bool $asCollection = false): Type
     {
         if ($asCollection) {
@@ -96,8 +75,6 @@ class PhpTypeParser
 
     /**
      * @param  null|\Symfony\Component\PropertyInfo\Type $type
-     *
-     * @return string
      */
     public function getTypeAsString(?Type $type): string
     {
@@ -122,11 +99,8 @@ class PhpTypeParser
     }
 
     /**
-     * @param  string   $namespace
      * @param  string[] $types
      * @param  string[] $uses
-     *
-     * @return array
      */
     protected function getFullyQualifiedClassNames(string $namespace, array $types, array $uses): array
     {

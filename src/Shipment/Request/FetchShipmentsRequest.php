@@ -27,20 +27,12 @@ class FetchShipmentsRequest extends Request
     private $referenceIdentifiers;
 
     /**
-     * @var null|int
+     * @param  null|int $size
      */
-    private $size;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipmentCollection
-     * @param  null|int                                               $size
-     */
-    public function __construct(ShipmentCollection $shipmentCollection, ?int $size = null)
+    public function __construct(ShipmentCollection $shipmentCollection, private readonly ?int $size = null)
     {
         parent::__construct();
         $collection = new Collection($shipmentCollection->all());
-
-        $this->size = $size;
 
         $this->ids                  = $collection->pluck('id')
             ->filter();
@@ -54,9 +46,6 @@ class FetchShipmentsRequest extends Request
         }
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         if ($this->ids->isEmpty()) {
@@ -66,9 +55,6 @@ class FetchShipmentsRequest extends Request
         return sprintf('%s/%s', $this->path, implode(';', $this->ids->toArray()));
     }
 
-    /**
-     * @return array
-     */
     protected function getParameters(): array
     {
         $referenceIdentifiers = $this->ids->isEmpty() ? $this->referenceIdentifiers->toArray() : [];

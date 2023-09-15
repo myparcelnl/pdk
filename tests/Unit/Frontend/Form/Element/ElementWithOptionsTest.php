@@ -30,109 +30,107 @@ it(
         );
     }
 )
-    ->with(function () {
-        return [
-            'plain array' => [
-                'options' => ['broccoli', 'bloemkool'],
-                'flags'   => 0,
-                'result'  => [
-                    'options' => [
-                        ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
-                        ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
-                    ],
-                ],
-            ],
-
-            'associative array' => [
+    ->with(fn() => [
+        'plain array' => [
+            'options' => ['broccoli', 'bloemkool'],
+            'flags'   => 0,
+            'result'  => [
                 'options' => [
-                    'bc' => 'broccoli',
-                    'bk' => 'bloemkool',
-                ],
-                'flags'   => 0,
-                'result'  => [
-                    'options' => [
-                        ['label' => 'test_option_broccoli', 'value' => 'bc'],
-                        ['label' => 'test_option_bloemkool', 'value' => 'bk'],
-                    ],
+                    ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
+                    ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
                 ],
             ],
+        ],
 
-            'include none' => [
-                'options' => ['broccoli', 'bloemkool'],
-                'flags'   => ElementBuilderWithOptionsInterface::ADD_NONE,
-                'result'  => [
-                    'options' => [
-                        ['label' => '_none', 'value' => Settings::OPTION_NONE],
-                        ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
-                        ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
-                    ],
+        'associative array' => [
+            'options' => [
+                'bc' => 'broccoli',
+                'bk' => 'bloemkool',
+            ],
+            'flags'   => 0,
+            'result'  => [
+                'options' => [
+                    ['label' => 'test_option_broccoli', 'value' => 'bc'],
+                    ['label' => 'test_option_bloemkool', 'value' => 'bk'],
                 ],
             ],
+        ],
 
-            'include default' => [
-                'options' => ['broccoli', 'bloemkool'],
-                'flags'   => ElementBuilderWithOptionsInterface::ADD_DEFAULT,
-                'result'  => [
-                    'options' => [
-                        ['label' => '_default', 'value' => Settings::OPTION_DEFAULT],
-                        ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
-                        ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
-                    ],
+        'include none' => [
+            'options' => ['broccoli', 'bloemkool'],
+            'flags'   => ElementBuilderWithOptionsInterface::ADD_NONE,
+            'result'  => [
+                'options' => [
+                    ['label' => '_none', 'value' => Settings::OPTION_NONE],
+                    ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
+                    ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
                 ],
             ],
+        ],
 
-            'plain label' => [
-                'options' => ['broccoli', 'bloemkool'],
-                'flags'   => ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL,
-                'result'  => [
-                    'options' => [
-                        ['plainLabel' => 'broccoli', 'value' => 'broccoli'],
-                        ['plainLabel' => 'bloemkool', 'value' => 'bloemkool'],
-                    ],
+        'include default' => [
+            'options' => ['broccoli', 'bloemkool'],
+            'flags'   => ElementBuilderWithOptionsInterface::ADD_DEFAULT,
+            'result'  => [
+                'options' => [
+                    ['label' => '_default', 'value' => Settings::OPTION_DEFAULT],
+                    ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
+                    ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
                 ],
             ],
+        ],
 
-            'multiple flags' => [
-                'options' => ['broccoli', 'bloemkool'],
-                'flags'   => ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL | ElementBuilderWithOptionsInterface::ADD_DEFAULT | ElementBuilderWithOptionsInterface::ADD_NONE,
-                'result'  => [
-                    'options' => [
-                        ['label' => '_none', 'value' => Settings::OPTION_NONE],
-                        ['label' => '_default', 'value' => Settings::OPTION_DEFAULT],
-                        ['plainLabel' => 'broccoli', 'value' => 'broccoli'],
-                        ['plainLabel' => 'bloemkool', 'value' => 'bloemkool'],
-                    ],
+        'plain label' => [
+            'options' => ['broccoli', 'bloemkool'],
+            'flags'   => ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL,
+            'result'  => [
+                'options' => [
+                    ['plainLabel' => 'broccoli', 'value' => 'broccoli'],
+                    ['plainLabel' => 'bloemkool', 'value' => 'bloemkool'],
                 ],
             ],
+        ],
 
-            'sort asc' => [
-                'options' => ['broccoli', 'bloemkool'],
-                'flags'   => ElementBuilderWithOptionsInterface::ADD_DEFAULT | ElementBuilderWithOptionsInterface::ADD_NONE | ElementBuilderWithOptionsInterface::SORT_ASC,
-                'result'  => [
-                    'options' => [
-                        ['label' => '_none', 'value' => Settings::OPTION_NONE],
-                        ['label' => '_default', 'value' => Settings::OPTION_DEFAULT],
-                        ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
-                        ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
-                    ],
-                    'sort'    => ElementBuilderWithOptionsInterface::SORT_ASC_VALUE,
+        'multiple flags' => [
+            'options' => ['broccoli', 'bloemkool'],
+            'flags'   => ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL | ElementBuilderWithOptionsInterface::ADD_DEFAULT | ElementBuilderWithOptionsInterface::ADD_NONE,
+            'result'  => [
+                'options' => [
+                    ['label' => '_none', 'value' => Settings::OPTION_NONE],
+                    ['label' => '_default', 'value' => Settings::OPTION_DEFAULT],
+                    ['plainLabel' => 'broccoli', 'value' => 'broccoli'],
+                    ['plainLabel' => 'bloemkool', 'value' => 'bloemkool'],
                 ],
             ],
+        ],
 
-            'sort desc' => [
-                'options' => ['broccoli', 'bloemkool', 'aardappel'],
-                'flags'   => ElementBuilderWithOptionsInterface::SORT_DESC,
-                'result'  => [
-                    'options' => [
-                        ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
-                        ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
-                        ['label' => 'test_option_aardappel', 'value' => 'aardappel'],
-                    ],
-                    'sort'    => ElementBuilderWithOptionsInterface::SORT_DESC_VALUE,
+        'sort asc' => [
+            'options' => ['broccoli', 'bloemkool'],
+            'flags'   => ElementBuilderWithOptionsInterface::ADD_DEFAULT | ElementBuilderWithOptionsInterface::ADD_NONE | ElementBuilderWithOptionsInterface::SORT_ASC,
+            'result'  => [
+                'options' => [
+                    ['label' => '_none', 'value' => Settings::OPTION_NONE],
+                    ['label' => '_default', 'value' => Settings::OPTION_DEFAULT],
+                    ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
+                    ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
                 ],
+                'sort'    => ElementBuilderWithOptionsInterface::SORT_ASC_VALUE,
             ],
-        ];
-    })
+        ],
+
+        'sort desc' => [
+            'options' => ['broccoli', 'bloemkool', 'aardappel'],
+            'flags'   => ElementBuilderWithOptionsInterface::SORT_DESC,
+            'result'  => [
+                'options' => [
+                    ['label' => 'test_option_broccoli', 'value' => 'broccoli'],
+                    ['label' => 'test_option_bloemkool', 'value' => 'bloemkool'],
+                    ['label' => 'test_option_aardappel', 'value' => 'aardappel'],
+                ],
+                'sort'    => ElementBuilderWithOptionsInterface::SORT_DESC_VALUE,
+            ],
+        ],
+    ])
     ->with('interactive elements with options');
 
 it('adds sort via withSort', function (string $sort, string $class, string $component) {

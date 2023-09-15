@@ -13,21 +13,14 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 
 class GetShipmentsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
-    private $shipments;
+    private ?ShipmentCollection $shipments = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
     public function getShipments(): ShipmentCollection
     {
         return $this->shipments;
     }
 
     /**
-     * @return void
      * @throws \Exception
      */
     protected function parseResponseBody(): void
@@ -35,13 +28,10 @@ class GetShipmentsResponse extends ApiResponseWithBody
         $parsedBody = json_decode($this->getBody(), true);
         $shipments  = $parsedBody['data']['shipments'] ?? [];
 
-        $this->shipments = new ShipmentCollection(array_map([$this, 'decodeShipment'], $shipments));
+        $this->shipments = new ShipmentCollection(array_map($this->decodeShipment(...), $shipments));
     }
 
     /**
-     * @param  array $data
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      * @throws \Exception
      */
     private function decodeShipment(array $data): Shipment
@@ -94,19 +84,12 @@ class GetShipmentsResponse extends ApiResponseWithBody
 
     /**
      * @param  null|array $item
-     *
-     * @return null|array
      */
     private function filter(?array $item): ?array
     {
         return array_filter($item ?? []) ?: null;
     }
 
-    /**
-     * @param  array $options
-     *
-     * @return array
-     */
     private function getShipmentOptions(array $options): array
     {
         $keys            = array_keys((new ShipmentOptions())->getAttributes(Arrayable::CASE_SNAKE));

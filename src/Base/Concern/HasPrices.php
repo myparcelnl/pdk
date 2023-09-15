@@ -13,9 +13,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 trait HasPrices
 {
     /**
-     * @param  array $fields
-     *
-     * @return void
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function calculateVatTotals(array $fields = ['price', 'vat', 'priceAfterVat']): void
@@ -37,9 +34,6 @@ trait HasPrices
     }
 
     /**
-     * @param  int $priceAfterVat
-     *
-     * @return self
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function setPriceAfterVatAttribute(int $priceAfterVat): self
@@ -51,9 +45,6 @@ trait HasPrices
     }
 
     /**
-     * @param  int $price
-     *
-     * @return self
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function setPriceAttribute(int $price): self
@@ -65,9 +56,6 @@ trait HasPrices
     }
 
     /**
-     * @param  int $vat
-     *
-     * @return self
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function setVatAttribute(int $vat): self

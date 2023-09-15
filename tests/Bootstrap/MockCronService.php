@@ -11,24 +11,19 @@ final class MockCronService implements CronServiceInterface
 {
     /**
      * Add an id to be able to identify the task.
-     *
-     * @var int
      */
-    private $incrementingId = 1;
+    private int $incrementingId = 1;
 
     /**
      * @var Collection|{callback: callable, args: array}[]
      */
-    private $scheduledTasks;
+    private Collection $scheduledTasks;
 
     public function __construct()
     {
         $this->clearScheduledTasks();
     }
 
-    /**
-     * @return void
-     */
     public function clearScheduledTasks(): void
     {
         $this->scheduledTasks = new Collection();
@@ -37,17 +32,12 @@ final class MockCronService implements CronServiceInterface
     /**
      * @param  callable|string|callable-string $callback
      * @param  mixed                           ...$args
-     *
-     * @return void
      */
     public function dispatch($callback, ...$args): void
     {
         $this->schedule($callback, time(), ...$args);
     }
 
-    /**
-     * @return void
-     */
     public function executeAllTasks(): void
     {
         while ($this->scheduledTasks->isNotEmpty()) {
@@ -57,8 +47,6 @@ final class MockCronService implements CronServiceInterface
 
     /**
      * Execute the first scheduled task.
-     *
-     * @return void
      */
     public function executeScheduledTask(): void
     {
@@ -75,9 +63,6 @@ final class MockCronService implements CronServiceInterface
         $this->scheduledTasks->forget($task['id']);
     }
 
-    /**
-     * @return Collection
-     */
     public function getScheduledTasks(): Collection
     {
         return $this->scheduledTasks;
@@ -85,10 +70,7 @@ final class MockCronService implements CronServiceInterface
 
     /**
      * @param  callable|string|callable-string $callback
-     * @param  int                             $timestamp
      * @param  mixed                           ...$args
-     *
-     * @return void
      */
     public function schedule($callback, int $timestamp, ...$args): void
     {

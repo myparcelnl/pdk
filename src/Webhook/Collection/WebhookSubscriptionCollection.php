@@ -15,8 +15,6 @@ class WebhookSubscriptionCollection extends Collection
     protected $cast = WebhookSubscription::class;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
-     *
      * @return $this
      */
     public function addIds(Collection $ids): self

@@ -45,9 +45,6 @@ final class ClassDefinition extends Model implements StorableArrayable
         'types'      => TypeCollection::class,
     ];
 
-    /**
-     * @return null|string
-     */
     public function getCollectionValueType(): ?string
     {
         if (! $this->isSubclassOf(Collection::class)) {
@@ -69,7 +66,6 @@ final class ClassDefinition extends Model implements StorableArrayable
     }
 
     /**
-     * @return \ReflectionClass
      * @throws \ReflectionException
      * @noinspection PhpUnused
      */
@@ -82,21 +78,14 @@ final class ClassDefinition extends Model implements StorableArrayable
         return new ReflectionClass($this->attributes['ref']['name']);
     }
 
-    /**
-     * @param  string $className
-     *
-     * @return bool
-     */
     public function isSubclassOf(string $className): bool
     {
-        return $this->parents->containsStrict(function (ClassDefinition $definition) use ($className) {
-            return $definition->ref->isSubclassOf($className) || $definition->ref->getName() === $className;
-        });
+        return $this->parents->containsStrict(
+            fn(ClassDefinition $definition) => $definition->ref->isSubclassOf($className)
+                || $definition->ref->getName() === $className
+        );
     }
 
-    /**
-     * @return array
-     */
     public function toStorableArray(): array
     {
         return [

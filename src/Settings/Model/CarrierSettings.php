@@ -61,57 +61,57 @@ class CarrierSettings extends AbstractSettingsModel
     /**
      * Settings category ID.
      */
-    public const ID           = 'carrier';
-    public const CARRIER_NAME = 'carrierName';
+    final public const ID           = 'carrier';
+    final public const CARRIER_NAME = 'carrierName';
     /**
      * Settings in this category.
      */
-    public const ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
-    public const ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
-    public const ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
-    public const ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
-    public const ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
-    public const ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
-    public const ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
-    public const ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
-    public const ALLOW_SIGNATURE                         = 'allowSignature';
-    public const CUTOFF_TIME                             = 'cutoffTime';
-    public const CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
-    public const DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
-    public const DELIVERY_DAYS_WINDOW                    = 'deliveryDaysWindow';
-    public const DELIVERY_OPTIONS_CUSTOM_CSS             = 'deliveryOptionsCustomCss';
-    public const DELIVERY_OPTIONS_ENABLED                = 'deliveryOptionsEnabled';
-    public const DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS = 'deliveryOptionsEnabledForBackorders';
-    public const DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
-    public const DROP_OFF_DELAY                          = 'dropOffDelay';
-    public const DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
-    public const EXPORT_AGE_CHECK                        = 'exportAgeCheck';
-    public const EXPORT_HIDE_SENDER                      = 'exportHideSender';
-    public const EXPORT_INSURANCE                        = 'exportInsurance';
-    public const EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
-    public const EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
-    public const EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
-    public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
-    public const EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
-    public const EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
-    public const EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
-    public const EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
-    public const EXPORT_RETURN                           = 'exportReturn';
-    public const EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
-    public const EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
-    public const EXPORT_SIGNATURE                        = 'exportSignature';
-    public const PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
-    public const PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
-    public const PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
-    public const PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
-    public const PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
-    public const PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
-    public const PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
-    public const PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
-    public const PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
-    public const PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
-    public const PRICE_SIGNATURE                         = 'priceSignature';
-    public const SHOW_DELIVERY_DAY                       = 'showDeliveryDay';
+    final public const ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
+    final public const ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
+    final public const ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
+    final public const ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
+    final public const ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
+    final public const ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
+    final public const ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
+    final public const ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
+    final public const ALLOW_SIGNATURE                         = 'allowSignature';
+    final public const CUTOFF_TIME                             = 'cutoffTime';
+    final public const CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
+    final public const DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
+    final public const DELIVERY_DAYS_WINDOW                    = 'deliveryDaysWindow';
+    final public const DELIVERY_OPTIONS_CUSTOM_CSS             = 'deliveryOptionsCustomCss';
+    final public const DELIVERY_OPTIONS_ENABLED                = 'deliveryOptionsEnabled';
+    final public const DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS = 'deliveryOptionsEnabledForBackorders';
+    final public const DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
+    final public const DROP_OFF_DELAY                          = 'dropOffDelay';
+    final public const DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
+    final public const EXPORT_AGE_CHECK                        = 'exportAgeCheck';
+    final public const EXPORT_HIDE_SENDER                      = 'exportHideSender';
+    final public const EXPORT_INSURANCE                        = 'exportInsurance';
+    final public const EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
+    final public const EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
+    final public const EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
+    final public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
+    final public const EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
+    final public const EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
+    final public const EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
+    final public const EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
+    final public const EXPORT_RETURN                           = 'exportReturn';
+    final public const EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
+    final public const EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
+    final public const EXPORT_SIGNATURE                        = 'exportSignature';
+    final public const PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
+    final public const PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
+    final public const PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
+    final public const PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
+    final public const PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
+    final public const PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
+    final public const PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
+    final public const PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
+    final public const PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
+    final public const PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
+    final public const PRICE_SIGNATURE                         = 'priceSignature';
+    final public const SHOW_DELIVERY_DAY                       = 'showDeliveryDay';
 
     protected $attributes = [
         'id'               => self::ID,
@@ -216,8 +216,6 @@ class CarrierSettings extends AbstractSettingsModel
 
     /**
      * @param  string|\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
-     *
-     * @return self
      */
     public static function fromCarrier($carrier): self
     {

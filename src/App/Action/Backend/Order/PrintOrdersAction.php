@@ -10,11 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PrintOrdersAction extends PrintShipmentsAction
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $orderIds = $this->getOrderIds($request);

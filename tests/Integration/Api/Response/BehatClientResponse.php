@@ -11,23 +11,16 @@ final class BehatClientResponse extends ClientResponse
 {
     /**
      * @param  string|array $body
-     * @param  int          $statusCode
-     * @param  array        $headers
      */
     public function __construct($body, int $statusCode, array $headers = [])
     {
         if (! is_string($body)) {
-            $body = json_encode($body);
+            $body = json_encode($body, JSON_THROW_ON_ERROR);
         }
 
         parent::__construct($body, $statusCode, $headers);
     }
 
-    /**
-     * @param  \GuzzleHttp\Psr7\Response $response
-     *
-     * @return self
-     */
     public static function create(Response $response): self
     {
         return new self(

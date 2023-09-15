@@ -11,19 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class ShopCarrierConfigurationUpdatedWebhook extends AbstractHook
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     public function handle(Request $request): void
     {
         Actions::execute(PdkBackendActions::UPDATE_ACCOUNT);
     }
 
-    /**
-     * @return string
-     */
     protected function getHookEvent(): string
     {
         return WebhookSubscription::SHOP_CARRIER_CONFIGURATION_UPDATED;

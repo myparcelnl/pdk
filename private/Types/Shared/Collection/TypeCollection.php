@@ -6,30 +6,22 @@ namespace MyParcelNL\Pdk\Console\Types\Shared\Collection;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser;
+use Stringable;
 use Symfony\Component\PropertyInfo\Type;
 
 /**
  * @property Type[] $items
  */
-class TypeCollection extends Collection
+class TypeCollection extends Collection implements Stringable
 {
-    /**
-     * @var \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser
-     */
-    private $typeParser;
+    private readonly PhpTypeParser $typeParser;
 
-    /**
-     * @param  array $items
-     */
     public function __construct(array $items = [])
     {
         parent::__construct($items);
         $this->typeParser = new PhpTypeParser();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->getTypeStrings()
@@ -45,23 +37,13 @@ class TypeCollection extends Collection
             ->all();
     }
 
-    /**
-     * @return array
-     */
     public function toStorableArray(): array
     {
-        return array_map(function (Type $type) {
-            return $this->typeParser->getTypeAsString($type);
-        }, $this->items);
+        return array_map(fn(Type $type) => $this->typeParser->getTypeAsString($type), $this->items);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection
-     */
     protected function getTypeStrings(): TypeCollection
     {
-        return $this->map(function (Type $type) {
-            return $this->typeParser->getTypeAsString($type);
-        });
+        return $this->map(fn(Type $type) => $this->typeParser->getTypeAsString($type));
     }
 }

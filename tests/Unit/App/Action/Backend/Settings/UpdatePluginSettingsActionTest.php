@@ -36,7 +36,7 @@ it('saves settings', function (array $data) {
 
     $response = Actions::execute($request);
 
-    $content = json_decode($response->getContent(), true);
+    $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     expect($response)
         ->toBeInstanceOf(Response::class)

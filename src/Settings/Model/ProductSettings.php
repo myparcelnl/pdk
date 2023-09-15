@@ -24,21 +24,21 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  */
 class ProductSettings extends AbstractSettingsModel
 {
-    public const ID                       = 'product';
-    public const COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
-    public const CUSTOMS_CODE             = 'customsCode';
-    public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
-    public const DROP_OFF_DELAY           = 'dropOffDelay';
-    public const EXPORT_AGE_CHECK         = 'exportAgeCheck';
-    public const EXPORT_HIDE_SENDER       = 'exportHideSender';
-    public const EXPORT_INSURANCE         = 'exportInsurance';
-    public const EXPORT_LARGE_FORMAT      = 'exportLargeFormat';
-    public const EXPORT_ONLY_RECIPIENT    = 'exportOnlyRecipient';
-    public const EXPORT_RETURN            = 'exportReturn';
-    public const EXPORT_SIGNATURE         = 'exportSignature';
-    public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
-    public const FIT_IN_MAILBOX           = 'fitInMailbox';
-    public const PACKAGE_TYPE             = 'packageType';
+    final public const ID                       = 'product';
+    final public const COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
+    final public const CUSTOMS_CODE             = 'customsCode';
+    final public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
+    final public const DROP_OFF_DELAY           = 'dropOffDelay';
+    final public const EXPORT_AGE_CHECK         = 'exportAgeCheck';
+    final public const EXPORT_HIDE_SENDER       = 'exportHideSender';
+    final public const EXPORT_INSURANCE         = 'exportInsurance';
+    final public const EXPORT_LARGE_FORMAT      = 'exportLargeFormat';
+    final public const EXPORT_ONLY_RECIPIENT    = 'exportOnlyRecipient';
+    final public const EXPORT_RETURN            = 'exportReturn';
+    final public const EXPORT_SIGNATURE         = 'exportSignature';
+    final public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
+    final public const FIT_IN_MAILBOX           = 'fitInMailbox';
+    final public const PACKAGE_TYPE             = 'packageType';
 
     protected $attributes = [
         'id' => self::ID,

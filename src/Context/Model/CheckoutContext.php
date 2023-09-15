@@ -79,19 +79,11 @@ class CheckoutContext extends Model
         $this->attributes['settings'] = $this->getSettings();
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return self
-     */
     public static function fromCart(PdkCart $cart): self
     {
         return new self(['config' => DeliveryOptionsConfig::fromCart($cart)]);
     }
 
-    /**
-     * @return array
-     */
     private function getActions(): array
     {
         /** @var \MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface $frontendEndpointService */
@@ -103,9 +95,6 @@ class CheckoutContext extends Model
         ];
     }
 
-    /**
-     * @return void
-     */
     private function getSettings(): array
     {
         return [
@@ -133,9 +122,6 @@ class CheckoutContext extends Model
         ];
     }
 
-    /**
-     * @return array
-     */
     private function getStrings(): array
     {
         return array_merge(

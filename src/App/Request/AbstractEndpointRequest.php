@@ -9,9 +9,6 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 
 abstract class AbstractEndpointRequest extends Request implements Arrayable
 {
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [

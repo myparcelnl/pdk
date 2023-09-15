@@ -15,14 +15,8 @@ use RuntimeException;
 
 class MockApiService extends AbstractApiService
 {
-    /**
-     * @var \GuzzleHttp\Handler\MockHandler
-     */
-    private $mock;
+    private readonly MockHandler $mock;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter $clientAdapter
-     */
     public function __construct(Guzzle7ClientAdapter $clientAdapter)
     {
         $mock   = new MockHandler();
@@ -35,11 +29,6 @@ class MockApiService extends AbstractApiService
         $this->mock = $mock;
     }
 
-    /**
-     * @param  \GuzzleHttp\Psr7\Response ...$responses
-     *
-     * @return void
-     */
     public function enqueue(Response ...$responses): void
     {
         $this->getMock()
@@ -47,7 +36,6 @@ class MockApiService extends AbstractApiService
     }
 
     /**
-     * @return \Psr\Http\Message\RequestInterface
      * @noinspection PhpUnused
      */
     public function ensureLastRequest(): RequestInterface
@@ -61,17 +49,11 @@ class MockApiService extends AbstractApiService
         return $lastRequest;
     }
 
-    /**
-     * @return string
-     */
     public function getBaseUrl(): string
     {
         return 'API';
     }
 
-    /**
-     * @return \Psr\Http\Message\RequestInterface|null
-     */
     public function getLastRequest(): ?RequestInterface
     {
         return $this
@@ -80,7 +62,6 @@ class MockApiService extends AbstractApiService
     }
 
     /**
-     * @return null|array
      * @noinspection PhpUnused
      */
     public function getLastRequestBody(): ?array
@@ -94,13 +75,12 @@ class MockApiService extends AbstractApiService
         return json_decode(
             $lastRequest->getBody()
                 ->getContents(),
-            true
+            true,
+            512,
+            JSON_THROW_ON_ERROR
         );
     }
 
-    /**
-     * @return \GuzzleHttp\Handler\MockHandler
-     */
     public function getMock(): MockHandler
     {
         return $this->mock;

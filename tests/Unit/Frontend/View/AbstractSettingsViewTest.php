@@ -19,14 +19,11 @@ usesShared(new UsesMockPdkInstance());
 
 final class MockSettingsView extends AbstractSettingsView
 {
-    private $children;
+    private ?Collection $children = null;
 
-    private $elements;
-
-    public function __construct($children = null, $elements = null)
+    public function __construct($children = null, private $elements = null)
     {
         $this->children = $children ? new Collection($children) : null;
-        $this->elements = $elements;
     }
 
     public function render(): string
@@ -55,56 +52,66 @@ it('can render a settings view', function (array $data) {
 
     expect($view->toArray())->toBe($data['result']);
 })->with([
-    'base' => function () {
-        return [
-            'elements' => null,
-            'children' => null,
-            'result'   => [
-                'id'          => 'test',
-                'title'       => 'settings_view_test_title',
-                'titleSuffix' => null,
-                'description' => 'settings_view_test_description',
-                'elements'    => null,
-                'children'    => null,
-            ],
-        ];
-    },
+    'base' => fn() => [
+        'elements' => null,
+        'children' => null,
+        'result'   => [
+            'id'          => 'test',
+            'title'       => 'settings_view_test_title',
+            'titleSuffix' => null,
+            'description' => 'settings_view_test_description',
+            'elements'    => null,
+            'children'    => null,
+        ],
+    ],
 
-    'with elements' => function () {
-        return [
-            'elements' => [
-                new InteractiveElement('interactive-test', 'test', ['prop' => 'value']),
-                new PlainElement('plain-test', ['prop' => 'value']),
-            ],
-            'children' => null,
-            'result'   => [
-                'id'          => 'test',
-                'title'       => 'settings_view_test_title',
-                'titleSuffix' => null,
-                'description' => 'settings_view_test_description',
-                'elements'    => [
-                    [
-                        'name'        => 'interactive-test',
-                        '$component'  => 'test',
-                        'prop'        => 'value',
-                        'label'       => 'settings_test_interactive-test',
-                        'description' => 'settings_test_interactive-test_description',
-                    ],
-                    [
-                        '$component' => 'plain-test',
-                        '$wrapper'   => false,
-                        'prop'       => 'value',
-                    ],
+    'with elements' => fn() => [
+        'elements' => [
+            new InteractiveElement('interactive-test', 'test', ['prop' => 'value']),
+            new PlainElement('plain-test', ['prop' => 'value']),
+        ],
+        'children' => null,
+        'result'   => [
+            'id'          => 'test',
+            'title'       => 'settings_view_test_title',
+            'titleSuffix' => null,
+            'description' => 'settings_view_test_description',
+            'elements'    => [
+                [
+                    'name'        => 'interactive-test',
+                    '$component'  => 'test',
+                    'prop'        => 'value',
+                    'label'       => 'settings_test_interactive-test',
+                    'description' => 'settings_test_interactive-test_description',
                 ],
-                'children'    => null,
+                [
+                    '$component' => 'plain-test',
+                    '$wrapper'   => false,
+                    'prop'       => 'value',
+                ],
             ],
-        ];
-    },
+            'children'    => null,
+        ],
+    ],
 
-    'with children' => function () {
-        return [
-            'elements' => null,
-            'children' => [
+    'with children' => fn() => [
+        'elements' => null,
+        'children' => [
+            [
+                'id'          => 'test',
+                'title'       => 'test.view.test.title',
+                'description' => 'test.view.test.description',
+                'elements'    => [],
+                'children'    => [],
+            ],
+        ],
+        'result'   => [
+            'id'          => 'test',
+            'title'       => 'settings_view_test_title',
+            'titleSuffix' => null,
+            'description' => 'settings_view_test_description',
+            'elements'    => null,
+            'children'    => [
                 [
                     'id'          => 'test',
                     'title'       => 'test.view.test.title',
@@ -113,22 +120,6 @@ it('can render a settings view', function (array $data) {
                     'children'    => [],
                 ],
             ],
-            'result'   => [
-                'id'          => 'test',
-                'title'       => 'settings_view_test_title',
-                'titleSuffix' => null,
-                'description' => 'settings_view_test_description',
-                'elements'    => null,
-                'children'    => [
-                    [
-                        'id'          => 'test',
-                        'title'       => 'test.view.test.title',
-                        'description' => 'test.view.test.description',
-                        'elements'    => [],
-                        'children'    => [],
-                    ],
-                ],
-            ],
-        ];
-    },
+        ],
+    ],
 ]);

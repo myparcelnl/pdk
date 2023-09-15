@@ -11,9 +11,6 @@ use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 
 class AccountRepository extends ApiRepository
 {
-    /**
-     * @return \MyParcelNL\Pdk\Account\Model\Account
-     */
     public function getAccount(): Account
     {
         return $this->retrieve('account', function () {

@@ -28,9 +28,6 @@ final class DhlForYouShipmentOptionsCalculator extends AbstractPdkOrderOptionCal
         $this->calculateAgeCheckAndOnlyRecipient();
     }
 
-    /**
-     * @return void
-     */
     private function calculateAgeCheckAndOnlyRecipient(): void
     {
         $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
@@ -44,9 +41,6 @@ final class DhlForYouShipmentOptionsCalculator extends AbstractPdkOrderOptionCal
         }
     }
 
-    /**
-     * @return void
-     */
     private function calculateOptionsForCountry(): void
     {
         if (CountryCodes::CC_NL === $this->order->shippingAddress->cc) {

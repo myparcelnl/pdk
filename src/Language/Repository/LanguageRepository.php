@@ -9,9 +9,6 @@ use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 class LanguageRepository extends ApiRepository
 {
     /**
-     * @param  string   $language
-     * @param  callable $callback
-     *
      * @return array<string, string>
      */
     public function getTranslations(string $language, callable $callback): array

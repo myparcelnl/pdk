@@ -16,11 +16,6 @@ class PdkOrderNoteCollection extends Collection
 {
     protected $cast = PdkOrderNote::class;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $notes
-     *
-     * @return void
-     */
     public function addApiIdentifiers(OrderNoteCollection $notes): void
     {
         $this->each(function (PdkOrderNote $note, $index) use ($notes) {
@@ -35,15 +30,10 @@ class PdkOrderNoteCollection extends Collection
         });
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
-     */
     public function toFulfilmentCollection(): OrderNoteCollection
     {
         $fulfilmentNotes = $this
-            ->map(function (PdkOrderNote $pdkOrderNote) {
-                return OrderNote::fromPdkOrderNote($pdkOrderNote);
-            })
+            ->map(fn(PdkOrderNote $pdkOrderNote) => OrderNote::fromPdkOrderNote($pdkOrderNote))
             ->all();
 
         return new OrderNoteCollection($fulfilmentNotes);

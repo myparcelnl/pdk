@@ -8,9 +8,6 @@ use MyParcelNL\Pdk\App\Request\AbstractEndpointRequest;
 
 class FetchWebhooksEndpointRequest extends AbstractEndpointRequest
 {
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return 'webhooks';

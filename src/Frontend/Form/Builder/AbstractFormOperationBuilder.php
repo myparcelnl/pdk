@@ -18,14 +18,9 @@ abstract class AbstractFormOperationBuilder implements ChainableFormOperationBui
      */
     protected $operations = [];
 
-    /**
-     * @return array
-     */
     public function createArray(): array
     {
-        return array_map(static function (FormOperationInterface $operation) {
-            return $operation->toArray();
-        }, $this->operations);
+        return array_map(static fn(FormOperationInterface $operation) => $operation->toArray(), $this->operations);
     }
 
     /**

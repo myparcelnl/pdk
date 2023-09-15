@@ -21,8 +21,6 @@ final class PdkOrderContext extends AbstractContext
 
     /**
      * @param  null|string $name
-     * @param  array       $data
-     * @param  string      $dataName
      */
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
@@ -34,10 +32,7 @@ final class PdkOrderContext extends AbstractContext
      * @Given an order with id :id exists
      * @Given an order with id :id exists with data:
      *
-     * @param  string                             $id
      * @param  null|\Behat\Gherkin\Node\TableNode $data
-     *
-     * @return void
      */
     public function anOrderWithIdExists(string $id, ?TableNode $data = null): void
     {
@@ -107,8 +102,6 @@ final class PdkOrderContext extends AbstractContext
 
     /**
      * @param  null|string $orderId
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
     private function retrieveOrder(?string $orderId = null): PdkOrder
     {

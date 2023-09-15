@@ -16,9 +16,6 @@ final class GenerateDocumentationCommand extends AbstractGenerateTypesCommand
         $this->setDescription('Generate documentation');
     }
 
-    /**
-     * @return string
-     */
     protected function getGeneratorClass(): string
     {
         return DocumentationGenerator::class;

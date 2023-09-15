@@ -8,16 +8,8 @@ use MyParcelNL\Sdk\src\Support\Arr as SdkArr;
 
 class Arr extends SdkArr
 {
-    /**
-     * @var \MyParcelNL\Pdk\Base\Support\Helpers
-     */
-    private static $helpers;
+    private static ?Helpers $helpers = null;
 
-    /**
-     * @param  array $dotted
-     *
-     * @return array
-     */
     public static function undot(array $dotted): array
     {
         $array = [];
@@ -30,9 +22,6 @@ class Arr extends SdkArr
         return $array;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Helpers
-     */
     protected static function getHelpers(): Helpers
     {
         if (! self::$helpers) {

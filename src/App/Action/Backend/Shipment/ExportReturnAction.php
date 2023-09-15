@@ -14,27 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportReturnAction extends AbstractOrderAction
 {
-    /**
-     * @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository
-     */
-    private $shipmentRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
-     */
     public function __construct(
-        PdkOrderRepositoryInterface $pdkOrderRepository,
-        ShipmentRepository          $shipmentRepository
+        PdkOrderRepositoryInterface         $pdkOrderRepository,
+        private readonly ShipmentRepository $shipmentRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->shipmentRepository = $shipmentRepository;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
     public function handle(Request $request): Response

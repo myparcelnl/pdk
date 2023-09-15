@@ -10,14 +10,8 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 
 class GetSubscriptionFeaturesResponse extends ApiResponseWithBody
 {
-    /**
-     * @var Collection
-     */
-    private $subscriptionFeatures;
+    private ?Collection $subscriptionFeatures = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function getSubscriptionFeatures(): Collection
     {
         return $this->subscriptionFeatures;

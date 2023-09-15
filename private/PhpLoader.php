@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Pdk\Console;
 
 use MyParcelNL\Pdk\Base\FileSystemInterface;
@@ -17,24 +19,10 @@ final class PhpLoader
     use ReportsTiming;
     use ParsesPhpDocs;
 
-    /**
-     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
-     */
-    private $fileSystem;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
-     */
-    public function __construct(FileSystemInterface $fileSystem)
+    public function __construct(private readonly FileSystemInterface $fileSystem)
     {
-        $this->fileSystem = $fileSystem;
     }
 
-    /**
-     * @param  array $input
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function load(array $input): Collection
     {
         $partitioned = $this->partitionFiles($input);
@@ -53,11 +41,6 @@ final class PhpLoader
             ->values();
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $paths
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     private function loadFiles(Collection $paths): Collection
     {
         $loader = new RobotLoader();
@@ -72,25 +55,14 @@ final class PhpLoader
         return new Collection(array_keys($loader->getIndexedClasses()));
     }
 
-    /**
-     * @param  array $files
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     private function partitionFiles(array $files): Collection
     {
         return (new Collection($files))
-            ->map(function (string $item) {
-                return $this->resolvePath($item);
-            })
-            ->partition(function ($item) {
-                return $this->fileSystem->isDir($item);
-            });
+            ->map(fn(string $item) => $this->resolvePath($item))
+            ->partition(fn($item) => $this->fileSystem->isDir($item));
     }
 
     /**
-     * @param  string $item
-     *
      * @return array|string|string[]
      */
     private function resolvePath(string $item)

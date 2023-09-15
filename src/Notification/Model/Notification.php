@@ -15,12 +15,12 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class Notification extends Model
 {
-    public const VARIANT_INFO    = 'info';
-    public const VARIANT_WARNING = 'warning';
-    public const VARIANT_ERROR   = 'error';
-    public const VARIANT_SUCCESS = 'success';
-    public const DEFAULT_VARIANT = self::VARIANT_INFO;
-    public const VARIANTS        = [
+    final public const VARIANT_INFO    = 'info';
+    final public const VARIANT_WARNING = 'warning';
+    final public const VARIANT_ERROR   = 'error';
+    final public const VARIANT_SUCCESS = 'success';
+    final public const DEFAULT_VARIANT = self::VARIANT_INFO;
+    final public const VARIANTS        = [
         self::VARIANT_INFO,
         self::VARIANT_WARNING,
         self::VARIANT_ERROR,

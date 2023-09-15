@@ -50,12 +50,10 @@ it('calculates age check for postnl', function (ShipmentOptionsFactory $shipment
     doTest(Carrier::CARRIER_POSTNL_NAME, $shipmentOptions, $result);
 })->with([
     'age check enabled should enable signature and age check' => [
-        function () {
-            return factory(ShipmentOptions::class)
-                ->withAgeCheck(TriStateService::ENABLED)
-                ->withSignature(TriStateService::DISABLED)
-                ->withOnlyRecipient(TriStateService::DISABLED);
-        },
+        fn() => factory(ShipmentOptions::class)
+            ->withAgeCheck(TriStateService::ENABLED)
+            ->withSignature(TriStateService::DISABLED)
+            ->withOnlyRecipient(TriStateService::DISABLED),
         [
             ShipmentOptions::AGE_CHECK      => TriStateService::ENABLED,
             ShipmentOptions::SIGNATURE      => TriStateService::ENABLED,
@@ -64,12 +62,10 @@ it('calculates age check for postnl', function (ShipmentOptionsFactory $shipment
     ],
 
     'age check disabled should not disable signature and age check' => [
-        function () {
-            return factory(ShipmentOptions::class)
-                ->withAgeCheck(TriStateService::DISABLED)
-                ->withSignature(TriStateService::ENABLED)
-                ->withOnlyRecipient(TriStateService::ENABLED);
-        },
+        fn() => factory(ShipmentOptions::class)
+            ->withAgeCheck(TriStateService::DISABLED)
+            ->withSignature(TriStateService::ENABLED)
+            ->withOnlyRecipient(TriStateService::ENABLED),
         [
             ShipmentOptions::AGE_CHECK      => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE      => TriStateService::ENABLED,
@@ -82,11 +78,9 @@ it('calculates age check for dhlforyou', function (ShipmentOptionsFactory $shipm
     doTest(Carrier::CARRIER_DHL_FOR_YOU_NAME, $shipmentOptions, $result);
 })->with([
     'when age check and only recipient are enabled, age check wins' => [
-        function () {
-            return factory(ShipmentOptions::class)
-                ->withAgeCheck(TriStateService::ENABLED)
-                ->withOnlyRecipient(TriStateService::ENABLED);
-        },
+        fn() => factory(ShipmentOptions::class)
+            ->withAgeCheck(TriStateService::ENABLED)
+            ->withOnlyRecipient(TriStateService::ENABLED),
         [
             ShipmentOptions::AGE_CHECK      => TriStateService::ENABLED,
             ShipmentOptions::SIGNATURE      => TriStateService::INHERIT,
@@ -95,11 +89,9 @@ it('calculates age check for dhlforyou', function (ShipmentOptionsFactory $shipm
     ],
 
     'when both are disabled, nothing happens' => [
-        function () {
-            return factory(ShipmentOptions::class)
-                ->withAgeCheck(TriStateService::DISABLED)
-                ->withOnlyRecipient(TriStateService::DISABLED);
-        },
+        fn() => factory(ShipmentOptions::class)
+            ->withAgeCheck(TriStateService::DISABLED)
+            ->withOnlyRecipient(TriStateService::DISABLED),
         [
             ShipmentOptions::AGE_CHECK      => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE      => TriStateService::INHERIT,

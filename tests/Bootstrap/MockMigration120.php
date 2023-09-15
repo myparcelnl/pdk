@@ -12,14 +12,8 @@ class MockMigration120 implements MigrationInterface
 {
     private const SETTING_KEY = AccountSettings::ID . '.' . AccountSettings::API_KEY;
 
-    /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
-     */
-    private $settingsRepository;
-
-    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    public function __construct(private readonly SettingsRepositoryInterface $settingsRepository)
     {
-        $this->settingsRepository = $settingsRepository;
     }
 
     public function down(): void

@@ -35,7 +35,7 @@ class PluginSettingsViewContext implements Arrayable
         CarrierSettings::ID  => CarrierSettingsView::class,
     ];
 
-    private $views = [];
+    private array $views = [];
 
     /**
      * @throws \Exception
@@ -54,9 +54,6 @@ class PluginSettingsViewContext implements Arrayable
         }
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return $this->views;

@@ -14,8 +14,6 @@ final class FactoryCollection extends Collection
 {
     public function store(): self
     {
-        return $this->map(function (FactoryInterface $item) {
-            return $item->store();
-        });
+        return $this->map(fn(FactoryInterface $item) => $item->store());
     }
 }

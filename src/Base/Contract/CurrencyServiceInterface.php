@@ -11,8 +11,6 @@ interface CurrencyServiceInterface
      * are present.
      *
      * @param  array{price?: int, vat?: int, priceAfterVat?: int} $prices
-     *
-     * @return array
      */
     public function calculateVatTotals(array $prices): array;
 
@@ -20,8 +18,6 @@ interface CurrencyServiceInterface
      * Convert euros to cents.
      *
      * @param  int|float|string $amount
-     *
-     * @return int
      */
     public function convertToCents($amount): int;
 
@@ -29,15 +25,11 @@ interface CurrencyServiceInterface
      * Convert cents to euros.
      *
      * @param  int|float|string $amount
-     *
-     * @return float
      */
     public function convertToEuros($amount): float;
 
     /**
      * @param  int $amount - amount in cents
-     *
-     * @return string
      */
     public function format(int $amount): string;
 }

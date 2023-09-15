@@ -9,18 +9,16 @@ namespace MyParcelNL\Pdk\Frontend\Form;
  */
 class SettingsDivider extends PlainElement
 {
-    public const LEVEL_1       = 1;
-    public const LEVEL_2       = 2;
-    public const LEVEL_3       = 3;
-    public const LEVEL_4       = 4;
-    public const LEVEL_5       = 5;
-    public const LEVEL_6       = 6;
-    public const DEFAULT_LEVEL = self::LEVEL_2;
+    final public const LEVEL_1       = 1;
+    final public const LEVEL_2       = 2;
+    final public const LEVEL_3       = 3;
+    final public const LEVEL_4       = 4;
+    final public const LEVEL_5       = 5;
+    final public const LEVEL_6       = 6;
+    final public const DEFAULT_LEVEL = self::LEVEL_2;
 
     /**
-     * @param  string   $translation
      * @param  null|int $level
-     * @param  array    $props
      */
     public function __construct(string $translation, ?int $level = null, array $props = [])
     {

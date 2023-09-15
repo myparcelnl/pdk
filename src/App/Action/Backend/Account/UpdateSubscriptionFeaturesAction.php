@@ -11,33 +11,13 @@ use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class UpdateSubscriptionFeaturesAction implements ActionInterface
+final readonly class UpdateSubscriptionFeaturesAction implements ActionInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Account\Repository\AclRepository
-     */
-    private $aclRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
-     */
-    private $pdkAccountRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Account\Repository\AclRepository                   $aclRepository
-     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $pdkAccountRepository
-     */
-    public function __construct(AclRepository $aclRepository, PdkAccountRepositoryInterface $pdkAccountRepository)
-    {
-        $this->aclRepository        = $aclRepository;
-        $this->pdkAccountRepository = $pdkAccountRepository;
+    public function __construct(private AclRepository                 $aclRepository,
+                                private PdkAccountRepositoryInterface $pdkAccountRepository
+    ) {
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $account              = $this->pdkAccountRepository->getAccount();

@@ -1,0 +1,95 @@
+{
+    "data": {
+        "orders": [
+            {
+                "external_identifier": "245",
+                "fulfilment_partner_identifier": null,
+                "invoice_address": {
+                    "street": "Antareslaan 31 ",
+                    "city": "Hoofddorp",
+                    "cc": "NL",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132JE"
+                },
+                "order_date": null,
+                "order_lines": [],
+                "shipment": {
+                    "carrier": 1,
+                    "customs_declaration": null,
+                    "drop_off_point": null,
+                    "options": {
+                        "age_check": 0,
+                        "delivery_type": 2,
+                        "hide_sender": 0,
+                        "insurance": {
+                            "amount": 0,
+                            "currency": "EUR"
+                        },
+                        "label_description": "",
+                        "large_format": 0,
+                        "only_recipient": 0,
+                        "package_type": 1,
+                        "return": 1,
+                        "same_day_delivery": 0,
+                        "signature": 0
+                    },
+                    "physical_properties": {
+                        "height": 0,
+                        "length": 0,
+                        "weight": 0,
+                        "width": 0
+                    },
+                    "pickup": null,
+                    "recipient": {
+                        "street": "Pietjestraat 35 ",
+                        "city": "Bikinibroek",
+                        "cc": "NL",
+                        "postal_code": "2771BW"
+                    }
+                }
+            },
+            {
+                "external_identifier": "247",
+                "fulfilment_partner_identifier": null,
+                "invoice_address": null,
+                "order_date": null,
+                "order_lines": [],
+                "shipment": {
+                    "carrier": 1,
+                    "customs_declaration": null,
+                    "drop_off_point": null,
+                    "options": {
+                        "age_check": 0,
+                        "delivery_type": 2,
+                        "hide_sender": 0,
+                        "insurance": {
+                            "amount": 0,
+                            "currency": "EUR"
+                        },
+                        "label_description": "",
+                        "large_format": 0,
+                        "only_recipient": 0,
+                        "package_type": 1,
+                        "return": 1,
+                        "same_day_delivery": 0,
+                        "signature": 0
+                    },
+                    "physical_properties": {
+                        "height": 0,
+                        "length": 0,
+                        "weight": 0,
+                        "width": 0
+                    },
+                    "pickup": null,
+                    "recipient": {
+                        "street": "Antareslaan 31 ",
+                        "city": "Hoofddorp",
+                        "cc": "NL",
+                        "person": "Felicia Parcel",
+                        "postal_code": "2132 JE"
+                    }
+                }
+            }
+        ]
+    }
+}

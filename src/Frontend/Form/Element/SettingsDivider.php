@@ -17,9 +17,7 @@ final class SettingsDivider extends AbstractPlainElement
     public const DEFAULT_LEVEL = self::LEVEL_2;
 
     /**
-     * @param  string   $translation
      * @param  null|int $level
-     * @param  array    $props
      */
     public function __construct(string $translation, ?int $level = null, array $props = [])
     {

@@ -15,16 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PdkActions
 {
-    /**
-     * @var string
-     */
-    private $context = PdkEndpoint::CONTEXT_BACKEND;
+    private string $context = PdkEndpoint::CONTEXT_BACKEND;
 
     /**
      * @param  string|\Symfony\Component\HttpFoundation\Request $action
-     * @param  array                                            $parameters
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
      * @throws \MyParcelNL\Pdk\Api\Exception\PdkEndpointException
      */
@@ -41,8 +36,6 @@ class PdkActions
     }
 
     /**
-     * @param  string $context
-     *
      * @return $this
      */
     public function setContext(string $context): self
@@ -54,9 +47,6 @@ class PdkActions
 
     /**
      * @param        $input
-     * @param  array $parameters
-     *
-     * @return \Symfony\Component\HttpFoundation\Request
      */
     protected function createRequest($input, array $parameters = []): Request
     {
@@ -84,9 +74,6 @@ class PdkActions
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return string
      * @throws \MyParcelNL\Pdk\Api\Exception\PdkEndpointException
      */
     private function resolveAction(Request $request): string

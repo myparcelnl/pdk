@@ -30,9 +30,6 @@ class ExampleGetCarrierConfigurationResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'carrier_configurations';

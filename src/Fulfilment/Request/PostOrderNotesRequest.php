@@ -10,25 +10,9 @@ use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 
 class PostOrderNotesRequest extends Request
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     */
-    private $collection;
-
-    /**
-     * @var string
-     */
-    private $orderId;
-
-    /**
-     * @param  string                                                    $orderId
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
-     */
-    public function __construct(string $orderId, OrderNoteCollection $collection)
+    public function __construct(private readonly string $orderId, private readonly OrderNoteCollection $collection)
     {
         parent::__construct();
-        $this->collection = $collection;
-        $this->orderId    = $orderId;
     }
 
     /**
@@ -38,27 +22,19 @@ class PostOrderNotesRequest extends Request
     {
         return json_encode([
             'data' => [
-                'order_notes' => array_map(static function (OrderNote $orderNote) {
-                    return [
-                        'author' => $orderNote->author,
-                        'note'   => $orderNote->note,
-                    ];
-                }, $this->collection->all()),
+                'order_notes' => array_map(static fn(OrderNote $orderNote) => [
+                    'author' => $orderNote->author,
+                    'note'   => $orderNote->note,
+                ], $this->collection->all()),
             ],
         ]);
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return sprintf('/fulfilment/orders/%s/notes', $this->orderId);

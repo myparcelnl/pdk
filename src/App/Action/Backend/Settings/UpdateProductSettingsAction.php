@@ -12,21 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateProductSettingsAction implements ActionInterface
 {
-    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface */
-    private $productRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface $productRepository
-     */
-    public function __construct(PdkProductRepositoryInterface $productRepository)
+    public function __construct(private readonly PdkProductRepositoryInterface $productRepository)
     {
-        $this->productRepository = $productRepository;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function handle(Request $request): Response

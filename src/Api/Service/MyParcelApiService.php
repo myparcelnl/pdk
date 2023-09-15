@@ -13,9 +13,6 @@ use MyParcelNL\Pdk\Settings\Model\AccountSettings;
  */
 class MyParcelApiService extends AbstractApiService
 {
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return [
@@ -24,19 +21,13 @@ class MyParcelApiService extends AbstractApiService
         ];
     }
 
-    /**
-     * @return null|string
-     */
     protected function getAuthorizationHeader(): ?string
     {
         $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
 
-        return $apiKey ? sprintf('bearer %s', base64_encode($apiKey)) : null;
+        return $apiKey ? sprintf('bearer %s', base64_encode((string) $apiKey)) : null;
     }
 
-    /**
-     * @return string
-     */
     protected function getUserAgentHeader(): string
     {
         $userAgentStrings = [];

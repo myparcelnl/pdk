@@ -3,13 +3,12 @@
 declare(strict_types=1);
 
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
-use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
-use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Config\RectorConfig;
+use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
-// TODO: Configure setlists
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheClass(FileCacheStorage::class);
     $rectorConfig->cacheDirectory(__DIR__ . '/.cache/rector');
@@ -22,18 +21,18 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->sets([
-        // LevelSetList::UP_TO_PHP_71,
+        LevelSetList::UP_TO_PHP_82,
         // SetList::CODE_QUALITY,
         // SetList::CODING_STYLE,
-        // SetList::DEAD_CODE,
+        SetList::DEAD_CODE,
         // SetList::EARLY_RETURN,
         // SetList::INSTANCEOF,
         // SetList::PRIVATIZATION,
         // SetList::TYPE_DECLARATION,
     ]);
 
-    $rectorConfig->ruleWithConfiguration(ConsistentPregDelimiterRector::class, [
-        ConsistentPregDelimiterRector::DELIMITER => '/',
+    $rectorConfig->rules([
+        DeclareStrictTypesRector::class,
     ]);
 
     /**
@@ -45,14 +44,4 @@ return static function (RectorConfig $rectorConfig): void {
          */
         EncapsedStringsToSprintfRector::class,
     ]);
-
-    /**
-     * Overrides for Pest tests.
-     */
-    $rectorConfig
-        ->withPath(__DIR__ . '/tests')
-        ->skip([
-            StaticArrowFunctionRector::class,
-            StaticClosureRector::class,
-        ]);
 };

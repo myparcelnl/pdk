@@ -18,12 +18,6 @@ trait HasOptions
      */
     private $options;
 
-    /**
-     * @param  array $options
-     * @param  int   $flags
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface
-     */
     public function withOptions(array $options, int $flags = 0): ElementBuilderWithOptionsInterface
     {
         $this->addHook(
@@ -44,22 +38,11 @@ trait HasOptions
         return $this;
     }
 
-    /**
-     * @param  string $sort
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface
-     */
     public function withSort(string $sort): ElementBuilderWithOptionsInterface
     {
         return $this->withProp('sort', $sort);
     }
 
-    /**
-     * @param  array $options
-     * @param  int   $flags
-     *
-     * @return array
-     */
     protected function addDefaultOption(array $options, int $flags = 0): array
     {
         if ($flags & ElementBuilderWithOptionsInterface::ADD_DEFAULT) {
@@ -79,12 +62,6 @@ trait HasOptions
         return $options;
     }
 
-    /**
-     * @param  array $array
-     * @param  int   $flags
-     *
-     * @return array
-     */
     protected function toSelectOptions(array $array, int $flags = 0): array
     {
         $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
@@ -102,12 +79,7 @@ trait HasOptions
         return $this->addDefaultOption($options, $flags);
     }
 
-    /**
-     * @param  mixed $value
-     *
-     * @return string
-     */
-    private function createOptionLabel($value): string
+    private function createOptionLabel(mixed $value): string
     {
         return $this->createLabel($this->getName(), 'option', (string) $value);
     }

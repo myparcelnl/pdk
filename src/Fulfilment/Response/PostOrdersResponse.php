@@ -9,14 +9,8 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 
 class PostOrdersResponse extends ApiResponseWithBody
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     */
-    private $orderCollection;
+    private ?OrderCollection $orderCollection = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     */
     public function getOrderCollection(): OrderCollection
     {
         return $this->orderCollection;

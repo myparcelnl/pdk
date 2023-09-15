@@ -13,12 +13,12 @@ class AccountSettings extends AbstractSettingsModel
     /**
      * Settings category ID.
      */
-    public const ID = 'account';
+    final public const ID = 'account';
     /**
      * Settings in this category.
      */
-    public const API_KEY       = 'apiKey';
-    public const API_KEY_VALID = 'apiKeyValid';
+    final public const API_KEY       = 'apiKey';
+    final public const API_KEY_VALID = 'apiKeyValid';
 
     protected $attributes = [
         'id' => self::ID,

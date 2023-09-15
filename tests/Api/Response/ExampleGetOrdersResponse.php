@@ -122,9 +122,9 @@ class ExampleGetOrdersResponse extends ExampleJsonResponse
                     [
                         'uuid'                         => '45c19d07-4d47-48df-989f-a01b9d988d7e',
                         'external_shipment_identifier' => '3SMYPA098753425',
-                        'shipment_id'                  => 83729991,
+                        'shipment_id'                  => 83_729_991,
                         'shipment'                     => [
-                            'id'                           => 83729991,
+                            'id'                           => 83_729_991,
                             'parent_id'                    => null,
                             'account_id'                   => 123456,
                             'shop_id'                      => 122377,
@@ -252,9 +252,6 @@ class ExampleGetOrdersResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'orders';

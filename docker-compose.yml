@@ -1,6 +1,6 @@
 version: '3.9'
 
-x-image: &image ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
+x-image: &image ghcr.io/myparcelnl/php-xd:8.2-cli-alpine
 
 services:
   php:

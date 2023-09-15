@@ -10,11 +10,6 @@ final class SharedFactoryState implements ResetInterface
 {
     public static $ids = [];
 
-    /**
-     * @param  string $key
-     *
-     * @return int
-     */
     public function getNextId(string $key): int
     {
         if (! isset(self::$ids[$key])) {

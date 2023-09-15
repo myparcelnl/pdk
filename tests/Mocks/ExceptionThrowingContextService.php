@@ -9,11 +9,7 @@ use RuntimeException;
 
 class ExceptionThrowingContextService extends ContextService
 {
-    /**
-     * @param  string $contextId
-     * @param  array  $data
-     */
-    protected function resolveContext(string $contextId, array $data = [])
+    protected function resolveContext(string $contextId, array $data = []): never
     {
         throw new RuntimeException('This is an exception thrown by the test');
     }

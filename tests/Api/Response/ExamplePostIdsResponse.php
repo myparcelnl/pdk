@@ -8,9 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExamplePostIdsResponse extends ExampleJsonResponse
 {
-    /**
-     * @return int
-     */
     public function getStatusCode(): int
     {
         return Response::HTTP_CREATED;
@@ -26,9 +23,6 @@ class ExamplePostIdsResponse extends ExampleJsonResponse
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getResponseProperty(): string
     {
         return 'ids';

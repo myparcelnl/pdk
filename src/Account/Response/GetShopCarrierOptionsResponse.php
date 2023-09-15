@@ -9,14 +9,8 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 
 class GetShopCarrierOptionsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var CarrierCollection
-     */
-    private $options;
+    private ?CarrierCollection $options = null;
 
-    /**
-     * @return CarrierCollection
-     */
     public function getCarrierOptions(): CarrierCollection
     {
         return $this->options;
@@ -25,7 +19,6 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
     /**
      * The "name" property is omitted intentionally so the carrier data is filled using the CarrierRepository.
      *
-     * @return void
      * @see \MyParcelNL\Pdk\Carrier\Model\Carrier::__construct()
      */
     protected function parseResponseBody(): void
@@ -33,17 +26,15 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
         $options = json_decode($this->getBody(), true)['data']['carrier_options'] ?? [];
 
         $this->options = new CarrierCollection(
-            array_map(static function (array $option) {
-                return [
-                    'id'             => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
-                    'subscriptionId' => $option['subscription_id'] ?? null,
-                    'enabled'        => $option['enabled'] ?? null,
-                    'label'          => $option['label'] ?? null,
-                    'optional'       => $option['optional'] ?? null,
-                    'primary'        => $option['primary'] ?? null,
-                    'type'           => $option['type'] ?? null,
-                ];
-            }, $options)
+            array_map(static fn(array $option) => [
+                'id'             => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
+                'subscriptionId' => $option['subscription_id'] ?? null,
+                'enabled'        => $option['enabled'] ?? null,
+                'label'          => $option['label'] ?? null,
+                'optional'       => $option['optional'] ?? null,
+                'primary'        => $option['primary'] ?? null,
+                'type'           => $option['type'] ?? null,
+            ], $options)
         );
     }
 }

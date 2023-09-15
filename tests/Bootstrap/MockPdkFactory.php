@@ -12,7 +12,6 @@ final class MockPdkFactory extends PdkFactory
     /**
      * @param ...$config
      *
-     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface
      * @throws \Exception
      */
     public static function create(...$config): PdkInterface

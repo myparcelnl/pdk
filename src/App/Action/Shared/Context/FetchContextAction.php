@@ -12,20 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FetchContextAction implements ActionInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Context\Contract\ContextServiceInterface
-     */
-    private $contextService;
-
-    public function __construct(ContextServiceInterface $contextService)
+    public function __construct(private readonly ContextServiceInterface $contextService)
     {
-        $this->contextService = $contextService;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function handle(Request $request): Response
@@ -36,8 +27,6 @@ class FetchContextAction implements ActionInterface
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return string[]
      */
     private function getContexts(Request $request): array
@@ -46,7 +35,7 @@ class FetchContextAction implements ActionInterface
         $requestContexts = $request->get('context');
 
         if ($requestContexts) {
-            $contexts += explode(',', $requestContexts) ?: [];
+            $contexts += explode(',', (string) $requestContexts) ?: [];
         }
 
         return $contexts;

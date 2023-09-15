@@ -11,8 +11,6 @@ class CurrencyService implements CurrencyServiceInterface
 {
     /**
      * @param  array{price?: int, vat?: int, priceAfterVat?: int} $prices
-     *
-     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function calculateVatTotals(array $prices): array
@@ -44,8 +42,6 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * @param  int|float|string $amount
-     *
-     * @return int
      */
     public function convertToCents($amount): int
     {
@@ -54,19 +50,12 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * @param  int|float|string $amount
-     *
-     * @return float
      */
     public function convertToEuros($amount): float
     {
         return (float) $amount / 100;
     }
 
-    /**
-     * @param  int $amount
-     *
-     * @return string
-     */
     public function format(int $amount): string
     {
         $currencySymbol = '€';

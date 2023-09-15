@@ -19,7 +19,7 @@ final class MockFileSystem implements FileSystemInterface
     /**
      * @var Collection|array<string,string>
      */
-    private static $files;
+    private static ?Collection $files = null;
 
     public function __construct()
     {
@@ -28,19 +28,12 @@ final class MockFileSystem implements FileSystemInterface
 
     /**
      * @param  resource $stream
-     *
-     * @return void
      */
     public function closeStream($stream): void
     {
         fclose($stream);
     }
 
-    /**
-     * @param  string $file
-     *
-     * @return string
-     */
     public function dirname(string $file): string
     {
         $parts = explode('/', $file);
@@ -48,21 +41,11 @@ final class MockFileSystem implements FileSystemInterface
         return implode('/', array_slice($parts, 0, -1));
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return bool
-     */
     public function fileExists(string $path): bool
     {
         return self::$files->has($this->resolvePath($path));
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return string
-     */
     public function get(string $path): string
     {
         if (! $this->fileExists($path)) {
@@ -72,32 +55,16 @@ final class MockFileSystem implements FileSystemInterface
         return self::$files->get($this->resolvePath($path));
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return bool
-     */
     public function isDir(string $path): bool
     {
         return self::DIRECTORY_TOKEN === self::$files->get($this->resolvePath($path));
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return bool
-     */
     public function isFile(string $path): bool
     {
         return $this->fileExists($path) && ! $this->isDir($path);
     }
 
-    /**
-     * @param  string $path
-     * @param  bool   $recursive
-     *
-     * @return void
-     */
     public function mkdir(string $path, bool $recursive = false): void
     {
         $dirname = $this->dirname($path);
@@ -111,9 +78,6 @@ final class MockFileSystem implements FileSystemInterface
     }
 
     /**
-     * @param  string $path
-     * @param  string $mode
-     *
      * @return resource
      */
     public function openStream(string $path, string $mode)
@@ -121,12 +85,6 @@ final class MockFileSystem implements FileSystemInterface
         return fopen('php://memory', 'wb+');
     }
 
-    /**
-     * @param  string $path
-     * @param  string $contents
-     *
-     * @return void
-     */
     public function put(string $path, string $contents): void
     {
         $this->mkdir($this->dirname($path), true);
@@ -134,29 +92,16 @@ final class MockFileSystem implements FileSystemInterface
         self::$files->put($this->resolvePath($path), $contents);
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return string
-     */
     public function realpath(string $path): string
     {
         return $path;
     }
 
-    /**
-     * @return void
-     */
     public function reset(): void
     {
         self::$files = new Collection();
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return array
-     */
     public function scandir(string $path): array
     {
         return self::$files->keys()
@@ -169,11 +114,6 @@ final class MockFileSystem implements FileSystemInterface
             }, ['..', '.']);
     }
 
-    /**
-     * @param  string $path
-     *
-     * @return bool
-     */
     public function unlink(string $path): bool
     {
         self::$files->forget($this->resolvePath($path));
@@ -183,20 +123,12 @@ final class MockFileSystem implements FileSystemInterface
 
     /**
      * @param  resource $stream
-     * @param  string   $contents
-     *
-     * @return void
      */
     public function writeToStream($stream, string $contents): void
     {
         fwrite($stream, $contents);
     }
 
-    /**
-     * @param  string $key
-     *
-     * @return string
-     */
     private function basename(string $key): string
     {
         $parts = explode('/', $key);
@@ -204,11 +136,6 @@ final class MockFileSystem implements FileSystemInterface
         return end($parts);
     }
 
-    /**
-     * @param  string $configDir
-     *
-     * @return void
-     */
     private function copyRealDirectory(string $configDir): void
     {
         /** @var \MyParcelNL\Pdk\Base\FileSystem $realFileSystem */
@@ -246,10 +173,6 @@ final class MockFileSystem implements FileSystemInterface
 
     /**
      * Resolve a path, supporting /../ etc
-     *
-     * @param  string $path
-     *
-     * @return string
      */
     private function resolvePath(string $path): string
     {
@@ -269,8 +192,6 @@ final class MockFileSystem implements FileSystemInterface
 
     /**
      * Copy all real files in the config directory to the fake file system.
-     *
-     * @return void
      */
     private function setupFiles(): void
     {

@@ -16,7 +16,7 @@ it('creates fulfilment shipment from pdk shipment', function (array $input) {
     $shipment    = Shipment::fromPdkShipment($pdkShipment);
 
     expect($shipment)->toBeInstanceOf(Shipment::class);
-    assertMatchesJsonSnapshot(json_encode($shipment->toArray()));
+    assertMatchesJsonSnapshot(json_encode($shipment->toArray(), JSON_THROW_ON_ERROR));
 })->with([
     'empty shipment'            => [[]],
     'shipment with all options' => [
@@ -67,5 +67,5 @@ it('creates fulfilment shipment from pdk shipment', function (array $input) {
 it('returns empty fulfilment shipment when no pdk shipment is passed', function () {
     $shipment = Shipment::fromPdkShipment(null);
     expect($shipment)->toBeInstanceOf(Shipment::class);
-    assertMatchesJsonSnapshot(json_encode($shipment->toArray()));
+    assertMatchesJsonSnapshot(json_encode($shipment->toArray(), JSON_THROW_ON_ERROR));
 });

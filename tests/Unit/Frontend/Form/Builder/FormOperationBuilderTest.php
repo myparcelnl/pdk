@@ -15,289 +15,265 @@ it('builds form operation arrays', function (array $args) {
     $result  = $builder->build();
 
     expect($result)->toBe($args['output']);
-})->with(function () {
-    return [
-        'readOnlyWhen' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->readOnlyWhen()
-                    ->ne('foo')->and->ne('bar'),
+})->with(fn() => [
+    'readOnlyWhen' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->readOnlyWhen()
+            ->ne('foo')->and->ne('bar'),
 
-                'output' => [
-                    [
-                        '$readOnlyWhen' => [
-                            '$if' => [
-                                [
-                                    '$and' => [
-                                        ['$ne' => 'foo'],
-                                        ['$ne' => 'bar'],
-                                    ],
-                                ],
+        'output' => [
+            [
+                '$readOnlyWhen' => [
+                    '$if' => [
+                        [
+                            '$and' => [
+                                ['$ne' => 'foo'],
+                                ['$ne' => 'bar'],
                             ],
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'disabledWhen' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->disabledWhen('target', true),
+    'disabledWhen' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->disabledWhen('target', true),
 
-                'output' => [
-                    [
-                        '$disabledWhen' => [
-                            '$if' => [
-                                [
-                                    '$target' => 'target',
-                                    '$eq'     => true,
-                                ],
-                            ],
+        'output' => [
+            [
+                '$disabledWhen' => [
+                    '$if' => [
+                        [
+                            '$target' => 'target',
+                            '$eq'     => true,
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'visibleWhen' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->visibleWhen('target', true),
+    'visibleWhen' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->visibleWhen('target', true),
 
-                'output' => [
-                    [
-                        '$visibleWhen' => [
-                            '$if' => [
-                                [
-                                    '$target' => 'target',
-                                    '$eq'     => true,
-                                ],
-                            ],
+        'output' => [
+            [
+                '$visibleWhen' => [
+                    '$if' => [
+                        [
+                            '$target' => 'target',
+                            '$eq'     => true,
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'visibleWhen with string that happens to also be a callable' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->visibleWhen('target', 'test'), // test is a function from pest
+    'visibleWhen with string that happens to also be a callable' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->visibleWhen('target', 'test'), // test is a function from pest
 
-                'output' => [
-                    [
-                        '$visibleWhen' => [
-                            '$if' => [
-                                [
-                                    '$target' => 'target',
-                                    '$eq'     => 'test',
-                                ],
-                            ],
+        'output' => [
+            [
+                '$visibleWhen' => [
+                    '$if' => [
+                        [
+                            '$target' => 'target',
+                            '$eq'     => 'test',
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'visibleWhen with multiple targets' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->visibleWhen('target')
-                    ->and('other-target'),
+    'visibleWhen with multiple targets' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->visibleWhen('target')
+            ->and('other-target'),
 
-                'output' => [
-                    [
-                        '$visibleWhen' => [
-                            '$if' => [
-                                [
-                                    '$and' => [
-                                        ['$target' => 'target'],
-                                        ['$target' => 'other-target'],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'visibleWhen without value' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->visibleWhen('target'),
-
-                'output' => [
-                    [
-                        '$visibleWhen' => [
-                            '$if' => [
+        'output' => [
+            [
+                '$visibleWhen' => [
+                    '$if' => [
+                        [
+                            '$and' => [
                                 ['$target' => 'target'],
+                                ['$target' => 'other-target'],
                             ],
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'multiple visibleWhen operations merged into one' => function () {
-            $builder = new FormOperationBuilder();
+    'visibleWhen without value' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->visibleWhen('target'),
 
-            $builder->visibleWhen('foo')
-                ->eq('bar');
-            $builder->visibleWhen('bar')
-                ->eq('baz');
+        'output' => [
+            [
+                '$visibleWhen' => [
+                    '$if' => [
+                        ['$target' => 'target'],
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-            return [
-                'builder' => $builder,
-                'output'  => [
+    'multiple visibleWhen operations merged into one' => function () {
+        $builder = new FormOperationBuilder();
+
+        $builder->visibleWhen('foo')
+            ->eq('bar');
+        $builder->visibleWhen('bar')
+            ->eq('baz');
+
+        return [
+            'builder' => $builder,
+            'output'  => [
+                [
+                    '$visibleWhen' => [
+                        '$if' => [
+                            [
+                                '$target' => 'foo',
+                                '$eq'     => 'bar',
+                            ],
+                            [
+                                '$target' => 'bar',
+                                '$eq'     => 'baz',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    },
+
+    'afterUpdate' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->afterUpdate()
+            ->setValue('groente')
+            ->on('soep')
+            ->if('bloemkool')
+            ->eq('broccoli'),
+        'output'  => [
+            [
+                '$afterUpdate' => [
                     [
-                        '$visibleWhen' => [
-                            '$if' => [
-                                [
-                                    '$target' => 'foo',
-                                    '$eq'     => 'bar',
-                                ],
-                                [
-                                    '$target' => 'bar',
-                                    '$eq'     => 'baz',
-                                ],
-                            ],
+                        '$setValue' => [
+                            '$value'  => 'groente',
+                            '$target' => 'soep',
+                            '$if'     => [['$target' => 'bloemkool', '$eq' => 'broccoli']],
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'afterUpdate' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->afterUpdate()
+    'with inline callback' => fn() => [
+        'builder' => (new FormOperationBuilder())->afterUpdate(
+            function (FormSubOperationBuilderInterface $builder) {
+                $builder
                     ->setValue('groente')
                     ->on('soep')
                     ->if('bloemkool')
-                    ->eq('broccoli'),
-                'output'  => [
+                    ->eq('broccoli');
+            }
+        ),
+        'output'  => [
+            [
+                '$afterUpdate' => [
                     [
-                        '$afterUpdate' => [
-                            [
-                                '$setValue' => [
-                                    '$value'  => 'groente',
-                                    '$target' => 'soep',
-                                    '$if'     => [['$target' => 'bloemkool', '$eq' => 'broccoli']],
-                                ],
-                            ],
+                        '$setValue' => [
+                            '$value'  => 'groente',
+                            '$target' => 'soep',
+                            '$if'     => [['$target' => 'bloemkool', '$eq' => 'broccoli']],
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'with inline callback' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())->afterUpdate(
-                    function (FormSubOperationBuilderInterface $builder) {
-                        $builder
-                            ->setValue('groente')
-                            ->on('soep')
-                            ->if('bloemkool')
-                            ->eq('broccoli');
-                    }
-                ),
-                'output'  => [
+    'if with inline callback' => fn() => [
+        'builder' => (new FormOperationBuilder())->afterUpdate(
+            function (FormSubOperationBuilderInterface $builder) {
+                $builder->setValue('broccoli')
+                    ->if('pannenkoek', static function (FormConditionInterface $builder) {
+                        $builder->eq('groente');
+                    });
+            }
+        ),
+        'output'  => [
+            [
+                '$afterUpdate' => [
                     [
-                        '$afterUpdate' => [
-                            [
-                                '$setValue' => [
-                                    '$value'  => 'groente',
-                                    '$target' => 'soep',
-                                    '$if'     => [['$target' => 'bloemkool', '$eq' => 'broccoli']],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'if with inline callback' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())->afterUpdate(
-                    function (FormSubOperationBuilderInterface $builder) {
-                        $builder->setValue('broccoli')
-                            ->if('pannenkoek', static function (FormConditionInterface $builder) {
-                                $builder->eq('groente');
-                            });
-                    }
-                ),
-                'output'  => [
-                    [
-                        '$afterUpdate' => [
-                            [
-                                '$setValue' => [
-                                    '$value' => 'broccoli',
-                                    '$if'    => [
-                                        [
-                                            '$target' => 'pannenkoek',
-                                            '$eq'     => 'groente',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        },
-
-        'readOnlyWhen with inline callback' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())->readOnlyWhen(
-                    'target',
-                    static function (FormOperationInterface $builder) {
-                        $builder->if('pannenkoek')
-                            ->eq('groente');
-                    }
-                ),
-
-                'output' => [
-                    [
-                        '$readOnlyWhen' => [
-                            '$if' => [
+                        '$setValue' => [
+                            '$value' => 'broccoli',
+                            '$if'    => [
                                 [
                                     '$target' => 'pannenkoek',
                                     '$eq'     => 'groente',
                                 ],
-                                [
-                                    '$target' => 'target',
-                                ],
                             ],
                         ],
                     ],
                 ],
-            ];
-        },
+            ],
+        ],
+    ],
 
-        'setProp' => function () {
-            return [
-                'builder' => (new FormOperationBuilder())
-                    ->afterUpdate(function (FormSubOperationBuilderInterface $builder) {
-                        $builder->setProp('foo', 'bar');
-                    }),
+    'readOnlyWhen with inline callback' => fn() => [
+        'builder' => (new FormOperationBuilder())->readOnlyWhen(
+            'target',
+            static function (FormOperationInterface $builder) {
+                $builder->if('pannenkoek')
+                    ->eq('groente');
+            }
+        ),
 
-                'output' => [
+        'output' => [
+            [
+                '$readOnlyWhen' => [
+                    '$if' => [
+                        [
+                            '$target' => 'pannenkoek',
+                            '$eq'     => 'groente',
+                        ],
+                        [
+                            '$target' => 'target',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'setProp' => fn() => [
+        'builder' => (new FormOperationBuilder())
+            ->afterUpdate(function (FormSubOperationBuilderInterface $builder) {
+                $builder->setProp('foo', 'bar');
+            }),
+
+        'output' => [
+            [
+                '$afterUpdate' => [
                     [
-                        '$afterUpdate' => [
-                            [
-                                '$setProp' => [
-                                    '$prop'  => 'foo',
-                                    '$value' => 'bar',
-                                ],
-                            ],
+                        '$setProp' => [
+                            '$prop'  => 'foo',
+                            '$value' => 'bar',
                         ],
                     ],
                 ],
-            ];
-        },
-    ];
-});
+            ],
+        ],
+    ],
+]);

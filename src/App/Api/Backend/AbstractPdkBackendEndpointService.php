@@ -11,9 +11,6 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 
 abstract class AbstractPdkBackendEndpointService extends PdkEndpoints implements BackendEndpointServiceInterface
 {
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function getEndpoints(): Collection
     {
         return $this->getActionsByScope(PdkEndpoint::CONTEXT_BACKEND)

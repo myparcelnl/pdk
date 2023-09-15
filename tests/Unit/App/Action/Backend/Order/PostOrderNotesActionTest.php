@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
-use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
@@ -40,17 +39,20 @@ usesShared(new UsesApiMock());
 
 it('posts order notes if order has notes', function (PdkOrderCollection $orders, PdkOrderNoteCollection $notes) {
     MockPdkFactory::create([
-        SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class)->constructor([
-            OrderSettings::ID => [
-                OrderSettings::ORDER_MODE => true,
-            ],
-        ]),
-        PdkOrderRepositoryInterface::class   => autowire(MockPdkOrderRepository::class)->constructor($orders),
-        PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class)->constructor([
-            'subscriptionFeatures' => [
-                Account::FEATURE_ORDER_NOTES,
-            ],
-        ]),
+        SettingsRepositoryInterface::class   => autowire(MockSettingsRepository::class),
+        //            ->constructor([
+        //                OrderSettings::ID => [
+        //                    OrderSettings::ORDER_MODE => true,
+        //                ],
+        //            ]),
+        PdkOrderRepositoryInterface::class   => autowire(MockPdkOrderRepository::class),
+        //            ->constructor($orders),
+        PdkAccountRepositoryInterface::class => autowire(MockPdkAccountRepository::class),
+        //            ->constructor([
+        //                'subscriptionFeatures' => [
+        //                    Account::FEATURE_ORDER_NOTES,
+        //                ],
+        //            ]),
     ]);
 
     MockApi::enqueue(new ExamplePostOrderNotesResponse());
@@ -205,11 +207,9 @@ it('does not post order notes if account does not have feature', function (PdkOr
 
     expect($request)->toBeNull();
 })->with([
-    'single exported order with one order note' => function () {
-        return factory(PdkOrderCollection::class)->push(
-            factory(PdkOrder::class)
-                ->withApiIdentifier('90001')
-                ->withNotes()
-        );
-    },
+    'single exported order with one order note' => fn() => factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)
+            ->withApiIdentifier('90001')
+            ->withNotes()
+    ),
 ]);

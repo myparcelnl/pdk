@@ -8,14 +8,8 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 
 class PostIdsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var \MyParcelNL\Pdk\Base\Support\Collection
-     */
-    private $ids;
+    private ?Collection $ids = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
     public function getIds(): Collection
     {
         return $this->ids;

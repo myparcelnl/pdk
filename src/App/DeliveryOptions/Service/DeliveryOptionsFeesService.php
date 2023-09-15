@@ -21,12 +21,6 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
         ShipmentOptions::SIGNATURE,
     ];
 
-    /**
-     * @param  string                                         $identifier
-     * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $deliveryOptions
-     *
-     * @return \MyParcelNL\Pdk\App\Cart\Model\PdkCartFee
-     */
     public function createFee(string $identifier, DeliveryOptions $deliveryOptions): PdkCartFee
     {
         $translation     = Str::snake("delivery_options_{$identifier}_title");
@@ -46,9 +40,6 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $deliveryOptions
-     *
-     * @return \MyParcelNL\Pdk\App\Cart\Collection\PdkCartFeeCollection
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getFees(DeliveryOptions $deliveryOptions): PdkCartFeeCollection
@@ -73,9 +64,6 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $deliveryOptions
-     *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getShipmentOptionsFees(DeliveryOptions $deliveryOptions): array

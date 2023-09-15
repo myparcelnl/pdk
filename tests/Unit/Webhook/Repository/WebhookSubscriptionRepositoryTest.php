@@ -41,7 +41,7 @@ it('creates WebhookSubscriptionCollection from api response', function () {
 });
 
 it('subscribes to a webhook', function () {
-    MockApi::enqueue(new ExamplePostIdsResponse([['id' => 3001518]]));
+    MockApi::enqueue(new ExamplePostIdsResponse([['id' => 3_001_518]]));
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
@@ -57,14 +57,14 @@ it('subscribes to a webhook', function () {
         ->toBeInstanceOf(WebhookSubscription::class)
         ->and($response->toArray())
         ->toEqual([
-            'id'   => 3001518,
+            'id'   => 3_001_518,
             'hook' => WebhookSubscription::SHIPMENT_LABEL_CREATED,
             'url'  => 'https://example.com/webhook',
         ]);
 });
 
 it('subscribes to a webhook using a shorthand method', function () {
-    MockApi::enqueue(new ExamplePostIdsResponse([['id' => 5731310]]));
+    MockApi::enqueue(new ExamplePostIdsResponse([['id' => 5_731_310]]));
 
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
@@ -75,7 +75,7 @@ it('subscribes to a webhook using a shorthand method', function () {
         ->toBeInstanceOf(WebhookSubscription::class)
         ->and($response->toArray())
         ->toEqual([
-            'id'   => 5731310,
+            'id'   => 5_731_310,
             'hook' => WebhookSubscription::ORDER_STATUS_CHANGE,
             'url'  => 'https://example.com/webhook',
         ]);

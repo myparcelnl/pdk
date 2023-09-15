@@ -16,29 +16,16 @@ use MyParcelNL\Pdk\Facade\Platform;
 
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
-     */
-    private $pdkAccountRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $pdkAccountRepository
-     */
-    public function __construct(PdkAccountRepositoryInterface $pdkAccountRepository)
+    public function __construct(private readonly PdkAccountRepositoryInterface $pdkAccountRepository)
     {
-        $this->pdkAccountRepository = $pdkAccountRepository;
     }
 
-    /**
-     * @return null|\MyParcelNL\Pdk\Account\Model\Account
-     */
     public function getAccount(): ?Account
     {
         return $this->pdkAccountRepository->getAccount();
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      * @deprecated use getCarriers()
      */
     public function getCarrierOptions(): CarrierCollection
@@ -46,9 +33,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $this->getCarriers();
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     */
     public function getCarriers(): CarrierCollection
     {
         $shop = $this->getShop();
@@ -66,13 +50,15 @@ class AccountSettingsService implements AccountSettingsServiceInterface
                 return $isAllowed && $carrier->enabled && $carrier->capabilities;
             })
             ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
-                $aIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierA) {
-                    return $allowedCarrier->name === $carrierA->name;
-                }, true);
+                $aIndex = $allowedCarriers->search(
+                    fn(Carrier $allowedCarrier) => $allowedCarrier->name === $carrierA->name,
+                    true
+                );
 
-                $bIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierB) {
-                    return $allowedCarrier->name === $carrierB->name;
-                }, true);
+                $bIndex = $allowedCarriers->search(
+                    fn(Carrier $allowedCarrier) => $allowedCarrier->name === $carrierB->name,
+                    true
+                );
 
                 return $aIndex === $bIndex
                     ? $carrierA->subscriptionId <=> $carrierB->subscriptionId
@@ -81,9 +67,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             ->values();
     }
 
-    /**
-     * @return null|\MyParcelNL\Pdk\Account\Model\Shop
-     */
     public function getShop(): ?Shop
     {
         $account = $this->getAccount();
@@ -91,19 +74,11 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $account ? $account->shops->first() : null;
     }
 
-    /**
-     * @return bool
-     */
     public function hasAccount(): bool
     {
         return null !== $this->getAccount();
     }
 
-    /**
-     * @param  string $feature
-     *
-     * @return bool
-     */
     public function hasSubscriptionFeature(string $feature): bool
     {
         if (! $this->hasAccount()) {
@@ -117,37 +92,24 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * @return bool
      * @noinspection PhpUnused
      */
     public function hasTaxFields(): bool
     {
         return $this->hasAccount()
             && (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
-                ->contains(function (string $carrier) {
-                    return $this->hasCarrier($carrier);
-                });
+                ->contains(fn(string $carrier) => $this->hasCarrier($carrier));
     }
 
-    /**
-     * @return bool
-     */
     public function usesOrderMode(): bool
     {
         return $this->getAccount()->generalSettings->orderMode;
     }
 
-    /**
-     * @param  string $carrierName
-     *
-     * @return bool
-     */
     protected function hasCarrier(string $carrierName): bool
     {
         return $this->hasAccount()
             && $this->getCarriers()
-                ->contains(function (Carrier $carrier) use ($carrierName) {
-                    return $carrier->name === $carrierName;
-                });
+                ->contains(fn(Carrier $carrier) => $carrier->name === $carrierName);
     }
 }

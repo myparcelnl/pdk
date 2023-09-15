@@ -24,11 +24,12 @@ uses()->group('frontend', 'settings');
 
 usesShared(
     new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            LabelSettings::ID => [
-                LabelSettings::DESCRIPTION => 'description',
-            ],
-        ]),
+        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class),
+        //            ->constructor([
+        //            LabelSettings::ID => [
+        //                LabelSettings::DESCRIPTION => 'description',
+        //            ],
+        //        ]),
     ])
 );
 
@@ -37,7 +38,7 @@ it('returns all keys', function () {
 
     expect($settings)->toBeInstanceOf(SettingsModel::class);
 
-    assertMatchesJsonSnapshot(json_encode($settings->toArray()));
+    assertMatchesJsonSnapshot(json_encode($settings->toArray(), JSON_THROW_ON_ERROR));
 });
 
 it('retrieves a single settings category', function () {
@@ -71,7 +72,7 @@ it('retrieves default settings', function (string $platform) {
     $array = (new SettingsModel($defaults))->except(CarrierSettings::ID, Arrayable::SKIP_NULL);
 
     // Carrier settings are tested separately
-    assertMatchesJsonSnapshot(json_encode($array));
+    assertMatchesJsonSnapshot(json_encode($array, JSON_THROW_ON_ERROR));
 
     $resetPlatform();
 })->with('platforms');
@@ -103,7 +104,7 @@ it('retrieves default carrier settings', function (string $platform) {
     $array = (new SettingsModel([CarrierSettings::ID => $carrierSettings]))
         ->carrier->toArrayWithoutNull();
 
-    assertMatchesJsonSnapshot(json_encode($array));
+    assertMatchesJsonSnapshot(json_encode($array, JSON_THROW_ON_ERROR));
 
     $resetPlatform();
 })->with('platforms');

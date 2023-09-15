@@ -18,9 +18,6 @@ use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
  */
 final class Language extends Facade
 {
-    /**
-     * @return string
-     */
     protected static function getFacadeAccessor(): string
     {
         return LanguageServiceInterface::class;

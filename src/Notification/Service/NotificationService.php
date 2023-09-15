@@ -23,9 +23,6 @@ class NotificationService implements NotificationServiceInterface
     /**
      * @param  null|string    $title
      * @param  null|string[]| $content
-     * @param  string         $variant
-     *
-     * @return void
      */
     public function add(?string $title, $content, string $variant): void
     {
@@ -36,27 +33,18 @@ class NotificationService implements NotificationServiceInterface
         ]);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Notification\Collection\NotificationCollection
-     */
     public function all(): NotificationCollection
     {
         return $this->notifications;
     }
 
-    /**
-     * @return void
-     */
     public function clear(): void
     {
         $this->notifications = new NotificationCollection();
     }
 
     /**
-     * @param  string          $title
      * @param  string|string[] $content
-     *
-     * @return void
      */
     public function error(string $title, $content): void
     {
@@ -64,37 +52,25 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string          $title
      * @param  string|string[] $content
-     *
-     * @return void
      */
     public function info(string $title, $content): void
     {
         $this->add($title, $content, Notification::VARIANT_INFO);
     }
 
-    /**
-     * @return bool
-     */
     public function isEmpty(): bool
     {
         return $this->notifications->isEmpty();
     }
 
-    /**
-     * @return bool
-     */
     public function isNotEmpty(): bool
     {
         return $this->notifications->isNotEmpty();
     }
 
     /**
-     * @param  string          $title
      * @param  string|string[] $content
-     *
-     * @return void
      */
     public function success(string $title, $content): void
     {
@@ -102,10 +78,7 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string          $title
      * @param  string|string[] $content
-     *
-     * @return void
      */
     public function warning(string $title, $content): void
     {

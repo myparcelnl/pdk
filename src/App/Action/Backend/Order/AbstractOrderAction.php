@@ -19,17 +19,12 @@ abstract class AbstractOrderAction implements ActionInterface
      */
     protected $pdkOrderRepository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
-     */
     public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository)
     {
         $this->pdkOrderRepository = $pdkOrderRepository;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return string|string[]
      */
     protected function getOrderIds(Request $request)
@@ -37,12 +32,6 @@ abstract class AbstractOrderAction implements ActionInterface
         return $request->get('orderIds', []);
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request               $request
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     *
-     * @return array
-     */
     protected function getShipmentIds(Request $request, PdkOrderCollection $orders): array
     {
         $shipmentIds = $request->get('shipmentIds', []);
@@ -60,11 +49,6 @@ abstract class AbstractOrderAction implements ActionInterface
         throw new InvalidArgumentException('No shipmentIds or orderIds found in request');
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
-     */
     protected function updateOrders(Request $request): PdkOrderCollection
     {
         $orders = $this->pdkOrderRepository->getMany($this->getOrderIds($request));
@@ -72,8 +56,6 @@ abstract class AbstractOrderAction implements ActionInterface
         $body       = json_decode($request->getContent(), true);
         $attributes = Utils::filterNull($body['data']['orders'][0] ?? []);
 
-        return $orders->map(function (PdkOrder $pdkOrder) use ($attributes) {
-            return $pdkOrder->fill($attributes);
-        });
+        return $orders->map(fn(PdkOrder $pdkOrder) => $pdkOrder->fill($attributes));
     }
 }

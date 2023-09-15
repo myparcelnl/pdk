@@ -17,35 +17,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostOrderNotesAction extends AbstractOrderAction
 {
-    /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository
-     */
-    private $orderNotesRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface
-     */
-    private $pdkOrderNoteRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface     $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository
-     * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository         $orderNotesRepository
-     */
     public function __construct(
-        PdkOrderRepositoryInterface     $pdkOrderRepository,
-        PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository,
-        OrderNotesRepository            $orderNotesRepository
+        PdkOrderRepositoryInterface                      $pdkOrderRepository,
+        private readonly PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository,
+        private readonly OrderNotesRepository            $orderNotesRepository
     ) {
         parent::__construct($pdkOrderRepository);
-        $this->pdkOrderNoteRepository = $pdkOrderNoteRepository;
-        $this->orderNotesRepository   = $orderNotesRepository;
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
     public function handle(Request $request): Response
@@ -58,9 +38,7 @@ class PostOrderNotesAction extends AbstractOrderAction
         $orders   = $this->pdkOrderRepository->getMany($orderIds);
 
         $orders
-            ->filter(function (PdkOrder $order) {
-                return $order->apiIdentifier && $order->notes->isNotEmpty();
-            })
+            ->filter(fn(PdkOrder $order) => $order->apiIdentifier && $order->notes->isNotEmpty())
             ->each(function (PdkOrder $order) {
                 $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
@@ -76,11 +54,6 @@ class PostOrderNotesAction extends AbstractOrderAction
         return $this->getFetchOrdersResponse($request);
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     protected function getFetchOrdersResponse(Request $request): Response
     {
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, ['orderIds' => $this->getOrderIds($request)]);

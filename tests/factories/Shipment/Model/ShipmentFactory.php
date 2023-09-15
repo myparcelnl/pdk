@@ -61,8 +61,6 @@ final class ShipmentFactory extends AbstractModelFactory
 
     /**
      * @param  int|array|Currency|CurrencyFactory $price
-     *
-     * @return self
      */
     public function withPrice($price): self
     {

@@ -35,16 +35,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
      */
-    private $currencyService;
+    private       $currencyService;
 
-    /**
-     * @var array
-     */
-    private $elements = [];
+    private array $elements = [];
 
-    /**
-     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
-     */
     public function __construct(Carrier $carrier)
     {
         $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
@@ -57,25 +51,16 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $this->carrierSchema = $schema;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->createLabel('view', $this->getSettingsId(), 'description');
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return "carrier_{$this->getFormattedCarrierName()}";
     }
 
-    /**
-     * @return null|string
-     */
     public function getTitleSuffix(): ?string
     {
         if ($this->carrier->isDefault) {
@@ -85,9 +70,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         return sprintf('%s_type_%s', $this->getLabelPrefix(), $this->carrier->type);
     }
 
-    /**
-     * @return null|array
-     */
     protected function createElements(): ?array
     {
         if (empty($this->elements)) {
@@ -97,44 +79,27 @@ class CarrierSettingsItemView extends AbstractSettingsView
         return $this->elements;
     }
 
-    /**
-     * @return string
-     */
     protected function getLabelPrefix(): string
     {
         return CarrierSettings::ID;
     }
 
-    /**
-     * @return string
-     */
     protected function getSettingsId(): string
     {
         return sprintf('%s_%s', CarrierSettings::ID, $this->getFormattedCarrierName());
     }
 
-    /**
-     * @param  string $string
-     *
-     * @return string
-     */
     private function createGenericLabel(string $string): string
     {
         return $this->createLabel($this->getLabelPrefix(), $string);
     }
 
-    /**
-     * @param  string $name
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\InteractiveElement
-     */
     private function createInsuranceElement(string $name): InteractiveElement
     {
         $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
 
-        $options = array_map(function (int $amount) {
-            return $this->currencyService->format($amount);
-        }, array_combine($insuranceAmounts, $insuranceAmounts));
+        $options = array_map(fn(int $amount) => $this->currencyService->format($amount),
+            array_combine($insuranceAmounts, $insuranceAmounts));
 
         return new InteractiveElement(
             $name,
@@ -143,12 +108,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         );
     }
 
-    /**
-     * @param  string $allowSetting
-     * @param  string $priceSetting
-     *
-     * @return array
-     */
     private function createSettingWithPriceFields(
         string $allowSetting,
         string $priceSetting
@@ -162,9 +121,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return array
-     */
     private function gatherElements(): array
     {
         return [
@@ -185,9 +141,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return array
-     */
     private function getDefaultExportFields(): array
     {
         return [
@@ -247,9 +200,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return array
-     */
     private function getDefaultExportReturnsFields(): array
     {
         $hasPackageTypeOptions = count($this->carrierSchema->getAllowedPackageTypes()) > 1;
@@ -281,9 +231,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         return $fields;
     }
 
-    /**
-     * @return array
-     */
     private function getDeliveryOptionsFields(): array
     {
         return [
@@ -399,9 +346,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return array
-     */
     private function getExportInsuranceFields(): array
     {
         return [
@@ -422,9 +366,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     Components::INPUT_NUMBER,
                     [
                         '$attributes' => [
-                            'min' => Pdk::get('insurancePercentageMin'),
+                            'min'  => Pdk::get('insurancePercentageMin'),
                             'step' => Pdk::get('insurancePercentageStep'),
-                            'max' => Pdk::get('insurancePercentageMax'),
+                            'max'  => Pdk::get('insurancePercentageMax'),
                         ],
                     ]
                 )
@@ -432,9 +376,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
         ];
     }
 
-    /**
-     * @return string
-     */
     private function getFormattedCarrierName(): string
     {
         return Str::snake(str_replace('.', '_', $this->carrier->name));

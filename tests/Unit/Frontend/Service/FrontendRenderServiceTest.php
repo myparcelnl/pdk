@@ -27,7 +27,7 @@ it('renders component', function (callable $callback) {
     $result = $callback();
 
     // Replace the randomly generated id with a placeholder.
-    preg_match('/id="(pdk-.+?)"/m', $result, $id);
+    preg_match('/id="(pdk-.+?)"/m', (string) $result, $id);
     $replacedContent = strtr($result, [$id[1] => '__ID__']);
 
     // Extract the context and snapshot test it separately.
@@ -36,9 +36,11 @@ it('renders component', function (callable $callback) {
 
     if ('[]' !== $decodedContext) {
         $replacedContent = strtr($replacedContent, [$context[1] => '__CONTEXT__']);
-        $filteredContext = (new Collection(json_decode($decodedContext, true)))->toArrayWithoutNull();
+        $filteredContext = (new Collection(
+            json_decode($decodedContext, true, 512, JSON_THROW_ON_ERROR)
+        ))->toArrayWithoutNull();
 
-        assertMatchesJsonSnapshot(json_encode($filteredContext));
+        assertMatchesJsonSnapshot(json_encode($filteredContext, JSON_THROW_ON_ERROR));
     }
 
     assertMatchesHtmlSnapshot($replacedContent);

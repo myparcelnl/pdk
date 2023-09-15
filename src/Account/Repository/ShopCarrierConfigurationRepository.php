@@ -14,10 +14,6 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 class ShopCarrierConfigurationRepository extends ApiRepository
 {
     /**
-     * @param  int    $shopId
-     * @param  string $carrier
-     *
-     * @return \MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration
      * @noinspection PhpUnused
      */
     public function getCarrierConfiguration(int $shopId, string $carrier): ShopCarrierConfiguration
@@ -36,9 +32,6 @@ class ShopCarrierConfigurationRepository extends ApiRepository
     }
 
     /**
-     * @param  int $shopId
-     *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
      * @noinspection PhpUnused
      */
     public function getCarrierConfigurations(int $shopId): Collection

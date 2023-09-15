@@ -16,11 +16,11 @@ use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
  */
 class CustomsDeclaration extends Model
 {
-    public const CONTENTS_COMMERCIAL_GOODS   = 1;
-    public const CONTENTS_COMMERCIAL_SAMPLES = 2;
-    public const CONTENTS_DOCUMENTS          = 3;
-    public const CONTENTS_GIFTS              = 4;
-    public const CONTENTS_RETURN_SHIPMENTS   = 5;
+    final public const CONTENTS_COMMERCIAL_GOODS   = 1;
+    final public const CONTENTS_COMMERCIAL_SAMPLES = 2;
+    final public const CONTENTS_DOCUMENTS          = 3;
+    final public const CONTENTS_GIFTS              = 4;
+    final public const CONTENTS_RETURN_SHIPMENTS   = 5;
 
     protected $attributes = [
         'contents' => self::CONTENTS_COMMERCIAL_GOODS,
@@ -39,13 +39,13 @@ class CustomsDeclaration extends Model
     /**
      * Calculate weight automatically if it's not present.
      *
-     * @return int
      * @noinspection PhpUnused
      */
     protected function getWeightAttribute(): int
     {
-        return $this->attributes['weight'] ?? $this->items->reduce(static function (int $acc, $item) {
-            return $acc + $item['weight'] * $item['amount'];
-        }, 0);
+        return $this->attributes['weight'] ?? $this->items->reduce(
+            static fn(int $acc, $item) => $acc + $item['weight'] * $item['amount'],
+            0
+        );
     }
 }

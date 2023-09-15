@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class OrderStatusChangeWebhook extends AbstractHook
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     public function handle(Request $request): void
     {
         $content = $this->getHookBody($request);
@@ -25,9 +20,6 @@ final class OrderStatusChangeWebhook extends AbstractHook
         ]);
     }
 
-    /**
-     * @return string
-     */
     protected function getHookEvent(): string
     {
         return WebhookSubscription::ORDER_STATUS_CHANGE;

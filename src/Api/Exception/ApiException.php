@@ -18,17 +18,12 @@ class ApiException extends Exception
     /**
      * @var string|null
      */
-    private $requestId;
+    private                                  $requestId;
+
+    private readonly ClientResponseInterface $response;
 
     /**
-     * @var \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
-     */
-    private $response;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface $response
-     * @param  int                                                  $code
-     * @param  \Throwable|null                                      $previous
+     * @param  \Throwable|null $previous
      */
     public function __construct(ClientResponseInterface $response, int $code = 0, Throwable $previous = null)
     {
@@ -49,25 +44,16 @@ class ApiException extends Exception
         );
     }
 
-    /**
-     * @return array
-     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
-    /**
-     * @return null|string
-     */
     public function getRequestId(): ?string
     {
         return $this->requestId;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Api\Contract\ClientResponseInterface
-     */
     public function getResponse(): ClientResponseInterface
     {
         return $this->response;

@@ -13,9 +13,6 @@ class ExportOrdersEndpointRequest extends AbstractEndpointRequest
         return 'POST';
     }
 
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return 'orders';

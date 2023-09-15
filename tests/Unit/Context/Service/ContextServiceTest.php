@@ -27,7 +27,7 @@ it('gets context data', function (string $id, array $arguments) {
 
     $context = $service->createContexts([$id], $arguments);
 
-    assertMatchesJsonSnapshot(json_encode($context->toArray()));
+    assertMatchesJsonSnapshot(json_encode($context->toArray(), JSON_THROW_ON_ERROR));
 })->with([
     'global' => [
         'id'        => Context::ID_GLOBAL,

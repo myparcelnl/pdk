@@ -9,14 +9,8 @@ use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 
 class GetWebhookSubscriptionsResponse extends ApiResponseWithBody
 {
-    /**
-     * @var \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
-     */
-    private $subscriptions;
+    private ?WebhookSubscriptionCollection $subscriptions = null;
 
-    /**
-     * @return \MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection
-     */
     public function getSubscriptions(): WebhookSubscriptionCollection
     {
         return $this->subscriptions;

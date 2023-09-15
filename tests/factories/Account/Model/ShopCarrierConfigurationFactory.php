@@ -28,8 +28,6 @@ final class ShopCarrierConfigurationFactory extends AbstractModelFactory
 
     /**
      * @param  \MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration $model
-     *
-     * @return void
      */
     protected function save(Model $model): void
     {

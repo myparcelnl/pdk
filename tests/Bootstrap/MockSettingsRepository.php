@@ -6,33 +6,12 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 
 class MockSettingsRepository extends AbstractSettingsRepository
 {
-    /**
-     * @var array
-     */
-    private $settings = [];
+    private array $settings = [];
 
     /**
-     * @param  array                                      $settings
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
-     */
-    public function __construct(array $settings = [], MemoryCacheStorage $storage)
-    {
-        parent::__construct($storage);
-
-        foreach ($settings as $key => $value) {
-            $this->store($this->createSettingsKey($key), $value);
-        }
-    }
-
-    /**
-     * @param  string $namespace
-     *
      * @return mixed
      */
     public function getGroup(string $namespace)
@@ -40,19 +19,13 @@ class MockSettingsRepository extends AbstractSettingsRepository
         return Arr::get($this->settings, $namespace, []);
     }
 
-    /**
-     * @return void
-     */
     public function reset(): void
     {
         $this->settings = [];
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return void
+     * @param  mixed $value
      */
     public function store(string $key, $value): void
     {

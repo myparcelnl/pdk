@@ -15,7 +15,7 @@ class TsTypeParser
 {
     use UsesCache;
 
-    public const  CONVERT_TYPES = [
+    final public const  CONVERT_TYPES = [
         ArrayIterator::class     => 'unknown[]',
         DateTime::class          => self::TYPE_DATE,
         DateTimeImmutable::class => 'Readonly<' . self::TYPE_DATE . '>',
@@ -31,18 +31,12 @@ class TsTypeParser
         'null'                   => TypescriptHelperGenerator::UNDEFINED,
         'resource'               => 'unknown',
     ];
-    private const TYPE_NUMBER   = 'number';
-    private const TYPE_RECORD   = 'Record<string, unknown>';
-    private const TYPE_FUNCTION = '((...args: unknown[]) => unknown)';
-    private const TYPE_DATE     = '{ date: string, timezone_type: number, timezone: string }';
-    private const NAMESPACE     = '\\MyParcelNL\\Pdk\\';
+    private const       TYPE_NUMBER   = 'number';
+    private const       TYPE_RECORD   = 'Record<string, unknown>';
+    private const       TYPE_FUNCTION = '((...args: unknown[]) => unknown)';
+    private const       TYPE_DATE     = '{ date: string, timezone_type: number, timezone: string }';
+    private const NAMESPACE           = '\\MyParcelNL\\Pdk\\';
 
-    /**
-     * @param  string $string
-     * @param  bool   $asReference
-     *
-     * @return string
-     */
     public function getType(string $string, bool $asReference = false): string
     {
         return $this->cache(sprintf('ts_type_%s', "{$string}_$asReference"), function () use ($asReference, $string) {
@@ -69,12 +63,6 @@ class TsTypeParser
         });
     }
 
-    /**
-     * @param  string $string
-     * @param  bool   $asReference
-     *
-     * @return string
-     */
     protected function fromArrayShape(string $string, bool $asReference = false): string
     {
         $contents = preg_match('/\{(.+)}/', $string, $matches) ? $matches[1] : $string;
@@ -82,9 +70,7 @@ class TsTypeParser
 
         if (! Str::contains($string, ':')) {
             $subTypes = explode(',', $contents);
-            $subTypes = array_map(function (string $subType) {
-                return $this->getType(trim($subType));
-            }, $subTypes);
+            $subTypes = array_map(fn(string $subType) => $this->getType(trim($subType)), $subTypes);
 
             if (empty($subTypes)) {
                 return self::TYPE_RECORD;
@@ -98,7 +84,7 @@ class TsTypeParser
         foreach (explode(',', $contents) as $keyValuePair) {
             [$key, $value] = explode(':', $keyValuePair);
 
-            $types[] = sprintf('%s: %s', trim($key), $this->getType(trim((string) $value), $asReference));
+            $types[] = sprintf('%s: %s', trim($key), $this->getType(trim($value), $asReference));
         }
 
         $spaces     = str_repeat(' ', 2);
@@ -107,12 +93,6 @@ class TsTypeParser
         return sprintf('{%s%s%s}%s', PHP_EOL, $typeString, PHP_EOL, $suffix);
     }
 
-    /**
-     * @param  string $string
-     * @param  bool   $asReference
-     *
-     * @return string
-     */
     protected function fromNamespacedClass(string $string, bool $asReference): string
     {
         $hasOwnNamespace = Str::startsWith($string, self::NAMESPACE);
@@ -125,7 +105,7 @@ class TsTypeParser
             $imploded = implode('', $parts);
 
             if ($hasOwnNamespace && count($parts) > 1 && Str::endsWith($imploded, Arr::first($parts))) {
-                $imploded = substr($imploded, strlen(Arr::first($parts)));
+                $imploded = substr($imploded, strlen((string) Arr::first($parts)));
             }
 
             return $imploded;
@@ -141,19 +121,11 @@ class TsTypeParser
             : $implode($parts);
     }
 
-    /**
-     * @param  string $string
-     * @param  bool   $asReference
-     *
-     * @return string
-     */
     protected function fromSimpleArray(string $string, bool $asReference = false): string
     {
         preg_match('/<(.+)>/', $string, $matches);
 
-        $types = array_map(function (string $string) use ($asReference) {
-            return $this->getType($string, $asReference);
-        }, explode(',', $matches[1]));
+        $types = array_map(fn(string $string) => $this->getType($string, $asReference), explode(',', $matches[1]));
 
         $typesString = implode(', ', $types);
 

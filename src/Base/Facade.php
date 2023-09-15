@@ -15,15 +15,12 @@ abstract class Facade
     protected static $pdk;
 
     /**
-     * @param  string $method
-     * @param  mixed  $args
-     *
      * @return mixed
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidFacadeException
      */
-    public static function __callStatic(string $method, $args)
+    public static function __callStatic(string $method, mixed $args)
     {
         return static::getFacadeRoot()
             ->$method(
@@ -32,7 +29,6 @@ abstract class Facade
     }
 
     /**
-     * @return null|\MyParcelNL\Pdk\Base\Concern\PdkInterface
      * @internal
      */
     public static function getPdkInstance(): ?PdkInterface
@@ -43,7 +39,6 @@ abstract class Facade
     /**
      * @param  null|\MyParcelNL\Pdk\Base\Concern\PdkInterface $pdk
      *
-     * @return void
      * @internal
      */
     public static function setPdkInstance(?PdkInterface $pdk): void
@@ -51,9 +46,6 @@ abstract class Facade
         self::$pdk = $pdk;
     }
 
-    /**
-     * @return string
-     */
     abstract protected static function getFacadeAccessor(): string;
 
     /**

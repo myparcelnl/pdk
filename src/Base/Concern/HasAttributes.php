@@ -81,28 +81,18 @@ trait HasAttributes
 
     /**
      * Extract and cache all the mutated attributes of a class.
-     *
-     * @param  string $class
-     *
-     * @return void
      */
     public static function cacheMutatedAttributes(string $class): void
     {
         static::$mutatorCache[$class] = (new Collection(static::getMutatorMethods($class)))
-            ->map(function ($match) {
-                return Str::camel($match);
-            })
+            ->map(fn($match) => Str::camel($match))
             ->all();
     }
 
     /**
      * Get all the attribute mutator methods.
-     *
-     * @param  mixed $class
-     *
-     * @return array
      */
-    protected static function getMutatorMethods($class): array
+    protected static function getMutatorMethods(mixed $class): array
     {
         preg_match_all('/(?<=^|;)get([^;]+?)Attribute(;|$)/', implode(';', get_class_methods($class)), $matches);
 
@@ -114,7 +104,6 @@ trait HasAttributes
      *
      * @param  null|int $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function attributesToArray(?int $flags = null): array
@@ -128,7 +117,6 @@ trait HasAttributes
      * @param  string|array $attributes
      * @param  null|int     $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function except($attributes, ?int $flags = null): array
@@ -138,30 +126,19 @@ trait HasAttributes
 
     /**
      * Decode the given float.
-     *
-     * @param  mixed $value
-     *
-     * @return float
      */
-    public function fromFloat($value): float
+    public function fromFloat(mixed $value): float
     {
-        switch ((string) $value) {
-            case 'Infinity':
-                return INF;
-            case '-Infinity':
-                return -INF;
-            case 'NaN':
-                return NAN;
-            default:
-                return (float) $value;
-        }
+        return match ((string) $value) {
+            'Infinity' => INF,
+            '-Infinity' => -INF,
+            'NaN' => NAN,
+            default => (float) $value,
+        };
     }
 
     /**
      * Decode the given JSON back into an array or object.
-     *
-     * @param  string $value
-     * @param  bool   $asObject
      *
      * @return mixed
      */
@@ -172,8 +149,6 @@ trait HasAttributes
 
     /**
      * Get an attribute from the model.
-     *
-     * @param  string $key
      *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
@@ -201,8 +176,6 @@ trait HasAttributes
      * Get all the current attributes on the model.
      *
      * @param  null|int $flags
-     *
-     * @return array
      */
     public function getAttributes(?int $flags = null): array
     {
@@ -210,9 +183,7 @@ trait HasAttributes
 
         if ($flags) {
             if ($flags & Arrayable::SKIP_NULL) {
-                $attributes = array_filter($attributes, static function ($value) {
-                    return null !== $value;
-                });
+                $attributes = array_filter($attributes, static fn($value) => null !== $value);
             }
 
             if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
@@ -225,10 +196,6 @@ trait HasAttributes
 
     /**
      * Determine if a get mutator exists for an attribute.
-     *
-     * @param  string $key
-     *
-     * @return bool
      */
     public function hasGetMutator(string $key): bool
     {
@@ -237,10 +204,6 @@ trait HasAttributes
 
     /**
      * Determine if a set mutator exists for an attribute.
-     *
-     * @param  string $key
-     *
-     * @return bool
      */
     public function hasSetMutator(string $key): bool
     {
@@ -253,7 +216,6 @@ trait HasAttributes
      * @param  string|array $attributes
      * @param  null|int     $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function only($attributes, ?int $flags = null): array
@@ -263,13 +225,8 @@ trait HasAttributes
 
     /**
      * Set a given attribute on the model.
-     *
-     * @param  string $key
-     * @param  mixed  $value
-     *
-     * @return self
      */
-    public function setAttribute(string $key, $value): self
+    public function setAttribute(string $key, mixed $value): self
     {
         $key = $this->convertDeprecatedKey($this->convertAttributeCase($key));
 
@@ -294,11 +251,8 @@ trait HasAttributes
     /**
      * Add the cast attributes to the attributes array.
      *
-     * @param  array    $attributes
-     * @param  array    $mutatedAttributes
      * @param  null|int $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
@@ -344,11 +298,7 @@ trait HasAttributes
     }
 
     /**
-     * @param  array    $attributes
-     * @param  array    $mutatedAttributes
      * @param  null|int $flags
-     *
-     * @return array
      */
     protected function addMutatedAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
@@ -373,12 +323,9 @@ trait HasAttributes
     /**
      * Return a timestamp as DateTime object with time set to 00:00:00.
      *
-     * @param  mixed $value
-     *
-     * @return \DateTimeImmutable
      * @throws \Exception
      */
-    protected function asDate($value): DateTimeImmutable
+    protected function asDate(mixed $value): DateTimeImmutable
     {
         return $this->asDateTime($value)
             ->setTime(0, 0);
@@ -389,7 +336,6 @@ trait HasAttributes
      *
      * @param  \DateTimeInterface|string|array{date: string, timezone: string, timezone_type: int} $value
      *
-     * @return \DateTimeImmutable
      * @throws \Exception
      */
     protected function asDateTime($value): DateTimeImmutable
@@ -425,12 +371,9 @@ trait HasAttributes
     /**
      * Return a timestamp as unix timestamp.
      *
-     * @param  mixed $value
-     *
-     * @return int
      * @throws \Exception
      */
-    protected function asTimestamp($value): int
+    protected function asTimestamp(mixed $value): int
     {
         return $this->asDateTime($value)
             ->getTimestamp();
@@ -439,14 +382,11 @@ trait HasAttributes
     /**
      * Cast an attribute to a native PHP type.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @throws \Exception
      */
-    protected function castAttribute(string $key, $value)
+    protected function castAttribute(string $key, mixed $value)
     {
         $castType = $this->getCastType($key);
 
@@ -495,10 +435,7 @@ trait HasAttributes
     }
 
     /**
-     * @param  string   $key
      * @param  null|int $flags
-     *
-     * @return string
      */
     protected function convertAttributeCase(string $key, ?int $flags = null): string
     {
@@ -507,11 +444,6 @@ trait HasAttributes
         return Str::{$case}($key);
     }
 
-    /**
-     * @param  string $key
-     *
-     * @return string
-     */
     protected function convertDeprecatedKey(string $key): string
     {
         if (! $this->isDeprecated($key)) {
@@ -526,10 +458,8 @@ trait HasAttributes
     }
 
     /**
-     * @param  array    $attributes
      * @param  null|int $flags
      *
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function createArrayFromAttributes(array $attributes, ?int $flags): array
@@ -544,8 +474,6 @@ trait HasAttributes
     /**
      * Get an attribute from the $attributes array.
      *
-     * @param  string $key
-     *
      * @return mixed
      */
     protected function getAttributeFromArray(string $key)
@@ -555,8 +483,6 @@ trait HasAttributes
 
     /**
      * Get a plain attribute (not a relationship).
-     *
-     * @param  string $key
      *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
@@ -576,10 +502,6 @@ trait HasAttributes
 
     /**
      * Get the type of cast for a model attribute.
-     *
-     * @param  string $key
-     *
-     * @return null|string
      */
     protected function getCastType(string $key): ?string
     {
@@ -588,8 +510,6 @@ trait HasAttributes
 
     /**
      * Get the casts array.
-     *
-     * @return array
      */
     protected function getCasts(): array
     {
@@ -599,13 +519,10 @@ trait HasAttributes
     /**
      * Cast the given attribute using a custom cast class.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    protected function getClassCastableAttributeValue(string $key, $value)
+    protected function getClassCastableAttributeValue(string $key, mixed $value)
     {
         if (isset($this->classCastCache[$key])) {
             return $this->classCastCache[$key];
@@ -622,9 +539,6 @@ trait HasAttributes
         return $value;
     }
 
-    /**
-     * @return array
-     */
     protected function getDateFormats(): array
     {
         return Pdk::get('dateFormats');
@@ -632,8 +546,6 @@ trait HasAttributes
 
     /**
      * @param  null|int $flags
-     *
-     * @return null|string
      */
     protected function getFlagCase(?int $flags): ?string
     {
@@ -654,8 +566,6 @@ trait HasAttributes
 
     /**
      * Get the mutated attributes for a given instance.
-     *
-     * @return array
      */
     protected function getMutatedAttributes(): array
     {
@@ -671,10 +581,7 @@ trait HasAttributes
     /**
      * Determine whether an attribute should be cast to a native type.
      *
-     * @param  string            $key
      * @param  array|string|null $types
-     *
-     * @return bool
      */
     protected function hasCast(string $key, $types = null): bool
     {
@@ -687,10 +594,6 @@ trait HasAttributes
 
     /**
      * Determine if the given key is cast using a custom class.
-     *
-     * @param  string $key
-     *
-     * @return bool
      */
     protected function isClassCastable(string $key): bool
     {
@@ -707,32 +610,16 @@ trait HasAttributes
         return false;
     }
 
-    /**
-     * @param  string $key
-     *
-     * @return bool
-     */
     protected function isDeprecated(string $key): bool
     {
         return array_key_exists($key, $this->deprecated);
     }
 
-    /**
-     * @param  string $key
-     *
-     * @return bool
-     */
     protected function isGuarded(string $key): bool
     {
         return array_key_exists($key, $this->guarded);
     }
 
-    /**
-     * @param  string $key
-     * @param  string $newKey
-     *
-     * @return void
-     */
     protected function logDeprecationWarning(string $key, string $newKey): void
     {
         Logger::warning(
@@ -744,12 +631,9 @@ trait HasAttributes
     /**
      * Get the value of an attribute using its mutator.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      */
-    protected function mutateAttribute(string $key, $value)
+    protected function mutateAttribute(string $key, mixed $value)
     {
         return $this->{$this->createMutatorName('get', $key)}($value);
     }
@@ -757,12 +641,9 @@ trait HasAttributes
     /**
      * Get the value of an attribute using its mutator for array conversion.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      */
-    protected function mutateAttributeForArray(string $key, $value)
+    protected function mutateAttributeForArray(string $key, mixed $value)
     {
         $value = $this->mutateAttribute($key, $value);
 
@@ -785,10 +666,6 @@ trait HasAttributes
 
     /**
      * Prepare a date for array / JSON serialization.
-     *
-     * @param  \DateTimeInterface $date
-     *
-     * @return string
      */
     protected function serializeDate(DateTimeInterface $date): string
     {
@@ -798,24 +675,18 @@ trait HasAttributes
     /**
      * Set the value of an attribute using its mutator.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      */
-    protected function setMutatedAttributeValue(string $key, $value)
+    protected function setMutatedAttributeValue(string $key, mixed $value)
     {
         return $this->{$this->createMutatorName('set', $key)}($value);
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    protected function transformModelValue(string $key, $value)
+    protected function transformModelValue(string $key, mixed $value)
     {
         if ($this->hasGetMutator($key)) {
             $value = $this->mutateAttribute($key, $value);
@@ -828,25 +699,16 @@ trait HasAttributes
         return $value;
     }
 
-    /**
-     * @param  string $type
-     * @param  string $key
-     *
-     * @return void
-     */
     private function createMutatorName(string $type, string $key): string
     {
         return sprintf('%s%sAttribute', $type, Str::studly($key));
     }
 
     /**
-     * @param  string $key
-     * @param  mixed  $value
-     *
      * @return mixed
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getCastModel(string $key, $value)
+    private function getCastModel(string $key, mixed $value)
     {
         $class = $this->getCasts()[$key];
 
@@ -871,49 +733,27 @@ trait HasAttributes
         }
     }
 
-    /**
-     * @param  mixed $value
-     *
-     * @return bool
-     */
-    private function isStringBoolean($value): bool
+    private function isStringBoolean(mixed $value): bool
     {
         return in_array($value, ['true', 'false'], true);
     }
 
     /**
-     * @param  string $castType
-     * @param  mixed  $value
-     *
      * @return mixed
      */
-    private function resolveTriStateValue(string $castType, $value)
+    private function resolveTriStateValue(string $castType, mixed $value)
     {
         $service = Pdk::get(TriStateServiceInterface::class);
 
-        switch ($castType) {
-            case TriStateService::TYPE_COERCED:
-                $value = $service->coerce($value);
-                break;
-
-            case TriStateService::TYPE_STRICT:
-                $value = $service->cast($value);
-                break;
-
-            case TriStateService::TYPE_STRING:
-                $value = empty($value) ? '' : (string) $value;
-                break;
-        }
-
-        return $value;
+        return match ($castType) {
+            TriStateService::TYPE_COERCED => $service->coerce($value),
+            TriStateService::TYPE_STRICT => $service->cast($value),
+            TriStateService::TYPE_STRING => empty($value) ? '' : (string) $value,
+            default => $value,
+        };
     }
 
-    /**
-     * @param  mixed $value
-     *
-     * @return bool
-     */
-    private function toBool($value): bool
+    private function toBool(mixed $value): bool
     {
         if ($this->isStringBoolean($value)) {
             return 'true' === $value;
@@ -922,12 +762,7 @@ trait HasAttributes
         return (bool) $value;
     }
 
-    /**
-     * @param  mixed $value
-     *
-     * @return int
-     */
-    private function toInt($value): int
+    private function toInt(mixed $value): int
     {
         if ($this->isStringBoolean($value)) {
             return (int) $this->toBool($value);

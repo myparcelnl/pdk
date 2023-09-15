@@ -19,8 +19,6 @@ class SchemaRepository extends Repository
      * @param  null|string $shippingZone
      * @param  null|string $packageType
      * @param  null|string $deliveryType
-     *
-     * @return string
      */
     public function getKey(
         ?string $carrier = null,
@@ -39,8 +37,6 @@ class SchemaRepository extends Repository
      * @param  null|string $cc
      * @param  null|string $packageType
      * @param  null|string $deliveryType
-     *
-     * @return array
      */
     public function getOrderValidationSchema(
         ?string $carrier = null,
@@ -73,37 +69,22 @@ class SchemaRepository extends Repository
         );
     }
 
-    /**
-     * @param  array  $schema
-     * @param  string $path
-     *
-     * @return array
-     */
     public function getValidOptions(array $schema, string $path): array
     {
         return $this->handleOption($schema, $path, []);
     }
 
-    /**
-     * @param  array  $schema
-     * @param  string $path
-     * @param  mixed  $value
-     *
-     * @return bool
-     */
-    public function validateOption(array $schema, string $path, $value): bool
+    public function validateOption(array $schema, string $path, mixed $value): bool
     {
         return (bool) $this->handleOption($schema, $path, $value);
     }
 
     /**
-     * @param  array  $schema
-     * @param  string $path
-     * @param  mixed  $value when array this returns the enum, otherwise will validate against the value
+     * @param  mixed $value when array this returns the enum, otherwise will validate against the value
      *
      * @return mixed array when $value is array, bool otherwise
      */
-    protected function handleOption(array $schema, string $path, $value)
+    protected function handleOption(array $schema, string $path, mixed $value)
     {
         $key = $this->generateDataHash($schema);
         $key = is_array($value) ? "option_{$key}_$path" : "option_{$key}_{$path}_$value";
@@ -126,12 +107,6 @@ class SchemaRepository extends Repository
         });
     }
 
-    /**
-     * @param  array $current
-     * @param  array $previous
-     *
-     * @return array
-     */
     private function mergeSchemas(array $current, array $previous): array
     {
         foreach ($previous as $key => $value) {
@@ -149,12 +124,6 @@ class SchemaRepository extends Repository
         return $current;
     }
 
-    /**
-     * @param  array $searches
-     * @param  array $schema
-     *
-     * @return array
-     */
     private function narrowSchema(
         array $searches,
         array $schema

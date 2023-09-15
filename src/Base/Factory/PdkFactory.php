@@ -28,7 +28,6 @@ class PdkFactory implements PdkFactoryInterface
     /**
      * @param  array[]|string[] $config
      *
-     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface
      * @throws \Exception
      */
     public static function create(...$config): PdkInterface
@@ -43,11 +42,6 @@ class PdkFactory implements PdkFactoryInterface
         return $pdk;
     }
 
-    /**
-     * @param  string $mode
-     *
-     * @return void
-     */
     public static function setMode(string $mode): void
     {
         if (! in_array($mode, self::MODES, true)) {
@@ -59,9 +53,6 @@ class PdkFactory implements PdkFactoryInterface
         self::$mode = $mode;
     }
 
-    /**
-     * @return string
-     */
     protected function getMode(): string
     {
         return self::$mode ?? getenv('PDK_MODE') ?: Pdk::MODE_PRODUCTION;
@@ -69,10 +60,6 @@ class PdkFactory implements PdkFactoryInterface
 
     /**
      * Caches the container definitions and proxies. This is only done in production mode.
-     *
-     * @param  \DI\ContainerBuilder $builder
-     *
-     * @return void
      */
     protected function setupCache(ContainerBuilder $builder): void
     {
@@ -87,7 +74,6 @@ class PdkFactory implements PdkFactoryInterface
     /**
      * @param  array[]|string[] $configs
      *
-     * @return \DI\Container
      * @throws \Exception
      */
     protected function setupContainer(...$configs): Container

@@ -25,33 +25,20 @@ final class FormCondition extends AbstractFormBuilderCore implements FormConditi
     protected $matcher;
 
     /**
-     * @var null|string
-     */
-    protected $target;
-
-    /**
      * @var scalar|scalar[]
      */
-    protected $value;
+    protected     $value;
+
+    private array $ands = [];
+
+    private array $ors  = [];
 
     /**
-     * @var array
+     * @param  null|string $target
      */
-    private $ands = [];
-
-    /**
-     * @var array
-     */
-    private $ors = [];
-
-    /**
-     * @param  \MyParcelNL\Pdk\Frontend\Form\Builder\Contract\FormOperationBuilderInterface $parent
-     * @param  null|string                                                                  $target
-     */
-    public function __construct(FormOperationBuilderInterface $parent, ?string $target = null)
+    public function __construct(FormOperationBuilderInterface $parent, protected ?string $target = null)
     {
         parent::__construct($parent);
-        $this->target = $target;
     }
 
     /**
@@ -176,17 +163,12 @@ final class FormCondition extends AbstractFormBuilderCore implements FormConditi
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         $array = array_filter([
             '$and' => $this->createArrays($this->ands),
             '$or'  => $this->createArrays($this->ors),
-        ], static function ($item) {
-            return ! empty($item);
-        });
+        ], static fn($item) => ! empty($item));
 
         if (! empty($array)) {
             return $array;
@@ -211,21 +193,11 @@ final class FormCondition extends AbstractFormBuilderCore implements FormConditi
         return $or;
     }
 
-    /**
-     * @param  array $array
-     *
-     * @return array
-     */
     private function createArrays(array $array): array
     {
-        return array_map(static function (self $item) {
-            return $item->createSingleArray();
-        }, $array);
+        return array_map(static fn(self $item) => $item->createSingleArray(), $array);
     }
 
-    /**
-     * @return array
-     */
     private function createSingleArray(): array
     {
         return Utils::filterNull([

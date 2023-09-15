@@ -28,20 +28,15 @@ final class GenerateFactoryCommand extends AbstractCommand
         $this->registerFilesArgument();
     }
 
-    /**
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
 
         $this->parseSourceDirectories($input, $output)
-            ->filter(function (ClassDefinition $definition) {
-                return $definition->isSubclassOf(Model::class) || $definition->isSubclassOf(Collection::class);
-            })
+            ->filter(
+                fn(ClassDefinition $definition) => $definition->isSubclassOf(Model::class)
+                    || $definition->isSubclassOf(Collection::class)
+            )
             ->each(function (ClassDefinition $definition) {
                 $class = $definition->isSubclassOf(Model::class)
                     ? ModelFactoryGeneratorService::class

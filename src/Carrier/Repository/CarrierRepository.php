@@ -14,22 +14,14 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
 {
     private const ORDERED_CARRIER_GETTER = ['id', 'name'];
 
-    /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     */
     public function all(): CarrierCollection
     {
         return Pdk::get('allCarriers');
     }
 
-    /**
-     * @param  array $input
-     *
-     * @return null|\MyParcelNL\Pdk\Carrier\Model\Carrier
-     */
     public function get(array $input): ?Carrier
     {
-        $hash       = md5(json_encode($input));
+        $hash       = md5(json_encode($input, JSON_THROW_ON_ERROR));
         $collection = $this->all();
 
         return $this->retrieve("carrier_options_$hash", function () use ($input, $collection) {

@@ -17,11 +17,6 @@ class PdkOrderCollection extends Collection
 {
     protected $cast = PdkOrder::class;
 
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $orders
-     *
-     * @return self
-     */
     public function addApiIdentifiers(OrderCollection $orders): self
     {
         $this->each(function (PdkOrder $order) use ($orders) {
@@ -34,7 +29,6 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @throws \Exception
      */
     public function generateShipments(): ShipmentCollection
@@ -50,9 +44,6 @@ class PdkOrderCollection extends Collection
         return $newShipments;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
     public function getAllShipments(): ShipmentCollection
     {
         /** @var ShipmentCollection $collection */
@@ -69,9 +60,6 @@ class PdkOrderCollection extends Collection
         return $collection->values();
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
     public function getLastShipments(): ShipmentCollection
     {
         return $this->getAllShipments()
@@ -92,8 +80,6 @@ class PdkOrderCollection extends Collection
 
     /**
      * @param  int|int[] $shipmentIds
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     public function getShipmentsByIds($shipmentIds): ShipmentCollection
     {
@@ -103,8 +89,6 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     *
      * @return $this
      */
     public function updateShipments(ShipmentCollection $shipments): self
@@ -121,9 +105,6 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
-     *
      * @return null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     private function mergeShipmentsById(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
@@ -147,9 +128,6 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
-     *
      * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     private function mergeShipmentsByOrder(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection

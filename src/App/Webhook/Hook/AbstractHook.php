@@ -12,32 +12,16 @@ abstract class AbstractHook implements HookInterface
 {
     abstract protected function getHookEvent(): string;
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return void
-     */
     public function handle(Request $request): void
     {
         throw new RuntimeException('Not implemented');
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return bool
-     */
     public function validate(Request $request): bool
     {
         return $this->eventMatches($request, $this->getHookEvent());
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     * @param  string                                    $hook
-     *
-     * @return bool
-     */
     protected function eventMatches(Request $request, string $hook): bool
     {
         $content = $this->getHookBody($request);
@@ -45,11 +29,6 @@ abstract class AbstractHook implements HookInterface
         return $request->headers->get('x-myparcel-hook') === $hook && $content['event'] === $hook;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return array
-     */
     protected function getHookBody(Request $request): array
     {
         $body = json_decode($request->getContent(), true);

@@ -52,9 +52,6 @@ class PdkOrderNote extends Model implements StorableArrayable
     ];
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\OrderNote $orderNote
-     *
-     * @return self
      * @noinspection PhpUnused
      */
     public static function fromFulfilmentOrderNote(OrderNote $orderNote): self
@@ -69,7 +66,6 @@ class PdkOrderNote extends Model implements StorableArrayable
     }
 
     /**
-     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array

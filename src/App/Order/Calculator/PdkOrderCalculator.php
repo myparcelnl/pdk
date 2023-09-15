@@ -9,22 +9,13 @@ use MyParcelNL\Pdk\Facade\Pdk;
 
 final class PdkOrderCalculator
 {
-    /**
-     * @var \MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
-    private $order;
+    private readonly PdkOrder $order;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
     public function __construct(PdkOrder $order)
     {
         $this->order = clone $order;
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
     public function calculateAll(): PdkOrder
     {
         foreach ($this->getCalculators() as $class) {

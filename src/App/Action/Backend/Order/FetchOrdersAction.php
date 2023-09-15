@@ -12,11 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FetchOrdersAction extends AbstractOrderAction
 {
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         $orderIds   = $this->getOrderIds($request);

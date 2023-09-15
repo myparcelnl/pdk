@@ -17,10 +17,7 @@ class DropOffService implements DropOffServiceInterface
     private const DELIVERY_DAYS_WINDOW_MAXIMUM = 14;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings
-     * @param  \DateTimeImmutable|null                        $date
-     *
-     * @return null|\MyParcelNL\Pdk\Shipment\Model\DropOffDay
+     * @param  \DateTimeImmutable|null $date
      */
     public function getForDate(CarrierSettings $settings, DateTimeImmutable $date = null): ?DropOffDay
     {
@@ -35,10 +32,8 @@ class DropOffService implements DropOffServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings
-     * @param  \DateTimeImmutable|null                        $date
+     * @param  \DateTimeImmutable|null $date
      *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getPossibleDropOffDays(
@@ -83,8 +78,7 @@ class DropOffService implements DropOffServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings
-     * @param  null|\DateTimeImmutable                        $date
+     * @param  null|\DateTimeImmutable $date
      *
      * @return \DateTimeImmutable|false
      */
@@ -100,12 +94,6 @@ class DropOffService implements DropOffServiceInterface
         return $fromDate;
     }
 
-    /**
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings
-     * @param  \DateTimeInterface                             $minDate
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection
-     */
     private function getRelevantDeviatedDropOffDays(
         CarrierSettings   $settings,
         DateTimeInterface $minDate

@@ -23,7 +23,7 @@ class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
             return $target;
         }
 
-        $key = is_array($key) ? $key : explode('.', $key);
+        $key = is_array($key) ? $key : explode('.', (string) $key);
 
         foreach ($key as $i => $segment) {
             unset($key[$i]);

@@ -18,10 +18,11 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor([
-            ['externalIdentifier' => 'PDK-1', 'isDeliverable' => true],
-            ['externalIdentifier' => 'PDK-2', 'isDeliverable' => true, 'exportSignature' => true],
-        ]),
+        PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class),
+        //            ->constructor([
+        //                ['externalIdentifier' => 'PDK-1', 'isDeliverable' => true],
+        //                ['externalIdentifier' => 'PDK-2', 'isDeliverable' => true, 'exportSignature' => true],
+        //            ]),
     ])
 );
 

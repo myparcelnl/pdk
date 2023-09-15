@@ -28,8 +28,6 @@ final class CustomsDeclarationItemFactory extends AbstractModelFactory
 
     /**
      * @param  int|array|Currency|CurrencyFactory $itemValue
-     *
-     * @return self
      */
     public function withItemValue($itemValue): self
     {

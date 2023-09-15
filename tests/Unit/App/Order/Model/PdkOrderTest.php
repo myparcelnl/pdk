@@ -23,9 +23,7 @@ it('instantiates shipments', function (array $input) {
     expect($order->shipments)
         ->toBeInstanceOf(ShipmentCollection::class)
         ->and(
-            $order->shipments->every(function ($item) {
-                return is_a($item, Shipment::class);
-            })
+            $order->shipments->every(fn($item) => is_a($item, Shipment::class))
         );
 })->with([
     'empty shipments' => [
@@ -118,13 +116,11 @@ it('creates pdk order from fulfilment order', function (array $orders) {
 
     $pdkOrders = new PdkOrderCollection(
         $orderCollection
-            ->map(function (Order $order) {
-                return PdkOrder::fromFulfilmentOrder($order);
-            })
+            ->map(fn(Order $order) => PdkOrder::fromFulfilmentOrder($order))
             ->all()
     );
 
-    assertMatchesJsonSnapshot(json_encode($pdkOrders->toArrayWithoutNull()));
+    assertMatchesJsonSnapshot(json_encode($pdkOrders->toArrayWithoutNull(), JSON_THROW_ON_ERROR));
 })->with('fulfilmentOrders');
 
 it('creates a storable array', function (array $orders) {
@@ -132,7 +128,7 @@ it('creates a storable array', function (array $orders) {
         ->push(...$orders)
         ->make();
 
-    assertMatchesJsonSnapshot(json_encode($collection->toStorableArray()));
+    assertMatchesJsonSnapshot(json_encode($collection->toStorableArray(), JSON_THROW_ON_ERROR));
 })->with('pdkOrdersDomestic');
 
 it('can check whether an order is deliverable', function (array $lines, bool $result) {

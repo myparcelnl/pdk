@@ -11,17 +11,11 @@ use MyParcelNL\Pdk\Tests\Integration\Api\Adapter\BehatMyParcelClientAdapter;
 
 final class BehatMyParcelApiService extends MyParcelApiService
 {
-    /**
-     * @param  \MyParcelNL\Pdk\Tests\Integration\Api\Adapter\BehatMyParcelClientAdapter $clientAdapter
-     */
     public function __construct(BehatMyParcelClientAdapter $clientAdapter)
     {
         parent::__construct($clientAdapter);
     }
 
-    /**
-     * @return array
-     */
     public function getHeaders(): array
     {
         return array_replace(parent::getHeaders(), [

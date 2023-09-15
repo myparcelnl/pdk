@@ -43,7 +43,7 @@ it('gets carriers', function (string $platform) {
 
     expect($carriers)->toBeInstanceOf(CarrierCollection::class);
 
-    assertMatchesJsonSnapshot(json_encode($carriers->toArrayWithoutNull()));
+    assertMatchesJsonSnapshot(json_encode($carriers->toArrayWithoutNull(), JSON_THROW_ON_ERROR));
 })->with('platforms');
 
 it('throws error when platform does not exist', function () {

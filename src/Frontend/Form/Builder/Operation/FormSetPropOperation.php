@@ -13,25 +13,13 @@ final class FormSetPropOperation extends AbstractFormOperation implements FormOp
     use HasFormTarget;
 
     /**
-     * @var string
+     * @param  mixed $value
      */
-    private $prop;
-
-    /**
-     * @var mixed
-     */
-    private $value;
-
-    public function __construct(?FormOperationBuilderInterface $parent, string $prop, $value)
+    public function __construct(?FormOperationBuilderInterface $parent, private readonly string $prop, private $value)
     {
         parent::__construct($parent);
-        $this->prop  = $prop;
-        $this->value = $value;
     }
 
-    /**
-     * @return array
-     */
     public function createArray(): array
     {
         return [

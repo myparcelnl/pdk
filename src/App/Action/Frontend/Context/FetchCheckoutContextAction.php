@@ -19,19 +19,11 @@ class FetchCheckoutContextAction implements ActionInterface
      */
     protected $cartRepository;
 
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface $cartRepository
-     */
     public function __construct(PdkCartRepositoryInterface $cartRepository)
     {
         $this->cartRepository = $cartRepository;
     }
 
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function handle(Request $request): Response
     {
         return Actions::execute(PdkSharedActions::FETCH_CONTEXT, [
