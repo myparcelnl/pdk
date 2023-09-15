@@ -76,6 +76,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      */
     public function __construct(
         DropOffServiceInterface  $dropOffService,

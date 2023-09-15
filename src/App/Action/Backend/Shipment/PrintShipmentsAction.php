@@ -8,9 +8,11 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Backend\Order\AbstractOrderAction;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Status\Contract\StatusServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,13 +26,22 @@ class PrintShipmentsAction extends AbstractOrderAction
     protected $shipmentRepository;
 
     /**
+     * @var \MyParcelNL\Pdk\App\Status\Contract\StatusServiceInterface
+     */
+    private $statusService;
+
+    /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
      */
-    public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository, ShipmentRepository $shipmentRepository)
-    {
+    public function __construct(
+        PdkOrderRepositoryInterface $pdkOrderRepository,
+        ShipmentRepository          $shipmentRepository,
+        StatusServiceInterface      $statusService
+    ) {
         parent::__construct($pdkOrderRepository);
         $this->shipmentRepository = $shipmentRepository;
+        $this->statusService      = $statusService;
     }
 
     /**
@@ -53,6 +64,11 @@ class PrintShipmentsAction extends AbstractOrderAction
         $shipments = count($shipmentIds)
             ? $orders->getShipmentsByIds($shipmentIds)
             : $orders->getLastShipments();
+
+        $this->statusService->changeOrderStatus(
+            $orderIds,
+            Settings::get(OrderSettings::STATUS_ON_LABEL_CREATE, OrderSettings::ID)
+        );
 
         switch ($output) {
             case LabelSettings::OUTPUT_OPEN:
