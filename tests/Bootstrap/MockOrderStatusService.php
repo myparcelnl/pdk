@@ -19,4 +19,8 @@ class MockOrderStatusService implements OrderStatusServiceInterface
             'refunded'  => 'Refunded',
         ];
     }
+
+    public function updateStatus(array $orderIds, $status)
+    {
+    }
 }

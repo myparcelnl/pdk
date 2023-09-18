@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -31,13 +32,15 @@ class PostOrderNotesAction extends AbstractOrderAction
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface     $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository
      * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderNotesRepository         $orderNotesRepository
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface     $orderStatusService
      */
     public function __construct(
         PdkOrderRepositoryInterface     $pdkOrderRepository,
         PdkOrderNoteRepositoryInterface $pdkOrderNoteRepository,
-        OrderNotesRepository            $orderNotesRepository
+        OrderNotesRepository            $orderNotesRepository,
+        OrderStatusServiceInterface     $orderStatusService
     ) {
-        parent::__construct($pdkOrderRepository);
+        parent::__construct($pdkOrderRepository, $orderStatusService);
         $this->pdkOrderNoteRepository = $pdkOrderNoteRepository;
         $this->orderNotesRepository   = $orderNotesRepository;
     }

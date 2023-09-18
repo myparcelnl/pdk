@@ -27,6 +27,7 @@ abstract class AbstractOrderAction implements ActionInterface
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
