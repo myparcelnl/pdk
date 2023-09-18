@@ -8,6 +8,7 @@ use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Config\RectorConfig;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
 // TODO: Configure setlists
 return static function (RectorConfig $rectorConfig): void {
@@ -30,6 +31,10 @@ return static function (RectorConfig $rectorConfig): void {
         // SetList::INSTANCEOF,
         // SetList::PRIVATIZATION,
         // SetList::TYPE_DECLARATION,
+    ]);
+
+    $rectorConfig->rules([
+        DeclareStrictTypesRector::class,
     ]);
 
     $rectorConfig->ruleWithConfiguration(ConsistentPregDelimiterRector::class, [
