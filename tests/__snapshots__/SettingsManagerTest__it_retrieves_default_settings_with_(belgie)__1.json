@@ -36,13 +36,14 @@
     },
     "customs": {
         "id": "customs",
+        "countryOfOrigin": "BE",
         "customsCode": "0",
         "packageContents": "1"
     },
     "checkout": {
         "id": "checkout",
         "allowedShippingMethods": [],
-        "pickupLocationsDefaultView": "list",
+        "pickupLocationsDefaultView": "map",
         "priceType": "included",
         "enableDeliveryOptions": true,
         "enableDeliveryOptionsWhenNotInStock": true,
