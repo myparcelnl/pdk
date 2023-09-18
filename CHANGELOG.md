@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.22.0](https://github.com/myparcelnl/pdk/compare/v2.21.0...v2.22.0) (2023-09-18)
+
+
+### :bug: Bug Fixes
+
+* **settings:** set country of origin to local country by default ([#195](https://github.com/myparcelnl/pdk/issues/195)) ([dd81b6d](https://github.com/myparcelnl/pdk/commit/dd81b6d4bf6a1424d853ff67f6dace37a6d5bb44))
+
+
+### :sparkles: New Features
+
+* **config:** add bulk actions definitions ([#197](https://github.com/myparcelnl/pdk/issues/197)) ([02d8f97](https://github.com/myparcelnl/pdk/commit/02d8f97cfae990bccd7140a0c6c9b0d9f96f5f1c))
+
 ## [2.21.0](https://github.com/myparcelnl/pdk/compare/v2.20.1...v2.21.0) (2023-09-15)
 
 
