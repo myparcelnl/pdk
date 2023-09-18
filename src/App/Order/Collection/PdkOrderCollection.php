@@ -112,6 +112,10 @@ class PdkOrderCollection extends Collection
         $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
 
         $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
+            $shipments->each(function (Shipment $shipment) use ($order) {
+                $shipment->orderId = $order->externalIdentifier;
+            });
+
             $order->shipments = $useOrderId
                 ? $this->mergeShipmentsByOrder($shipments, $order)
                 : $this->mergeShipmentsById($shipments, $order);
