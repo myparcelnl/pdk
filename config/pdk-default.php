@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\env;
 use function DI\factory;
@@ -19,39 +23,39 @@ return [
     /**
      * Path to the root directory of the pdk.
      */
-    'rootDir'                  => value(__DIR__ . '/../'),
+    'rootDir'                => value(__DIR__ . '/../'),
 
     /**
      * Directories to load config files from.
      */
-    'configDirs'               => value([
+    'configDirs'             => value([
         __DIR__ . '/../config',
     ]),
 
     /**
      * Url to the API.
      */
-    'apiUrl'                   => env('PDK_API_URL', 'https://api.myparcel.nl'),
+    'apiUrl'                 => env('PDK_API_URL', 'https://api.myparcel.nl'),
 
     /**
      * CDN URL to use for frontend dependencies.
      */
-    'baseCdnUrl'               => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
+    'baseCdnUrl'             => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
 
     /**
      * The default date format to use for date and time functions.
      */
-    'defaultDateFormat'        => value('Y-m-d H:i:s'),
+    'defaultDateFormat'      => value('Y-m-d H:i:s'),
 
     /**
      * Short date format.
      */
-    'defaultDateFormatShort'   => value('Y-m-d'),
+    'defaultDateFormatShort' => value('Y-m-d'),
 
     /**
      * Supported date formats.
      */
-    'dateFormats'              => factory(function () {
+    'dateFormats'            => factory(function () {
         return [
             'Y-m-d\TH:i:s.uP',
             'Y-m-d\TH:i:sP',
@@ -64,17 +68,45 @@ return [
     /**
      * The default time zone to use for date and time functions.
      */
-    'defaultTimeZone'          => value('Europe/Amsterdam'),
+    'defaultTimeZone'        => value('Europe/Amsterdam'),
 
     /**
      * Package types, ordered by size from largest to smallest.
      */
-    'packageTypesBySize'       => value([
+    'packageTypesBySize'     => value([
         DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
         DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
         DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
     ]),
+
+    /**
+     * Bulk order actions.
+     *
+     * @example Pdk::get('bulkActions') // gets the bulk actions for the current order mode.
+     */
+
+    'allBulkActions' => value([
+        'default'   => [
+            'action_print',
+            'action_export_print',
+            'action_export',
+            'action_edit',
+        ],
+        'orderMode' => [
+            'action_edit',
+            'action_export',
+        ],
+    ]),
+
+    'bulkActions'              => factory(static function (): array {
+        $orderModeEnabled = Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID);
+        $all              = PdkFacade::get('allBulkActions');
+
+        return $orderModeEnabled
+            ? Arr::get($all, 'orderMode', [])
+            : Arr::get($all, 'default', []);
+    }),
 
     /**
      * Allowed positions for the delivery options in the checkout.
