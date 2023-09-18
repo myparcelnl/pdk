@@ -16,10 +16,10 @@ interface OrderStatusServiceInterface
     /**
      * Update the status of the given order ids with the given status.
      *
-     * @param  array $orderIds
-     * @param        $status
+     * @param  array  $orderIds
+     * @param  string $status
      *
      * @return mixed
      */
-    public function updateStatus(array $orderIds, $status);
+    public function updateStatus(array $orderIds, string $status);
 }

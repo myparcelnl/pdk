@@ -64,7 +64,7 @@ class PrintShipmentsAction extends AbstractOrderAction
 
         Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
             'orderIds' => $orderIds,
-            'status'   => Settings::get(OrderSettings::STATUS_ON_LABEL_CREATE, OrderSettings::ID),
+            'setting'  => OrderSettings::STATUS_ON_LABEL_CREATE,
         ]);
 
         switch ($output) {
