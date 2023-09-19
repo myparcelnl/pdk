@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
-use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -43,15 +42,13 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
         OrderRepository             $orderRepository,
-        ShipmentRepository          $shipmentRepository,
-        OrderStatusServiceInterface $orderStatusService
+        ShipmentRepository          $shipmentRepository
     ) {
-        parent::__construct($pdkOrderRepository, $orderStatusService);
+        parent::__construct($pdkOrderRepository);
         $this->orderRepository    = $orderRepository;
         $this->shipmentRepository = $shipmentRepository;
     }

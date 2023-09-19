@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Backend\Order\AbstractOrderAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Actions;
@@ -30,14 +29,12 @@ class PrintShipmentsAction extends AbstractOrderAction
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
-        ShipmentRepository          $shipmentRepository,
-        OrderStatusServiceInterface $orderStatusService
+        ShipmentRepository          $shipmentRepository
     ) {
-        parent::__construct($pdkOrderRepository, $orderStatusService);
+        parent::__construct($pdkOrderRepository);
         $this->shipmentRepository = $shipmentRepository;
     }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
@@ -22,14 +21,12 @@ final class SynchronizeOrdersAction extends AbstractOrderAction
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
-     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
      */
     public function __construct(
         PdkOrderRepositoryInterface $pdkOrderRepository,
-        OrderRepository             $orderRepository,
-        OrderStatusServiceInterface $orderStatusService
+        OrderRepository             $orderRepository
     ) {
-        parent::__construct($pdkOrderRepository, $orderStatusService);
+        parent::__construct($pdkOrderRepository);
         $this->orderRepository = $orderRepository;
     }
 

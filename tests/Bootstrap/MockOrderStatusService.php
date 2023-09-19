@@ -40,12 +40,12 @@ final class MockOrderStatusService implements OrderStatusServiceInterface, Reset
     }
 
     /**
-     * @param  array  $orderIds
-     * @param  string $status
+     * @param  array       $orderIds
+     * @param  null|string $status
      *
      * @return void
      */
-    public function updateStatus(array $orderIds, string $status)
+    public function updateStatus(array $orderIds, ?string $status)
     {
         $this->updates[] = [
             'orderIds' => $orderIds,

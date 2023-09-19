@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Settings as SettingsFacade;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
@@ -12,6 +14,26 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateOrderStatusAction extends AbstractOrderAction
 {
+    /**
+     * @var \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface
+     */
+    private $orderStatusService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface $orderStatusService
+     */
+    public function __construct(
+        PdkOrderRepositoryInterface $pdkOrderRepository,
+        OrderStatusServiceInterface $orderStatusService
+    ) {
+        parent::__construct(
+            $pdkOrderRepository
+        );
+
+        $this->orderStatusService = $orderStatusService;
+    }
+
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
