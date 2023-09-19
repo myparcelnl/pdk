@@ -109,6 +109,17 @@
                 "property": "orders",
                 "responseProperty": null
             },
+            "updateOrderStatus": {
+                "body": null,
+                "headers": [],
+                "method": "POST",
+                "parameters": {
+                    "action": "updateOrderStatus"
+                },
+                "path": "",
+                "property": "orders",
+                "responseProperty": null
+            },
             "updateShipments": {
                 "body": null,
                 "headers": [],

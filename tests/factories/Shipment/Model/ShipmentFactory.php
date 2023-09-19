@@ -34,7 +34,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withDropOffPoint(array|RetailLocation|RetailLocationFactory|RetailLocationFactory $dropOffPoint)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withHidden(bool $hidden)
- * @method $this withId(int $id)
  * @method $this withIsReturn(bool $isReturn)
  * @method $this withLinkConsumerPortal(string $linkConsumerPortal)
  * @method $this withModified(array|string|DateTimeInterface $modified)
@@ -57,6 +56,16 @@ final class ShipmentFactory extends AbstractModelFactory
     public function getModel(): string
     {
         return Shipment::class;
+    }
+
+    /**
+     * @param  null|int $id
+     *
+     * @return self
+     */
+    public function withId(?int $id = null): self
+    {
+        return $this->with(['id' => $id ?? $this->getNextId()]);
     }
 
     /**

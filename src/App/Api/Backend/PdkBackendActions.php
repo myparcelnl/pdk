@@ -11,12 +11,13 @@ final class PdkBackendActions
     public const UPDATE_ACCOUNT               = 'updateAccount';
     public const UPDATE_SUBSCRIPTION_FEATURES = 'updateSubscriptionFeatures';
     // Orders
-    public const EXPORT_ORDERS      = 'exportOrders';
-    public const POST_ORDER_NOTES   = 'postOrderNotes';
-    public const FETCH_ORDERS       = 'fetchOrders';
-    public const PRINT_ORDERS       = 'printOrders';
-    public const SYNCHRONIZE_ORDERS = 'synchronizeOrders';
-    public const UPDATE_ORDERS      = 'updateOrders';
+    public const EXPORT_ORDERS       = 'exportOrders';
+    public const POST_ORDER_NOTES    = 'postOrderNotes';
+    public const FETCH_ORDERS        = 'fetchOrders';
+    public const PRINT_ORDERS        = 'printOrders';
+    public const SYNCHRONIZE_ORDERS  = 'synchronizeOrders';
+    public const UPDATE_ORDERS       = 'updateOrders';
+    public const UPDATE_ORDER_STATUS = 'updateOrderStatus';
     // Returns
     public const EXPORT_RETURN = 'exportReturn';
     // Shipments
