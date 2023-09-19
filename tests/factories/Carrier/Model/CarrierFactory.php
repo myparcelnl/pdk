@@ -28,6 +28,55 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class CarrierFactory extends AbstractModelFactory
 {
+    public function fromBpost(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_BPOST_NAME)
+            ->withId(Carrier::CARRIER_BPOST_ID);
+    }
+
+    public function fromDhlEuroplus(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_DHL_EUROPLUS_NAME)
+            ->withId(Carrier::CARRIER_DHL_EUROPLUS_ID);
+    }
+
+    public function fromDhlForYou(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_DHL_FOR_YOU_NAME)
+            ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID);
+    }
+
+    public function fromDhlParcelConnect(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME)
+            ->withId(Carrier::CARRIER_DHL_PARCEL_CONNECT_ID);
+    }
+
+    public function fromDpd(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_DPD_NAME)
+            ->withId(Carrier::CARRIER_DPD_ID);
+    }
+
+    public function fromPostNL(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_POSTNL_NAME)
+            ->withId(Carrier::CARRIER_POSTNL_ID);
+    }
+
+    public function fromUps(): self
+    {
+        return $this
+            ->withName(Carrier::CARRIER_UPS_NAME)
+            ->withId(Carrier::CARRIER_UPS_ID);
+    }
+
     public function getModel(): string
     {
         return Carrier::class;

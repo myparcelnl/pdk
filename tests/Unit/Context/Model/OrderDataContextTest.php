@@ -28,9 +28,9 @@ function setup(): void
     factory(Shop::class)
         ->withCarriers(
             factory(CarrierCollection::class)->push(
-                factory(Carrier::class)->withName('postnl'),
+                factory(Carrier::class)->fromPostNL(),
                 factory(Carrier::class)
-                    ->withName('dhlforyou')
+                    ->fromDhlForYou()
                     ->withSubscriptionId(12345)
             )
         )

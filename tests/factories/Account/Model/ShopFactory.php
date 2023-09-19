@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollectionFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
@@ -22,7 +23,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withAccountId(int $accountId)
  * @method $this withBilling(array $billing)
  * @method $this withCarrierConfigurations(array|ShopCarrierConfigurationCollection|ShopCarrierConfigurationFactory[] $carrierConfigurations)
- * @method $this withCarriers(array|CarrierCollection|CarrierFactory[] $carriers)
+ * @method $this withCarriers(array|CarrierCollection|CarrierFactory[]|CarrierCollectionFactory $carriers)
  * @method $this withDeliveryAddress(array $deliveryAddress)
  * @method $this withGeneralSettings(array $generalSettings)
  * @method $this withHidden(bool $hidden)

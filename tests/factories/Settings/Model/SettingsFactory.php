@@ -122,7 +122,7 @@ final class SettingsFactory extends AbstractModelFactory
 
     /**
      * @param  string[]                                     $carriers
-     * @param  array|CarrierSettings|CarrierSettingsFactory $data *
+     * @param  array|CarrierSettings|CarrierSettingsFactory $data
      *
      * @return $this
      */
@@ -135,6 +135,9 @@ final class SettingsFactory extends AbstractModelFactory
         return $this;
     }
 
+    /**
+     * @return \MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface
+     */
     protected function createDefault(): FactoryInterface
     {
         return $this->withCarrier(Platform::get('defaultCarrier'));
