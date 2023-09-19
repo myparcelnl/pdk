@@ -27,9 +27,7 @@ class UpdateOrderStatusAction extends AbstractOrderAction
         PdkOrderRepositoryInterface $pdkOrderRepository,
         OrderStatusServiceInterface $orderStatusService
     ) {
-        parent::__construct(
-            $pdkOrderRepository
-        );
+        parent::__construct($pdkOrderRepository);
 
         $this->orderStatusService = $orderStatusService;
     }

@@ -30,10 +30,8 @@ class PrintShipmentsAction extends AbstractOrderAction
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository         $shipmentRepository
      */
-    public function __construct(
-        PdkOrderRepositoryInterface $pdkOrderRepository,
-        ShipmentRepository          $shipmentRepository
-    ) {
+    public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository, ShipmentRepository $shipmentRepository)
+    {
         parent::__construct($pdkOrderRepository);
         $this->shipmentRepository = $shipmentRepository;
     }

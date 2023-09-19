@@ -22,10 +22,8 @@ final class SynchronizeOrdersAction extends AbstractOrderAction
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface $pdkOrderRepository
      * @param  \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository          $orderRepository
      */
-    public function __construct(
-        PdkOrderRepositoryInterface $pdkOrderRepository,
-        OrderRepository             $orderRepository
-    ) {
+    public function __construct(PdkOrderRepositoryInterface $pdkOrderRepository, OrderRepository $orderRepository)
+    {
         parent::__construct($pdkOrderRepository);
         $this->orderRepository = $orderRepository;
     }
