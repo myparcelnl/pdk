@@ -45,7 +45,7 @@ final class MockOrderStatusService implements OrderStatusServiceInterface, Reset
      *
      * @return void
      */
-    public function updateStatus(array $orderIds, ?string $status)
+    public function updateStatus(array $orderIds, ?string $status): void
     {
         $this->updates[] = [
             'orderIds' => $orderIds,

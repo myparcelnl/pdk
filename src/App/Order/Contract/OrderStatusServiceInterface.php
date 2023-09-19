@@ -19,7 +19,7 @@ interface OrderStatusServiceInterface
      * @param  array  $orderIds
      * @param  string $status
      *
-     * @return mixed
+     * @return void
      */
-    public function updateStatus(array $orderIds, string $status);
+    public function updateStatus(array $orderIds, string $status): void;
 }
