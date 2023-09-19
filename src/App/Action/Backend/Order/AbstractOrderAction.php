@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,11 +31,11 @@ abstract class AbstractOrderAction implements ActionInterface
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return string|string[]
+     * @return string[]
      */
-    protected function getOrderIds(Request $request)
+    protected function getOrderIds(Request $request): array
     {
-        return $request->get('orderIds', []);
+        return Arr::wrap($request->get('orderIds', []));
     }
 
     /**
