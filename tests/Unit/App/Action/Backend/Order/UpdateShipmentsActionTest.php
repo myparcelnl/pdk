@@ -94,6 +94,9 @@ it('updates barcode in note', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderNoteRepository $notesRepository */
     $notesRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
 
+    expect($collection->count())
+        ->toBeGreaterThan(0);
+
     $collection->each(function (PdkOrder $order) use ($notesRepository) {
         $notes = $notesRepository->getFromOrder($order);
 
