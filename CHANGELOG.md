@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.23.0](https://github.com/myparcelnl/pdk/compare/v2.22.0...v2.23.0) (2023-09-19)
+
+
+### :sparkles: New Features
+
+* **orders:** change status after creating label ([#196](https://github.com/myparcelnl/pdk/issues/196)) ([10ae5d2](https://github.com/myparcelnl/pdk/commit/10ae5d220380984fcd9ad220929684fe1641b0bf))
+
+
+### :bug: Bug Fixes
+
+* **print-action:** cast order ids to array ([#198](https://github.com/myparcelnl/pdk/issues/198)) ([3ac559c](https://github.com/myparcelnl/pdk/commit/3ac559cf12b6b723128ea0b35365a5ee51e7252d))
+
 ## [2.22.0](https://github.com/myparcelnl/pdk/compare/v2.21.0...v2.22.0) (2023-09-18)
 
 
