@@ -10,11 +10,12 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
@@ -49,11 +50,34 @@ it('updates shipments', function () {
 });
 
 it('updates barcode in note', function () {
-    MockApi::enqueue(new ExampleGetShipmentsResponse());
-
-    $collection = factory(PdkOrderCollection::class, 2)
+    $collection = factory(PdkOrderCollection::class)
+        ->push(
+            factory(PdkOrder::class)->withShipments([factory(Shipment::class)->withId()]),
+            factory(PdkOrder::class)->withShipments([factory(Shipment::class)->withId()])
+        )
         ->store()
         ->make();
+
+    $ids = Arr::pluck(
+        (new Collection($collection->toArray()))
+            ->pluck('shipments')
+            ->flatten(1)
+            ->toArray(),
+        'id'
+    );
+
+    MockApi::enqueue(
+        new ExampleGetShipmentsResponse([
+            array_replace(ExampleGetShipmentsResponse::DEFAULT_SHIPMENT_DATA, [
+                'id'      => $ids[0],
+                'barcode' => '3SMYPA000000000',
+            ]),
+            array_replace(ExampleGetShipmentsResponse::DEFAULT_SHIPMENT_DATA, [
+                'id'      => $ids[1],
+                'barcode' => '3SMYPA000000001',
+            ]),
+        ])
+    );
 
     $orderIds = (new Collection($collection))
         ->pluck('externalIdentifier')
@@ -67,15 +91,17 @@ it('updates barcode in note', function () {
         'orderIds' => $orderIds,
     ]);
 
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository $orderRepository */
-    $orderRepository = Pdk::get(PdkOrderRepositoryInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderNoteRepository $notesRepository */
     $notesRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
 
-    $notes = $notesRepository->getFromOrder($orderRepository->get($orderIds[1]));
+    $collection->each(function (PdkOrder $order) use ($notesRepository) {
+        $notes = $notesRepository->getFromOrder($order);
 
-    expect($notes->count())
-        ->toBe(1)
-        ->and($notes->first()->orderIdentifier)
-        ->toBe($orderIds[1]);
+        expect($notes->count())
+            ->toBe(1)
+            ->and($notes->first()->orderIdentifier)
+            ->toBe($order->externalIdentifier)
+            ->and($notes->first()->barcode)
+            ->toBe($order->shipments->first()->barcode);
+    });
 });
