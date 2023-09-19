@@ -51,7 +51,7 @@ class UpdateOrderStatusAction extends AbstractOrderAction
             return $this->getResponse();
         }
 
-        $orderIds = $this->getOrderIds($request);
+        $orderIds = (array) $this->getOrderIds($request);
 
         $this->orderStatusService->updateStatus($orderIds, $status);
 
