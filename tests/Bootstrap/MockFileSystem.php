@@ -141,7 +141,7 @@ final class MockFileSystem implements FileSystemInterface
      */
     public function realpath(string $path): string
     {
-        return $path;
+        return $this->resolvePath($path);
     }
 
     /**
@@ -253,7 +253,9 @@ final class MockFileSystem implements FileSystemInterface
      */
     private function resolvePath(string $path): string
     {
-        $parts = explode('/', $path);
+        $trimmedPath = preg_replace('/\/+/', '/', $path);
+
+        $parts = explode('/', $trimmedPath);
         $newParts = [];
 
         foreach ($parts as $part) {
