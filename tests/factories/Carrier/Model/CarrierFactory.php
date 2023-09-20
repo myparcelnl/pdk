@@ -31,50 +31,64 @@ final class CarrierFactory extends AbstractModelFactory
     public function fromBpost(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_BPOST_NAME)
-            ->withId(Carrier::CARRIER_BPOST_ID);
+            ->withId(Carrier::CARRIER_BPOST_ID)
+            ->fromCarrier(Carrier::CARRIER_BPOST_NAME);
+    }
+
+    /**
+     * @param  string $name
+     *
+     * @return self
+     */
+    public function fromCarrier(string $name): self
+    {
+        return $this
+            ->withName($name)
+            ->withHuman($name)
+            ->withCapabilities(factory(CarrierCapabilities::class)->fromCarrier($name))
+            ->withReturnCapabilities(factory(CarrierCapabilities::class)->fromCarrier($name));
     }
 
     public function fromDhlEuroplus(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_DHL_EUROPLUS_NAME)
-            ->withId(Carrier::CARRIER_DHL_EUROPLUS_ID);
+            ->withId(Carrier::CARRIER_DHL_EUROPLUS_ID)
+            ->fromCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME);
     }
 
     public function fromDhlForYou(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_DHL_FOR_YOU_NAME)
-            ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID);
+            ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
+            ->fromCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME);
     }
 
     public function fromDhlParcelConnect(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME)
-            ->withId(Carrier::CARRIER_DHL_PARCEL_CONNECT_ID);
+            ->withId(Carrier::CARRIER_DHL_PARCEL_CONNECT_ID)
+            ->fromCarrier(Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME);
     }
 
     public function fromDpd(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_DPD_NAME)
-            ->withId(Carrier::CARRIER_DPD_ID);
+            ->withId(Carrier::CARRIER_DPD_ID)
+            ->fromCarrier(Carrier::CARRIER_DPD_NAME);
     }
 
     public function fromPostNL(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_POSTNL_NAME)
-            ->withId(Carrier::CARRIER_POSTNL_ID);
+            ->withId(Carrier::CARRIER_POSTNL_ID)
+            ->fromCarrier(Carrier::CARRIER_POSTNL_NAME);
     }
 
     public function fromUps(): self
     {
         return $this
-            ->withName(Carrier::CARRIER_UPS_NAME)
-            ->withId(Carrier::CARRIER_UPS_ID);
+            ->withId(Carrier::CARRIER_UPS_ID)
+            ->fromCarrier(Carrier::CARRIER_UPS_NAME);
     }
 
     public function getModel(): string

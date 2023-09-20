@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
@@ -19,6 +20,21 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  */
 final class CarrierCapabilitiesFactory extends AbstractModelFactory
 {
+    public function fromCarrier(string $carrierName): self
+    {
+        $foundCarrier = Platform::getCarriers()
+            ->firstWhere('name', $carrierName);
+
+        if (! $foundCarrier) {
+            return $this;
+        }
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        $capabilities = $foundCarrier->capabilities->toArrayWithoutNull();
+
+        return $this->with($capabilities);
+    }
+
     public function getModel(): string
     {
         return CarrierCapabilities::class;
