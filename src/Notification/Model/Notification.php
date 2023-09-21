@@ -7,11 +7,12 @@ namespace MyParcelNL\Pdk\Notification\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property string|null $title
- * @property string|null $content
- * @property string      $category
- * @property bool        $timeout
- * @property string      $variant
+ * @property string|null                                              $title
+ * @property string|null                                              $content
+ * @property string                                                   $category
+ * @property \MyParcelNL\Pdk\Notification\Model\NotificationTags|null $tags
+ * @property bool                                                     $timeout
+ * @property string                                                   $variant
  */
 class Notification extends Model
 {
@@ -26,11 +27,21 @@ class Notification extends Model
         self::VARIANT_ERROR,
         self::VARIANT_SUCCESS,
     ];
+    public const CATEGORY_ACTION  = 'action';
+    public const CATEGORY_API     = 'api';
+    public const CATEGORY_GENERAL = 'general';
+    public const DEFAULT_CATEGORY = self::CATEGORY_API;
+    public const CATEGORIES = [
+        self::CATEGORY_ACTION,
+        self::CATEGORY_API,
+        self::CATEGORY_GENERAL,
+    ];
 
     protected $attributes = [
         'title'    => null,
         'content'  => null,
-        'category' => 'api',
+        'category' => self::DEFAULT_CATEGORY,
+        'tags'     => null,
         'timeout'  => false,
         'variant'  => self::DEFAULT_VARIANT,
     ];
@@ -39,6 +50,7 @@ class Notification extends Model
         'title'    => 'string',
         'content'  => 'string',
         'category' => 'string',
+        'tags'     => NotificationTags::class,
         'timeout'  => 'bool',
         'variant'  => 'string',
     ];

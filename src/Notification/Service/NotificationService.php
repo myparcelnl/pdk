@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Notification\Service;
 use MyParcelNL\Pdk\Notification\Collection\NotificationCollection;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\Notification\Model\NotificationTags;
 
 class NotificationService implements NotificationServiceInterface
 {
@@ -21,18 +22,22 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  null|string    $title
-     * @param  null|string[]| $content
-     * @param  string         $variant
+     * @param  null|string           $title
+     * @param  null|string[]         $content
+     * @param  string                $variant
+     * @param  null|string           $category
+     * @param  null|NotificationTags $tags
      *
      * @return void
      */
-    public function add(?string $title, $content, string $variant): void
+    public function add(?string $title, $content, string $variant, ?string $category, ?NotificationTags $tags): void
     {
         $this->notifications->push([
-            'content' => $content,
-            'title'   => $title,
-            'variant' => $variant,
+            'content'  => $content,
+            'title'    => $title,
+            'variant'  => $variant,
+            'category' => $category ?? Notification::DEFAULT_CATEGORY,
+            'tags'     => $tags,
         ]);
     }
 
@@ -53,25 +58,29 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function error(string $title, $content): void
+    public function error(string $title, $content, ?string $category, ?NotificationTags $tags): void
     {
-        $this->add($title, $content, Notification::VARIANT_ERROR);
+        $this->add($title, $content, Notification::VARIANT_ERROR, $category, $tags);
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function info(string $title, $content): void
+    public function info(string $title, $content, ?string $category, ?NotificationTags $tags): void
     {
-        $this->add($title, $content, Notification::VARIANT_INFO);
+        $this->add($title, $content, Notification::VARIANT_INFO, $category, $tags);
     }
 
     /**
@@ -91,24 +100,28 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function success(string $title, $content): void
+    public function success(string $title, $content, ?string $category, ?NotificationTags $tags): void
     {
-        $this->add($title, $content, Notification::VARIANT_SUCCESS);
+        $this->add($title, $content, Notification::VARIANT_SUCCESS, $category, $tags);
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function warning(string $title, $content): void
+    public function warning(string $title, $content, ?string $category, ?NotificationTags $tags): void
     {
-        $this->add($title, $content, Notification::VARIANT_WARNING);
+        $this->add($title, $content, Notification::VARIANT_WARNING, $category, $tags);
     }
 }

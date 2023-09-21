@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Notification\Contract;
 
 use MyParcelNL\Pdk\Notification\Collection\NotificationCollection;
+use MyParcelNL\Pdk\Notification\Model\NotificationTags;
 
 interface NotificationServiceInterface
 {
     /**
-     * @param  null|string     $title
-     * @param  string|string[] $content
-     * @param  string          $variant
+     * @param  null|string                                              $title
+     * @param  string|string[]                                          $content
+     * @param  string                                                   $variant
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function add(?string $title, $content, string $variant): void;
+    public function add(?string $title, $content, string $variant, ?string $category, ?NotificationTags $tags): void;
 
     /**
      * @return \MyParcelNL\Pdk\Notification\Collection\NotificationCollection
@@ -23,20 +26,24 @@ interface NotificationServiceInterface
     public function all(): NotificationCollection;
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function error(string $title, $content): void;
+    public function error(string $title, $content, ?string $category, ?NotificationTags $tags): void;
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function info(string $title, $content): void;
+    public function info(string $title, $content, ?string $category, ?NotificationTags $tags): void;
 
     /**
      * @return bool
@@ -49,18 +56,22 @@ interface NotificationServiceInterface
     public function isNotEmpty(): bool;
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function success(string $title, $content): void;
+    public function success(string $title, $content, ?string $category, ?NotificationTags $tags): void;
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string                                                   $title
+     * @param  string|string[]                                          $content
+     * @param  null|string                                              $category
+     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
      *
      * @return void
      */
-    public function warning(string $title, $content): void;
+    public function warning(string $title, $content, ?string $category, ?NotificationTags $tags): void;
 }

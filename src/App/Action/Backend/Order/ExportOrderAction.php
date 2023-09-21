@@ -18,6 +18,8 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
+use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\Notification\Model\NotificationTags;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -212,7 +214,12 @@ class ExportOrderAction extends AbstractOrderAction
                     "Failed to export order $order->externalIdentifier",
                     array_map(static function (array $error) {
                         return sprintf('%s: %s', $error['property'], $error['message']);
-                    }, $validatorErrors)
+                    }, $validatorErrors),
+                    Notification::CATEGORY_ACTION,
+                    new NotificationTags([
+                        'action'   => 'orderExport',
+                        'orderIds' => $order->externalIdentifier,
+                    ])
                 );
 
                 return false;
@@ -220,7 +227,8 @@ class ExportOrderAction extends AbstractOrderAction
     }
 
     /**
-     * Reset shipment options that were originally set to "inherit" because they've been modified by the PdkOrderOptionsService.
+     * Reset shipment options that were originally set to "inherit" because they've been modified by the
+     * PdkOrderOptionsService.
      *
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $originalOrders
