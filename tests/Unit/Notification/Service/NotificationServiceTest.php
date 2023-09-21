@@ -7,15 +7,16 @@ namespace MyParcelNL\Pdk\Notification\Service;
 
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\Notification\Model\NotificationTags;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
 
-it('can add notifications', function (string $variant, $content) {
-    Notifications::add('title', $content, $variant);
-    Notifications::{$variant}('title', $content);
+it('can add notifications', function (string $variant, $content, ?string $category, ?NotificationTags $tags) {
+    Notifications::add('title', $content, $variant, $category, $tags);
+    Notifications::{$variant}('title', $content, $category, $tags);
 
     $collection = Notifications::all();
     $items      = $collection->toArray();
@@ -26,7 +27,8 @@ it('can add notifications', function (string $variant, $content) {
             'title'    => 'title',
             'content'  => $content,
             'variant'  => $variant,
-            'category' => 'api',
+            'category' => $category ?? 'api',
+            'tags'     => null === $tags ? null : $tags->toArray(),
             'timeout'  => false,
         ]);
 })
@@ -34,6 +36,14 @@ it('can add notifications', function (string $variant, $content) {
     ->with([
         'string content' => [['content']],
         'array content'  => [[['content line 1', 'content line 2']]],
+    ])
+    ->with([
+        'string category' => 'api',
+        'null category'   => null,
+    ])
+    ->with([
+        'some tags' => new NotificationTags(['action' => 'myAction', 'orderIds' => '123']),
+        'no tags'   => null,
     ]);
 
 it('can show if there are notifications', function () {
@@ -42,7 +52,7 @@ it('can show if there are notifications', function () {
         ->and(Notifications::isNotEmpty())
         ->toBeFalse();
 
-    Notifications::add('title', 'content', Notification::VARIANT_SUCCESS);
+    Notifications::add('title', 'content', Notification::VARIANT_SUCCESS, null, null);
 
     expect(Notifications::isEmpty())
         ->toBeFalse()

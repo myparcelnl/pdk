@@ -30,8 +30,13 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return void
      */
-    public function add(?string $title, $content, string $variant, ?string $category, ?NotificationTags $tags): void
-    {
+    public function add(
+        ?string           $title,
+                          $content,
+        string            $variant = Notification::DEFAULT_VARIANT,
+        ?string           $category = Notification::DEFAULT_CATEGORY,
+        ?NotificationTags $tags = null
+    ): void {
         $this->notifications->push([
             'content'  => $content,
             'title'    => $title,
@@ -65,8 +70,12 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return void
      */
-    public function error(string $title, $content, ?string $category, ?NotificationTags $tags): void
-    {
+    public function error(
+        string            $title,
+                          $content,
+        ?string           $category = Notification::DEFAULT_CATEGORY,
+        ?NotificationTags $tags = null
+    ): void {
         $this->add($title, $content, Notification::VARIANT_ERROR, $category, $tags);
     }
 
@@ -78,8 +87,12 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return void
      */
-    public function info(string $title, $content, ?string $category, ?NotificationTags $tags): void
-    {
+    public function info(
+        string            $title,
+                          $content,
+        ?string           $category = Notification::DEFAULT_CATEGORY,
+        ?NotificationTags $tags = null
+    ): void {
         $this->add($title, $content, Notification::VARIANT_INFO, $category, $tags);
     }
 
@@ -107,8 +120,12 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return void
      */
-    public function success(string $title, $content, ?string $category, ?NotificationTags $tags): void
-    {
+    public function success(
+        string            $title,
+                          $content,
+        ?string           $category = Notification::DEFAULT_CATEGORY,
+        ?NotificationTags $tags = null
+    ): void {
         $this->add($title, $content, Notification::VARIANT_SUCCESS, $category, $tags);
     }
 
@@ -120,8 +137,12 @@ class NotificationService implements NotificationServiceInterface
      *
      * @return void
      */
-    public function warning(string $title, $content, ?string $category, ?NotificationTags $tags): void
-    {
+    public function warning(
+        string            $title,
+                          $content,
+        ?string           $category = Notification::DEFAULT_CATEGORY,
+        ?NotificationTags $tags = null
+    ): void {
         $this->add($title, $content, Notification::VARIANT_WARNING, $category, $tags);
     }
 }
