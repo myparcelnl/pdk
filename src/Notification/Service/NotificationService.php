@@ -63,10 +63,10 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string                                                   $title
-     * @param  string|string[]                                          $content
-     * @param  null|string                                              $category
-     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
+     * @param  string                $title
+     * @param  string|string[]       $content
+     * @param  null|string           $category
+     * @param  null|NotificationTags $tags
      *
      * @return void
      */
@@ -80,10 +80,10 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string                                                   $title
-     * @param  string|string[]                                          $content
-     * @param  null|string                                              $category
-     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
+     * @param  string                $title
+     * @param  string|string[]       $content
+     * @param  null|string           $category
+     * @param  null|NotificationTags $tags
      *
      * @return void
      */
@@ -113,10 +113,10 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string                                                   $title
-     * @param  string|string[]                                          $content
-     * @param  null|string                                              $category
-     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
+     * @param  string                $title
+     * @param  string|string[]       $content
+     * @param  null|string           $category
+     * @param  null|NotificationTags $tags
      *
      * @return void
      */
@@ -130,10 +130,10 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string                                                   $title
-     * @param  string|string[]                                          $content
-     * @param  null|string                                              $category
-     * @param  null|\MyParcelNL\Pdk\Notification\Model\NotificationTags $tags
+     * @param  string                $title
+     * @param  string|string[]       $content
+     * @param  null|string           $category
+     * @param  null|NotificationTags $tags
      *
      * @return void
      */
