@@ -182,11 +182,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Fulfilment/Request/PostOrdersRequest.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @param has invalid value \\(null\\|string\\[\\]\\| \\$content\\)\\: Unexpected token "\\$content", expected type at offset 71$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Notification/Service/NotificationService.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type MyParcelNL\\\\Pdk\\\\Settings\\\\Model\\\\Settings\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Settings/Repository/AbstractSettingsRepository.php',
