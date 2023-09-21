@@ -8,6 +8,7 @@
       </value>
     </option>
     <option name="LINE_SEPARATOR" value="&#10;" />
+    <option name="FORMATTER_TAGS_ENABLED" value="false" />
     <option name="SOFT_MARGINS" value="80,120" />
     <CssCodeStyleSettings>
       <option name="HEX_COLOR_UPPER_CASE" value="true" />
@@ -83,6 +84,10 @@
       <option name="SPACE_BEFORE_ASYNC_ARROW_LPAREN" value="false" />
       <option name="IMPORT_SORT_MEMBERS" value="false" />
     </JSCodeStyleSettings>
+    <JSON>
+      <option name="OBJECT_WRAPPING" value="5" />
+      <option name="ARRAY_WRAPPING" value="5" />
+    </JSON>
     <LessCodeStyleSettings>
       <option name="HEX_COLOR_LOWER_CASE" value="true" />
       <option name="HEX_COLOR_SHORT_FORMAT" value="true" />
@@ -1273,6 +1278,7 @@
     </codeStyleSettings>
     <codeStyleSettings language="JSON">
       <option name="KEEP_LINE_BREAKS" value="false" />
+      <option name="WRAP_LONG_LINES" value="true" />
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="2" />
         <option name="TAB_SIZE" value="2" />

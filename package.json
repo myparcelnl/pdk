@@ -1,43 +1,42 @@
 {
-    "name": "@myparcel/php-pdk",
-    "private": true,
-    "license": "MIT",
-    "scripts": {
-        "analyse": "yarn docker composer analyse",
-        "analyse:generate": "yarn docker composer analyse:generate",
-        "analyze": "yarn analyse",
-        "analyze:generate": "yarn analyse:generate",
-        "console": "yarn docker composer console",
-        "docker": "docker compose run --rm -T php",
-        "prepare": "is-ci || husky install",
-        "quality": "yarn docker composer quality",
-        "quality:fix": "yarn docker composer quality:fix",
-        "test": "yarn docker composer test",
-        "test:coverage": "yarn test:unit:coverage",
-        "test:integration": "yarn docker composer test:integration",
-        "test:unit": "yarn docker composer test:unit",
-        "test:unit:coverage": "yarn docker composer test:unit:coverage",
-        "test:unit:snapshot": "yarn docker composer test:unit:snapshot",
-        "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
-    },
-    "lint-staged": {
-        "*.md": "prettier --write",
-        "*.php": "yarn quality:fix && yarn test"
-    },
-    "prettier": "@myparcel/prettier-config",
-    "release": {
-        "extends": "@myparcel/semantic-release-config/github-composer"
-    },
-    "devDependencies": {
-        "@myparcel/prettier-config": "^1.1.0",
-        "@myparcel/semantic-release-config": "^4.2.3",
-        "husky": "^8.0.3",
-        "is-ci": "^3.0.1",
-        "lint-staged": "^13.1.1",
-        "prettier": "^2.8.4"
-    },
-    "packageManager": "yarn@3.6.0",
-    "volta": {
-        "node": "18.17.0"
-    }
+  "name": "@myparcel/php-pdk",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "analyse": "yarn docker composer analyse",
+    "analyse:generate": "yarn docker composer analyse:generate",
+    "analyze": "yarn analyse",
+    "analyze:generate": "yarn analyse:generate",
+    "console": "yarn docker composer console",
+    "docker": "docker compose run --rm -T php",
+    "prepare": "is-ci || husky install",
+    "quality": "yarn docker composer quality",
+    "quality:fix": "yarn docker composer quality:fix",
+    "test": "yarn docker composer test",
+    "test:coverage": "yarn test:unit:coverage",
+    "test:integration": "yarn docker composer test:integration",
+    "test:unit": "yarn docker composer test:unit",
+    "test:unit:coverage": "yarn docker composer test:unit:coverage",
+    "test:unit:snapshot": "yarn docker composer test:unit:snapshot",
+    "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
+  },
+  "lint-staged": {
+    "*.{md,html,yml,json}": "prettier --write",
+    "*.php": "yarn quality:fix && yarn test"
+  },
+  "release": {
+    "extends": "@myparcel/semantic-release-config/github-composer"
+  },
+  "devDependencies": {
+    "@myparcel/prettier-config": "^1.1.0",
+    "@myparcel/semantic-release-config": "^4.2.3",
+    "husky": "^8.0.3",
+    "is-ci": "^3.0.1",
+    "lint-staged": "^13.1.1",
+    "prettier": "^2.8.4"
+  },
+  "packageManager": "yarn@3.6.0",
+  "volta": {
+    "node": "18.17.0"
+  }
 }
