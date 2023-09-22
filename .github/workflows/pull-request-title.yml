@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  validate-pr-title:
     runs-on: ubuntu-22.04
     steps:
       - uses: myparcelnl/actions/pr-validate-title-conventional@v3

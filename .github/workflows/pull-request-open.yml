@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  assign-author:
+  pr-assign-author:
     runs-on: ubuntu-22.04
     steps:
       - uses: myparcelnl/actions/pr-assign-author@v3
