@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "behat/behat": "^3.13",
-        "brick/varexporter": "^0.3.8",
+        "brick/varexporter": "^0.3.8 || ^0.4.0",
         "guzzlehttp/guzzle": "^7.5",
         "myparcelnl/devtools": ">= 1",
         "nette/robot-loader": ">= 3",
