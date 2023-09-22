@@ -216,10 +216,10 @@ class ExportOrderAction extends AbstractOrderAction
                         return sprintf('%s: %s', $error['property'], $error['message']);
                     }, $validatorErrors),
                     Notification::CATEGORY_ACTION,
-                    new NotificationTags([
-                        'action'   => 'orderExport',
+                    [
+                        'action'   => PdkBackendActions::EXPORT_ORDERS,
                         'orderIds' => $order->externalIdentifier,
-                    ])
+                    ]
                 );
 
                 return false;
