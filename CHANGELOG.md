@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.23.1](https://github.com/myparcelnl/pdk/compare/v2.23.0...v2.23.1) (2023-09-22)
+
+
+### :bug: Bug Fixes
+
+* **notifications:** pass notifications to frontend ([#199](https://github.com/myparcelnl/pdk/issues/199)) ([da5e730](https://github.com/myparcelnl/pdk/commit/da5e73016bc3cdc3ddc6d9a687a99ea9e703f823))
+
 ## [2.23.0](https://github.com/myparcelnl/pdk/compare/v2.22.0...v2.23.0) (2023-09-19)
 
 
