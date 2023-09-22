@@ -7,13 +7,14 @@ namespace MyParcelNL\Pdk\Facade;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 
 /**
- * @method static void add(string $title, string|string[] $content, string $level = 'info')
- * @method static void error(string $title, string|string[] $content)
- * @method static void warning(string $title, string|string[] $content)
- * @method static void info(string $title, string|string[] $content)
- * @method static void success(string $title, string|string[] $content)
+ * @method static void add(string $title, null|string|string[] $content, string $level, string $category = Notification::DEFAULT_CATEGORY, array $tags = [])
+ * @method static void error(string $title, null|string|string[] $content, string $category = Notification::DEFAULT_CATEGORY, array $tags = [])
+ * @method static void warning(string $title, null|string|string[] $content, string $category = Notification::DEFAULT_CATEGORY, array $tags = [])
+ * @method static void info(string $title, null|string|string[] $content, string $category = Notification::DEFAULT_CATEGORY, array $tags = [])
+ * @method static void success(string $title, null|string|string[] $content, string $category = Notification::DEFAULT_CATEGORY, array $tags = [])
  * @method static Collection all()
  * @method static void clear()
  * @method static bool isEmpty()

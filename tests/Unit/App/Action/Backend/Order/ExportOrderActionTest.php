@@ -162,6 +162,7 @@ it('exports order without customer information if setting is false', function (
 
     if ($orderMode && ! $collection->contains('billingAddress', '!=', null)) {
         expect($postedAddress)->toBeNull();
+
         return;
     }
 
@@ -220,8 +221,12 @@ it('adds notification if shipment export fails', function () {
                 'customsDeclaration: NULL value found, but an object is required',
             ],
             'variant'  => Notification::VARIANT_ERROR,
-            'category' => 'api',
+            'category' => Notification::CATEGORY_ACTION,
             'timeout'  => false,
+            'tags'     => [
+                'action'   => PdkBackendActions::EXPORT_ORDERS,
+                'orderIds' => 'error',
+            ],
         ]);
 });
 

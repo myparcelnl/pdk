@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Notification\Contract;
 
 use MyParcelNL\Pdk\Notification\Collection\NotificationCollection;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 
 interface NotificationServiceInterface
 {
@@ -12,10 +13,18 @@ interface NotificationServiceInterface
      * @param  null|string     $title
      * @param  string|string[] $content
      * @param  string          $variant
+     * @param  null|string     $category
+     * @param  array           $tags
      *
      * @return void
      */
-    public function add(?string $title, $content, string $variant): void;
+    public function add(
+        ?string $title,
+                $content,
+        string  $variant,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void;
 
     /**
      * @return \MyParcelNL\Pdk\Notification\Collection\NotificationCollection
@@ -25,18 +34,32 @@ interface NotificationServiceInterface
     /**
      * @param  string          $title
      * @param  string|string[] $content
+     * @param  null|string     $category
+     * @param  array           $tags
      *
      * @return void
      */
-    public function error(string $title, $content): void;
+    public function error(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void;
 
     /**
      * @param  string          $title
      * @param  string|string[] $content
+     * @param  null|string     $category
+     * @param  array           $tags
      *
      * @return void
      */
-    public function info(string $title, $content): void;
+    public function info(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void;
 
     /**
      * @return bool
@@ -51,16 +74,30 @@ interface NotificationServiceInterface
     /**
      * @param  string          $title
      * @param  string|string[] $content
+     * @param  null|string     $category
+     * @param  array           $tags
      *
      * @return void
      */
-    public function success(string $title, $content): void;
+    public function success(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void;
 
     /**
      * @param  string          $title
      * @param  string|string[] $content
+     * @param  null|string     $category
+     * @param  array           $tags
      *
      * @return void
      */
-    public function warning(string $title, $content): void;
+    public function warning(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void;
 }

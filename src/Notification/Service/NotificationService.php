@@ -21,18 +21,27 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  null|string    $title
-     * @param  null|string[]| $content
-     * @param  string         $variant
+     * @param  null|string          $title
+     * @param  null|string|string[] $content
+     * @param  string               $variant
+     * @param  null|string          $category
+     * @param  array                $tags
      *
      * @return void
      */
-    public function add(?string $title, $content, string $variant): void
-    {
+    public function add(
+        ?string $title,
+                $content,
+        string  $variant = Notification::DEFAULT_VARIANT,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void {
         $this->notifications->push([
-            'content' => $content,
-            'title'   => $title,
-            'variant' => $variant,
+            'content'  => $content,
+            'title'    => $title,
+            'variant'  => $variant,
+            'category' => $category ?? Notification::DEFAULT_CATEGORY,
+            'tags'     => $tags,
         ]);
     }
 
@@ -53,25 +62,37 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string               $title
+     * @param  null|string|string[] $content
+     * @param  null|string          $category
+     * @param  array                $tags
      *
      * @return void
      */
-    public function error(string $title, $content): void
-    {
-        $this->add($title, $content, Notification::VARIANT_ERROR);
+    public function error(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void {
+        $this->add($title, $content, Notification::VARIANT_ERROR, $category, $tags);
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string               $title
+     * @param  null|string|string[] $content
+     * @param  null|string          $category
+     * @param  array                $tags
      *
      * @return void
      */
-    public function info(string $title, $content): void
-    {
-        $this->add($title, $content, Notification::VARIANT_INFO);
+    public function info(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void {
+        $this->add($title, $content, Notification::VARIANT_INFO, $category, $tags);
     }
 
     /**
@@ -91,24 +112,36 @@ class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string               $title
+     * @param  null|string|string[] $content
+     * @param  null|string          $category
+     * @param  array                $tags
      *
      * @return void
      */
-    public function success(string $title, $content): void
-    {
-        $this->add($title, $content, Notification::VARIANT_SUCCESS);
+    public function success(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void {
+        $this->add($title, $content, Notification::VARIANT_SUCCESS, $category, $tags);
     }
 
     /**
-     * @param  string          $title
-     * @param  string|string[] $content
+     * @param  string               $title
+     * @param  null|string|string[] $content
+     * @param  null|string          $category
+     * @param  array                $tags
      *
      * @return void
      */
-    public function warning(string $title, $content): void
-    {
-        $this->add($title, $content, Notification::VARIANT_WARNING);
+    public function warning(
+        string  $title,
+                $content,
+        ?string $category = Notification::DEFAULT_CATEGORY,
+        array   $tags = []
+    ): void {
+        $this->add($title, $content, Notification::VARIANT_WARNING, $category, $tags);
     }
 }
