@@ -14,23 +14,15 @@ uses()->group('settings', 'tri-state');
 
 usesShared(new UsesMockPdkInstance());
 
-function testCoerce(array $values): void
+function doTest(string $method, array $values)
 {
     $service = Pdk::get(TriStateServiceInterface::class);
     $result  = array_pop($values);
 
-    expect($service->coerce(...array_reverse($values)))->toBe($result);
+    expect($service->{$method}(...array_reverse($values)))->toBe($result);
 }
 
-function testResolve(array $values): void
-{
-    $service = Pdk::get(TriStateServiceInterface::class);
-    $result  = array_pop($values);
-
-    expect($service->resolve(...array_reverse($values)))->toBe($result);
-}
-
-it('coerces values', function (...$values) { testCoerce($values); })->with([
+it('coerces values', function (...$values) { doTest('coerce', $values); })->with([
     '-1 -> -1'           => [-1, -1],
     '0 -> 0'             => [0, 0],
     '1 -> 1'             => [1, 1],
@@ -43,9 +35,22 @@ it('coerces values', function (...$values) { testCoerce($values); })->with([
     '_, _, c, _ -> c'    => ['', '', 'c', '', 'c'],
 ]);
 
-it('coerces tri-state values', function (...$values) { testCoerce($values); })->with('triState3');
+it('coerces tri-state values', function (...$values) { doTest('coerce', $values); })->with('triState3');
 
-it('resolves values', function (...$values) { testResolve($values); })->with([
+it('coerces string values', function (...$values) { doTest('coerceString', $values); })->with([
+    '-1 -> -1'          => [-1, -1],
+    '0 -> _'            => [0, ''],
+    '1 -> "1"'          => [1, '1'],
+    'empty array -> _'  => [[], ''],
+    'empty string -> _' => ['', ''],
+    'false -> _'        => [false, ''],
+    'null -> _'         => [null, ''],
+    'true -> "1"'       => [true, '1'],
+    'a, _, b -> b'      => ['a', '', 'b', 'b'],
+    '_, _, c, _ -> _'   => ['', '', 'c', '', ''],
+]);
+
+it('resolves values', function (...$values) { doTest('resolve', $values); })->with([
     '-1 -> 0'           => [-1, 0],
     '0 -> 0'            => [0, 0],
     '1 -> 1'            => [1, 1],
@@ -58,4 +63,19 @@ it('resolves values', function (...$values) { testResolve($values); })->with([
     '_, _, c, _ -> c'   => ['', '', 'c', '', 'c'],
 ]);
 
-it('resolves tri-state values', function (...$values) { testResolve($values); })->with('triState3Coerced');
+it('resolves tri-state values', function (...$values) { doTest('resolve', $values); })->with('triState3Coerced');
+
+it('resolves string values', function (...$values) { doTest('resolveString', $values); })->with([
+    '-1 -> -1'          => [-1, ''],
+    '0 -> _'            => [0, ''],
+    '1 -> "1'           => [1, '1'],
+    'empty array -> _'  => [[], ''],
+    'empty string -> _' => ['', ''],
+    'false -> _'        => [false, ''],
+    'null -> _'         => [null, ''],
+    'true -> "1"'       => [true, '1'],
+    '1, _, 2 -> 2'      => ['1', '', '2', '2'],
+    '1, 2, 3, _ -> 3'   => ['1', '2', '3', '', '3'],
+    'a, _, b -> b'      => ['a', '', 'b', 'b'],
+    '_, _, c, _ -> c'   => ['', '', 'c', '', 'c'],
+]);

@@ -1,52 +1,47 @@
 {
-    "account": {
-        "id": "account",
-        "apiKeyValid": true
-    },
-    "order": {
-        "id": "order",
-        "barcodeInNote": false,
-        "conceptShipments": true,
-        "emptyDigitalStampWeight": 0,
-        "emptyMailboxWeight": 0,
-        "emptyParcelWeight": 0,
-        "orderMode": false,
-        "processDirectly": false,
-        "saveCustomerAddress": false,
-        "sendNotificationAfter": "-1",
-        "sendReturnEmail": false,
-        "shareCustomerInformation": false,
-        "statusOnLabelCreate": "-1",
-        "statusWhenDelivered": "-1",
-        "statusWhenLabelScanned": "-1",
-        "trackTraceInAccount": false,
-        "trackTraceInEmail": false
-    },
-    "label": {
-        "id": "label",
-        "format": "a4",
-        "output": "open",
-        "position": [
-            1,
-            2,
-            3,
-            4
-        ],
-        "prompt": false
-    },
-    "customs": {
-        "id": "customs",
-        "countryOfOrigin": "BE",
-        "customsCode": "0",
-        "packageContents": "1"
-    },
-    "checkout": {
-        "id": "checkout",
-        "allowedShippingMethods": [],
-        "pickupLocationsDefaultView": "map",
-        "priceType": "included",
-        "enableDeliveryOptions": true,
-        "enableDeliveryOptionsWhenNotInStock": true,
-        "useSeparateAddressFields": false
-    }
+  "account": {
+    "id": "account",
+    "apiKeyValid": true
+  },
+  "order": {
+    "id": "order",
+    "barcodeInNote": false,
+    "conceptShipments": true,
+    "emptyDigitalStampWeight": 0,
+    "emptyMailboxWeight": 0,
+    "emptyParcelWeight": 0,
+    "orderMode": false,
+    "processDirectly": false,
+    "saveCustomerAddress": false,
+    "sendNotificationAfter": -1,
+    "sendReturnEmail": false,
+    "shareCustomerInformation": false,
+    "statusOnLabelCreate": -1,
+    "statusWhenDelivered": -1,
+    "statusWhenLabelScanned": -1,
+    "trackTraceInAccount": false,
+    "trackTraceInEmail": false
+  },
+  "label": {
+    "id": "label",
+    "format": "a4",
+    "output": "open",
+    "position": [1, 2, 3, 4],
+    "prompt": false
+  },
+  "customs": {
+    "id": "customs",
+    "countryOfOrigin": "BE",
+    "customsCode": "0",
+    "packageContents": "1"
+  },
+  "checkout": {
+    "id": "checkout",
+    "allowedShippingMethods": [],
+    "pickupLocationsDefaultView": "map",
+    "priceType": "included",
+    "enableDeliveryOptions": true,
+    "enableDeliveryOptionsWhenNotInStock": true,
+    "useSeparateAddressFields": false
+  }
 }

@@ -51,6 +51,20 @@ class TriStateService implements TriStateServiceInterface
     }
 
     /**
+     * @param  mixed $value
+     *
+     * @return string|int
+     */
+    public function coerceString($value)
+    {
+        if (self::INHERIT === $value) {
+            return self::INHERIT;
+        }
+
+        return empty($value) ? '' : (string) $value;
+    }
+
+    /**
      * Resolves to the first non-INHERIT value.
      *
      * @param  mixed ...$values
@@ -71,7 +85,7 @@ class TriStateService implements TriStateServiceInterface
     {
         $value = $this->resolveValues($values);
 
-        return null === $value ? null : (string) $value;
+        return $value ? (string) $value : '';
     }
 
     /**

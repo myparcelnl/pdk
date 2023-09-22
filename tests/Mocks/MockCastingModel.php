@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @property Collection        $collection
@@ -58,6 +59,12 @@ class MockCastingModel extends Model
         'string_float'      => '2',
         'without_a_cast'    => 'whatever',
         'null'              => null,
+        'tristate1'         => TriStateService::ENABLED,
+        'tristate2'         => TriStateService::INHERIT,
+        'tristateCoerced1'  => 1000,
+        'tristateCoerced2'  => TriStateService::INHERIT,
+        'tristateString1'   => 'hello',
+        'tristateString2'   => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -77,5 +84,11 @@ class MockCastingModel extends Model
         'int_float'         => 'float',
         'string_float'      => 'float',
         'null'              => 'string',
+        'tristate1'         => TriStateService::TYPE_STRICT,
+        'tristate2'         => TriStateService::TYPE_STRICT,
+        'tristateCoerced1'  => TriStateService::TYPE_COERCED,
+        'tristateCoerced2'  => TriStateService::TYPE_COERCED,
+        'tristateString1'   => TriStateService::TYPE_STRING,
+        'tristateString2'   => TriStateService::TYPE_STRING,
     ];
 }
