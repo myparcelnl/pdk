@@ -221,10 +221,10 @@ it('adds notification if shipment export fails', function () {
                 'customsDeclaration: NULL value found, but an object is required',
             ],
             'variant'  => Notification::VARIANT_ERROR,
-            'category' => 'action',
+            'category' => Notification::CATEGORY_ACTION,
             'timeout'  => false,
             'tags'     => [
-                'action'   => 'orderExport',
+                'action'   => PdkBackendActions::EXPORT_ORDERS,
                 'orderIds' => 'error',
             ],
         ]);
