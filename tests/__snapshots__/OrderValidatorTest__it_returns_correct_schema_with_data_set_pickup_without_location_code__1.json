@@ -1,5 +1,5 @@
 {
-    "description": "myparcel\/order\/postnl\/nl_package",
+    "description": "myparcel\/order\/postnl\/morning_evening",
     "type": "object",
     "additionalItems": false,
     "required": [
@@ -171,8 +171,7 @@
                     "properties": {
                         "ageCheck": {
                             "enum": [
-                                0,
-                                1
+                                0
                             ]
                         },
                         "hideSender": {
@@ -226,7 +225,6 @@
                         },
                         "onlyRecipient": {
                             "enum": [
-                                0,
                                 1
                             ]
                         },
@@ -243,11 +241,14 @@
                         },
                         "signature": {
                             "enum": [
-                                0,
                                 1
                             ]
                         }
-                    }
+                    },
+                    "required": [
+                        "onlyRecipient",
+                        "signature"
+                    ]
                 }
             }
         },
@@ -446,6 +447,7 @@
                                         "morning",
                                         "standard",
                                         "evening",
+                                        "pickup",
                                         null
                                     ]
                                 }

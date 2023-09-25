@@ -33,6 +33,11 @@ return [
                                     'name'   => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
                                     'schema' => 'order/postnl/morning_evening',
                                 ],
+                                [
+                                    'id'     => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                                    'name'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                                    'schema' => 'order/postnl/morning_evening',
+                                ],
                             ],
                         ],
                         [

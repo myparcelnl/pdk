@@ -154,7 +154,7 @@
             "deliveryOptions": {
               "properties": {
                 "deliveryType": {
-                  "enum": ["morning", "standard", "evening", null]
+                  "enum": ["morning", "standard", "evening", "pickup", null]
                 }
               }
             }
