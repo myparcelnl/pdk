@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.24.0](https://github.com/myparcelnl/pdk/compare/v2.23.1...v2.24.0) (2023-09-25)
+
+
+### :sparkles: New Features
+
+* **carriers:** add ups ([#202](https://github.com/myparcelnl/pdk/issues/202)) ([ecbbb2e](https://github.com/myparcelnl/pdk/commit/ecbbb2e228fe7b74fcdfdbc30b1c49ff8c0ae6f9))
+
 ## [2.23.1](https://github.com/myparcelnl/pdk/compare/v2.23.0...v2.23.1) (2023-09-22)
 
 
