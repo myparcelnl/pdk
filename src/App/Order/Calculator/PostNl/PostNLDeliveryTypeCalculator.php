@@ -25,26 +25,19 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
             return;
         }
 
-        if (! $this->isMorningOrEveningDelivery()) {
-            return;
+        switch ($this->order->deliveryOptions->deliveryType) {
+            case DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME:
+                $deliveryOptions->shipmentOptions->signature = TriStateService::ENABLED;
+                break;
+
+            case DeliveryOptions::DELIVERY_TYPE_MORNING_NAME:
+            case DeliveryOptions::DELIVERY_TYPE_EVENING_NAME:
+                $shipmentOptions = $deliveryOptions->shipmentOptions;
+
+                $shipmentOptions->ageCheck      = TriStateService::DISABLED;
+                $shipmentOptions->onlyRecipient = TriStateService::ENABLED;
+                $shipmentOptions->signature     = TriStateService::ENABLED;
+                break;
         }
-
-        $shipmentOptions = $deliveryOptions->shipmentOptions;
-
-        $shipmentOptions->ageCheck      = TriStateService::DISABLED;
-        $shipmentOptions->onlyRecipient = TriStateService::ENABLED;
-        $shipmentOptions->signature     = TriStateService::ENABLED;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isMorningOrEveningDelivery(): bool
-    {
-        return in_array(
-            $this->order->deliveryOptions->deliveryType,
-            [DeliveryOptions::DELIVERY_TYPE_MORNING_NAME, DeliveryOptions::DELIVERY_TYPE_EVENING_NAME],
-            true
-        );
     }
 }

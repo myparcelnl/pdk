@@ -84,6 +84,32 @@
         }
     },
     {
+        "id": 8,
+        "name": "ups",
+        "human": "UPS",
+        "enabled": false,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "standard"
+            ],
+            "features": {
+                "labelDescriptionLength": 45
+            },
+            "packageTypes": [
+                "package"
+            ],
+            "shipmentOptions": {
+                "ageCheck": false,
+                "onlyRecipient": false,
+                "return": false
+            }
+        }
+    },
+    {
         "id": 9,
         "name": "dhlforyou",
         "human": "DHL For You",

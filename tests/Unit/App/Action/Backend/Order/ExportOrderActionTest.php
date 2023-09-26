@@ -264,3 +264,43 @@ it('exports order and directly returns barcode if concept shipments is off', fun
         ->and($responseShipments)->each->toHaveLength(1)
         ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
 });
+
+it('exports pickup order without signature', function () {
+    factory(CarrierSettings::class)
+        ->withId((string) Carrier::CARRIER_POSTNL_ID)
+        ->withExportSignature(false)
+        ->store();
+
+    $orderWithPickup = factory(PdkOrder::class)
+        ->withOrderDate('2020-01-01T00:00:00+00:00')
+        ->withDeliveryOptionsWithPickupLocation()
+        ->store()
+        ->make();
+
+    $collection = factory(PdkOrderCollection::class)
+        ->push($orderWithPickup)
+        ->store()
+        ->make();
+
+    MockApi::enqueue(
+        new ExamplePostShipmentsResponse()
+    );
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
+
+    $content = json_decode($response->getContent(), true);
+
+    $responseOrders    = $content['data']['orders'];
+    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($responseOrders)
+        ->toHaveLength(count($responseOrders))
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        ->and($responseShipments)->each->toHaveLength(1)
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+});

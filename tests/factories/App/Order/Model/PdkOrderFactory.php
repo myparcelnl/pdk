@@ -112,6 +112,7 @@ final class PdkOrderFactory extends AbstractModelFactory
     {
         return $this->withDeliveryOptions(
             factory(DeliveryOptions::class)
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
                 ->withPickupLocation($pickupLocation ?? factory(RetailLocation::class))
         );
     }

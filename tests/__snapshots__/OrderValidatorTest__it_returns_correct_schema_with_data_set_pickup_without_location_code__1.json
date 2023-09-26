@@ -367,6 +367,7 @@
                                 "deliveryType": {
                                     "enum": [
                                         "standard",
+                                        "pickup",
                                         null
                                     ]
                                 }
