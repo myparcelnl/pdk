@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\DhlEuroplus\DhlEuroplusCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlForYou\DhlForYouCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\PostNl\PostNLCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
@@ -16,8 +17,9 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
      * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
     private const CARRIER_CALCULATOR_MAP = [
-        Carrier::CARRIER_POSTNL_NAME      => PostNLCalculator::class,
-        Carrier::CARRIER_DHL_FOR_YOU_NAME => DhlForYouCalculator::class,
+        Carrier::CARRIER_POSTNL_NAME       => PostNLCalculator::class,
+        Carrier::CARRIER_DHL_FOR_YOU_NAME  => DhlForYouCalculator::class,
+        Carrier::CARRIER_DHL_EUROPLUS_NAME => DhlEuroplusCalculator::class,
     ];
 
     public function calculate(): void

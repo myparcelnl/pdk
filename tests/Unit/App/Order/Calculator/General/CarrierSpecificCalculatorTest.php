@@ -145,6 +145,25 @@ it('calculates options for dhlforyou', function (
     ],
 ]);
 
+it('calculates options for dhl europlus', function (
+    ?callable              $orderCallback,
+    ShipmentOptionsFactory $shipmentOptions,
+    array                  $result
+) {
+    doTest(Carrier::CARRIER_DHL_EUROPLUS_NAME, $orderCallback, $shipmentOptions, $result);
+})->with([
+    'when signature is disabled, enable it anyway' => [
+        null,
+        function () {
+            return factory(ShipmentOptions::class)
+                ->withSignature(0);
+        },
+        [
+            ShipmentOptions::SIGNATURE => TriStateService::ENABLED,
+        ],
+    ],
+]);
+
 it('should do nothing for other carriers', function (string $carrierName) {
     $result = [
         ShipmentOptions::AGE_CHECK      => TriStateService::ENABLED,
@@ -155,7 +174,6 @@ it('should do nothing for other carriers', function (string $carrierName) {
     doTest($carrierName, null, factory(ShipmentOptions::class)->withAllOptions(), $result);
 })->with([
     Carrier::CARRIER_BPOST_NAME,
-    Carrier::CARRIER_DHL_EUROPLUS_NAME,
     Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
     Carrier::CARRIER_DPD_NAME,
 ]);
