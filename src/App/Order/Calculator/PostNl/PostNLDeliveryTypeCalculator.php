@@ -29,6 +29,7 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
             case DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME:
                 $deliveryOptions->shipmentOptions->signature = TriStateService::ENABLED;
                 break;
+
             case DeliveryOptions::DELIVERY_TYPE_MORNING_NAME:
             case DeliveryOptions::DELIVERY_TYPE_EVENING_NAME:
                 $shipmentOptions = $deliveryOptions->shipmentOptions;
@@ -36,8 +37,6 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
                 $shipmentOptions->ageCheck      = TriStateService::DISABLED;
                 $shipmentOptions->onlyRecipient = TriStateService::ENABLED;
                 $shipmentOptions->signature     = TriStateService::ENABLED;
-                break;
-            default:
                 break;
         }
     }
