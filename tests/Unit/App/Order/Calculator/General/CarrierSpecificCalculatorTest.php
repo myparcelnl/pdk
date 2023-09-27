@@ -156,7 +156,7 @@ it('calculates options for dhl europlus', function (
         null,
         function () {
             return factory(ShipmentOptions::class)
-                ->withSignature(0);
+                ->withSignature(TriStateService::DISABLED);
         },
         [
             ShipmentOptions::SIGNATURE => TriStateService::ENABLED,
@@ -175,7 +175,7 @@ it('calculates options for dhl parcel connect', function (
         null,
         function () {
             return factory(ShipmentOptions::class)
-                ->withSignature(0);
+                ->withSignature(TriStateService::DISABLED);
         },
         [
             ShipmentOptions::SIGNATURE => TriStateService::ENABLED,
