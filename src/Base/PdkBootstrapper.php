@@ -71,22 +71,7 @@ class PdkBootstrapper implements PdkBootstrapperInterface
         string $path,
         string $url
     ): PdkInterface {
-        $appInfo = new AppInfo([
-            'name'    => $name,
-            'title'   => $title,
-            'version' => $version,
-            'path'    => $path,
-            'url'     => $url,
-        ]);
-
-        return PdkFactory::create(
-            implode('/', [$path, $this->getConfigPath()]),
-            [
-                'appInfo'  => value($appInfo),
-                'platform' => value($this->determinePlatform($name)),
-            ],
-            $this->getAdditionalConfig($name, $title, $version, $path, $url)
-        );
+        return PdkFactory::create(...$this->getAllConfiguration($path, $name, $title, $version, $url));
     }
 
     /**
@@ -127,6 +112,40 @@ class PdkBootstrapper implements PdkBootstrapperInterface
         string $url
     ): array {
         return [];
+    }
+
+    /**
+     * @param  string $path
+     * @param  string $name
+     * @param  string $title
+     * @param  string $version
+     * @param  string $url
+     *
+     * @return array
+     */
+    protected function getAllConfiguration(
+        string $path,
+        string $name,
+        string $title,
+        string $version,
+        string $url
+    ): array {
+        return [
+            implode('/', [$path, $this->getConfigPath()]),
+            [
+                'appInfo'  => value(
+                    new AppInfo([
+                        'name'    => $name,
+                        'title'   => $title,
+                        'version' => $version,
+                        'path'    => $path,
+                        'url'     => $url,
+                    ])
+                ),
+                'platform' => value($this->determinePlatform($name)),
+            ],
+            $this->getAdditionalConfig($name, $title, $version, $path, $url),
+        ];
     }
 
     /**
