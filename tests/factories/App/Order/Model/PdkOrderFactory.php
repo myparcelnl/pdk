@@ -132,6 +132,11 @@ final class PdkOrderFactory extends AbstractModelFactory
         return $this->withCollection('notes', $notes);
     }
 
+    public function withPhysicalProperties($physicalProperties = 1): self
+    {
+        return $this->withCollection('physicalProperties', $physicalProperties);
+    }
+
     public function withShipments($shipments = 1): self
     {
         return $this->withCollection('shipments', $shipments, function (ShipmentFactory $factory) {
