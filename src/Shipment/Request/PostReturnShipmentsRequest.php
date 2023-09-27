@@ -73,7 +73,9 @@ class PostReturnShipmentsRequest extends Request
     {
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
         $options         = array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
+            $result = is_bool($item) ? (int) $item : $item;
+
+            return $result === -1 ? 0 : $result;
         }, $shipmentOptions->toSnakeCaseArray());
 
         return array_filter(
