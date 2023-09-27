@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.24.2](https://github.com/myparcelnl/pdk/compare/v2.24.1...v2.24.2) (2023-09-27)
+
+
+### :bug: Bug Fixes
+
+* **settings:** fix label description not inheriting from defaults ([#201](https://github.com/myparcelnl/pdk/issues/201)) ([d5aae9e](https://github.com/myparcelnl/pdk/commit/d5aae9e58dbceca5864a6058e9797472d88893e1))
+* **shipments:** inherit delivery date from order ([#200](https://github.com/myparcelnl/pdk/issues/200)) ([355e71f](https://github.com/myparcelnl/pdk/commit/355e71f6ad1fa145e56824ad83d2dd310c12ddbc))
+* **validation:** remove required date for dhl shipments ([#205](https://github.com/myparcelnl/pdk/issues/205)) ([ef9d323](https://github.com/myparcelnl/pdk/commit/ef9d323066e843b637b5f073f6f7e52d9809166b))
+
 ## [2.24.1](https://github.com/myparcelnl/pdk/compare/v2.24.0...v2.24.1) (2023-09-26)
 
 
