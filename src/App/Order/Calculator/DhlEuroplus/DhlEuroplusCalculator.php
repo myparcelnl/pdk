@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\DhlEuroplus;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractCarrierOptionsCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\DhlParcelConnect\DhlParcelConnectShipmentOptionsCalculator;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 final class DhlEuroplusCalculator extends AbstractCarrierOptionsCalculator
@@ -13,7 +12,7 @@ final class DhlEuroplusCalculator extends AbstractCarrierOptionsCalculator
     protected function getCalculators(): array
     {
         return [
-            DhlParcelConnectShipmentOptionsCalculator::class,
+            DhlEuroplusShipmentOptionsCalculator::class,
         ];
     }
 
