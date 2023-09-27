@@ -85,6 +85,8 @@ class ShipmentOptions extends Model
             array_replace($calculated->deliveryOptions->shipmentOptions->getAttributes(), [
                 'packageType'  => $pdkDeliveryOptions->getPackageTypeId(),
                 'deliveryType' => $pdkDeliveryOptions->getDeliveryTypeId(),
+                'deliveryDate' => $pdkDeliveryOptions->date ? $pdkDeliveryOptions->date
+                    ->format(Pdk::get('defaultDateFormat')) : null,
             ])
         );
     }
