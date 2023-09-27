@@ -11,17 +11,17 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
 /**
  * @template T of PhysicalProperties
- * @method ShippingAddress make()
+ * @method PhysicalProperties make()
  * @method $this withWeight(int $weight)
  * @method $this withLength(int $length)
  * @method $this withWidth(int $width)
  * @method $this withHeight(int $height)
  */
-final class ShippingAddressFactory extends AbstractModelFactory
+final class PhysicalPropertiesFactory extends AbstractModelFactory
 {
     public function getModel(): string
     {
-        return ShippingAddress::class;
+        return PhysicalProperties::class;
     }
 
     protected function createDefault(): FactoryInterface
