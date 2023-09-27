@@ -901,7 +901,7 @@ trait HasAttributes
                 break;
 
             case TriStateService::TYPE_STRING:
-                $value = empty($value) ? '' : (string) $value;
+                $value = $service->coerceString($value);
                 break;
         }
 

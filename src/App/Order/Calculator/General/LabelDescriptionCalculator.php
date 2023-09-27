@@ -15,7 +15,9 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
 {
     public function calculate(): void
     {
-        $this->order->deliveryOptions->shipmentOptions->labelDescription = $this->calculateDescription();
+        $description = $this->calculateDescription();
+
+        $this->order->deliveryOptions->shipmentOptions->labelDescription = $description;
     }
 
     /**
@@ -23,9 +25,7 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function calculateDescription(): string
     {
-        $description = $this->order->deliveryOptions->shipmentOptions->labelDescription
-            ?? Settings::get(LabelSettings::DESCRIPTION, LabelSettings::ID)
-            ?? '';
+        $description = $this->getDescription();
 
         $createString = function (string $key): string {
             return implode(', ', Utils::filterNull(Arr::pluck($this->order->lines->all(), $key)));
@@ -60,5 +60,19 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
                 return $this->order->lines->sum('quantity');
             },
         ], $description);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDescription(): string
+    {
+        $labelDescriptionFromOrder = $this->order->deliveryOptions->shipmentOptions->labelDescription;
+
+        if (is_string($labelDescriptionFromOrder)) {
+            return $labelDescriptionFromOrder;
+        }
+
+        return Settings::get(LabelSettings::DESCRIPTION, LabelSettings::ID) ?? '';
     }
 }
