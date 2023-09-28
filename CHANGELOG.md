@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.25.0](https://github.com/myparcelnl/pdk/compare/v2.24.2...v2.25.0) (2023-09-28)
+
+
+### :sparkles: New Features
+
+* **calculator:** add empty package weight ([#207](https://github.com/myparcelnl/pdk/issues/207)) ([b125005](https://github.com/myparcelnl/pdk/commit/b125005495a1719c046cd8ba36344c57778cdc31))
+
+
+### :bug: Bug Fixes
+
+* **calculator:** ensure signature for dhl europlus and parcelconnect orders ([#206](https://github.com/myparcelnl/pdk/issues/206)) ([1c542c9](https://github.com/myparcelnl/pdk/commit/1c542c9430c377f39500cbee17a6fe9fa9a65bb1))
+
 ## [2.24.2](https://github.com/myparcelnl/pdk/compare/v2.24.1...v2.24.2) (2023-09-27)
 
 
