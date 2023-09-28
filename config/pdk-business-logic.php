@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\factory;
 use function DI\value;
@@ -78,6 +79,7 @@ return [
             LabelDescriptionCalculator::class,
             InsuranceCalculator::class,
             CarrierSpecificCalculator::class,
+            WeightCalculator::class,
         ];
     }),
 ];
