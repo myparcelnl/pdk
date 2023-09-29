@@ -78,9 +78,7 @@ class PostReturnShipmentsRequest extends Request
 
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
         $options         = array_map(static function ($item) use ($triStateService) {
-            $optionValue = is_bool($item) ? (int) $item : $item;
-
-            return $triStateService->resolve($optionValue);
+            return $triStateService->resolve($item);
         }, $shipmentOptions->toSnakeCaseArray());
 
         return array_filter(
