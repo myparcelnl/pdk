@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.25.2](https://github.com/myparcelnl/pdk/compare/v2.25.1...v2.25.2) (2023-09-29)
+
+
+### :bug: Bug Fixes
+
+* **orders:** limit label description to max length ([#190](https://github.com/myparcelnl/pdk/issues/190)) ([0adca88](https://github.com/myparcelnl/pdk/commit/0adca883da0d427f447f00890a2b5cc7fc49fd2f))
+
 ## [2.25.1](https://github.com/myparcelnl/pdk/compare/v2.25.0...v2.25.1) (2023-09-29)
 
 
