@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class PostReturnShipmentsRequest extends Request
 {
@@ -71,9 +73,12 @@ class PostReturnShipmentsRequest extends Request
      */
     private function encodeReturnOptions(Shipment $shipment): array
     {
+        /** @var \MyParcelNL\Pdk\Types\Service\TriStateService $triStateService */
+        $triStateService = Pdk::get(TriStateService::class);
+
         $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-        $options         = array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
+        $options         = array_map(static function ($item) use ($triStateService) {
+            return $triStateService->resolve($item);
         }, $shipmentOptions->toSnakeCaseArray());
 
         return array_filter(
