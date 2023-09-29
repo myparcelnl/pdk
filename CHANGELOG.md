@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.25.1](https://github.com/myparcelnl/pdk/compare/v2.25.0...v2.25.1) (2023-09-29)
+
+
+### :bug: Bug Fixes
+
+* **returns:** fix faulty shipment options ([#208](https://github.com/myparcelnl/pdk/issues/208)) ([e754b05](https://github.com/myparcelnl/pdk/commit/e754b05b98c86fd93785b5117d0694ff6ab14b7e))
+* **schema:** fix europlus validation errors ([#209](https://github.com/myparcelnl/pdk/issues/209)) ([13712ff](https://github.com/myparcelnl/pdk/commit/13712ffd2f920ddea123eed5137cb0be10e188fd))
+
 ## [2.25.0](https://github.com/myparcelnl/pdk/compare/v2.24.2...v2.25.0) (2023-09-28)
 
 
