@@ -7,9 +7,11 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Sdk\src\Support\Str;
 
 final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -31,7 +33,7 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
             return implode(', ', Utils::filterNull(Arr::pluck($this->order->lines->all(), $key)));
         };
 
-        return preg_replace_callback_array([
+        $labelDescription = preg_replace_callback_array([
             '/\[ORDER_ID\]/' => function () {
                 return $this->order->externalIdentifier;
             },
@@ -60,6 +62,8 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
                 return $this->order->lines->sum('quantity');
             },
         ], $description);
+
+        return Str::limit($labelDescription, Pdk::get('labelDescriptionMaxLength'));
     }
 
     /**

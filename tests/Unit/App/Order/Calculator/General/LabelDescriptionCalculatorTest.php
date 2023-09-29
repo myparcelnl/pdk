@@ -94,7 +94,7 @@ it('formats label description from order', function ($labelDescription, $output)
         ],
         'multiple label description placeholders' => [
             'input'  => '[CUSTOMER_NOTE] | [ORDER_ID] | [PRODUCT_ID] | [PRODUCT_NAME] | [PRODUCT_SKU] | [PRODUCT_EAN] | [PRODUCT_QTY]',
-            'output' => 'Hello | 123 | 456, 789 | Apple, Banana | A-456, A-789 | 212444 | 5',
+            'output' => 'Hello | 123 | 456, 789 | Apple, Banana | A...',
         ],
     ]);
 

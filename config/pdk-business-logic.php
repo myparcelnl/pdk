@@ -32,18 +32,19 @@ return [
      */
 
     // Shipments
-    'customsCodeMaxLength'    => value(10),
-    'dropOffDelayMaximum'     => value(14),
-    'dropOffDelayMinimum'     => value(-1),
-    'numberSuffixMaxLength'   => value(6),
-    'packageTypeWeightLimits' => value([
+    'customsCodeMaxLength'      => value(10),
+    'dropOffDelayMaximum'       => value(14),
+    'dropOffDelayMinimum'       => value(-1),
+    'numberSuffixMaxLength'     => value(6),
+    'packageTypeWeightLimits'   => value([
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 2000,
         DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 2000,
     ]),
 
     // Delivery options
-    'deliveryDaysWindowMin'   => value(0),
-    'deliveryDaysWindowMax'   => value(14),
+    'deliveryDaysWindowMin'     => value(0),
+    'deliveryDaysWindowMax'     => value(14),
+    'labelDescriptionMaxLength' => value(45),
 
     /**
      * PDK
