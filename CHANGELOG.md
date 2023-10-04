@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.26.0](https://github.com/myparcelnl/pdk/compare/v2.25.2...v2.26.0) (2023-10-04)
+
+
+### :sparkles: New Features
+
+* **orders:** add order number property ([#210](https://github.com/myparcelnl/pdk/issues/210)) ([0106cd7](https://github.com/myparcelnl/pdk/commit/0106cd75ba37974aaf7ae2fa7290c6ef9141538c))
+
 ## [2.25.2](https://github.com/myparcelnl/pdk/compare/v2.25.1...v2.25.2) (2023-09-29)
 
 
