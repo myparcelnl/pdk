@@ -8,6 +8,7 @@
     "invoiceAddress": null,
     "language": "nl",
     "orderDate": "2023-01-01 00:00:00",
+    "orderNumber": null,
     "lines": [
         {
             "uuid": null,
