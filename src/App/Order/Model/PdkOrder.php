@@ -33,6 +33,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
+ * @property null|string                                                 $orderNumber
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
@@ -72,6 +73,7 @@ class PdkOrder extends Model implements StorableArrayable
          * Timestamp of when the order was placed.
          */
         'orderDate'          => null,
+        'orderNumber'        => null,
 
         /**
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
@@ -108,6 +110,7 @@ class PdkOrder extends Model implements StorableArrayable
         'notes'              => PdkOrderNoteCollection::class,
 
         'orderDate'             => 'datetime',
+        'orderNumber'           => 'string',
         'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
@@ -154,6 +157,7 @@ class PdkOrder extends Model implements StorableArrayable
             'externalIdentifier' => $order->externalIdentifier,
             'apiIdentifier'      => $order->uuid,
             'orderDate'          => $order->orderDate,
+            'orderNumber'        => $order->orderNumber,
             'invoiceAddress'     => $order->invoiceAddress,
             'dropOffPoint'       => $order->dropOffPoint,
             'notes'              => new PdkOrderNoteCollection($order->notes->all()),

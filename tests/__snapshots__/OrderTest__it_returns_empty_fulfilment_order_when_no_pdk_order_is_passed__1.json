@@ -8,6 +8,7 @@
     "invoiceAddress": null,
     "language": null,
     "orderDate": null,
+    "orderNumber": null,
     "lines": [],
     "notes": [],
     "shipment": null,

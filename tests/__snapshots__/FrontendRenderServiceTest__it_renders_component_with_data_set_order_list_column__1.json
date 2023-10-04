@@ -137,6 +137,7 @@
             "lines": [],
             "notes": [],
             "orderDate": null,
+            "orderNumber": null,
             "exported": false,
             "shipmentPrice": 0,
             "shipmentPriceAfterVat": 0,
