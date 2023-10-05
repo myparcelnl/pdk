@@ -277,6 +277,25 @@ return [
                 ],
             ],
         ],
+        [
+            'name'         => Carrier::CARRIER_DPD_NAME,
+            'capabilities' => [
+                'packageTypes'    => [
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                ],
+                'deliveryTypes'   => [
+                    DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                ],
+                'shipmentOptions' => [
+                    'ageCheck'      => false,
+                    'onlyRecipient' => false,
+                    'return'        => false,
+                ],
+                'features'        => [
+                    'labelDescriptionLength' => 45,
+                ],
+            ],
+        ],
     ],
 ];
 
