@@ -33,7 +33,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
- * @property null|string                                                 $orderNumber
+ * @property null|string                                                 $referenceIdentifier
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
@@ -56,29 +56,29 @@ class PdkOrder extends Model implements StorableArrayable
 
         'deliveryOptions' => DeliveryOptions::class,
 
-        'senderAddress'      => null,
-        'billingAddress'     => null,
-        'shippingAddress'    => ShippingAddress::class,
+        'senderAddress'       => null,
+        'billingAddress'      => null,
+        'shippingAddress'     => ShippingAddress::class,
 
         /**
          * Order shipments. Applicable when NOT using order mode.
          */
-        'shipments'          => ShipmentCollection::class,
-        'customsDeclaration' => null,
-        'physicalProperties' => PhysicalProperties::class,
-        'lines'              => PdkOrderLineCollection::class,
-        'notes'              => null,
+        'shipments'           => ShipmentCollection::class,
+        'customsDeclaration'  => null,
+        'physicalProperties'  => PhysicalProperties::class,
+        'lines'               => PdkOrderLineCollection::class,
+        'notes'               => null,
 
         /**
          * Timestamp of when the order was placed.
          */
-        'orderDate'          => null,
-        'orderNumber'        => null,
+        'orderDate'           => null,
+        'referenceIdentifier' => null,
 
         /**
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
          */
-        'exported'           => false,
+        'exported'            => false,
 
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
@@ -110,7 +110,7 @@ class PdkOrder extends Model implements StorableArrayable
         'notes'              => PdkOrderNoteCollection::class,
 
         'orderDate'             => 'datetime',
-        'orderNumber'           => 'string',
+        'referenceIdentifier'   => 'string',
         'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
@@ -154,21 +154,21 @@ class PdkOrder extends Model implements StorableArrayable
     public static function fromFulfilmentOrder(Order $order): self
     {
         return new self([
-            'externalIdentifier' => $order->externalIdentifier,
-            'apiIdentifier'      => $order->uuid,
-            'orderDate'          => $order->orderDate,
-            'orderNumber'        => $order->orderNumber,
-            'invoiceAddress'     => $order->invoiceAddress,
-            'dropOffPoint'       => $order->dropOffPoint,
-            'notes'              => new PdkOrderNoteCollection($order->notes->all()),
-            'lines'              => new PdkOrderLineCollection($order->lines->all()),
-            'status'             => $order->status,
-            'type'               => $order->type,
-            'price'              => $order->price,
-            'vat'                => $order->vat,
-            'priceAfterVat'      => $order->priceAfterVat,
-            'createdAt'          => $order->createdAt,
-            'updatedAt'          => $order->updatedAt,
+            'externalIdentifier'  => $order->externalIdentifier,
+            'apiIdentifier'       => $order->uuid,
+            'orderDate'           => $order->orderDate,
+            'referenceIdentifier' => $order->referenceIdentifier,
+            'invoiceAddress'      => $order->invoiceAddress,
+            'dropOffPoint'        => $order->dropOffPoint,
+            'notes'               => new PdkOrderNoteCollection($order->notes->all()),
+            'lines'               => new PdkOrderLineCollection($order->lines->all()),
+            'status'              => $order->status,
+            'type'                => $order->type,
+            'price'               => $order->price,
+            'vat'                 => $order->vat,
+            'priceAfterVat'       => $order->priceAfterVat,
+            'createdAt'           => $order->createdAt,
+            'updatedAt'           => $order->updatedAt,
         ]);
     }
 

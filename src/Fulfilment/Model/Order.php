@@ -25,7 +25,7 @@ use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails            $invoiceAddress
  * @property null|string                                               $language
  * @property null|\DateTime                                            $orderDate
- * @property null|string                                               $orderNumber
+ * @property null|string                                               $referenceIdentifier
  * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderLineCollection $lines
  * @property \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $notes
  * @property null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment            $shipment
@@ -49,7 +49,7 @@ class Order extends Model
         'invoiceAddress'              => null,
         'language'                    => null,
         'orderDate'                   => null,
-        'orderNumber'                 => null,
+        'referenceIdentifier'         => null,
         'lines'                       => OrderLineCollection::class,
         'notes'                       => OrderNoteCollection::class,
         'shipment'                    => null,
@@ -72,7 +72,7 @@ class Order extends Model
         'invoiceAddress'              => ContactDetails::class,
         'language'                    => 'string',
         'orderDate'                   => 'datetime',
-        'orderNumber'                 => 'string',
+        'referenceIdentifier'         => 'string',
         'lines'                       => OrderLineCollection::class,
         'notes'                       => OrderNoteCollection::class,
         'shipment'                    => Shipment::class,
@@ -108,7 +108,7 @@ class Order extends Model
                 'invoiceAddress'              => $pdkOrder->billingAddress ?? null,
                 'language'                    => Language::getIso2(),
                 'orderDate'                   => $pdkOrder->orderDate,
-                'orderNumber'                 => $pdkOrder->orderNumber,
+                'referenceIdentifier'         => $pdkOrder->referenceIdentifier,
                 'lines'                       => $pdkOrder->lines
                     ->map(function (PdkOrderLine $pdkOrderLine) {
                         return new OrderLine(

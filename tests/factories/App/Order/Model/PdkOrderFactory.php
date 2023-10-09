@@ -34,7 +34,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withExported(bool $exported)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withOrderDate(string|DateTimeImmutable $orderDate)
- * @method $this withOrderNumber(string $orderNumber)
+ * @method $this withReferenceIdentifier(string $referenceIdentifier)
  * @method $this withOrderPrice(int $orderPrice)
  * @method $this withOrderPriceAfterVat(int $orderPriceAfterVat)
  * @method $this withOrderVat(int $orderVat)

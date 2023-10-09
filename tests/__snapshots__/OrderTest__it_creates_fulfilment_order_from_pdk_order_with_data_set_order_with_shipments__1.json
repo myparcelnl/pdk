@@ -8,7 +8,7 @@
     "invoiceAddress": null,
     "language": "nl",
     "orderDate": null,
-    "orderNumber": null,
+    "referenceIdentifier": null,
     "lines": [],
     "notes": [],
     "shipment": {
