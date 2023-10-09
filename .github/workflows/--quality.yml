@@ -52,7 +52,7 @@ jobs:
         run: |
           docker compose run php composer quality:fix
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run != 'true'
         with:
           commit_message: 'style(rector): apply changes'
