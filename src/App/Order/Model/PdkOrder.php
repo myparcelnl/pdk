@@ -23,6 +23,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 /**
  * @property null|string                                                 $externalIdentifier
  * @property null|string                                                 $apiIdentifier
+ * @property null|string                                                 $referenceIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
@@ -33,7 +34,6 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
- * @property null|string                                                 $referenceIdentifier
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
@@ -49,36 +49,38 @@ class PdkOrder extends Model implements StorableArrayable
 {
     protected $attributes = [
         /** Plugin order id */
-        'externalIdentifier' => null,
+        'externalIdentifier'  => null,
 
         /** Fulfilment order ID from MyParcel */
-        'apiIdentifier'      => null,
+        'apiIdentifier'       => null,
+
+        /** Custom order number given by plugin */
+        'referenceIdentifier' => null,
 
         'deliveryOptions' => DeliveryOptions::class,
 
-        'senderAddress'       => null,
-        'billingAddress'      => null,
-        'shippingAddress'     => ShippingAddress::class,
+        'senderAddress'      => null,
+        'billingAddress'     => null,
+        'shippingAddress'    => ShippingAddress::class,
 
         /**
          * Order shipments. Applicable when NOT using order mode.
          */
-        'shipments'           => ShipmentCollection::class,
-        'customsDeclaration'  => null,
-        'physicalProperties'  => PhysicalProperties::class,
-        'lines'               => PdkOrderLineCollection::class,
-        'notes'               => null,
+        'shipments'          => ShipmentCollection::class,
+        'customsDeclaration' => null,
+        'physicalProperties' => PhysicalProperties::class,
+        'lines'              => PdkOrderLineCollection::class,
+        'notes'              => null,
 
         /**
          * Timestamp of when the order was placed.
          */
-        'orderDate'           => null,
-        'referenceIdentifier' => null,
+        'orderDate'          => null,
 
         /**
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
          */
-        'exported'            => false,
+        'exported'           => false,
 
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
