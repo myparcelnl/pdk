@@ -24,7 +24,7 @@ usesShared(new UsesMockPdkInstance());
 function createOrder($labelDescription): PdkOrder
 {
     return factory(PdkOrder::class)
-        ->withOrderNumber('123')
+        ->withReferenceIdentifier('123')
         ->withDeliveryOptions(['shipmentOptions' => ['labelDescription' => $labelDescription]])
         ->withLines([
             factory(PdkOrderLine::class)

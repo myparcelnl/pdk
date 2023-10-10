@@ -35,7 +35,7 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
 
         $labelDescription = preg_replace_callback_array([
             '/\[ORDER_ID\]/' => function () {
-                return $this->order->orderNumber;
+                return $this->order->referenceIdentifier;
             },
 
             '/\[CUSTOMER_NOTE\]/' => function () {

@@ -23,6 +23,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 /**
  * @property null|string                                                 $externalIdentifier
  * @property null|string                                                 $apiIdentifier
+ * @property null|string                                                 $referenceIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
@@ -33,7 +34,6 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
- * @property null|string                                                 $orderNumber
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
@@ -49,10 +49,13 @@ class PdkOrder extends Model implements StorableArrayable
 {
     protected $attributes = [
         /** Plugin order id */
-        'externalIdentifier' => null,
+        'externalIdentifier'  => null,
 
         /** Fulfilment order ID from MyParcel */
-        'apiIdentifier'      => null,
+        'apiIdentifier'       => null,
+
+        /** Custom order number given by plugin */
+        'referenceIdentifier' => null,
 
         'deliveryOptions' => DeliveryOptions::class,
 
@@ -73,7 +76,6 @@ class PdkOrder extends Model implements StorableArrayable
          * Timestamp of when the order was placed.
          */
         'orderDate'          => null,
-        'orderNumber'        => null,
 
         /**
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
@@ -110,7 +112,7 @@ class PdkOrder extends Model implements StorableArrayable
         'notes'              => PdkOrderNoteCollection::class,
 
         'orderDate'             => 'datetime',
-        'orderNumber'           => 'string',
+        'referenceIdentifier'   => 'string',
         'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
@@ -154,21 +156,21 @@ class PdkOrder extends Model implements StorableArrayable
     public static function fromFulfilmentOrder(Order $order): self
     {
         return new self([
-            'externalIdentifier' => $order->externalIdentifier,
-            'apiIdentifier'      => $order->uuid,
-            'orderDate'          => $order->orderDate,
-            'orderNumber'        => $order->orderNumber,
-            'invoiceAddress'     => $order->invoiceAddress,
-            'dropOffPoint'       => $order->dropOffPoint,
-            'notes'              => new PdkOrderNoteCollection($order->notes->all()),
-            'lines'              => new PdkOrderLineCollection($order->lines->all()),
-            'status'             => $order->status,
-            'type'               => $order->type,
-            'price'              => $order->price,
-            'vat'                => $order->vat,
-            'priceAfterVat'      => $order->priceAfterVat,
-            'createdAt'          => $order->createdAt,
-            'updatedAt'          => $order->updatedAt,
+            'externalIdentifier'  => $order->externalIdentifier,
+            'apiIdentifier'       => $order->uuid,
+            'orderDate'           => $order->orderDate,
+            'referenceIdentifier' => $order->referenceIdentifier,
+            'invoiceAddress'      => $order->invoiceAddress,
+            'dropOffPoint'        => $order->dropOffPoint,
+            'notes'               => new PdkOrderNoteCollection($order->notes->all()),
+            'lines'               => new PdkOrderLineCollection($order->lines->all()),
+            'status'              => $order->status,
+            'type'                => $order->type,
+            'price'               => $order->price,
+            'vat'                 => $order->vat,
+            'priceAfterVat'       => $order->priceAfterVat,
+            'createdAt'           => $order->createdAt,
+            'updatedAt'           => $order->updatedAt,
         ]);
     }
 
