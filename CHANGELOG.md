@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.27.0](https://github.com/myparcelnl/pdk/compare/v2.26.0...v2.27.0) (2023-10-11)
+
+
+### :sparkles: New Features
+
+* **carriers:** add dpd for platform myparcel ([#211](https://github.com/myparcelnl/pdk/issues/211)) ([8928bdd](https://github.com/myparcelnl/pdk/commit/8928bdde7fdf72155c85995f785a2eac9b85c794))
+
 ## [2.26.0](https://github.com/myparcelnl/pdk/compare/v2.25.2...v2.26.0) (2023-10-04)
 
 
