@@ -16,11 +16,12 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 /**
  * @template T of PdkOrderNote
  * @method PdkOrderNote make()
- * @method $this withApiIdentifier(string $apiIdentifier)
+ * @method $this withApiIdentifier(null|string $apiIdentifier)
  * @method $this withAuthor(string $author)
  * @method $this withCreatedAt(string|DateTime $createdAt)
- * @method $this withExternalIdentifier(string $externalIdentifier)
+ * @method $this withExternalIdentifier(null|string $externalIdentifier)
  * @method $this withNote(string $note)
+ * @method $this withOrderIdentifier(null|string $orderIdentifier)
  * @method $this withUpdatedAt(string|DateTime $updatedAt)
  */
 final class PdkOrderNoteFactory extends AbstractModelFactory

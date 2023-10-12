@@ -10,56 +10,39 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
-use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
+use MyParcelNL\Pdk\Tests\Factory\Collection\FactoryCollection;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
-use function DI\autowire;
+use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(new UsesApiMock());
+usesShared(new UsesEachMockPdkInstance(), new UsesApiMock());
 
-it('posts order notes if order has notes', function (PdkOrderCollection $orders, PdkOrderNoteCollection $notes) {
-    MockPdkFactory::create([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            OrderSettings::ID => [
-                OrderSettings::ORDER_MODE => true,
-            ],
-        ]),
-        PdkOrderRepositoryInterface::class => autowire(MockPdkOrderRepository::class)->constructor($orders),
-    ]);
-
+it('posts order notes if order has notes', function (
+    PdkOrderCollectionFactory     $ordersFactory,
+    PdkOrderNoteCollectionFactory $notesFactory
+) {
     TestBootstrapper::hasApiKey();
 
-    factory(Account::class)
-        ->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES])
-        ->store();
+    (new FactoryCollection([
+        $ordersFactory,
+        $notesFactory,
+        factory(OrderSettings::class)->withOrderMode(true),
+        factory(Account::class)->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES]),
+    ]))->store();
+
+    $orderCollection = new Collection($ordersFactory->make());
 
     MockApi::enqueue(new ExamplePostOrderNotesResponse());
-
-    $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
-    $notes->each(function (PdkOrderNote $note) use ($orderNoteRepository) {
-        $orderNoteRepository->add($note);
-    });
-
-    $orderCollection = new Collection($orders);
 
     Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
         'orderIds' => $orderCollection
@@ -77,108 +60,63 @@ it('posts order notes if order has notes', function (PdkOrderCollection $orders,
     expect($request)->not->toBeNull();
 })->with([
     'single order' => [
-        new PdkOrderCollection([
-            [
-                'apiIdentifier'      => '90001',
-                'externalIdentifier' => '243',
-                'shippingAddress'    => [
-                    'cc'          => CountryCodes::CC_NL,
-                    'city'        => 'Hoofddorp',
-                    'person'      => 'Felicia Parcel',
-                    'postal_code' => '2132 JE',
-                    'address1'    => 'Antareslaan 31',
-                ],
-                'deliveryOptions'    => [
-                    'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                    'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                    'shipmentOptions' => [
-                        'signature' => true,
-                    ],
-                ],
-            ],
-        ]),
-        new PdkOrderNoteCollection([
-            [
-                'author'          => OrderNote::AUTHOR_WEBSHOP,
-                'note'            => 'test note',
-                'orderIdentifier' => '243',
-                'createdAt'       => '2023-01-01 12:00:00',
-                'updatedAt'       => '2023-01-01 12:00:00',
-            ],
-            [
-                'author'          => OrderNote::AUTHOR_CUSTOMER,
-                'note'            => 'hello',
-                'orderIdentifier' => '243',
-                'createdAt'       => '2023-01-01 12:00:00',
-                'updatedAt'       => '2023-01-02 12:00:00',
-            ],
-        ]),
+        function () {
+            return factory(PdkOrderCollection::class)->push(
+                factory(PdkOrder::class)
+                    ->withApiIdentifier('90001')
+                    ->withExternalIdentifier('243')
+                    ->withSimpleDeliveryOptions()
+            );
+        },
 
+        function () {
+            return factory(PdkOrderNoteCollection::class)->push(
+                factory(PdkOrderNote::class)
+                    ->byWebshop()
+                    ->withOrderIdentifier('243'),
+                factory(PdkOrderNote::class)
+                    ->byCustomer()
+                    ->withOrderIdentifier('243')
+            );
+        },
     ],
 
     'two orders where only one has notes' => [
-        new PdkOrderCollection([
-            [
-                'apiIdentifier'      => '90002',
-                'externalIdentifier' => '245',
-                'shippingAddress'    => [
-                    'cc'         => CountryCodes::CC_NL,
-                    'address1'   => 'Pietjestraat 35',
-                    'postalCode' => '2771BW',
-                    'city'       => 'Bikinibroek',
-                ],
-                'deliveryOptions'    => [],
-            ],
-            [
-                'apiIdentifier'      => '90003',
-                'externalIdentifier' => '247',
-                'shippingAddress'    => [
-                    'cc'          => CountryCodes::CC_NL,
-                    'city'        => 'Hoofddorp',
-                    'person'      => 'Felicia Parcel',
-                    'postal_code' => '2132 JE',
-                    'address1'    => 'Antareslaan 31',
-                ],
-                'deliveryOptions'    => [
-                    'carrier'      => Carrier::CARRIER_POSTNL_NAME,
-                    'deliveryType' => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                ],
-            ],
-        ]),
-        new PdkOrderNoteCollection([
-            [
-                'author'          => OrderNote::AUTHOR_CUSTOMER,
-                'note'            => 'test note from customer',
-                'orderIdentifier' => '247',
-                'createdAt'       => '2023-01-01 12:00:00',
-                'updatedAt'       => '2023-01-01 18:00:00',
-            ],
-        ]),
+        function () {
+            return factory(PdkOrderCollection::class)->push(
+                factory(PdkOrder::class)
+                    ->withExternalIdentifier('245')
+                    ->withApiIdentifier('90002'),
+                factory(PdkOrder::class)
+                    ->withExternalIdentifier('247')
+                    ->withApiIdentifier('90003')
+            );
+        },
+
+        function () {
+            return factory(PdkOrderNoteCollection::class)->push(
+                factory(PdkOrderNote::class)
+                    ->byCustomer()
+                    ->withOrderIdentifier('247')
+            );
+        },
     ],
 
     'order without api identifier' => [
-        new PdkOrderCollection([
-            [
-                'externalIdentifier' => '248',
-                'shippingAddress'    => [
-                    'cc'          => CountryCodes::CC_NL,
-                    'city'        => 'Hoofddorp',
-                    'person'      => 'Felicia Parcel',
-                    'postal_code' => '2132 JE',
-                    'address1'    => 'Antareslaan 31',
-                ],
-                'deliveryOptions'    => [],
-            ],
-        ]),
-        new PdkOrderNoteCollection([
-            [
-                'author'          => OrderNote::AUTHOR_CUSTOMER,
-                'note'            => 'hello',
-                'orderIdentifier' => '248',
-                'createdAt'       => '2023-01-01 12:00:00',
-                'updatedAt'       => '2023-01-02 12:00:00',
-            ],
-        ]),
+        function () {
+            return factory(PdkOrderCollection::class)->push(
+                factory(PdkOrder::class)
+                    ->withExternalIdentifier('248')
+            );
+        },
+
+        function () {
+            return factory(PdkOrderNoteCollection::class)->push(
+                factory(PdkOrderNote::class)
+                    ->byCustomer()
+                    ->withOrderIdentifier('248')
+            );
+        },
     ],
 ]);
 
@@ -191,8 +129,6 @@ it('does not post order notes if account does not have feature', function (PdkOr
     factory(OrderSettings::class)
         ->withOrderMode(true)
         ->store();
-
-    MockApi::enqueue(new ExamplePostOrderNotesResponse());
 
     Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
         'orderIds' => (new Collection($orderCollection))

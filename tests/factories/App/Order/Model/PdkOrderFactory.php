@@ -28,7 +28,7 @@ use function MyParcelNL\Pdk\Tests\factory;
 /**
  * @template T of PdkOrder
  * @method PdkOrder make()
- * @method $this withApiIdentifier(string $apiIdentifier)
+ * @method $this withApiIdentifier(null|string $apiIdentifier)
  * @method $this withBillingAddress(array|ContactDetails|ContactDetailsFactory $billingAddress)
  * @method $this withCustomsDeclaration(array|CustomsDeclaration|CustomsDeclarationFactory $customsDeclaration)
  * @method $this withExported(bool $exported)
