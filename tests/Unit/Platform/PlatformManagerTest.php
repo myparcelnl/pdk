@@ -11,14 +11,13 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use function Spatie\Snapshots\assertMatchesSnapshot;
 
 it('retrieves config for each platform', function (string $platform) {
     MockPdkFactory::create(['platform' => $platform]);
 
     $defaults = PlatformFacade::all();
 
-    assertMatchesSnapshot($defaults);
+    assertMatchesJsonSnapshot(json_encode($defaults));
 })->with('platforms');
 
 it('gets specific keys from platform data', function () {
