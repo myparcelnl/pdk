@@ -73,8 +73,7 @@ it('returns correct schema', function (array $order) use ($createOrder) {
 
 it('validates order', function (array $order) use ($createOrder) {
     $validator = $createOrder($order)->getValidator();
-    //    var_dump($validator);
-    //    die('wegwet');
+
     $isValid = $validator->validate();
     $errors  = $validator->getErrors();
 
