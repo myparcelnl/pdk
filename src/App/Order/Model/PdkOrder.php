@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -32,7 +33,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
- * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
+ * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties           $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
@@ -134,7 +135,7 @@ class PdkOrder extends Model implements StorableArrayable
     ];
 
     /**
-     * @var \MyParcelNL\Pdk\Validation\Validator\OrderValidator
+     * @var null|\MyParcelNL\Pdk\Validation\Validator\OrderValidator
      */
     private $validator;
 
@@ -236,16 +237,17 @@ class PdkOrder extends Model implements StorableArrayable
     /**
      * Turns data into an array that should be stored in the plugin.
      *
-     * @return void
+     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
     {
-        return [
-            'apiIdentifier'   => $this->apiIdentifier,
-            'exported'        => $this->exported,
-            'deliveryOptions' => $this->deliveryOptions->toStorableArray(),
-        ];
+        return Utils::filterNull([
+            'apiIdentifier'      => $this->apiIdentifier,
+            'exported'           => $this->exported,
+            'deliveryOptions'    => $this->deliveryOptions->toStorableArray(),
+            'physicalProperties' => $this->physicalProperties->toStorableArray(),
+        ]);
     }
 
     /**
@@ -309,6 +311,8 @@ class PdkOrder extends Model implements StorableArrayable
      */
     private function updateTotals(): void
     {
+        $this->physicalProperties->initialWeight = $this->lines->getTotalWeight();
+
         [$price, $vat, $priceAfterVat] = $this->lines->reduce(
             function (array $carry, $line) {
                 $quantity = Arr::get($line, 'quantity', 1);

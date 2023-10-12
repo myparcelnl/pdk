@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationFactory;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptionsFactory;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentFactory;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -38,6 +39,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withOrderPrice(int $orderPrice)
  * @method $this withOrderPriceAfterVat(int $orderPriceAfterVat)
  * @method $this withOrderVat(int $orderVat)
+ * @method $this withPhysicalProperties(array|PhysicalProperties|PhysicalPropertiesFactory $physicalProperties)
  * @method $this withSenderAddress(array|ContactDetails|ContactDetailsFactory $senderAddress)
  * @method $this withShipmentPrice(int $shipmentPrice)
  * @method $this withShipmentPriceAfterVat(int $shipmentPriceAfterVat)

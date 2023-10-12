@@ -12,7 +12,8 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method PhysicalProperties make()
  * @method $this withHeight(int $height)
  * @method $this withLength(int $length)
- * @method $this withWeight(int $weight)
+ * @method $this withManualWeight(int $manualWeight)
+ * @method $this withInitialWeight(int $initialWeight)
  * @method $this withWidth(int $width)
  */
 final class PhysicalPropertiesFactory extends AbstractModelFactory

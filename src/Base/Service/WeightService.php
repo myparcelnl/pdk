@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Base\Service;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 class WeightService implements WeightServiceInterface
 {
@@ -16,14 +17,20 @@ class WeightService implements WeightServiceInterface
      *
      * @return int
      */
-    public function convertToDigitalStamp(int $weight, array $ranges = self::DIGITAL_STAMP_RANGES): int
+    public function convertToDigitalStamp(int $weight, array $ranges = []): int
     {
-        if ($weight > Arr::last($ranges)['max']) {
+        if (empty($ranges)) {
+            $ranges = Pdk::get('digitalStampRanges');
+        }
+
+        $lastRange = Arr::last($ranges);
+
+        if ($weight > $lastRange['max']) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Supplied weight to convert of %sg exceeds maximum digital stamp weight of %sg',
                     $weight,
-                    Arr::last($ranges)['max']
+                    $lastRange['max']
                 )
             );
         }
@@ -32,13 +39,9 @@ class WeightService implements WeightServiceInterface
             return $weight > $range['min'];
         });
 
-        if (empty($results)) {
-            $rangeWeight = Arr::first($ranges)['average'];
-        } else {
-            $rangeWeight = Arr::last($results)['average'];
-        }
-
-        return $rangeWeight;
+        return empty($results)
+            ? Arr::first($ranges)['average']
+            : Arr::last($results)['average'];
     }
 
     /**

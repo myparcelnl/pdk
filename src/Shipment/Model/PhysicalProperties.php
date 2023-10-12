@@ -4,27 +4,71 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @property null|int $height
  * @property null|int $length
- * @property int      $weight
  * @property null|int $width
+ * @property int      $initialWeight
+ * @property int      $manualWeight
+ * @property int      $totalWeight
  */
-class PhysicalProperties extends Model
+class PhysicalProperties extends Model implements StorableArrayable
 {
     protected $attributes = [
-        'height' => null,
-        'length' => null,
-        'weight' => 0,
-        'width'  => null,
+        'height'        => null,
+        'length'        => null,
+        'width'         => null,
+
+        /**
+         * Base weight.
+         */
+        'initialWeight' => 0,
+
+        /**
+         * Optional manual override of the initial weight.
+         */
+        'manualWeight'  => TriStateService::INHERIT,
+
+        /**
+         * Calculated automatically based on the initial weight and manual weight.
+         */
+        'totalWeight'   => 0,
     ];
 
     protected $casts      = [
-        'height' => 'int',
-        'length' => 'int',
-        'weight' => 'int',
-        'width'  => 'int',
+        'height'        => 'int',
+        'length'        => 'int',
+        'width'         => 'int',
+        'initialWeight' => 'int',
+        'manualWeight'  => 'int',
+        'totalWeight'   => 'int',
     ];
+
+    /**
+     * @return array
+     */
+    public function toStorableArray(): array
+    {
+        return Utils::filterNull([
+            'manualWeight' => TriStateService::INHERIT === $this->manualWeight ? null : $this->manualWeight,
+        ]);
+    }
+
+    /**
+     * @return int
+     * @noinspection PhpUnused
+     */
+    protected function getTotalWeightAttribute(): int
+    {
+        /** @var TriStateService $triStateService */
+        $triStateService = Pdk::get(TriStateService::class);
+
+        return $triStateService->resolve($this->manualWeight, $this->initialWeight);
+    }
 }

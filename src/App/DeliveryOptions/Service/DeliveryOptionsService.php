@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -123,6 +122,23 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    public function getWeightByPackageType(int $weight, PackageType $packageType): int
+    {
+        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
+
+        if ($emptyWeightSetting) {
+            $weight += Settings::get($emptyWeightSetting, OrderSettings::ID);
+        }
+
+        return $weight ?: 1;
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
@@ -198,7 +214,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         foreach ($cart->shippingMethod->allowedPackageTypes->all() as $packageType) {
-            $weight = $this->getWeightByPackageType($cart, $packageType);
+            $weight = $this->getWeightByPackageType($cart->lines->getTotalWeight(), $packageType);
 
             $filteredCarriers = $allCarriers
                 ->filter(
@@ -229,28 +245,5 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart     $cart
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
-     *
-     * @return int
-     */
-    private function getWeightByPackageType(PdkCart $cart, PackageType $packageType): int
-    {
-        $cartWeight = (int) $cart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-            return $carry + $line->product->weight * $line->quantity;
-        }, 0);
-
-        $fullWeight = $cartWeight;
-
-        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
-
-        if ($emptyWeightSetting) {
-            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
-        }
-
-        return $fullWeight ?: 1;
     }
 }

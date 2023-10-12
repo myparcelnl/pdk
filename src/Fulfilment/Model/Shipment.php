@@ -13,14 +13,14 @@ use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
 
 /**
- * @property int                                               $carrier
- * @property string                                            $contractId
- * @property \MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
- * @property \MyParcelNL\Pdk\Fulfilment\Model\ShipmentOptions  $options
- * @property \MyParcelNL\Pdk\Shipment\Model\RetailLocation     $pickup
- * @property \MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
- * @property \MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
- * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties $physicalProperties
+ * @property int                                                    $carrier
+ * @property string                                                 $contractId
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
+ * @property \MyParcelNL\Pdk\Fulfilment\Model\ShipmentOptions       $options
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation     $pickup
+ * @property \MyParcelNL\Pdk\Base\Model\ContactDetails              $recipient
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
+ * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties      $physicalProperties
  */
 class Shipment extends Model
 {
@@ -75,10 +75,11 @@ class Shipment extends Model
             'recipient'          => $pdkShipment->recipient,
             'dropOffPoint'       => $pdkShipment->dropOffPoint,
             'physicalProperties' => [
-                'height' => $pdkShipment->physicalProperties->height ?? 0,
-                'width'  => $pdkShipment->physicalProperties->width ?? 0,
-                'length' => $pdkShipment->physicalProperties->length ?? 0,
-                'weight' => $pdkShipment->physicalProperties->weight ?? 0,
+                'height'        => $pdkShipment->physicalProperties->height ?? 0,
+                'width'         => $pdkShipment->physicalProperties->width ?? 0,
+                'length'        => $pdkShipment->physicalProperties->length ?? 0,
+                'initialWeight' => $pdkShipment->physicalProperties->initialWeight,
+                'manualWeight'  => $pdkShipment->physicalProperties->manualWeight,
             ],
         ]);
     }

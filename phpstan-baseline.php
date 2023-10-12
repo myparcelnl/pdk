@@ -67,16 +67,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/App/Order/Contract/PdkOrderNoteRepositoryInterface.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Negated boolean expression is always false\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/Order/Model/PdkOrder.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @return with type void is incompatible with native type array\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/Order/Model/PdkOrder.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @extends has invalid value \\(\\\\MyParcelNL\\\\Pdk\\\\Base\\\\Model\\\\Model\\)\\: Unexpected token "\\\\n ", expected \'\\<\' at offset 48$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Base/Concern/HasPrices.php',
@@ -165,21 +155,6 @@ $ignoreErrors[] = [
 	'message' => '#^Property MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Request\\\\PostOrderNotesRequest\\:\\:\\$collection \\(MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Collection\\\\OrderCollection\\) does not accept MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Collection\\\\OrderNoteCollection\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Fulfilment/Request/PostOrderNotesRequest.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Fulfilment\\\\Request\\\\PostOrdersRequest\\:\\:getShipment\\(\\) never returns null so it can be removed from the return type\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Fulfilment/Request/PostOrdersRequest.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^PHPDoc tag @return with type string\\|null is not subtype of native type string\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Fulfilment/Request/PostOrdersRequest.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Ternary operator condition is always true\\.$#',
-	'count' => 4,
-	'path' => __DIR__ . '/src/Fulfilment/Request/PostOrdersRequest.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type MyParcelNL\\\\Pdk\\\\Settings\\\\Model\\\\Settings\\.$#',

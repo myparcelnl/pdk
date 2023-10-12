@@ -7,11 +7,14 @@ namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollectionFactory;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -113,6 +116,42 @@ it('calculates correct totals', function (array $input, array $totals) {
     ],
 ]);
 
+it('calculates order weight', function (PdkOrderLineCollectionFactory $collectionFactory, int $result) {
+    $order = factory(PdkOrder::class)
+        ->withLines($collectionFactory)
+        ->make();
+
+    expect($order->physicalProperties->totalWeight)->toEqual($result);
+})->with([
+    'one line' => [
+        'lines'  => function () {
+            return factory(PdkOrderLineCollection::class)->push(
+                factory(PdkOrderLine::class)
+                    ->withQuantity(3)
+                    ->withProduct(factory(PdkProduct::class)->withWeight(120))
+            );
+        },
+        'result' => 120 * 3,
+    ],
+
+    'multiple lines' => [
+        'lines'  => function () {
+            return factory(PdkOrderLineCollection::class)
+                ->push(
+                    factory(PdkOrderLine::class)
+                        ->withQuantity(1)
+                        ->withProduct(factory(PdkProduct::class)->withWeight(3000))
+                )
+                ->push(
+                    factory(PdkOrderLine::class)
+                        ->withQuantity(4)
+                        ->withProduct(factory(PdkProduct::class)->withWeight(150))
+                );
+        },
+        'result' => 150 * 4 + 3000,
+    ],
+]);
+
 it('creates pdk order from fulfilment order', function (array $orders) {
     $orderCollection = new OrderCollection($orders);
 
@@ -134,7 +173,9 @@ it('creates a storable array', function (PdkOrderCollectionFactory $orderFactory
 })->with('pdkOrdersDomestic');
 
 it('can check whether an order is deliverable', function (array $lines, bool $result) {
-    $pdkOrder = new PdkOrder(['lines' => $lines]);
+    $pdkOrder = factory(PdkOrder::class)
+        ->withLines($lines)
+        ->make();
 
     expect($pdkOrder->isDeliverable())->toBe($result);
 })
