@@ -6,6 +6,7 @@
         <settings>
           <configurations>
             <configuration_by_sdk interpreter_id="65878930-6f8e-40a5-9468-2a119b1c994a" configuration_file_path="/app/config/behat.yml" executable_path="/app/vendor/behat/behat/bin/behat" use_configuration_file="true" />
+            <local_configuration configuration_file_path="$PROJECT_DIR$/config/behat.yml" executable_path="$PROJECT_DIR$/vendor/behat/behat/bin/behat" use_configuration_file="true" />
           </configurations>
         </settings>
       </tool>
@@ -13,6 +14,7 @@
         <settings>
           <configurations>
             <configuration_by_sdk interpreter_id="65878930-6f8e-40a5-9468-2a119b1c994a" configuration_file_path="/app/phpunit.xml" executable_path="/app/vendor/pestphp/pest/bin/pest" use_configuration_file="true" />
+            <local_configuration configuration_file_path="$PROJECT_DIR$/phpunit.xml" executable_path="$PROJECT_DIR$/vendor/pestphp/pest/bin/pest" use_configuration_file="true" />
           </configurations>
         </settings>
       </tool>
