@@ -81,6 +81,18 @@ it('creates a valid request from a shipment collection', function (array $input)
             ],
         ],
     ],
+    'address with address1 and address2 combined' => [
+        'input' => [
+            [
+                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'recipient' => array_merge(DEFAULT_INPUT_RECIPIENT, [
+                    'address1' => 'Tuinstraat',
+                    'address2' => '35',
+                ]),
+            ],
+        ],
+    ],
+
     'simple domestic shipment'                    => [
         'input' => [
             [
