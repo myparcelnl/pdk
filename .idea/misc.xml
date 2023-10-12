@@ -103,6 +103,6 @@
     <pattern value="\MyParcelNL\Pdk\Base\Concern\HasAttributes" member="only" />
   </component>
   <component name="TaskProjectConfiguration">
-    <server type="JIRA" url="https://jira.dmp.zone" />
+    <server type="JIRA" url="https://myparcelnl.atlassian.net" />
   </component>
 </project>
