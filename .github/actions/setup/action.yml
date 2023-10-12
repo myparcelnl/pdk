@@ -11,8 +11,9 @@ runs:
           $HOME/.composer
           ./composer.lock
           ./vendor
-        key: composer-${{ hashFiles('**/composer.json') }}
+        key: composer-${{ hashFiles('**/composer.json') }}-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
+          composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
     - uses: myparcelnl/actions/pull-docker-image@v3
