@@ -122,23 +122,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
-     * @param  int                                        $weight
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
-     *
-     * @return int
-     */
-    public function getWeightByPackageType(int $weight, PackageType $packageType): int
-    {
-        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
-
-        if ($emptyWeightSetting) {
-            $weight += Settings::get($emptyWeightSetting, OrderSettings::ID);
-        }
-
-        return $weight ?: 1;
-    }
-
-    /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
@@ -206,7 +189,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return array<string, \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection>
+     * @return array{0: string, 1: \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection}
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
@@ -245,5 +228,24 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
+    }
+
+    /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    private function getWeightByPackageType(int $weight, PackageType $packageType): int
+    {
+        $fullWeight = $weight;
+
+        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
+
+        if ($emptyWeightSetting) {
+            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
+        }
+
+        return $fullWeight ?: 1;
     }
 }

@@ -27,26 +27,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/App/Action/Shared/Context/FetchContextAction.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\App\\\\DeliveryOptions\\\\Service\\\\DeliveryOptionsService\\:\\:getValidCarrierOptions\\(\\) should return array\\<string, MyParcelNL\\\\Pdk\\\\Carrier\\\\Collection\\\\CarrierCollection\\> but returns array\\<int, MyParcelNL\\\\Pdk\\\\Carrier\\\\Collection\\\\CarrierCollection\\|string\\>\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/DeliveryOptionsService.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\App\\\\DeliveryOptions\\\\Service\\\\DeliveryOptionsService\\:\\:getValidCarrierOptions\\(\\) should return array\\<string, MyParcelNL\\\\Pdk\\\\Carrier\\\\Collection\\\\CarrierCollection\\> but returns array\\<int, mixed\\>\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/DeliveryOptionsService.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Offset 0 does not exist on array\\<string, MyParcelNL\\\\Pdk\\\\Carrier\\\\Collection\\\\CarrierCollection\\>\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/DeliveryOptionsService.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Offset 1 does not exist on array\\<string, MyParcelNL\\\\Pdk\\\\Carrier\\\\Collection\\\\CarrierCollection\\>\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/App/DeliveryOptions/Service/DeliveryOptionsService.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Method MyParcelNL\\\\Pdk\\\\App\\\\Order\\\\Collection\\\\PdkOrderCollection\\:\\:mergeShipmentsByOrder\\(\\) should return MyParcelNL\\\\Pdk\\\\Shipment\\\\Collection\\\\ShipmentCollection but returns MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/App/Order/Collection/PdkOrderCollection.php',

@@ -16,7 +16,11 @@ final class WeightCalculator extends AbstractPdkOrderOptionCalculator
     {
         $physicalProperties = $this->order->physicalProperties;
 
-        $weight = $physicalProperties->totalWeight + $this->getEmptyWeight();
+        $weight = $physicalProperties->totalWeight;
+
+        if (TriStateService::INHERIT === $physicalProperties->manualWeight) {
+            $weight += $this->getEmptyWeight();
+        }
 
         $physicalProperties->manualWeight  = TriStateService::INHERIT;
         $physicalProperties->initialWeight = $weight;
@@ -29,9 +33,6 @@ final class WeightCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
-     * Get the empty weight for the package type. Digital stamp is excluded, because its weight has been applied already
-     * in the selected range through $order->manualWeight.
-     *
      * @return int
      */
     private function getEmptyWeight(): int
@@ -42,6 +43,9 @@ final class WeightCalculator extends AbstractPdkOrderOptionCalculator
 
             case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
                 return (int) Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID);
+
+            case DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME:
+                return (int) Settings::get(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT, OrderSettings::ID);
 
             default:
                 return 0;

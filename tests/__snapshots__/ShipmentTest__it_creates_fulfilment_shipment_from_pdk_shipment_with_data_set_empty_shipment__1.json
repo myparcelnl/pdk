@@ -1,44 +1,46 @@
 {
-    "carrier": 1,
-    "contractId": null,
-    "customsDeclaration": null,
-    "options": {
-        "ageCheck": false,
-        "collect": null,
-        "cooledDelivery": null,
-        "deliveryDate": null,
-        "deliveryType": 2,
-        "hideSender": false,
-        "insurance": 0,
-        "labelDescription": "",
-        "largeFormat": false,
-        "onlyRecipient": false,
-        "packageType": 1,
-        "return": false,
-        "sameDayDelivery": false,
-        "saturdayDelivery": null,
-        "signature": false
-    },
-    "pickup": null,
-    "recipient": {
-        "address1": null,
-        "address2": null,
-        "area": null,
-        "cc": null,
-        "city": null,
-        "postalCode": null,
-        "region": null,
-        "state": null,
-        "email": null,
-        "phone": null,
-        "person": null,
-        "company": null
-    },
-    "physicalProperties": {
-        "height": 0,
-        "length": 0,
-        "weight": 0,
-        "width": 0
-    },
-    "dropOffPoint": null
+  "carrier": 1,
+  "contractId": null,
+  "customsDeclaration": null,
+  "options": {
+    "ageCheck": false,
+    "collect": null,
+    "cooledDelivery": null,
+    "deliveryDate": null,
+    "deliveryType": 2,
+    "hideSender": false,
+    "insurance": 0,
+    "labelDescription": "",
+    "largeFormat": false,
+    "onlyRecipient": false,
+    "packageType": 1,
+    "return": false,
+    "sameDayDelivery": false,
+    "saturdayDelivery": null,
+    "signature": false
+  },
+  "pickup": null,
+  "recipient": {
+    "address1": null,
+    "address2": null,
+    "area": null,
+    "cc": null,
+    "city": null,
+    "postalCode": null,
+    "region": null,
+    "state": null,
+    "email": null,
+    "phone": null,
+    "person": null,
+    "company": null
+  },
+  "physicalProperties": {
+    "height": 0,
+    "length": 0,
+    "width": 0,
+    "initialWeight": 0,
+    "manualWeight": -1,
+    "totalWeight": 0
+  },
+  "dropOffPoint": null
 }

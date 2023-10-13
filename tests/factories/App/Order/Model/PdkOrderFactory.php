@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationFactory;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptionsFactory;
 use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalPropertiesFactory;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentFactory;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -133,6 +134,16 @@ final class PdkOrderFactory extends AbstractModelFactory
     public function withNotes($notes = 1): self
     {
         return $this->withCollection('notes', $notes);
+    }
+
+    /**
+     * @param  string $packageType
+     *
+     * @return $this
+     */
+    public function withPackageType(string $packageType): self
+    {
+        return $this->withDeliveryOptions(factory(DeliveryOptions::class)->withPackageType($packageType));
     }
 
     public function withShipments($shipments = 1): self
