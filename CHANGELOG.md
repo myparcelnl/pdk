@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.0](https://github.com/myparcelnl/pdk/compare/v2.27.0...v2.28.0) (2023-10-13)
+
+
+### :bug: Bug Fixes
+
+* **shipment:** include address2 in street ([#214](https://github.com/myparcelnl/pdk/issues/214)) ([0e434de](https://github.com/myparcelnl/pdk/commit/0e434de78c0df1ee3d10fccfe288ddc77a4f4ed7))
+
+
+### :sparkles: New Features
+
+* **order:** allow changing digital stamp weight range ([#215](https://github.com/myparcelnl/pdk/issues/215)) ([20a58fa](https://github.com/myparcelnl/pdk/commit/20a58fa7d4a69ef4faec0bda5db5fce2d05a2181))
+
 ## [2.27.0](https://github.com/myparcelnl/pdk/compare/v2.26.0...v2.27.0) (2023-10-11)
 
 
