@@ -260,6 +260,7 @@ class PostShipmentsRequest extends Request
     private function getRecipient(Shipment $shipment): array
     {
         $recipient = $shipment->recipient;
+        $street    = trim(implode(' ', [$recipient->address1, $recipient->address2])) ?: null;
 
         return Utils::filterNull([
             'area'                   => $recipient->area,
@@ -272,7 +273,7 @@ class PostShipmentsRequest extends Request
             'postal_code'            => $recipient->postalCode,
             'region'                 => $recipient->region,
             'state'                  => $recipient->state,
-            'street'                 => $recipient->address1,
+            'street'                 => $street,
             'street_additional_info' => $recipient->address2,
             'eori_number'            => $recipient->eoriNumber,
             'vat_number'             => $recipient->vatNumber,
