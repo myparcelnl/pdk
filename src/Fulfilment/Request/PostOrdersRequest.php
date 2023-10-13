@@ -31,7 +31,7 @@ class PostOrdersRequest extends Request
     }
 
     /**
-     * @return null|string
+     * @return string
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getBody(): string
@@ -114,9 +114,12 @@ class PostOrdersRequest extends Request
     }
 
     /**
+     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
+     *
+     * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getShipment(Order $order): ?array
+    private function getShipment(Order $order): array
     {
         $shipment = $order->shipment;
 
@@ -129,9 +132,12 @@ class PostOrdersRequest extends Request
                 ? $shipment->dropOffPoint->toSnakeCaseArray()
                 : null,
             'options'             => $this->getShipmentOptions($shipment),
-            'physical_properties' => $shipment->physicalProperties
-                ? $shipment->physicalProperties->toSnakeCaseArray()
-                : null,
+            'physical_properties' => Utils::filterNull([
+                'height' => $shipment->physicalProperties->height,
+                'length' => $shipment->physicalProperties->length,
+                'width'  => $shipment->physicalProperties->width,
+                'weight' => $shipment->physicalProperties->totalWeight,
+            ]),
             'pickup'              => $shipment->pickup
                 ? $shipment->pickup->toSnakeCaseArray()
                 : null,

@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+ * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties           $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
@@ -36,6 +37,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
  * @property Collection<DeliveryOptions>                                 $inheritedDeliveryOptions
+ * @property array                                                       $digitalStampRanges
  */
 class OrderDataContext extends PdkOrder
 {
@@ -44,6 +46,7 @@ class OrderDataContext extends PdkOrder
     public function __construct(?array $data = null)
     {
         $this->attributes['inheritedDeliveryOptions'] = null;
+        $this->attributes['digitalStampRanges']       = Pdk::get('digitalStampRanges');
 
         parent::__construct($data);
     }

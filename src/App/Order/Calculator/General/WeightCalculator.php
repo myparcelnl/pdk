@@ -8,22 +8,33 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 final class WeightCalculator extends AbstractPdkOrderOptionCalculator
 {
     public function calculate(): void
     {
-        $emptyWeight = $this->getEmptyWeight();
+        $physicalProperties = $this->order->physicalProperties;
 
-        $this->order->physicalProperties->weight += $emptyWeight;
+        $weight = $physicalProperties->totalWeight;
+
+        if (TriStateService::INHERIT === $physicalProperties->manualWeight) {
+            $weight += $this->getEmptyWeight();
+        }
+
+        $physicalProperties->manualWeight  = TriStateService::INHERIT;
+        $physicalProperties->initialWeight = $weight;
 
         if (! $this->order->customsDeclaration) {
             return;
         }
 
-        $this->order->customsDeclaration->weight += $emptyWeight;
+        $this->order->customsDeclaration->weight = $weight;
     }
 
+    /**
+     * @return int
+     */
     private function getEmptyWeight(): int
     {
         switch ($this->order->deliveryOptions->packageType) {

@@ -50,6 +50,7 @@ function setup(): void
 
     factory(PdkProduct::class)
         ->withExternalIdentifier('product-1')
+        ->withWeight(120)
         ->withSettings(
             factory(ProductSettings::class)
                 ->withExportAgeCheck(TriStateService::DISABLED)
@@ -123,4 +124,14 @@ it('exposes inherited options', function () {
                 ],
             ],
         ]);
+});
+
+it('gets digital stamp ranges', function () {
+    $context = factory(OrderDataContext::class)->make();
+
+    expect($context->digitalStampRanges)
+        ->toBeArray()
+        ->and($context->digitalStampRanges)->not->toBeEmpty()
+        ->and($context->digitalStampRanges)->each->toBeArray()
+        ->and($context->digitalStampRanges)->each->toHaveKeys(['min', 'max', 'average']);
 });

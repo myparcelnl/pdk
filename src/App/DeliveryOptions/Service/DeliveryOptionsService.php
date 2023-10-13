@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -190,7 +189,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return array<string, \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection>
+     * @return array{0: string, 1: \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection}
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
@@ -198,7 +197,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         foreach ($cart->shippingMethod->allowedPackageTypes->all() as $packageType) {
-            $weight = $this->getWeightByPackageType($cart, $packageType);
+            $weight = $this->getWeightByPackageType($cart->lines->getTotalWeight(), $packageType);
 
             $filteredCarriers = $allCarriers
                 ->filter(
@@ -232,18 +231,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart     $cart
+     * @param  int                                        $weight
      * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
      *
      * @return int
      */
-    private function getWeightByPackageType(PdkCart $cart, PackageType $packageType): int
+    private function getWeightByPackageType(int $weight, PackageType $packageType): int
     {
-        $cartWeight = (int) $cart->lines->reduce(function (float $carry, PdkOrderLine $line) {
-            return $carry + $line->product->weight * $line->quantity;
-        }, 0);
-
-        $fullWeight = $cartWeight;
+        $fullWeight = $weight;
 
         $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
 

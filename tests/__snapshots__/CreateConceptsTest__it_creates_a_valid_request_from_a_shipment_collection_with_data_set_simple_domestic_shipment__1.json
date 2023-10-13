@@ -12,12 +12,12 @@
         "amount": 500,
         "currency": "EUR"
       },
-      "age_check": 1,
       "label_description": "order 204829",
+      "age_check": 1,
       "only_recipient": 1
     },
     "physical_properties": {
-      "weight": 2000
+      "weight": 0
     },
     "recipient": {
       "cc": "NL",

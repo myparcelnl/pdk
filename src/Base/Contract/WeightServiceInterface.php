@@ -6,6 +6,9 @@ namespace MyParcelNL\Pdk\Base\Contract;
 
 interface WeightServiceInterface
 {
+    /**
+     * @deprecated use Pdk::get('digitalStampRanges'). Will be removed in v3.0.0
+     */
     public const DIGITAL_STAMP_RANGES = [
         [
             'min'     => 0,
@@ -46,7 +49,7 @@ interface WeightServiceInterface
      *
      * @return int
      */
-    public function convertToDigitalStamp(int $weight, array $ranges = self::DIGITAL_STAMP_RANGES): int;
+    public function convertToDigitalStamp(int $weight, array $ranges = []): int;
 
     /**
      * Convert a given weight to grams.

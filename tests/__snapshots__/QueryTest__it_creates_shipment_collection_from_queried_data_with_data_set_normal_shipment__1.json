@@ -1,126 +1,128 @@
 {
-    "orderId": null,
-    "multiCollo": false,
-    "updated": null,
-    "deleted": null,
-    "id": 7,
-    "shopId": 6,
-    "referenceIdentifier": "GeheimeDingen-1",
-    "externalIdentifier": "CV515676839NL",
-    "barcode": "CV515676839NL",
+  "orderId": null,
+  "multiCollo": false,
+  "updated": null,
+  "deleted": null,
+  "id": 7,
+  "shopId": 6,
+  "referenceIdentifier": "GeheimeDingen-1",
+  "externalIdentifier": "CV515676839NL",
+  "barcode": "CV515676839NL",
+  "carrier": {
+    "externalIdentifier": "postnl",
+    "id": 1,
+    "name": "postnl",
+    "human": "PostNL",
+    "subscriptionId": null,
+    "enabled": false,
+    "isDefault": true,
+    "label": null,
+    "optional": false,
+    "primary": false,
+    "type": "main"
+  },
+  "collectionContact": null,
+  "customsDeclaration": {
+    "contents": 1,
+    "invoice": "123456",
+    "items": [
+      {
+        "amount": 1,
+        "classification": "123456",
+        "country": "NL",
+        "description": "Product",
+        "itemValue": {
+          "amount": 1000,
+          "currency": "EUR"
+        },
+        "weight": 500
+      }
+    ],
+    "weight": 3500
+  },
+  "delayed": false,
+  "delivered": false,
+  "deliveryOptions": {
     "carrier": {
-        "externalIdentifier": "postnl",
-        "id": 1,
-        "name": "postnl",
-        "human": "PostNL",
-        "subscriptionId": null,
-        "enabled": false,
-        "isDefault": true,
-        "label": null,
-        "optional": false,
-        "primary": false,
-        "type": "main"
+      "externalIdentifier": "postnl",
+      "id": 1,
+      "name": "postnl",
+      "human": "PostNL",
+      "subscriptionId": null,
+      "enabled": false,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main"
     },
-    "collectionContact": null,
-    "customsDeclaration": {
-        "contents": 1,
-        "invoice": "123456",
-        "items": [
-            {
-                "amount": 1,
-                "classification": "123456",
-                "country": "NL",
-                "description": "Product",
-                "itemValue": {
-                    "amount": 1000,
-                    "currency": "EUR"
-                },
-                "weight": 500
-            }
-        ],
-        "weight": 3500
+    "date": null,
+    "labelAmount": 1,
+    "pickupLocation": null,
+    "shipmentOptions": {
+      "labelDescription": "standaard kenmerk",
+      "insurance": 20000,
+      "ageCheck": 0,
+      "hideSender": -1,
+      "largeFormat": 0,
+      "onlyRecipient": 0,
+      "return": 0,
+      "sameDayDelivery": -1,
+      "signature": 0
     },
-    "delayed": false,
-    "delivered": false,
-    "deliveryOptions": {
-        "carrier": {
-            "externalIdentifier": "postnl",
-            "id": 1,
-            "name": "postnl",
-            "human": "PostNL",
-            "subscriptionId": null,
-            "enabled": false,
-            "isDefault": true,
-            "label": null,
-            "optional": false,
-            "primary": false,
-            "type": "main"
-        },
-        "date": null,
-        "labelAmount": 1,
-        "pickupLocation": null,
-        "shipmentOptions": {
-            "labelDescription": "standaard kenmerk",
-            "insurance": 20000,
-            "ageCheck": 0,
-            "hideSender": -1,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "return": 0,
-            "sameDayDelivery": -1,
-            "signature": 0
-        },
-        "deliveryType": "standard",
-        "packageType": "package"
-    },
-    "dropOffPoint": null,
-    "hidden": false,
-    "isReturn": false,
-    "linkConsumerPortal": null,
-    "multiColloMainShipmentId": null,
-    "partnerTrackTraces": [],
-    "physicalProperties": {
-        "height": 20,
-        "length": 40,
-        "weight": 3500,
-        "width": 30
-    },
-    "price": {
-        "amount": 5390,
-        "currency": "EUR"
-    },
-    "recipient": {
-        "address1": "Schottegatweg Oost 12",
-        "address2": null,
-        "area": null,
-        "cc": "CW",
-        "city": "Willemstad",
-        "postalCode": null,
-        "region": null,
-        "state": null,
-        "email": "meneer@groenteboer.nl",
-        "phone": "+31699335577",
-        "person": "Joep Meloen",
-        "company": "MyParcel"
-    },
-    "sender": {
-        "address1": "Antareslaan 31",
-        "address2": null,
-        "area": null,
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "postalCode": "2132 JE",
-        "region": null,
-        "state": null,
-        "email": "shop@geheimedingen.nl",
-        "phone": "0612345678",
-        "person": "Denzel Crocker",
-        "company": "Geheime Dingen"
-    },
-    "shipmentType": 1,
-    "status": 2,
-    "created": "2021-04-26 14:06:45",
-    "createdBy": 35159,
-    "modified": "2021-05-03 07:42:43",
-    "modifiedBy": 35159
+    "deliveryType": "standard",
+    "packageType": "package"
+  },
+  "dropOffPoint": null,
+  "hidden": false,
+  "isReturn": false,
+  "linkConsumerPortal": null,
+  "multiColloMainShipmentId": null,
+  "partnerTrackTraces": [],
+  "physicalProperties": {
+    "height": 20,
+    "length": 40,
+    "width": 30,
+    "initialWeight": 0,
+    "manualWeight": -1,
+    "totalWeight": 0
+  },
+  "price": {
+    "amount": 5390,
+    "currency": "EUR"
+  },
+  "recipient": {
+    "address1": "Schottegatweg Oost 12",
+    "address2": null,
+    "area": null,
+    "cc": "CW",
+    "city": "Willemstad",
+    "postalCode": null,
+    "region": null,
+    "state": null,
+    "email": "meneer@groenteboer.nl",
+    "phone": "+31699335577",
+    "person": "Joep Meloen",
+    "company": "MyParcel"
+  },
+  "sender": {
+    "address1": "Antareslaan 31",
+    "address2": null,
+    "area": null,
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132 JE",
+    "region": null,
+    "state": null,
+    "email": "shop@geheimedingen.nl",
+    "phone": "0612345678",
+    "person": "Denzel Crocker",
+    "company": "Geheime Dingen"
+  },
+  "shipmentType": 1,
+  "status": 2,
+  "created": "2021-04-26 14:06:45",
+  "createdBy": 35159,
+  "modified": "2021-05-03 07:42:43",
+  "modifiedBy": 35159
 }
