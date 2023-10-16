@@ -84,9 +84,9 @@ class PostReturnShipmentsRequest extends Request
         return array_filter(
             [
                 'package_type' => $shipment->deliveryOptions->getPackageTypeId(),
-                'insurance'    => $shipmentOptions->insurance
+                'insurance'    => $options['insurance']
                     ? [
-                        'amount'   => $shipmentOptions->insurance * 100,
+                        'amount'   => $options['insurance'],
                         'currency' => 'EUR',
                     ] : null,
             ] + $options
