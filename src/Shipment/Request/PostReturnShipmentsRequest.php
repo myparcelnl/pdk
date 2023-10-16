@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -99,6 +103,8 @@ class PostReturnShipmentsRequest extends Request
     private function encodeReturnShipments(): array
     {
         return $this->collection->map(function (Shipment $shipment) {
+            $shipment = $this->ensureReturnCapabilities($shipment);
+
             return [
                 'parent'               => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
@@ -109,5 +115,28 @@ class PostReturnShipmentsRequest extends Request
             ];
         })
             ->toArray();
+    }
+
+    private function ensureReturnCapabilities(Shipment $shipment): Shipment
+    {
+        $carrierId = $shipment->carrier->id;
+        $carrier   =
+            Platform::getCarriers()
+                ->firstWhere('id', $carrierId);
+
+        if (! $carrier || ! $carrier->returnCapabilities) {
+            Notifications::warning(
+                "{$shipment->carrier->getHuman()} has no return capabilities",
+                'Return shipment exported with default carrier ' . Platform::get('defaultCarrier'),
+                Notification::CATEGORY_ACTION,
+                [
+                    'action'   => PdkBackendActions::EXPORT_RETURN,
+                    'orderIds' => $shipment->referenceIdentifier,
+                ]
+            );
+            $shipment->carrier = ['carrierId' => Platform::get('defaultCarrierId')];
+        }
+
+        return $shipment;
     }
 }
