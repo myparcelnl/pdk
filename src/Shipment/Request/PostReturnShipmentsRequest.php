@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
@@ -126,7 +127,7 @@ class PostReturnShipmentsRequest extends Request
 
         if (! $carrier || ! $carrier->returnCapabilities) {
             Notifications::warning(
-                "{$shipment->carrier->getHuman()} has no return capabilities",
+                "{$shipment->carrier->human} has no return capabilities",
                 'Return shipment exported with default carrier ' . Platform::get('defaultCarrier'),
                 Notification::CATEGORY_ACTION,
                 [
@@ -134,7 +135,7 @@ class PostReturnShipmentsRequest extends Request
                     'orderIds' => $shipment->referenceIdentifier,
                 ]
             );
-            $shipment->carrier = ['carrierId' => Platform::get('defaultCarrierId')];
+            $shipment->carrier = new Carrier(['carrierId' => Platform::get('defaultCarrierId')]);
         }
 
         return $shipment;
