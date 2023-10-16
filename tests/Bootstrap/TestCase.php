@@ -24,6 +24,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             MockCarrierSchema::class,
             MockMemoryCacheStorage::class,
             MockOrderStatusService::class,
+            MockPdkActionsService::class,
             SharedFactoryState::class,
         ];
     }

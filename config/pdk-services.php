@@ -8,6 +8,8 @@ use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
+use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
+use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Service\CartCalculationService;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsFeesServiceInterface;
@@ -182,6 +184,11 @@ return [
     PdkAccountRepositoryInterface::class       => factory(function () {
         return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
     }),
+
+    /**
+     * Handles executing pdk actions.
+     */
+    PdkActionsServiceInterface::class          => autowire(PdkActionsService::class),
 
     /**
      * Handles order options calculation.

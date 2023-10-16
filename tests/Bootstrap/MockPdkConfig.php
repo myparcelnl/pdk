@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
+use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Contract\PdkCartRepositoryInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
@@ -84,6 +85,7 @@ class MockPdkConfig
             MigrationServiceInterface::class            => get(MockMigrationService::class),
             OrderStatusServiceInterface::class          => get(MockOrderStatusService::class),
             PdkAccountRepositoryInterface::class        => get(MockPdkAccountRepository::class),
+            PdkActionsServiceInterface::class           => get(MockPdkActionsService::class),
             PdkCartRepositoryInterface::class           => get(MockPdkCartRepository::class),
             PdkInterface::class                         => get(MockPdk::class),
             PdkOrderNoteRepositoryInterface::class      => get(MockPdkOrderNoteRepository::class),
