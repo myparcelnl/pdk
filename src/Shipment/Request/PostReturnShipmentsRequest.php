@@ -118,6 +118,14 @@ class PostReturnShipmentsRequest extends Request
             ->toArray();
     }
 
+    /**
+     * If the carrier cannot handle return shipments, the carrier will be set to the platform default carrier.
+     * A notification is emitted.
+     *
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
+     */
     private function ensureReturnCapabilities(Shipment $shipment): Shipment
     {
         $carrierId = $shipment->carrier->id;
