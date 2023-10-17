@@ -120,7 +120,7 @@ class PostReturnShipmentsRequest extends Request
 
     /**
      * If the carrier cannot handle return shipments, the carrier will be set to the platform default carrier.
-     * A notification is emitted.
+     * In that case a notification is emitted.
      *
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
