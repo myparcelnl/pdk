@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 return [
     'name'             => 'myparcel',
+    'alias'            => 'MyParcelNL',
     'human'            => 'MyParcel',
     'backofficeUrl'    => 'https://backoffice.myparcel.nl',
     'localCountry'     => CountryCodes::CC_NL,

@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 return [
     'name'             => 'flespakket',
+    'alias'            => 'Flespakket',
     'human'            => 'Flespakket',
     'backofficeUrl'    => 'https://backoffice.flespakket.nl',
     'localCountry'     => CountryCodes::CC_NL,
