@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -56,7 +57,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private function calculateInsurance(?int $amount): int
     {
         if (null === $amount || TriStateService::DISABLED === $amount) {
-            return 0;
+            /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
+            $schema        = Pdk::get(CarrierSchema::class);
+            $carrierSchema = $schema->setCarrier($this->order->deliveryOptions->carrier);
+
+            return $carrierSchema->getAllowedInsuranceAmounts()[0] ?? 0;
         }
 
         $carrierSettings   = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);

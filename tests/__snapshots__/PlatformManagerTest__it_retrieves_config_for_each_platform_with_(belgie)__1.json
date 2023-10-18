@@ -53,7 +53,7 @@
         "packageTypes": ["package"],
         "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": {
-          "insurance": [0]
+          "insurance": [52000]
         },
         "features": {
           "dropOffAtPostalPoint": true,

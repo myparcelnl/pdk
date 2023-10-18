@@ -404,7 +404,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getExportInsuranceFields(): array
     {
-        return [
+        $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
+
+        return count($insuranceAmounts) > 1 ? [
             new InteractiveElement(CarrierSettings::EXPORT_INSURANCE, Components::INPUT_TOGGLE),
 
             $this->withOperation(
@@ -429,7 +431,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     ]
                 )
             ),
-        ];
+        ] : [];
     }
 
     /**

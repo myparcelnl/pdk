@@ -292,6 +292,9 @@ return [
                     'ageCheck'      => false,
                     'onlyRecipient' => false,
                     'return'        => false,
+                    'insurance'     => [
+                        52000,
+                    ],
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,

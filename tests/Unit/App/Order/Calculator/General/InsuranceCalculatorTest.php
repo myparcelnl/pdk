@@ -13,10 +13,12 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -333,3 +335,35 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 400000,
         ],
     ]);
+
+it('calculates insurance for fixed insurance amount when insurance is disabled', function () {
+    mockPdkProperty('orderCalculators', [InsuranceCalculator::class]);
+
+    factory(Settings::class)
+        ->withCarrier(
+            Carrier::CARRIER_DPD_NAME,
+            [
+                CarrierSettings::EXPORT_INSURANCE => false,
+            ]
+        )
+        ->store();
+
+    $carrier = factory(Carrier::class)
+        ->withName(Carrier::CARRIER_DPD_NAME)
+        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [52000]]))
+        ->make();
+
+    $order = factory(PdkOrder::class)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withShipmentOptions(factory(ShipmentOptions::class)->withInsurance(0))
+        )
+        ->make();
+
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
+
+    expect($newOrder->deliveryOptions->shipmentOptions->insurance)->toBe(52000);
+});
