@@ -94,10 +94,7 @@ return [
                     DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
-                    'insurance' => [
-                        0,
-                        52000,
-                    ],
+                    'insurance' => false,
                 ],
                 'features'        => [
                     'dropOffAtPostalPoint'   => true,
