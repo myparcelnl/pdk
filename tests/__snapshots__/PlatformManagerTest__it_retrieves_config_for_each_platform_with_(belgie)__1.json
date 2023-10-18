@@ -83,10 +83,7 @@
                     "pickup"
                 ],
                 "shipmentOptions": {
-                    "insurance": [
-                        0,
-                        52000
-                    ]
+                    "insurance": false
                 },
                 "features": {
                     "dropOffAtPostalPoint": true,

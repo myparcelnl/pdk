@@ -102,10 +102,7 @@
                 "package"
             ],
             "shipmentOptions": {
-                "insurance": [
-                    0,
-                    52000
-                ]
+                "insurance": false
             }
         },
         "returnCapabilities": {
