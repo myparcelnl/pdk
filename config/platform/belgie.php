@@ -67,6 +67,7 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
                     'saturdayDelivery' => true,
@@ -90,6 +91,7 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
                     'insurance' => [
