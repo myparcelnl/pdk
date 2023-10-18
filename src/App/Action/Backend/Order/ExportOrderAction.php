@@ -146,7 +146,7 @@ class ExportOrderAction extends AbstractOrderAction
         }
 
         $shipments->each(function (Shipment $shipment) {
-            if ($this->sharingCustomerInformation($shipment->deliveryOptions->carrier)) {
+            if (! $this->sharingCustomerInformation($shipment->deliveryOptions->carrier)) {
                 $shipment->recipient->email = null;
                 $shipment->recipient->phone = null;
             }
