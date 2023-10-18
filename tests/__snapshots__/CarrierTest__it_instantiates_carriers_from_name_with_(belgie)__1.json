@@ -58,7 +58,8 @@
         "type": "main",
         "capabilities": {
             "deliveryTypes": [
-                "standard"
+                "standard",
+                "pickup"
             ],
             "features": {
                 "labelDescriptionLength": 45,
@@ -89,7 +90,8 @@
         "type": "main",
         "capabilities": {
             "deliveryTypes": [
-                "standard"
+                "standard",
+                "pickup"
             ],
             "features": {
                 "dropOffAtPostalPoint": true,
