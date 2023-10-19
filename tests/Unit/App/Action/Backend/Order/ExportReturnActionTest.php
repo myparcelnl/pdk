@@ -12,10 +12,11 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
-use MyParcelNL\Pdk\Tests\Factory\Collection\FactoryCollection;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -25,9 +26,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 usesShared(new UsesMockPdkInstance());
 
 it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
-    (new FactoryCollection([
-        $ordersFactory,
-    ]))->store();
+    $ordersFactory->store();
 
     MockApi::enqueue(
         new ExamplePostIdsResponse([['id' => 30011], ['id' => 30012]]),
@@ -50,28 +49,26 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                 factory(PdkOrder::class)
                     ->withExternalIdentifier('701')
                     ->withShipments([
-                        [
-                            'id'                  => 100001,
-                            'referenceIdentifier' => '1',
-                        ],
-                        [
-                            'id'                  => 100002,
-                            'referenceIdentifier' => '2',
-                            'deliveryOptions'     => [
-                                'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                                'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
-                                'shipmentOptions' => [
-                                    'signature' => true,
-                                ],
-                            ],
-                        ],
+                        factory(Shipment::class)
+                            ->withId(100001)
+                            ->withReferenceIdentifier('1'),
+                        factory(Shipment::class)
+                            ->withId(100002)
+                            ->withReferenceIdentifier('2')
+                            ->withDeliveryOptions(
+                                factory(DeliveryOptions::class)
+                                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
+                                    ->withShipmentOptions(factory(ShipmentOptions::class)->withSignature(1))
+                            ),
                     ]),
                 factory(PdkOrder::class)
                     ->withExternalIdentifier('247')
-                    ->withDeliveryOptions([
-                        'carrier'      => Carrier::CARRIER_POSTNL_NAME,
-                        'deliveryType' => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
-                    ])
+                    ->withDeliveryOptions(
+                        factory(DeliveryOptions::class)
+                            ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                            ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                    )
             );
         },
     ],
@@ -81,26 +78,28 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                 factory(PdkOrder::class)
                     ->withExternalIdentifier('701')
                     ->withShipments([
-                        [
-                            'id'                  => 100001,
-                            'referenceIdentifier' => '1',
-                            'deliveryOptions'     => [
-                                'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                                'shipmentOptions' => [
-                                    'insurance' => 0,
-                                ],
-                            ],
-                        ],
-                        [
-                            'id'                  => 100002,
-                            'referenceIdentifier' => '2',
-                            'deliveryOptions'     => [
-                                'carrier'         => Carrier::CARRIER_POSTNL_NAME,
-                                'shipmentOptions' => [
-                                    'insurance' => 500,
-                                ],
-                            ],
-                        ],
+                        factory(Shipment::class)
+                            ->withId(100001)
+                            ->withReferenceIdentifier('1')
+                            ->withDeliveryOptions(
+                                factory(DeliveryOptions::class)
+                                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withShipmentOptions(
+                                        factory(ShipmentOptions::class)
+                                            ->withInsurance(0)
+                                    )
+                            ),
+                        factory(Shipment::class)
+                            ->withId(100002)
+                            ->withReferenceIdentifier('2')
+                            ->withDeliveryOptions(
+                                factory(DeliveryOptions::class)
+                                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withShipmentOptions(
+                                        factory(ShipmentOptions::class)
+                                            ->withInsurance(500)
+                                    )
+                            ),
                     ])
             );
         },
@@ -111,26 +110,28 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                 factory(PdkOrder::class)
                     ->withExternalIdentifier('701')
                     ->withShipments([
-                        [
-                            'id'                  => 100001,
-                            'referenceIdentifier' => '1',
-                            'deliveryOptions'     => [
-                                'carrier'         => Carrier::CARRIER_DHL_EUROPLUS_NAME,
-                                'shipmentOptions' => [
-                                    'insurance' => 0,
-                                ],
-                            ],
-                        ],
-                        [
-                            'id'                  => 100002,
-                            'referenceIdentifier' => '2',
-                            'deliveryOptions'     => [
-                                'carrier'         => Carrier::CARRIER_DHL_EUROPLUS_NAME,
-                                'shipmentOptions' => [
-                                    'insurance' => 500,
-                                ],
-                            ],
-                        ],
+                        factory(Shipment::class)
+                            ->withId(100001)
+                            ->withReferenceIdentifier('1')
+                            ->withDeliveryOptions(
+                                factory(DeliveryOptions::class)
+                                    ->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME)
+                                    ->withShipmentOptions(
+                                        factory(ShipmentOptions::class)
+                                            ->withInsurance(0)
+                                    )
+                            ),
+                        factory(Shipment::class)
+                            ->withId(100002)
+                            ->withReferenceIdentifier('2')
+                            ->withDeliveryOptions(
+                                factory(DeliveryOptions::class)
+                                    ->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME)
+                                    ->withShipmentOptions(
+                                        factory(ShipmentOptions::class)
+                                            ->withInsurance(500)
+                                    )
+                            ),
                     ])
             );
         },

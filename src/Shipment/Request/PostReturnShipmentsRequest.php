@@ -129,9 +129,8 @@ class PostReturnShipmentsRequest extends Request
     private function ensureReturnCapabilities(Shipment $shipment): Shipment
     {
         $carrierId = $shipment->carrier->id;
-        $carrier   =
-            Platform::getCarriers()
-                ->firstWhere('id', $carrierId);
+        $carrier   = Platform::getCarriers()
+            ->firstWhere('id', $carrierId);
 
         if (! $carrier || ! $carrier->returnCapabilities) {
             Notifications::warning(
