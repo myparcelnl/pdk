@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.1](https://github.com/myparcelnl/pdk/compare/v2.28.0...v2.28.1) (2023-10-20)
+
+
+### :bug: Bug Fixes
+
+* **returns:** prevent validation error on export return ([#216](https://github.com/myparcelnl/pdk/issues/216)) ([a046143](https://github.com/myparcelnl/pdk/commit/a046143b65931d1f00c982dd96858810440caf42))
+
 ## [2.28.0](https://github.com/myparcelnl/pdk/compare/v2.27.0...v2.28.0) (2023-10-13)
 
 
