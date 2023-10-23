@@ -34,22 +34,13 @@ return [
                 ],
                 'shipmentOptions' => [
                     'signature'     => true,
+                    'ageCheck'      => false,
+                    'return'        => false,
                     'onlyRecipient' => true,
                     'largeFormat'   => true,
                     'insurance'     => [
                         0,
-                        10000,
-                        25000,
                         50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000,
                     ],
                 ],
                 'features'        => [
@@ -75,6 +66,8 @@ return [
                     'insurance'        => [
                         0,
                         50000,
+                        250000,
+                        500000,
                     ],
                 ],
                 'features'        => [
@@ -94,7 +87,7 @@ return [
                     DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
-                    'insurance' => false,
+                    'insurance' => [0],
                 ],
                 'features'        => [
                     'dropOffAtPostalPoint'   => true,
