@@ -6,7 +6,6 @@ use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
 use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
-use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 
@@ -37,9 +36,7 @@ return static function (RectorConfig $rectorConfig): void {
         DeclareStrictTypesRector::class,
     ]);
 
-    $rectorConfig->ruleWithConfiguration(ConsistentPregDelimiterRector::class, [
-        ConsistentPregDelimiterRector::DELIMITER => '/',
-    ]);
+    $rectorConfig->rule(DeclareStrictTypesRector::class);
 
     /**
      * Global overrides.
@@ -52,12 +49,11 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     /**
-     * Overrides for Pest tests.
+     * Overrides for tests.
      */
     $rectorConfig
-        ->withPath(__DIR__ . '/tests')
         ->skip([
-            StaticArrowFunctionRector::class,
-            StaticClosureRector::class,
+            StaticArrowFunctionRector::class => [__DIR__ . '/tests'],
+            StaticClosureRector::class       => [__DIR__ . '/tests'],
         ]);
 };
