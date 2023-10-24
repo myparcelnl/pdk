@@ -34,22 +34,13 @@ return [
                 ],
                 'shipmentOptions' => [
                     'signature'     => true,
+                    'ageCheck'      => false,
+                    'return'        => false,
                     'onlyRecipient' => true,
                     'largeFormat'   => true,
                     'insurance'     => [
                         0,
-                        10000,
-                        25000,
                         50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000,
                     ],
                 ],
                 'features'        => [
@@ -67,6 +58,7 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
                     'saturdayDelivery' => true,
@@ -74,6 +66,8 @@ return [
                     'insurance'        => [
                         0,
                         50000,
+                        250000,
+                        500000,
                     ],
                 ],
                 'features'        => [
@@ -90,12 +84,10 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
-                    'insurance' => [
-                        0,
-                        52000,
-                    ],
+                    'insurance' => [0],
                 ],
                 'features'        => [
                     'dropOffAtPostalPoint'   => true,
