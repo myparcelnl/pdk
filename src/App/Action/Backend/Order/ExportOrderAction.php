@@ -26,6 +26,7 @@ use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -181,7 +182,12 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function sharingCustomerInformation(Carrier $carrier): bool
     {
-        $carrierNeedsCustomerInfo = in_array($carrier->name, Pdk::get('carriersNeedingCustomerInfo'));
+        /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
+        $schema = Pdk::get(CarrierSchema::class);
+
+        $schema->setCarrier($carrier);
+
+        $carrierNeedsCustomerInfo = $schema->needsCustomerInfo();
         $sharingCustomerInfo      = Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
 
         return $carrierNeedsCustomerInfo || $sharingCustomerInfo;

@@ -18,7 +18,6 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use function DI\factory;
 use function DI\value;
@@ -90,9 +89,5 @@ return [
         ['min' => 50, 'max' => 100, 'average' => 75],
         ['min' => 100, 'max' => 350, 'average' => 225],
         ['min' => 350, 'max' => 2000, 'average' => 1175],
-    ]),
-
-    'carriersNeedingCustomerInfo' => value([
-        Carrier::CARRIER_DPD_NAME,
     ]),
 ];
