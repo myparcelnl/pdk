@@ -45,6 +45,7 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
+                    'needsCustomerInfo'      => false,
                 ],
             ],
             'returnCapabilities' => [],
@@ -73,6 +74,7 @@ return [
                 'features'        => [
                     'labelDescriptionLength' => 45,
                     'multiCollo'             => true,
+                    'needsCustomerInfo'      => false,
                 ],
             ],
         ],
@@ -93,6 +95,7 @@ return [
                     'dropOffAtPostalPoint'   => true,
                     'labelDescriptionLength' => 45,
                     'multiCollo'             => true,
+                    'needsCustomerInfo'      => true,
                 ],
             ],
             'returnCapabilities' => [],
