@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.3](https://github.com/myparcelnl/pdk/compare/v2.28.2...v2.28.3) (2023-10-24)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** update carrier capabilities ([#218](https://github.com/myparcelnl/pdk/issues/218)) ([8cab5f8](https://github.com/myparcelnl/pdk/commit/8cab5f8b1fafd98e5a90c2fd44772e8c4740e541))
+
 ## [2.28.2](https://github.com/myparcelnl/pdk/compare/v2.28.1...v2.28.2) (2023-10-24)
 
 
