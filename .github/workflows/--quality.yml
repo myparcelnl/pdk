@@ -30,7 +30,7 @@ jobs:
         id: rector-cache
         with:
           path: './.cache/rector'
-          key: rector-cache-${{ hashFiles('composer.json') }}-${{ hashFiles('**/*.php') }}
+          key: rector-cache-${{ hashFiles('composer.json') }}-${{ hashFiles('rector.php', 'src/**/*.php', 'config/**/*.php', 'tests/**/*.php') }}
           restore-keys: |
             rector-cache-${{ hashFiles('composer.json') }}-
             rector-cache-
