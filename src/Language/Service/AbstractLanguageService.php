@@ -48,7 +48,7 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
     {
         $lang = substr($language ?? $this->getLanguage(), 0, 2);
 
-        return in_array($lang, Pdk::get('availableTranslations')) ? $lang : Pdk::get('defaultLanguage');
+        return in_array($lang, Pdk::get('availableLanguages')) ? $lang : Pdk::get('defaultLanguage');
     }
 
     /**
