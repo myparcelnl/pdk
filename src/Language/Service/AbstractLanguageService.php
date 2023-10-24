@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Language\Service;
 
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 
@@ -45,7 +46,9 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
      */
     public function getIso2(?string $language = null): string
     {
-        return substr($language ?? $this->getLanguage(), 0, 2);
+        $lang = substr($language ?? $this->getLanguage(), 0, 2);
+
+        return in_array($lang, Pdk::get('availableTranslations')) ? $lang : Pdk::get('defaultLanguage');
     }
 
     /**
