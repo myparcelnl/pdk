@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.2](https://github.com/myparcelnl/pdk/compare/v2.28.1...v2.28.2) (2023-10-24)
+
+
+### :bug: Bug Fixes
+
+* **deps:** add psr/log to prod dependencies ([f648448](https://github.com/myparcelnl/pdk/commit/f6484485257e83870c41dc3b399ac93f7fcd6461))
+
 ## [2.28.1](https://github.com/myparcelnl/pdk/compare/v2.28.0...v2.28.1) (2023-10-20)
 
 
