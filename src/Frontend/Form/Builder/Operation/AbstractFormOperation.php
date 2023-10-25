@@ -68,9 +68,11 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
     }
 
     /**
+     * @param  null|int $flags
+     *
      * @return array
      */
-    final public function toArray(): array
+    final public function toArray(?int $flags = null): array
     {
         return [
             $this->getOperationKey() => Utils::filterNull(array_filter($this->createArray())),

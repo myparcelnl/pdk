@@ -10,9 +10,11 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 abstract class AbstractEndpointRequest extends Request implements Arrayable
 {
     /**
+     * @param  null|int $flags
+     *
      * @return array
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
         return [
             'body'             => $this->getBody(),

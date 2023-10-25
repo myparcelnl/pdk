@@ -26,12 +26,14 @@ class InteractiveElement extends PlainElement
     }
 
     /**
+     * @param  null|int $flags
+     *
      * @return string[]
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
         return [
                 'name' => $this->name,
-            ] + parent::toArray();
+            ] + parent::toArray($flags);
     }
 }

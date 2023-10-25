@@ -14,7 +14,9 @@ interface Arrayable
     /**
      * Get the instance as an array.
      *
+     * @param  null|int $flags
+     *
      * @return array
      */
-    public function toArray(): array;
+    public function toArray(?int $flags = null): array;
 }
