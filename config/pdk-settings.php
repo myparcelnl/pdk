@@ -6,6 +6,7 @@ use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
@@ -78,6 +79,11 @@ return [
                     CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
                     CarrierSettings::PRICE_SIGNATURE                         => 0,
                     CarrierSettings::SHOW_DELIVERY_DAY                       => true,
+                ],
+            ],
+            OrderSettings::ID   => [
+                SettingsManager::KEY_ALL => [
+                    OrderSettings::STATUS_ON_LABEL_CREATE => -1,
                 ],
             ],
         ];

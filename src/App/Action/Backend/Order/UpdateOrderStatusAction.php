@@ -47,7 +47,7 @@ class UpdateOrderStatusAction extends AbstractOrderAction
 
         $status = SettingsFacade::get($settingName, OrderSettings::ID);
 
-        if (Settings::OPTION_NONE === (int) $status || null === $status) {
+        if (Settings::OPTION_NONE === (int) $status) {
             return $this->getResponse();
         }
 
