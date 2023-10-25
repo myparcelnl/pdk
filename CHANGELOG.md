@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.4](https://github.com/myparcelnl/pdk/compare/v2.28.3...v2.28.4) (2023-10-25)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** always pass customer info for dpd ([#220](https://github.com/myparcelnl/pdk/issues/220)) ([a5ece07](https://github.com/myparcelnl/pdk/commit/a5ece0777da8c1b5429d83488d8525537cc4d7be))
+* **language:** fix error when language is absent ([#222](https://github.com/myparcelnl/pdk/issues/222)) ([0dd4bb0](https://github.com/myparcelnl/pdk/commit/0dd4bb0e725fc7c9d6de7bd250d6c0dbb06fbec2))
+
 ## [2.28.3](https://github.com/myparcelnl/pdk/compare/v2.28.2...v2.28.3) (2023-10-24)
 
 
