@@ -60,6 +60,10 @@ it('converts to iso2 language code', function (?string $language, string $transl
     expect(Language::getIso2($language))->toBe($iso2);
 })->with('languages');
 
+it('falls back to default language when unsupported language is passed', function () {
+    expect(Language::getIso2('tr-TR'))->toBe('en');
+});
+
 it('translates indexed arrays', function () {
     $result = Language::translateArray(['send_help', 'help_is_coming']);
     expect($result)

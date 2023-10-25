@@ -135,7 +135,7 @@ return [
      * Carriers filtered by those allowed in the current platform.
      */
 
-    'carriers' => factory(function (): CarrierCollection {
+    'carriers'           => factory(function (): CarrierCollection {
         /** @var CarrierCollection $allCarriers */
         $allCarriers      = Pdk::get('allCarriers');
         $platformCarriers = new Collection(Platform::get('carriers'));
@@ -144,4 +144,18 @@ return [
             ->whereIn('name', $platformCarriers->pluck('name'))
             ->values();
     }),
+
+    /**
+     * Language to default to when no language is set.
+     */
+    'defaultLanguage'    => value('en'),
+
+    /**
+     * Languages present in the translations directory after the build process.
+     */
+    'availableLanguages' => value([
+        'en',
+        'nl',
+        'fr',
+    ]),
 ];
