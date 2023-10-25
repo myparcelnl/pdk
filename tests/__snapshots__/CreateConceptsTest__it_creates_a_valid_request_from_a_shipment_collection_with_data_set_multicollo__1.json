@@ -1,27 +1,27 @@
 [
-    {
-        "carrier": 1,
-        "general_settings": {
-            "save_recipient_address": 0
-        },
-        "options": {
-            "package_type": 1,
-            "delivery_type": 2
-        },
-        "physical_properties": {
-            "weight": 0
-        },
-        "recipient": {
-            "cc": "NL",
-            "city": "Hoofddorp",
-            "person": "Jaap Krekel",
-            "postal_code": "2132JE"
-        },
-        "reference_identifier": "my-multicollo-set",
-        "secondary_shipments": [
-            {
-                "reference_identifier": null
-            }
-        ]
-    }
+  {
+    "carrier": 1,
+    "general_settings": {
+      "save_recipient_address": 0
+    },
+    "options": {
+      "package_type": 1,
+      "delivery_type": 2
+    },
+    "physical_properties": {
+      "weight": 0
+    },
+    "recipient": {
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "person": "Jaap Krekel",
+      "postal_code": "2132JE"
+    },
+    "reference_identifier": "my-multicollo-set",
+    "secondary_shipments": [
+      {
+        "reference_identifier": null
+      }
+    ]
+  }
 ]

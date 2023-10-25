@@ -1,76 +1,76 @@
 {
-    "id": "print",
-    "title": "settings_print_title",
-    "description": "settings_print_description",
-    "elements": [
+  "id": "print",
+  "title": "settings_print_title",
+  "description": "settings_print_description",
+  "elements": [
+    {
+      "name": "output",
+      "$component": "RadioGroup",
+      "label": "settings_print_output",
+      "description": "settings_print_output_description",
+      "options": [
         {
-            "name": "output",
-            "$component": "RadioGroup",
-            "label": "settings_print_output",
-            "description": "settings_print_output_description",
-            "options": [
-                {
-                    "label": "settings_label_output_option_open",
-                    "value": "open"
-                },
-                {
-                    "label": "settings_label_output_option_download",
-                    "value": "download"
-                }
-            ]
+          "label": "settings_label_output_option_open",
+          "value": "open"
         },
         {
-            "name": "format",
-            "$component": "RadioGroup",
-            "label": "settings_print_format",
-            "description": "settings_print_format_description",
-            "options": [
-                {
-                    "label": "settings_label_format_option_a4",
-                    "value": "a4"
-                },
-                {
-                    "label": "settings_label_format_option_a6",
-                    "value": "a6"
-                }
-            ]
-        },
-        {
-            "name": "position",
-            "$builders": [
-                {
-                    "$visibleWhen": {
-                        "$if": [
-                            {
-                                "$target": "format",
-                                "$eq": "a4"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "$component": "MultiSelectInput",
-            "label": "settings_print_position",
-            "description": "settings_print_position_description",
-            "options": [
-                {
-                    "label": "settings_label_position_option_1",
-                    "value": 1
-                },
-                {
-                    "label": "settings_label_position_option_2",
-                    "value": 2
-                },
-                {
-                    "label": "settings_label_position_option_3",
-                    "value": 3
-                },
-                {
-                    "label": "settings_label_position_option_4",
-                    "value": 4
-                }
-            ]
+          "label": "settings_label_output_option_download",
+          "value": "download"
         }
-    ],
-    "children": null
+      ]
+    },
+    {
+      "name": "format",
+      "$component": "RadioGroup",
+      "label": "settings_print_format",
+      "description": "settings_print_format_description",
+      "options": [
+        {
+          "label": "settings_label_format_option_a4",
+          "value": "a4"
+        },
+        {
+          "label": "settings_label_format_option_a6",
+          "value": "a6"
+        }
+      ]
+    },
+    {
+      "name": "position",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "format",
+                "$eq": "a4"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "MultiSelectInput",
+      "label": "settings_print_position",
+      "description": "settings_print_position_description",
+      "options": [
+        {
+          "label": "settings_label_position_option_1",
+          "value": 1
+        },
+        {
+          "label": "settings_label_position_option_2",
+          "value": 2
+        },
+        {
+          "label": "settings_label_position_option_3",
+          "value": 3
+        },
+        {
+          "label": "settings_label_position_option_4",
+          "value": 4
+        }
+      ]
+    }
+  ],
+  "children": null
 }

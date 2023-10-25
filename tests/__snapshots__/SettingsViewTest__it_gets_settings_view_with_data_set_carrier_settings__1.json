@@ -1,377 +1,377 @@
 {
-    "id": "carrier",
-    "title": "settings_view_carrier_title",
-    "titleSuffix": null,
-    "description": "settings_view_carrier_description",
-    "elements": null,
-    "children": [
+  "id": "carrier",
+  "title": "settings_view_carrier_title",
+  "titleSuffix": null,
+  "description": "settings_view_carrier_description",
+  "elements": null,
+  "children": [
+    {
+      "id": "postnl",
+      "title": "carrier_postnl",
+      "description": "settings_view_carrier_postnl_description",
+      "elements": [
         {
-            "id": "postnl",
-            "title": "carrier_postnl",
-            "description": "settings_view_carrier_postnl_description",
-            "elements": [
-                {
-                    "$component": "SettingsDivider",
-                    "$wrapper": false,
-                    "content": "settings_carrier_export_description",
-                    "heading": "settings_carrier_export_title",
-                    "level": 2
-                },
-                {
-                    "$component": "SettingsDivider",
-                    "$wrapper": false,
-                    "content": "settings_carrier_delivery_options_description",
-                    "heading": "settings_carrier_delivery_options_title",
-                    "level": 2
-                },
-                {
-                    "name": "deliveryOptionsEnabled",
-                    "$component": "ToggleInput",
-                    "label": "settings_carrier_delivery_options_enabled",
-                    "description": "settings_carrier_delivery_options_enabled_description"
-                },
-                {
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$target": "deliveryOptionsEnabled"
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "SettingsDivider",
-                    "$wrapper": false,
-                    "content": "settings_carrier_delivery_options_delivery_description",
-                    "heading": "settings_carrier_delivery_options_delivery_title",
-                    "level": 3
-                },
-                {
-                    "name": "allowDeliveryOptions",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$target": "deliveryOptionsEnabled"
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "ToggleInput",
-                    "label": "settings_carrier_allow_delivery_options",
-                    "description": "settings_carrier_allow_delivery_options_description"
-                },
-                {
-                    "name": "defaultPackageType",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "SelectInput",
-                    "options": [
-                        {
-                            "value": -1,
-                            "label": "settings_default"
-                        }
-                    ],
-                    "label": "settings_carrier_default_package_type",
-                    "description": "settings_carrier_default_package_type_description"
-                },
-                {
-                    "name": "priceDeliveryTypeStandard",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "CurrencyInput",
-                    "label": "settings_carrier_price_delivery_type_standard",
-                    "description": "settings_carrier_price_delivery_type_standard_description"
-                },
-                {
-                    "name": "deliveryDaysWindow",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "NumberInput",
-                    "$attributes": {
-                        "min": 0,
-                        "max": 14
-                    },
-                    "label": "settings_carrier_delivery_days_window",
-                    "description": "settings_carrier_delivery_days_window_description"
-                },
-                {
-                    "name": "dropOffDelay",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "NumberInput",
-                    "label": "settings_carrier_drop_off_delay",
-                    "description": "settings_carrier_drop_off_delay_description"
-                },
-                {
-                    "name": "dropOffPossibilities",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "DropOffInput",
-                    "label": "settings_carrier_drop_off_possibilities",
-                    "description": "settings_carrier_drop_off_possibilities_description"
-                },
-                {
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "SettingsDivider",
-                    "$wrapper": false,
-                    "content": "settings_carrier_delivery_moments_description",
-                    "heading": "settings_carrier_delivery_moments_title",
-                    "level": 4
-                },
-                {
-                    "name": "showDeliveryDay",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "ToggleInput",
-                    "label": "settings_carrier_show_delivery_day",
-                    "description": "settings_carrier_show_delivery_day_description"
-                },
-                {
-                    "name": "allowMondayDelivery",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "ToggleInput",
-                    "label": "settings_carrier_allow_monday_delivery",
-                    "description": "settings_carrier_allow_monday_delivery_description"
-                },
-                {
-                    "name": "priceDeliveryTypeMonday",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$target": "allowMondayDelivery"
-                                    },
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "CurrencyInput",
-                    "label": "settings_carrier_price_delivery_type_monday",
-                    "description": "settings_carrier_price_delivery_type_monday_description"
-                },
-                {
-                    "name": "allowSaturdayDelivery",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "ToggleInput",
-                    "label": "settings_carrier_allow_saturday_delivery",
-                    "description": "settings_carrier_allow_saturday_delivery_description"
-                },
-                {
-                    "name": "priceDeliveryTypeSaturday",
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$target": "allowSaturdayDelivery"
-                                    },
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "CurrencyInput",
-                    "label": "settings_carrier_price_delivery_type_saturday",
-                    "description": "settings_carrier_price_delivery_type_saturday_description"
-                },
-                {
-                    "$builders": [
-                        {
-                            "$visibleWhen": {
-                                "$if": [
-                                    {
-                                        "$and": [
-                                            {
-                                                "$target": "deliveryOptionsEnabled"
-                                            },
-                                            {
-                                                "$target": "allowDeliveryOptions"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "$component": "SettingsDivider",
-                    "$wrapper": false,
-                    "content": "settings_carrier_shipment_options_description",
-                    "heading": "settings_carrier_shipment_options_title",
-                    "level": 4
-                }
-            ]
+          "$component": "SettingsDivider",
+          "$wrapper": false,
+          "content": "settings_carrier_export_description",
+          "heading": "settings_carrier_export_title",
+          "level": 2
+        },
+        {
+          "$component": "SettingsDivider",
+          "$wrapper": false,
+          "content": "settings_carrier_delivery_options_description",
+          "heading": "settings_carrier_delivery_options_title",
+          "level": 2
+        },
+        {
+          "name": "deliveryOptionsEnabled",
+          "$component": "ToggleInput",
+          "label": "settings_carrier_delivery_options_enabled",
+          "description": "settings_carrier_delivery_options_enabled_description"
+        },
+        {
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "deliveryOptionsEnabled"
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "SettingsDivider",
+          "$wrapper": false,
+          "content": "settings_carrier_delivery_options_delivery_description",
+          "heading": "settings_carrier_delivery_options_delivery_title",
+          "level": 3
+        },
+        {
+          "name": "allowDeliveryOptions",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "deliveryOptionsEnabled"
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_allow_delivery_options",
+          "description": "settings_carrier_allow_delivery_options_description"
+        },
+        {
+          "name": "defaultPackageType",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "SelectInput",
+          "options": [
+            {
+              "value": -1,
+              "label": "settings_default"
+            }
+          ],
+          "label": "settings_carrier_default_package_type",
+          "description": "settings_carrier_default_package_type_description"
+        },
+        {
+          "name": "priceDeliveryTypeStandard",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "CurrencyInput",
+          "label": "settings_carrier_price_delivery_type_standard",
+          "description": "settings_carrier_price_delivery_type_standard_description"
+        },
+        {
+          "name": "deliveryDaysWindow",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "NumberInput",
+          "$attributes": {
+            "min": 0,
+            "max": 14
+          },
+          "label": "settings_carrier_delivery_days_window",
+          "description": "settings_carrier_delivery_days_window_description"
+        },
+        {
+          "name": "dropOffDelay",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "NumberInput",
+          "label": "settings_carrier_drop_off_delay",
+          "description": "settings_carrier_drop_off_delay_description"
+        },
+        {
+          "name": "dropOffPossibilities",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "DropOffInput",
+          "label": "settings_carrier_drop_off_possibilities",
+          "description": "settings_carrier_drop_off_possibilities_description"
+        },
+        {
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "SettingsDivider",
+          "$wrapper": false,
+          "content": "settings_carrier_delivery_moments_description",
+          "heading": "settings_carrier_delivery_moments_title",
+          "level": 4
+        },
+        {
+          "name": "showDeliveryDay",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_show_delivery_day",
+          "description": "settings_carrier_show_delivery_day_description"
+        },
+        {
+          "name": "allowMondayDelivery",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_allow_monday_delivery",
+          "description": "settings_carrier_allow_monday_delivery_description"
+        },
+        {
+          "name": "priceDeliveryTypeMonday",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "allowMondayDelivery"
+                  },
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "CurrencyInput",
+          "label": "settings_carrier_price_delivery_type_monday",
+          "description": "settings_carrier_price_delivery_type_monday_description"
+        },
+        {
+          "name": "allowSaturdayDelivery",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_allow_saturday_delivery",
+          "description": "settings_carrier_allow_saturday_delivery_description"
+        },
+        {
+          "name": "priceDeliveryTypeSaturday",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "allowSaturdayDelivery"
+                  },
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "CurrencyInput",
+          "label": "settings_carrier_price_delivery_type_saturday",
+          "description": "settings_carrier_price_delivery_type_saturday_description"
+        },
+        {
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "SettingsDivider",
+          "$wrapper": false,
+          "content": "settings_carrier_shipment_options_description",
+          "heading": "settings_carrier_shipment_options_title",
+          "level": 4
         }
-    ]
+      ]
+    }
+  ]
 }

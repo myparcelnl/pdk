@@ -1,11 +1,11 @@
 {
-    "externalIdentifier": "bpost",
-    "id": 2,
-    "name": "bpost",
-    "human": "bpost",
-    "enabled": false,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
+  "externalIdentifier": "bpost",
+  "id": 2,
+  "name": "bpost",
+  "human": "bpost",
+  "enabled": false,
+  "isDefault": true,
+  "optional": false,
+  "primary": false,
+  "type": "main"
 }

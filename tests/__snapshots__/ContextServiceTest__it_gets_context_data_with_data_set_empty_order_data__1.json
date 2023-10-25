@@ -1,9 +1,9 @@
 {
-    "checkout": null,
-    "dynamic": null,
-    "global": null,
-    "orderData": [],
-    "pluginSettingsView": null,
-    "productData": null,
-    "productSettingsView": null
+  "checkout": null,
+  "dynamic": null,
+  "global": null,
+  "orderData": [],
+  "pluginSettingsView": null,
+  "productData": null,
+  "productSettingsView": null
 }

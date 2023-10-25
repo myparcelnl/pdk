@@ -1,21 +1,21 @@
 {
-    "data": {
-        "product_settings": {
-            "id": "product",
-            "countryOfOrigin": -1,
-            "customsCode": -1,
-            "disableDeliveryOptions": -1,
-            "dropOffDelay": -1,
-            "exportAgeCheck": 1,
-            "exportHideSender": -1,
-            "exportInsurance": -1,
-            "exportLargeFormat": -1,
-            "exportOnlyRecipient": -1,
-            "exportReturn": -1,
-            "exportSignature": -1,
-            "fitInDigitalStamp": -1,
-            "fitInMailbox": -1,
-            "packageType": -1
-        }
+  "data": {
+    "product_settings": {
+      "id": "product",
+      "countryOfOrigin": -1,
+      "customsCode": -1,
+      "disableDeliveryOptions": -1,
+      "dropOffDelay": -1,
+      "exportAgeCheck": 1,
+      "exportHideSender": -1,
+      "exportInsurance": -1,
+      "exportLargeFormat": -1,
+      "exportOnlyRecipient": -1,
+      "exportReturn": -1,
+      "exportSignature": -1,
+      "fitInDigitalStamp": -1,
+      "fitInMailbox": -1,
+      "packageType": -1
     }
+  }
 }

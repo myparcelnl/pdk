@@ -1,21 +1,21 @@
 {
-    "data": {
-        "product_settings": {
-            "id": "product",
-            "countryOfOrigin": "DE",
-            "customsCode": "388",
-            "disableDeliveryOptions": 1,
-            "dropOffDelay": 2,
-            "exportAgeCheck": 1,
-            "exportHideSender": -1,
-            "exportInsurance": 1,
-            "exportLargeFormat": 1,
-            "exportOnlyRecipient": 1,
-            "exportReturn": 1,
-            "exportSignature": 1,
-            "fitInDigitalStamp": -1,
-            "fitInMailbox": 10,
-            "packageType": "mailbox"
-        }
+  "data": {
+    "product_settings": {
+      "id": "product",
+      "countryOfOrigin": "DE",
+      "customsCode": "388",
+      "disableDeliveryOptions": 1,
+      "dropOffDelay": 2,
+      "exportAgeCheck": 1,
+      "exportHideSender": -1,
+      "exportInsurance": 1,
+      "exportLargeFormat": 1,
+      "exportOnlyRecipient": 1,
+      "exportReturn": 1,
+      "exportSignature": 1,
+      "fitInDigitalStamp": -1,
+      "fitInMailbox": 10,
+      "packageType": "mailbox"
     }
+  }
 }
