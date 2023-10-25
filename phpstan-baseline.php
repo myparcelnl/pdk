@@ -62,11 +62,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Base/Factory/PdkFactory.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Base\\\\Contract\\\\Arrayable\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Base/Model/Model.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Offset \'date\' on array\\{date\\: string, timezone\\: string, timezone_type\\: int\\} in isset\\(\\) always exists and is not nullable\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Base/Model/Model.php',
@@ -95,11 +90,6 @@ $ignoreErrors[] = [
 	'message' => '#^Negated boolean expression is always false\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Base/Support/Arr.php',
-];
-$ignoreErrors[] = [
-	'message' => '#^Method MyParcelNL\\\\Pdk\\\\Base\\\\Contract\\\\Arrayable\\:\\:toArray\\(\\) invoked with 1 parameter, 0 required\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Base/Support/Collection.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type array\\.$#',
