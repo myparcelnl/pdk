@@ -28,8 +28,7 @@
                             "pickup"
                         ],
                         "features": {
-                            "labelDescriptionLength": 45,
-                            "needsCustomerInfo": false
+                            "labelDescriptionLength": 45
                         },
                         "packageTypes": [
                             "package",
@@ -66,8 +65,7 @@
                             "standard"
                         ],
                         "features": {
-                            "labelDescriptionLength": 45,
-                            "needsCustomerInfo": false
+                            "labelDescriptionLength": 45
                         },
                         "packageTypes": [
                             "package"

@@ -160,7 +160,10 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->cache[$identifier];
     }
 
-    public function needsCustomerInfo()
+    /**
+     * @return bool
+     */
+    public function needsCustomerInfo(): bool
     {
         return (bool) $this->getFeature('needsCustomerInfo');
     }

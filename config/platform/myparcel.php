@@ -62,7 +62,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
             'returnCapabilities' => [
@@ -97,7 +96,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
         ],
@@ -138,7 +136,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
             'returnCapabilities' => [
@@ -161,7 +158,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
         ],
@@ -200,7 +196,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
             'returnCapabilities' => [
@@ -223,7 +218,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
         ],
@@ -261,7 +255,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
         ],
@@ -281,7 +274,6 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
-                    'needsCustomerInfo'      => false,
                 ],
             ],
         ],
