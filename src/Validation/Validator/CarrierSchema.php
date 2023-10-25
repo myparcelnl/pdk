@@ -161,6 +161,14 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     }
 
     /**
+     * @return bool
+     */
+    public function needsCustomerInfo(): bool
+    {
+        return (bool) $this->getFeature('needsCustomerInfo');
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
      * @return self

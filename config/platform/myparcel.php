@@ -294,6 +294,7 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
+                    'needsCustomerInfo'      => true,
                 ],
             ],
         ],

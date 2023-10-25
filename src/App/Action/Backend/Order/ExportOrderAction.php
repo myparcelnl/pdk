@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
@@ -25,6 +26,7 @@ use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -108,7 +110,7 @@ class ExportOrderAction extends AbstractOrderAction
                 ->map(function (PdkOrder $order) {
                     $order->exported = true;
 
-                    if ($this->notSharingCustomerInformation()) {
+                    if (! $this->sharingCustomerInformation($order->deliveryOptions->carrier)) {
                         $order->shippingAddress->phone = null;
                         $order->shippingAddress->email = null;
 
@@ -144,12 +146,12 @@ class ExportOrderAction extends AbstractOrderAction
             return $orders;
         }
 
-        if ($this->notSharingCustomerInformation()) {
-            $shipments->each(function (Shipment $shipment) {
+        $shipments->each(function (Shipment $shipment) {
+            if (! $this->sharingCustomerInformation($shipment->deliveryOptions->carrier)) {
                 $shipment->recipient->email = null;
                 $shipment->recipient->phone = null;
-            });
-        }
+            }
+        });
 
         $concepts = $this->shipmentRepository->createConcepts($shipments);
 
@@ -174,11 +176,21 @@ class ExportOrderAction extends AbstractOrderAction
     }
 
     /**
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     *
      * @return bool
      */
-    protected function notSharingCustomerInformation(): bool
+    protected function sharingCustomerInformation(Carrier $carrier): bool
     {
-        return ! Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
+        /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
+        $schema = Pdk::get(CarrierSchema::class);
+
+        $schema->setCarrier($carrier);
+
+        $carrierNeedsCustomerInfo = $schema->needsCustomerInfo();
+        $sharingCustomerInfo      = Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
+
+        return $carrierNeedsCustomerInfo || $sharingCustomerInfo;
     }
 
     /**

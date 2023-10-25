@@ -93,6 +93,7 @@ return [
                     'dropOffAtPostalPoint'   => true,
                     'labelDescriptionLength' => 45,
                     'multiCollo'             => true,
+                    'needsCustomerInfo'      => true,
                 ],
             ],
             'returnCapabilities' => [],
