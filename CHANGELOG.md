@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.5](https://github.com/myparcelnl/pdk/compare/v2.28.4...v2.28.5) (2023-10-26)
+
+
+### :bug: Bug Fixes
+
+* **order:** fix error on updating order status if setting is empty ([#221](https://github.com/myparcelnl/pdk/issues/221)) ([b36d55c](https://github.com/myparcelnl/pdk/commit/b36d55c42b4b71208148d1f26342db1ca5f993a4))
+* **support:** make toArray act consistently everywhere ([#224](https://github.com/myparcelnl/pdk/issues/224)) ([5f0d5f2](https://github.com/myparcelnl/pdk/commit/5f0d5f2795a418941b9e9c96ba53f6ccf2f1615e))
+
 ## [2.28.4](https://github.com/myparcelnl/pdk/compare/v2.28.3...v2.28.4) (2023-10-25)
 
 
