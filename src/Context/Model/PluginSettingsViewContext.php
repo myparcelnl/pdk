@@ -55,9 +55,11 @@ class PluginSettingsViewContext implements Arrayable
     }
 
     /**
+     * @param  null|int $flags
+     *
      * @return array
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
         return $this->views;
     }

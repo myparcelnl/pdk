@@ -24,9 +24,11 @@ abstract class PdkEndpoints implements EndpointServiceInterface
     protected $parameters = [];
 
     /**
+     * @param  null|int $flags
+     *
      * @return \MyParcelNL\Pdk\Api\Request\Request[]
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
         return $this
             ->getEndpoints()

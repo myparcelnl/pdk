@@ -177,9 +177,11 @@ final class FormCondition extends AbstractFormBuilderCore implements FormConditi
     }
 
     /**
+     * @param  null|int $flags
+     *
      * @return array
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
         $array = array_filter([
             '$and' => $this->createArrays($this->ands),

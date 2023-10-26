@@ -74,9 +74,11 @@ class PlainElement implements ElementInterface
     }
 
     /**
+     * @param  null|int $flags
+     *
      * @return array
      */
-    public function toArray(): array
+    public function toArray(?int $flags = null): array
     {
         return Utils::filterNull(
             array_merge(

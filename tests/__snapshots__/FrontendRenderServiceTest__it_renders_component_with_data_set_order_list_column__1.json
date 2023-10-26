@@ -2,18 +2,14 @@
   "orderData": [
     {
       "externalIdentifier": "P00924878",
-      "apiIdentifier": null,
-      "referenceIdentifier": null,
       "deliveryOptions": {
         "carrier": {
           "externalIdentifier": "postnl",
           "id": 1,
           "name": "postnl",
           "human": "PostNL",
-          "subscriptionId": null,
           "enabled": false,
           "isDefault": true,
-          "label": null,
           "optional": false,
           "primary": false,
           "type": "main",
@@ -54,11 +50,8 @@
             }
           }
         },
-        "date": null,
         "labelAmount": 1,
-        "pickupLocation": null,
         "shipmentOptions": {
-          "labelDescription": null,
           "insurance": -1,
           "ageCheck": -1,
           "hideSender": -1,
@@ -71,37 +64,15 @@
         "deliveryType": "standard",
         "packageType": "package"
       },
-      "senderAddress": null,
-      "billingAddress": null,
-      "shippingAddress": {
-        "address1": null,
-        "address2": null,
-        "area": null,
-        "cc": null,
-        "city": null,
-        "postalCode": null,
-        "region": null,
-        "state": null,
-        "eoriNumber": null,
-        "vatNumber": null,
-        "email": null,
-        "phone": null,
-        "person": null,
-        "company": null
-      },
+      "shippingAddress": [],
       "shipments": [],
-      "customsDeclaration": null,
       "physicalProperties": {
-        "height": null,
-        "length": null,
-        "width": null,
         "initialWeight": 0,
         "manualWeight": -1,
         "totalWeight": 0
       },
       "lines": [],
       "notes": [],
-      "orderDate": null,
       "exported": false,
       "shipmentPrice": 0,
       "shipmentPriceAfterVat": 0,
@@ -112,23 +83,6 @@
       "totalPrice": 0,
       "totalVat": 0,
       "totalPriceAfterVat": 0,
-      "inheritedDeliveryOptions": {
-        "postnl": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "return": 0,
-            "sameDayDelivery": 0,
-            "signature": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        }
-      },
       "digitalStampRanges": [
         {
           "min": 0,

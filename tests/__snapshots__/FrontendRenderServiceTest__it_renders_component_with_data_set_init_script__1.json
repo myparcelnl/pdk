@@ -267,10 +267,8 @@
       },
       "shops": [
         {
-          "id": null,
           "accountId": 1,
           "platformId": 3,
-          "name": null,
           "hidden": false,
           "billing": [],
           "deliveryAddress": {
@@ -297,10 +295,8 @@
               "id": 1,
               "name": "postnl",
               "human": "PostNL",
-              "subscriptionId": null,
               "enabled": true,
               "isDefault": true,
-              "label": null,
               "optional": false,
               "primary": false,
               "type": "main",
@@ -342,10 +338,8 @@
         "id": 1,
         "name": "postnl",
         "human": "PostNL",
-        "subscriptionId": null,
         "enabled": true,
         "isDefault": true,
-        "label": null,
         "optional": false,
         "primary": false,
         "type": "main",
@@ -422,7 +416,6 @@
       "carrier": {
         "postnl": {
           "id": "postnl",
-          "carrierName": null,
           "allowDeliveryOptions": false,
           "allowEveningDelivery": false,
           "allowMondayDelivery": false,
@@ -503,10 +496,8 @@
           "id": 1,
           "name": "postnl",
           "human": "PostNL",
-          "subscriptionId": null,
           "enabled": true,
           "isDefault": true,
-          "label": null,
           "optional": false,
           "primary": false,
           "type": "main",

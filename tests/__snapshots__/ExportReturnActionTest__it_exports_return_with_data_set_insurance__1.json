@@ -86,22 +86,15 @@
           {
             "orderId": "701",
             "multiCollo": false,
-            "updated": null,
-            "deleted": null,
             "id": 100001,
-            "shopId": null,
             "referenceIdentifier": "1",
-            "externalIdentifier": null,
-            "barcode": null,
             "carrier": {
               "externalIdentifier": "postnl",
               "id": 1,
               "name": "postnl",
               "human": "PostNL",
-              "subscriptionId": null,
               "enabled": false,
               "isDefault": true,
-              "label": null,
               "optional": false,
               "primary": false,
               "type": "main",
@@ -142,8 +135,6 @@
                 }
               }
             },
-            "collectionContact": null,
-            "customsDeclaration": null,
             "delayed": false,
             "delivered": false,
             "deliveryOptions": {
@@ -152,10 +143,8 @@
                 "id": 1,
                 "name": "postnl",
                 "human": "PostNL",
-                "subscriptionId": null,
                 "enabled": false,
                 "isDefault": true,
-                "label": null,
                 "optional": false,
                 "primary": false,
                 "type": "main",
@@ -196,11 +185,8 @@
                   }
                 }
               },
-              "date": null,
               "labelAmount": 1,
-              "pickupLocation": null,
               "shipmentOptions": {
-                "labelDescription": null,
                 "insurance": 0,
                 "ageCheck": -1,
                 "hideSender": -1,
@@ -213,71 +199,28 @@
               "deliveryType": "standard",
               "packageType": "package"
             },
-            "dropOffPoint": null,
             "hidden": false,
             "isReturn": false,
-            "linkConsumerPortal": null,
-            "multiColloMainShipmentId": null,
             "partnerTrackTraces": [],
-            "physicalProperties": null,
             "price": {
               "amount": 100,
               "currency": "EUR"
             },
-            "recipient": {
-              "address1": null,
-              "address2": null,
-              "area": null,
-              "cc": null,
-              "city": null,
-              "postalCode": null,
-              "region": null,
-              "state": null,
-              "email": null,
-              "phone": null,
-              "person": null,
-              "company": null
-            },
-            "sender": {
-              "address1": null,
-              "address2": null,
-              "area": null,
-              "cc": null,
-              "city": null,
-              "postalCode": null,
-              "region": null,
-              "state": null,
-              "email": null,
-              "phone": null,
-              "person": null,
-              "company": null
-            },
-            "shipmentType": null,
-            "status": null,
-            "created": null,
-            "createdBy": null,
-            "modified": null,
-            "modifiedBy": null
+            "recipient": [],
+            "sender": []
           },
           {
             "orderId": "701",
             "multiCollo": false,
-            "updated": null,
-            "deleted": null,
             "id": 100002,
-            "shopId": null,
             "referenceIdentifier": "2",
-            "externalIdentifier": null,
-            "barcode": null,
             "carrier": {
               "externalIdentifier": "postnl",
               "id": 1,
               "name": "postnl",
               "human": "PostNL",
-              "subscriptionId": null,
               "enabled": false,
               "isDefault": true,
-              "label": null,
               "optional": false,
               "primary": false,
               "type": "main",
@@ -318,8 +261,6 @@
                 }
               }
             },
-            "collectionContact": null,
-            "customsDeclaration": null,
             "delayed": false,
             "delivered": false,
             "deliveryOptions": {
@@ -328,10 +269,8 @@
                 "id": 1,
                 "name": "postnl",
                 "human": "PostNL",
-                "subscriptionId": null,
                 "enabled": false,
                 "isDefault": true,
-                "label": null,
                 "optional": false,
                 "primary": false,
                 "type": "main",
@@ -372,11 +311,8 @@
                   }
                 }
               },
-              "date": null,
               "labelAmount": 1,
-              "pickupLocation": null,
               "shipmentOptions": {
-                "labelDescription": null,
                 "insurance": 500,
                 "ageCheck": -1,
                 "hideSender": -1,
@@ -389,51 +325,15 @@
               "deliveryType": "standard",
               "packageType": "package"
             },
-            "dropOffPoint": null,
             "hidden": false,
             "isReturn": false,
-            "linkConsumerPortal": null,
-            "multiColloMainShipmentId": null,
             "partnerTrackTraces": [],
-            "physicalProperties": null,
             "price": {
               "amount": 100,
               "currency": "EUR"
             },
-            "recipient": {
-              "address1": null,
-              "address2": null,
-              "area": null,
-              "cc": null,
-              "city": null,
-              "postalCode": null,
-              "region": null,
-              "state": null,
-              "email": null,
-              "phone": null,
-              "person": null,
-              "company": null
-            },
-            "sender": {
-              "address1": null,
-              "address2": null,
-              "area": null,
-              "cc": null,
-              "city": null,
-              "postalCode": null,
-              "region": null,
-              "state": null,
-              "email": null,
-              "phone": null,
-              "person": null,
-              "company": null
-            },
-            "shipmentType": null,
-            "status": null,
-            "created": null,
-            "createdBy": null,
-            "modified": null,
-            "modifiedBy": null
+            "recipient": [],
+            "sender": []
           }
         ],
         "physicalProperties": {
@@ -450,8 +350,6 @@
             "product": {
               "externalIdentifier": "PDK-1",
               "sku": "test",
-              "ean": null,
-              "isDeliverable": null,
               "name": "test",
               "price": {
                 "amount": 1000,
@@ -494,8 +392,7 @@
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
-              },
-              "parent": null
+              }
             }
           }
         ],

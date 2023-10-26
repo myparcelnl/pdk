@@ -22,49 +22,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
@@ -123,49 +116,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
@@ -224,49 +210,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
@@ -325,49 +304,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
@@ -426,49 +398,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
@@ -527,49 +492,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
@@ -628,49 +586,42 @@
       "dropOffDays": [
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 1
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 2
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 3
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 4
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 5
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 6
         },
         {
           "cutoffTime": "17:00:00",
-          "date": null,
           "dispatch": true,
           "sameDayCutoffTime": "09:00:00",
           "weekday": 0
