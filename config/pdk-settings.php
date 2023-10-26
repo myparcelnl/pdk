@@ -6,9 +6,11 @@ use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\factory;
 use function DI\value;
 
@@ -79,6 +81,12 @@ return [
                     CarrierSettings::PRICE_SIGNATURE                         => 0,
                     CarrierSettings::SHOW_DELIVERY_DAY                       => true,
                 ],
+            ],
+            OrderSettings::ID   => [
+                OrderSettings::STATUS_ON_LABEL_CREATE    => TriStateService::INHERIT,
+                OrderSettings::STATUS_WHEN_LABEL_SCANNED => TriStateService::INHERIT,
+                OrderSettings::STATUS_WHEN_DELIVERED     => TriStateService::INHERIT,
+                OrderSettings::SEND_NOTIFICATION_AFTER   => TriStateService::INHERIT,
             ],
         ];
     }),

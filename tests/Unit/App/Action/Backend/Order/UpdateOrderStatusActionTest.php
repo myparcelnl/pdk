@@ -80,9 +80,13 @@ it('updates order status', function (string $settingName, $value, $result) {
             'status' => -1,
             'result' => null,
         ],
+        'null status, no call'  => [
+            'status' => null,
+            'result' => null,
+        ],
     ]);
 
-it('does nothing when no status is passed', function () {
+it('does nothing when no setting is passed', function () {
     $response = Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
         'orderIds' => '1234',
     ]);
