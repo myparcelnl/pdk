@@ -44,24 +44,14 @@
           "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
         },
         "deliveryType": {
-          "enum": [
-            "morning",
-            "standard",
-            "evening",
-            "pickup"
-          ]
+          "enum": ["morning", "standard", "evening", "pickup"]
         },
         "labelAmount": {
           "type": ["integer", "null"],
           "minimum": 1
         },
         "packageType": {
-          "enum": [
-            "package",
-            "mailbox",
-            "digital_stamp",
-            "letter"
-          ]
+          "enum": ["package", "mailbox", "digital_stamp", "letter"]
         },
         "pickupLocation": {
           "type": ["object", "null"],

@@ -24,9 +24,7 @@
               "enum": [0]
             },
             "hideSender": {
-              "enum": [
-                false
-              ]
+              "enum": [false]
             }
           }
         }

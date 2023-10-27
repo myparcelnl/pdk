@@ -1,317 +1,203 @@
 [
-    {
-        "id": 1,
-        "name": "postnl",
-        "human": "PostNL",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "morning",
-                "standard",
-                "evening",
-                "pickup"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package",
-                "mailbox",
-                "letter",
-                "digital_stamp"
-            ],
-            "shipmentOptions": {
-                "ageCheck": true,
-                "largeFormat": true,
-                "onlyRecipient": true,
-                "return": true,
-                "sameDayDelivery": false,
-                "signature": true,
-                "insurance": [
-                    0,
-                    10000,
-                    25000,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        },
-        "returnCapabilities": {
-            "deliveryTypes": [
-                "standard"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "signature": true,
-                "insurance": [
-                    0,
-                    10000,
-                    25000,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ],
-                "return": true,
-                "ageCheck": true,
-                "onlyRecipient": true,
-                "sameDayDelivery": false,
-                "largeFormat": true
-            }
-        }
+  {
+    "id": 1,
+    "name": "postnl",
+    "human": "PostNL",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
+      "shipmentOptions": {
+        "ageCheck": true,
+        "largeFormat": true,
+        "onlyRecipient": true,
+        "return": true,
+        "sameDayDelivery": false,
+        "signature": true,
+        "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
     },
-    {
-        "id": 4,
-        "name": "dpd",
-        "human": "DPD",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "standard",
-                "pickup"
-            ],
-            "features": {
-                "labelDescriptionLength": 45,
-                "needsCustomerInfo": true
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "ageCheck": false,
-                "onlyRecipient": false,
-                "return": false
-            }
-        }
-    },
-    {
-        "id": 8,
-        "name": "ups",
-        "human": "UPS",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "standard"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "ageCheck": false,
-                "onlyRecipient": false,
-                "return": false
-            }
-        }
-    },
-    {
-        "id": 9,
-        "name": "dhlforyou",
-        "human": "DHL For You",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "standard",
-                "pickup"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package",
-                "mailbox"
-            ],
-            "shipmentOptions": {
-                "ageCheck": true,
-                "largeFormat": false,
-                "onlyRecipient": true,
-                "return": true,
-                "sameDayDelivery": true,
-                "signature": true,
-                "saturdayDelivery": true,
-                "hideSender": true,
-                "insurance": [
-                    0,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        },
-        "returnCapabilities": {
-            "deliveryTypes": [
-                "standard"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "signature": true,
-                "insurance": [
-                    0
-                ],
-                "return": true,
-                "ageCheck": true,
-                "onlyRecipient": true,
-                "sameDayDelivery": true,
-                "largeFormat": true
-            }
-        }
-    },
-    {
-        "id": 10,
-        "name": "dhlparcelconnect",
-        "human": "DHL Parcel Connect",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "standard",
-                "pickup"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "ageCheck": false,
-                "onlyRecipient": false,
-                "return": false,
-                "sameDayDelivery": false,
-                "signature": true,
-                "saturdayDelivery": false,
-                "hideSender": false,
-                "insurance": [
-                    0,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        },
-        "returnCapabilities": {
-            "deliveryTypes": [
-                "standard"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "signature": false,
-                "insurance": [
-                    50000
-                ],
-                "return": false,
-                "ageCheck": false,
-                "onlyRecipient": false,
-                "sameDayDelivery": false,
-                "largeFormat": false
-            }
-        }
-    },
-    {
-        "id": 11,
-        "name": "dhleuroplus",
-        "human": "DHL Europlus",
-        "enabled": false,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "standard"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "ageCheck": false,
-                "onlyRecipient": false,
-                "return": false,
-                "sameDayDelivery": false,
-                "signature": true,
-                "saturdayDelivery": true,
-                "hideSender": true,
-                "insurance": [
-                    0,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        }
+    "returnCapabilities": {
+      "deliveryTypes": ["standard"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "signature": true,
+        "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000],
+        "return": true,
+        "ageCheck": true,
+        "onlyRecipient": true,
+        "sameDayDelivery": false,
+        "largeFormat": true
+      }
     }
+  },
+  {
+    "id": 4,
+    "name": "dpd",
+    "human": "DPD",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["standard", "pickup"],
+      "features": {
+        "labelDescriptionLength": 45,
+        "needsCustomerInfo": true
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "ageCheck": false,
+        "onlyRecipient": false,
+        "return": false
+      }
+    }
+  },
+  {
+    "id": 8,
+    "name": "ups",
+    "human": "UPS",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["standard"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "ageCheck": false,
+        "onlyRecipient": false,
+        "return": false
+      }
+    }
+  },
+  {
+    "id": 9,
+    "name": "dhlforyou",
+    "human": "DHL For You",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["standard", "pickup"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package", "mailbox"],
+      "shipmentOptions": {
+        "ageCheck": true,
+        "largeFormat": false,
+        "onlyRecipient": true,
+        "return": true,
+        "sameDayDelivery": true,
+        "signature": true,
+        "saturdayDelivery": true,
+        "hideSender": true,
+        "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    },
+    "returnCapabilities": {
+      "deliveryTypes": ["standard"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "signature": true,
+        "insurance": [0],
+        "return": true,
+        "ageCheck": true,
+        "onlyRecipient": true,
+        "sameDayDelivery": true,
+        "largeFormat": true
+      }
+    }
+  },
+  {
+    "id": 10,
+    "name": "dhlparcelconnect",
+    "human": "DHL Parcel Connect",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["standard", "pickup"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "ageCheck": false,
+        "onlyRecipient": false,
+        "return": false,
+        "sameDayDelivery": false,
+        "signature": true,
+        "saturdayDelivery": false,
+        "hideSender": false,
+        "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    },
+    "returnCapabilities": {
+      "deliveryTypes": ["standard"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "signature": false,
+        "insurance": [50000],
+        "return": false,
+        "ageCheck": false,
+        "onlyRecipient": false,
+        "sameDayDelivery": false,
+        "largeFormat": false
+      }
+    }
+  },
+  {
+    "id": 11,
+    "name": "dhleuroplus",
+    "human": "DHL Europlus",
+    "enabled": false,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["standard"],
+      "features": {
+        "labelDescriptionLength": 45
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "ageCheck": false,
+        "onlyRecipient": false,
+        "return": false,
+        "sameDayDelivery": false,
+        "signature": true,
+        "saturdayDelivery": true,
+        "hideSender": true,
+        "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    }
+  }
 ]
