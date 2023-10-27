@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Model;
 
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -19,7 +18,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property int                    $status
  * @property array                  $subscriptionFeatures
  */
-class Account extends Model implements StorableArrayable
+class Account extends Model
 {
     public const FEATURE_ORDER_NOTES = 'allow_order_notes';
 
@@ -42,12 +41,4 @@ class Account extends Model implements StorableArrayable
         'status'               => 'int',
         'subscriptionFeatures' => Collection::class,
     ];
-
-    /**
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    public function toStorableArray(): array
-    {
-        return $this->toArrayWithoutNull();
-    }
 }

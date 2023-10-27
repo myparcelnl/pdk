@@ -10,6 +10,10 @@ interface Arrayable
     public const CASE_KEBAB  = 2;
     public const CASE_STUDLY = 4;
     public const SKIP_NULL   = 8;
+    public const STORABLE    = 16;
+    // Combinations
+    public const STORABLE_NULL = self::STORABLE | self::SKIP_NULL;
+    public const ENCODED       = self::SKIP_NULL | self::CASE_SNAKE;
 
     /**
      * Get the instance as an array.

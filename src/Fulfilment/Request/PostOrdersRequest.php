@@ -78,7 +78,7 @@ class PostOrdersRequest extends Request
                 : null,
             'order_lines'                   => $order->lines->reduce(
                 function (array $carry, OrderLine $orderLine) {
-                    $carry[] = $orderLine->except('vat', Arrayable::CASE_SNAKE);
+                    $carry[] = $orderLine->except('vat', Arrayable::ENCODED);
 
                     return $carry;
                 },
@@ -126,20 +126,15 @@ class PostOrdersRequest extends Request
         return [
             'carrier'             => $shipment->carrier,
             'customs_declaration' => $shipment->customsDeclaration
-                ? $shipment->customsDeclaration->toSnakeCaseArray()
+                ? $shipment->customsDeclaration->toArray(Arrayable::ENCODED)
                 : null,
             'drop_off_point'      => $shipment->dropOffPoint
-                ? $shipment->dropOffPoint->toSnakeCaseArray()
+                ? $shipment->dropOffPoint->toArray(Arrayable::ENCODED)
                 : null,
             'options'             => $this->getShipmentOptions($shipment),
-            'physical_properties' => Utils::filterNull([
-                'height' => $shipment->physicalProperties->height,
-                'length' => $shipment->physicalProperties->length,
-                'width'  => $shipment->physicalProperties->width,
-                'weight' => $shipment->physicalProperties->totalWeight,
-            ]),
+            'physical_properties' => $shipment->physicalProperties->toArray(Arrayable::ENCODED),
             'pickup'              => $shipment->pickup
-                ? $shipment->pickup->toSnakeCaseArray()
+                ? $shipment->pickup->toArray(Arrayable::ENCODED)
                 : null,
             'recipient'           => $this->getAddress($shipment->recipient),
         ];
@@ -153,7 +148,7 @@ class PostOrdersRequest extends Request
      */
     private function getShipmentOptions(Shipment $shipment): array
     {
-        $options = $shipment->options->toArray(Arrayable::CASE_SNAKE | Arrayable::SKIP_NULL);
+        $options = $shipment->options->toArray(Arrayable::ENCODED);
 
         $options['insurance'] = [
             'amount'   => $shipment->options->insurance,

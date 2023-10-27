@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -22,7 +21,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|RetailLocation    $pickupLocation
  * @property ShipmentOptions        $shipmentOptions
  */
-class DeliveryOptions extends Model implements StorableArrayable
+class DeliveryOptions extends Model
 {
     /**
      * Attributes
@@ -208,17 +207,5 @@ class DeliveryOptions extends Model implements StorableArrayable
     public function toArray(?int $flags = null): array
     {
         return Utils::filterNull([self::DATE => $this->getDateAsString()]) + parent::toArray($flags);
-    }
-
-    /**
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    public function toStorableArray(): array
-    {
-        $array                = $this->toArrayWithoutNull();
-        $array[self::CARRIER] = $this->carrier->externalIdentifier ?? null;
-
-        return $array;
     }
 }

@@ -163,4 +163,14 @@ class Carrier extends Model
     {
         return $this->subscriptionId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
     }
+
+    /**
+     * @return string[]
+     */
+    public function toStorableArray(): array
+    {
+        return [
+            'externalIdentifier' => $this->externalIdentifier,
+        ];
+    }
 }

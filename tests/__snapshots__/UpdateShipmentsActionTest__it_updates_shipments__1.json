@@ -9,14 +9,7 @@
         "externalIdentifier": "CV515676839NL",
         "barcode": "CV515676839NL",
         "carrier": {
-          "id": 1,
-          "name": "postnl",
-          "human": "PostNL",
-          "enabled": false,
-          "isDefault": true,
-          "optional": false,
-          "primary": false,
-          "type": "main"
+          "externalIdentifier": "postnl"
         },
         "customsDeclaration": {
           "contents": 1,
@@ -40,15 +33,7 @@
         "delivered": false,
         "deliveryOptions": {
           "carrier": {
-            "externalIdentifier": "postnl",
-            "id": 1,
-            "name": "postnl",
-            "human": "PostNL",
-            "enabled": false,
-            "isDefault": true,
-            "optional": false,
-            "primary": false,
-            "type": "main"
+            "externalIdentifier": "postnl"
           },
           "labelAmount": 1,
           "shipmentOptions": {
@@ -72,9 +57,7 @@
           "height": 20,
           "length": 40,
           "width": 30,
-          "initialWeight": 0,
-          "manualWeight": -1,
-          "totalWeight": 0
+          "weight": 3500
         },
         "price": {
           "amount": 5390,

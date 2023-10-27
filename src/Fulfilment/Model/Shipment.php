@@ -75,11 +75,10 @@ class Shipment extends Model
             'recipient'          => $pdkShipment->recipient,
             'dropOffPoint'       => $pdkShipment->dropOffPoint,
             'physicalProperties' => [
-                'height'        => $pdkShipment->physicalProperties->height ?? 0,
-                'width'         => $pdkShipment->physicalProperties->width ?? 0,
-                'length'        => $pdkShipment->physicalProperties->length ?? 0,
-                'initialWeight' => $pdkShipment->physicalProperties->initialWeight,
-                'manualWeight'  => $pdkShipment->physicalProperties->manualWeight,
+                'height' => $pdkShipment->physicalProperties->height ?? 0,
+                'width'  => $pdkShipment->physicalProperties->width ?? 0,
+                'length' => $pdkShipment->physicalProperties->length ?? 0,
+                'weight' => $pdkShipment->physicalProperties->weight ?? 0,
             ],
         ]);
     }

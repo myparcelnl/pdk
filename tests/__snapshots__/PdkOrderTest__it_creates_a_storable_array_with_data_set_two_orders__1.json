@@ -2,7 +2,9 @@
   {
     "exported": false,
     "deliveryOptions": {
-      "carrier": "postnl",
+      "carrier": {
+        "externalIdentifier": "postnl"
+      },
       "labelAmount": 2,
       "shipmentOptions": {
         "insurance": -1,
@@ -22,7 +24,9 @@
   {
     "exported": false,
     "deliveryOptions": {
-      "carrier": "postnl",
+      "carrier": {
+        "externalIdentifier": "postnl"
+      },
       "labelAmount": 1,
       "shipmentOptions": {
         "insurance": -1,

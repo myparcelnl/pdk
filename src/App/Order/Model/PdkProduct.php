@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Model;
 
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -27,7 +26,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property \MyParcelNL\Pdk\Settings\Model\ProductSettings  $mergedSettings
  * @property null|\MyParcelNL\Pdk\App\Order\Model\PdkProduct $parent
  */
-class PdkProduct extends Model implements StorableArrayable
+class PdkProduct extends Model
 {
     /**
      * @var array

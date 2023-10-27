@@ -1,0 +1,52 @@
+{
+  "id": 1,
+  "platformId": 3,
+  "contactInfo": {
+    "address1": "Antareslaan 31",
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132 JE",
+    "email": "support@myparcel.nl",
+    "person": "Felicia Parcel",
+    "company": "MyParcel"
+  },
+  "generalSettings": {
+    "isTest": false,
+    "orderMode": false,
+    "hasCarrierContract": false
+  },
+  "shops": [
+    {
+      "accountId": 1,
+      "platformId": 3,
+      "hidden": false,
+      "billing": [],
+      "deliveryAddress": {
+        "address1": "Antareslaan 31",
+        "address2": null,
+        "area": null,
+        "cc": "NL",
+        "city": "Hoofddorp",
+        "postalCode": "2132 JE",
+        "region": null,
+        "state": null,
+        "email": "support@myparcel.nl",
+        "phone": null,
+        "person": "Felicia Parcel",
+        "company": "MyParcel"
+      },
+      "generalSettings": [],
+      "return": [],
+      "shipmentOptions": [],
+      "trackTrace": [],
+      "carriers": [
+        {
+          "externalIdentifier": "postnl"
+        }
+      ],
+      "carrierConfigurations": []
+    }
+  ],
+  "status": 2,
+  "subscriptionFeatures": []
+}

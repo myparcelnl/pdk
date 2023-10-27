@@ -83,9 +83,7 @@
     "height": 20,
     "length": 40,
     "width": 30,
-    "initialWeight": 0,
-    "manualWeight": -1,
-    "totalWeight": 0
+    "weight": 3500
   },
   "price": {
     "amount": 5390,

@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalPropertiesFactory;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
@@ -42,7 +44,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withMultiColloMainShipmentId(string $multiColloMainShipmentId)
  * @method $this withOrderId(string $orderId)
  * @method $this withPartnerTrackTraces(array $partnerTrackTraces)
- * @method $this withPhysicalProperties(array|PhysicalProperties|PhysicalPropertiesFactory $physicalProperties)
+ * @method $this withPhysicalProperties(array|PdkPhysicalProperties|PdkPhysicalPropertiesFactory $physicalProperties)
  * @method $this withRecipient(array|ShippingAddress|ShippingAddressFactory $recipient)
  * @method $this withReferenceIdentifier(string $referenceIdentifier)
  * @method $this withSender(array|ContactDetails|ContactDetailsFactory $sender)

@@ -287,7 +287,7 @@ class PostShipmentsRequest extends Request
      */
     private function getWeight(Shipment $shipment): int
     {
-        return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->totalWeight ?? 0;
+        return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
     }
 
     /**

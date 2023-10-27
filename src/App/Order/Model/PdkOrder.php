@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Order\Model;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
@@ -17,7 +16,6 @@ use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
@@ -33,7 +31,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
- * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties           $physicalProperties
+ * @property \MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties       $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice
@@ -46,7 +44,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
  */
-class PdkOrder extends Model implements StorableArrayable
+class PdkOrder extends Model
 {
     protected $attributes = [
         /** Plugin order id */
@@ -69,7 +67,7 @@ class PdkOrder extends Model implements StorableArrayable
          */
         'shipments'          => ShipmentCollection::class,
         'customsDeclaration' => null,
-        'physicalProperties' => PhysicalProperties::class,
+        'physicalProperties' => PdkPhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
         'notes'              => null,
 
@@ -108,7 +106,7 @@ class PdkOrder extends Model implements StorableArrayable
 
         'shipments'          => ShipmentCollection::class,
         'customsDeclaration' => CustomsDeclaration::class,
-        'physicalProperties' => PhysicalProperties::class,
+        'physicalProperties' => PdkPhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
         'notes'              => PdkOrderNoteCollection::class,
 

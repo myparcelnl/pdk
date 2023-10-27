@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Collection;
 
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
@@ -48,11 +49,10 @@ class ShipmentCollection extends Collection
      */
     public function toStorableArray(): array
     {
-        return $this
-            ->filterNotDeleted()
+        return (new Collection($this->filterNotDeleted()))
             ->map(function (Shipment $shipment) {
                 return $shipment->toStorableArray();
             })
-            ->toArrayWithoutNull();
+            ->toArray(Arrayable::STORABLE_NULL);
     }
 }
