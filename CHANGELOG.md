@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.6](https://github.com/myparcelnl/pdk/compare/v2.28.5...v2.28.6) (2023-10-27)
+
+
+### :bug: Bug Fixes
+
+* **core:** fix data that should not be stored being stored ([#226](https://github.com/myparcelnl/pdk/issues/226)) ([77e8c09](https://github.com/myparcelnl/pdk/commit/77e8c09a1a9e3a3f1b8ebd915ed09e8c605e2dda))
+
 ## [2.28.5](https://github.com/myparcelnl/pdk/compare/v2.28.4...v2.28.5) (2023-10-26)
 
 
