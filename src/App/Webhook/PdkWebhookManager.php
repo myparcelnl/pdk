@@ -57,7 +57,6 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
             return $response;
         }
 
-        $test = $this->processWebhook($input);
         $this->cronService->dispatch([$this, 'processWebhook'], $input);
 
         return $response;
