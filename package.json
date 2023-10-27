@@ -21,8 +21,8 @@
     "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
   },
   "lint-staged": {
-    "*.{md,html,yml,json}": "prettier --write",
-    "*.php": "yarn quality:fix && yarn test"
+    "*.{md,yml,json}": "prettier --write",
+    "*.php": "yarn quality:fix"
   },
   "release": {
     "extends": "@myparcel/semantic-release-config/github-composer"
