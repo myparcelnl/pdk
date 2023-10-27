@@ -57,6 +57,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
             return $response;
         }
 
+        $test = $this->processWebhook($input);
         $this->cronService->dispatch([$this, 'processWebhook'], $input);
 
         return $response;
@@ -69,14 +70,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     public function processWebhook(Request $request): void
     {
-        $requiredPath = parse_url($this->webhooksRepository->getHashedUrl(), PHP_URL_PATH);
-        $logContext   = ['request' => get_object_vars($request)];
-
-        if ($request->getRequestUri() !== $requiredPath) {
-            Logger::error('Webhook received with invalid url', $logContext);
-
-            return;
-        }
+        $logContext = ['request' => get_object_vars($request)];
 
         Logger::debug('Webhook received', $logContext);
 
@@ -87,6 +81,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
 
                 if (! $hook->validate($request)) {
                     Logger::debug('Webhook skipped', $logContext);
+
                     continue;
                 }
 
@@ -123,7 +118,16 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     private function getHooks(Request $request): array
     {
-        $body = json_decode($request->getContent(), true);
+        $headers = $request->headers->all();
+        $body    = json_decode($request->getContent(), true);
+
+        if (isset($headers['x-myparcel-hook'])) {
+            $body['data']['hooks'] = array_map(function ($hook) use ($headers) {
+                $hook['event'] = $headers['x-myparcel-hook'][0];
+
+                return $hook;
+            }, $body['data']['hooks']);
+        }
 
         return $body['data']['hooks'] ?? [];
     }
