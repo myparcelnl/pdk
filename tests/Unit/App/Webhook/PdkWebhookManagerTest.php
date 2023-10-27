@@ -21,7 +21,7 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron());
 
-it('dispatches incoming webhook', function (string $hook) {
+it('dispatches and executes webhooks with myparcel header', function (string $hook) {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
     /** @var PdkWebhookManagerInterface $webhookManager */
@@ -29,10 +29,85 @@ it('dispatches incoming webhook', function (string $hook) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
 
+    $repository->storeHashedUrl('https://example.com/hashed-url');
+
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
 
-    $time     = time();
-    $response = $webhookManager->call(new Request());
+    $time = time();
+
+    $request = Request::create(
+        $repository->getHashedUrl(),
+        Request::METHOD_POST,
+        [],
+        [],
+        [],
+        ['HTTP_X_MYPARCEL_HOOK' => $hook],
+        json_encode([
+            'data' => [
+                'hooks' => [
+                    ['event' => $hook],
+                ],
+            ],
+        ])
+    );
+
+    $response = $webhookManager->call($request);
+
+    $scheduled = $cronService->getScheduledTasks();
+    $timestamp = $scheduled->first()['timestamp'];
+
+    expect($response->getStatusCode())
+        ->toBe(Response::HTTP_ACCEPTED)
+        ->and($request->headers->all())
+        ->toHaveKey('x-myparcel-hook')
+        ->and($response->getContent())
+        ->toBe('')
+        ->and($response->getStatusCode())
+        ->toBe(Response::HTTP_ACCEPTED)
+        ->and($scheduled->all())
+        ->toHaveLength(1)
+        // The webhook is scheduled to start immediately. Add a little window to account for the time it takes to run the test.
+        ->and($timestamp)
+        ->toBeGreaterThanOrEqual($time - 10)
+        ->and($timestamp)
+        ->toBeLessThanOrEqual($time + 10);
+
+    $cronService->executeAllTasks();
+    expect(
+        $cronService->getScheduledTasks()
+            ->all()
+    )->toBeEmpty();
+})->with(WebhookSubscription::ALL);
+
+it('dispatches and executes incoming webhook without myparcel header', function (string $hook) {
+    /** @var PdkWebhooksRepositoryInterface $repository */
+    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
+    /** @var PdkWebhookManagerInterface $webhookManager */
+    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
+    $cronService = Pdk::get(CronServiceInterface::class);
+
+    $repository->storeHashedUrl('https://example.com/hashed-url');
+    $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
+
+    $time = time();
+
+    $request  = Request::create(
+        $repository->getHashedUrl(),
+        Request::METHOD_POST,
+        [],
+        [],
+        [],
+        [],
+        json_encode([
+            'data' => [
+                'hooks' => [
+                    ['event' => $hook],
+                ],
+            ],
+        ])
+    );
+    $response = $webhookManager->call($request);
 
     $scheduled = $cronService->getScheduledTasks();
 
@@ -49,4 +124,10 @@ it('dispatches incoming webhook', function (string $hook) {
         ->toBeGreaterThanOrEqual($time - 10)
         ->and($timestamp)
         ->toBeLessThanOrEqual($time + 10);
+
+    $cronService->executeAllTasks();
+    expect(
+        $cronService->getScheduledTasks()
+            ->all()
+    )->toBeEmpty();
 })->with(WebhookSubscription::ALL);

@@ -69,7 +69,14 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     public function processWebhook(Request $request): void
     {
-        $logContext = ['request' => get_object_vars($request)];
+        $requiredPath = parse_url($this->webhooksRepository->getHashedUrl(), PHP_URL_PATH);
+        $logContext   = ['request' => get_object_vars($request)];
+
+        if ($request->getRequestUri() !== $requiredPath) {
+            Logger::error('Webhook received with invalid url', $logContext);
+
+            return;
+        }
 
         Logger::debug('Webhook received', $logContext);
 
@@ -117,17 +124,14 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     private function getHooks(Request $request): array
     {
-        $headers = $request->headers->all();
-        $body    = json_decode($request->getContent(), true);
+        $myParcelHeader = $request->headers->get('x-myparcel-hook');
+        $body           = json_decode($request->getContent(), true);
+        $hooks          = $body['data']['hooks'] ?? [];
 
-        if (isset($headers['x-myparcel-hook'])) {
-            $body['data']['hooks'] = array_map(function ($hook) use ($headers) {
-                $hook['event'] = $headers['x-myparcel-hook'][0];
+        return array_map(static function ($hook) use ($myParcelHeader) {
+            $hook['event'] = $myParcelHeader;
 
-                return $hook;
-            }, $body['data']['hooks']);
-        }
-
-        return $body['data']['hooks'] ?? [];
+            return $hook;
+        }, $hooks);
     }
 }
