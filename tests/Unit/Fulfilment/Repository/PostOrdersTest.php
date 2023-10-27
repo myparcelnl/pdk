@@ -68,7 +68,11 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
 
     'order with drop-off point' => [
         function () {
-            return factory(PdkOrderCollection::class)->push(factory(PdkOrder::class)->withShipments());
+            return factory(PdkOrderCollection::class)->push(
+                factory(PdkOrder::class)->withShipments([
+                    factory(Shipment::class)->withDropOffPoint(),
+                ])
+            );
         },
     ],
 

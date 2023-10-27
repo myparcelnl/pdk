@@ -33,7 +33,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withDeleted(string|DateTime $deleted)
  * @method $this withDelivered(bool $delivered)
  * @method $this withDeliveryOptions(array|DeliveryOptions|DeliveryOptionsFactory|DeliveryOptionsFactory|DeliveryOptionsFactory $deliveryOptions)
- * @method $this withDropOffPoint(array|RetailLocation|RetailLocationFactory|RetailLocationFactory $dropOffPoint)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withHidden(bool $hidden)
  * @method $this withIsReturn(bool $isReturn)
@@ -66,6 +65,16 @@ final class ShipmentFactory extends AbstractModelFactory
     public function withDeliveryOptionsWithPickupLocation(): self
     {
         return $this->withDeliveryOptions(factory(DeliveryOptions::class)->withPickupLocation());
+    }
+
+    /**
+     * @param  array|RetailLocation|RetailLocationFactory $dropOffPoint
+     *
+     * @return $this
+     */
+    public function withDropOffPoint($dropOffPoint = null): self
+    {
+        return $this->with(['dropOffPoint' => $dropOffPoint ?? factory(RetailLocation::class)]);
     }
 
     /**
