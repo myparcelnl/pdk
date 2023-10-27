@@ -450,6 +450,19 @@
         "totalVat": 0,
         "totalPriceAfterVat": 0
       }
+    ],
+    "notifications": [
+      {
+        "category": "action",
+        "content": ["Return shipment exported with default carrier postnl"],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "2"
+        },
+        "timeout": false,
+        "title": "DHL Europlus has no return capabilities",
+        "variant": "warning"
+      }
     ]
   }
 }

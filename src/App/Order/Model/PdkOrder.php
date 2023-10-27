@@ -190,7 +190,12 @@ class PdkOrder extends Model
             'carrier'             => $deliveryOptions->carrier,
             'orderId'             => $this->externalIdentifier,
             'dropOffPoint'        => null,
-            'physicalProperties'  => $this->physicalProperties,
+            'physicalProperties'  => [
+                'height' => $this->physicalProperties->height,
+                'length' => $this->physicalProperties->length,
+                'width'  => $this->physicalProperties->width,
+                'weight' => $this->physicalProperties->totalWeight,
+            ],
         ]);
     }
 

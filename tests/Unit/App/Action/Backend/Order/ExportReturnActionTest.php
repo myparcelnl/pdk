@@ -41,7 +41,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
     $content = json_decode($response->getContent(), true);
 
     // Remove updated key from each shipment.
-    $orders = array_map(function (array $order) {
+    $content['data']['orders'] = array_map(function (array $order) {
         return array_replace($order, [
             'shipments' => array_map(function (array $shipment) {
                 Arr::forget($shipment, ['updated']);
@@ -51,7 +51,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
         ]);
     }, $content['data']['orders']);
 
-    assertMatchesJsonSnapshot(json_encode(['data' => ['orders' => $orders]]));
+    assertMatchesJsonSnapshot(json_encode($content));
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($response->getStatusCode())
