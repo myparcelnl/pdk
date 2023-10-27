@@ -8,13 +8,14 @@ use ArrayAccess;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\ModelInterface;
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class Model implements Arrayable, ArrayAccess, ModelInterface
+class Model implements StorableArrayable, ArrayAccess, ModelInterface
 {
     use HasAttributes;
 
@@ -229,6 +230,15 @@ class Model implements Arrayable, ArrayAccess, ModelInterface
     public function toSnakeCaseArray(): array
     {
         return $this->toArray(Arrayable::CASE_SNAKE);
+    }
+
+    /**
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        return $this->toArray(Arrayable::STORABLE_NULL);
     }
 
     /**

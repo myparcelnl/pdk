@@ -24,7 +24,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $billingAddress
  * @property \MyParcelNL\Pdk\App\Order\Model\ShippingAddress             $shippingAddress
  * @property null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
- * @property \MyParcelNL\Pdk\Shipment\Model\PhysicalProperties           $physicalProperties
+ * @property \MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties       $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
  * @property int                                                         $shipmentPrice

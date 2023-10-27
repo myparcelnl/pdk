@@ -8,11 +8,9 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use DateTime;
 use DateTimeZone;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
@@ -49,7 +47,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|\DateTime                                         $modified
  * @property null|int                                               $modifiedBy
  */
-class Shipment extends Model implements StorableArrayable
+class Shipment extends Model
 {
     public const SHIPMENT_TYPE_STANDARD       = 1;
     public const SHIPMENT_TYPE_RETURN         = 2;
@@ -220,12 +218,7 @@ class Shipment extends Model implements StorableArrayable
             $this->updated = new DateTime('now', $timeZone);
         }
 
-        $attributes = $this->toArrayWithoutNull();
-
-        // TODO: replace this with except() when nested properties are supported
-        Arr::forget($attributes, ['carrier.capabilities', 'carrier.returnCapabilities']);
-
-        return $attributes;
+        return parent::toStorableArray();
     }
 
     /**

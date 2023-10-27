@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Model;
 
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -25,7 +24,7 @@ use RuntimeException;
  * @property ReflectionClass           $ref
  * @property TypeCollection            $types
  */
-final class ClassDefinition extends Model implements StorableArrayable
+final class ClassDefinition extends Model
 {
     public    $attributes = [
         'comments'   => KeyValueCollection::class,

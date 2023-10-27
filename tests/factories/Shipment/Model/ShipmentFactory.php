@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalPropertiesFactory;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
@@ -31,7 +33,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withDeleted(string|DateTime $deleted)
  * @method $this withDelivered(bool $delivered)
  * @method $this withDeliveryOptions(array|DeliveryOptions|DeliveryOptionsFactory|DeliveryOptionsFactory|DeliveryOptionsFactory $deliveryOptions)
- * @method $this withDropOffPoint(array|RetailLocation|RetailLocationFactory|RetailLocationFactory $dropOffPoint)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withHidden(bool $hidden)
  * @method $this withIsReturn(bool $isReturn)
@@ -42,7 +43,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withMultiColloMainShipmentId(string $multiColloMainShipmentId)
  * @method $this withOrderId(string $orderId)
  * @method $this withPartnerTrackTraces(array $partnerTrackTraces)
- * @method $this withPhysicalProperties(array|PhysicalProperties|PhysicalPropertiesFactory $physicalProperties)
+ * @method $this withPhysicalProperties(array|PdkPhysicalProperties|PdkPhysicalPropertiesFactory $physicalProperties)
  * @method $this withRecipient(array|ShippingAddress|ShippingAddressFactory $recipient)
  * @method $this withReferenceIdentifier(string $referenceIdentifier)
  * @method $this withSender(array|ContactDetails|ContactDetailsFactory $sender)
@@ -56,6 +57,24 @@ final class ShipmentFactory extends AbstractModelFactory
     public function getModel(): string
     {
         return Shipment::class;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withDeliveryOptionsWithPickupLocation(): self
+    {
+        return $this->withDeliveryOptions(factory(DeliveryOptions::class)->withPickupLocation());
+    }
+
+    /**
+     * @param  array|RetailLocation|RetailLocationFactory $dropOffPoint
+     *
+     * @return $this
+     */
+    public function withDropOffPoint($dropOffPoint = null): self
+    {
+        return $this->with(['dropOffPoint' => $dropOffPoint ?? factory(RetailLocation::class)]);
     }
 
     /**

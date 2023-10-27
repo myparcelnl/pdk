@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Mocks;
 
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
  * @property array|null $property
  */
-class MockStorableModel extends Model implements StorableArrayable
+class MockStorableModel extends Model
 {
     protected $attributes = [
         'property' => null,

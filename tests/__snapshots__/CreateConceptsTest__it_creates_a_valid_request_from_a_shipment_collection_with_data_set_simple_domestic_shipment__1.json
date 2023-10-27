@@ -17,7 +17,7 @@
       "only_recipient": 1
     },
     "physical_properties": {
-      "weight": 0
+      "weight": 2000
     },
     "recipient": {
       "cc": "NL",

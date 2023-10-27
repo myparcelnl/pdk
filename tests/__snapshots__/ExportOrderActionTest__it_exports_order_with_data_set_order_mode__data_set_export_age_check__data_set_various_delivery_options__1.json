@@ -15,17 +15,13 @@
         "order_date": "2030-01-01 12:00:00",
         "order_lines": [
           {
-            "uuid": null,
             "quantity": 5,
             "price": 0,
             "price_after_vat": 0,
             "product": {
-              "uuid": null,
               "sku": "test",
-              "ean": null,
               "external_identifier": "PDK-2",
               "name": "test",
-              "description": null,
               "width": 0,
               "length": 0,
               "height": 0,
@@ -56,8 +52,8 @@
           "physical_properties": {
             "height": 0,
             "length": 0,
-            "weight": 0,
-            "width": 0
+            "width": 0,
+            "weight": 0
           },
           "pickup": null,
           "recipient": {
@@ -84,17 +80,13 @@
         "order_date": "2030-01-01 12:00:00",
         "order_lines": [
           {
-            "uuid": null,
             "quantity": 1,
             "price": 0,
             "price_after_vat": 0,
             "product": {
-              "uuid": null,
               "sku": "test",
-              "ean": null,
               "external_identifier": "PDK-3",
               "name": "test",
-              "description": null,
               "width": 0,
               "length": 0,
               "height": 0,
@@ -126,8 +118,8 @@
           "physical_properties": {
             "height": 0,
             "length": 0,
-            "weight": 0,
-            "width": 0
+            "width": 0,
+            "weight": 0
           },
           "pickup": null,
           "recipient": {
@@ -154,17 +146,13 @@
         "order_date": "2030-01-01 12:00:00",
         "order_lines": [
           {
-            "uuid": null,
             "quantity": 1,
             "price": 0,
             "price_after_vat": 0,
             "product": {
-              "uuid": null,
               "sku": "test",
-              "ean": null,
               "external_identifier": "PDK-4",
               "name": "test",
-              "description": null,
               "width": 0,
               "length": 0,
               "height": 0,
@@ -195,8 +183,8 @@
           "physical_properties": {
             "height": 0,
             "length": 0,
-            "weight": 0,
-            "width": 0
+            "width": 0,
+            "weight": 0
           },
           "pickup": null,
           "recipient": {

@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -37,7 +38,20 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
         'orderIds' => ['701', '247'],
     ]);
 
-    assertMatchesJsonSnapshot($response->getContent());
+    $content = json_decode($response->getContent(), true);
+
+    // Remove updated key from each shipment.
+    $content['data']['orders'] = array_map(function (array $order) {
+        return array_replace($order, [
+            'shipments' => array_map(function (array $shipment) {
+                Arr::forget($shipment, ['updated']);
+
+                return $shipment;
+            }, $order['shipments'] ?? []),
+        ]);
+    }, $content['data']['orders']);
+
+    assertMatchesJsonSnapshot(json_encode($content));
     expect($response)
         ->toBeInstanceOf(Response::class)
         ->and($response->getStatusCode())

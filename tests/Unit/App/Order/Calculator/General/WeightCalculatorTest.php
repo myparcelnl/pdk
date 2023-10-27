@@ -10,12 +10,12 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
@@ -38,7 +38,7 @@ it('calculates weight', function (
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(factory(DeliveryOptions::class)->withPackageType($packageType))
-        ->withPhysicalProperties(factory(PhysicalProperties::class)->withManualWeight($manualWeight))
+        ->withPhysicalProperties(factory(PdkPhysicalProperties::class)->withManualWeight($manualWeight))
         ->withLines(
             factory(PdkOrderLineCollection::class)->push(
                 factory(PdkOrderLine::class)

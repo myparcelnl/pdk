@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Model;
 
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 
@@ -17,7 +16,7 @@ use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
  * @property null|\DateTime $createdAt
  * @property null|\DateTime $updatedAt
  */
-class PdkOrderNote extends Model implements StorableArrayable
+class PdkOrderNote extends Model
 {
     public    $attributes = [
         /**
@@ -66,14 +65,5 @@ class PdkOrderNote extends Model implements StorableArrayable
             'createdAt'     => $orderNote->createdAt,
             'updatedAt'     => $orderNote->updatedAt,
         ]);
-    }
-
-    /**
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    public function toStorableArray(): array
-    {
-        return $this->toArrayWithoutNull();
     }
 }

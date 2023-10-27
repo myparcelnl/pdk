@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Model;
 
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use ReflectionMethod;
 
@@ -13,7 +12,7 @@ use ReflectionMethod;
  * @property \ReflectionMethod $ref
  * @property array             $parameters
  */
-class ClassMethod extends Model implements StorableArrayable
+class ClassMethod extends Model
 {
     public    $attributes = [
         'name'       => null,

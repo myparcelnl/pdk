@@ -68,9 +68,7 @@
     "height": 0,
     "length": 0,
     "width": 0,
-    "initialWeight": 0,
-    "manualWeight": -1,
-    "totalWeight": 0
+    "weight": 0
   },
   "dropOffPoint": null
 }

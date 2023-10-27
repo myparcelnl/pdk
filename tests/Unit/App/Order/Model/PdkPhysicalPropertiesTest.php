@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Shipment\Model;
+namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -13,7 +13,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('calculates total weight', function (array $input, int $result) {
-    $physicalProperties = factory(PhysicalProperties::class)
+    $physicalProperties = factory(PdkPhysicalProperties::class)
         ->fromScratch()
         ->with($input)
         ->make();
@@ -45,7 +45,7 @@ it('calculates total weight', function (array $input, int $result) {
 ]);
 
 it('creates a storable array', function (int $manualWeight, array $result) {
-    $physicalProperties = factory(PhysicalProperties::class)
+    $physicalProperties = factory(PdkPhysicalProperties::class)
         ->withInitialWeight(2000)
         ->withWidth(20)
         ->withHeight(30)

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -15,7 +14,7 @@ use MyParcelNL\Pdk\Facade\Platform;
  *
  * @property string $id
  */
-abstract class AbstractSettingsModel extends Model implements StorableArrayable
+abstract class AbstractSettingsModel extends Model
 {
     /**
      * @param  null|array $data
@@ -47,7 +46,7 @@ abstract class AbstractSettingsModel extends Model implements StorableArrayable
      */
     public function toStorableArray(): array
     {
-        return Arr::except($this->toArrayWithoutNull(), 'id');
+        return Arr::except(parent::toStorableArray(), 'id');
     }
 
     /**

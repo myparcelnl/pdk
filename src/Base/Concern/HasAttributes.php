@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -327,7 +328,9 @@ trait HasAttributes
                 $attributes[$key] = $this->serializeDate($attributes[$key]);
             }
 
-            if ($attributes[$key] instanceof Arrayable) {
+            if ($flags & Arrayable::STORABLE && $attributes[$key] instanceof StorableArrayable) {
+                $attributes[$key] = $attributes[$key]->toStorableArray();
+            } elseif ($attributes[$key] instanceof Arrayable) {
                 $attributes[$key] = $attributes[$key]->toArray($flags);
             }
 
