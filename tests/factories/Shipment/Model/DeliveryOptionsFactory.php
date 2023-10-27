@@ -20,7 +20,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withDeliveryType(string $deliveryType)
  * @method $this withLabelAmount(int $labelAmount)
  * @method $this withPackageType(string $packageType)
- * @method $this withPickupLocation(array|RetailLocation|RetailLocationFactory $pickupLocation)
  * @method $this withShipmentOptions(array|ShipmentOptions|ShipmentOptionsFactory $shipmentOptions)
  */
 final class DeliveryOptionsFactory extends AbstractModelFactory
@@ -33,6 +32,16 @@ final class DeliveryOptionsFactory extends AbstractModelFactory
     public function withAllShipmentOptions(): self
     {
         return $this->withShipmentOptions(factory(ShipmentOptions::class)->withAllOptions());
+    }
+
+    /**
+     * @param  array|RetailLocation|RetailLocationFactory $pickupLocation
+     *
+     * @return $this
+     */
+    public function withPickupLocation($pickupLocation = null): self
+    {
+        return $this->with(['pickupLocation' => $pickupLocation ?? factory(RetailLocation::class)]);
     }
 
     protected function createDefault(): FactoryInterface

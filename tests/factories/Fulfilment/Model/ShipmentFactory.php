@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Shipment\Model\PhysicalPropertiesFactory;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Shipment
@@ -21,7 +22,6 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withCarrier(int $carrier)
  * @method $this withContractId(string $contractId)
  * @method $this withCustomsDeclaration(CustomsDeclaration|CustomsDeclarationFactory $customsDeclaration)
- * @method $this withDropOffPoint(RetailLocation|RetailLocationFactory $dropOffPoint)
  * @method $this withOptions(ShipmentOptions|ShipmentOptionsFactory $options)
  * @method $this withPhysicalProperties(PhysicalProperties|PhysicalPropertiesFactory $physicalProperties)
  * @method $this withPickup(RetailLocation|RetailLocationFactory $pickup)
@@ -32,5 +32,15 @@ final class ShipmentFactory extends AbstractModelFactory
     public function getModel(): string
     {
         return Shipment::class;
+    }
+
+    /**
+     * @param  array|RetailLocation|RetailLocationFactory $dropOffPoint
+     *
+     * @return $this
+     */
+    public function withDropOffPoint($dropOffPoint = null): self
+    {
+        return $this->with(['dropOffPoint' => $dropOffPoint ?? factory(RetailLocation::class)]);
     }
 }
