@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx -q lint-staged
+npx -q lint-staged --relative
 yarn test
