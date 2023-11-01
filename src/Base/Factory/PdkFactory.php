@@ -19,7 +19,7 @@ class PdkFactory implements PdkFactoryInterface
     private const CONFIG_PATH = __DIR__ . '/../../../config';
 
     /**
-     * @var string
+     * @var null|string
      */
     protected static $mode;
 

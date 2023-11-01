@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 class PostOrderNotesRequest extends Request
 {
     /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
+     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
      */
     private $collection;
 
@@ -32,7 +32,7 @@ class PostOrderNotesRequest extends Request
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public function getBody(): string
     {

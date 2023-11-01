@@ -20,7 +20,7 @@ interface PdkOrderNoteRepositoryInterface
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
-     * @return mixed
+     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      */
     public function getFromOrder(PdkOrder $order): PdkOrderNoteCollection;
 

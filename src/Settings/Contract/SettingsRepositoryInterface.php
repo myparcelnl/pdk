@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Contract;
 
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
-interface SettingsRepositoryInterface
+interface SettingsRepositoryInterface extends RepositoryInterface
 {
     /**
      * Retrieve all settings from your platform.

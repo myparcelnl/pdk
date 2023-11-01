@@ -124,7 +124,7 @@ class PdkOrderCollection extends Collection
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
      *
-     * @return null|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     private function mergeShipmentsById(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
     {
@@ -150,13 +150,16 @@ class PdkOrderCollection extends Collection
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
      *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection|\MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     private function mergeShipmentsByOrder(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
     {
         $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
 
-        return $order->shipments->mergeByKey($byOrderId, 'id');
+        /** @var ShipmentCollection $merged */
+        $merged = $order->shipments->mergeByKey($byOrderId, 'id');
+
+        return $merged;
     }
 }
 

@@ -6,8 +6,9 @@ namespace MyParcelNL\Pdk\App\Cart\Contract;
 
 use MyParcelNL\Pdk\App\Cart\Collection\PdkCartCollection;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 
-interface PdkCartRepositoryInterface
+interface PdkCartRepositoryInterface extends RepositoryInterface
 {
     /**
      * Retrieve a cart.

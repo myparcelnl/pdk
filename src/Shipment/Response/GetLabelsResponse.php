@@ -14,7 +14,7 @@ class GetLabelsResponse extends ApiResponseWithBody
     private $labelLink;
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @return string
      */
     public function getLink(): string
     {

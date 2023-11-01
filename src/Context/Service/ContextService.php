@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
-use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection;
@@ -116,12 +115,14 @@ class ContextService implements ContextServiceInterface
     }
 
     /**
-     * @param  null|array|Model|Collection $input
-     * @param  class-string<Model>         $modelClass
-     * @param  class-string<Collection>    $modelCollectionClass
-     * @param  class-string<Collection>    $contextCollectionClass
+     * @template M of \MyParcelNL\Pdk\Base\Model\Model
+     * @template C of \MyParcelNL\Pdk\Base\Support\Collection
+     * @param  null|array|M|C  $input
+     * @param  class-string<M> $modelClass
+     * @param  class-string<C> $modelCollectionClass
+     * @param  class-string<C> $contextCollectionClass
      *
-     * @return \MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection
+     * @return C
      */
     protected function createContextCollection(
         $input,

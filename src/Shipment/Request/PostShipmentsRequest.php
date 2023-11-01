@@ -39,7 +39,7 @@ class PostShipmentsRequest extends Request
     }
 
     /**
-     * @return null|string
+     * @return string
      */
     public function getBody(): string
     {

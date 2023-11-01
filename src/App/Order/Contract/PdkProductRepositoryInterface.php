@@ -6,9 +6,10 @@ namespace MyParcelNL\Pdk\App\Order\Contract;
 
 use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
-interface PdkProductRepositoryInterface
+interface PdkProductRepositoryInterface extends RepositoryInterface
 {
     /**
      * Get a product by identifier.

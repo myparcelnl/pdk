@@ -14,7 +14,7 @@ class GetLabelsPdfResponse extends ApiResponseWithBody
     private $pdf;
 
     /**
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @return string
      */
     public function getPdf(): string
     {

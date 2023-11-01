@@ -7,9 +7,6 @@ namespace MyParcelNL\Pdk\Base\Concern;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 
-/**
- * @extends \MyParcelNL\Pdk\Base\Model\Model
- */
 trait HasPrices
 {
     /**

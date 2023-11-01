@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Repository;
 
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
-class Repository
+class Repository implements RepositoryInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Storage\Contract\StorageInterface
@@ -14,7 +15,7 @@ class Repository
     protected $storage;
 
     /**
-     * @var array{string, string}
+     * @var array<string, string>
      */
     protected $storageHashMap = [];
 
