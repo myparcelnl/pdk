@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Contract;
 
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
-interface CarrierRepositoryInterface
+interface CarrierRepositoryInterface extends RepositoryInterface
 {
     /**
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection

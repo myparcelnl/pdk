@@ -46,7 +46,7 @@ class FetchContextAction implements ActionInterface
         $requestContexts = $request->get('context');
 
         if ($requestContexts) {
-            $contexts += explode(',', $requestContexts) ?: [];
+            $contexts += explode(',', $requestContexts);
         }
 
         return $contexts;

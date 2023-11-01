@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Base\Exception\InvalidFacadeException;
 abstract class Facade
 {
     /**
-     * @var \MyParcelNL\Pdk\Base\Concern\PdkInterface
+     * @var null|\MyParcelNL\Pdk\Base\Concern\PdkInterface
      */
     protected static $pdk;
 

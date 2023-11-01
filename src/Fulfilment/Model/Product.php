@@ -61,10 +61,10 @@ class Product extends Model
     public static function fromPdkProduct(?PdkProduct $product): self
     {
         if (! $product) {
-            return new self();
+            return new static();
         }
 
-        return new self([
+        return new static([
             'sku'                => $product->sku,
             'ean'                => $product->ean,
             'name'               => $product->name,

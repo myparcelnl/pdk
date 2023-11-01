@@ -61,7 +61,7 @@ class DropOffService implements DropOffServiceInterface
                 $dropOffDate = $fromDate->modify("+$day day");
                 $weekday     = (int) $dropOffDate->format('w');
 
-                /** @var DropOffDay $matchingDay */
+                /** @var null|DropOffDay $matchingDay */
                 $matchingDay = $settings->dropOffPossibilities->dropOffDays->firstWhere('weekday', $weekday);
                 $deviation   = $deviatedDays->firstWhere('date', '==', $dropOffDate);
 
@@ -93,8 +93,7 @@ class DropOffService implements DropOffServiceInterface
         $fromDate = (new DateTimeImmutable('today'))->modify("+$settings->dropOffDelay day");
 
         if ($date) {
-            $newDate  = $date->setTime(0, 0);
-            $fromDate = $newDate ?: $fromDate;
+            $fromDate = $date->setTime(0, 0);
         }
 
         return $fromDate;

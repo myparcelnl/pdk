@@ -20,7 +20,7 @@ class OrderCollection extends Collection
     /**
      * @param  \MyParcelNL\Pdk\Base\Support\Collection $ids
      *
-     * @return $this
+     * @return self
      */
     public function addIds(Collection $ids): self
     {

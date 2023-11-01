@@ -699,7 +699,7 @@ trait HasAttributes
     {
         $castType = $this->parseCasterClass($this->getCastType($key));
 
-        if (! $castType || in_array($castType, self::$primitiveCastTypes)) {
+        if (! $castType || in_array($castType, self::$primitiveCastTypes, true)) {
             return false;
         }
 

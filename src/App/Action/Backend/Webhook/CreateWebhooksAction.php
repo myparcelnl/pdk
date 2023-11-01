@@ -42,15 +42,15 @@ class CreateWebhooksAction extends AbstractWebhooksAction
      */
     private function getRequestHooks(Request $request): array
     {
-        return explode(',', $request->get('hooks', [])) ?: [];
+        return explode(',', $request->get('hooks', []));
     }
 
     /**
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return null|string
+     * @return string
      */
-    private function getWebhookUrl(Request $request): ?string
+    private function getWebhookUrl(Request $request): string
     {
         $url = $this->pdkWebhooksRepository->getHashedUrl();
 

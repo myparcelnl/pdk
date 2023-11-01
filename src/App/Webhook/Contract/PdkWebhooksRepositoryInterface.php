@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Webhook\Contract;
 
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 
@@ -13,7 +14,7 @@ use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
  *
  * @see \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface
  */
-interface PdkWebhooksRepositoryInterface
+interface PdkWebhooksRepositoryInterface extends RepositoryInterface
 {
     /**
      * Get a webhook subscription.

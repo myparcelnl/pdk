@@ -122,7 +122,7 @@ class WebhookSubscriptionRepository extends ApiRepository
      *
      * @param  int $id
      *
-     * @return void
+     * @return bool
      */
     public function unsubscribe(int $id): bool
     {

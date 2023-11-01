@@ -104,7 +104,7 @@ class CheckoutContext extends Model
     }
 
     /**
-     * @return void
+     * @return array
      */
     private function getSettings(): array
     {
