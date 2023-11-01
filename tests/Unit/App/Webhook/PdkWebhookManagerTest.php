@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
+uses()->group('webhook');
+
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron());
 
 it('dispatches incoming webhook', function (string $hook) {

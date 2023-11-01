@@ -17,10 +17,9 @@ use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(
-    new UsesMockPdkInstance(),
-    new UsesApiMock()
-);
+uses()->group('webhook');
+
+usesShared(new UsesMockPdkInstance(), new UsesApiMock());
 
 it('creates WebhookSubscription from api response', function () {
     MockApi::enqueue(new ExampleGetWebhookSubscriptionsResponse());

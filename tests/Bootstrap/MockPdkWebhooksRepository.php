@@ -7,49 +7,30 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\App\Webhook\Repository\AbstractPdkWebhooksRepository;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
-use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
+use Symfony\Contracts\Service\ResetInterface;
 
-final class MockPdkWebhooksRepository extends AbstractPdkWebhooksRepository
+final class MockPdkWebhooksRepository extends AbstractPdkWebhooksRepository implements ResetInterface
 {
-    private const DEFAULT_SUBSCRIPTIONS = [
-        [
-            'id'   => 1,
-            'hook' => WebhookSubscription::SHOP_CARRIER_CONFIGURATION_UPDATED,
-            'url'  => 'https://example.com',
-        ],
-        [
-            'id'   => 2,
-            'hook' => WebhookSubscription::SHOP_UPDATED,
-            'url'  => 'https://example.com',
-        ],
-    ];
-
     /**
-     * @var string
+     * @var null|string
      */
-    protected $hashedUrl = 'https://example.com/hook/1234567890abcdef';
+    protected $hashedUrl;
 
     /**
-     * @var array
+     * @var WebhookSubscriptionCollection
      */
     protected $subscriptions;
 
     /**
-     * @param  array                                                            $subscriptions
      * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $storage
      * @param  \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $subscriptionRepository
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
      */
-    public function __construct(
-        array                         $subscriptions = self::DEFAULT_SUBSCRIPTIONS,
-        StorageInterface              $storage,
-        WebhookSubscriptionRepository $subscriptionRepository
-    ) {
+    public function __construct(StorageInterface $storage, WebhookSubscriptionRepository $subscriptionRepository)
+    {
         parent::__construct($storage, $subscriptionRepository);
 
-        $this->subscriptions = new WebhookSubscriptionCollection($subscriptions);
+        $this->reset();
     }
 
     /**
@@ -76,6 +57,14 @@ final class MockPdkWebhooksRepository extends AbstractPdkWebhooksRepository
     public function remove(string $hook): void
     {
         $this->subscriptions = $this->subscriptions->where('hook', '!=', $hook);
+    }
+
+    /**
+     * @return void
+     */
+    public function reset(): void
+    {
+        $this->subscriptions = new WebhookSubscriptionCollection();
     }
 
     /**
