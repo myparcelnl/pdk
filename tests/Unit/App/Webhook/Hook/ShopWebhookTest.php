@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
+uses()->group('webhook');
+
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
 it('executes "update account" action', function (string $hook, string $expectedClass, array $hookBody) {
@@ -34,6 +36,7 @@ it('executes "update account" action', function (string $hook, string $expectedC
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = Pdk::get(LoggerInterface::class);
 
+    $repository->storeHashedUrl('https://example.com/hook/1234567890abcdef');
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
 
     $request = Request::create(
