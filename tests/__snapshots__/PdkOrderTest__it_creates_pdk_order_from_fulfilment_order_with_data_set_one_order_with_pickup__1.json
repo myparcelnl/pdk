@@ -13,7 +13,8 @@
         "capabilities": {
           "deliveryTypes": ["morning", "standard", "evening", "pickup"],
           "features": {
-            "labelDescriptionLength": 45
+            "labelDescriptionLength": 45,
+            "multiCollo": true
           },
           "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
           "shipmentOptions": {

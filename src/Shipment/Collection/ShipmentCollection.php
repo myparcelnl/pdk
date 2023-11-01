@@ -6,7 +6,10 @@ namespace MyParcelNL\Pdk\Shipment\Collection;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 /**
  * @property \MyParcelNL\Pdk\Shipment\Model\Shipment[] $items
@@ -42,6 +45,38 @@ class ShipmentCollection extends Collection
     public function filterNotDeleted(): self
     {
         return $this->where('deleted', null);
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    public function groupByMultiCollo(): self
+    {
+        return (new ShipmentCollection($this->all()))->groupBy(function ($shipment) {
+            /** @var Shipment $shipment */
+            $shipment = Utils::cast(Shipment::class, $shipment);
+            $schema   = Pdk::get(CarrierSchema::class);
+
+            $schema->setCarrier($shipment->deliveryOptions->carrier);
+
+            if ($shipment->multiCollo && $schema->canHaveMultiCollo()) {
+                return $shipment->referenceIdentifier;
+            }
+
+            return uniqid('random_', true);
+        });
+    }
+
+    /**
+     * @return self
+     */
+    public function removeMultiColloShipments(): self
+    {
+        return $this->groupByMultiCollo()
+            ->map(function ($group) {
+                return $group->first();
+            })
+            ->values();
     }
 
     /**

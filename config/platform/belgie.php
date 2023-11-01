@@ -45,6 +45,7 @@ return [
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
+                    'multiCollo'             => true,
                 ],
             ],
             'returnCapabilities' => [],

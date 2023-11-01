@@ -11,7 +11,8 @@
     "capabilities": {
       "deliveryTypes": ["standard", "pickup"],
       "features": {
-        "labelDescriptionLength": 45
+        "labelDescriptionLength": 45,
+        "multiCollo": true
       },
       "packageTypes": ["package"],
       "shipmentOptions": {

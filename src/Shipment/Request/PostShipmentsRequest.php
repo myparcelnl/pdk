@@ -47,7 +47,7 @@ class PostShipmentsRequest extends Request
     {
         return json_encode([
             'data' => [
-                'shipments' => $this->groupByMultiCollo()
+                'shipments' => $this->collection->groupByMultiCollo()
                     ->flatMap(function (Collection $groupedShipments) {
                         return [$this->encodeShipmentWithSecondaryShipments($groupedShipments)];
                     })
@@ -126,7 +126,7 @@ class PostShipmentsRequest extends Request
         return $clonedCollection
             ->map(function (Shipment $shipment) {
                 return [
-                    'reference_identifier' => $shipment->externalIdentifier,
+                    'reference_identifier' => $shipment->referenceIdentifier,
                 ];
             })
             ->toArray();
@@ -272,21 +272,5 @@ class PostShipmentsRequest extends Request
     private function getWeight(Shipment $shipment): int
     {
         return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
-    }
-
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
-    private function groupByMultiCollo(): Collection
-    {
-        return (new Collection($this->collection->all()))->groupBy(function ($shipment) {
-            $shipment = Utils::cast(Shipment::class, $shipment);
-
-            if ($shipment->multiCollo) {
-                return $shipment->referenceIdentifier;
-            }
-
-            return uniqid('random_', true);
-        });
     }
 }

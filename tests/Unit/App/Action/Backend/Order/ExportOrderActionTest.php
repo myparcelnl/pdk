@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleMulticolloPostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
@@ -112,6 +113,61 @@ it('exports order', function (
     ->with('orderModeToggle')
     ->with('carrierExportSettings')
     ->with('pdkOrdersDomestic');
+
+it('exports multicollo order', function (
+    PdkOrderCollectionFactory $orderFactory,
+    int                       $expectedNumberOfShipments
+) {
+    $orders = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    $carriers = $orders
+        ->pluck('deliveryOptions.carrier.externalIdentifier')
+        ->toArray();
+
+    factory(Settings::class)
+        ->withCarriers($carriers)
+        ->store();
+
+    MockApi::enqueue(new ExampleMulticolloPostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    $lastRequest = MockApi::ensureLastRequest();
+
+    assertMatchesJsonSnapshot(
+        $lastRequest->getBody()
+            ->getContents()
+    );
+
+    $content = json_decode($response->getContent(), true);
+
+    $responseOrders    = $content['data']['orders'];
+    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+    $errors = Notifications::all()
+        ->filter(function (Notification $notification) {
+            return $notification->variant === Notification::VARIANT_ERROR;
+        });
+
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($responseOrders)
+        ->toHaveLength(count($orders))
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        // Expect no errors to have been added to notifications
+        ->and($errors->toArrayWithoutNull())
+        ->toBe([])
+        ->and($responseShipments)->each->toHaveLength($expectedNumberOfShipments)
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+})
+    ->with('multicolloPdkOrders');
 
 it('adds notification if shipment export fails', function () {
     MockApi::enqueue(new ExamplePostShipmentsResponse());

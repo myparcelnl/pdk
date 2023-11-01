@@ -20,7 +20,7 @@
     "reference_identifier": "my-multicollo-set",
     "secondary_shipments": [
       {
-        "reference_identifier": null
+        "reference_identifier": "my-multicollo-set"
       }
     ]
   }
