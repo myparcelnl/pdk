@@ -325,7 +325,7 @@
   </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="config" value="$PROJECT_DIR$/phpstan.neon.dist" />
-    <option name="level" value="1" />
+    <option name="level" value="5" />
     <option name="memoryLimit" value="4G" />
     <option name="transferred" value="true" />
   </component>
