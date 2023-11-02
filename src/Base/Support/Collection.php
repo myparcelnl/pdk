@@ -129,6 +129,27 @@ class Collection extends SdkCollection implements StorableArrayable
     /**
      * @return array
      */
+    public function toArrayWithoutNull(): array
+    {
+        return array_map(
+            static function ($value) {
+                if ($value instanceof Arrayable) {
+                    return $value->toArray(Arrayable::SKIP_NULL);
+                }
+
+                if (is_array($value)) {
+                    return Utils::filterNull($value);
+                }
+
+                return $value;
+            },
+            Utils::filterNull($this->items)
+        );
+    }
+
+    /**
+     * @return array
+     */
     public function toStorableArray(): array
     {
         return array_map(
@@ -138,7 +159,7 @@ class Collection extends SdkCollection implements StorableArrayable
                 }
 
                 if ($value instanceof Arrayable) {
-                    return $value->toArray(Arrayable::SKIP_NULL);
+                    return $value->toArray(Arrayable::STORABLE | Arrayable::SKIP_NULL);
                 }
 
                 return $value;
