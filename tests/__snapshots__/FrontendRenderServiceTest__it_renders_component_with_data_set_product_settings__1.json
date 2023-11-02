@@ -45,7 +45,6 @@
     "view": {
       "id": "product",
       "title": "settings_view_product_title",
-      "titleSuffix": null,
       "description": "settings_view_product_description",
       "elements": [
         {
@@ -1188,8 +1187,7 @@
           "label": "settings_product_export_return",
           "description": "settings_product_export_return_description"
         }
-      ],
-      "children": null
+      ]
     }
   }
 }

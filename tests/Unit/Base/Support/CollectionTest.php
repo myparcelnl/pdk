@@ -103,16 +103,22 @@ it('can create an array without null', function () {
     $collection = new Collection([
         'a' => 1,
         'b' => null,
-        'c' => [
-            'd' => 2,
-            'e' => null,
-        ],
+        'c' => ['d' => 2, 'e' => null],
+        'd' => new Collection([
+            'f' => 3,
+            'g' => null,
+            new MockCastModel(['property' => ['h' => 4]]),
+        ]),
+        'e' => new MockCastModel(['property' => null]),
     ]);
 
     expect($collection->toArrayWithoutNull())->toEqual([
         'a' => 1,
-        'c' => [
-            'd' => 2,
+        'c' => ['d' => 2],
+        'd' => [
+            'f' => 3,
+            ['property' => ['h' => 4]],
         ],
+        'e' => [],
     ]);
 });

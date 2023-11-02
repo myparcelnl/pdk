@@ -121,6 +121,10 @@ class Collection extends SdkCollection implements StorableArrayable
      */
     public function toArray(?int $flags = null): array
     {
+        if ($flags & Arrayable::SKIP_NULL) {
+            return $this->toArrayWithoutNull();
+        }
+
         return array_map(static function ($value) use ($flags) {
             return $value instanceof Arrayable ? $value->toArray($flags) : $value;
         }, $this->items);
