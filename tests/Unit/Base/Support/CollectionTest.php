@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
+use MyParcelNL\Pdk\Tests\Mocks\MockArrayable;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingCollection;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockStorableModel;
@@ -87,13 +88,14 @@ it('can create a storable array', function (array $items, array $storable) {
                 new MockStorableModel(['property' => ['a' => 1]]),
                 new MockStorableModel(['property' => ['b' => 2]]),
                 'test',
-                new Collection(['test' => 1]),
+                new Collection(['test' => 1, 'test2' => null, 'test3' => new MockArrayable(['ba' => null, 'bo' => 1])]
+                ),
             ],
             'storable' => [
                 ['property' => '{"a":1}'],
                 ['property' => '{"b":2}'],
                 'test',
-                ['test' => 1],
+                ['test' => 1, 'test3' => ['bo' => 1]],
             ],
         ],
     ];
@@ -107,7 +109,7 @@ it('can create an array without null', function () {
         'd' => new Collection([
             'f' => 3,
             'g' => null,
-            new MockCastModel(['property' => ['h' => 4]]),
+            'z' => new MockArrayable(['a' => 1, 'b' => null]),
         ]),
         'e' => new MockCastModel(['property' => null]),
     ]);
@@ -117,7 +119,7 @@ it('can create an array without null', function () {
         'c' => ['d' => 2],
         'd' => [
             'f' => 3,
-            ['property' => ['h' => 4]],
+            'z' => ['a' => 1],
         ],
         'e' => [],
     ]);

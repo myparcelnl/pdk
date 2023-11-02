@@ -168,7 +168,7 @@ class Collection extends SdkCollection implements StorableArrayable
 
                 return $value;
             },
-            $this->items
+            Utils::filterNull($this->items)
         );
     }
 
