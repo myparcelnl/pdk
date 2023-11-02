@@ -82,17 +82,37 @@ it('can create a storable array', function (array $items, array $storable) {
             ],
         ],
 
-        '2 storable models and 1 non-storable' => [
+        '2 storable models, 1 non-storable and a collection' => [
             'items'    => [
                 new MockStorableModel(['property' => ['a' => 1]]),
                 new MockStorableModel(['property' => ['b' => 2]]),
                 'test',
+                new Collection(['test' => 1]),
             ],
             'storable' => [
                 ['property' => '{"a":1}'],
                 ['property' => '{"b":2}'],
                 'test',
+                ['test' => 1],
             ],
         ],
     ];
+});
+
+it('can create an array without null', function () {
+    $collection = new Collection([
+        'a' => 1,
+        'b' => null,
+        'c' => [
+            'd' => 2,
+            'e' => null,
+        ],
+    ]);
+
+    expect($collection->toArrayWithoutNull())->toEqual([
+        'a' => 1,
+        'c' => [
+            'd' => 2,
+        ],
+    ]);
 });
