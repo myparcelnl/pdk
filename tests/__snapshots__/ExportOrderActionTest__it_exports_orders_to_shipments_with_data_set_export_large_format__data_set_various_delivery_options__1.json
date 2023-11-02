@@ -1,0 +1,83 @@
+{
+  "data": {
+    "shipments": [
+      {
+        "carrier": 1,
+        "general_settings": {
+          "save_recipient_address": 0
+        },
+        "options": {
+          "package_type": 2,
+          "delivery_type": 2
+        },
+        "physical_properties": {
+          "weight": 0
+        },
+        "recipient": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan 31",
+          "company": "MyParcel",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel"
+        },
+        "reference_identifier": "PDK-1"
+      },
+      {
+        "carrier": 1,
+        "general_settings": {
+          "save_recipient_address": 0
+        },
+        "options": {
+          "package_type": 1,
+          "delivery_type": 3,
+          "delivery_date": "2077-10-23 09:47:51",
+          "large_format": 1,
+          "only_recipient": 1,
+          "signature": 1
+        },
+        "physical_properties": {
+          "weight": 0
+        },
+        "recipient": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan 31",
+          "company": "MyParcel",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel"
+        },
+        "reference_identifier": "PDK-2"
+      },
+      {
+        "carrier": 9,
+        "general_settings": {
+          "save_recipient_address": 0
+        },
+        "options": {
+          "package_type": 1,
+          "delivery_type": 2,
+          "age_check": 1,
+          "hide_sender": 1,
+          "return": 1,
+          "signature": 1
+        },
+        "physical_properties": {
+          "weight": 0
+        },
+        "recipient": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan 31",
+          "company": "MyParcel",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel"
+        },
+        "reference_identifier": "PDK-3"
+      }
+    ]
+  }
+}

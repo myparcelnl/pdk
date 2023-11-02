@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
+use DateTimeInterface;
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Model\ContactDetails;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
-use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesRequestShipment;
 
 class PostOrdersRequest extends Request
 {
+    use EncodesRequestShipment;
+
     /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
+     * @var \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      */
     private $collection;
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $collection
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $collection
      */
-    public function __construct(OrderCollection $collection)
+    public function __construct(PdkOrderCollection $collection)
     {
         parent::__construct();
         $this->collection = $collection;
@@ -38,7 +39,7 @@ class PostOrdersRequest extends Request
     {
         return json_encode([
             'data' => [
-                'orders' => array_map(function (Order $order) {
+                'orders' => array_map(function (PdkOrder $order) {
                     return $this->encodeOrder($order);
                 }, $this->collection->all()),
             ],
@@ -62,101 +63,52 @@ class PostOrdersRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
+     * @param  null|\DateTimeInterface $date
+     *
+     * @return null|string
+     */
+    private function encodeDate(?DateTimeInterface $date): ?string
+    {
+        return $date ? $date->format(Pdk::get('defaultDateFormat')) : null;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @throws \Exception
      */
-    private function encodeOrder(Order $order): array
+    private function encodeOrder(PdkOrder $order): array
     {
         return [
-            'external_identifier'           => $order->externalIdentifier,
+            'external_identifier' => $order->externalIdentifier,
             'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
-            'invoice_address'               => $this->getAddress($order->invoiceAddress),
-            'order_date'                    => $order->orderDate
-                ? $order->orderDate->format(Pdk::get('defaultDateFormat'))
+            'invoice_address' => $order->billingAddress
+                ? $this->encodeAddress($order->billingAddress)
                 : null,
-            'order_lines'                   => $order->lines->reduce(
-                function (array $carry, OrderLine $orderLine) {
-                    $carry[] = $orderLine->except('vat', Arrayable::ENCODED);
-
-                    return $carry;
-                },
-                []
+            'order_date' => $this->encodeDate($order->orderDate),
+            'order_lines' => $this->encodeOrderLines($order),
+            'shipment' => $this->encodeShipment(
+                $order->shipments->last() ?? $order->createShipment()
             ),
-            'shipment'                      => $this->getShipment($order),
         ];
     }
 
     /**
-     * @param  null|\MyParcelNL\Pdk\Base\Model\ContactDetails $address
-     *
-     * @return null|array
-     */
-    private function getAddress(?ContactDetails $address): ?array
-    {
-        if (! $address) {
-            return null;
-        }
-
-        return Utils::filterNull([
-            'street'      => implode(' ', [$address->address1, $address->address2]),
-            'city'        => $address->city,
-            'area'        => $address->area,
-            'company'     => $address->company,
-            'cc'          => $address->cc,
-            'email'       => $address->email,
-            'person'      => $address->person,
-            'phone'       => $address->phone,
-            'postal_code' => $address->postalCode,
-            'region'      => $address->region,
-        ]);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getShipment(Order $order): array
+    private function encodeOrderLines(PdkOrder $order): array
     {
-        $shipment = $order->shipment;
+        return $order->lines->reduce(
+            function (array $carry, PdkOrderLine $orderLine) {
+                $carry[] = $orderLine->except('vat', Arrayable::ENCODED);
 
-        return [
-            'carrier'             => $shipment->carrier,
-            'customs_declaration' => $shipment->customsDeclaration
-                ? $shipment->customsDeclaration->toArray(Arrayable::ENCODED)
-                : null,
-            'drop_off_point'      => $shipment->dropOffPoint
-                ? $shipment->dropOffPoint->toArray(Arrayable::ENCODED)
-                : null,
-            'options'             => $this->getShipmentOptions($shipment),
-            'physical_properties' => $shipment->physicalProperties->toArray(Arrayable::ENCODED),
-            'pickup'              => $shipment->pickup
-                ? $shipment->pickup->toArray(Arrayable::ENCODED)
-                : null,
-            'recipient'           => $this->getAddress($shipment->recipient),
-        ];
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment
-     *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function getShipmentOptions(Shipment $shipment): array
-    {
-        $options = $shipment->options->toArray(Arrayable::ENCODED);
-
-        $options['insurance'] = [
-            'amount'   => $shipment->options->insurance,
-            'currency' => 'EUR',
-        ];
-
-        return array_map(static function ($item) {
-            return is_bool($item) ? (int) $item : $item;
-        }, $options);
+                return $carry;
+            },
+            []
+        );
     }
 }

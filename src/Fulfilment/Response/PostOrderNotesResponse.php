@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
 
 class PostOrderNotesResponse extends ApiResponseWithBody
 {
     /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
+     * @var \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      */
     private $orderNotes;
 
     /**
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
+     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      */
-    public function getOrderNotes(): OrderNoteCollection
+    public function getOrderNotes(): PdkOrderNoteCollection
     {
         return $this->orderNotes;
     }
@@ -42,14 +42,14 @@ class PostOrderNotesResponse extends ApiResponseWithBody
      */
     private function createOrderNotes(array $orderNotes): void
     {
-        $this->orderNotes = new OrderNoteCollection(
+        $this->orderNotes = new PdkOrderNoteCollection(
             array_map(static function (array $orderNote) {
                 return [
-                    'uuid'      => $orderNote['uuid'],
-                    'author'    => $orderNote['author'],
-                    'note'      => $orderNote['note'],
-                    'createdAt' => $orderNote['created'],
-                    'updatedAt' => $orderNote['updated'],
+                    'apiIdentifier' => $orderNote['uuid'],
+                    'author'        => $orderNote['author'],
+                    'note'          => $orderNote['note'],
+                    'createdAt'     => $orderNote['created'],
+                    'updatedAt'     => $orderNote['updated'],
                 ];
             }, $orderNotes)
         );

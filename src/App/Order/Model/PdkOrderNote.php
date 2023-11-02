@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 
 /**
  * @property null|string    $externalIdentifier
@@ -18,6 +17,9 @@ use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
  */
 class PdkOrderNote extends Model
 {
+    public const AUTHOR_CUSTOMER = 'customer';
+    public const AUTHOR_WEBSHOP  = 'webshop';
+
     public    $attributes = [
         /**
          * The id of the order this note belongs to in the external system.
@@ -49,21 +51,4 @@ class PdkOrderNote extends Model
         'createdAt'          => 'datetime',
         'updatedAt'          => 'datetime',
     ];
-
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\OrderNote $orderNote
-     *
-     * @return self
-     * @noinspection PhpUnused
-     */
-    public static function fromFulfilmentOrderNote(OrderNote $orderNote): self
-    {
-        return new self([
-            'apiIdentifier' => $orderNote->uuid,
-            'author'        => $orderNote->author,
-            'note'          => $orderNote->note,
-            'createdAt'     => $orderNote->createdAt,
-            'updatedAt'     => $orderNote->updatedAt,
-        ]);
-    }
 }

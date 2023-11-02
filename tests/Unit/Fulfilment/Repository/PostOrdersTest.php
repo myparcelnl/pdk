@@ -9,8 +9,6 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
@@ -27,12 +25,12 @@ it('creates a valid order collection from api data', function (array $input) {
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
     $repository  = Pdk::get(OrderRepository::class);
-    $savedOrders = $repository->postOrders(new OrderCollection($input));
+    $savedOrders = $repository->postOrders(new PdkOrderCollection($input));
 
     expect($savedOrders)
-        ->toBeInstanceOf(OrderCollection::class);
+        ->toBeInstanceOf(PdkOrderCollection::class);
 
-    assertMatchesJsonSnapshot(json_encode($savedOrders->toArray()));
+    assertMatchesJsonSnapshot(json_encode($savedOrders->toArrayWithoutNull()));
 })->with('fulfilmentOrders');
 
 it('creates order', function (PdkOrderCollectionFactory $factory) {
@@ -45,12 +43,8 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
         ->store()
         ->make();
 
-    $orderCollection = new OrderCollection($pdkOrderCollection->map(function (PdkOrder $pdkOrder) {
-        return Order::fromPdkOrder($pdkOrder);
-    }));
-
     /** @var OrderRepository $response */
-    $response = $repository->postOrders($orderCollection);
+    $response = $repository->postOrders($pdkOrderCollection);
     $request  = MockApi::ensureLastRequest();
 
     $uri = $request->getUri();
@@ -58,7 +52,7 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
     expect($uri->getPath())
         ->toBe('API/fulfilment/orders')
         ->and($response)
-        ->toBeInstanceOf(OrderCollection::class);
+        ->toBeInstanceOf(PdkOrderCollection::class);
 })->with([
     'simple order' => [
         function () {

@@ -9,7 +9,6 @@ use DateTime;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
@@ -28,12 +27,12 @@ final class PdkOrderNoteFactory extends AbstractModelFactory
 {
     public function byCustomer(): self
     {
-        return $this->withAuthor(OrderNote::AUTHOR_CUSTOMER);
+        return $this->withAuthor(PdkOrderNote::AUTHOR_CUSTOMER);
     }
 
     public function byWebshop(): self
     {
-        return $this->withAuthor(OrderNote::AUTHOR_WEBSHOP);
+        return $this->withAuthor(PdkOrderNote::AUTHOR_WEBSHOP);
     }
 
     public function getModel(): string

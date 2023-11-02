@@ -10,23 +10,17 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository;
 use MyParcelNL\Pdk\Notification\Model\Notification;
-use MyParcelNL\Pdk\Notification\Model\NotificationTags;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -105,31 +99,15 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function exportOrders(PdkOrderCollection $orders): PdkOrderCollection
     {
-        $fulfilmentOrders = new OrderCollection(
-            $orders
-                ->map(function (PdkOrder $order) {
-                    $order->exported = true;
-
-                    if (! $this->sharingCustomerInformation($order->deliveryOptions->carrier)) {
-                        $order->shippingAddress->phone = null;
-                        $order->shippingAddress->email = null;
-
-                        if ($order->billingAddress) {
-                            $order->billingAddress->phone = null;
-                            $order->billingAddress->email = null;
-                        }
-                    }
-
-                    return Order::fromPdkOrder($order);
-                })
-                ->all()
-        );
-
-        $apiOrders = $this->orderRepository->postOrders($fulfilmentOrders);
+        $apiOrders = $this->orderRepository->postOrders($orders);
 
         $orders->addApiIdentifiers($apiOrders);
 
-        return $orders;
+        return $orders->map(function (PdkOrder $order) {
+            $order->exported = true;
+
+            return $order;
+        });
     }
 
     /**
@@ -145,13 +123,6 @@ class ExportOrderAction extends AbstractOrderAction
         if ($shipments->isEmpty()) {
             return $orders;
         }
-
-        $shipments->each(function (Shipment $shipment) {
-            if (! $this->sharingCustomerInformation($shipment->deliveryOptions->carrier)) {
-                $shipment->recipient->email = null;
-                $shipment->recipient->phone = null;
-            }
-        });
 
         $concepts = $this->shipmentRepository->createConcepts($shipments);
 
@@ -173,24 +144,6 @@ class ExportOrderAction extends AbstractOrderAction
         }
 
         return $orders;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
-     *
-     * @return bool
-     */
-    protected function sharingCustomerInformation(Carrier $carrier): bool
-    {
-        /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
-        $schema = Pdk::get(CarrierSchema::class);
-
-        $schema->setCarrier($carrier);
-
-        $carrierNeedsCustomerInfo = $schema->needsCustomerInfo();
-        $sharingCustomerInfo      = Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
-
-        return $carrierNeedsCustomerInfo || $sharingCustomerInfo;
     }
 
     /**

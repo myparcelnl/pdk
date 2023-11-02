@@ -70,7 +70,9 @@
     },
     "lines": [
       {
+        "apiIdentifier": null,
         "quantity": 1,
+        "instructions": "",
         "price": 250,
         "vat": 10,
         "priceAfterVat": 260,

@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Sdk\src\Support\Arr;
 use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
@@ -189,6 +190,13 @@ class Collection extends SdkCollection implements StorableArrayable
             try {
                 $this->items[$key] = Utils::cast($this->cast, $item);
             } catch (Throwable $e) {
+                Logger::warning(
+                    'Failed to cast item to ' . $this->cast . '.',
+                    [
+                        'item' => $item,
+                        'key'  => $key,
+                    ]
+                );
                 // Silently fail to allow methods like pluck() to work.
             }
         }

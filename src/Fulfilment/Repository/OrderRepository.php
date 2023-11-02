@@ -4,24 +4,23 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Request\GetOrderRequest;
 use MyParcelNL\Pdk\Fulfilment\Request\GetOrdersRequest;
 use MyParcelNL\Pdk\Fulfilment\Request\PostOrdersRequest;
 use MyParcelNL\Pdk\Fulfilment\Response\GetOrderResponse;
 use MyParcelNL\Pdk\Fulfilment\Response\GetOrdersResponse;
-use MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse;
 
 class OrderRepository extends ApiRepository
 {
     /**
      * @param  string $uuid
      *
-     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
+     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
-    public function get(string $uuid): Order
+    public function get(string $uuid): PdkOrder
     {
         $request = new GetOrderRequest($uuid);
 
@@ -34,26 +33,24 @@ class OrderRepository extends ApiRepository
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection $collection
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $collection
      *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     * @noinspection PhpUnused
+     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      */
-    public function postOrders(OrderCollection $collection): OrderCollection
+    public function postOrders(PdkOrderCollection $collection): PdkOrderCollection
     {
-        /** @var \MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse $response */
-        $response = $this->api->doRequest(new PostOrdersRequest($collection), PostOrdersResponse::class);
+        /** @var \MyParcelNL\Pdk\Fulfilment\Response\GetOrdersResponse $response */
+        $response = $this->api->doRequest(new PostOrdersRequest($collection), GetOrdersResponse::class);
 
-        return $response->getOrderCollection();
+        return $response->getOrders();
     }
 
     /**
      * @param  array $parameters
      *
-     * @return \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
-     * @noinspection PhpUnused
+     * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      */
-    public function query(array $parameters): OrderCollection
+    public function query(array $parameters): PdkOrderCollection
     {
         $request = new GetOrdersRequest(['parameters' => $parameters]);
 

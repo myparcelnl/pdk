@@ -8,7 +8,9 @@ use MyParcelNL\Pdk\Base\Concern\HasPrices;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
+ * @property int                                             $apiIdentifier
  * @property int                                             $quantity
+ * @property string                                          $instructions
  * @property int                                             $price
  * @property int                                             $vat
  * @property int                                             $priceAfterVat
@@ -19,7 +21,9 @@ class PdkOrderLine extends Model
     use HasPrices;
 
     protected $attributes = [
+        'apiIdentifier' => null,
         'quantity'      => 1,
+        'instructions'  => '',
         'price'         => 0,
         'vat'           => 0,
         'priceAfterVat' => 0,
@@ -27,7 +31,12 @@ class PdkOrderLine extends Model
     ];
 
     protected $casts      = [
+        /**
+         * UUID from the api if order was exported in order mode.
+         */
+        'apiIdentifier' => 'string',
         'quantity'      => 'int',
+        'instructions'  => 'string',
         'price'         => 'int',
         'vat'           => 'int',
         'priceAfterVat' => 'int',

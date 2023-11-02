@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 
 class PostOrderNotesRequest extends Request
 {
     /**
-     * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection
+     * @var \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
      */
     private $collection;
 
@@ -21,10 +21,10 @@ class PostOrderNotesRequest extends Request
     private $orderId;
 
     /**
-     * @param  string                                                    $orderId
-     * @param  \MyParcelNL\Pdk\Fulfilment\Collection\OrderNoteCollection $collection
+     * @param  string                                                      $orderId
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $collection
      */
-    public function __construct(string $orderId, OrderNoteCollection $collection)
+    public function __construct(string $orderId, PdkOrderNoteCollection $collection)
     {
         parent::__construct();
         $this->collection = $collection;
@@ -38,7 +38,7 @@ class PostOrderNotesRequest extends Request
     {
         return json_encode([
             'data' => [
-                'order_notes' => array_map(static function (OrderNote $orderNote) {
+                'order_notes' => array_map(static function (PdkOrderNote $orderNote) {
                     return [
                         'author' => $orderNote->author,
                         'note'   => $orderNote->note,

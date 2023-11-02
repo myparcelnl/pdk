@@ -15,7 +15,7 @@ class ExampleGetOrdersResponse extends ExampleJsonResponse
             [
                 'uuid'                          => '1ed6c2c8-c15a-68a6-96b4-7ffb046c7237',
                 'fulfilment_partner_identifier' => null,
-                'external_identifier'           => '#1025',
+                'external_identifier'           => '1025',
                 'order_date'                    => '2022-11-24 20:16:45',
                 'invoice_address'               => [
                     'cc'          => 'NL',

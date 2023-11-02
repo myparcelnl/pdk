@@ -30,7 +30,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
-use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -42,8 +41,7 @@ dataset('orderModeToggle', [
     'order mode' => [true],
 ]);
 
-it('exports order', function (
-    bool                      $orderMode,
+it('exports orders to shipments', function (
     CarrierSettingsFactory    $carrierSettingsFactory,
     PdkOrderCollectionFactory $orderFactory
 ) {
@@ -56,15 +54,10 @@ it('exports order', function (
         ->toArray();
 
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
-    MockApi::enqueue(
-        ...$orderMode
-        ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
-        : [new ExamplePostShipmentsResponse()]
-    );
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => $orders
@@ -85,30 +78,66 @@ it('exports order', function (
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
     $errors = Notifications::all()
-        ->filter(function (Notification $notification) {
-            return $notification->variant === Notification::VARIANT_ERROR;
-        });
+        ->where('variant', Notification::VARIANT_ERROR);
 
-    expect($response)
-        ->toBeInstanceOf(Response::class)
-        ->and($responseOrders)
+    expect($responseOrders)
         ->toHaveLength(count($orders))
         ->and($response->getStatusCode())
         ->toBe(200)
         // Expect no errors to have been added to notifications
         ->and($errors->toArrayWithoutNull())
-        ->toBe([]);
-
-    if ($orderMode) {
-        expect($responseShipments)->each->toHaveLength(0);
-    } else {
-        expect($responseShipments)->each->toHaveLength(1)
-            ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
-    }
+        ->toBe([])
+        ->and($responseShipments)->each->toHaveLength(1)
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
 })
-    ->with('orderModeToggle')
     ->with('carrierExportSettings')
     ->with('pdkOrdersDomestic');
+
+it('exports complete orders', function (PdkOrderCollectionFactory $orderFactory) {
+    $orders = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    $orderIds = $orders
+        ->pluck('externalIdentifier')
+        ->toArray();
+
+    $carriers = $orders
+        ->pluck('deliveryOptions.carrier.externalIdentifier')
+        ->toArray();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withOrderMode(true))
+        ->withCarriers($carriers /*, $carrierSettingsFactory*/)
+        ->store();
+
+    MockApi::enqueue(new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds]);
+
+    $lastRequest = MockApi::ensureLastRequest();
+
+    assertMatchesJsonSnapshot(
+        $lastRequest->getBody()
+            ->getContents()
+    );
+
+    $content = json_decode($response->getContent(), true);
+
+    $responseOrders    = $content['data']['orders'];
+    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+    $errors = Notifications::all()
+        ->where('variant', Notification::VARIANT_ERROR);
+
+    expect($responseOrders)
+        ->toHaveLength(count($orders))
+        // Expect no errors to have been added to notifications
+        ->and($errors->toArrayWithoutNull())
+        ->toBe([])
+        ->and($responseShipments)->each->toHaveLength(1)
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+})->with('pdkOrdersDomestic');
 
 it('exports order without customer information if setting is false', function (
     bool                      $share,
@@ -255,9 +284,7 @@ it('exports order and directly returns barcode if concept shipments is off', fun
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
-    expect($response)
-        ->toBeInstanceOf(Response::class)
-        ->and($responseOrders)
+    expect($responseOrders)
         ->toHaveLength(count($responseOrders))
         ->and($response->getStatusCode())
         ->toBe(200)
@@ -295,9 +322,7 @@ it('exports pickup order without signature', function () {
     $responseOrders    = $content['data']['orders'];
     $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
-    expect($response)
-        ->toBeInstanceOf(Response::class)
-        ->and($responseOrders)
+    expect($responseOrders)
         ->toHaveLength(count($responseOrders))
         ->and($response->getStatusCode())
         ->toBe(200)

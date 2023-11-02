@@ -31,67 +31,7 @@
     }
   ],
   "notes": [],
-  "shipment": {
-    "carrier": 1,
-    "contractId": null,
-    "customsDeclaration": {
-      "contents": 0,
-      "invoice": "ABC123456",
-      "items": [
-        {
-          "amount": 10,
-          "classification": "12345",
-          "country": "NL",
-          "description": "A word",
-          "itemValue": {
-            "amount": 100,
-            "currency": "EUR"
-          },
-          "weight": 100
-        }
-      ],
-      "weight": 1000
-    },
-    "options": {
-      "ageCheck": false,
-      "collect": null,
-      "cooledDelivery": null,
-      "deliveryDate": null,
-      "deliveryType": 2,
-      "hideSender": false,
-      "insurance": 0,
-      "labelDescription": "",
-      "largeFormat": false,
-      "onlyRecipient": true,
-      "packageType": 1,
-      "return": false,
-      "sameDayDelivery": false,
-      "saturdayDelivery": null,
-      "signature": true
-    },
-    "pickup": null,
-    "recipient": {
-      "address1": "Antareslaan 31",
-      "address2": null,
-      "area": null,
-      "cc": "NL",
-      "city": "Hoofddorp",
-      "postalCode": "2132JE",
-      "region": "Noord-Holland",
-      "state": "Noord-Holland",
-      "email": "test@myparcel.nl",
-      "phone": "0612356789",
-      "person": "Ms. Parcel",
-      "company": "MyParcel"
-    },
-    "physicalProperties": {
-      "height": 100,
-      "length": 100,
-      "width": 100,
-      "weight": 1000
-    },
-    "dropOffPoint": null
-  },
+  "shipment": null,
   "status": null,
   "type": null,
   "price": 2950,

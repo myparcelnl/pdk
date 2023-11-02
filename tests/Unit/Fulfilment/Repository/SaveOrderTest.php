@@ -5,17 +5,17 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Repository;
 
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -38,14 +38,19 @@ const DEFAULT_INPUT_SENDER_SAVE_ORDER = [
 ];
 
 it('creates a valid order collection from api data', function (array $input) {
+    $collection = factory(PdkOrderCollection::class)
+        ->push(...$input)
+        ->store()
+        ->make();
+
     MockApi::enqueue(new ExamplePostOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
     $repository  = Pdk::get(OrderRepository::class);
-    $savedOrders = $repository->postOrders(new OrderCollection($input));
+    $savedOrders = $repository->postOrders($collection);
 
     expect($savedOrders)
-        ->toBeInstanceOf(OrderCollection::class);
+        ->toBeInstanceOf(PdkOrderCollection::class);
 
     assertMatchesJsonSnapshot(json_encode($savedOrders->toArray()));
 })->with([
@@ -208,12 +213,15 @@ it('creates a valid order collection from api data', function (array $input) {
 ]);
 
 it('creates order', function ($input, $path, $query) {
+    $orderCollection = factory(PdkOrderCollection::class)
+        ->push(...$input)
+        ->store()
+        ->make();
+
     MockApi::enqueue(new ExampleGetOrdersResponse());
 
     /** @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository $repository */
-    $repository      = Pdk::get(OrderRepository::class);
-    $order           = new Order($input);
-    $orderCollection = (new OrderCollection())->push($order);
+    $repository = Pdk::get(OrderRepository::class);
 
     /** @var OrderRepository $response */
     $response = $repository->postOrders($orderCollection);
@@ -226,7 +234,7 @@ it('creates order', function ($input, $path, $query) {
         ->and($uri->getPath())
         ->toBe($path)
         ->and($response)
-        ->toBeInstanceOf(OrderCollection::class);
+        ->toBeInstanceOf(PdkOrderCollection::class);
 })->with([
     'empty query with single shipment response' => [
         'input' => [

@@ -12,13 +12,18 @@
       "weight": 440
     },
     "pickup": {
-      "location_code": "34653"
+      "city": "",
+      "location_code": "34653",
+      "location_name": "",
+      "number": "",
+      "postal_code": "",
+      "street": ""
     },
     "recipient": {
       "cc": "DE",
       "city": "Hoofddorp",
-      "person": "Jaap Krekel",
-      "postal_code": "2132JE"
+      "postal_code": "2132JE",
+      "person": "Jaap Krekel"
     }
   }
 ]

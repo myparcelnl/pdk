@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -23,6 +22,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property null|string                                                 $externalIdentifier
  * @property null|string                                                 $apiIdentifier
  * @property null|string                                                 $referenceIdentifier
+ * @property null|string                                                 $fulfilmentPartnerIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
@@ -48,13 +48,16 @@ class PdkOrder extends Model
 {
     protected $attributes = [
         /** Plugin order id */
-        'externalIdentifier'  => null,
+        'externalIdentifier'          => null,
 
         /** Fulfilment order ID from MyParcel */
-        'apiIdentifier'       => null,
+        'apiIdentifier'               => null,
+
+        /** Fulfilment partner ID from MyParcel */
+        'fulfilmentPartnerIdentifier' => null,
 
         /** Custom order number given by plugin */
-        'referenceIdentifier' => null,
+        'referenceIdentifier'         => null,
 
         'deliveryOptions' => DeliveryOptions::class,
 
@@ -95,8 +98,10 @@ class PdkOrder extends Model
     ];
 
     protected $casts      = [
-        'externalIdentifier' => 'string',
-        'apiIdentifier'      => 'string',
+        'externalIdentifier'          => 'string',
+        'apiIdentifier'               => 'string',
+        'fulfilmentPartnerIdentifier' => 'string',
+        'referenceIdentifier'         => 'string',
 
         'deliveryOptions' => DeliveryOptions::class,
 
@@ -111,7 +116,6 @@ class PdkOrder extends Model
         'notes'              => PdkOrderNoteCollection::class,
 
         'orderDate'             => 'datetime',
-        'referenceIdentifier'   => 'string',
         'exported'              => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
@@ -145,32 +149,6 @@ class PdkOrder extends Model
         parent::__construct($data);
         $this->updateShipments();
         $this->updateTotals();
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
-     *
-     * @return self
-     */
-    public static function fromFulfilmentOrder(Order $order): self
-    {
-        return new self([
-            'externalIdentifier'  => $order->externalIdentifier,
-            'apiIdentifier'       => $order->uuid,
-            'orderDate'           => $order->orderDate,
-            'referenceIdentifier' => $order->referenceIdentifier,
-            'invoiceAddress'      => $order->invoiceAddress,
-            'dropOffPoint'        => $order->dropOffPoint,
-            'notes'               => new PdkOrderNoteCollection($order->notes->all()),
-            'lines'               => new PdkOrderLineCollection($order->lines->all()),
-            'status'              => $order->status,
-            'type'                => $order->type,
-            'price'               => $order->price,
-            'vat'                 => $order->vat,
-            'priceAfterVat'       => $order->priceAfterVat,
-            'createdAt'           => $order->createdAt,
-            'updatedAt'           => $order->updatedAt,
-        ]);
     }
 
     /**

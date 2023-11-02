@@ -1,0 +1,200 @@
+{
+  "data": {
+    "orders": [
+      {
+        "external_identifier": "PDK-1",
+        "fulfilment_partner_identifier": null,
+        "invoice_address": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan 31",
+          "company": "MyParcel",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel"
+        },
+        "order_date": "2030-01-01 12:00:00",
+        "order_lines": [
+          {
+            "api_identifier": null,
+            "quantity": 1,
+            "instructions": "",
+            "price": 0,
+            "price_after_vat": 0,
+            "product": {
+              "external_identifier": "PDK-1",
+              "sku": "test",
+              "name": "test",
+              "price": {
+                "amount": 1000,
+                "currency": "EUR"
+              },
+              "weight": 0,
+              "length": 0,
+              "width": 0,
+              "height": 0,
+              "settings": {
+                "id": "product",
+                "country_of_origin": -1,
+                "customs_code": -1,
+                "disable_delivery_options": -1,
+                "drop_off_delay": -1,
+                "export_age_check": -1,
+                "export_hide_sender": -1,
+                "export_insurance": -1,
+                "export_large_format": -1,
+                "export_only_recipient": -1,
+                "export_return": -1,
+                "export_signature": -1,
+                "fit_in_digital_stamp": -1,
+                "fit_in_mailbox": -1,
+                "package_type": -1
+              },
+              "merged_settings": {
+                "id": "product",
+                "country_of_origin": -1,
+                "customs_code": -1,
+                "disable_delivery_options": -1,
+                "drop_off_delay": -1,
+                "export_age_check": -1,
+                "export_hide_sender": -1,
+                "export_insurance": -1,
+                "export_large_format": -1,
+                "export_only_recipient": -1,
+                "export_return": -1,
+                "export_signature": -1,
+                "fit_in_digital_stamp": -1,
+                "fit_in_mailbox": -1,
+                "package_type": -1
+              }
+            }
+          }
+        ],
+        "shipment": {
+          "carrier": 1,
+          "customs_declaration": null,
+          "drop_off_point": null,
+          "general_settings": {
+            "save_recipient_address": 0
+          },
+          "options": {
+            "package_type": 1,
+            "delivery_type": 2
+          },
+          "physical_properties": {
+            "weight": 0
+          },
+          "pickup": null,
+          "recipient": {
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "postal_code": "2132 JE",
+            "street": "Antareslaan 31",
+            "company": "MyParcel",
+            "email": "support@myparcel.nl",
+            "person": "Felicia Parcel"
+          },
+          "reference_identifier": "PDK-1",
+          "status": null
+        }
+      },
+      {
+        "external_identifier": "PDK-2",
+        "fulfilment_partner_identifier": null,
+        "invoice_address": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan 31",
+          "company": "MyParcel",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel"
+        },
+        "order_date": "2030-01-01 12:00:00",
+        "order_lines": [
+          {
+            "api_identifier": null,
+            "quantity": 1,
+            "instructions": "",
+            "price": 0,
+            "price_after_vat": 0,
+            "product": {
+              "external_identifier": "PDK-2",
+              "sku": "test",
+              "name": "test",
+              "price": {
+                "amount": 1000,
+                "currency": "EUR"
+              },
+              "weight": 0,
+              "length": 0,
+              "width": 0,
+              "height": 0,
+              "settings": {
+                "id": "product",
+                "country_of_origin": -1,
+                "customs_code": -1,
+                "disable_delivery_options": -1,
+                "drop_off_delay": -1,
+                "export_age_check": -1,
+                "export_hide_sender": -1,
+                "export_insurance": -1,
+                "export_large_format": -1,
+                "export_only_recipient": -1,
+                "export_return": -1,
+                "export_signature": -1,
+                "fit_in_digital_stamp": -1,
+                "fit_in_mailbox": -1,
+                "package_type": -1
+              },
+              "merged_settings": {
+                "id": "product",
+                "country_of_origin": -1,
+                "customs_code": -1,
+                "disable_delivery_options": -1,
+                "drop_off_delay": -1,
+                "export_age_check": -1,
+                "export_hide_sender": -1,
+                "export_insurance": -1,
+                "export_large_format": -1,
+                "export_only_recipient": -1,
+                "export_return": -1,
+                "export_signature": -1,
+                "fit_in_digital_stamp": -1,
+                "fit_in_mailbox": -1,
+                "package_type": -1
+              }
+            }
+          }
+        ],
+        "shipment": {
+          "carrier": 1,
+          "customs_declaration": null,
+          "drop_off_point": null,
+          "general_settings": {
+            "save_recipient_address": 0
+          },
+          "options": {
+            "package_type": 1,
+            "delivery_type": 2
+          },
+          "physical_properties": {
+            "weight": 0
+          },
+          "pickup": null,
+          "recipient": {
+            "cc": "NL",
+            "city": "Hoofddorp",
+            "postal_code": "2132 JE",
+            "street": "Antareslaan 31",
+            "company": "MyParcel",
+            "email": "support@myparcel.nl",
+            "person": "Felicia Parcel"
+          },
+          "reference_identifier": "PDK-2",
+          "status": null
+        }
+      }
+    ]
+  }
+}

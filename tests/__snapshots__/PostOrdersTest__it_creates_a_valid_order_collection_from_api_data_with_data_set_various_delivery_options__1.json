@@ -1,0 +1,104 @@
+[
+  {
+    "apiIdentifier": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
+    "shopId": 122377,
+    "accountId": 123456,
+    "externalIdentifier": "1025",
+    "orderDate": "2022-11-24 20:16:45",
+    "status": "processed",
+    "invoiceAddress": {
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "number": null,
+      "person": "Felicia Parcel",
+      "postal_code": "2132 JE",
+      "street": "Antareslaan 31"
+    },
+    "lines": [
+      {
+        "apiIdentifier": "4040ae40-d54a-4a64-aa5a-1ebd73680fdc",
+        "quantity": 2,
+        "instructions": null,
+        "price": 519,
+        "price_after_vat": 795,
+        "vat": 276,
+        "product": {
+          "externalIdentifier": "43597032554725",
+          "description": "Zilver",
+          "height": 0,
+          "length": 0,
+          "name": "Hendel (per stuk)",
+          "weight": 6,
+          "width": 0
+        }
+      },
+      {
+        "apiIdentifier": "d9d4de59-1b88-467e-bba5-fdacb8bf27b3",
+        "quantity": 1,
+        "instructions": null,
+        "price": 1483,
+        "price_after_vat": 1795,
+        "vat": 312,
+        "product": {
+          "externalIdentifier": "12746352738812",
+          "description": "1 per verpakking",
+          "height": 0,
+          "length": 0,
+          "name": "Stofzuigerzak - Met diamantjes",
+          "weight": 21,
+          "width": 0
+        }
+      },
+      {
+        "apiIdentifier": "84bbe3b0-da17-4de6-8233-e6555bdf8be3",
+        "quantity": 2,
+        "instructions": null,
+        "price": 583,
+        "price_after_vat": 894,
+        "vat": 311,
+        "product": {
+          "externalIdentifier": "32436582546543",
+          "description": "1 per verpakking",
+          "height": 0,
+          "length": 0,
+          "name": "Stofzuigerzak",
+          "weight": 8,
+          "width": 0
+        }
+      }
+    ],
+    "shipments": [
+      {
+        "recipient": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "number": "31",
+          "person": "Felicia Parcel",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan"
+        },
+        "pickup": null,
+        "drop_off_point": null,
+        "options": {
+          "package_type": 2,
+          "delivery_type": 2,
+          "delivery_date": "2022-11-24 20:16:50",
+          "signature": 0,
+          "only_recipient": 0,
+          "age_check": 0,
+          "large_format": 0,
+          "return": 0,
+          "label_description": "#1025"
+        },
+        "physical_properties": {
+          "weight": 35
+        },
+        "customs_declaration": null,
+        "carrier": 1,
+        "contract_id": null
+      }
+    ],
+    "createdAt": "2022-11-24 20:16:50",
+    "updatedAt": "2022-11-25 13:09:07"
+  }
+]

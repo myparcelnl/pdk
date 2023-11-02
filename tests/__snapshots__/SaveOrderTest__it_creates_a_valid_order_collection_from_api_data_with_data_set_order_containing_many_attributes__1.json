@@ -1,115 +1,130 @@
 [
   {
-    "uuid": "123",
-    "externalIdentifier": null,
+    "apiIdentifier": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
+    "shopId": 122377,
+    "accountId": 123456,
+    "externalIdentifier": "1025",
     "fulfilmentPartnerIdentifier": null,
-    "shopId": null,
-    "accountId": null,
-    "dropOffPoint": null,
-    "invoiceAddress": null,
-    "language": null,
-    "orderDate": "2022-08-22 00:00:00",
-    "referenceIdentifier": null,
+    "orderDate": "2022-11-24 20:16:45",
+    "status": "processed",
+    "invoiceAddress": {
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "number": null,
+      "person": "Felicia Parcel",
+      "postal_code": "2132 JE",
+      "street": "Antareslaan 31"
+    },
+    "price": null,
+    "vat": null,
+    "priceAfterVat": null,
+    "createdAt": "2022-11-24 20:16:50",
+    "updatedAt": "2022-11-25 13:09:07",
+    "deliveryOptions": {
+      "carrier": 1,
+      "date": "2022-11-24 20:16:50",
+      "pickupLocation": null,
+      "deliveryType": 2,
+      "packageType": 2,
+      "shipmentOptions": {
+        "package_type": 2,
+        "delivery_type": 2,
+        "delivery_date": "2022-11-24 20:16:50",
+        "signature": 0,
+        "only_recipient": 0,
+        "age_check": 0,
+        "large_format": 0,
+        "return": 0,
+        "label_description": "#1025"
+      }
+    },
     "lines": [
       {
-        "uuid": "1234",
-        "quantity": 1,
-        "price": 250,
-        "vat": 10,
-        "priceAfterVat": 260,
+        "apiIdentifier": "4040ae40-d54a-4a64-aa5a-1ebd73680fdc",
+        "quantity": 2,
+        "instructions": null,
+        "price": 519,
+        "price_after_vat": 795,
+        "vat": 276,
         "product": {
-          "uuid": "12345",
-          "sku": "018234",
-          "ean": "018234",
-          "externalIdentifier": "018234",
-          "name": "Paarse stofzuiger",
-          "description": "Een paars object waarmee stof opgezogen kan worden",
-          "width": 0,
-          "length": 0,
+          "externalIdentifier": "43597032554725",
+          "description": "Zilver",
           "height": 0,
-          "weight": 3500
+          "length": 0,
+          "name": "Hendel (per stuk)",
+          "weight": 6,
+          "width": 0
+        }
+      },
+      {
+        "apiIdentifier": "d9d4de59-1b88-467e-bba5-fdacb8bf27b3",
+        "quantity": 1,
+        "instructions": null,
+        "price": 1483,
+        "price_after_vat": 1795,
+        "vat": 312,
+        "product": {
+          "externalIdentifier": "12746352738812",
+          "description": "1 per verpakking",
+          "height": 0,
+          "length": 0,
+          "name": "Stofzuigerzak - Met diamantjes",
+          "weight": 21,
+          "width": 0
+        }
+      },
+      {
+        "apiIdentifier": "84bbe3b0-da17-4de6-8233-e6555bdf8be3",
+        "quantity": 2,
+        "instructions": null,
+        "price": 583,
+        "price_after_vat": 894,
+        "vat": 311,
+        "product": {
+          "externalIdentifier": "32436582546543",
+          "description": "1 per verpakking",
+          "height": 0,
+          "length": 0,
+          "name": "Stofzuigerzak",
+          "weight": 8,
+          "width": 0
         }
       }
     ],
-    "notes": [],
-    "shipment": {
-      "carrier": 1,
-      "contractId": null,
-      "customsDeclaration": {
-        "contents": 1,
-        "invoice": "25",
-        "items": [
-          {
-            "amount": 1,
-            "classification": "5256",
-            "country": "BE",
-            "description": "Vlaamse Patatekes",
-            "itemValue": {
-              "amount": 5000,
-              "currency": "EUR"
-            },
-            "weight": 200
-          },
-          {
-            "amount": 1,
-            "classification": "9221",
-            "country": "FR",
-            "description": "Omelette du Fromage",
-            "itemValue": {
-              "amount": 10000,
-              "currency": "EUR"
-            },
-            "weight": 350
-          }
-        ],
-        "weight": 550
-      },
-      "options": {
-        "ageCheck": null,
-        "collect": null,
-        "cooledDelivery": null,
-        "deliveryDate": null,
-        "deliveryType": null,
-        "hideSender": null,
-        "insurance": null,
-        "labelDescription": "",
-        "largeFormat": null,
-        "onlyRecipient": null,
-        "packageType": null,
-        "return": null,
-        "sameDayDelivery": null,
-        "saturdayDelivery": null,
-        "signature": null
-      },
-      "pickup": null,
-      "recipient": {
-        "address1": "Antareslaan 31",
-        "address2": null,
-        "area": null,
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "postalCode": "2132JE",
-        "region": null,
-        "state": null,
-        "email": null,
-        "phone": null,
-        "person": "Jaap Krekel",
-        "company": null
-      },
-      "physicalProperties": {
-        "height": null,
-        "length": null,
-        "width": null,
-        "weight": 3500
-      },
-      "dropOffPoint": null
-    },
-    "status": null,
-    "type": null,
-    "price": 260,
-    "vat": 0,
-    "priceAfterVat": 0,
-    "createdAt": null,
-    "updatedAt": null
+    "shipments": [
+      {
+        "apiIdentifier": null,
+        "trackingCode": null,
+        "status": null,
+        "recipient": {
+          "person": "Felicia Parcel",
+          "company": null,
+          "email": null,
+          "phone": null,
+          "address1": "Antareslaan 31",
+          "postalCode": "2132 JE",
+          "city": "Hoofddorp",
+          "cc": "NL"
+        },
+        "deliveryOptions": {
+          "carrier": 1,
+          "package_type": 2,
+          "delivery_type": 2,
+          "delivery_date": "2022-11-24 20:16:50",
+          "signature": 0,
+          "only_recipient": 0,
+          "age_check": 0,
+          "large_format": 0,
+          "return": 0,
+          "pickup": null
+        },
+        "dropOffPoint": null,
+        "physicalProperties": {
+          "weight": 35
+        },
+        "createdAt": null,
+        "updatedAt": null
+      }
+    ]
   }
 ]

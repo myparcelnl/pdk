@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Sdk\src\Support\Str;
 
@@ -39,7 +39,7 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
             },
 
             '/\[CUSTOMER_NOTE\]/' => function () {
-                return $this->order->notes->firstWhere('author', OrderNote::AUTHOR_CUSTOMER)->note ?? '';
+                return $this->order->notes->firstWhere('author', PdkOrderNote::AUTHOR_CUSTOMER)->note ?? '';
             },
 
             '/\[PRODUCT_ID\]/' => static function () use ($createString) {

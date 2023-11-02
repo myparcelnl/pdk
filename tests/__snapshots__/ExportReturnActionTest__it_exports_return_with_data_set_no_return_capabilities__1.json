@@ -304,6 +304,7 @@
         "lines": [
           {
             "quantity": 1,
+            "instructions": "",
             "price": 0,
             "vat": 0,
             "priceAfterVat": 0,

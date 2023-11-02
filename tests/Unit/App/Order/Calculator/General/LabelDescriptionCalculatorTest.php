@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -36,7 +35,7 @@ function createOrder($labelDescription): PdkOrder
         ])
         ->withNotes([
             factory(PdkOrderNote::class)
-                ->withAuthor(OrderNote::AUTHOR_CUSTOMER)
+                ->withAuthor(PdkOrderNote::AUTHOR_CUSTOMER)
                 ->withNote('Hello'),
         ])
         ->store()

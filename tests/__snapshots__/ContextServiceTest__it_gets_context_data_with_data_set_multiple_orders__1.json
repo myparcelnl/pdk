@@ -6,6 +6,7 @@
     {
       "externalIdentifier": "123",
       "apiIdentifier": null,
+      "fulfilmentPartnerIdentifier": null,
       "referenceIdentifier": null,
       "deliveryOptions": {
         "carrier": {
@@ -163,6 +164,7 @@
     {
       "externalIdentifier": "124",
       "apiIdentifier": null,
+      "fulfilmentPartnerIdentifier": null,
       "referenceIdentifier": null,
       "deliveryOptions": {
         "carrier": {

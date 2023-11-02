@@ -65,7 +65,6 @@ class PostOrderNotesAction extends AbstractOrderAction
                 $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
                     $order->notes->where('apiIdentifier', '==', null)
-                        ->toFulfilmentCollection()
                 );
 
                 $order->notes->addApiIdentifiers($notes);

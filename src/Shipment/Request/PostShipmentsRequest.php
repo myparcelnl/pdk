@@ -5,27 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesRequestShipment;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class PostShipmentsRequest extends Request
 {
+    use EncodesRequestShipment;
+
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     private $collection;
-
-    /**
-     * @var \MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface
-     */
-    private $triStateService;
 
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $collection
@@ -34,8 +27,6 @@ class PostShipmentsRequest extends Request
     {
         parent::__construct();
         $this->collection = $collection;
-
-        $this->triStateService = Pdk::get(TriStateServiceInterface::class);
     }
 
     /**
@@ -81,31 +72,7 @@ class PostShipmentsRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    protected function encodeShipment(Shipment $shipment): array
-    {
-        return [
-            'carrier'              => $shipment->carrier->id,
-            'customs_declaration'  => $this->getCustomsDeclaration($shipment),
-            'drop_off_point'       => $this->getDropOffPoint($shipment),
-            'general_settings'     => [
-                'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
-            ],
-            'options'              => $this->getOptions($shipment),
-            'physical_properties'  => ['weight' => $this->getWeight($shipment)],
-            'pickup'               => $this->getPickupLocation($shipment),
-            'recipient'            => $this->getRecipient($shipment),
-            'reference_identifier' => $shipment->referenceIdentifier,
-            'status'               => $shipment->status,
-        ];
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
+     * @param  Collection $groupedShipments
      *
      * @return null|array
      */
@@ -139,155 +106,12 @@ class PostShipmentsRequest extends Request
      */
     private function encodeShipmentWithSecondaryShipments(Collection $groupedShipments): array
     {
-        $shipment                        = $this->encodeShipment($groupedShipments->first());
-        $shipment['secondary_shipments'] = $this->encodeSecondaryShipments($groupedShipments);
-
-        return $shipment;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function getCustomsDeclaration(Shipment $shipment): ?array
-    {
-        /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
-        $countryService = Pdk::get(CountryServiceInterface::class);
-        $cc             = $shipment->recipient->cc;
-
-        if (! $cc || ! $countryService->isRow($cc)) {
-            return null;
-        }
-
-        return $shipment->customsDeclaration
-            ? Utils::filterNull($shipment->customsDeclaration->toSnakeCaseArray())
-            : null;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function getDropOffPoint(Shipment $shipment): ?array
-    {
-        if (! $shipment->dropOffPoint) {
-            return null;
-        }
-
-        /**
-         * API currently does not support only sending location_code, however, the following properties are not used or
-         * validated beyond "must be a string".
-         */
-        $defaults = [
-            'postal_code'   => '',
-            'location_name' => '',
-            'city'          => '',
-            'street'        => '',
-            'number'        => '',
-        ];
-
-        return Utils::filterNull($shipment->dropOffPoint->toSnakeCaseArray()) + $defaults;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function getOptions(Shipment $shipment): array
-    {
-        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-
-        $options = array_map(function ($item) {
-            return $this->triStateService->resolve($item);
-        }, $shipmentOptions->toSnakeCaseArray());
-
-        $hasInsurance = $shipmentOptions->insurance > TriStateService::DISABLED;
-
-        return array_filter(
+        return array_merge(
+            $this->encodeShipment($groupedShipments->first()),
             [
-                'package_type'  => $shipment->deliveryOptions->getPackageTypeId(),
-                'delivery_type' => $shipment->deliveryOptions->getDeliveryTypeId(),
-                'delivery_date' => $shipment->deliveryOptions->getDateAsString(),
-                'insurance'     => $hasInsurance
-                    ? [
-                        'amount'   => $shipmentOptions->insurance,
-                        'currency' => 'EUR',
-                    ] : null,
-            ] + $options
+                'secondary_shipments' => $this->encodeSecondaryShipments($groupedShipments),
+            ]
         );
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     */
-    private function getPickupLocation(Shipment $shipment): ?array
-    {
-        if (! $shipment->deliveryOptions->isPickup()) {
-            return null;
-        }
-
-        $address = $shipment->deliveryOptions->pickupLocation;
-
-        return Utils::filterNull([
-            'location_code'     => $address->locationCode,
-            'location_name'     => $address->locationName,
-            'retail_network_id' => $address->retailNetworkId,
-            'cc'                => $address->cc,
-            'street'            => $address->street,
-            'number'            => $address->number,
-            'number_suffix'     => $address->numberSuffix,
-            'box_number'        => $address->boxNumber,
-            'postal_code'       => $address->postalCode,
-            'city'              => $address->city,
-            'region'            => $address->region,
-            'state'             => $address->state,
-        ]);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     */
-    private function getRecipient(Shipment $shipment): array
-    {
-        $recipient = $shipment->recipient;
-        $street    = trim(implode(' ', [$recipient->address1, $recipient->address2])) ?: null;
-
-        return Utils::filterNull([
-            'area'                   => $recipient->area,
-            'cc'                     => $recipient->cc,
-            'city'                   => $recipient->city,
-            'company'                => $recipient->company,
-            'email'                  => $recipient->email,
-            'person'                 => $recipient->person,
-            'phone'                  => $recipient->phone,
-            'postal_code'            => $recipient->postalCode,
-            'region'                 => $recipient->region,
-            'state'                  => $recipient->state,
-            'street'                 => $street,
-            'street_additional_info' => $recipient->address2,
-            'eori_number'            => $recipient->eoriNumber,
-            'vat_number'             => $recipient->vatNumber,
-        ]);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return int
-     */
-    private function getWeight(Shipment $shipment): int
-    {
-        return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
     }
 
     /**

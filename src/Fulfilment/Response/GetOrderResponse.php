@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
-use MyParcelNL\Pdk\Fulfilment\Model\Order;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 
 final class GetOrderResponse extends GetOrdersResponse
 {
     /**
-     * @return \MyParcelNL\Pdk\Fulfilment\Model\Order
+     * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
-    public function getOrder(): Order
+    public function getOrder(): PdkOrder
     {
         return $this
             ->getOrders()
