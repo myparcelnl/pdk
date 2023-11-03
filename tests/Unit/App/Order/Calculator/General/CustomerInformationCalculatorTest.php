@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
@@ -47,6 +48,8 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
         )
         ->make();
 
+    $order->createShipment();
+
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsService::class);
     $newOrder = $service->calculate($order);
@@ -60,6 +63,13 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
             ->toBe('bye@myparcel.nl')
             ->and($newOrder->billingAddress->phone)
             ->toBe('987654321');
+
+        $newOrder->shipments->each(function (Shipment $shipment) {
+            expect($shipment->recipient->email)
+                ->toBe('hello@myparcel.nl')
+                ->and($shipment->recipient->phone)
+                ->toBe('123456789');
+        });
     } else {
         expect($newOrder->shippingAddress->email)
             ->toBeNull()
@@ -69,6 +79,13 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
             ->toBeNull()
             ->and($newOrder->billingAddress->phone)
             ->toBeNull();
+
+        $newOrder->shipments->each(function (Shipment $shipment) {
+            expect($shipment->recipient->email)
+                ->toBeNull()
+                ->and($shipment->recipient->phone)
+                ->toBeNull();
+        });
     }
 
     $reset();
