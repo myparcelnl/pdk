@@ -72,8 +72,7 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
     }
 
     $reset();
-}
-)
+})
     ->with([
         'share customer information'        => [true],
         'do not share customer information' => [false],
