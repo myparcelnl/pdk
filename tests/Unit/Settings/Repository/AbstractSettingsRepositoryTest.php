@@ -44,7 +44,7 @@ it('retrieves all categories and fields', function () {
     $repository = Pdk::get(SettingsRepositoryInterface::class);
     $settings   = $repository->all();
 
-    assertMatchesJsonSnapshot(json_encode($settings->toArray()));
+    assertMatchesJsonSnapshot(json_encode($settings->toArrayWithoutNull()));
 });
 
 it('retrieves a single setting from a category', function (string $key, $expected) {

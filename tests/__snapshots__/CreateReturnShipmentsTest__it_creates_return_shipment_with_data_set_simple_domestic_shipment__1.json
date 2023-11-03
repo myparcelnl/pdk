@@ -1,28 +1,21 @@
 [
   {
-    "orderId": null,
     "multiCollo": false,
-    "updated": null,
-    "deleted": null,
     "id": 7,
     "shopId": 6,
     "referenceIdentifier": "GeheimeDingen-1",
     "externalIdentifier": "CV515676839NL",
     "barcode": "CV515676839NL",
     "carrier": {
-      "externalIdentifier": "postnl",
       "id": 1,
       "name": "postnl",
       "human": "PostNL",
-      "subscriptionId": null,
       "enabled": false,
       "isDefault": true,
-      "label": null,
       "optional": false,
       "primary": false,
       "type": "main"
     },
-    "collectionContact": null,
     "customsDeclaration": {
       "contents": 1,
       "invoice": "123456",
@@ -49,10 +42,8 @@
         "id": 1,
         "name": "postnl",
         "human": "PostNL",
-        "subscriptionId": null,
         "enabled": false,
         "isDefault": true,
-        "label": null,
         "optional": false,
         "primary": false,
         "type": "main",
@@ -93,9 +84,7 @@
           }
         }
       },
-      "date": null,
       "labelAmount": 1,
-      "pickupLocation": null,
       "shipmentOptions": {
         "labelDescription": "standaard kenmerk",
         "insurance": 20000,
@@ -110,11 +99,8 @@
       "deliveryType": "standard",
       "packageType": "package"
     },
-    "dropOffPoint": null,
     "hidden": false,
     "isReturn": false,
-    "linkConsumerPortal": null,
-    "multiColloMainShipmentId": null,
     "partnerTrackTraces": [],
     "physicalProperties": {
       "height": 20,
@@ -128,13 +114,8 @@
     },
     "recipient": {
       "address1": "Schottegatweg Oost 12",
-      "address2": null,
-      "area": null,
       "cc": "CW",
       "city": "Willemstad",
-      "postalCode": null,
-      "region": null,
-      "state": null,
       "email": "meneer@groenteboer.nl",
       "phone": "+31699335577",
       "person": "Joep Meloen",
@@ -142,13 +123,9 @@
     },
     "sender": {
       "address1": "Antareslaan 31",
-      "address2": null,
-      "area": null,
       "cc": "NL",
       "city": "Hoofddorp",
       "postalCode": "2132 JE",
-      "region": null,
-      "state": null,
       "email": "shop@geheimedingen.nl",
       "phone": "0612345678",
       "person": "Denzel Crocker",

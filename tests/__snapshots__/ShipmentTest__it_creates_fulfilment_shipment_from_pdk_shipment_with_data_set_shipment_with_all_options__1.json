@@ -21,9 +21,6 @@
   },
   "options": {
     "ageCheck": false,
-    "collect": null,
-    "cooledDelivery": null,
-    "deliveryDate": null,
     "deliveryType": 2,
     "hideSender": false,
     "insurance": 0,
@@ -33,32 +30,16 @@
     "packageType": 1,
     "return": false,
     "sameDayDelivery": false,
-    "saturdayDelivery": null,
     "signature": false
   },
   "pickup": {
-    "locationCode": "34653",
-    "locationName": null,
-    "retailNetworkId": null,
-    "boxNumber": null,
-    "cc": null,
-    "city": null,
-    "number": null,
-    "numberSuffix": null,
-    "postalCode": null,
-    "region": null,
-    "state": null,
-    "street": null
+    "locationCode": "34653"
   },
   "recipient": {
     "address1": "Antareslaan 31",
-    "address2": null,
-    "area": null,
     "cc": "NL",
     "city": "Hoofddorp",
     "postalCode": "2132JE",
-    "region": null,
-    "state": null,
     "email": "test@myparcel.nl",
     "phone": "0612345678",
     "person": "Felicia Parcel",
@@ -69,6 +50,5 @@
     "length": 0,
     "width": 0,
     "weight": 0
-  },
-  "dropOffPoint": null
+  }
 }

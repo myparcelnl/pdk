@@ -1,15 +1,7 @@
 [
   {
     "uuid": "123",
-    "externalIdentifier": null,
-    "fulfilmentPartnerIdentifier": null,
-    "shopId": null,
-    "accountId": null,
-    "dropOffPoint": null,
-    "invoiceAddress": null,
-    "language": null,
     "orderDate": "2022-08-22 00:00:00",
-    "referenceIdentifier": null,
     "lines": [
       {
         "uuid": "1234",
@@ -34,7 +26,6 @@
     "notes": [],
     "shipment": {
       "carrier": 1,
-      "contractId": null,
       "customsDeclaration": {
         "contents": 1,
         "invoice": "25",
@@ -61,55 +52,24 @@
             },
             "weight": 350
           }
-        ],
-        "weight": 550
+        ]
       },
       "options": {
-        "ageCheck": null,
-        "collect": null,
-        "cooledDelivery": null,
-        "deliveryDate": null,
-        "deliveryType": null,
-        "hideSender": null,
-        "insurance": null,
-        "labelDescription": "",
-        "largeFormat": null,
-        "onlyRecipient": null,
-        "packageType": null,
-        "return": null,
-        "sameDayDelivery": null,
-        "saturdayDelivery": null,
-        "signature": null
+        "labelDescription": ""
       },
-      "pickup": null,
       "recipient": {
         "address1": "Antareslaan 31",
-        "address2": null,
-        "area": null,
         "cc": "NL",
         "city": "Hoofddorp",
         "postalCode": "2132JE",
-        "region": null,
-        "state": null,
-        "email": null,
-        "phone": null,
-        "person": "Jaap Krekel",
-        "company": null
+        "person": "Jaap Krekel"
       },
       "physicalProperties": {
-        "height": null,
-        "length": null,
-        "width": null,
         "weight": 3500
-      },
-      "dropOffPoint": null
+      }
     },
-    "status": null,
-    "type": null,
     "price": 260,
     "vat": 0,
-    "priceAfterVat": 0,
-    "createdAt": null,
-    "updatedAt": null
+    "priceAfterVat": 0
   }
 ]

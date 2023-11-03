@@ -23,7 +23,7 @@ it('creates a valid order note collection from api data', function (?string $ful
 
     $savedOrderNotes = $repository->postOrderNotes($fulfilmentId, new OrderNoteCollection($input));
 
-    assertMatchesJsonSnapshot(json_encode($savedOrderNotes->toArray()));
+    assertMatchesJsonSnapshot(json_encode($savedOrderNotes->toArrayWithoutNull()));
 })->with([
     'single note' => [
         'fulfilmentId' => '657718',

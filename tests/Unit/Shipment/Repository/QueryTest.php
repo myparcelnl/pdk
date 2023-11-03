@@ -26,7 +26,7 @@ it('creates shipment collection from queried data', function (string $responseCl
 
     $response = $repository->query([]);
     $shipment = $response->first();
-    $array    = $shipment->toArray();
+    $array    = $shipment->toArrayWithoutNull();
 
     // No need to test this data here.
     $arrayWithoutCapabilities = Arr::except(

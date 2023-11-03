@@ -1,10 +1,7 @@
 {
-  "uuid": null,
   "sku": "ABC123456",
   "ean": "1234567890123",
-  "externalIdentifier": null,
   "name": "Product name",
-  "description": null,
   "width": 0,
   "length": 0,
   "height": 0,

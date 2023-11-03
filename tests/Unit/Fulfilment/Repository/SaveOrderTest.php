@@ -47,7 +47,7 @@ it('creates a valid order collection from api data', function (array $input) {
     expect($savedOrders)
         ->toBeInstanceOf(OrderCollection::class);
 
-    assertMatchesJsonSnapshot(json_encode($savedOrders->toArray()));
+    assertMatchesJsonSnapshot(json_encode($savedOrders->toArrayWithoutNull()));
 })->with([
     'order containing many attributes' => [
         'input' => [

@@ -11,18 +11,15 @@
     "bootstrapId": "myparcel-pdk-boot",
     "endpoints": {
       "deleteAccount": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "deleteAccount"
         },
         "path": "",
-        "property": null,
         "responseProperty": "context"
       },
       "updateAccount": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
@@ -33,202 +30,166 @@
         "responseProperty": "context"
       },
       "updateSubscriptionFeatures": {
-        "body": null,
         "headers": [],
         "method": "GET",
         "parameters": {
           "action": "updateSubscriptionFeatures"
         },
         "path": "",
-        "property": null,
         "responseProperty": "data"
       },
       "synchronizeOrders": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "synchronizeOrders"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "exportOrders": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "exportOrders"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "postOrderNotes": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "postOrderNotes"
         },
         "path": "",
-        "property": "orderNotes",
-        "responseProperty": null
+        "property": "orderNotes"
       },
       "fetchOrders": {
-        "body": null,
         "headers": [],
         "method": "GET",
         "parameters": {
           "action": "fetchOrders"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "printOrders": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "printOrders"
         },
         "path": "",
-        "property": "pdfs",
-        "responseProperty": null
+        "property": "pdfs"
       },
       "updateOrders": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "updateOrders"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "updateOrderStatus": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "updateOrderStatus"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "updateShipments": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "updateShipments"
         },
         "path": "",
-        "property": "shipments",
-        "responseProperty": null
+        "property": "shipments"
       },
       "deleteShipments": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "deleteShipments"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "printShipments": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "printShipments"
         },
         "path": "",
-        "property": "pdfs",
-        "responseProperty": null
+        "property": "pdfs"
       },
       "updatePluginSettings": {
-        "body": null,
         "headers": [],
         "method": "PUT",
         "parameters": {
           "action": "updatePluginSettings"
         },
         "path": "",
-        "property": "plugin_settings",
-        "responseProperty": null
+        "property": "plugin_settings"
       },
       "updateProductSettings": {
-        "body": null,
         "headers": [],
         "method": "PUT",
         "parameters": {
           "action": "updateProductSettings"
         },
         "path": "",
-        "property": "product_settings",
-        "responseProperty": null
+        "property": "product_settings"
       },
       "exportReturn": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "exportReturn"
         },
         "path": "",
-        "property": "orders",
-        "responseProperty": null
+        "property": "orders"
       },
       "createWebhooks": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "createWebhooks"
         },
         "path": "",
-        "property": "webhooks",
-        "responseProperty": null
+        "property": "webhooks"
       },
       "deleteWebhooks": {
-        "body": null,
         "headers": [],
         "method": "POST",
         "parameters": {
           "action": "deleteWebhooks"
         },
         "path": "",
-        "property": "webhooks",
-        "responseProperty": null
+        "property": "webhooks"
       },
       "fetchWebhooks": {
-        "body": null,
         "headers": [],
         "method": "GET",
         "parameters": {
           "action": "fetchWebhooks"
         },
         "path": "",
-        "property": "webhooks",
-        "responseProperty": null
+        "property": "webhooks"
       },
       "fetchContext": {
-        "body": null,
         "headers": [],
         "method": "GET",
         "parameters": {
           "action": "fetchContext"
         },
         "path": "",
-        "property": "context",
-        "responseProperty": null
+        "property": "context"
       }
     },
     "eventPing": "myparcel_pdk_ping",
@@ -246,11 +207,5 @@
     "translations": {
       "apple_tree": "Appelboom"
     }
-  },
-  "dynamic": null,
-  "checkout": null,
-  "orderData": null,
-  "pluginSettingsView": null,
-  "productData": null,
-  "productSettingsView": null
+  }
 }

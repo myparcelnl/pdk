@@ -1,44 +1,8 @@
 {
   "carrier": 1,
-  "contractId": null,
-  "customsDeclaration": null,
   "options": {
-    "ageCheck": null,
-    "collect": null,
-    "cooledDelivery": null,
-    "deliveryDate": null,
-    "deliveryType": null,
-    "hideSender": null,
-    "insurance": null,
-    "labelDescription": "",
-    "largeFormat": null,
-    "onlyRecipient": null,
-    "packageType": null,
-    "return": null,
-    "sameDayDelivery": null,
-    "saturdayDelivery": null,
-    "signature": null
+    "labelDescription": ""
   },
-  "pickup": null,
-  "recipient": {
-    "address1": null,
-    "address2": null,
-    "area": null,
-    "cc": null,
-    "city": null,
-    "postalCode": null,
-    "region": null,
-    "state": null,
-    "email": null,
-    "phone": null,
-    "person": null,
-    "company": null
-  },
-  "physicalProperties": {
-    "height": null,
-    "length": null,
-    "width": null,
-    "weight": null
-  },
-  "dropOffPoint": null
+  "recipient": [],
+  "physicalProperties": []
 }

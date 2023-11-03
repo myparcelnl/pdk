@@ -43,7 +43,7 @@ it('creates return shipment', function (array $input) {
     $repository             = Pdk::get(ShipmentRepository::class);
     $inputShipments         = (new Collection($input))->mapInto(Shipment::class);
     $createdReturnShipments = $repository->createReturnShipments(new ShipmentCollection($inputShipments->all()));
-    $array                  = $createdReturnShipments->toArray();
+    $array                  = $createdReturnShipments->toArrayWithoutNull();
 
     foreach ($array as $index => $shipment) {
         unset($shipment['carrier']['capabilities'], $shipment['carrier']['returnCapabilities']);

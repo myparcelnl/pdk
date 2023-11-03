@@ -1,28 +1,21 @@
 {
-  "orderId": null,
   "multiCollo": true,
-  "updated": null,
-  "deleted": null,
   "id": 23001,
   "shopId": 67890,
   "referenceIdentifier": "my-multicollo-set",
   "externalIdentifier": "3SMYPA060119130",
   "barcode": "3SMYPA123456789",
   "carrier": {
-    "externalIdentifier": "dhlforyou:10932623",
     "id": 9,
     "name": "dhlforyou",
     "human": "DHL For You",
     "subscriptionId": "10932623",
     "enabled": false,
     "isDefault": false,
-    "label": null,
     "optional": false,
     "primary": false,
     "type": "custom"
   },
-  "collectionContact": null,
-  "customsDeclaration": null,
   "delayed": false,
   "delivered": false,
   "deliveryOptions": {
@@ -34,16 +27,12 @@
       "subscriptionId": "10932623",
       "enabled": false,
       "isDefault": false,
-      "label": null,
       "optional": false,
       "primary": false,
       "type": "custom"
     },
-    "date": null,
     "labelAmount": 1,
-    "pickupLocation": null,
     "shipmentOptions": {
-      "labelDescription": null,
       "insurance": 0,
       "ageCheck": -1,
       "hideSender": -1,
@@ -56,45 +45,28 @@
     "deliveryType": "standard",
     "packageType": "package"
   },
-  "dropOffPoint": null,
   "hidden": false,
   "isReturn": false,
   "linkConsumerPortal": "https://demo.myparcel.me/track-trace/demo",
   "multiColloMainShipmentId": "23001",
   "partnerTrackTraces": [],
-  "physicalProperties": {
-    "height": null,
-    "length": null,
-    "width": null,
-    "weight": null
-  },
+  "physicalProperties": [],
   "price": {
     "amount": 625,
     "currency": "EUR"
   },
   "recipient": {
     "address1": "Antareslaan 31",
-    "address2": null,
-    "area": null,
     "cc": "NL",
     "city": "Hoofddorp",
     "postalCode": "2132JE",
-    "region": null,
-    "state": null,
-    "email": null,
-    "phone": null,
-    "person": "Jaap Krekel",
-    "company": null
+    "person": "Jaap Krekel"
   },
   "sender": {
     "address1": "Antareslaan 31",
-    "address2": null,
-    "area": null,
     "cc": "NL",
     "city": "Hoofddorp",
     "postalCode": "2132 JE",
-    "region": null,
-    "state": null,
     "email": "spam@myparcel.nl",
     "phone": "0612345678",
     "person": "Bye Felicia",

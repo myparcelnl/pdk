@@ -37,7 +37,7 @@ it('returns all keys', function () {
 
     expect($settings)->toBeInstanceOf(SettingsModel::class);
 
-    assertMatchesJsonSnapshot(json_encode($settings->toArray()));
+    assertMatchesJsonSnapshot(json_encode($settings->toArrayWithoutNull()));
 });
 
 it('retrieves a single settings category', function () {

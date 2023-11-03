@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -21,5 +22,5 @@ it('gets settings view', function (string $class) {
     /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
     $view = Pdk::get($class);
 
-    assertMatchesJsonSnapshot(json_encode($view->toArray()));
+    assertMatchesJsonSnapshot(json_encode($view->toArray(Arrayable::SKIP_NULL)));
 })->with('settingsViews');

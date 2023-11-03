@@ -211,7 +211,7 @@ it('adds notification if shipment export fails', function () {
     expect($response->getStatusCode())->toBe(200);
 
     $notifications = Notifications::all()
-        ->toArray();
+        ->toArrayWithoutNull();
 
     expect($notifications)
         ->toHaveLength(1)

@@ -1,13 +1,11 @@
 {
   "account": {
     "id": "account",
-    "apiKey": null,
     "apiKeyValid": true
   },
   "order": {
     "id": "order",
     "barcodeInNote": false,
-    "barcodeInNoteTitle": null,
     "conceptShipments": true,
     "emptyDigitalStampWeight": 0,
     "emptyMailboxWeight": 0,
@@ -34,17 +32,12 @@
   },
   "customs": {
     "id": "customs",
-    "countryOfOrigin": null,
     "customsCode": "0",
     "packageContents": "1"
   },
   "checkout": {
     "id": "checkout",
     "allowedShippingMethods": [],
-    "deliveryOptionsCustomCss": null,
-    "deliveryOptionsHeader": null,
-    "deliveryOptionsPosition": null,
-    "pickupLocationsDefaultView": null,
     "priceType": "included",
     "enableDeliveryOptions": true,
     "enableDeliveryOptionsWhenNotInStock": true,

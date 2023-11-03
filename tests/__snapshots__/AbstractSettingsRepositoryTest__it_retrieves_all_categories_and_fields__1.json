@@ -7,7 +7,6 @@
   "order": {
     "id": "order",
     "barcodeInNote": false,
-    "barcodeInNoteTitle": null,
     "conceptShipments": true,
     "emptyDigitalStampWeight": 0,
     "emptyMailboxWeight": 0,
@@ -26,7 +25,6 @@
   },
   "label": {
     "id": "label",
-    "description": null,
     "format": "a4",
     "output": "open",
     "position": [1, 2, 3, 4],
@@ -34,17 +32,12 @@
   },
   "customs": {
     "id": "customs",
-    "countryOfOrigin": null,
     "customsCode": "0",
     "packageContents": "1"
   },
   "checkout": {
     "id": "checkout",
     "allowedShippingMethods": [],
-    "deliveryOptionsCustomCss": null,
-    "deliveryOptionsHeader": null,
-    "deliveryOptionsPosition": null,
-    "pickupLocationsDefaultView": null,
     "priceType": "included",
     "enableDeliveryOptions": true,
     "enableDeliveryOptionsWhenNotInStock": true,
@@ -53,7 +46,6 @@
   "carrier": {
     "postnl": {
       "id": "postnl",
-      "carrierName": null,
       "allowDeliveryOptions": true,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
@@ -105,7 +97,6 @@
     },
     "dhl": {
       "id": "dhl",
-      "carrierName": null,
       "allowDeliveryOptions": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
@@ -157,7 +148,6 @@
     },
     "bpost": {
       "id": "bpost",
-      "carrierName": null,
       "allowDeliveryOptions": true,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,

@@ -16,7 +16,7 @@ it('creates fulfilment product from pdk product', function (array $input) {
     $product    = Product::fromPdkProduct($pdkProduct);
 
     expect($product)->toBeInstanceOf(Product::class);
-    assertMatchesJsonSnapshot(json_encode($product->toArray()));
+    assertMatchesJsonSnapshot(json_encode($product->toArrayWithoutNull()));
 })->with([
     'empty product'            => [[]],
     'product with all options' => [
@@ -32,5 +32,5 @@ it('creates fulfilment product from pdk product', function (array $input) {
 it('returns empty fulfilment product when no pdk product is passed', function () {
     $product = Product::fromPdkProduct(null);
     expect($product)->toBeInstanceOf(Product::class);
-    assertMatchesJsonSnapshot(json_encode($product->toArray()));
+    assertMatchesJsonSnapshot(json_encode($product->toArrayWithoutNull()));
 });
