@@ -204,6 +204,7 @@
             "product": {
               "externalIdentifier": "PDK-1",
               "sku": "test",
+              "isDeliverable": true,
               "name": "test",
               "price": {
                 "amount": 1000,

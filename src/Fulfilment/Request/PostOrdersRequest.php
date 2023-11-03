@@ -13,9 +13,12 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
 use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
 
 class PostOrdersRequest extends Request
 {
+    use EncodesCustomsDeclaration;
+
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
@@ -125,9 +128,7 @@ class PostOrdersRequest extends Request
 
         return [
             'carrier'             => $shipment->carrier,
-            'customs_declaration' => $shipment->customsDeclaration
-                ? $shipment->customsDeclaration->toArray(Arrayable::ENCODED)
-                : null,
+            'customs_declaration' => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'      => $shipment->dropOffPoint
                 ? $shipment->dropOffPoint->toArray(Arrayable::ENCODED)
                 : null,

@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CustomsDeclarationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
@@ -40,6 +41,7 @@ return [
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 2000,
         DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 2000,
     ]),
+    'minimumWeight'             => value(1),
 
     // Delivery options
     'deliveryDaysWindowMin'     => value(0),
@@ -82,6 +84,7 @@ return [
             CarrierSpecificCalculator::class,
             WeightCalculator::class,
             CustomerInformationCalculator::class,
+            CustomsDeclarationCalculator::class,
         ];
     }),
 

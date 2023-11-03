@@ -24,11 +24,28 @@ class OrderLine extends Model
 
     protected $attributes = [
         'uuid'          => null,
+
+        /**
+         * Quantity of items.
+         */
         'quantity'      => 1,
+
+        /**
+         * Price of a single item.
+         */
         'price'         => 0,
+
+        /**
+         * VAT of a single item.
+         */
         'vat'           => 0,
+
+        /**
+         * Price of a single item including VAT.
+         */
         'priceAfterVat' => 0,
-        'product'       => null,
+
+        'product' => null,
     ];
 
     protected $casts      = [

@@ -1,8 +1,8 @@
 {
   "0.property": "deliveryOptions.pickupLocation",
   "0.pointer": "/deliveryOptions/pickupLocation",
-  "0.message": "NULL value found, but an object is required",
-  "0.constraint": "type",
+  "0.message": "The property pickupLocation is required",
+  "0.constraint": "required",
   "0.context": 1,
   "1.property": "deliveryOptions.deliveryType",
   "1.pointer": "/deliveryOptions/deliveryType",

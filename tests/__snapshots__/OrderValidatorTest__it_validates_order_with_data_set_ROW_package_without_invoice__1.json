@@ -132,5 +132,12 @@
     "constraint": "enum",
     "context": 1,
     "enum": [0, 1]
+  },
+  {
+    "property": "customsDeclaration.weight",
+    "pointer": "/customsDeclaration/weight",
+    "message": "The property weight is required",
+    "constraint": "required",
+    "context": 1
   }
 ]

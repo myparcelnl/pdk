@@ -66,7 +66,12 @@ class PdkOrder extends Model
          * Order shipments. Applicable when NOT using order mode.
          */
         'shipments'          => ShipmentCollection::class,
+
+        /**
+         * @deprecated Do not use, will be generated automatically. Will be removed in v3.0.0
+         */
         'customsDeclaration' => null,
+
         'physicalProperties' => PdkPhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
         'notes'              => null,
@@ -314,7 +319,9 @@ class PdkOrder extends Model
      */
     private function updateTotals(): void
     {
-        $this->physicalProperties->initialWeight = $this->lines->getTotalWeight();
+        $this->physicalProperties->initialWeight = $this->lines
+            ->onlyDeliverable()
+            ->getTotalWeight();
 
         [$price, $vat, $priceAfterVat] = $this->lines->reduce(
             function (array $carry, $line) {

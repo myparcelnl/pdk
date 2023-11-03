@@ -42,6 +42,19 @@ class PdkOrderLine extends Model
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
+
         $this->calculateVatTotals();
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalWeight(): int
+    {
+        if (! $this->product) {
+            return 0;
+        }
+
+        return $this->product->weight * $this->quantity;
     }
 }

@@ -78,6 +78,7 @@
           "externalIdentifier": "018234",
           "sku": "018234",
           "ean": "018234",
+          "isDeliverable": true,
           "name": "Paarse stofzuiger",
           "weight": 3500,
           "length": 0,

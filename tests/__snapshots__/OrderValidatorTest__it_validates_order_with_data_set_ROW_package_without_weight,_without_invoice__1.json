@@ -1,5 +1,12 @@
 [
   {
+    "property": "customsDeclaration",
+    "pointer": "/customsDeclaration",
+    "message": "The property customsDeclaration is required",
+    "constraint": "required",
+    "context": 1
+  },
+  {
     "property": "deliveryOptions.shipmentOptions.ageCheck",
     "pointer": "/deliveryOptions/shipmentOptions/ageCheck",
     "message": "Does not have a value in the enumeration [1]",
@@ -132,12 +139,5 @@
     "constraint": "enum",
     "context": 1,
     "enum": [0, 1]
-  },
-  {
-    "property": "customsDeclaration",
-    "pointer": "/customsDeclaration",
-    "message": "NULL value found, but an object is required",
-    "constraint": "type",
-    "context": 1
   }
 ]

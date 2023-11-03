@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -20,6 +19,10 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
+use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
+use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
+use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
@@ -116,7 +119,11 @@ it('adds notification if shipment export fails', function () {
     factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)->store();
     factory(PdkOrder::class)
         ->withExternalIdentifier('error')
-        ->withShippingAddress(['cc' => CountryCodes::CC_ZW])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME)
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+        )
         ->store();
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => 'error']);
@@ -126,13 +133,13 @@ it('adds notification if shipment export fails', function () {
     $notifications = Notifications::all()
         ->toArrayWithoutNull();
 
+    $notification = Arr::first($notifications);
+
     expect($notifications)
         ->toHaveLength(1)
-        ->and($notifications)->each->toEqual([
+        ->and($notification)
+        ->toHaveKeysAndValues([
             'title'    => 'Failed to export order error',
-            'content'  => [
-                'customsDeclaration: NULL value found, but an object is required',
-            ],
             'variant'  => Notification::VARIANT_ERROR,
             'category' => Notification::CATEGORY_ACTION,
             'timeout'  => false,
@@ -140,7 +147,11 @@ it('adds notification if shipment export fails', function () {
                 'action'   => PdkBackendActions::EXPORT_ORDERS,
                 'orderIds' => 'error',
             ],
-        ]);
+        ])
+        ->and($notification['content'][0] ?? null)
+        ->toBe(
+            'deliveryOptions.deliveryType: Does not have a value in the enumeration ["standard","pickup",null]'
+        );
 });
 
 it('exports order and directly returns barcode if concept shipments is off', function () {
@@ -195,9 +206,7 @@ it('exports pickup order without signature', function () {
         ->store()
         ->make();
 
-    MockApi::enqueue(
-        new ExamplePostShipmentsResponse()
-    );
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
@@ -217,3 +226,61 @@ it('exports pickup order without signature', function () {
         ->and($responseShipments)->each->toHaveLength(1)
         ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
 });
+
+it('exports international orders', function (PdkOrderCollectionFactory $factory, bool $orderMode) {
+    MockApi::enqueue(
+        ...$orderMode
+        ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+        : [new ExamplePostShipmentsResponse()]
+    );
+
+    factory(OrderSettings::class)
+        ->withConceptShipments(true)
+        ->store();
+
+    $collection = $factory
+        ->store()
+        ->make();
+
+    $orderIds = $collection->pluck('externalIdentifier');
+
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds->toArray()]);
+
+    $lastRequest = MockApi::ensureLastRequest();
+    $stream      = $lastRequest->getBody();
+
+    assertMatchesJsonSnapshot($stream->getContents());
+})
+    ->with([
+        'without customs declaration' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(factory(PdkOrder::class)->toTheUnitedStates());
+            },
+        ],
+
+        'with customs declaration (deprecated)' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(
+                    factory(PdkOrder::class)
+                        ->toTheUnitedStates()
+                        ->withCustomsDeclaration(
+                            factory(CustomsDeclaration::class)
+                                ->withContents(3)
+                                ->withWeight(3000)
+                                ->withItems(
+                                    factory(CustomsDeclarationItemCollection::class)->push(
+                                        factory(CustomsDeclarationItem::class)
+                                            ->withWeight(400)
+                                            ->withAmount(3)
+                                            ->withItemValue(1000)
+                                            ->withDescription('hello')
+                                            ->withCountry('DE')
+                                            ->withClassification('123456')
+                                    )
+                                )
+                        )
+                );
+            },
+        ],
+    ])
+    ->with('orderModeToggle');

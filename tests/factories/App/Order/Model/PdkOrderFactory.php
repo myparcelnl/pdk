@@ -57,37 +57,37 @@ final class PdkOrderFactory extends AbstractModelFactory
 
     public function toAddressWithDifficultStreet(): self
     {
-        return $this->from(factory(ShippingAddress::class)->withDifficultStreet());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->withDifficultStreet());
     }
 
     public function toBelgium(): self
     {
-        return $this->from(factory(ShippingAddress::class)->inBelgium());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->inBelgium());
     }
 
     public function toFrance(): self
     {
-        return $this->from(factory(ShippingAddress::class)->inFrance());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->inFrance());
     }
 
     public function toGermany(): self
     {
-        return $this->from(factory(ShippingAddress::class)->inGermany());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->inGermany());
     }
 
     public function toTheNetherlands(): self
     {
-        return $this->from(factory(ShippingAddress::class)->inTheNetherlands());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->inTheNetherlands());
     }
 
     public function toTheUnitedKingdom(): self
     {
-        return $this->from(factory(ShippingAddress::class)->inTheUnitedKingdom());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->inTheUnitedKingdom());
     }
 
     public function toTheUnitedStates(): self
     {
-        return $this->from(factory(ShippingAddress::class)->inTheUnitedStates());
+        return $this->withShippingAddress(factory(ShippingAddress::class)->inTheUnitedStates());
     }
 
     /**

@@ -1,6 +1,7 @@
 {
   "productData": [
     {
+      "isDeliverable": true,
       "weight": 0,
       "length": 0,
       "width": 0,
@@ -40,6 +41,7 @@
         "packageType": -1
       },
       "parent": {
+        "isDeliverable": true,
         "weight": 0,
         "length": 0,
         "width": 0,
