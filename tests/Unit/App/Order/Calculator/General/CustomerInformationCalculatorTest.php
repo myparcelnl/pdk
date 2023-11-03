@@ -48,11 +48,13 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
         )
         ->make();
 
-    $order->createShipment();
+    $order->shipments->push($order->createShipment());
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsService::class);
     $newOrder = $service->calculate($order);
+
+    expect($newOrder->shipments)->toHaveLength(1);
 
     if ($shareCustomerInfo || $needsCustomerInfo) {
         expect($newOrder->shippingAddress->email)
