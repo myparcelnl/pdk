@@ -1,84 +1,84 @@
 [
-    {
-        "exported": false,
-        "deliveryOptions": {
-            "carrier": {
-                "enabled": false,
-                "externalIdentifier": "postnl",
-                "isDefault": true,
-                "optional": false,
-                "primary": false,
-                "type": "main"
-            },
-            "labelAmount": 1,
-            "shipmentOptions": {
-                "insurance": -1,
-                "ageCheck": -1,
-                "hideSender": -1,
-                "largeFormat": -1,
-                "onlyRecipient": -1,
-                "return": -1,
-                "sameDayDelivery": -1,
-                "signature": -1
-            },
-            "deliveryType": "standard",
-            "packageType": "mailbox"
-        },
-        "physicalProperties": []
+  {
+    "exported": false,
+    "deliveryOptions": {
+      "carrier": {
+        "enabled": false,
+        "externalIdentifier": "postnl",
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
+      },
+      "labelAmount": 1,
+      "shipmentOptions": {
+        "insurance": -1,
+        "ageCheck": -1,
+        "hideSender": -1,
+        "largeFormat": -1,
+        "onlyRecipient": -1,
+        "return": -1,
+        "sameDayDelivery": -1,
+        "signature": -1
+      },
+      "deliveryType": "standard",
+      "packageType": "mailbox"
     },
-    {
-        "exported": false,
-        "deliveryOptions": {
-            "date": "2077-10-23 09:47:51",
-            "carrier": {
-                "enabled": true,
-                "externalIdentifier": "postnl",
-                "isDefault": true,
-                "optional": false,
-                "primary": false,
-                "type": "main"
-            },
-            "labelAmount": 1,
-            "shipmentOptions": {
-                "insurance": -1,
-                "ageCheck": 0,
-                "hideSender": -1,
-                "largeFormat": -1,
-                "onlyRecipient": 1,
-                "return": -1,
-                "sameDayDelivery": -1,
-                "signature": 1
-            },
-            "deliveryType": "evening",
-            "packageType": "package"
-        },
-        "physicalProperties": []
+    "physicalProperties": []
+  },
+  {
+    "exported": false,
+    "deliveryOptions": {
+      "date": "2077-10-23 09:47:51",
+      "carrier": {
+        "enabled": true,
+        "externalIdentifier": "postnl",
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
+      },
+      "labelAmount": 1,
+      "shipmentOptions": {
+        "insurance": -1,
+        "ageCheck": 0,
+        "hideSender": -1,
+        "largeFormat": -1,
+        "onlyRecipient": 1,
+        "return": -1,
+        "sameDayDelivery": -1,
+        "signature": 1
+      },
+      "deliveryType": "evening",
+      "packageType": "package"
     },
-    {
-        "exported": false,
-        "deliveryOptions": {
-            "carrier": {
-                "enabled": false,
-                "externalIdentifier": "dhlforyou",
-                "isDefault": true,
-                "optional": false,
-                "primary": false,
-                "type": "main"
-            },
-            "labelAmount": 1,
-            "shipmentOptions": {
-                "insurance": 1,
-                "ageCheck": 1,
-                "hideSender": 1,
-                "largeFormat": 1,
-                "onlyRecipient": 1,
-                "return": 1,
-                "sameDayDelivery": -1,
-                "signature": 1
-            },
-            "deliveryType": "standard",
-            "packageType": "package"
-        },
-        "physicalProperties": []
-    }
+    "physicalProperties": []
+  },
+  {
+    "exported": false,
+    "deliveryOptions": {
+      "carrier": {
+        "enabled": false,
+        "externalIdentifier": "dhlforyou",
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
+      },
+      "labelAmount": 1,
+      "shipmentOptions": {
+        "insurance": 1,
+        "ageCheck": 1,
+        "hideSender": 1,
+        "largeFormat": 1,
+        "onlyRecipient": 1,
+        "return": 1,
+        "sameDayDelivery": -1,
+        "signature": 1
+      },
+      "deliveryType": "standard",
+      "packageType": "package"
+    },
+    "physicalProperties": []
+  }
 ]

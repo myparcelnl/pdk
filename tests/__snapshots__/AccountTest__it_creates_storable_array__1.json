@@ -1,7 +1,27 @@
 {
-    "id": 1,
-    "platformId": 3,
-    "contactInfo": {
+  "id": 1,
+  "platformId": 3,
+  "contactInfo": {
+    "address1": "Antareslaan 31",
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132 JE",
+    "email": "support@myparcel.nl",
+    "person": "Felicia Parcel",
+    "company": "MyParcel"
+  },
+  "generalSettings": {
+    "isTest": false,
+    "orderMode": false,
+    "hasCarrierContract": false
+  },
+  "shops": [
+    {
+      "accountId": 1,
+      "platformId": 3,
+      "hidden": false,
+      "billing": [],
+      "deliveryAddress": {
         "address1": "Antareslaan 31",
         "cc": "NL",
         "city": "Hoofddorp",
@@ -9,45 +29,25 @@
         "email": "support@myparcel.nl",
         "person": "Felicia Parcel",
         "company": "MyParcel"
-    },
-    "generalSettings": {
-        "isTest": false,
-        "orderMode": false,
-        "hasCarrierContract": false
-    },
-    "shops": [
+      },
+      "generalSettings": [],
+      "return": [],
+      "shipmentOptions": [],
+      "trackTrace": [],
+      "carriers": [
         {
-            "accountId": 1,
-            "platformId": 3,
-            "hidden": false,
-            "billing": [],
-            "deliveryAddress": {
-                "address1": "Antareslaan 31",
-                "cc": "NL",
-                "city": "Hoofddorp",
-                "postalCode": "2132 JE",
-                "email": "support@myparcel.nl",
-                "person": "Felicia Parcel",
-                "company": "MyParcel"
-            },
-            "generalSettings": [],
-            "return": [],
-            "shipmentOptions": [],
-            "trackTrace": [],
-            "carriers": [
-                {
-                    "enabled": true,
-                    "externalIdentifier": "postnl",
-                    "isDefault": true,
-                    "label": null,
-                    "optional": false,
-                    "primary": false,
-                    "type": "main"
-                }
-            ],
-            "carrierConfigurations": []
+          "enabled": true,
+          "externalIdentifier": "postnl",
+          "isDefault": true,
+          "label": null,
+          "optional": false,
+          "primary": false,
+          "type": "main"
         }
-    ],
-    "status": 2,
-    "subscriptionFeatures": []
+      ],
+      "carrierConfigurations": []
+    }
+  ],
+  "status": 2,
+  "subscriptionFeatures": []
 }
