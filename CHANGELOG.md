@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.7](https://github.com/myparcelnl/pdk/compare/v2.28.6...v2.28.7) (2023-11-03)
+
+
+### :bug: Bug Fixes
+
+* **base:** make null flag in toArray act more consistently ([#230](https://github.com/myparcelnl/pdk/issues/230)) ([a7177f8](https://github.com/myparcelnl/pdk/commit/a7177f82af81c0e61385a05406a4f1aaf344ded7))
+
 ## [2.28.6](https://github.com/myparcelnl/pdk/compare/v2.28.5...v2.28.6) (2023-10-27)
 
 
