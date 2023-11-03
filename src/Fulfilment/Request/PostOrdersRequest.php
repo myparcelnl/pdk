@@ -89,9 +89,7 @@ class PostOrdersRequest extends Request
                 : null,
             'order_date' => $this->encodeDate($order->orderDate),
             'order_lines' => $this->encodeOrderLines($order),
-            'shipment' => $this->encodeShipment(
-                $order->shipments->last() ?? $order->createShipment()
-            ),
+            'shipment' => $this->encodeShipment($order->shipments->last()),
         ];
     }
 

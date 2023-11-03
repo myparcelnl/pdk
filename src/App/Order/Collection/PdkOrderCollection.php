@@ -17,22 +17,6 @@ class PdkOrderCollection extends Collection
     protected $cast = PdkOrder::class;
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
-     *
-     * @return self
-     */
-    public function addApiIdentifiers(PdkOrderCollection $orders): self
-    {
-        $this->each(function (PdkOrder $order) use ($orders) {
-            $order->apiIdentifier = $orders
-                ->firstWhere('externalIdentifier', $order->externalIdentifier)
-                ->uuid;
-        });
-
-        return $this;
-    }
-
-    /**
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      * @throws \Exception
      */
@@ -99,6 +83,18 @@ class PdkOrderCollection extends Collection
         return $this->getAllShipments()
             ->whereIn('id', is_array($shipmentIds) ? $shipmentIds : func_get_args())
             ->values();
+    }
+
+    /**
+     * @return self
+     */
+    public function markAsExported(): self
+    {
+        return $this->map(static function (PdkOrder $order) {
+            $order->exported = true;
+
+            return $order;
+        });
     }
 
     /**

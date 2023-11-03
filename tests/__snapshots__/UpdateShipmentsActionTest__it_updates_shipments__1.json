@@ -2,11 +2,11 @@
   "data": {
     "shipments": [
       {
-        "multiCollo": false,
         "id": 7,
-        "shopId": 6,
-        "referenceIdentifier": "GeheimeDingen-1",
         "externalIdentifier": "CV515676839NL",
+        "referenceIdentifier": "GeheimeDingen-1",
+        "shopId": 6,
+        "multiCollo": false,
         "barcode": "CV515676839NL",
         "carrier": {
           "externalIdentifier": "postnl"
@@ -36,20 +36,21 @@
             "externalIdentifier": "postnl"
           },
           "labelAmount": 1,
+          "pickupLocation": [],
           "shipmentOptions": {
-            "labelDescription": "standaard kenmerk",
-            "insurance": 20000,
-            "ageCheck": 0,
+            "insurance": -1,
+            "ageCheck": -1,
             "hideSender": -1,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "return": 0,
+            "largeFormat": -1,
+            "onlyRecipient": -1,
+            "return": -1,
             "sameDayDelivery": -1,
-            "signature": 0
+            "signature": -1
           },
           "deliveryType": "standard",
           "packageType": "package"
         },
+        "dropOffPoint": [],
         "hidden": false,
         "isReturn": false,
         "partnerTrackTraces": [],
@@ -65,22 +66,17 @@
         },
         "recipient": {
           "address1": "Schottegatweg Oost 12",
+          "address2": "",
           "cc": "CW",
           "city": "Willemstad",
-          "email": "meneer@groenteboer.nl",
-          "phone": "+31699335577",
-          "person": "Joep Meloen",
-          "company": "MyParcel"
+          "postalCode": ""
         },
         "sender": {
           "address1": "Antareslaan 31",
+          "address2": "",
           "cc": "NL",
           "city": "Hoofddorp",
-          "postalCode": "2132 JE",
-          "email": "shop@geheimedingen.nl",
-          "phone": "0612345678",
-          "person": "Denzel Crocker",
-          "company": "Geheime Dingen"
+          "postalCode": "2132 JE"
         },
         "shipmentType": 1,
         "status": 2,

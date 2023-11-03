@@ -15,6 +15,8 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
+ * @property null|string                                            $apiIdentifier
+ * @property null|string                                            $uuid
  * @property null|int                                               $id
  * @property null|int                                               $shopId
  * @property null|string                                            $orderId
@@ -63,33 +65,43 @@ class Shipment extends Model
     ];
 
     protected $attributes = [
-        /**
-         * ID of the order this shipment belongs to, if any.
-         */
-        'orderId'                  => null,
-
-        /**
-         * MultiCollo shipments are shipments that are split into multiple shipments.
-         */
-        'multiCollo'               => false,
-
-        /**
-         * The date and time when the shipment was last updated. Supposed to be saved in the plugin.
-         */
-        'updated'                  => null,
-
-        /**
-         * PLUGIN ONLY: Whether the shipment is deleted.
-         */
-        'deleted'                  => null,
+        'apiIdentifier' => null,
 
         /**
          * Shipment ID. Filled by the API after exporting shipment.
          */
-        'id'                       => null,
-        'shopId'                   => null,
-        'referenceIdentifier'      => null,
-        'externalIdentifier'       => null,
+        'id'            => null,
+        /**
+         * Shipment UUID. Filled by the API after creating shipment in order.
+         */
+        'uuid'          => null,
+
+        'externalIdentifier' => null,
+
+        'referenceIdentifier' => null,
+
+        'shopId'     => null,
+
+        /**
+         * ID of the order this shipment belongs to, if any.
+         */
+        'orderId'    => null,
+
+        /**
+         * MultiCollo shipments are shipments that are split into multiple shipments.
+         */
+        'multiCollo' => false,
+
+        /**
+         * The date and time when the shipment was last updated. Supposed to be saved in the plugin.
+         */
+        'updated'    => null,
+
+        /**
+         * PLUGIN ONLY: Whether the shipment is deleted.
+         */
+        'deleted'    => null,
+
         'barcode'                  => null,
         'carrier'                  => null,
         'collectionContact'        => null,
@@ -158,7 +170,9 @@ class Shipment extends Model
     ];
 
     protected $casts      = [
+        'apiIdentifier'            => 'string',
         'id'                       => 'int',
+        'uuid'                     => 'string',
         'shopId'                   => 'int',
         'orderId'                  => 'string',
         'referenceIdentifier'      => 'string',
@@ -219,6 +233,16 @@ class Shipment extends Model
         }
 
         return parent::toStorableArray();
+    }
+
+    /**
+     * @return null|string
+     */
+    protected function getApiIdentifierAttribute(): ?string
+    {
+        $identifier = (string) ($this->uuid ?? $this->id);
+
+        return $identifier ?: null;
     }
 
     /**

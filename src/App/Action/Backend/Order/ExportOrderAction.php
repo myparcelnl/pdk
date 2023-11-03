@@ -79,6 +79,8 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
+        $orders->generateShipments();
+
         if (! Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID)) {
             return $this->exportShipments($orders);
         }
@@ -99,15 +101,9 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function exportOrders(PdkOrderCollection $orders): PdkOrderCollection
     {
-        $apiOrders = $this->orderRepository->postOrders($orders);
-
-        $orders->addApiIdentifiers($apiOrders);
-
-        return $orders->map(function (PdkOrder $order) {
-            $order->exported = true;
-
-            return $order;
-        });
+        return $this->orderRepository
+            ->postOrders($orders)
+            ->markAsExported();
     }
 
     /**
@@ -118,7 +114,7 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function exportShipments(PdkOrderCollection $orders): PdkOrderCollection
     {
-        $shipments = $orders->generateShipments();
+        $shipments = $orders->getLastShipments();
 
         if ($shipments->isEmpty()) {
             return $orders;

@@ -84,10 +84,11 @@
         },
         "shipments": [
           {
-            "orderId": "701",
-            "multiCollo": false,
+            "apiIdentifier": "100001",
             "id": 100001,
             "referenceIdentifier": "1",
+            "orderId": "701",
+            "multiCollo": false,
             "carrier": {
               "externalIdentifier": "dhleuroplus",
               "id": 11,
@@ -172,10 +173,11 @@
             "sender": []
           },
           {
-            "orderId": "701",
-            "multiCollo": false,
+            "apiIdentifier": "100002",
             "id": 100002,
             "referenceIdentifier": "2",
+            "orderId": "701",
+            "multiCollo": false,
             "carrier": {
               "id": 1,
               "name": "postnl",

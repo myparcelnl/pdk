@@ -1,90 +1,77 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 
 trait DecodesRequestShipment
 {
+    use DecodesDeliveryOptions;
+
+    /**
+     * @param  array $shipment
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function decodeShipment(array $shipment): array
+    {
+        return [
+            'id'                       => Arr::get($shipment, 'id'),
+            'uuid'                     => Arr::get($shipment, 'uuid'),
+            'shopId'                   => Arr::get($shipment, 'shop_id'),
+            'referenceIdentifier'      => Arr::get($shipment, 'reference_identifier'),
+            'barcode'                  => Arr::get($shipment, 'barcode'),
+            'carrier'                  => $this->decodeCarrier($shipment),
+            'collectionContact'        => Arr::get($shipment, 'collection_contact'),
+            'customsDeclaration'       => Arr::get($shipment, 'customs_declaration'),
+            'deliveryOptions'          => $this->decodeDeliveryOptions($shipment),
+            'dropOffPoint'             => $this->decodeRetailLocation(Arr::get($shipment, 'drop_off_point') ?? []),
+            'externalIdentifier'       => Arr::get($shipment, 'external_identifier'),
+            'hidden'                   => Arr::get($shipment, 'hidden'),
+            'isReturn'                 => $this->isReturn($shipment),
+            'linkConsumerPortal'       => Arr::get($shipment, 'link_consumer_portal'),
+            'multiCollo'               => $this->isMultiCollo($shipment),
+            'multiColloMainShipmentId' => Arr::get($shipment, 'multi_collo_main_shipment_id'),
+            'partnerTrackTraces'       => Arr::get($shipment, 'partner_tracktraces'),
+            'physicalProperties'       => Arr::get($shipment, 'physical_properties') ?? [],
+            'price'                    => Arr::get($shipment, 'price'),
+            'recipient'                => $this->decodeAddress(Arr::get($shipment, 'recipient', [])),
+            'sender'                   => $this->decodeAddress(Arr::get($shipment, 'sender', [])),
+            'shipmentType'             => Arr::get($shipment, 'shipment_type'),
+            'status'                   => Arr::get($shipment, 'status'),
+            'delayed'                  => Arr::get($shipment, 'delayed'),
+            'delivered'                => Arr::get($shipment, 'delivered'),
+
+            'created'    => Arr::get($shipment, 'created'),
+            'createdBy'  => Arr::get($shipment, 'created_by'),
+            'modified'   => Arr::get($shipment, 'modified'),
+            'modifiedBy' => Arr::get($shipment, 'modified_by'),
+        ];
+    }
+
     /**
      * @param  array $data
      *
-     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
-     * @throws \Exception
+     * @return bool
      */
-    private function decodeShipment(array $data): Shipment
+    private function isMultiCollo(array $data): bool
     {
-        $isReturn = in_array((int) $data['shipment_type'], Shipment::RETURN_SHIPMENT_TYPES, true);
+        $secondaryShipments = Arr::get($data, 'secondary_shipments');
 
-        $options            = $data['options'] ?? [];
-        $physicalProperties = $data['physical_properties'] ?? [];
-
-        return new Shipment([
-            'id'                       => $data['id'],
-            'shopId'                   => $data['shop_id'],
-            'barcode'                  => $data['barcode'],
-            'carrier'                  => [
-                'id'             => $data['carrier_id'],
-                'subscriptionId' => $data['contract_id'],
-            ],
-            'collectionContact'        => $data['collection_contact'],
-            'customsDeclaration'       => $this->filter($data['customs_declaration']),
-            'delayed'                  => $data['delayed'],
-            'delivered'                => $data['delivered'],
-            'deliveryOptions'          => [
-                'deliveryType'    => $options['delivery_type'],
-                'packageType'     => $options['package_type'],
-                'shipmentOptions' => $this->getShipmentOptions($options),
-                'pickupLocation'  => $this->filter($data['pickup']),
-            ],
-            'dropOffPoint'             => $this->filter($data['drop_off_point']),
-            'externalIdentifier'       => $data['external_identifier'],
-            'hidden'                   => $data['hidden'],
-            'isReturn'                 => $isReturn,
-            'linkConsumerPortal'       => $data['link_consumer_portal'],
-            'multiCollo'               => $data['multi_collo_main_shipment_id'] && $data['secondary_shipments'],
-            'multiColloMainShipmentId' => $data['multi_collo_main_shipment_id'],
-            'partnerTrackTraces'       => $data['partner_tracktraces'],
-            'physicalProperties'       => $physicalProperties,
-            'price'                    => $data['price'],
-            'recipient'                => $this->filter($data['recipient']),
-            'referenceIdentifier'      => $data['reference_identifier'],
-            'sender'                   => $this->filter($data['sender']),
-            'shipmentType'             => $data['shipment_type'],
-            'status'                   => $data['status'],
-
-            'created'    => $data['created'],
-            'createdBy'  => $data['created_by'],
-            'modified'   => $data['modified'],
-            'modifiedBy' => $data['modified_by'],
-        ]);
+        return Arr::get($data, 'multi_collo_main_shipment_id') && count($secondaryShipments);
     }
 
     /**
-     * @param  null|array $item
+     * @param  array $shipment
      *
-     * @return null|array
+     * @return bool
      */
-    private function filter(?array $item): ?array
+    private function isReturn(array $shipment): bool
     {
-        return array_filter($item ?? []) ?: null;
-    }
-
-    /**
-     * @param  array $options
-     *
-     * @return array
-     */
-    private function getShipmentOptions(array $options): array
-    {
-        $keys            = array_keys((new ShipmentOptions())->getAttributes(Arrayable::CASE_SNAKE));
-        $shipmentOptions = Arr::only($options, $keys);
-
-        $shipmentOptions['insurance'] = $options['insurance']['amount'] ?? null;
-
-        return $shipmentOptions;
+        return in_array((int) Arr::get($shipment, 'shipment_type'), Shipment::RETURN_SHIPMENT_TYPES, true);
     }
 }

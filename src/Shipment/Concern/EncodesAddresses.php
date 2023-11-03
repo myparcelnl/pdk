@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;

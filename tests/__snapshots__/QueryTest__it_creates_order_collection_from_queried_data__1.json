@@ -1,136 +1,255 @@
 {
-  "uuid": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
-  "externalIdentifier": "#1025",
-  "fulfilmentPartnerIdentifier": null,
-  "shopId": 122377,
-  "accountId": 123456,
-  "dropOffPoint": null,
-  "invoiceAddress": {
-    "address1": null,
-    "address2": null,
-    "area": null,
+  "externalIdentifier": "PDK-1",
+  "apiIdentifier": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
+  "fulfilmentPartnerIdentifier": "2345678902748721482",
+  "billingAddress": {
+    "address1": "Antareslaan 31",
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132 JE"
+  },
+  "shippingAddress": {
+    "address1": "Antareslaan 31",
     "cc": "NL",
     "city": "Hoofddorp",
     "postalCode": "2132 JE",
-    "region": null,
-    "state": null,
-    "email": null,
-    "phone": null,
-    "person": "Felicia Parcel",
-    "company": null
+    "region": ""
   },
-  "language": "nl",
-  "orderDate": "2022-11-24 20:16:45",
-  "referenceIdentifier": null,
+  "physicalProperties": {
+    "initialWeight": 49,
+    "manualWeight": -1,
+    "totalWeight": 49
+  },
   "lines": [
     {
-      "uuid": "4040ae40-d54a-4a64-aa5a-1ebd73680fdc",
+      "apiIdentifier": "4040ae40-d54a-4a64-aa5a-1ebd73680fdc",
       "quantity": 2,
+      "instructions": "",
       "price": 519,
       "vat": 276,
       "priceAfterVat": 795,
       "product": {
-        "uuid": null,
-        "sku": null,
-        "ean": null,
         "externalIdentifier": "43597032554725",
         "name": "Hendel (per stuk)",
-        "description": "Zilver",
-        "width": 0,
+        "weight": 6,
         "length": 0,
+        "width": 0,
         "height": 0,
-        "weight": 6
+        "settings": {
+          "id": "product",
+          "countryOfOrigin": -1,
+          "customsCode": -1,
+          "disableDeliveryOptions": -1,
+          "dropOffDelay": -1,
+          "exportAgeCheck": -1,
+          "exportHideSender": -1,
+          "exportInsurance": -1,
+          "exportLargeFormat": -1,
+          "exportOnlyRecipient": -1,
+          "exportReturn": -1,
+          "exportSignature": -1,
+          "fitInDigitalStamp": -1,
+          "fitInMailbox": -1,
+          "packageType": -1
+        }
       }
     },
     {
-      "uuid": "d9d4de59-1b88-467e-bba5-fdacb8bf27b3",
+      "apiIdentifier": "d9d4de59-1b88-467e-bba5-fdacb8bf27b3",
       "quantity": 1,
+      "instructions": "mooi inpakken",
       "price": 1483,
       "vat": 312,
       "priceAfterVat": 1795,
       "product": {
-        "uuid": null,
-        "sku": null,
-        "ean": null,
         "externalIdentifier": "12746352738812",
         "name": "Stofzuigerzak - Met diamantjes",
-        "description": "1 per verpakking",
-        "width": 0,
+        "weight": 21,
         "length": 0,
+        "width": 0,
         "height": 0,
-        "weight": 21
+        "settings": {
+          "id": "product",
+          "countryOfOrigin": -1,
+          "customsCode": -1,
+          "disableDeliveryOptions": -1,
+          "dropOffDelay": -1,
+          "exportAgeCheck": -1,
+          "exportHideSender": -1,
+          "exportInsurance": -1,
+          "exportLargeFormat": -1,
+          "exportOnlyRecipient": -1,
+          "exportReturn": -1,
+          "exportSignature": -1,
+          "fitInDigitalStamp": -1,
+          "fitInMailbox": -1,
+          "packageType": -1
+        }
       }
     },
     {
-      "uuid": "84bbe3b0-da17-4de6-8233-e6555bdf8be3",
+      "apiIdentifier": "84bbe3b0-da17-4de6-8233-e6555bdf8be3",
       "quantity": 2,
+      "instructions": "",
       "price": 583,
       "vat": 311,
       "priceAfterVat": 894,
       "product": {
-        "uuid": null,
-        "sku": null,
-        "ean": null,
         "externalIdentifier": "32436582546543",
         "name": "Stofzuigerzak",
-        "description": "1 per verpakking",
-        "width": 0,
+        "weight": 8,
         "length": 0,
+        "width": 0,
         "height": 0,
-        "weight": 8
+        "settings": {
+          "id": "product",
+          "countryOfOrigin": -1,
+          "customsCode": -1,
+          "disableDeliveryOptions": -1,
+          "dropOffDelay": -1,
+          "exportAgeCheck": -1,
+          "exportHideSender": -1,
+          "exportInsurance": -1,
+          "exportLargeFormat": -1,
+          "exportOnlyRecipient": -1,
+          "exportReturn": -1,
+          "exportSignature": -1,
+          "fitInDigitalStamp": -1,
+          "fitInMailbox": -1,
+          "packageType": -1
+        }
       }
     }
   ],
   "notes": [],
-  "shipment": {
-    "carrier": 1,
-    "contractId": null,
-    "customsDeclaration": null,
-    "options": {
-      "ageCheck": false,
-      "collect": null,
-      "cooledDelivery": null,
-      "deliveryDate": "2022-11-24 20:16:50",
-      "deliveryType": 2,
-      "hideSender": null,
-      "insurance": null,
-      "labelDescription": "#1025",
-      "largeFormat": false,
-      "onlyRecipient": false,
-      "packageType": 2,
-      "return": false,
-      "sameDayDelivery": null,
-      "saturdayDelivery": null,
-      "signature": false
-    },
-    "pickup": null,
-    "recipient": {
-      "address1": "Antareslaan 31",
-      "address2": null,
-      "area": null,
-      "cc": "NL",
-      "city": "Hoofddorp",
-      "postalCode": "2132 JE",
+  "orderDate": "2022-11-24 20:16:45",
+  "exported": true,
+  "shipmentPrice": 0,
+  "shipmentPriceAfterVat": 0,
+  "shipmentVat": 0,
+  "orderPrice": 3687,
+  "orderPriceAfterVat": 5173,
+  "orderVat": 1486,
+  "totalPrice": 3687,
+  "totalVat": 1486,
+  "totalPriceAfterVat": 5173,
+  "deliveryOptions": {
+    "date": null,
+    "labelAmount": 1,
+    "pickupLocation": {
+      "locationCode": null,
+      "locationName": null,
+      "retailNetworkId": null,
+      "boxNumber": null,
+      "cc": null,
+      "city": null,
+      "number": null,
+      "numberSuffix": null,
+      "postalCode": null,
       "region": null,
       "state": null,
-      "email": null,
-      "phone": null,
-      "person": "Felicia Parcel",
-      "company": null
+      "street": null
     },
-    "physicalProperties": {
-      "height": null,
-      "length": null,
-      "width": null,
-      "weight": 35
+    "shipmentOptions": {
+      "labelDescription": null,
+      "insurance": -1,
+      "ageCheck": -1,
+      "hideSender": -1,
+      "largeFormat": -1,
+      "onlyRecipient": -1,
+      "return": -1,
+      "sameDayDelivery": -1,
+      "signature": -1
     },
-    "dropOffPoint": null
+    "deliveryType": "standard",
+    "packageType": "package",
+    "carrier": {
+      "externalIdentifier": "postnl"
+    }
   },
-  "status": "processed",
-  "type": "consumer",
-  "price": 0,
-  "vat": 0,
-  "priceAfterVat": 0,
-  "createdAt": "2022-11-24 20:16:50",
-  "updatedAt": "2022-11-25 13:09:07"
+  "shipments": [
+    {
+      "apiIdentifier": "45c19d07-4d47-48df-989f-a01b9d988d7e",
+      "id": 83729991,
+      "uuid": "45c19d07-4d47-48df-989f-a01b9d988d7e",
+      "externalIdentifier": "3SMYPA098753425",
+      "referenceIdentifier": "",
+      "shopId": 122377,
+      "multiCollo": false,
+      "barcode": "3SMYPA098753425",
+      "delayed": false,
+      "delivered": true,
+      "dropOffPoint": [],
+      "hidden": false,
+      "isReturn": false,
+      "partnerTrackTraces": [],
+      "physicalProperties": {
+        "height": 0,
+        "length": 0,
+        "width": 0,
+        "weight": 1000
+      },
+      "price": {
+        "amount": 425,
+        "currency": "EUR"
+      },
+      "recipient": {
+        "address1": "Antareslaan 31",
+        "address2": "",
+        "cc": "NL",
+        "city": "Hoofddorp",
+        "postalCode": "2132 JE"
+      },
+      "sender": {
+        "address1": "Antareslaan 31",
+        "address2": "",
+        "cc": "NL",
+        "city": "MyParcel",
+        "postalCode": "2132 JE"
+      },
+      "shipmentType": 1,
+      "status": 7,
+      "created": "2022-11-25 13:08:22",
+      "createdBy": 28288,
+      "modified": "2022-12-05 01:03:51",
+      "modifiedBy": 28288,
+      "carrier": {
+        "externalIdentifier": "postnl:1"
+      },
+      "deliveryOptions": {
+        "date": null,
+        "labelAmount": 1,
+        "pickupLocation": {
+          "locationCode": null,
+          "locationName": null,
+          "retailNetworkId": null,
+          "boxNumber": null,
+          "cc": null,
+          "city": null,
+          "number": null,
+          "numberSuffix": null,
+          "postalCode": null,
+          "region": null,
+          "state": null,
+          "street": null
+        },
+        "shipmentOptions": {
+          "labelDescription": null,
+          "insurance": -1,
+          "ageCheck": -1,
+          "hideSender": -1,
+          "largeFormat": -1,
+          "onlyRecipient": -1,
+          "return": -1,
+          "sameDayDelivery": -1,
+          "signature": -1
+        },
+        "deliveryType": "standard",
+        "packageType": "package",
+        "carrier": {
+          "externalIdentifier": "postnl:1"
+        }
+      }
+    }
+  ]
 }

@@ -79,7 +79,7 @@ trait EncodesRequestShipment
 
         $customsDeclaration = $shipment->customsDeclaration ?? $this->generateCustomsDeclaration($shipment);
 
-        return $customsDeclaration->toArray(Arrayable::CASE_SNAKE | Arrayable::SKIP_NULL);
+        return $customsDeclaration->toArray(Arrayable::ENCODED);
     }
 
     /**

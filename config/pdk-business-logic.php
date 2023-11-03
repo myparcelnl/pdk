@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
@@ -80,6 +81,7 @@ return [
             InsuranceCalculator::class,
             CarrierSpecificCalculator::class,
             WeightCalculator::class,
+            CustomerInformationCalculator::class,
         ];
     }),
 

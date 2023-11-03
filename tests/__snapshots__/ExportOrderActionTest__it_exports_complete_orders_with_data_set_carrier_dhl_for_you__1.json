@@ -10,7 +10,6 @@
           "postal_code": "2132 JE",
           "street": "Antareslaan 31",
           "company": "MyParcel",
-          "email": "support@myparcel.nl",
           "person": "Felicia Parcel"
         },
         "order_date": "2030-01-01 12:00:00",
@@ -91,7 +90,6 @@
             "postal_code": "2132 JE",
             "street": "Antareslaan 31",
             "company": "MyParcel",
-            "email": "support@myparcel.nl",
             "person": "Felicia Parcel"
           },
           "reference_identifier": "PDK-1",

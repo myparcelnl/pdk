@@ -57,7 +57,11 @@ it('exports orders to shipments', function (
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
-    MockApi::enqueue(new ExamplePostShipmentsResponse());
+    $responseIds = array_map(function (int $index) {
+        return ['id' => $index];
+    }, range(1, count($orders)));
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse($responseIds));
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => $orders
@@ -98,22 +102,26 @@ it('exports complete orders', function (PdkOrderCollectionFactory $orderFactory)
 
     $orderFactory->store();
 
-    $orderIds = $orders
-        ->pluck('externalIdentifier')
-        ->toArray();
-
-    $carriers = $orders
-        ->pluck('deliveryOptions.carrier.externalIdentifier')
-        ->toArray();
+    $orderIds = $orders->pluck('externalIdentifier');
+    $carriers = $orders->pluck('deliveryOptions.carrier.externalIdentifier');
 
     factory(Settings::class)
         ->withOrder(factory(OrderSettings::class)->withOrderMode(true))
-        ->withCarriers($carriers /*, $carrierSettingsFactory*/)
+        ->withCarriers($carriers->toArray())
         ->store();
 
-    MockApi::enqueue(new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse());
+    $postOrdersResponse = new ExamplePostOrdersResponse();
+    $postOrdersResponse->setResponseContent(
+        $orders
+            ->map(function (PdkOrder $order) use ($postOrdersResponse) {
+                return $postOrdersResponse->getDefaultSingleItem(['externalIdentifier' => $order->externalIdentifier]);
+            })
+            ->toArrayWithoutNull()
+    );
 
-    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds]);
+    MockApi::enqueue($postOrdersResponse, new ExamplePostOrderNotesResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds->toArray()]);
 
     $lastRequest = MockApi::ensureLastRequest();
 
@@ -136,7 +144,7 @@ it('exports complete orders', function (PdkOrderCollectionFactory $orderFactory)
         ->and($errors->toArrayWithoutNull())
         ->toBe([])
         ->and($responseShipments)->each->toHaveLength(1)
-        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+        ->and(Arr::pluck(Arr::flatten($responseShipments, 1), 'id'))->each->toBeInt();
 })->with('pdkOrdersDomestic');
 
 it('exports order without customer information if setting is false', function (
@@ -309,9 +317,7 @@ it('exports pickup order without signature', function () {
         ->store()
         ->make();
 
-    MockApi::enqueue(
-        new ExamplePostShipmentsResponse()
-    );
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),

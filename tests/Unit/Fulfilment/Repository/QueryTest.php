@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Helpers\CarrierSnapshotHelper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -25,14 +26,7 @@ it('creates order collection from queried data', function () {
     $repository = Pdk::get(OrderRepository::class);
 
     $response = $repository->query([]);
-    $order    = $response->first();
-    $array    = $order->toArray();
+    $array    = Arr::except(CarrierSnapshotHelper::removeCapabilities($response->first()), ['updated']);
 
-    // No need to test this data here.
-    $arrayWithoutCapabilities = Arr::except(
-        $array,
-        ['shipment.carrier.capabilities', 'shipment.carrier.returnCapabilities']
-    );
-
-    assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
+    assertMatchesJsonSnapshot(json_encode($array));
 });

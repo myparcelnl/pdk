@@ -27,8 +27,7 @@ it('creates a valid order collection from api data', function (array $input) {
     $repository  = Pdk::get(OrderRepository::class);
     $savedOrders = $repository->postOrders(new PdkOrderCollection($input));
 
-    expect($savedOrders)
-        ->toBeInstanceOf(PdkOrderCollection::class);
+    expect($savedOrders)->toBeInstanceOf(PdkOrderCollection::class);
 
     assertMatchesJsonSnapshot(json_encode($savedOrders->toArrayWithoutNull()));
 })->with('fulfilmentOrders');
@@ -42,6 +41,8 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
     $pdkOrderCollection = $factory
         ->store()
         ->make();
+
+    $pdkOrderCollection->generateShipments();
 
     /** @var OrderRepository $response */
     $response = $repository->postOrders($pdkOrderCollection);

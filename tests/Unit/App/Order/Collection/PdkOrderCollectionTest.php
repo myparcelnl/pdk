@@ -138,7 +138,7 @@ it('updates order shipments by shipment ids', function () {
         $orders->getAllShipments()
             ->toArray());
 
-    expect($shipments)->toBe([
+    expect($shipments)->toEqual([
         ['orderId' => '🐰', 'id' => 29090, 'status' => 1],
         ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
         ['orderId' => '🐸', 'id' => 30010, 'status' => 7],
@@ -189,7 +189,7 @@ it('updates order shipments by order ids', function () {
         $orders->getAllShipments()
             ->toArray());
 
-    expect($shipments)->toBe([
+    expect($shipments)->toEqual([
         ['orderId' => '🐰', 'id' => 29090, 'status' => 1],
         ['orderId' => '🐰', 'id' => 30000, 'status' => 7],
         ['orderId' => '🐸', 'id' => 30010, 'status' => 3],
