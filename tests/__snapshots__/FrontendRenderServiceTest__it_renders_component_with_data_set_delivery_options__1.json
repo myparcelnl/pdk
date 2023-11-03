@@ -39,8 +39,7 @@
       "pickupTitle": "delivery_options_pickup_title",
       "postalCode": "delivery_options_postal_code",
       "saturdayDeliveryTitle": "delivery_options_saturday_delivery_title",
-      "signatureTitle": "delivery_options_signature_title",
-      "headerDeliveryOptions": null
+      "signatureTitle": "delivery_options_signature_title"
     },
     "settings": {
       "actions": {

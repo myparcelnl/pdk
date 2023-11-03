@@ -334,8 +334,14 @@ trait HasAttributes
                 $attributes[$key] = $attributes[$key]->toArray($flags);
             }
 
-            if ($flags & Arrayable::SKIP_NULL && null === $attributes[$key]) {
-                unset($attributes[$key]);
+            if ($flags & Arrayable::SKIP_NULL) {
+                if (null === $attributes[$key]) {
+                    unset($attributes[$key]);
+                }
+
+                if (is_array($attributes[$key])) {
+                    $attributes[$key] = Utils::filterNull($attributes[$key]);
+                }
             }
 
             if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {

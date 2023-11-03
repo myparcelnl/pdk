@@ -23,15 +23,10 @@
       "billing": [],
       "deliveryAddress": {
         "address1": "Antareslaan 31",
-        "address2": null,
-        "area": null,
         "cc": "NL",
         "city": "Hoofddorp",
         "postalCode": "2132 JE",
-        "region": null,
-        "state": null,
         "email": "support@myparcel.nl",
-        "phone": null,
         "person": "Felicia Parcel",
         "company": "MyParcel"
       },
