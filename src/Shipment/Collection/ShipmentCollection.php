@@ -52,7 +52,7 @@ class ShipmentCollection extends Collection
      */
     public function groupByMultiCollo(): self
     {
-        return (new ShipmentCollection($this->all()))->groupBy(function ($shipment) {
+        return $this->groupBy(function ($shipment) {
             /** @var Shipment $shipment */
             $shipment = Utils::cast(Shipment::class, $shipment);
             $schema   = Pdk::get(CarrierSchema::class);

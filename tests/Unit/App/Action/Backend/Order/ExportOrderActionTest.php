@@ -25,7 +25,6 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleMulticolloPostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
@@ -130,7 +129,7 @@ it('exports multicollo order', function (
         ->withCarriers($carriers)
         ->store();
 
-    MockApi::enqueue(new ExampleMulticolloPostShipmentsResponse());
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'orderIds' => $orders
