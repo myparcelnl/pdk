@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
+use ReflectionClass;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -20,21 +21,59 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     use HasAttributes;
 
     /**
+     * @var array
+     */
+    public static $booted;
+
+    /**
+     * @var array|mixed
+     */
+    private static $traitInitializers;
+
+    /**
      * @var bool
      */
     protected $cloned = false;
 
     /**
      * @param  null|array $data
+     *
+     * @throws \ReflectionException
      */
     public function __construct(?array $data = null)
     {
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
 
+        $this->bootIfNotBooted();
+
+        $this->initializeTraits();
+
         $convertedData = Utils::changeArrayKeysCase($data ?? []);
 
         $this->fill($convertedData + $this->attributes);
+    }
+
+    /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected static function bootTraits(): void
+    {
+        $class = static::class;
+
+        self::$traitInitializers[$class] = [];
+
+        $traits = Utils::getClassTraitsRecursive($class);
+
+        foreach ($traits as $trait) {
+            $baseName = (new ReflectionClass($trait))->getShortName();
+            $method   = sprintf('initialize%s', $baseName);
+
+            if (method_exists($class, $method)) {
+                self::$traitInitializers[$class][] = $method;
+            }
+        }
     }
 
     /**
@@ -248,6 +287,29 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     public function toStudlyCaseArray(): array
     {
         return $this->toArray(Arrayable::CASE_STUDLY);
+    }
+
+    /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function bootIfNotBooted(): void
+    {
+        if (! isset(static::$booted[static::class])) {
+            static::bootTraits();
+
+            static::$booted[static::class] = true;
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function initializeTraits(): void
+    {
+        foreach (self::$traitInitializers[static::class] as $method) {
+            $this->{$method}();
+        }
     }
 
     /**

@@ -67,6 +67,8 @@ class ExportOrderAction extends AbstractOrderAction
 
         $this->saveOrders($exportedOrders, $originalOrders);
 
+        $this->addAudits($request, $exportedOrders);
+
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, [
             'orderIds' => $this->getOrderIds($request),
         ]);
@@ -159,6 +161,11 @@ class ExportOrderAction extends AbstractOrderAction
         $orderService = Pdk::get(PdkOrderOptionsServiceInterface::class);
 
         return $orders
+            ->filter(function (PdkOrder $order) {
+                return ! $order->audits
+                    ->automatic()
+                    ->hasAction(PdkBackendActions::EXPORT_ORDERS);
+            })
             ->map(static function (PdkOrder $order) use ($orderService) {
                 return $orderService->calculate($order);
             })
@@ -191,6 +198,26 @@ class ExportOrderAction extends AbstractOrderAction
 
                 return false;
             });
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\Request               $request
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $exportedOrders
+     *
+     * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    private function addAudits(Request $request, PdkOrderCollection $exportedOrders): void
+    {
+        $exportedOrders->each(function (PdkOrder $order) use ($request) {
+            $order->addAudit(
+                PdkBackendActions::EXPORT_ORDERS,
+                $request->get('actionType'),
+                [
+                    'mode' => Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID) ? 'order' : 'shipment',
+                ]
+            );
+        });
     }
 
     /**

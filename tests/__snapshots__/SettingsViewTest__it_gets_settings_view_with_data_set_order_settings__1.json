@@ -42,9 +42,40 @@
     },
     {
       "name": "processDirectly",
-      "$component": "ToggleInput",
+      "$component": "SelectInput",
       "label": "settings_order_process_directly",
-      "description": "settings_order_process_directly_description"
+      "description": "settings_order_process_directly_description",
+      "options": [
+        {
+          "value": -1,
+          "label": "settings_none"
+        },
+        {
+          "plainLabel": "Pending",
+          "value": "pending"
+        },
+        {
+          "plainLabel": "Paid",
+          "value": "paid"
+        },
+        {
+          "plainLabel": "Shipped",
+          "value": "shipped"
+        },
+        {
+          "plainLabel": "Completed",
+          "value": "completed"
+        },
+        {
+          "plainLabel": "Cancelled",
+          "value": "cancelled"
+        },
+        {
+          "plainLabel": "Refunded",
+          "value": "refunded"
+        }
+      ],
+      "sort": "desc"
     },
     {
       "name": "sendReturnEmail",

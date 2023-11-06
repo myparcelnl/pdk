@@ -36,6 +36,28 @@ it('executes actions', function () {
         ]);
 });
 
+it('can label an action as automatic', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionsService $actions */
+    $actions = Pdk::get(PdkActionsServiceInterface::class);
+
+    $actions
+        ->setContext(PdkEndpoint::CONTEXT_BACKEND)
+        ->executeAutomatic(PdkBackendActions::FETCH_ORDERS, ['orderIds' => 1]);
+
+    $calls = $actions->getCalls();
+
+    expect($calls)
+        ->toHaveLength(1)
+        ->and($calls[0])
+        ->toBe([
+            'action'     => PdkBackendActions::FETCH_ORDERS,
+            'parameters' => [
+                'orderIds'   => 1,
+                'actionType' => 'automatic',
+            ],
+        ]);
+});
+
 it('throws error if action parameter is missing', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionsService $actions */
     $actions = Pdk::get(PdkActionsServiceInterface::class);

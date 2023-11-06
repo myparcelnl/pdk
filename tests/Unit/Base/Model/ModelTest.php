@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
+use MyParcelNL\Pdk\Tests\Mocks\MockTraitModel;
 
 it('can use constructor arguments', function () {
     $model = new MockMutateModel([
@@ -19,5 +20,11 @@ it('can use constructor arguments', function () {
             'perenboom'  => 'mutated_zeker',
             'bloemkool'  => null,
         ]);
+});
+
+it('boots on construct', function () {
+    $model = new MockTraitModel();
+
+    expect($model::$booted)->toHaveKeysAndValues([get_class($model) => true]);
 });
 

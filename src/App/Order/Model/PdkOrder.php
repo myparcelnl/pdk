@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Model;
 
+use MyParcelNL\Pdk\App\Audit\Concern\HasAudits;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
@@ -47,7 +48,9 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  */
 class PdkOrder extends Model
 {
-    protected $attributes = [
+    use HasAudits;
+
+    protected $attributes      = [
         /** Plugin order id */
         'externalIdentifier'  => null,
 
@@ -100,7 +103,9 @@ class PdkOrder extends Model
         'totalPriceAfterVat'    => 0,
     ];
 
-    protected $casts      = [
+    protected $auditIdentifier = 'externalIdentifier';
+
+    protected $casts           = [
         'externalIdentifier' => 'string',
         'apiIdentifier'      => 'string',
 
@@ -187,11 +192,13 @@ class PdkOrder extends Model
      */
     public function createShipment(bool $store = true): Shipment
     {
-        $shipment = $this->synchronizeShipment(new Shipment([
-            'carrier'            => $this->deliveryOptions->carrier,
-            'customsDeclaration' => $this->customsDeclaration,
-            'deliveryOptions'    => $this->deliveryOptions,
-        ]));
+        $shipment = $this->synchronizeShipment(
+            new Shipment([
+                'carrier'            => $this->deliveryOptions->carrier,
+                'customsDeclaration' => $this->customsDeclaration,
+                'deliveryOptions'    => $this->deliveryOptions,
+            ])
+        );
 
         if ($store) {
             $this->shipments->push($shipment);

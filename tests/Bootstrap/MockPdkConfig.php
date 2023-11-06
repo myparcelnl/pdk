@@ -23,6 +23,9 @@ use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
+use MyParcelNL\Pdk\Audit\Service\AuditService;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
@@ -74,6 +77,8 @@ class MockPdkConfig
             'platform' => value(Platform::MYPARCEL_NAME),
 
             ApiServiceInterface::class                  => get(MockApiService::class),
+            AuditServiceInterface::class                => get(AuditService::class),
+            AuditRepositoryInterface::class             => get(MockAuditRepository::class),
             BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
             CarrierSchema::class                        => get(MockCarrierSchema::class),
             ClientAdapterInterface::class               => get(Guzzle7ClientAdapter::class),
