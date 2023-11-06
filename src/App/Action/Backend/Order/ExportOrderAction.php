@@ -136,10 +136,6 @@ class ExportOrderAction extends AbstractOrderAction
 
         $orders->updateShipments($concepts);
 
-        $orders->each(function (PdkOrder $order) {
-            $order->shipments = $order->shipments->take(-1);
-        });
-
         if (! Settings::get(OrderSettings::CONCEPT_SHIPMENTS, OrderSettings::ID)) {
             $this->shipmentRepository->fetchLabelLink($concepts, LabelSettings::FORMAT_A4);
 
