@@ -335,12 +335,12 @@ trait HasAttributes
             }
 
             if ($flags & Arrayable::SKIP_NULL) {
-                if (null === $attributes[$key]) {
-                    unset($attributes[$key]);
-                }
-
                 if (is_array($attributes[$key])) {
                     $attributes[$key] = Utils::filterNull($attributes[$key]);
+                }
+
+                if (null === $attributes[$key]) {
+                    unset($attributes[$key]);
                 }
             }
 
