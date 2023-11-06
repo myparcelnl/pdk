@@ -130,19 +130,6 @@ class Order extends Model
     }
 
     /**
-     * @param  null|string $orderId
-     *
-     * @return $this
-     * @noinspection PhpUnused
-     */
-    protected function setOrderIdAttribute(?string $orderId): self
-    {
-        $this->shipment->orderId = $orderId;
-
-        return $this;
-    }
-
-    /**
      * @param  null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment|array $shipment
      *
      * @return $this
