@@ -3,7 +3,12 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "postnl"
+        "enabled": false,
+        "externalIdentifier": "postnl",
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
       },
       "labelAmount": 1,
       "shipmentOptions": {
@@ -26,7 +31,12 @@
     "deliveryOptions": {
       "date": "2077-10-23 09:47:51",
       "carrier": {
-        "externalIdentifier": "postnl"
+        "enabled": true,
+        "externalIdentifier": "postnl",
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
       },
       "labelAmount": 1,
       "shipmentOptions": {
@@ -48,7 +58,12 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "dhlforyou"
+        "enabled": false,
+        "externalIdentifier": "dhlforyou",
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
       },
       "labelAmount": 1,
       "shipmentOptions": {

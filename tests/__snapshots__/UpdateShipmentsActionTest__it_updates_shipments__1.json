@@ -9,7 +9,12 @@
         "externalIdentifier": "CV515676839NL",
         "barcode": "CV515676839NL",
         "carrier": {
-          "externalIdentifier": "postnl"
+          "enabled": false,
+          "externalIdentifier": "postnl",
+          "isDefault": true,
+          "optional": false,
+          "primary": false,
+          "type": "main"
         },
         "customsDeclaration": {
           "contents": 1,
@@ -33,7 +38,12 @@
         "delivered": false,
         "deliveryOptions": {
           "carrier": {
-            "externalIdentifier": "postnl"
+            "enabled": false,
+            "externalIdentifier": "postnl",
+            "isDefault": true,
+            "optional": false,
+            "primary": false,
+            "type": "main"
           },
           "labelAmount": 1,
           "shipmentOptions": {

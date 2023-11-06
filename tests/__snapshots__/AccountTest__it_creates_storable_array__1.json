@@ -36,7 +36,13 @@
       "trackTrace": [],
       "carriers": [
         {
-          "externalIdentifier": "postnl"
+          "enabled": true,
+          "externalIdentifier": "postnl",
+          "isDefault": true,
+          "label": null,
+          "optional": false,
+          "primary": false,
+          "type": "main"
         }
       ],
       "carrierConfigurations": []

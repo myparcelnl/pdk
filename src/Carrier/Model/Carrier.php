@@ -170,7 +170,13 @@ class Carrier extends Model
     public function toStorableArray(): array
     {
         return [
+            'enabled'            => $this->enabled,
             'externalIdentifier' => $this->externalIdentifier,
+            'isDefault'          => $this->isDefault,
+            'label'              => $this->label,
+            'optional'           => $this->optional,
+            'primary'            => $this->primary,
+            'type'               => $this->type,
         ];
     }
 }
