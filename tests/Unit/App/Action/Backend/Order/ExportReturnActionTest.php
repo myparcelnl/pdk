@@ -44,7 +44,13 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
     $content['data']['orders'] = array_map(function (array $order) {
         return array_replace($order, [
             'shipments' => array_map(function (array $shipment) {
-                Arr::forget($shipment, ['updated']);
+                Arr::forget($shipment, [
+                    'updated',
+                    'carrier.capabilities',
+                    'carrier.returnCapabilities',
+                    'deliveryOptions.carrier.capabilities',
+                    'deliveryOptions.carrier.returnCapabilities',
+                ]);
 
                 return $shipment;
             }, $order['shipments'] ?? []),

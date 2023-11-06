@@ -97,24 +97,7 @@
               "isDefault": true,
               "optional": false,
               "primary": false,
-              "type": "main",
-              "capabilities": {
-                "deliveryTypes": ["standard"],
-                "features": {
-                  "labelDescriptionLength": 45
-                },
-                "packageTypes": ["package"],
-                "shipmentOptions": {
-                  "ageCheck": false,
-                  "onlyRecipient": false,
-                  "return": false,
-                  "sameDayDelivery": false,
-                  "signature": true,
-                  "saturdayDelivery": true,
-                  "hideSender": true,
-                  "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-                }
-              }
+              "type": "main"
             },
             "delayed": false,
             "delivered": false,
@@ -128,24 +111,7 @@
                 "isDefault": true,
                 "optional": false,
                 "primary": false,
-                "type": "main",
-                "capabilities": {
-                  "deliveryTypes": ["standard"],
-                  "features": {
-                    "labelDescriptionLength": 45
-                  },
-                  "packageTypes": ["package"],
-                  "shipmentOptions": {
-                    "ageCheck": false,
-                    "onlyRecipient": false,
-                    "return": false,
-                    "sameDayDelivery": false,
-                    "signature": true,
-                    "saturdayDelivery": true,
-                    "hideSender": true,
-                    "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-                  }
-                }
+                "type": "main"
               },
               "labelAmount": 1,
               "shipmentOptions": {
@@ -184,43 +150,7 @@
               "isDefault": true,
               "optional": false,
               "primary": false,
-              "type": "main",
-              "capabilities": {
-                "deliveryTypes": ["morning", "standard", "evening", "pickup"],
-                "features": {
-                  "labelDescriptionLength": 45
-                },
-                "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
-                "shipmentOptions": {
-                  "ageCheck": true,
-                  "largeFormat": true,
-                  "onlyRecipient": true,
-                  "return": true,
-                  "sameDayDelivery": false,
-                  "signature": true,
-                  "insurance": [
-                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                  ]
-                }
-              },
-              "returnCapabilities": {
-                "deliveryTypes": ["standard"],
-                "features": {
-                  "labelDescriptionLength": 45
-                },
-                "packageTypes": ["package"],
-                "shipmentOptions": {
-                  "signature": true,
-                  "insurance": [
-                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                  ],
-                  "return": true,
-                  "ageCheck": true,
-                  "onlyRecipient": true,
-                  "sameDayDelivery": false,
-                  "largeFormat": true
-                }
-              }
+              "type": "main"
             },
             "delayed": false,
             "delivered": false,
@@ -233,43 +163,7 @@
                 "isDefault": true,
                 "optional": false,
                 "primary": false,
-                "type": "main",
-                "capabilities": {
-                  "deliveryTypes": ["morning", "standard", "evening", "pickup"],
-                  "features": {
-                    "labelDescriptionLength": 45
-                  },
-                  "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
-                  "shipmentOptions": {
-                    "ageCheck": true,
-                    "largeFormat": true,
-                    "onlyRecipient": true,
-                    "return": true,
-                    "sameDayDelivery": false,
-                    "signature": true,
-                    "insurance": [
-                      0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                    ]
-                  }
-                },
-                "returnCapabilities": {
-                  "deliveryTypes": ["standard"],
-                  "features": {
-                    "labelDescriptionLength": 45
-                  },
-                  "packageTypes": ["package"],
-                  "shipmentOptions": {
-                    "signature": true,
-                    "insurance": [
-                      0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                    ],
-                    "return": true,
-                    "ageCheck": true,
-                    "onlyRecipient": true,
-                    "sameDayDelivery": false,
-                    "largeFormat": true
-                  }
-                }
+                "type": "main"
               },
               "labelAmount": 1,
               "shipmentOptions": {
