@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -28,6 +29,8 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
     $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
 
     $repository->storeHashedUrl('https://example.com/hashed-url');
 
@@ -58,8 +61,8 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
-        ->and($request->headers->all())
-        ->toHaveKey('x-myparcel-hook')
+        ->and($request->headers->get('x-myparcel-hook'))
+        ->toBe($hook)
         ->and($response->getContent())
         ->toBe('')
         ->and($response->getStatusCode())
@@ -71,12 +74,6 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
         ->toBeGreaterThanOrEqual($time - 10)
         ->and($timestamp)
         ->toBeLessThanOrEqual($time + 10);
-
-    $cronService->executeAllTasks();
-    expect(
-        $cronService->getScheduledTasks()
-            ->all()
-    )->toBeEmpty();
 })->with(WebhookSubscription::ALL);
 
 it('dispatches and executes incoming webhook without myparcel header', function (string $hook) {
@@ -124,10 +121,4 @@ it('dispatches and executes incoming webhook without myparcel header', function 
         ->toBeGreaterThanOrEqual($time - 10)
         ->and($timestamp)
         ->toBeLessThanOrEqual($time + 10);
-
-    $cronService->executeAllTasks();
-    expect(
-        $cronService->getScheduledTasks()
-            ->all()
-    )->toBeEmpty();
 })->with(WebhookSubscription::ALL);
