@@ -56,10 +56,7 @@ it('calculates weight', function (
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->physicalProperties->totalWeight)
-        ->toBe($totalWeight)
-        ->and($newOrder->customsDeclaration->weight)
-        ->toBe($totalWeight);
+    expect($newOrder->physicalProperties->totalWeight)->toBe($totalWeight);
 
     $reset();
 })

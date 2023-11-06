@@ -32,7 +32,7 @@
   "customs": {
     "id": "customs",
     "countryOfOrigin": "BE",
-    "customsCode": "0",
+    "customsCode": "000000",
     "packageContents": "1"
   },
   "checkout": {

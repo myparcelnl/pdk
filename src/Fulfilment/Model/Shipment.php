@@ -75,15 +75,10 @@ class Shipment extends Model
             'contractId'         => $pdkShipment->carrier->subscriptionId,
             'customsDeclaration' => $pdkShipment->customsDeclaration,
             'options'            => ShipmentOptions::fromPdkDeliveryOptions($pdkShipment->deliveryOptions),
-            'pickup'             => $pdkShipment->deliveryOptions->pickupLocation,
+            'pickup'             => $pdkShipment->deliveryOptions->pickupLocation ?? null,
             'recipient'          => $pdkShipment->recipient,
             'dropOffPoint'       => $pdkShipment->dropOffPoint,
-            'physicalProperties' => [
-                'height' => $pdkShipment->physicalProperties->height ?? 0,
-                'width'  => $pdkShipment->physicalProperties->width ?? 0,
-                'length' => $pdkShipment->physicalProperties->length ?? 0,
-                'weight' => $pdkShipment->physicalProperties->weight ?? 0,
-            ],
+            'physicalProperties' => $pdkShipment->physicalProperties,
         ]);
     }
 }

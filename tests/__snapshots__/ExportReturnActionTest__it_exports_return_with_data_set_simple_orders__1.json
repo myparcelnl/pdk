@@ -133,9 +133,7 @@
             "price": {
               "amount": 100,
               "currency": "EUR"
-            },
-            "recipient": [],
-            "sender": []
+            }
           },
           {
             "orderId": "701",
@@ -187,9 +185,7 @@
             "price": {
               "amount": 100,
               "currency": "EUR"
-            },
-            "recipient": [],
-            "sender": []
+            }
           }
         ],
         "physicalProperties": {

@@ -48,7 +48,7 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
         )
         ->make();
 
-    $order->shipments->push($order->createShipment());
+    $order->createShipment();
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsService::class);

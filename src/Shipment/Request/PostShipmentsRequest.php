@@ -90,7 +90,7 @@ class PostShipmentsRequest extends Request
      */
     protected function encodeShipment(Shipment $shipment): array
     {
-        return [
+        return Utils::filterNull([
             'carrier'              => $shipment->carrier->id,
             'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'       => $this->getDropOffPoint($shipment),
@@ -102,12 +102,11 @@ class PostShipmentsRequest extends Request
             'pickup'               => $this->getPickupLocation($shipment),
             'recipient'            => $this->getRecipient($shipment),
             'reference_identifier' => $shipment->referenceIdentifier,
-            'status'               => $shipment->status,
-        ];
+        ]);
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
      *
      * @return null|array
      */
@@ -182,7 +181,11 @@ class PostShipmentsRequest extends Request
      */
     private function getOptions(Shipment $shipment): array
     {
-        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
+        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions ?? null;
+
+        if (! $shipmentOptions) {
+            return [];
+        }
 
         $options = array_map(function ($item) {
             return $this->triStateService->resolve($item);

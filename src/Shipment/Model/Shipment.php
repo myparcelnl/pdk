@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeZone;
-use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -26,7 +26,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property bool                                                   $delayed
  * @property bool                                                   $delivered
- * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions         $deliveryOptions
+ * @property null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions    $deliveryOptions
  * @property null|\MyParcelNL\Pdk\Shipment\Model\RetailLocation     $dropOffPoint
  * @property bool                                                   $hidden
  * @property bool                                                   $isReturn
@@ -100,61 +100,73 @@ class Shipment extends Model
         'dropOffPoint'             => null,
         'hidden'                   => false,
         'isReturn'                 => false,
+
         /**
          * The link to the track and trace page of the consumer portal.
          */
         'linkConsumerPortal'       => null,
+
         /**
          * Main shipment if this shipment belongs to a multi-collo shipment.
          */
         'multiColloMainShipmentId' => null,
+
         /**
          * Partner track traces are track traces of other carriers that are linked to this shipment.
          */
         'partnerTrackTraces'       => [],
+
         /**
          * Physical properties of the shipment.
          */
+        'physicalProperties'       => null,
 
-        'physicalProperties' => null,
         /**
          * The billed price of the shipment.
          */
-        'price'              => Currency::class,
+        'price'                    => Currency::class,
+
         /**
          * The recipient of the shipment.
          */
-        'recipient'          => ShippingAddress::class,
+        'recipient'                => null,
+
         /**
          * The sender of the shipment.
          */
-        'sender'             => ContactDetails::class,
+        'sender'                   => null,
+
         /**
          * Type of shipment.
          */
-        'shipmentType'       => null,
+        'shipmentType'             => null,
+
         /**
          * Status of the shipment.
          *
          * @see https://developer.myparcel.nl/api-reference/04.data-types.html#shipment-status
          */
-        'status'             => null,
+        'status'                   => null,
+
         /**
          * The date and time when the shipment was created in the API.
          */
-        'created'            => null,
+        'created'                  => null,
+
         /**
          * The id of the user that created the shipment in the API.
          */
-        'createdBy'          => null,
+        'createdBy'                => null,
+
         /**
          * The date and time when the shipment was last updated in the API.
          */
-        'modified'           => null,
+        'modified'                 => null,
+
         /**
          * The id of the user that last updated the shipment in the API.
          */
-        'modifiedBy'         => null,
+        'modifiedBy'               => null,
     ];
 
     protected $casts      = [
@@ -218,7 +230,12 @@ class Shipment extends Model
             $this->updated = new DateTime('now', $timeZone);
         }
 
-        return parent::toStorableArray();
+        return $this->except([
+            'customsDeclaration',
+            'physicalProperties',
+            'recipient',
+            'sender',
+        ], Arrayable::STORABLE_NULL);
     }
 
     /**

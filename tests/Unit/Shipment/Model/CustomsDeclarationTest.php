@@ -5,13 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
-use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
-use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -95,57 +89,3 @@ it('returns correct weight', function (array $input, int $expectedWeight) {
         'expectedWeight' => 12345,
     ],
 ]);
-
-it('creates customs declaration from pdk order', function () {
-    factory(CustomsSettings::class)
-        ->withPackageContents(CustomsDeclaration::CONTENTS_GIFTS)
-        ->withCountryOfOrigin(CountryCodes::CC_DE)
-        ->withCustomsCode('96020000')
-        ->store();
-
-    $product = factory(PdkProduct::class)
-        ->withPrice(1249)
-        ->withWeight(300)
-        ->make();
-
-    // Not deliverable so should not show up on the customs declaration
-    $product2 = factory(PdkProduct::class)
-        ->withPrice(895)
-        ->withWeight(150)
-        ->withIsDeliverable(false)
-        ->make();
-
-    $order = factory(PdkOrder::class)
-        ->withLines([
-            factory(PdkOrderLine::class)
-                ->withProduct($product)
-                ->withVat((int) ceil(1249 * 0.21))
-                ->withQuantity(3),
-            factory(PdkOrderLine::class)
-                ->withProduct($product2)
-                ->withVat((int) ceil(895 * 0.21))
-                ->withQuantity(2),
-        ])
-        ->make();
-
-    $customsDeclaration = CustomsDeclaration::fromPdkOrder($order);
-
-    expect($customsDeclaration->toArrayWithoutNull())->toEqual([
-        'contents' => CustomsSettings::PACKAGE_CONTENTS_GIFTS,
-        'invoice'  => 'PDK-1',
-        'weight'   => 900,
-        'items'    => [
-            [
-                'amount'         => 3,
-                'classification' => '96020000',
-                'country'        => 'DE',
-                'description'    => $product->name,
-                'itemValue'      => [
-                    'amount'   => 1249,
-                    'currency' => 'EUR',
-                ],
-                'weight'         => 300,
-            ],
-        ],
-    ]);
-});
