@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.8](https://github.com/myparcelnl/pdk/compare/v2.28.7...v2.28.8) (2023-11-06)
+
+
+### :bug: Bug Fixes
+
+* **account:** fix carriers being disabled when getting account ([#231](https://github.com/myparcelnl/pdk/issues/231)) ([d5210b1](https://github.com/myparcelnl/pdk/commit/d5210b115c5e2c9e69e09cab0f18a98de3f50ae1))
+
 ## [2.28.7](https://github.com/myparcelnl/pdk/compare/v2.28.6...v2.28.7) (2023-11-03)
 
 
