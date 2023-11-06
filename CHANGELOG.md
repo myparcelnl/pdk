@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.28.9](https://github.com/myparcelnl/pdk/compare/v2.28.8...v2.28.9) (2023-11-06)
+
+
+### :bug: Bug Fixes
+
+* **model:** fix error when unsetting property using skip_null ([e6bf984](https://github.com/myparcelnl/pdk/commit/e6bf984b76ef3019928356e9f0d7525e650fd8de))
+
 ## [2.28.8](https://github.com/myparcelnl/pdk/compare/v2.28.7...v2.28.8) (2023-11-06)
 
 
