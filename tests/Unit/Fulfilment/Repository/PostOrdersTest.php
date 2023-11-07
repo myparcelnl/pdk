@@ -45,9 +45,11 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
         ->store()
         ->make();
 
-    $orderCollection = new OrderCollection($pdkOrderCollection->map(function (PdkOrder $pdkOrder) {
-        return Order::fromPdkOrder($pdkOrder);
-    }));
+    $orderCollection = new OrderCollection(
+        $pdkOrderCollection->map(function (PdkOrder $pdkOrder) {
+            return Order::fromPdkOrder($pdkOrder);
+        })
+    );
 
     /** @var OrderRepository $response */
     $response = $repository->postOrders($orderCollection);
@@ -80,7 +82,7 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
         function () {
             return factory(PdkOrderCollection::class)->push(
                 factory(PdkOrder::class)->withShipments([
-                    factory(Shipment::class)->withDeliveryOptionsWithPickupLocation(),
+                    factory(Shipment::class)->withDeliveryOptionsWithPickupLocationInTheNetherlands(),
                 ])
             );
         },

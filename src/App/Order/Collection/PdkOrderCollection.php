@@ -6,9 +6,11 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -42,7 +44,15 @@ class PdkOrderCollection extends Collection
         $newShipments = new ShipmentCollection();
 
         $this->each(function (PdkOrder $order) use ($newShipments) {
-            $newShipments->push($order->createShipment());
+            $schema = Pdk::get(CarrierSchema::class);
+
+            $schema->setCarrier($order->deliveryOptions->carrier);
+
+            $amountOfShipmentsToCreate = $schema->canHaveMultiCollo() ? 1 : $order->deliveryOptions->labelAmount;
+
+            for ($i = 0; $i < $amountOfShipmentsToCreate; $i++) {
+                $newShipments->push($order->createShipment());
+            }
         });
 
         return $newShipments;

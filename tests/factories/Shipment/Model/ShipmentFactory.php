@@ -62,9 +62,29 @@ final class ShipmentFactory extends AbstractModelFactory
     /**
      * @return $this
      */
-    public function withDeliveryOptionsWithPickupLocation(): self
+    public function withDeliveryOptionsWithPickupLocationInEU(): self
     {
-        return $this->withDeliveryOptions(factory(DeliveryOptions::class)->withPickupLocation());
+        return $this->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withPickupLocation(
+                    factory(RetailLocation::class)->inEU()
+                )
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+        );
+    }
+
+    /**
+     * @return $this
+     */
+    public function withDeliveryOptionsWithPickupLocationInTheNetherlands(): self
+    {
+        return $this->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withPickupLocation(
+                    factory(RetailLocation::class)->inTheNetherlands()
+                )
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+        );
     }
 
     /**

@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 class PostShipmentsRequest extends Request
 {
@@ -47,10 +48,9 @@ class PostShipmentsRequest extends Request
     {
         return json_encode([
             'data' => [
-                'shipments' => $this->collection->groupByMultiCollo()
-                    ->flatMap(function (Collection $groupedShipments) {
-                        return [$this->encodeShipmentWithSecondaryShipments($groupedShipments)];
-                    })
+                'shipments' => $this->collection->map(function (Shipment $shipment) {
+                    return $this->encodeShipmentWithSecondaryShipments($shipment);
+                })
                     ->toArrayWithoutNull(),
             ],
         ]);
@@ -133,17 +133,27 @@ class PostShipmentsRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function encodeShipmentWithSecondaryShipments(Collection $groupedShipments): array
+    private function encodeShipmentWithSecondaryShipments(Shipment $shipment): array
     {
-        $shipment                        = $this->encodeShipment($groupedShipments->first());
-        $shipment['secondary_shipments'] = $this->encodeSecondaryShipments($groupedShipments);
+        $encodedShipment = $this->encodeShipment($shipment);
+        $schema          = Pdk::get(CarrierSchema::class);
 
-        return $shipment;
+        $schema->setCarrier($shipment->deliveryOptions->carrier);
+
+        $secondaryShipmentsAmount = $schema->canHaveMultiCollo() ? $shipment->deliveryOptions->labelAmount - 1 : 0;
+
+        for ($i = 0; $i < $secondaryShipmentsAmount; $i++) {
+            $encodedShipment['secondary_shipments'][] = [
+                'reference_identifier' => $shipment->referenceIdentifier,
+            ];
+        }
+
+        return $encodedShipment;
     }
 
     /**

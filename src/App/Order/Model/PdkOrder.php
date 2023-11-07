@@ -187,11 +187,13 @@ class PdkOrder extends Model
      */
     public function createShipment(bool $store = true): Shipment
     {
-        $shipment = $this->synchronizeShipment(new Shipment([
-            'carrier'            => $this->deliveryOptions->carrier,
-            'customsDeclaration' => $this->customsDeclaration,
-            'deliveryOptions'    => $this->deliveryOptions,
-        ]));
+        $shipment = $this->synchronizeShipment(
+            new Shipment([
+                'carrier'            => $this->deliveryOptions->carrier,
+                'customsDeclaration' => $this->customsDeclaration,
+                'deliveryOptions'    => $this->deliveryOptions,
+            ])
+        );
 
         if ($store) {
             $this->shipments->push($shipment);
@@ -308,6 +310,7 @@ class PdkOrder extends Model
         $shipment->carrier             = $shipment->carrier ?? $this->deliveryOptions->carrier;
         $shipment->customsDeclaration  = $shipment->customsDeclaration ?? $this->customsDeclaration;
         $shipment->deliveryOptions     = $shipment->deliveryOptions ?? $this->deliveryOptions;
+        $shipment->multiCollo          = $shipment->deliveryOptions->labelAmount > 1;
         $shipment->recipient           = $this->shippingAddress;
         $shipment->sender              = $this->senderAddress;
         $shipment->physicalProperties  = new PhysicalProperties([

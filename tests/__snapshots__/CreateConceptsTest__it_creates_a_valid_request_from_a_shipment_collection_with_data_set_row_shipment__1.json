@@ -4,7 +4,7 @@
     "customs_declaration": {
       "contents": 1,
       "items": [],
-      "weight": 1000
+      "weight": 1
     },
     "general_settings": {
       "save_recipient_address": 0
@@ -14,10 +14,10 @@
       "delivery_type": 2
     },
     "physical_properties": {
-      "weight": 1000
+      "weight": 1
     },
     "recipient": {
-      "cc": "US",
+      "cc": "CA",
       "city": "Hoofddorp",
       "person": "Jaap Krekel",
       "postal_code": "2132JE"

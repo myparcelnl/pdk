@@ -31,6 +31,19 @@ final class RetailLocationFactory extends AbstractModelFactory
         return RetailLocation::class;
     }
 
+    public function inEU(): self
+    {
+        return $this
+            ->withCc('DE')
+            ->withCity('BERLIN')
+            ->withPostalCode('1431ED')
+            ->withStreet('Strasse')
+            ->withNumber('1')
+            ->withLocationCode('215700')
+            ->withLocationName('Berghain')
+            ->withRetailNetworkId('BGHN-01');
+    }
+
     public function inTheNetherlands(): self
     {
         return $this

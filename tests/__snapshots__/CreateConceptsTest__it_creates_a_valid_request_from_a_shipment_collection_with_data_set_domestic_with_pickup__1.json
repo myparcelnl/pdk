@@ -12,7 +12,14 @@
       "weight": 0
     },
     "pickup": {
-      "location_code": "12345"
+      "location_code": "215795",
+      "location_name": "Phone House Aalsmeer",
+      "retail_network_id": "PNPNL-01",
+      "cc": "NL",
+      "street": "Zijdstraat",
+      "number": "38",
+      "postal_code": "1431ED",
+      "city": "AALSMEER"
     },
     "recipient": {
       "cc": "NL",
