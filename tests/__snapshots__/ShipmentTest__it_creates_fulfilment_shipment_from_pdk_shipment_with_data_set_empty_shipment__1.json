@@ -14,10 +14,5 @@
     "signature": false
   },
   "recipient": [],
-  "physicalProperties": {
-    "height": 0,
-    "length": 0,
-    "width": 0,
-    "weight": 0
-  }
+  "physicalProperties": []
 }

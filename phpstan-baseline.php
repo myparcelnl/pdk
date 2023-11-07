@@ -67,11 +67,6 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Shipment/Request/GetLabelsRequest.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Parameter \\#1 \\$groupedShipments of method MyParcelNL\\\\Pdk\\\\Shipment\\\\Request\\\\PostShipmentsRequest\\:\\:encodeSecondaryShipments\\(\\) expects MyParcelNL\\\\Pdk\\\\Shipment\\\\Collection\\\\ShipmentCollection, MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection given\\.$#',
-	'count' => 1,
-	'path' => __DIR__ . '/src/Shipment/Request/PostShipmentsRequest.php',
-];
-$ignoreErrors[] = [
 	'message' => '#^Call to an undefined method DateTimeInterface\\:\\:modify\\(\\)\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Shipment/Service/DropOffService.php',

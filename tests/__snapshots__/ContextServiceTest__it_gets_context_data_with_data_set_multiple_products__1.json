@@ -2,6 +2,7 @@
   "productData": [
     {
       "externalIdentifier": "123",
+      "isDeliverable": true,
       "weight": 0,
       "length": 0,
       "width": 0,
@@ -43,6 +44,7 @@
     },
     {
       "externalIdentifier": "124",
+      "isDeliverable": true,
       "weight": 0,
       "length": 0,
       "width": 0,

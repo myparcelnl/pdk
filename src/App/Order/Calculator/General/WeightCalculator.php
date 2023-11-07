@@ -24,12 +24,6 @@ final class WeightCalculator extends AbstractPdkOrderOptionCalculator
 
         $physicalProperties->manualWeight  = TriStateService::INHERIT;
         $physicalProperties->initialWeight = $weight;
-
-        if (! $this->order->customsDeclaration) {
-            return;
-        }
-
-        $this->order->customsDeclaration->weight = $weight;
     }
 
     /**

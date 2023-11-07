@@ -33,8 +33,8 @@
   {
     "property": "deliveryOptions.date",
     "pointer": "/deliveryOptions/date",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
+    "message": "The property date is required",
+    "constraint": "required",
     "context": 1
   },
   {

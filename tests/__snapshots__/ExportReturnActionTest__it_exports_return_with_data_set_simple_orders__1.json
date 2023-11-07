@@ -133,9 +133,7 @@
             "price": {
               "amount": 100,
               "currency": "EUR"
-            },
-            "recipient": [],
-            "sender": []
+            }
           },
           {
             "orderId": "701",
@@ -187,9 +185,7 @@
             "price": {
               "amount": 100,
               "currency": "EUR"
-            },
-            "recipient": [],
-            "sender": []
+            }
           }
         ],
         "physicalProperties": {
@@ -206,6 +202,7 @@
             "product": {
               "externalIdentifier": "PDK-1",
               "sku": "test",
+              "isDeliverable": true,
               "name": "test",
               "price": {
                 "amount": 1000,
@@ -361,6 +358,7 @@
             "product": {
               "externalIdentifier": "PDK-2",
               "sku": "test",
+              "isDeliverable": true,
               "name": "test",
               "price": {
                 "amount": 1000,

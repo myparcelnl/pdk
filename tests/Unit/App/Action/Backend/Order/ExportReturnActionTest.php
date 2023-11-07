@@ -40,7 +40,6 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
 
     $content = json_decode($response->getContent(), true);
 
-    // Remove updated key from each shipment.
     $content['data']['orders'] = array_map(function (array $order) {
         return array_replace($order, [
             'shipments' => array_map(function (array $shipment) {

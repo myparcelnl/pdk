@@ -35,7 +35,7 @@ class PdkProduct extends Model
         'externalIdentifier' => null,
         'sku'                => null,
         'ean'                => null,
-        'isDeliverable'      => null,
+        'isDeliverable'      => true,
         'name'               => null,
         'price'              => null,
         'weight'             => 0,

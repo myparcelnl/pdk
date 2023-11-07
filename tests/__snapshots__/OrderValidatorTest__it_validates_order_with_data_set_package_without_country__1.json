@@ -48,8 +48,8 @@
   {
     "property": "shippingAddress.cc",
     "pointer": "/shippingAddress/cc",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
+    "message": "The property cc is required",
+    "constraint": "required",
     "context": 1
   },
   {

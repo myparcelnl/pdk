@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class PostShipmentsRequest extends Request
 {
+    use EncodesCustomsDeclaration;
+
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
@@ -88,9 +90,9 @@ class PostShipmentsRequest extends Request
      */
     protected function encodeShipment(Shipment $shipment): array
     {
-        return [
+        return Utils::filterNull([
             'carrier'              => $shipment->carrier->id,
-            'customs_declaration'  => $this->getCustomsDeclaration($shipment),
+            'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'       => $this->getDropOffPoint($shipment),
             'general_settings'     => [
                 'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
@@ -100,12 +102,11 @@ class PostShipmentsRequest extends Request
             'pickup'               => $this->getPickupLocation($shipment),
             'recipient'            => $this->getRecipient($shipment),
             'reference_identifier' => $shipment->referenceIdentifier,
-            'status'               => $shipment->status,
-        ];
+        ]);
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $groupedShipments
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
      *
      * @return null|array
      */
@@ -151,27 +152,6 @@ class PostShipmentsRequest extends Request
      * @return null|array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function getCustomsDeclaration(Shipment $shipment): ?array
-    {
-        /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
-        $countryService = Pdk::get(CountryServiceInterface::class);
-        $cc             = $shipment->recipient->cc;
-
-        if (! $cc || ! $countryService->isRow($cc)) {
-            return null;
-        }
-
-        return $shipment->customsDeclaration
-            ? Utils::filterNull($shipment->customsDeclaration->toSnakeCaseArray())
-            : null;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
     private function getDropOffPoint(Shipment $shipment): ?array
     {
         if (! $shipment->dropOffPoint) {
@@ -201,7 +181,11 @@ class PostShipmentsRequest extends Request
      */
     private function getOptions(Shipment $shipment): array
     {
-        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
+        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions ?? null;
+
+        if (! $shipmentOptions) {
+            return [];
+        }
 
         $options = array_map(function ($item) {
             return $this->triStateService->resolve($item);

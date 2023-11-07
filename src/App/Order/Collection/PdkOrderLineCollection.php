@@ -19,8 +19,8 @@ class PdkOrderLineCollection extends Collection
      */
     public function getTotalWeight(): int
     {
-        return $this->reduce(static function ($carry, $line) {
-            return $carry + $line->quantity * $line->product->weight;
+        return $this->reduce(static function (int $carry, PdkOrderLine $line) {
+            return $carry + $line->getTotalWeight();
         }, 0);
     }
 
@@ -30,5 +30,13 @@ class PdkOrderLineCollection extends Collection
     public function isDeliverable(): bool
     {
         return $this->containsStrict('product.isDeliverable', true);
+    }
+
+    /**
+     * @return self
+     */
+    public function onlyDeliverable(): self
+    {
+        return $this->where('product.isDeliverable', true);
     }
 }

@@ -42,9 +42,7 @@ class PdkOrderCollection extends Collection
         $newShipments = new ShipmentCollection();
 
         $this->each(function (PdkOrder $order) use ($newShipments) {
-            $newShipment = $order->createShipment();
-            $newShipments->push($newShipment);
-            $order->shipments->push($newShipment);
+            $newShipments->push($order->createShipment());
         });
 
         return $newShipments;

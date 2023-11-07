@@ -73,7 +73,7 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
      */
     protected function createOrderArray(): array
     {
-        return $this->order->toArray();
+        return $this->order->toArrayWithoutNull();
     }
 
     /**

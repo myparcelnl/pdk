@@ -98,7 +98,8 @@ class Order extends Model
             return new static();
         }
 
-        $shipment = Shipment::fromPdkShipment($pdkOrder->createShipment());
+        $shipment                  = $pdkOrder->createShipment(false);
+        $shipment->deliveryOptions = $shipment->deliveryOptions ?? $pdkOrder->deliveryOptions;
 
         return new static(
             [
@@ -119,7 +120,7 @@ class Order extends Model
                     })
                     ->all(),
                 'notes'                       => $pdkOrder->notes,
-                'shipment'                    => $shipment,
+                'shipment'                    => Shipment::fromPdkShipment($shipment),
                 'price'                       => $pdkOrder->orderPrice,
                 'priceAfterVat'               => $pdkOrder->orderPriceAfterVat,
                 'vat'                         => $pdkOrder->orderVat,
@@ -127,5 +128,22 @@ class Order extends Model
                 'type'                        => null,
             ]
         );
+    }
+
+    /**
+     * @param  null|\MyParcelNL\Pdk\Fulfilment\Model\Shipment|array $shipment
+     *
+     * @return $this
+     * @noinspection PhpUnused
+     */
+    protected function setShipmentAttribute($shipment): self
+    {
+        if ($shipment) {
+            $shipment['orderId'] = $this->uuid;
+        }
+
+        $this->attributes['shipment'] = $shipment;
+
+        return $this;
     }
 }

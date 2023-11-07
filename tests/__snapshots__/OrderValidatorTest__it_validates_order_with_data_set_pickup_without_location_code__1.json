@@ -30,38 +30,31 @@
     "context": 1
   },
   {
-    "property": "deliveryOptions.pickupLocation.postalCode",
-    "pointer": "/deliveryOptions/pickupLocation/postalCode",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
+    "property": "deliveryOptions.pickupLocation.city",
+    "pointer": "/deliveryOptions/pickupLocation/city",
+    "message": "The property city is required",
+    "constraint": "required",
     "context": 1
   },
   {
     "property": "deliveryOptions.pickupLocation.locationName",
     "pointer": "/deliveryOptions/pickupLocation/locationName",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
+    "message": "The property locationName is required",
+    "constraint": "required",
+    "context": 1
+  },
+  {
+    "property": "deliveryOptions.pickupLocation.postalCode",
+    "pointer": "/deliveryOptions/pickupLocation/postalCode",
+    "message": "The property postalCode is required",
+    "constraint": "required",
     "context": 1
   },
   {
     "property": "deliveryOptions.pickupLocation.street",
     "pointer": "/deliveryOptions/pickupLocation/street",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
-    "context": 1
-  },
-  {
-    "property": "deliveryOptions.pickupLocation.number",
-    "pointer": "/deliveryOptions/pickupLocation/number",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
-    "context": 1
-  },
-  {
-    "property": "deliveryOptions.pickupLocation.cc",
-    "pointer": "/deliveryOptions/pickupLocation/cc",
-    "message": "NULL value found, but a string is required",
-    "constraint": "type",
+    "message": "The property street is required",
+    "constraint": "required",
     "context": 1
   },
   {

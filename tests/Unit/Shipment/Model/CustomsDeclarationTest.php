@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
-use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -88,33 +87,5 @@ it('returns correct weight', function (array $input, int $expectedWeight) {
             ],
         ],
         'expectedWeight' => 12345,
-    ],
-]);
-
-it('creates customs declaration item from pdk product', function (array $input, array $output) {
-    $customsDeclaration = CustomsDeclarationItem::fromProduct(new PdkProduct($input));
-
-    expect($customsDeclaration->toArray())->toEqual($output);
-})->with([
-    'product' => [
-        'input'  => [
-            'name'     => 'Test product',
-            'weight'   => 1000,
-            'settings' => [
-                'customsCode'     => '1234',
-                'countryOfOrigin' => 'NL',
-            ],
-        ],
-        'output' => [
-            'amount'         => 1,
-            'classification' => '1234',
-            'country'        => 'NL',
-            'description'    => 'Test product',
-            'itemValue'      => [
-                'amount'   => 0,
-                'currency' => 'EUR',
-            ],
-            'weight'         => 1000,
-        ],
     ],
 ]);

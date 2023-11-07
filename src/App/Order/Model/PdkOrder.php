@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
@@ -66,7 +67,12 @@ class PdkOrder extends Model
          * Order shipments. Applicable when NOT using order mode.
          */
         'shipments'          => ShipmentCollection::class,
+
+        /**
+         * @deprecated Do not use, will be generated automatically. Will be removed in v3.0.0
+         */
         'customsDeclaration' => null,
+
         'physicalProperties' => PdkPhysicalProperties::class,
         'lines'              => PdkOrderLineCollection::class,
         'notes'              => null,
@@ -143,8 +149,8 @@ class PdkOrder extends Model
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
-        $this->updateShipments();
         $this->updateTotals();
+        $this->synchronizeShipments();
     }
 
     /**
@@ -174,29 +180,24 @@ class PdkOrder extends Model
     }
 
     /**
+     * @param  bool $store
+     *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      * @throws \Exception
      */
-    public function createShipment(): Shipment
+    public function createShipment(bool $store = true): Shipment
     {
-        $deliveryOptions = $this->deliveryOptions;
+        $shipment = $this->synchronizeShipment(new Shipment([
+            'carrier'            => $this->deliveryOptions->carrier,
+            'customsDeclaration' => $this->customsDeclaration,
+            'deliveryOptions'    => $this->deliveryOptions,
+        ]));
 
-        return new Shipment([
-            'customsDeclaration'  => $this->customsDeclaration,
-            'deliveryOptions'     => $deliveryOptions,
-            'recipient'           => $this->shippingAddress,
-            'sender'              => $this->senderAddress,
-            'referenceIdentifier' => $this->externalIdentifier,
-            'carrier'             => $deliveryOptions->carrier,
-            'orderId'             => $this->externalIdentifier,
-            'dropOffPoint'        => null,
-            'physicalProperties'  => [
-                'height' => $this->physicalProperties->height,
-                'length' => $this->physicalProperties->length,
-                'width'  => $this->physicalProperties->width,
-                'weight' => $this->physicalProperties->totalWeight,
-            ],
-        ]);
+        if ($store) {
+            $this->shipments->push($shipment);
+        }
+
+        return $shipment;
     }
 
     /**
@@ -262,7 +263,7 @@ class PdkOrder extends Model
     protected function setDeliveryOptionsAttribute($deliveryOptions): self
     {
         $this->attributes['deliveryOptions'] = $deliveryOptions;
-        $this->updateShipments();
+        $this->synchronizeShipments();
 
         return $this;
     }
@@ -290,7 +291,41 @@ class PdkOrder extends Model
     protected function setShipmentsAttribute($shipments): self
     {
         $this->attributes['shipments'] = $shipments;
-        $this->updateShipments();
+        $this->synchronizeShipments();
+
+        return $this;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
+     */
+    protected function synchronizeShipment(Shipment $shipment): Shipment
+    {
+        $shipment->orderId             = $this->externalIdentifier;
+        $shipment->referenceIdentifier = $this->externalIdentifier;
+        $shipment->carrier             = $shipment->carrier ?? $this->deliveryOptions->carrier;
+        $shipment->customsDeclaration  = $shipment->customsDeclaration ?? $this->customsDeclaration;
+        $shipment->deliveryOptions     = $shipment->deliveryOptions ?? $this->deliveryOptions;
+        $shipment->recipient           = $this->shippingAddress;
+        $shipment->sender              = $this->senderAddress;
+        $shipment->physicalProperties  = new PhysicalProperties([
+            'height' => $this->physicalProperties->height,
+            'length' => $this->physicalProperties->length,
+            'width'  => $this->physicalProperties->width,
+            'weight' => $this->physicalProperties->totalWeight,
+        ]);
+
+        return $shipment;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function synchronizeShipments(): self
+    {
+        $this->shipments->each([$this, 'synchronizeShipment']);
 
         return $this;
     }
@@ -298,23 +333,11 @@ class PdkOrder extends Model
     /**
      * @return void
      */
-    private function updateShipments(): void
-    {
-        $this->shipments->each(function (Shipment $shipment) {
-            $shipment->orderId            = $this->externalIdentifier;
-            $shipment->customsDeclaration = $shipment->customsDeclaration ?? $this->customsDeclaration;
-            $shipment->deliveryOptions    = $shipment->deliveryOptions ?? $this->deliveryOptions;
-            $shipment->recipient          = $shipment->recipient ?? $this->shippingAddress;
-            $shipment->sender             = $shipment->sender ?? $this->senderAddress;
-        });
-    }
-
-    /**
-     * @return void
-     */
     private function updateTotals(): void
     {
-        $this->physicalProperties->initialWeight = $this->lines->getTotalWeight();
+        $this->physicalProperties->initialWeight = $this->lines
+            ->onlyDeliverable()
+            ->getTotalWeight();
 
         [$price, $vat, $priceAfterVat] = $this->lines->reduce(
             function (array $carry, $line) {

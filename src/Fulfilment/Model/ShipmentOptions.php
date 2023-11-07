@@ -67,12 +67,16 @@ class ShipmentOptions extends Model
     ];
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $pdkDeliveryOptions
+     * @param  null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $pdkDeliveryOptions
      *
      * @return static
      */
-    public static function fromPdkDeliveryOptions(DeliveryOptions $pdkDeliveryOptions): self
+    public static function fromPdkDeliveryOptions(?DeliveryOptions $pdkDeliveryOptions): self
     {
+        if (! $pdkDeliveryOptions) {
+            return new static();
+        }
+
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $orderOptionsService */
         $orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
 

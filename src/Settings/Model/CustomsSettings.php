@@ -25,7 +25,7 @@ class CustomsSettings extends AbstractSettingsModel
      * Default values.
      */
     public const DEFAULT_PACKAGE_CONTENTS = self::PACKAGE_CONTENTS_COMMERCIAL_GOODS;
-    public const DEFAULT_CUSTOMS_CODE     = '0';
+    public const DEFAULT_CUSTOMS_CODE     = '000000';
     /**
      * Available package contents.
      */

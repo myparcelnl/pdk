@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 
 /**
@@ -46,6 +47,6 @@ class CustomsDeclaration extends Model
     {
         return $this->attributes['weight'] ?? $this->items->reduce(static function (int $acc, $item) {
             return $acc + $item['weight'] * $item['amount'];
-        }, 0);
+        }, 0) ?: Pdk::get('minimumWeight');
     }
 }

@@ -10,7 +10,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @method CustomsSettings make()
  * @method $this withCountryOfOrigin(string $countryOfOrigin)
  * @method $this withCustomsCode(string $customsCode)
- * @method $this withPackageContents(string $packageContents)
+ * @method $this withPackageContents(int $packageContents)
  */
 final class CustomsSettingsFactory extends AbstractSettingsModelFactory
 {

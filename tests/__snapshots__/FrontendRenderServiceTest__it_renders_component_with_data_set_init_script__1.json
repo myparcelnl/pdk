@@ -358,7 +358,7 @@
       },
       "customs": {
         "id": "customs",
-        "customsCode": "0",
+        "customsCode": "000000",
         "packageContents": "1"
       },
       "checkout": {

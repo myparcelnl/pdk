@@ -133,9 +133,7 @@
             "price": {
               "amount": 100,
               "currency": "EUR"
-            },
-            "recipient": [],
-            "sender": []
+            }
           },
           {
             "orderId": "701",
@@ -156,9 +154,10 @@
             "delivered": false,
             "deliveryOptions": {
               "carrier": {
-                "id": 1,
-                "name": "postnl",
-                "human": "PostNL",
+                "externalIdentifier": "dhleuroplus",
+                "id": 11,
+                "name": "dhleuroplus",
+                "human": "DHL Europlus",
                 "enabled": false,
                 "isDefault": true,
                 "optional": false,
@@ -185,9 +184,7 @@
             "price": {
               "amount": 100,
               "currency": "EUR"
-            },
-            "recipient": [],
-            "sender": []
+            }
           }
         ],
         "physicalProperties": {
@@ -204,6 +201,7 @@
             "product": {
               "externalIdentifier": "PDK-1",
               "sku": "test",
+              "isDeliverable": true,
               "name": "test",
               "price": {
                 "amount": 1000,

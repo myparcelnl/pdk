@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
-use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
@@ -46,40 +46,38 @@ class CustomsDeclarationItem extends Model
     ];
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
-     * @param  array                                      $additionalFields
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderLine $orderLine
      *
      * @return static
      */
-    public static function fromProduct(PdkProduct $product, array $additionalFields = []): self
+    public static function fromOrderLine(PdkOrderLine $orderLine): self
     {
         $triStateService = Pdk::get(TriStateServiceInterface::class);
+        $productSettings = $orderLine->product->settings;
 
         $classification = $triStateService->resolveString(
-            $product->settings->customsCode,
+            $productSettings->customsCode,
             Settings::get(CustomsSettings::CUSTOMS_CODE, CustomsSettings::ID)
         );
 
         $country = $triStateService->resolveString(
-            $product->settings->countryOfOrigin,
+            $productSettings->countryOfOrigin,
             Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID),
             Platform::get('localCountry')
         );
 
         return new static(
-            array_replace(
-                Utils::filterNull([
-                    'classification' => $classification,
-                    'country'        => $country,
-                    'description'    => $product->name,
-                    'weight'         => $product->weight,
-                    'itemValue'      => [
-                        'currency' => $product->price->currency,
-                        'amount'   => $product->price->amount,
-                    ],
-                ]),
-                $additionalFields
-            )
+            Utils::filterNull([
+                'amount'         => $orderLine->quantity,
+                'classification' => $classification,
+                'country'        => $country,
+                'description'    => $orderLine->product->name,
+                'weight'         => $orderLine->product->weight,
+                'itemValue'      => [
+                    'amount'   => $orderLine->product->price->amount,
+                    'currency' => $orderLine->product->price->currency,
+                ],
+            ])
         );
     }
 }
