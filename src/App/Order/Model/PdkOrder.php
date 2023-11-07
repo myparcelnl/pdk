@@ -187,13 +187,11 @@ class PdkOrder extends Model
      */
     public function createShipment(bool $store = true): Shipment
     {
-        $shipment = $this->synchronizeShipment(
-            new Shipment([
-                'carrier'            => $this->deliveryOptions->carrier,
-                'customsDeclaration' => $this->customsDeclaration,
-                'deliveryOptions'    => $this->deliveryOptions,
-            ])
-        );
+        $shipment = $this->synchronizeShipment(new Shipment([
+            'carrier'            => $this->deliveryOptions->carrier,
+            'customsDeclaration' => $this->customsDeclaration,
+            'deliveryOptions'    => $this->deliveryOptions,
+        ]));
 
         if ($store) {
             $this->shipments->push($shipment);

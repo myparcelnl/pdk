@@ -90,22 +90,20 @@ class PostShipmentsRequest extends Request
      */
     protected function encodeShipment(Shipment $shipment): array
     {
-        return array_replace(
-            Utils::filterNull([
-                'carrier'              => $shipment->carrier->id,
-                'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
-                'drop_off_point'       => $this->getDropOffPoint($shipment),
-                'general_settings'     => [
-                    'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
-                ],
-                'options'              => $this->getOptions($shipment),
-                'physical_properties'  => ['weight' => $this->getWeight($shipment)],
-                'pickup'               => $this->getPickupLocation($shipment),
-                'recipient'            => $this->getRecipient($shipment),
-                'reference_identifier' => $shipment->referenceIdentifier,
-            ]),
-            ['secondary_shipments' => $this->encodeSecondaryShipments($shipment)]
-        );
+        return Utils::filterNull([
+            'carrier'              => $shipment->carrier->id,
+            'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
+            'drop_off_point'       => $this->getDropOffPoint($shipment),
+            'general_settings'     => [
+                'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
+            ],
+            'options'              => $this->getOptions($shipment),
+            'physical_properties'  => ['weight' => $this->getWeight($shipment)],
+            'pickup'               => $this->getPickupLocation($shipment),
+            'recipient'            => $this->getRecipient($shipment),
+            'reference_identifier' => $shipment->referenceIdentifier,
+            'secondary_shipments'  => $this->encodeSecondaryShipments($shipment),
+        ]);
     }
 
     /**

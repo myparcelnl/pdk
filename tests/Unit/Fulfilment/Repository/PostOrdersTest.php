@@ -45,11 +45,9 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
         ->store()
         ->make();
 
-    $orderCollection = new OrderCollection(
-        $pdkOrderCollection->map(function (PdkOrder $pdkOrder) {
-            return Order::fromPdkOrder($pdkOrder);
-        })
-    );
+    $orderCollection = new OrderCollection($pdkOrderCollection->map(function (PdkOrder $pdkOrder) {
+        return Order::fromPdkOrder($pdkOrder);
+    }));
 
     /** @var OrderRepository $response */
     $response = $repository->postOrders($orderCollection);
