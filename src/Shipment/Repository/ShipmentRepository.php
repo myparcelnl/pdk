@@ -34,8 +34,7 @@ class ShipmentRepository extends ApiRepository
         /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
         $response = $this->api->doRequest(new PostShipmentsRequest($collection), PostIdsResponse::class);
 
-        return $collection->removeSecondaryShipments()
-            ->addIds($response->getIds());
+        return $collection->addIds($response->getIds());
     }
 
     /**

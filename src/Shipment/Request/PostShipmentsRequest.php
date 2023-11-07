@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -103,33 +102,6 @@ class PostShipmentsRequest extends Request
             'recipient'            => $this->getRecipient($shipment),
             'reference_identifier' => $shipment->referenceIdentifier,
         ]);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
-     *
-     * @return null|array
-     */
-    private function encodeSecondaryShipments(Collection $groupedShipments): ?array
-    {
-        $clonedCollection = new Collection($groupedShipments->all());
-
-        $clonedCollection->shift();
-
-        if ($clonedCollection->isEmpty()) {
-            return null;
-        }
-
-        /**
-         * Turn grouped shipments into regular collection to avoid all shipment properties being added.
-         */
-        return $clonedCollection
-            ->map(function (Shipment $shipment) {
-                return [
-                    'reference_identifier' => $shipment->referenceIdentifier,
-                ];
-            })
-            ->toArray();
     }
 
     /**
