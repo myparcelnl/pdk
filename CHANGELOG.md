@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.29.0](https://github.com/myparcelnl/pdk/compare/v2.28.9...v2.29.0) (2023-11-07)
+
+
+### :sparkles: New Features
+
+* **orders:** generate customs declaration automatically ([#232](https://github.com/myparcelnl/pdk/issues/232)) ([cd3e7e1](https://github.com/myparcelnl/pdk/commit/cd3e7e1768651a428f1ae6a07b235677109a8894))
+
+
+### :bug: Bug Fixes
+
+* **orders:** fix exporting shipments occasionally causing visual error ([#234](https://github.com/myparcelnl/pdk/issues/234)) ([1625978](https://github.com/myparcelnl/pdk/commit/16259785b747fdbae4392117f24afc2ca8cfe327))
+
 ## [2.28.9](https://github.com/myparcelnl/pdk/compare/v2.28.8...v2.28.9) (2023-11-06)
 
 
