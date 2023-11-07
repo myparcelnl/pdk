@@ -31,20 +31,6 @@ dataset('pdkOrdersDomestic', [
         );
     },
 
-    'two orders' => function () {
-        return factory(PdkOrderCollection::class)->push(
-            factory(PdkOrder::class)
-                ->withDeliveryOptions(factory(DeliveryOptions::class)->withLabelAmount(2)),
-
-            factory(PdkOrder::class)
-                ->withNotes([
-                    factory(PdkOrderNote::class)
-                        ->byCustomer()
-                        ->withNote('test note from customer'),
-                ])
-        );
-    },
-
     'carrier dhl for you' => function () {
         return factory(PdkOrderCollection::class)->push(
             factory(PdkOrder::class)

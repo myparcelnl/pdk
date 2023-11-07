@@ -80,7 +80,7 @@ it('creates order', function (PdkOrderCollectionFactory $factory) {
         function () {
             return factory(PdkOrderCollection::class)->push(
                 factory(PdkOrder::class)->withShipments([
-                    factory(Shipment::class)->withDeliveryOptionsWithPickupLocation(),
+                    factory(Shipment::class)->withDeliveryOptionsWithPickupLocationInTheNetherlands(),
                 ])
             );
         },

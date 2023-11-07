@@ -1,6 +1,11 @@
 [
   {
     "carrier": 1,
+    "customs_declaration": {
+      "contents": 1,
+      "items": [],
+      "weight": 1
+    },
     "general_settings": {
       "save_recipient_address": 0
     },
@@ -9,19 +14,13 @@
       "delivery_type": 2
     },
     "physical_properties": {
-      "weight": 0
+      "weight": 1
     },
     "recipient": {
-      "cc": "NL",
+      "cc": "CA",
       "city": "Hoofddorp",
       "person": "Jaap Krekel",
       "postal_code": "2132JE"
-    },
-    "reference_identifier": "my-multicollo-set",
-    "secondary_shipments": [
-      {
-        "reference_identifier": "my-multicollo-set"
-      }
-    ]
+    }
   }
 ]

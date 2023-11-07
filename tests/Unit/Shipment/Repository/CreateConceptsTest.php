@@ -7,14 +7,19 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
+use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollectionFactory;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -37,304 +42,225 @@ const DEFAULT_INPUT_SENDER = [
     'street'     => 'Werf',
 ];
 
-it('creates a valid request from a shipment collection', function (array $input) {
-    MockApi::enqueue(
-        new ExamplePostIdsResponse(),
-        new ExamplePostIdsResponse(
-            array_map(function (array $data) {
-                return [
-                    'id'                   => mt_rand(),
-                    'reference_identifier' => $data['reference_identifier'],
-                ];
-            }, $input)
-        )
-    );
+it(
+    'creates a valid request from a shipment collection',
+    function (ShipmentCollectionFactory $shipmentCollectionFactory) {
+        $shipmentCollection = $shipmentCollectionFactory->make();
+        $mockIdsCollection  = new Collection($shipmentCollection->all());
 
-    $inputShipments = new ShipmentCollection($input);
+        MockApi::enqueue(
+            new ExamplePostIdsResponse(),
+            new ExamplePostIdsResponse(
+                $mockIdsCollection->map(function ($shipment) {
+                    return [
+                        'id'                   => mt_rand(),
+                        'reference_identifier' => $shipment->referenceIdentifier,
+                    ];
+                })
+                    ->toArray()
+            )
+        );
 
-    /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
-    $repository = Pdk::get(ShipmentRepository::class);
+        /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+        $repository = Pdk::get(ShipmentRepository::class);
 
-    $createdConcepts = $repository->createConcepts($inputShipments);
-    $request         = MockApi::ensureLastRequest();
+        $createdConcepts = $repository->createConcepts($shipmentCollection);
+        $request         = MockApi::ensureLastRequest();
 
-    $body = json_decode(
-        $request->getBody()
-            ->getContents(),
-        true
-    );
+        $body = json_decode(
+            $request->getBody()
+                ->getContents(),
+            true
+        );
 
-    $shipments = Arr::get($body, 'data.shipments');
+        $shipments = Arr::get($body, 'data.shipments');
 
-    expect($shipments)
-        ->toBeArray()
-        ->and($createdConcepts)
-        ->toBeInstanceOf(ShipmentCollection::class);
+        expect($shipments)
+            ->toBeArray()
+            ->and($createdConcepts)
+            ->toBeInstanceOf(ShipmentCollection::class);
 
-    assertMatchesJsonSnapshot(json_encode($shipments));
-})->with([
+        assertMatchesJsonSnapshot(json_encode($shipments));
+    }
+)->with([
     'bare minimum'                                => [
-        'input' => [
-            [
-                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'recipient' => DEFAULT_INPUT_RECIPIENT,
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+            );
+        },
     ],
     'address with address1 and address2 combined' => [
-        'input' => [
-            [
-                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'recipient' => array_merge(DEFAULT_INPUT_RECIPIENT, [
-                    'address1' => 'Tuinstraat',
-                    'address2' => '35',
-                ]),
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(
+                        array_merge(DEFAULT_INPUT_RECIPIENT, [
+                            'address1' => 'Tuinstraat',
+                            'address2' => '35',
+                        ])
+                    )
+            );
+        },
     ],
 
     'simple domestic shipment'                    => [
-        'input' => [
-            [
-                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'deliveryOptions'    => [
-                    'date'            => '2038-07-10 16:00:00',
-                    'shipmentOptions' => [
-                        'ageCheck'         => true,
-                        'insurance'        => 500,
-                        'labelDescription' => 'order 204829',
-                        'largeFormat'      => false,
-                        'onlyRecipient'    => true,
-                        'return'           => false,
-                        'sameDayDelivery'  => false,
-                        'signature'        => false,
-                    ],
-                ],
-                'physicalProperties' => [
-                    'height' => 100,
-                    'width'  => 120,
-                    'length' => 80,
-                    'weight' => 2000,
-                ],
-                'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                'sender'             => DEFAULT_INPUT_SENDER,
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(
+                        array_merge(DEFAULT_INPUT_RECIPIENT, [
+                            'address1' => 'Tuinstraat',
+                            'address2' => '35',
+                        ])
+                    )
+            );
+        },
     ],
     'shipment to be delivered in the past'        => [
-        'input' => [
-            [
-                'carrier'         => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'deliveryOptions' => [
-                    'date' => '2000-07-10 16:00:00',
-                ],
-                'recipient'       => DEFAULT_INPUT_RECIPIENT,
-                'sender'          => DEFAULT_INPUT_SENDER,
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withDeliveryOptions(
+                        factory(DeliveryOptions::class)->withDate('2000-07-10 16:00:00')
+                    )
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+            );
+        },
     ],
     'domestic with pickup'                        => [
-        'input' => [
-            [
-                'carrier'         => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'recipient'       => DEFAULT_INPUT_RECIPIENT,
-                'deliveryOptions' => [
-                    'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                    'pickupLocation' => [
-                        'locationCode' => 12345,
-                    ],
-                ],
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withDeliveryOptionsWithPickupLocationInTheNetherlands()
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+            );
+        },
     ],
-    'instabox same day delivery'                  => [
-        'input' => [
-            [
-                'carrier'         => ['name' => Carrier::CARRIER_INSTABOX_NAME],
-                'recipient'       => DEFAULT_INPUT_RECIPIENT,
-                'deliveryOptions' => [
-                    'shipmentOptions' => [
-                        'sameDayDelivery' => true,
-                    ],
-                ],
-                'dropOffPoint'    => [
-                    'locationCode' => 45678,
-                ],
-            ],
-        ],
-    ],
-    'eu shipment'                                 => [
-        'input' => [
-            [
-                'carrier'            => ['id' => Carrier::CARRIER_BPOST_ID],
-                'recipient'          => ['cc' => CountryCodes::CC_CA] + DEFAULT_INPUT_RECIPIENT,
-                'customsDeclaration' => [
-                    'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
-                    'invoice'  => '25',
-                    'items'    => [
-                        [
-                            'amount'         => 1,
-                            'classification' => 9609,
-                            'country'        => CountryCodes::CC_NL,
-                            'description'    => 'trendy pencil',
-                            'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
-                            'weight'         => 200,
-                        ],
-                        [
-                            'amount'         => 1,
-                            'classification' => 40169200,
-                            'country'        => CountryCodes::CC_NL,
-                            'description'    => 'beautiful eraser',
-                            'itemValue'      => ['amount' => 10000, 'currency' => 'EUR'],
-                            'weight'         => 350,
-                        ],
-                    ],
-                ],
-            ],
-        ],
+    'row shipment'                                => [
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCustomsDeclaration(factory(CustomsDeclaration::class))
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(['cc' => CountryCodes::CC_CA] + DEFAULT_INPUT_RECIPIENT)
+            );
+        },
     ],
     'shipment with weight in customs declaration' => [
-        'input' => [
-            [
-                'carrier'            => ['id' => Carrier::CARRIER_BPOST_ID],
-                'recipient'          => ['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT,
-                'deliveryOptions'    => [
-                    'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                    'pickupLocation' => [
-                        'locationCode' => 34653,
-                    ],
-                ],
-                'physicalProperties' => [
-                    'weight' => 0,
-                ],
-                'customsDeclaration' => [
-                    'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
-                    'invoice'  => '14',
-                    'items'    => [
-                        [
-                            'amount'         => 1,
-                            'classification' => 9609,
-                            'country'        => CountryCodes::CC_BE,
-                            'description'    => 'stofzuiger',
-                            'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
-                            'weight'         => 200,
-                        ],
-                        [
-                            'amount'         => 2,
-                            'classification' => 420690,
-                            'country'        => CountryCodes::CC_NL,
-                            'description'    => 'ruler',
-                            'itemValue'      => ['amount' => 900, 'currency' => 'EUR'],
-                            'weight'         => 120,
-                        ],
-                    ],
-                ],
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(['cc' => CountryCodes::CC_US] + DEFAULT_INPUT_RECIPIENT)
+                    ->withCustomsDeclaration(factory(CustomsDeclaration::class)->withWeight(1000))
+            );
+        },
     ],
     'eu shipment with pickup'                     => [
-        'input' => [
-            [
-                'carrier'            => ['id' => Carrier::CARRIER_BPOST_ID],
-                'recipient'          => ['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT,
-                'deliveryOptions'    => [
-                    'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                    'pickupLocation' => [
-                        'locationCode' => 34653,
-                    ],
-                ],
-                'customsDeclaration' => [
-                    'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
-                    'invoice'  => '14',
-                    'items'    => [
-                        [
-                            'amount'         => 1,
-                            'classification' => 9609,
-                            'country'        => CountryCodes::CC_BE,
-                            'description'    => 'stofzuiger',
-                            'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
-                            'weight'         => 200,
-                        ],
-                        [
-                            'amount'         => 2,
-                            'classification' => 420690,
-                            'country'        => CountryCodes::CC_NL,
-                            'description'    => 'ruler',
-                            'itemValue'      => ['amount' => 900, 'currency' => 'EUR'],
-                            'weight'         => 120,
-                        ],
-                    ],
-                ],
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT)
+                    ->withDeliveryOptionsWithPickupLocationInEU()
+            );
+        },
     ],
     'multicollo'                                  => [
-        'input' => [
-            [
-                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'multiCollo'          => true,
-                'recipient'           => DEFAULT_INPUT_RECIPIENT,
-                'referenceIdentifier' => 'my-multicollo-set',
-            ],
-            [
-                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'multiCollo'          => true,
-                'recipient'           => DEFAULT_INPUT_RECIPIENT,
-                'referenceIdentifier' => 'my-multicollo-set',
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withDeliveryOptions(
+                        factory(DeliveryOptions::class)
+                            ->withLabelAmount(2)
+                    )
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+                    ->withReferenceIdentifier('my-multicollo-set')
+            );
+        },
     ],
     'multiple shipments'                          => [
-        'input' => [
-            [
-                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
-                'deliveryOptions'    => [
-                    'date'            => '2038-07-20 16:00:00',
-                    'shipmentOptions' => [
-                        'ageCheck'         => true,
-                        'insurance'        => 0,
-                        'labelDescription' => 'order 204829',
-                        'largeFormat'      => false,
-                        'onlyRecipient'    => true,
-                        'return'           => false,
-                        'sameDayDelivery'  => false,
-                        'signature'        => false,
-                    ],
-                ],
-                'physicalProperties' => [
-                    'height' => 100,
-                    'width'  => 120,
-                    'length' => 80,
-                    'weight' => 2000,
-                ],
-                'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                'sender'             => DEFAULT_INPUT_SENDER,
-            ],
-            [
-                'carrier'            => ['id' => Carrier::CARRIER_INSTABOX_ID],
-                'deliveryOptions'    => [
-                    'date'            => '2038-07-20 16:00:00',
-                    'shipmentOptions' => [
-                        'ageCheck'         => true,
-                        'insurance'        => 500,
-                        'labelDescription' => 'order 204829',
-                        'largeFormat'      => false,
-                        'onlyRecipient'    => true,
-                        'return'           => false,
-                        'sameDayDelivery'  => false,
-                        'signature'        => false,
-                    ],
-                ],
-                'physicalProperties' => [
-                    'height' => 100,
-                    'width'  => 120,
-                    'length' => 80,
-                    'weight' => 2000,
-                ],
-                'recipient'          => DEFAULT_INPUT_RECIPIENT,
-                'sender'             => DEFAULT_INPUT_SENDER,
-            ],
-        ],
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    ),
+                factory(Shipment::class)->withCarrier(
+                    factory(Carrier::class)
+                        ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
+                        ->withCapabilities(
+                            factory(CarrierCapabilities::class)->withEverything()
+                        )
+                )
+            );
+        },
     ],
 ]);
 

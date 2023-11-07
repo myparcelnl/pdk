@@ -1,21 +1,23 @@
 [
   {
-    "carrier": 2,
+    "carrier": 1,
+    "customs_declaration": {
+      "contents": 1,
+      "items": [],
+      "weight": 1000
+    },
     "general_settings": {
       "save_recipient_address": 0
     },
     "options": {
       "package_type": 1,
-      "delivery_type": 4
+      "delivery_type": 2
     },
     "physical_properties": {
-      "weight": 440
-    },
-    "pickup": {
-      "location_code": "34653"
+      "weight": 1000
     },
     "recipient": {
-      "cc": "DE",
+      "cc": "US",
       "city": "Hoofddorp",
       "person": "Jaap Krekel",
       "postal_code": "2132JE"

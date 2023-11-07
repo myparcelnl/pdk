@@ -25,7 +25,8 @@
           "insurance": [0, 50000]
         },
         "features": {
-          "labelDescriptionLength": 45
+          "labelDescriptionLength": 45,
+          "multiCollo": true
         }
       },
       "returnCapabilities": []

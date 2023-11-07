@@ -1,6 +1,6 @@
 [
   {
-    "carrier": 2,
+    "carrier": 1,
     "general_settings": {
       "save_recipient_address": 0
     },
@@ -9,10 +9,17 @@
       "delivery_type": 4
     },
     "physical_properties": {
-      "weight": 440
+      "weight": 0
     },
     "pickup": {
-      "location_code": "34653"
+      "location_code": "215700",
+      "location_name": "Berghain",
+      "retail_network_id": "BGHN-01",
+      "cc": "DE",
+      "street": "Strasse",
+      "number": "1",
+      "postal_code": "1431ED",
+      "city": "BERLIN"
     },
     "recipient": {
       "cc": "DE",

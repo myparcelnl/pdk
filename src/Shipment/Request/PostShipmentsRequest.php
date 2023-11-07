@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -14,6 +13,7 @@ use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 class PostShipmentsRequest extends Request
 {
@@ -47,9 +47,9 @@ class PostShipmentsRequest extends Request
     {
         return json_encode([
             'data' => [
-                'shipments' => $this->groupByMultiCollo()
-                    ->flatMap(function (Collection $groupedShipments) {
-                        return [$this->encodeShipmentWithSecondaryShipments($groupedShipments)];
+                'shipments' => $this->collection
+                    ->map(function (Shipment $shipment) {
+                        return $this->encodeShipment($shipment);
                     })
                     ->toArrayWithoutNull(),
             ],
@@ -102,48 +102,29 @@ class PostShipmentsRequest extends Request
             'pickup'               => $this->getPickupLocation($shipment),
             'recipient'            => $this->getRecipient($shipment),
             'reference_identifier' => $shipment->referenceIdentifier,
+            'secondary_shipments'  => $this->encodeSecondaryShipments($shipment),
         ]);
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return null|array
      */
-    private function encodeSecondaryShipments(Collection $groupedShipments): ?array
+    private function encodeSecondaryShipments(Shipment $shipment): ?array
     {
-        $clonedCollection = new Collection($groupedShipments->all());
+        $schema = Pdk::get(CarrierSchema::class);
 
-        $clonedCollection->shift();
+        $schema->setCarrier($shipment->deliveryOptions->carrier);
 
-        if ($clonedCollection->isEmpty()) {
-            return null;
+        $secondaryShipmentsAmount = $schema->canHaveMultiCollo() ? $shipment->deliveryOptions->labelAmount - 1 : 0;
+        $secondaryShipments       = [];
+
+        for ($i = 0; $i < $secondaryShipmentsAmount; $i++) {
+            $secondaryShipments[] = ['reference_identifier' => $shipment->referenceIdentifier];
         }
 
-        /**
-         * Turn grouped shipments into regular collection to avoid all shipment properties being added.
-         */
-        return $clonedCollection
-            ->map(function (Shipment $shipment) {
-                return [
-                    'reference_identifier' => $shipment->externalIdentifier,
-                ];
-            })
-            ->toArray();
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Support\Collection $groupedShipments
-     *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     */
-    private function encodeShipmentWithSecondaryShipments(Collection $groupedShipments): array
-    {
-        $shipment                        = $this->encodeShipment($groupedShipments->first());
-        $shipment['secondary_shipments'] = $this->encodeSecondaryShipments($groupedShipments);
-
-        return $shipment;
+        return $secondaryShipments ?: null;
     }
 
     /**
@@ -272,21 +253,5 @@ class PostShipmentsRequest extends Request
     private function getWeight(Shipment $shipment): int
     {
         return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
-    }
-
-    /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection
-     */
-    private function groupByMultiCollo(): Collection
-    {
-        return (new Collection($this->collection->all()))->groupBy(function ($shipment) {
-            $shipment = Utils::cast(Shipment::class, $shipment);
-
-            if ($shipment->multiCollo) {
-                return $shipment->referenceIdentifier;
-            }
-
-            return uniqid('random_', true);
-        });
     }
 }

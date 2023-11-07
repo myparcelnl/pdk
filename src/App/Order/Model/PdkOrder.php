@@ -308,6 +308,7 @@ class PdkOrder extends Model
         $shipment->carrier             = $shipment->carrier ?? $this->deliveryOptions->carrier;
         $shipment->customsDeclaration  = $shipment->customsDeclaration ?? $this->customsDeclaration;
         $shipment->deliveryOptions     = $shipment->deliveryOptions ?? $this->deliveryOptions;
+        $shipment->multiCollo          = $shipment->deliveryOptions->labelAmount > 1;
         $shipment->recipient           = $this->shippingAddress;
         $shipment->sender              = $this->senderAddress;
         $shipment->physicalProperties  = new PhysicalProperties([
