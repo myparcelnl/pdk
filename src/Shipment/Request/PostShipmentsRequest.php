@@ -47,9 +47,10 @@ class PostShipmentsRequest extends Request
     {
         return json_encode([
             'data' => [
-                'shipments' => $this->collection->map(function (Shipment $shipment) {
-                    return $this->encodeShipmentWithSecondaryShipments($shipment);
-                })
+                'shipments' => $this->collection
+                    ->map(function (Shipment $shipment) {
+                        return $this->encodeShipment($shipment);
+                    })
                     ->toArrayWithoutNull(),
             ],
         ]);
@@ -89,43 +90,43 @@ class PostShipmentsRequest extends Request
      */
     protected function encodeShipment(Shipment $shipment): array
     {
-        return Utils::filterNull([
-            'carrier'              => $shipment->carrier->id,
-            'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
-            'drop_off_point'       => $this->getDropOffPoint($shipment),
-            'general_settings'     => [
-                'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
-            ],
-            'options'              => $this->getOptions($shipment),
-            'physical_properties'  => ['weight' => $this->getWeight($shipment)],
-            'pickup'               => $this->getPickupLocation($shipment),
-            'recipient'            => $this->getRecipient($shipment),
-            'reference_identifier' => $shipment->referenceIdentifier,
-        ]);
+        return array_replace(
+            Utils::filterNull([
+                'carrier'              => $shipment->carrier->id,
+                'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
+                'drop_off_point'       => $this->getDropOffPoint($shipment),
+                'general_settings'     => [
+                    'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
+                ],
+                'options'              => $this->getOptions($shipment),
+                'physical_properties'  => ['weight' => $this->getWeight($shipment)],
+                'pickup'               => $this->getPickupLocation($shipment),
+                'recipient'            => $this->getRecipient($shipment),
+                'reference_identifier' => $shipment->referenceIdentifier,
+            ]),
+            ['secondary_shipments' => $this->encodeSecondaryShipments($shipment)]
+        );
     }
 
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
-     * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @return null|array
      */
-    private function encodeShipmentWithSecondaryShipments(Shipment $shipment): array
+    private function encodeSecondaryShipments(Shipment $shipment): ?array
     {
-        $encodedShipment = $this->encodeShipment($shipment);
-        $schema          = Pdk::get(CarrierSchema::class);
+        $schema = Pdk::get(CarrierSchema::class);
 
         $schema->setCarrier($shipment->deliveryOptions->carrier);
 
         $secondaryShipmentsAmount = $schema->canHaveMultiCollo() ? $shipment->deliveryOptions->labelAmount - 1 : 0;
+        $secondaryShipments       = [];
 
         for ($i = 0; $i < $secondaryShipmentsAmount; $i++) {
-            $encodedShipment['secondary_shipments'][] = [
-                'reference_identifier' => $shipment->referenceIdentifier,
-            ];
+            $secondaryShipments[] = ['reference_identifier' => $shipment->referenceIdentifier];
         }
 
-        return $encodedShipment;
+        return $secondaryShipments ?: null;
     }
 
     /**
