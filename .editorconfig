@@ -33,6 +33,7 @@ ij_editorconfig_spaces_around_assignment_operators      = true
 
 # Gherkin
 ij_gherkin_keep_indents_on_empty_lines                  = false
+ij_gherkin_indent_size                                  = 2
 
 # HTML
 ij_html_add_new_line_before_tags                        = body, div, p, form, h1, h2, h3
