@@ -106,6 +106,29 @@ final class PdkOrderContext extends AbstractContext
     }
 
     /**
+     * @Given order :id has :n shipment
+     * @Given order :id has :n shipment with:
+     * @Given order :id has :n shipments
+     * @Given order :id has :n shipments with:
+     *
+     * @param  string                             $id
+     * @param  int                                $n
+     * @param  null|\Behat\Gherkin\Node\TableNode $data
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function orderHasShipment(string $id, int $n = 1, ?TableNode $data = null): void
+    {
+        $order = $this->retrieveOrder($id);
+
+        for ($i = 0; $i < $n; $i++) {
+            $shipment = $order->createShipment();
+            $shipment->fill($this->parseTable($data) ?? []);
+        }
+    }
+
+    /**
      * @param  null|string $orderId
      *
      * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
