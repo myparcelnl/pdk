@@ -70,7 +70,7 @@ class ShipmentCollection extends Collection
     /**
      * @return self
      */
-    public function removeMultiColloShipments(): self
+    public function removeSecondaryShipments(): self
     {
         return $this->groupByMultiCollo()
             ->map(function ($group) {
