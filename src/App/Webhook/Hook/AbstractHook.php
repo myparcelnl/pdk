@@ -29,20 +29,7 @@ abstract class AbstractHook implements HookInterface
      */
     public function validate(Request $request): bool
     {
-        return $this->eventMatches($request, $this->getHookEvent());
-    }
-
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     * @param  string                                    $hook
-     *
-     * @return bool
-     */
-    protected function eventMatches(Request $request, string $hook): bool
-    {
-        $content = $this->getHookBody($request);
-
-        return $request->headers->get('x-myparcel-hook') === $hook && $content['event'] === $hook;
+        return true;
     }
 
     /**

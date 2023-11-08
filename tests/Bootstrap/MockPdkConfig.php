@@ -20,6 +20,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\ShippingMethod\Contract\PdkShippingMethodRepositoryInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
@@ -93,6 +94,7 @@ class MockPdkConfig
             PdkOrderRepositoryInterface::class          => get(MockPdkOrderRepository::class),
             PdkProductRepositoryInterface::class        => get(MockPdkProductRepository::class),
             PdkShippingMethodRepositoryInterface::class => get(MockPdkShippingMethodRepository::class),
+            PdkWebhookManagerInterface::class           => get(MockPdkWebhookManager::class),
             PdkWebhookServiceInterface::class           => get(MockPdkWebhookService::class),
             PdkWebhooksRepositoryInterface::class       => get(MockPdkWebhooksRepository::class),
             SettingsRepositoryInterface::class          => get(MockSettingsRepository::class),

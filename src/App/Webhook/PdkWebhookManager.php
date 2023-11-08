@@ -87,16 +87,29 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
 
                 if (! $hook->validate($request)) {
                     Logger::debug('Webhook skipped', $logContext);
+
                     continue;
                 }
 
-                $hook->handle($request);
-
-                Logger::debug('Webhook processed', $logContext);
+                $this->handleHook($hook, $request, $logContext);
             } catch (Throwable $exception) {
                 Logger::error('Webhook failed', $logContext);
             }
         }
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Webhook\Contract\HookInterface $hook
+     * @param  \Symfony\Component\HttpFoundation\Request          $request
+     * @param  array                                              $logContext
+     *
+     * @return void
+     */
+    protected function handleHook(HookInterface $hook, Request $request, array $logContext): void
+    {
+        $hook->handle($request);
+
+        Logger::debug('Webhook processed', $logContext);
     }
 
     /**
@@ -123,8 +136,14 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     private function getHooks(Request $request): array
     {
-        $body = json_decode($request->getContent(), true);
+        $myParcelHeader = $request->headers->get('x-myparcel-hook');
+        $body           = json_decode($request->getContent(), true);
+        $hooks          = $body['data']['hooks'] ?? [];
 
-        return $body['data']['hooks'] ?? [];
+        return array_map(static function ($hook) use ($myParcelHeader) {
+            $hook['event'] = $hook['event'] ?? $myParcelHeader;
+
+            return $hook;
+        }, $hooks);
     }
 }

@@ -25,6 +25,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             MockMemoryCacheStorage::class,
             MockOrderStatusService::class,
             MockPdkActionsService::class,
+            MockPdkWebhookManager::class,
             MockPdkWebhooksRepository::class,
             SharedFactoryState::class,
         ];
