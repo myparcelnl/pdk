@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Model;
 
 use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
  * @property int                                $id
@@ -83,5 +86,30 @@ class Shop extends Model
         }
 
         parent::__construct($data);
+    }
+
+    /**
+     * @return array
+     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     */
+    public function toStorableArray(): array
+    {
+        $carriers = (new Collection($this->carriers))
+            ->map(static function (Carrier $carrier): array {
+                return $carrier->only([
+                    'externalIdentifier',
+                    'enabled',
+                    'label',
+                    'primary',
+                    'optional',
+                ], Arrayable::STORABLE_NULL);
+            });
+
+        return array_replace(
+            $this->except('carriers', Arrayable::STORABLE_NULL),
+            [
+                'carriers' => $carriers->toArray(self::STORABLE_NULL),
+            ]
+        );
     }
 }
