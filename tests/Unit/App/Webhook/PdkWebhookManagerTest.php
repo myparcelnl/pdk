@@ -7,7 +7,15 @@ namespace MyParcelNL\Pdk\App\Webhook;
 
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
+use MyParcelNL\Pdk\App\Webhook\Hook\OrderStatusChangeWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShipmentLabelCreatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShipmentStatusChangeWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShopCarrierAccessibilityUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShopCarrierConfigurationUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\ShopUpdatedWebhook;
+use MyParcelNL\Pdk\App\Webhook\Hook\SubscriptionCreatedOrUpdatedWebhook;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -21,10 +29,10 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron());
 
-it('dispatches and executes webhooks with myparcel header', function (string $hook, bool $hasHeader) {
-    /** @var PdkWebhooksRepositoryInterface $repository */
+it('dispatches and executes webhooks', function (string $hook, string $calledClass, bool $useHeader) {
+    /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
-    /** @var PdkWebhookManagerInterface $webhookManager */
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkWebhookManager $webhookManager */
     $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
@@ -40,11 +48,11 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
         [],
         [],
         [],
-        $hasHeader ? ['HTTP_X_MYPARCEL_HOOK' => $hook] : [],
+        ['HTTP_X_MYPARCEL_HOOK' => $hook],
         json_encode([
             'data' => [
                 'hooks' => [
-                    ['event' => $hook],
+                    $useHeader ? [] : ['event' => $hook],
                 ],
             ],
         ])
@@ -58,9 +66,7 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
         ->and($request->headers->get('x-myparcel-hook'))
-        ->toBe($hasHeader ? $hook : null)
-        ->and($request->getContent())
-        ->toEqual('{"data":{"hooks":[{"event":"' . $hook . '"}]}}')
+        ->toBe($hook)
         ->and($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
         ->and($scheduled->all())
@@ -74,8 +80,52 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
         ->toBe([$webhookManager, 'processWebhook'])
         ->and($scheduled->first()['args'])
         ->toBe([$request]);
+
+    $cronService->executeScheduledTask();
+
+    $calledHooks = $webhookManager->getCalledHooks();
+
+    expect($calledHooks)
+        ->toHaveLength(1)
+        ->and(Arr::first($calledHooks))
+        ->toBeInstanceOf($calledClass);
 })
-    ->with(WebhookSubscription::ALL)
+    ->with([
+        WebhookSubscription::SHIPMENT_STATUS_CHANGE => [
+            WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+            ShipmentStatusChangeWebhook::class,
+        ],
+
+        WebhookSubscription::SHIPMENT_LABEL_CREATED => [
+            WebhookSubscription::SHIPMENT_LABEL_CREATED,
+            ShipmentLabelCreatedWebhook::class,
+        ],
+
+        WebhookSubscription::ORDER_STATUS_CHANGE => [
+            WebhookSubscription::ORDER_STATUS_CHANGE,
+            OrderStatusChangeWebhook::class,
+        ],
+
+        WebhookSubscription::SHOP_UPDATED => [
+            WebhookSubscription::SHOP_UPDATED,
+            ShopUpdatedWebhook::class,
+        ],
+
+        WebhookSubscription::SHOP_CARRIER_ACCESSIBILITY_UPDATED => [
+            WebhookSubscription::SHOP_CARRIER_ACCESSIBILITY_UPDATED,
+            ShopCarrierAccessibilityUpdatedWebhook::class,
+        ],
+
+        WebhookSubscription::SHOP_CARRIER_CONFIGURATION_UPDATED => [
+            WebhookSubscription::SHOP_CARRIER_CONFIGURATION_UPDATED,
+            ShopCarrierConfigurationUpdatedWebhook::class,
+        ],
+
+        WebhookSubscription::SUBSCRIPTION_CREATED_OR_UPDATED => [
+            WebhookSubscription::SUBSCRIPTION_CREATED_OR_UPDATED,
+            SubscriptionCreatedOrUpdatedWebhook::class,
+        ],
+    ])
     ->with([
         'no header' => [false],
         'header'    => [true],

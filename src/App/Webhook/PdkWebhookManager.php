@@ -91,13 +91,25 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
                     continue;
                 }
 
-                $hook->handle($request);
-
-                Logger::debug('Webhook processed', $logContext);
+                $this->handleHook($hook, $request, $logContext);
             } catch (Throwable $exception) {
                 Logger::error('Webhook failed', $logContext);
             }
         }
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Webhook\Contract\HookInterface $hook
+     * @param  \Symfony\Component\HttpFoundation\Request          $request
+     * @param  array                                              $logContext
+     *
+     * @return void
+     */
+    protected function handleHook(HookInterface $hook, Request $request, array $logContext): void
+    {
+        $hook->handle($request);
+
+        Logger::debug('Webhook processed', $logContext);
     }
 
     /**
