@@ -69,7 +69,11 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
         ->and($timestamp)
         ->toBeGreaterThanOrEqual($time - 10)
         ->and($timestamp)
-        ->toBeLessThanOrEqual($time + 10);
+        ->toBeLessThanOrEqual($time + 10)
+        ->and($scheduled->first()['callback'])
+        ->toBe([$webhookManager, 'processWebhook'])
+        ->and($scheduled->first()['args'])
+        ->toBe([$request]);
 })
     ->with(WebhookSubscription::ALL)
     ->with([
