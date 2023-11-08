@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -22,18 +21,15 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron());
 
-it('dispatches and executes webhooks with myparcel header', function (string $hook) {
+it('dispatches and executes webhooks with myparcel header', function (string $hook, bool $hasHeader) {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
     /** @var PdkWebhookManagerInterface $webhookManager */
     $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
 
     $repository->storeHashedUrl('https://example.com/hashed-url');
-
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
 
     $time = time();
@@ -44,7 +40,7 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
         [],
         [],
         [],
-        ['HTTP_X_MYPARCEL_HOOK' => $hook],
+        $hasHeader ? ['HTTP_X_MYPARCEL_HOOK' => $hook] : [],
         json_encode([
             'data' => [
                 'hooks' => [
@@ -62,9 +58,9 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
         ->and($request->headers->get('x-myparcel-hook'))
-        ->toBe($hook)
-        ->and($response->getContent())
-        ->toBe('')
+        ->toBe($hasHeader ? $hook : null)
+        ->and($request->getContent())
+        ->toEqual('{"data":{"hooks":[{"event":"' . $hook . '"}]}}')
         ->and($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
         ->and($scheduled->all())
@@ -74,51 +70,9 @@ it('dispatches and executes webhooks with myparcel header', function (string $ho
         ->toBeGreaterThanOrEqual($time - 10)
         ->and($timestamp)
         ->toBeLessThanOrEqual($time + 10);
-})->with(WebhookSubscription::ALL);
-
-it('dispatches and executes incoming webhook without myparcel header', function (string $hook) {
-    /** @var PdkWebhooksRepositoryInterface $repository */
-    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
-    /** @var PdkWebhookManagerInterface $webhookManager */
-    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
-    $cronService = Pdk::get(CronServiceInterface::class);
-
-    $repository->storeHashedUrl('https://example.com/hashed-url');
-    $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
-
-    $time = time();
-
-    $request  = Request::create(
-        $repository->getHashedUrl(),
-        Request::METHOD_POST,
-        [],
-        [],
-        [],
-        [],
-        json_encode([
-            'data' => [
-                'hooks' => [
-                    ['event' => $hook],
-                ],
-            ],
-        ])
-    );
-    $response = $webhookManager->call($request);
-
-    $scheduled = $cronService->getScheduledTasks();
-
-    $timestamp = $scheduled->first()['timestamp'];
-
-    expect($response->getContent())
-        ->toBe('')
-        ->and($response->getStatusCode())
-        ->toBe(Response::HTTP_ACCEPTED)
-        ->and($scheduled->all())
-        ->toHaveLength(1)
-        // The webhook is scheduled to start immediately. Add a little window to account for the time it takes to run the test.
-        ->and($timestamp)
-        ->toBeGreaterThanOrEqual($time - 10)
-        ->and($timestamp)
-        ->toBeLessThanOrEqual($time + 10);
-})->with(WebhookSubscription::ALL);
+})
+    ->with(WebhookSubscription::ALL)
+    ->with([
+        'no header' => [false],
+        'header'    => [true],
+    ]);

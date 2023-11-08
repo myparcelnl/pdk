@@ -129,7 +129,7 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
         $hooks          = $body['data']['hooks'] ?? [];
 
         return array_map(static function ($hook) use ($myParcelHeader) {
-            $hook['event'] = $myParcelHeader;
+            $hook['event'] = $hook['event'] ?? $myParcelHeader;
 
             return $hook;
         }, $hooks);
