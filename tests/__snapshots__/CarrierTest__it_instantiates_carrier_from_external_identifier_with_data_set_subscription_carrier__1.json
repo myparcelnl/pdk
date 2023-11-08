@@ -4,7 +4,7 @@
   "name": "dhlforyou",
   "human": "DHL For You",
   "subscriptionId": "23182",
-  "enabled": false,
+  "enabled": true,
   "isDefault": false,
   "optional": false,
   "primary": false,

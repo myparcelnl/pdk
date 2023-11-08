@@ -3,7 +3,7 @@
   "id": 9,
   "name": "dhlforyou",
   "human": "DHL For You",
-  "enabled": false,
+  "enabled": true,
   "isDefault": true,
   "optional": false,
   "primary": false,

@@ -76,7 +76,7 @@ class Carrier extends Model
         'name'               => null,
         'human'              => null,
         'subscriptionId'     => null,
-        'enabled'            => false,
+        'enabled'            => true,
         'isDefault'          => true,
         'label'              => null,
         'optional'           => false,
