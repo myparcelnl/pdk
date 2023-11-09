@@ -76,7 +76,7 @@ class Carrier extends Model
         'name'               => null,
         'human'              => null,
         'subscriptionId'     => null,
-        'enabled'            => false,
+        'enabled'            => true,
         'isDefault'          => true,
         'label'              => null,
         'optional'           => false,
@@ -170,13 +170,7 @@ class Carrier extends Model
     public function toStorableArray(): array
     {
         return [
-            'enabled'            => $this->enabled,
             'externalIdentifier' => $this->externalIdentifier,
-            'isDefault'          => $this->isDefault,
-            'label'              => $this->label,
-            'optional'           => $this->optional,
-            'primary'            => $this->primary,
-            'type'               => $this->type,
         ];
     }
 }

@@ -34,18 +34,15 @@
       "return": [],
       "shipmentOptions": [],
       "trackTrace": [],
+      "carrierConfigurations": [],
       "carriers": [
         {
-          "enabled": true,
           "externalIdentifier": "postnl",
-          "isDefault": true,
-          "label": null,
+          "enabled": true,
           "optional": false,
-          "primary": false,
-          "type": "main"
+          "primary": false
         }
-      ],
-      "carrierConfigurations": []
+      ]
     }
   ],
   "status": 2,
