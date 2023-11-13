@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.30.3](https://github.com/myparcelnl/pdk/compare/v2.30.2...v2.30.3) (2023-11-13)
+
+
+### :bug: Bug Fixes
+
+* **orders:** fix notice when billing address or recipient are not present ([#237](https://github.com/myparcelnl/pdk/issues/237)) ([715d6f4](https://github.com/myparcelnl/pdk/commit/715d6f41b96ab6184de127ad5243a33a494b3386))
+
 ## [2.30.2](https://github.com/myparcelnl/pdk/compare/v2.30.1...v2.30.2) (2023-11-09)
 
 
