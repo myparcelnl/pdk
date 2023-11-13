@@ -19,21 +19,24 @@ final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculat
         $orderCarrier = $this->order->deliveryOptions->carrier;
 
         if (! $this->sharingCustomerInformation($orderCarrier)) {
-            $this->order->billingAddress->email = null;
-            $this->order->billingAddress->phone = null;
-
             $this->order->shippingAddress->email = null;
             $this->order->shippingAddress->phone = null;
+
+            if ($this->order->billingAddress) {
+                $this->order->billingAddress->email = null;
+                $this->order->billingAddress->phone = null;
+            }
         }
 
-        $this->order->shipments->each(function (Shipment $shipment) {
-            if ($this->sharingCustomerInformation($shipment->deliveryOptions->carrier)) {
-                return;
-            }
-
-            $shipment->recipient->email = null;
-            $shipment->recipient->phone = null;
-        });
+        $this->order->shipments
+            ->filter(function (Shipment $shipment) {
+                return isset($shipment->recipient)
+                    && ! $this->sharingCustomerInformation($shipment->deliveryOptions->carrier);
+            })
+            ->each(function (Shipment $shipment) {
+                $shipment->recipient->email = null;
+                $shipment->recipient->phone = null;
+            });
     }
 
     /**
