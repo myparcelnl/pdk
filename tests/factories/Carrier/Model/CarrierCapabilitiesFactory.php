@@ -70,12 +70,27 @@ final class CarrierCapabilitiesFactory extends AbstractModelFactory
                 ShipmentOptions::AGE_CHECK,
                 ShipmentOptions::DIRECT_RETURN,
                 ShipmentOptions::HIDE_SENDER,
-                ShipmentOptions::INSURANCE,
                 ShipmentOptions::LARGE_FORMAT,
                 ShipmentOptions::ONLY_RECIPIENT,
                 ShipmentOptions::SAME_DAY_DELIVERY,
                 ShipmentOptions::SIGNATURE,
-            ], true)
+            ], true) + [
+                ShipmentOptions::INSURANCE => [
+                    0,
+                    10000,
+                    25000,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000,
+                ],
+            ]
         );
     }
 

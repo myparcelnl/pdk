@@ -193,5 +193,4 @@ it('should do nothing for other carriers', function (string $carrierName) {
     doTest($carrierName, null, factory(ShipmentOptions::class)->withAllOptions(), $result);
 })->with([
     Carrier::CARRIER_BPOST_NAME,
-    Carrier::CARRIER_DPD_NAME,
 ]);

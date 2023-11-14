@@ -73,7 +73,7 @@
       },
       "packageTypes": ["package"],
       "shipmentOptions": {
-        "insurance": [0]
+        "insurance": [52000]
       }
     },
     "returnCapabilities": {
