@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.30.4](https://github.com/myparcelnl/pdk/compare/v2.30.3...v2.30.4) (2023-11-14)
+
+
+### :bug: Bug Fixes
+
+* **base:** fix error when calling toArray with empty values ([#238](https://github.com/myparcelnl/pdk/issues/238)) ([a5975d1](https://github.com/myparcelnl/pdk/commit/a5975d16f38d20ec1cf44874e47dfef4eab67431))
+* **calculator:** always send insurance for dpd ([#219](https://github.com/myparcelnl/pdk/issues/219)) ([a360ae8](https://github.com/myparcelnl/pdk/commit/a360ae8151cc4fb0aac8ece9df97c14ea05efbd7))
+
 ## [2.30.3](https://github.com/myparcelnl/pdk/compare/v2.30.2...v2.30.3) (2023-11-13)
 
 
