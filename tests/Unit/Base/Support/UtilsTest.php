@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
+use Date;
+use DateTime;
 use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
 use stdClass;
@@ -112,4 +114,16 @@ it('clones objects', function ($input, bool $cloned) {
     'null'   => [null, false],
     'int'    => [1, false],
     'string' => ['string', false],
+]);
+
+it('converts input to array', function ($input, array $output) {
+    expect(Utils::toArray($input))->toEqual($output);
+})->with([
+    'string'                 => ['1', ['1']],
+    'array'                  => [['1'], ['1']],
+    'string with semicolons' => ['1;2', ['1', '2']],
+    'numbers'                => ['1;2', ['1', '2']],
+    'mixed values with null' => [['1', null, new DateTime(), 3], ['1', '3']],
+    'numbers in array'       => [['1', 2, 3], ['1', '2', '3']],
+    'semicolons and values'  => [['1;2;3', 4, 5], ['1', '2', '3', '4', '5']],
 ]);
