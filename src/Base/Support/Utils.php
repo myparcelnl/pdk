@@ -215,13 +215,11 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
      */
     public static function toArray($value): array
     {
-        if (! $value) {
-            return [];
-        }
-
-        return array_reduce((array) $value, static function (array $acc, string $item) {
-            $ids = explode(';', $item);
-            array_push($acc, ...$ids);
+        return array_reduce(Arr::wrap($value), static function (array $acc, $item) {
+            if (is_scalar($item)) {
+                $ids = explode(';', (string) $item);
+                array_push($acc, ...$ids);
+            }
 
             return $acc;
         }, []);
