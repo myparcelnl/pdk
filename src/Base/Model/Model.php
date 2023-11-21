@@ -23,7 +23,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     /**
      * @var array
      */
-    public static $booted;
+    public static $booted = [];
 
     /**
      * @var array|mixed
