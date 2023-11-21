@@ -9,6 +9,6 @@ trait MockHasCatsTrait
     public function initializeMockHasCatsTrait(): void
     {
         $this->attributes['cat1'] = 'Gouda';
-        $this->attributes['cat2'] = 'Mokka';
+        $this->attributes['cat2'] = 'Mocha';
     }
 }
