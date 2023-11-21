@@ -5,11 +5,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Audit\Concern;
 
+use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
 use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAuditClass;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockFaultyAuditClass;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -40,3 +42,7 @@ it('initializes class with audits property', function () {
     expect($mockAuditClass->audits)
         ->toBeInstanceOf(AuditCollection::class);
 });
+
+it('throws error when initialized without auditIdentifier property', function () {
+    new MockFaultyAuditClass();
+})->throws(InvalidArgumentException::class);

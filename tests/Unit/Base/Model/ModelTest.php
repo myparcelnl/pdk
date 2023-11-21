@@ -25,6 +25,6 @@ it('can use constructor arguments', function () {
 it('boots on construct', function () {
     $model = new MockTraitModel();
 
-    expect($model::$booted)->toHaveKeysAndValues([get_class($model) => true]);
+    expect($model::isBooted())->toBeTrue();
 });
 

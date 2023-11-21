@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Sdk\src\Support\Str;
-use ReflectionClass;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -23,10 +22,10 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     /**
      * @var array
      */
-    public static $booted = [];
+    protected static $booted = [];
 
     /**
-     * @var array|mixed
+     * @var array
      */
     protected static $traitInitializers;
 
@@ -37,16 +36,14 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
     /**
      * @param  null|array $data
-     *
-     * @throws \ReflectionException
      */
     public function __construct(?array $data = null)
     {
-        $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
-        $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
-
         $this->bootIfNotBooted();
 
+        $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
+        $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
+        
         $this->initializeTraits();
 
         $convertedData = Utils::changeArrayKeysCase($data ?? []);
@@ -54,9 +51,13 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
         $this->fill($convertedData + $this->attributes);
     }
 
+    public static function isBooted(): bool
+    {
+        return isset(static::$booted[static::class]);
+    }
+
     /**
      * @return void
-     * @throws \ReflectionException
      */
     protected static function bootTraits(): void
     {
@@ -67,7 +68,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
         $traits = Utils::getClassTraitsRecursive($class);
 
         foreach ($traits as $trait) {
-            $baseName = (new ReflectionClass($trait))->getShortName();
+            $baseName = Utils::classBasename($trait);
             $method   = sprintf('initialize%s', $baseName);
 
             if (method_exists($class, $method)) {
@@ -291,15 +292,15 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
     /**
      * @return void
-     * @throws \ReflectionException
      */
     protected function bootIfNotBooted(): void
     {
-        if (! isset(static::$booted[static::class])) {
-            static::bootTraits();
-
-            static::$booted[static::class] = true;
+        if (self::isBooted()) {
+            return;
         }
+        static::bootTraits();
+
+        static::$booted[static::class] = true;
     }
 
     /**
