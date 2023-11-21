@@ -9,11 +9,13 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
@@ -339,3 +341,33 @@ it('exports international orders', function (PdkOrderCollectionFactory $factory,
         ],
     ])
     ->with('orderModeToggle');
+
+it('creates audit after export', function () {
+    factory(OrderSettings::class)
+        ->withConceptShipments(true)
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->store()
+        ->make();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse(), new ExampleGetShipmentsResponse());
+
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => [$order->externalIdentifier]]);
+
+    $auditService = Pdk::get(AuditServiceInterface::class);
+    $audit        = $auditService->all()
+        ->first();
+
+    expect($audit)->not->toBeNull()
+        ->and($audit->modelIdentifier)
+        ->toBe($order->externalIdentifier)
+        ->and($audit->model)
+        ->toBe(PdkOrder::class)
+        ->and($audit->action)
+        ->toBe(PdkBackendActions::EXPORT_ORDERS)
+        ->and($audit->arguments)
+        ->toBe([
+            'mode' => 'shipment',
+        ]);
+});

@@ -20,6 +20,16 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     use HasAttributes;
 
     /**
+     * @var array
+     */
+    protected static $booted = [];
+
+    /**
+     * @var array
+     */
+    protected static $traitInitializers;
+
+    /**
      * @var bool
      */
     protected $cloned = false;
@@ -29,12 +39,42 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function __construct(?array $data = null)
     {
+        $this->bootIfNotBooted();
+
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
+        
+        $this->initializeTraits();
 
         $convertedData = Utils::changeArrayKeysCase($data ?? []);
 
         $this->fill($convertedData + $this->attributes);
+    }
+
+    public static function isBooted(): bool
+    {
+        return isset(static::$booted[static::class]);
+    }
+
+    /**
+     * @return void
+     */
+    protected static function bootTraits(): void
+    {
+        $class = static::class;
+
+        static::$traitInitializers[$class] = [];
+
+        $traits = Utils::getClassTraitsRecursive($class);
+
+        foreach ($traits as $trait) {
+            $baseName = Utils::classBasename($trait);
+            $method   = sprintf('initialize%s', $baseName);
+
+            if (method_exists($class, $method)) {
+                static::$traitInitializers[$class][] = $method;
+            }
+        }
     }
 
     /**
@@ -248,6 +288,29 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     public function toStudlyCaseArray(): array
     {
         return $this->toArray(Arrayable::CASE_STUDLY);
+    }
+
+    /**
+     * @return void
+     */
+    protected function bootIfNotBooted(): void
+    {
+        if (self::isBooted()) {
+            return;
+        }
+        static::bootTraits();
+
+        static::$booted[static::class] = true;
+    }
+
+    /**
+     * @return void
+     */
+    protected function initializeTraits(): void
+    {
+        foreach (static::$traitInitializers[static::class] as $method) {
+            $this->{$method}();
+        }
     }
 
     /**

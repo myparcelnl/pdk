@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Exception\PdkEndpointException;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
+use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -39,6 +40,19 @@ class PdkActionsService implements PdkActionsServiceInterface
         $action = Pdk::get($actionClass);
 
         return $action->handle($request);
+    }
+
+    /**
+     * @param        $action
+     * @param  array $parameters
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
+     * @throws \MyParcelNL\Pdk\Api\Exception\PdkEndpointException
+     */
+    public function executeAutomatic($action, array $parameters = []): Response
+    {
+        return $this->execute($action, array_replace($parameters, ['actionType' => Audit::TYPE_AUTOMATIC]));
     }
 
     /**

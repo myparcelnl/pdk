@@ -45,7 +45,10 @@ final class OrderSettingsView extends NewAbstractSettingsView
 
             $this->createOrderModeToggle(),
             (new ToggleInput(OrderSettings::CONCEPT_SHIPMENTS))->visibleWhen(OrderSettings::ORDER_MODE, false),
-            new ToggleInput(OrderSettings::PROCESS_DIRECTLY),
+
+            (new SelectInput(OrderSettings::PROCESS_DIRECTLY))
+                ->withOptions($orderStatusOptions, $orderStatusOptionsFlags),
+
             new ToggleInput(OrderSettings::SEND_RETURN_EMAIL),
             new ToggleInput(OrderSettings::SAVE_CUSTOMER_ADDRESS),
             new ToggleInput(OrderSettings::SHARE_CUSTOMER_INFORMATION),
