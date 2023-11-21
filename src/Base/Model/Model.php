@@ -28,7 +28,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     /**
      * @var array|mixed
      */
-    private static $traitInitializers;
+    protected static $traitInitializers;
 
     /**
      * @var bool
@@ -62,7 +62,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     {
         $class = static::class;
 
-        self::$traitInitializers[$class] = [];
+        static::$traitInitializers[$class] = [];
 
         $traits = Utils::getClassTraitsRecursive($class);
 
@@ -71,7 +71,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
             $method   = sprintf('initialize%s', $baseName);
 
             if (method_exists($class, $method)) {
-                self::$traitInitializers[$class][] = $method;
+                static::$traitInitializers[$class][] = $method;
             }
         }
     }
@@ -307,7 +307,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     protected function initializeTraits(): void
     {
-        foreach (self::$traitInitializers[static::class] as $method) {
+        foreach (static::$traitInitializers[static::class] as $method) {
             $this->{$method}();
         }
     }
