@@ -76,7 +76,7 @@ class PdkFactory implements PdkFactoryInterface
      */
     protected function setupCache(ContainerBuilder $builder): void
     {
-        if (function_exists('apcu_fetch')) {
+        if (function_exists('apcu_fetch') && in_array(ini_get('apc.enabled'), ['1', 'on', 'On'], false)) {
             $builder->enableDefinitionCache('pdk-definition-cache');
         }
 
