@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Base\Factory;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use DI\Definition\Source\SourceCache;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\PdkFactoryInterface;
@@ -76,7 +77,7 @@ class PdkFactory implements PdkFactoryInterface
      */
     protected function setupCache(ContainerBuilder $builder): void
     {
-        if (function_exists('apcu_fetch') && in_array(ini_get('apc.enabled'), ['1', 'on', 'On'], false)) {
+        if (SourceCache::isSupported()) {
             $builder->enableDefinitionCache('pdk-definition-cache');
         }
 
