@@ -13,5 +13,5 @@ it('initializes traits on model', function () {
     expect($model->cat1)
         ->toBe('Gouda')
         ->and($model->cat2)
-        ->toBe('Mokka');
+        ->toBe('Mocha');
 });
