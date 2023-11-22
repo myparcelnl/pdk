@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.0](https://github.com/myparcelnl/pdk/compare/v2.30.4...v2.31.0) (2023-11-22)
+
+
+### :sparkles: New Features
+
+* add audits ([#236](https://github.com/myparcelnl/pdk/issues/236)) ([646e6b9](https://github.com/myparcelnl/pdk/commit/646e6b95582708bb4a5a332465bdfca0c6fcda79))
+
 ## [2.30.4](https://github.com/myparcelnl/pdk/compare/v2.30.3...v2.30.4) (2023-11-14)
 
 
