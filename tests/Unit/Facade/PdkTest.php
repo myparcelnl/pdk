@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Facade;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Pdk as PdkBase;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use function DI\value;
 
@@ -34,14 +35,22 @@ it('exposes mode property', function (string $mode, bool $isDevelopment) {
         ->toBe(! $isDevelopment);
 })->with([
     'production'  => [
-        'mode'          => \MyParcelNL\Pdk\Base\Pdk::MODE_PRODUCTION,
+        'mode'          => PdkBase::MODE_PRODUCTION,
         'isDevelopment' => false,
     ],
     'development' => [
-        'mode'          => \MyParcelNL\Pdk\Base\Pdk::MODE_DEVELOPMENT,
+        'mode'          => PdkBase::MODE_DEVELOPMENT,
         'isDevelopment' => true,
     ],
 ]);
+
+it('sets up cache when required', function () {
+    putenv('PDK_DISABLE_CACHE=0');
+    PdkFactory::create(MockPdkConfig::create(['mode' => 'production']));
+    putenv('PDK_DISABLE_CACHE=1');
+
+    expect(scandir(PdkBase::CACHE_DIR))->toContain('CompiledContainer.php');
+});
 
 it('throws error if appInfo is missing', function () {
     PdkFactory::create();
