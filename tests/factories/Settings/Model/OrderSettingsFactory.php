@@ -17,7 +17,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @method $this withExportWithAutomaticStatus(null|string $exportWithAutomaticStatus);
  * @method $this withOrderMode(bool $orderMode);
  * @method $this withOrderStatusMail(bool $orderStatusMail)
- * @method $this withProcessDirectly(bool $processDirectly);
+ * @method $this withProcessDirectly(string $processDirectly);
  * @method $this withSaveCustomerAddress(bool $saveCustomerAddress)
  * @method $this withSendNotificationAfter(string $sendNotificationAfter)
  * @method $this withSendReturnEmail(bool $sendReturnEmail);
