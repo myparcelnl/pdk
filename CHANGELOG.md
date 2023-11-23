@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.1](https://github.com/myparcelnl/pdk/compare/v2.31.0...v2.31.1) (2023-11-23)
+
+
+### :bug: Bug Fixes
+
+* **caching:** use apc only when enabled ([#239](https://github.com/myparcelnl/pdk/issues/239)) ([7b4ebbd](https://github.com/myparcelnl/pdk/commit/7b4ebbdfcc2563665355e70dabb00b0e46024f90))
+
 ## [2.31.0](https://github.com/myparcelnl/pdk/compare/v2.30.4...v2.31.0) (2023-11-22)
 
 
