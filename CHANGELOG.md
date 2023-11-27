@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.3](https://github.com/myparcelnl/pdk/compare/v2.31.2...v2.31.3) (2023-11-27)
+
+
+### :bug: Bug Fixes
+
+* **core:** connect audit service ([13150b2](https://github.com/myparcelnl/pdk/commit/13150b2e1e6fc292432f90e3f6807e572320f287))
+* re-add deprecated class ([10130eb](https://github.com/myparcelnl/pdk/commit/10130eb063f33593d7be54527980e5a77fe71099))
+
 ## [2.31.2](https://github.com/myparcelnl/pdk/compare/v2.31.1...v2.31.2) (2023-11-27)
 
 
