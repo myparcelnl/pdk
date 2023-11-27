@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.2](https://github.com/myparcelnl/pdk/compare/v2.31.1...v2.31.2) (2023-11-27)
+
+
+### :bug: Bug Fixes
+
+* **core:** correct names of interfaces ([d4a08c0](https://github.com/myparcelnl/pdk/commit/d4a08c035a1dd5ccec5ebb4152ca098a7f03fcd6))
+
 ## [2.31.1](https://github.com/myparcelnl/pdk/compare/v2.31.0...v2.31.1) (2023-11-23)
 
 
