@@ -58,7 +58,6 @@ jobs:
 
   release:
     runs-on: ubuntu-22.04
-    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
     needs:
       - test-unit
       - test-integration
@@ -93,6 +92,5 @@ jobs:
 
   rebase-prs:
     needs: release
-    if: ((always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true') && needs.release.outputs.released == 'true'
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit
