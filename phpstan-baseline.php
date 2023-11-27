@@ -29,12 +29,12 @@ $ignoreErrors[] = [
 $ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type MyParcelNL\\\\Pdk\\\\Settings\\\\Model\\\\Settings\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/Settings/Repository/AbstractSettingsRepository.php',
+	'path' => __DIR__ . '/src/Settings/Repository/AbstractPdkSettingsRepository.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^Variable \\$existing in PHPDoc tag @var does not match assigned variable \\$id\\.$#',
 	'count' => 1,
-	'path' => __DIR__ . '/src/Settings/Repository/AbstractSettingsRepository.php',
+	'path' => __DIR__ . '/src/Settings/Repository/AbstractPdkSettingsRepository.php',
 ];
 $ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type array\\.$#',
