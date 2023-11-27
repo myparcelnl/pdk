@@ -48,7 +48,9 @@ use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
 use MyParcelNL\Pdk\Platform\PlatformManager;
 use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
+use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
@@ -183,6 +185,13 @@ return [
      */
     PdkAccountRepositoryInterface::class       => factory(function () {
         return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
+    }),
+
+    /**
+     * @todo remove in v3.0.0
+     */
+    PdkSettingsRepositoryInterface::class      => factory(function () {
+        return \MyParcelNL\Pdk\Facade\Pdk::get(SettingsRepositoryInterface::class);
     }),
 
     /**

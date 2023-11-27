@@ -9,11 +9,11 @@ use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AbstractSettingsModel;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
-abstract class AbstractSettingsRepository extends Repository implements SettingsRepositoryInterface
+abstract class AbstractPdkSettingsRepository extends Repository implements PdkSettingsRepositoryInterface
 {
     /**
      * @param  string $namespace

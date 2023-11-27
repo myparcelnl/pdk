@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
@@ -22,14 +22,14 @@ class SettingsManager implements SettingsManagerInterface
     public const KEY_ALL = '*';
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface
      */
     protected $repository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository
      */
-    public function __construct(SettingsRepositoryInterface $repository)
+    public function __construct(PdkSettingsRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }

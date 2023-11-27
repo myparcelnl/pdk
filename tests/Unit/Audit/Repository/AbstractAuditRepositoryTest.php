@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Repository;
 
 use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
-use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Facade\Audits;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -17,16 +17,16 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('gets all audits', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAuditRepository $repository */
-    $repository = Pdk::get(AuditRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAuditRepository $repository */
+    $repository = Pdk::get(PdkAuditRepositoryInterface::class);
     $audits     = $repository->all();
 
     expect($audits)->toBeInstanceOf(AuditCollection::class);
 });
 
 it('stores an audit', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockAuditRepository $repository */
-    $repository = Pdk::get(AuditRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAuditRepository $repository */
+    $repository = Pdk::get(PdkAuditRepositoryInterface::class);
     $audit      = factory(Audit::class)
         ->withId('123')
         ->make();

@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Log\LoggerInterface;
@@ -38,8 +38,8 @@ usesShared(
 );
 
 it('performs a fresh install of the app, filling default values from platform and config', function () {
-    /** @var SettingsRepositoryInterface $settingsRepository */
-    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 
@@ -64,8 +64,8 @@ it('performs a fresh install of the app, filling default values from platform an
 });
 
 it('upgrades app to new version', function () {
-    /** @var SettingsRepositoryInterface $settingsRepository */
-    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 
@@ -92,8 +92,8 @@ it('upgrades app to new version', function () {
 });
 
 it('runs down migrations on uninstall', function () {
-    /** @var SettingsRepositoryInterface $settingsRepository */
-    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 
@@ -146,8 +146,8 @@ it('passes through arbitrary arguments', function ($_, array $result) {
 ]);
 
 it('does not install if version is equal', function () {
-    /** @var SettingsRepositoryInterface $settingsRepository */
-    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 
@@ -164,8 +164,8 @@ it('does not install if version is equal', function () {
 });
 
 it('does not uninstall if is not installed', function () {
-    /** @var SettingsRepositoryInterface $settingsRepository */
-    $settingsRepository  = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 

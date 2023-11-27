@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
 use function DI\value;
@@ -81,10 +81,10 @@ return [
      * Handles settings being saved and retrieved in your app.
      *
      * @note Required for plugin settings.
-     * @see  \MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository
+     * @see  \MyParcelNL\Pdk\Settings\Repository\AbstractPdkSettingsRepository
      */
 
-    SettingsRepositoryInterface::class => autowire(),
+    PdkSettingsRepositoryInterface::class => autowire(),
 
     /**
      * Handles conversion of your app's cart data to PDK cart data.

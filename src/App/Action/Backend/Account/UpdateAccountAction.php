@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,20 +37,20 @@ class UpdateAccountAction implements ActionInterface
     protected $pdkAccountRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface
      */
     protected $pdkSettingsRepository;
 
     /**
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository $carrierConfigurationRepository
      * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository       $carrierOptionsRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface         $pdkSettingsRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface      $pdkSettingsRepository
      * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface    $pdkAccountRepository
      */
     public function __construct(
         ShopCarrierConfigurationRepository $carrierConfigurationRepository,
         ShopCarrierOptionsRepository       $carrierOptionsRepository,
-        SettingsRepositoryInterface        $pdkSettingsRepository,
+        PdkSettingsRepositoryInterface     $pdkSettingsRepository,
         PdkAccountRepositoryInterface      $pdkAccountRepository
     ) {
         $this->carrierConfigurationRepository = $carrierConfigurationRepository;

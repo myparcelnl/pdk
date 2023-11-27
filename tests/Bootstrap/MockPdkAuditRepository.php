@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
-use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Model\Audit;
 
-class MockAuditRepository implements AuditRepositoryInterface
+class MockPdkAuditRepository implements PdkAuditRepositoryInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Audit\Collection\AuditCollection

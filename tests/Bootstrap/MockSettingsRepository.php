@@ -6,10 +6,10 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\App\Webhook\Service\AbstractPdkWebhookService;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Settings\Repository\AbstractSettingsRepository;
+use MyParcelNL\Pdk\Settings\Repository\AbstractPdkSettingsRepository;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 
-class MockSettingsRepository extends AbstractSettingsRepository
+class MockSettingsRepository extends AbstractPdkSettingsRepository
 {
     /**
      * @var array

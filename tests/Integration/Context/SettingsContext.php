@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Integration\Context;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -32,7 +32,7 @@ final class SettingsContext extends AbstractContext
     {
         parent::__construct($name, $data, $dataName);
 
-        $this->settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
+        $this->settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
 
         $this->onAfterScenario(function () {
             /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $accountRepository */

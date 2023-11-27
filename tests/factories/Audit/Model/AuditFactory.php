@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Audit\Model;
 
 use DateTime;
-use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
@@ -36,8 +36,8 @@ final class AuditFactory extends AbstractModelFactory
      */
     protected function save(Model $model): void
     {
-        /** @var \MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface $repository */
-        $repository = Pdk::get(AuditRepositoryInterface::class);
+        /** @var \MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface $repository */
+        $repository = Pdk::get(PdkAuditRepositoryInterface::class);
 
         $repository->store($model);
     }

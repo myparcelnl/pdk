@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -152,7 +152,7 @@ final class SettingsFactory extends AbstractModelFactory
     protected function save(Model $model): void
     {
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $repository */
-        $repository = Pdk::get(SettingsRepositoryInterface::class);
+        $repository = Pdk::get(PdkSettingsRepositoryInterface::class);
 
         $repository->storeAllSettings($model);
     }

@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
 abstract class AbstractSettingsModelFactory extends AbstractModelFactory
@@ -24,7 +24,7 @@ abstract class AbstractSettingsModelFactory extends AbstractModelFactory
      */
     protected function save(Model $model): void
     {
-        Pdk::get(SettingsRepositoryInterface::class)
+        Pdk::get(PdkSettingsRepositoryInterface::class)
             ->storeSettings($model);
     }
 }

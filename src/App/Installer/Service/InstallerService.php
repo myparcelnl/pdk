@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings as SettingsFacade;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
 class InstallerService implements InstallerServiceInterface
@@ -22,17 +22,17 @@ class InstallerService implements InstallerServiceInterface
     private $migrationService;
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface
      */
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface    $settingsRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface $migrationService
      */
     public function __construct(
-        SettingsRepositoryInterface $settingsRepository,
-        MigrationServiceInterface   $migrationService
+        PdkSettingsRepositoryInterface $settingsRepository,
+        MigrationServiceInterface      $migrationService
     ) {
         $this->settingsRepository = $settingsRepository;
         $this->migrationService   = $migrationService;

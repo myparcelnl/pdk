@@ -8,7 +8,7 @@ namespace MyParcelNL\Pdk\App\Audit\Concern;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
-use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAuditClass;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockFaultyAuditClass;
@@ -27,7 +27,7 @@ it('gets all audits for a model', function () {
 
     $mockAuditClass->addAudit(PdkBackendActions::EXPORT_ORDERS);
 
-    $auditRepository = Pdk::get(AuditRepositoryInterface::class);
+    $auditRepository = Pdk::get(PdkAuditRepositoryInterface::class);
     $audits          = $auditRepository->all();
 
     expect($audits)

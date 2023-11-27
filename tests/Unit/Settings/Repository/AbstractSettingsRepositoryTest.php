@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Settings\Repository;
 
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
@@ -19,7 +19,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(
     new UsesMockPdkInstance([
-        SettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
             AccountSettings::ID => [
                 AccountSettings::API_KEY => '1234567890',
             ],
@@ -40,16 +40,16 @@ usesShared(
 );
 
 it('retrieves all categories and fields', function () {
-    /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository */
-    $repository = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository */
+    $repository = Pdk::get(PdkSettingsRepositoryInterface::class);
     $settings   = $repository->all();
 
     assertMatchesJsonSnapshot(json_encode($settings->toArrayWithoutNull()));
 });
 
 it('retrieves a single setting from a category', function (string $key, $expected) {
-    /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $repository */
-    $repository        = Pdk::get(SettingsRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository */
+    $repository        = Pdk::get(PdkSettingsRepositoryInterface::class);
     $createSettingsKey = Pdk::get('createSettingsKey');
 
     expect($repository->get($createSettingsKey($key)))->toBe($expected);
@@ -60,7 +60,7 @@ it('retrieves a single setting from a category', function (string $key, $expecte
 
 it('updates settings', function () {
     /** @var MockSettingsRepository $repository */
-    $repository        = Pdk::get(SettingsRepositoryInterface::class);
+    $repository        = Pdk::get(PdkSettingsRepositoryInterface::class);
     $createSettingsKey = Pdk::get('createSettingsKey');
 
     $newLabelSettings = new LabelSettings([

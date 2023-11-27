@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
 use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 
-interface AuditRepositoryInterface extends RepositoryInterface
+interface PdkAuditRepositoryInterface extends RepositoryInterface
 {
     /**
      * Get all audits from the database.

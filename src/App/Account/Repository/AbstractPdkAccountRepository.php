@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use Throwable;
@@ -22,19 +22,19 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
     private $accountRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface
      */
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface             $storage
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository          $accountRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
+     * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface                $storage
+     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository             $accountRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      */
     public function __construct(
-        StorageInterface            $storage,
-        AccountRepository           $accountRepository,
-        SettingsRepositoryInterface $settingsRepository
+        StorageInterface               $storage,
+        AccountRepository              $accountRepository,
+        PdkSettingsRepositoryInterface $settingsRepository
     ) {
         parent::__construct($storage);
         $this->accountRepository  = $accountRepository;

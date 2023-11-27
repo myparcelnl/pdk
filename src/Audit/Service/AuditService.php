@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Audit\Service;
 
 use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
-use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
+use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 class AuditService implements AuditServiceInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface
+     * @var \MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface
      */
     private $auditRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface $auditRepository
+     * @param  \MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface $auditRepository
      */
-    public function __construct(AuditRepositoryInterface $auditRepository)
+    public function __construct(PdkAuditRepositoryInterface $auditRepository)
     {
         $this->auditRepository = $auditRepository;
     }

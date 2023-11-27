@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Settings;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 class UpdatePluginSettingsAction implements ActionInterface
 {
     /**
-     * @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface
+     * @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface
      */
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      */
-    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    public function __construct(PdkSettingsRepositoryInterface $settingsRepository)
     {
         $this->settingsRepository = $settingsRepository;
     }

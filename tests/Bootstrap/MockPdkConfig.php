@@ -23,8 +23,8 @@ use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
-use MyParcelNL\Pdk\Audit\Contract\AuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
+use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Service\AuditService;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
@@ -33,7 +33,7 @@ use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
@@ -78,7 +78,7 @@ class MockPdkConfig
 
             ApiServiceInterface::class                  => get(MockApiService::class),
             AuditServiceInterface::class                => get(AuditService::class),
-            AuditRepositoryInterface::class             => get(MockAuditRepository::class),
+            PdkAuditRepositoryInterface::class          => get(MockPdkAuditRepository::class),
             BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
             CarrierSchema::class                        => get(MockCarrierSchema::class),
             ClientAdapterInterface::class               => get(Guzzle7ClientAdapter::class),
@@ -102,7 +102,7 @@ class MockPdkConfig
             PdkWebhookManagerInterface::class           => get(MockPdkWebhookManager::class),
             PdkWebhookServiceInterface::class           => get(MockPdkWebhookService::class),
             PdkWebhooksRepositoryInterface::class       => get(MockPdkWebhooksRepository::class),
-            SettingsRepositoryInterface::class          => get(MockSettingsRepository::class),
+            PdkSettingsRepositoryInterface::class       => get(MockSettingsRepository::class),
             StorageInterface::class                     => get(MockMemoryCacheStorage::class),
             TaxServiceInterface::class                  => get(MockTaxService::class),
             ViewServiceInterface::class                 => get(MockViewService::class),

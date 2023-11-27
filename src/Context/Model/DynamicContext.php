@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\PrintOptionsView;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 
@@ -46,8 +46,8 @@ class DynamicContext extends Model
     {
         parent::__construct($data);
 
-        /** @var \MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface $settingsRepository */
-        $settingsRepository = Pdk::get(SettingsRepositoryInterface::class);
+        /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
+        $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
 
         $this->attributes['pluginSettings'] = $settingsRepository->all();
 
