@@ -24,6 +24,8 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\PdkWebhookManager;
+use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
+use MyParcelNL\Pdk\Audit\Service\AuditService;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
@@ -79,6 +81,11 @@ return [
      * Used to make requests to the MyParcel API.
      */
     ApiServiceInterface::class                 => autowire(MyParcelApiService::class),
+
+    /**
+     * Used to manage audit data.
+     */
+    AuditServiceInterface::class               => autowire(AuditService::class),
 
     /**
      * Retrieves carriers from the config.
