@@ -91,8 +91,7 @@ return [
     'digitalStampRanges' => value([
         ['min' => 0, 'max' => 20, 'average' => 15],
         ['min' => 20, 'max' => 50, 'average' => 35],
-        ['min' => 50, 'max' => 100, 'average' => 75],
-        ['min' => 100, 'max' => 350, 'average' => 225],
+        ['min' => 50, 'max' => 350, 'average' => 200],
         ['min' => 350, 'max' => 2000, 'average' => 1175],
     ]),
 ];
