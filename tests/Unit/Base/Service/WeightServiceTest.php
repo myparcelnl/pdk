@@ -56,9 +56,9 @@ it('converts weight to digital stamp range', function ($input, $expectation) {
     [21, 35],
     [49, 35],
     [50, 35],
-    [51, 75],
-    [100, 75],
-    [350, 225],
+    [51, 200],
+    [100, 200],
+    [350, 200],
     [351, 1175],
     [1000, 1175],
 ]);
