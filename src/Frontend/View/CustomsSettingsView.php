@@ -37,15 +37,11 @@ class CustomsSettingsView extends AbstractSettingsView
                 ['options' => $this->toSelectOptions(CustomsSettings::PACKAGE_CONTENTS_LIST)]
             ),
             new InteractiveElement(CustomsSettings::CUSTOMS_CODE, Components::INPUT_TEXT),
-
             new InteractiveElement(
                 CustomsSettings::COUNTRY_OF_ORIGIN,
                 Components::INPUT_SELECT,
                 [
-                    'options' => $this->toSelectOptions(
-                        $this->countryService->getAllTranslatable(),
-                        AbstractSettingsView::SELECT_INCLUDE_OPTION_NONE
-                    ),
+                    'options' => $this->toSelectOptions($this->countryService->getAllTranslatable()),
                     'sort'    => ElementBuilderWithOptionsInterface::SORT_ASC_VALUE,
                 ]
             ),
