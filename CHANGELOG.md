@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.4](https://github.com/myparcelnl/pdk/compare/v2.31.3...v2.31.4) (2023-12-04)
+
+
+### :bug: Bug Fixes
+
+* **settings:** disallow "none" in customs country of origin ([#241](https://github.com/myparcelnl/pdk/issues/241)) ([6376df6](https://github.com/myparcelnl/pdk/commit/6376df65aee339f1d11bba3e93d866df7e3ec392))
+
 ## [2.31.3](https://github.com/myparcelnl/pdk/compare/v2.31.2...v2.31.3) (2023-11-27)
 
 
