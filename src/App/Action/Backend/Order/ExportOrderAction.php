@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -62,7 +63,7 @@ class ExportOrderAction extends AbstractOrderAction
     public function handle(Request $request): Response
     {
         $originalOrders = $this->updateOrders($request);
-        $validOrders    = $this->validateOrders($originalOrders);
+        $validOrders    = $this->validateOrders($originalOrders, $request);
         $exportedOrders = $this->export($validOrders, $request);
 
         $this->saveOrders($exportedOrders, $originalOrders);
@@ -152,16 +153,22 @@ class ExportOrderAction extends AbstractOrderAction
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $orders
+     * @param  \Symfony\Component\HttpFoundation\Request               $request
      *
      * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection
      */
-    protected function validateOrders(PdkOrderCollection $orders): PdkOrderCollection
+    protected function validateOrders(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $orderService */
         $orderService = Pdk::get(PdkOrderOptionsServiceInterface::class);
+        $isAutomatic  = Audit::TYPE_AUTOMATIC === $request->get('actionType');
 
         return $orders
-            ->filter(function (PdkOrder $order) {
+            ->filter(function (PdkOrder $order) use ($isAutomatic) {
+                if (! $isAutomatic) {
+                    return true;
+                }
+
                 return ! $order->audits
                     ->automatic()
                     ->hasAction(PdkBackendActions::EXPORT_ORDERS);

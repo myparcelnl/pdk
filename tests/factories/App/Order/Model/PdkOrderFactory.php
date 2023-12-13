@@ -8,6 +8,8 @@ namespace MyParcelNL\Pdk\App\Order\Model;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
+use MyParcelNL\Pdk\Audit\Collection\AuditCollectionFactory;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\ContactDetailsFactory;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -29,6 +31,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @template T of PdkOrder
  * @method PdkOrder make()
  * @method $this withApiIdentifier(null|string $apiIdentifier)
+ * @method $this withAudits(null|AuditCollection|AuditCollectionFactory $audits)
  * @method $this withBillingAddress(array|ContactDetails|ContactDetailsFactory $billingAddress)
  * @method $this withCustomsDeclaration(array|CustomsDeclaration|CustomsDeclarationFactory $customsDeclaration)
  * @method $this withExported(bool $exported)
