@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.5](https://github.com/myparcelnl/pdk/compare/v2.31.4...v2.31.5) (2023-12-13)
+
+
+### :bug: Bug Fixes
+
+* **export:** fix multiple export of same order ([#244](https://github.com/myparcelnl/pdk/issues/244)) ([fda39cc](https://github.com/myparcelnl/pdk/commit/fda39cc4976f63b6416640066cae30bedc2048bc))
+
 ## [2.31.4](https://github.com/myparcelnl/pdk/compare/v2.31.3...v2.31.4) (2023-12-04)
 
 
