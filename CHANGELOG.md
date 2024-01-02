@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.0](https://github.com/myparcelnl/pdk/compare/v2.31.5...v2.32.0) (2024-01-02)
+
+
+### :sparkles: New Features
+
+* **config:** add new dpz range ([#243](https://github.com/myparcelnl/pdk/issues/243)) ([e72f31e](https://github.com/myparcelnl/pdk/commit/e72f31e8fb78eb8f61a12bce8594a50c2fb4c64c))
+
 ## [2.31.5](https://github.com/myparcelnl/pdk/compare/v2.31.4...v2.31.5) (2023-12-13)
 
 
