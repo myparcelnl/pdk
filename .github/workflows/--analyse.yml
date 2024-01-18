@@ -20,7 +20,7 @@ jobs:
           token: ${{ steps.credentials.outputs.token }}
 
       - name: 'Handle PHPStan cache'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: phpstan-cache
         with:
           path: './.cache/phpstan'
