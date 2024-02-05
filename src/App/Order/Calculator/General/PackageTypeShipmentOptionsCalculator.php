@@ -16,8 +16,16 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
 {
     public function calculate(): void
     {
-        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME === $this->order->deliveryOptions->packageType) {
+        $deliveryOptions = $this->order->deliveryOptions;
+
+        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME === $deliveryOptions->packageType) {
             return;
+        }
+
+        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $deliveryOptions->packageType) {
+            $this->order->deliveryOptions->shipmentOptions->tracked = TriStateService::ENABLED;
+        } else {
+            $this->order->deliveryOptions->shipmentOptions->tracked = TriStateService::DISABLED;
         }
 
         $this->order->deliveryOptions->shipmentOptions->fill([

@@ -14,7 +14,8 @@
         "onlyRecipient": -1,
         "return": -1,
         "sameDayDelivery": -1,
-        "signature": -1
+        "signature": -1,
+        "tracked": -1
       },
       "deliveryType": "standard",
       "packageType": "mailbox"
@@ -37,7 +38,8 @@
         "onlyRecipient": 1,
         "return": -1,
         "sameDayDelivery": -1,
-        "signature": 1
+        "signature": 1,
+        "tracked": -1
       },
       "deliveryType": "evening",
       "packageType": "package"
@@ -59,7 +61,8 @@
         "onlyRecipient": 1,
         "return": 1,
         "sameDayDelivery": -1,
-        "signature": 1
+        "signature": 1,
+        "tracked": -1
       },
       "deliveryType": "standard",
       "packageType": "package"

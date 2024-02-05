@@ -14,7 +14,7 @@
     {
       "name": "postnl",
       "capabilities": {
-        "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
+        "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
         "deliveryTypes": ["morning", "standard", "evening", "pickup"],
         "shipmentOptions": {
           "ageCheck": true,

@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -156,6 +157,14 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     public function canHaveSignature(): bool
     {
         return $this->canHaveOptionDef(SignatureDefinition::class, self::SHIPMENT_OPTIONS_KEY);
+    }
+
+    /**
+     * @return bool
+     */
+    public function canHaveTracked(): bool
+    {
+        return $this->canHaveOptionDef(TrackedDefinition::class, self::SHIPMENT_OPTIONS_KEY);
     }
 
     /**

@@ -34,6 +34,7 @@ it('calculates weight', function (
         ->withEmptyParcelWeight(200)
         ->withEmptyMailboxWeight(100)
         ->withEmptyDigitalStampWeight(50)
+        ->withEmptyPackageSmallWeight(75)
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -74,6 +75,12 @@ it('calculates weight', function (
                 'packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 'manualWeight' => 300,
                 'totalWeight'  => 300,
+            ],
+
+            'package small' => [
+                'packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                'manualWeight' => null,
+                'totalWeight'  => $orderLinesWeight + 75,
             ],
 
             'mailbox' => [

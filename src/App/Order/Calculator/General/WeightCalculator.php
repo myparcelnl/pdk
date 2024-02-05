@@ -35,6 +35,9 @@ final class WeightCalculator extends AbstractPdkOrderOptionCalculator
             case DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME:
                 return (int) Settings::get(OrderSettings::EMPTY_PARCEL_WEIGHT, OrderSettings::ID);
 
+            case DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME:
+                return (int) Settings::get(OrderSettings::EMPTY_PACKAGE_SMALL_WEIGHT, OrderSettings::ID);
+
             case DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME:
                 return (int) Settings::get(OrderSettings::EMPTY_MAILBOX_WEIGHT, OrderSettings::ID);
 

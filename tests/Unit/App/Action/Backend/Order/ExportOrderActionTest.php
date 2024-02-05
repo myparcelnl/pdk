@@ -79,9 +79,10 @@ it('exports order', function (
 
     $lastRequest = MockApi::ensureLastRequest();
 
+    $contents = $lastRequest->getBody()
+        ->getContents();
     assertMatchesJsonSnapshot(
-        $lastRequest->getBody()
-            ->getContents()
+        $contents
     );
 
     $content = json_decode($response->getContent(), true);

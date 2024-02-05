@@ -68,6 +68,7 @@ it('instantiates shipment options', function () {
             'return'           => true,
             'sameDayDelivery'  => true,
             'signature'        => true,
+            'tracked'          => true,
         ]);
 });
 

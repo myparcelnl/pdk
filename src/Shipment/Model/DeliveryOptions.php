@@ -80,27 +80,32 @@ class DeliveryOptions extends Model
     public const  PACKAGE_TYPE_MAILBOX_ID         = 2;
     public const  PACKAGE_TYPE_LETTER_ID          = 3;
     public const  PACKAGE_TYPE_DIGITAL_STAMP_ID   = 4;
+    public const  PACKAGE_TYPE_PACKAGE_SMALL_ID   = 5;
     public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
     public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
     public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
     public const  PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
+    public const  PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
     public const  PACKAGE_TYPES_IDS               = [
         self::PACKAGE_TYPE_PACKAGE_ID,
         self::PACKAGE_TYPE_MAILBOX_ID,
         self::PACKAGE_TYPE_LETTER_ID,
         self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_ID,
     ];
     public const  PACKAGE_TYPES_NAMES             = [
         self::PACKAGE_TYPE_PACKAGE_NAME,
         self::PACKAGE_TYPE_MAILBOX_NAME,
         self::PACKAGE_TYPE_LETTER_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
     ];
     public const  PACKAGE_TYPES_NAMES_IDS_MAP     = [
         self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE_ID,
         self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX_ID,
         self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER_ID,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL_ID,
     ];
     public const  DEFAULT_PACKAGE_TYPE_ID         = self::PACKAGE_TYPE_PACKAGE_ID;
     public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;

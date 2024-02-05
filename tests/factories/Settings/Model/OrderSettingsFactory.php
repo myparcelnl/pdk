@@ -14,6 +14,7 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @method $this withEmptyDigitalStampWeight(int $emptyDigitalStampWeight)
  * @method $this withEmptyMailboxWeight(int $emptyMailboxWeight)
  * @method $this withEmptyParcelWeight(int $emptyParcelWeight)
+ * @method $this withEmptyPackageSmallWeight(int $emptyPackageSmallWeight));
  * @method $this withExportWithAutomaticStatus(null|string $exportWithAutomaticStatus);
  * @method $this withOrderMode(bool $orderMode);
  * @method $this withOrderStatusMail(bool $orderStatusMail)

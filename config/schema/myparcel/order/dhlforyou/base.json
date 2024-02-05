@@ -27,6 +27,9 @@
             },
             "ageCheck": {
               "enum": [0]
+            },
+            "tracked": {
+              "enum": [-1, 1]
             }
           }
         }

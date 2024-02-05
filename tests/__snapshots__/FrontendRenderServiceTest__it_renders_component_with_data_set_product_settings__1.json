@@ -78,6 +78,10 @@
             {
               "value": "digital_stamp",
               "label": "package_type_digital_stamp"
+            },
+            {
+              "value": "package_small",
+              "label": "package_type_package_small"
             }
           ],
           "label": "settings_product_package_type",

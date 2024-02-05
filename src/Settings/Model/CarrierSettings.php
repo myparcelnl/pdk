@@ -100,6 +100,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
     public const EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
     public const EXPORT_SIGNATURE                        = 'exportSignature';
+    public const EXPORT_TRACKED                          = 'exportTracked';
     public const PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
     public const PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
     public const PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
@@ -110,6 +111,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
     public const PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
     public const PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
+    public const PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
     public const PRICE_SIGNATURE                         = 'priceSignature';
     public const SHOW_DELIVERY_DAY                       = 'showDeliveryDay';
 
