@@ -73,7 +73,7 @@ jobs:
           token: ${{ secrets.GH_REPO_TOKEN }}
 
       # TODO: Switch to v3 with app credentials when GitHub apps are allowed to bypass the merge queue. https://github.com/orgs/community/discussions/52652#discussioncomment-5647196
-      - uses: myparcelnl/actions/setup-git-credentials@v2
+      - uses: myparcelnl/actions/setup-git-credentials@v4
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
 
@@ -82,9 +82,9 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_REPO_TOKEN }}
 
-      - uses: myparcelnl/actions/yarn-install@v3
+      - uses: myparcelnl/actions/yarn-install@v4
 
-      - uses: myparcelnl/actions/semantic-release@v3
+      - uses: myparcelnl/actions/semantic-release@v4
         id: semantic-release
         with:
           token: ${{ secrets.GH_REPO_TOKEN }}
