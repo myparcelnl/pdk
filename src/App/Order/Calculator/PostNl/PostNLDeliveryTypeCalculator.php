@@ -27,7 +27,9 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
 
         switch ($this->order->deliveryOptions->deliveryType) {
             case DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME:
-                $deliveryOptions->shipmentOptions->signature = TriStateService::ENABLED;
+                $deliveryOptions->shipmentOptions->signature     = TriStateService::ENABLED;
+                $deliveryOptions->shipmentOptions->onlyRecipient = TriStateService::DISABLED;
+                $deliveryOptions->shipmentOptions->return        = TriStateService::DISABLED;
                 break;
 
             case DeliveryOptions::DELIVERY_TYPE_MORNING_NAME:
