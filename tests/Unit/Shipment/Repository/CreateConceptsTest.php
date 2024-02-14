@@ -98,6 +98,22 @@ it(
             );
         },
     ],
+    'subscription carrier'                        => [
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withSubscriptionId(1234)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+            );
+        },
+    ],
     'address with address1 and address2 combined' => [
         'input' => function () {
             return factory(ShipmentCollection::class)->push(

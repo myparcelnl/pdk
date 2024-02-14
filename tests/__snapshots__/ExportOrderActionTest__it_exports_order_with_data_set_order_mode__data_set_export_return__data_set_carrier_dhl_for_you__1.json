@@ -31,6 +31,7 @@
         ],
         "shipment": {
           "carrier": 9,
+          "contract_id": 1234,
           "customs_declaration": null,
           "drop_off_point": null,
           "options": {
