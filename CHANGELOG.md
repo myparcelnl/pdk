@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.1](https://github.com/myparcelnl/pdk/compare/v2.32.0...v2.32.1) (2024-02-15)
+
+
+### :bug: Bug Fixes
+
+* **calculator:** disable shipment options for postnl pickup ([#252](https://github.com/myparcelnl/pdk/issues/252)) ([3d66e83](https://github.com/myparcelnl/pdk/commit/3d66e834f6741a9697e457a66912dd5cf0eccb91))
+* **orders:** fix contract ids being ignored on export ([#253](https://github.com/myparcelnl/pdk/issues/253)) ([29e4bda](https://github.com/myparcelnl/pdk/commit/29e4bda2f7456b1e6821bc05842046d1e126abe4))
+
 ## [2.32.0](https://github.com/myparcelnl/pdk/compare/v2.31.5...v2.32.0) (2024-01-02)
 
 
