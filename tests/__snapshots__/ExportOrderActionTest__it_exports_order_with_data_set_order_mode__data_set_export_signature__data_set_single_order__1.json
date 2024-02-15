@@ -31,6 +31,7 @@
         ],
         "shipment": {
           "carrier": 1,
+          "contract_id": null,
           "customs_declaration": null,
           "drop_off_point": null,
           "options": {

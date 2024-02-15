@@ -3,6 +3,7 @@
     "shipments": [
       {
         "carrier": 9,
+        "contract_id": 1234,
         "general_settings": {
           "save_recipient_address": 0
         },

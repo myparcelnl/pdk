@@ -34,7 +34,11 @@ dataset('pdkOrdersDomestic', [
     'carrier dhl for you' => function () {
         return factory(PdkOrderCollection::class)->push(
             factory(PdkOrder::class)
-                ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME))
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)->withCarrier(
+                        sprintf('%s:1234', Carrier::CARRIER_DHL_FOR_YOU_NAME)
+                    )
+                )
         );
     },
 

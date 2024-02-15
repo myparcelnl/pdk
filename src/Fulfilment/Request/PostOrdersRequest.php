@@ -128,6 +128,7 @@ class PostOrdersRequest extends Request
 
         return [
             'carrier'             => $shipment->carrier,
+            'contract_id'         => $shipment->contractId ? (int) $shipment->contractId : null,
             'customs_declaration' => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'      => $shipment->dropOffPoint
                 ? $shipment->dropOffPoint->toArray(Arrayable::ENCODED)
