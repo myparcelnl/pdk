@@ -194,3 +194,19 @@ it('should do nothing for other carriers', function (string $carrierName) {
 })->with([
     Carrier::CARRIER_BPOST_NAME,
 ]);
+
+it('should disable return and only recipient when pickup is enabled', function () {
+    $result = [
+        ShipmentOptions::DIRECT_RETURN  => TriStateService::DISABLED,
+        ShipmentOptions::SIGNATURE      => TriStateService::ENABLED,
+        ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
+    ];
+
+    doTest(Carrier::CARRIER_POSTNL_NAME, function () {
+        return factory(PdkOrder::class)
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)
+                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+            );
+    }, factory(ShipmentOptions::class), $result);
+});
