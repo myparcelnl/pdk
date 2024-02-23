@@ -104,9 +104,9 @@ it('maps carriers correctly', function () {
             'ups',
             'dhlforyou',
             'postnl',
-            'postnl:8123',
+            'postnl:23991',
             'dhlparcelconnect',
             'dhleuroplus',
-            'dhlforyou:677',
+            'dhlforyou:12424',
         ]);
 });
