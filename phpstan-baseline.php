@@ -27,6 +27,11 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Base/Support/Arr.php',
 ];
 $ignoreErrors[] = [
+	'message' => '#^PHPDoc tag @mixin contains invalid type MyParcelNL\\\\Pdk\\\\Carrier\\\\Concern\\\\HasDeprecatedSubscriptionId\\.$#',
+	'count' => 1,
+	'path' => __DIR__ . '/src/Carrier/Model/Carrier.php',
+];
+$ignoreErrors[] = [
 	'message' => '#^PHPDoc tag @return with type void is incompatible with native type MyParcelNL\\\\Pdk\\\\Settings\\\\Model\\\\Settings\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Settings/Repository/AbstractPdkSettingsRepository.php',
