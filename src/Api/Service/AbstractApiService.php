@@ -87,7 +87,11 @@ abstract class AbstractApiService implements ApiServiceInterface
             throw new ApiException($response);
         }
 
-        Logger::debug('Received response from MyParcel', compact('response'));
+        $body = $responseObject->getBody();
+
+        Logger::debug('Received response from MyParcel', [
+            'response' => $body ? json_decode($body, true) : null,
+        ]);
 
         return $responseObject;
     }
