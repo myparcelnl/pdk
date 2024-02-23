@@ -47,16 +47,16 @@ it('generates external identifier', function (array $input, string $identifier) 
         'identifier' => Carrier::CARRIER_BPOST_NAME,
     ],
 
-    'name and subscriptionId' => [
+    'name and contractId' => [
         'input'      => [
-            'name'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-            'subscriptionId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
+            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+            'contractId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
         ],
         'identifier' => DHL_FOR_YOU_CUSTOM_IDENTIFIER,
     ],
 ]);
 
-it('determines type based on subscription id', function (array $input, string $type) {
+it('determines type based on contract id', function (array $input, string $type) {
     $carrier = new Carrier($input);
 
     expect($carrier->type)->toBe($type);
@@ -68,10 +68,10 @@ it('determines type based on subscription id', function (array $input, string $t
         'type'  => Carrier::TYPE_MAIN,
     ],
 
-    'name and subscriptionId' => [
+    'name and contractId' => [
         'input' => [
-            'name'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-            'subscriptionId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
+            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+            'contractId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
         ],
         'type'  => Carrier::TYPE_CUSTOM,
     ],
@@ -97,15 +97,15 @@ it('generates the same data with either name or id', function (array $values, ar
             Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
             Carrier::CARRIER_POSTNL_NAME,
         ], function (array $carry, string $name) {
-            $id             = Carrier::CARRIER_NAME_ID_MAP[$name];
-            $subscriptionId = 124230;
+            $id         = Carrier::CARRIER_NAME_ID_MAP[$name];
+            $contractId = 124230;
 
             $carry[$name] = [
                 [
                     'id'                 => $id,
                     'name'               => $name,
-                    'subscriptionId'     => $subscriptionId,
-                    'externalIdentifier' => "$name:$subscriptionId",
+                    'contractId'         => $contractId,
+                    'externalIdentifier' => "$name:$contractId",
                 ],
             ];
 
@@ -113,9 +113,9 @@ it('generates the same data with either name or id', function (array $values, ar
         }, [])
     )
     ->with([
-        'id and name'                 => [[['id'], ['name']]],
-        'id, name and subscriptionId' => [[['id', 'subscriptionId'], ['name', 'subscriptionId']]],
-        'external identifier'         => [[['externalIdentifier'], ['externalIdentifier']]],
+        'id and name'             => [[['id'], ['name']]],
+        'id, name and contractId' => [[['id', 'contractId'], ['name', 'contractId']]],
+        'external identifier'     => [[['externalIdentifier'], ['externalIdentifier']]],
     ]);
 
 it('instantiates carriers from name', function (string $platform) {

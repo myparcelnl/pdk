@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Facade\Platform;
  * @property null|int                 $id
  * @property null|string              $name
  * @property null|string              $human
- * @property null|int                 $subscriptionId
+ * @property null|int                 $contractId
  * @property bool                     $enabled
  * @property bool                     $primary
  * @property bool                     $isDefault
@@ -23,6 +23,7 @@ use MyParcelNL\Pdk\Facade\Platform;
  * @property null|string              $type
  * @property null|CarrierCapabilities $capabilities
  * @property null|CarrierCapabilities $returnCapabilities
+ * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
  */
 class Carrier extends Model
 {
@@ -75,7 +76,7 @@ class Carrier extends Model
         'id'                 => null,
         'name'               => null,
         'human'              => null,
-        'subscriptionId'     => null,
+        'contractId'         => null,
         'enabled'            => true,
         'isDefault'          => true,
         'label'              => null,
@@ -91,7 +92,7 @@ class Carrier extends Model
         'id'                 => 'int',
         'name'               => 'string',
         'human'              => 'string',
-        'subscriptionId'     => 'string',
+        'contractId'         => 'string',
         'enabled'            => 'bool',
         'isDefault'          => 'bool',
         'label'              => 'string',
@@ -100,6 +101,13 @@ class Carrier extends Model
         'type'               => 'string',
         'capabilities'       => CarrierCapabilities::class,
         'returnCapabilities' => CarrierCapabilities::class,
+    ];
+
+    /**
+     * @todo remove in v3.0.0
+     */
+    protected $deprecated = [
+        'subscriptionId' => 'contractId',
     ];
 
     /**
@@ -113,8 +121,8 @@ class Carrier extends Model
         if (isset($data['externalIdentifier']) && ! isset($data['name'], $data['id'])) {
             $parts = explode(':', $data['externalIdentifier']);
 
-            $data['name']           = $parts[0] ?? null;
-            $data['subscriptionId'] = $parts[1] ?? null;
+            $data['name']       = $parts[0] ?? null;
+            $data['contractId'] = $parts[1] ?? null;
         }
 
         if (! isset($data['name'], $data['id'])) {
@@ -139,8 +147,8 @@ class Carrier extends Model
     {
         $identifier = $this->name;
 
-        if ($this->subscriptionId) {
-            $identifier .= ":$this->subscriptionId";
+        if ($this->contractId) {
+            $identifier .= ":$this->contractId";
         }
 
         return $identifier ?: '?';
@@ -161,7 +169,7 @@ class Carrier extends Model
      */
     public function getTypeAttribute(): string
     {
-        return $this->subscriptionId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
+        return $this->contractId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
     }
 
     /**

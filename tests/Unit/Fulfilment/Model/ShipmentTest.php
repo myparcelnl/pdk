@@ -29,8 +29,8 @@ it('creates fulfilment shipment from pdk shipment', function (array $input) {
                 ],
             ],
             'carrier'            => [
-                'id'             => 1,
-                'subscriptionId' => '1234567890',
+                'id'         => 1,
+                'contractId' => '1234567890',
             ],
             'customsDeclaration' => [
                 'contents' => '00',

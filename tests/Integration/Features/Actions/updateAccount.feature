@@ -17,7 +17,7 @@ Feature: As a user I want to be able to update my account settings
       | data.context.0.dynamic.carriers.4.human            | DHL For You    |
       | data.context.0.dynamic.carriers.4.id               | 9              |
       | data.context.0.dynamic.carriers.4.name             | dhlforyou      |
-      | data.context.0.dynamic.carriers.4.subscriptionId   | 12424          |
+      | data.context.0.dynamic.carriers.4.contractId       | 12424          |
       | data.context.0.dynamic.carriers.4.type             | custom         |
       | data.context.0.pluginSettingsView                  | ARRAY,FILLED   |
       | data.context.0.pluginSettingsView.carrier.children | ARRAY,LENGTH:7 |

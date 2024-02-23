@@ -23,7 +23,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withOptional(bool $optional)
  * @method $this withPrimary(bool $primary)
  * @method $this withReturnCapabilities(array|CarrierCapabilities|CarrierCapabilitiesFactory $returnCapabilities)
- * @method $this withSubscriptionId(int $subscriptionId)
+ * @method $this withContractId(int $contractId)
  * @method $this withType(string $type)
  */
 final class CarrierFactory extends AbstractModelFactory

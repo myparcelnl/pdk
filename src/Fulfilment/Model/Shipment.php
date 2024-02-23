@@ -72,7 +72,7 @@ class Shipment extends Model
         return new self([
             'orderId'            => $pdkShipment->orderId,
             'carrier'            => $pdkShipment->carrier->id,
-            'contractId'         => $pdkShipment->carrier->subscriptionId,
+            'contractId'         => $pdkShipment->carrier->contractId,
             'customsDeclaration' => $pdkShipment->customsDeclaration,
             'options'            => ShipmentOptions::fromPdkDeliveryOptions($pdkShipment->deliveryOptions),
             'pickup'             => $pdkShipment->deliveryOptions->pickupLocation ?? null,

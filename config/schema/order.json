@@ -34,7 +34,7 @@
             "name": {
               "type": "string"
             },
-            "subscriptionId": {
+            "contractId": {
               "type": ["string", "null"]
             }
           }
