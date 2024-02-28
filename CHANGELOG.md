@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.32.2](https://github.com/myparcelnl/pdk/compare/v2.32.1...v2.32.2) (2024-02-28)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** use correct subscription id ([#257](https://github.com/myparcelnl/pdk/issues/257)) ([3662c06](https://github.com/myparcelnl/pdk/commit/3662c067854c55b501c5cadaa1015242aa7593c6))
+* **logging:** log successful response bodies ([#256](https://github.com/myparcelnl/pdk/issues/256)) ([32e0f3c](https://github.com/myparcelnl/pdk/commit/32e0f3cfcafce53e73628ad5157b19dfca65e5d2))
+
 ## [2.32.1](https://github.com/myparcelnl/pdk/compare/v2.32.0...v2.32.1) (2024-02-15)
 
 
