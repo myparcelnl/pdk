@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Account\Response;
 
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 class GetShopCarrierOptionsResponse extends ApiResponseWithBody
 {
@@ -34,9 +35,11 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
 
         $this->options = new CarrierCollection(
             array_map(static function (array $option) {
+                $subscriptionId = Carrier::TYPE_CUSTOM === $option['type'] ? $option['id'] ?? null : null;
+
                 return [
                     'id'             => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
-                    'subscriptionId' => $option['subscription_id'] ?? null,
+                    'subscriptionId' => $subscriptionId,
                     'enabled'        => $option['enabled'] ?? null,
                     'label'          => $option['label'] ?? null,
                     'optional'       => $option['optional'] ?? null,
