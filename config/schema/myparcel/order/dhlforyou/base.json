@@ -29,7 +29,7 @@
               "enum": [0]
             },
             "tracked": {
-              "enum": [-1, 1]
+              "enum": [-1, 0, 1, null]
             }
           }
         }

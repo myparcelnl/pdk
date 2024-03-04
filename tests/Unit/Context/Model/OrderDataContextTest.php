@@ -105,7 +105,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                     // Enabled by carrier
                     ShipmentOptions::SIGNATURE         => TriStateService::ENABLED,
-                    ShipmentOptions::TRACKED           => TriStateService::INHERIT,
+                    ShipmentOptions::TRACKED           => TriStateService::ENABLED,
                 ],
             ],
             'dhlforyou:12345' => [
@@ -123,7 +123,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                     ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
-                    ShipmentOptions::TRACKED           => TriStateService::INHERIT,
+                    ShipmentOptions::TRACKED           => TriStateService::ENABLED,
                 ],
             ],
         ]);
