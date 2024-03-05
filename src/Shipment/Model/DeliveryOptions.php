@@ -80,7 +80,7 @@ class DeliveryOptions extends Model
     public const  PACKAGE_TYPE_MAILBOX_ID         = 2;
     public const  PACKAGE_TYPE_LETTER_ID          = 3;
     public const  PACKAGE_TYPE_DIGITAL_STAMP_ID   = 4;
-    public const  PACKAGE_TYPE_PACKAGE_SMALL_ID   = 5;
+    public const  PACKAGE_TYPE_PACKAGE_SMALL_ID   = 6;
     public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
     public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
     public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
