@@ -1,7 +1,0 @@
-{
-  "0.property": "deliveryOptions.shipmentOptions",
-  "0.pointer": "/deliveryOptions/shipmentOptions",
-  "0.message": "The property tracked is not defined and the definition does not allow additional properties",
-  "0.constraint": "additionalProp",
-  "0.context": 1
-}
