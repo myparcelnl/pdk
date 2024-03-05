@@ -74,4 +74,12 @@ it('calculates package type', function (string $platform, array $options, string
             ],
             'result'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
         ],
+
+        'non-local country, package type package small' => [
+            'options' => [
+                'cc'          => CountryCodes::CC_GB,
+                'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+            ],
+            'result'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+        ],
     ]);

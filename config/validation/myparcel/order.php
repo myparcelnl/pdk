@@ -101,6 +101,11 @@ return [
                             'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                             'schema' => 'order/postnl/letter',
                         ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                            'schema' => 'order/postnl/row_package_small',
+                        ],
                     ],
                 ],
                 [
@@ -116,6 +121,11 @@ return [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                             'schema' => 'order/postnl/letter',
+                        ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                            'schema' => 'order/postnl/row_package_small',
                         ],
                     ],
                 ],

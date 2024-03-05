@@ -460,6 +460,13 @@ class CarrierSettingsItemView extends AbstractSettingsView
             new InteractiveElement(CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD, Components::INPUT_CURRENCY),
         ];
 
+        if (in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $allowedPackageTypes, true)) {
+            $fields[] = new InteractiveElement(
+                CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL,
+                Components::INPUT_CURRENCY
+            );
+        }
+
         if (in_array(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, $allowedPackageTypes, true)) {
             $fields[] = new InteractiveElement(
                 CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,

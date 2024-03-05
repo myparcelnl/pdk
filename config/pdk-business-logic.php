@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
@@ -40,6 +41,7 @@ return [
     'packageTypeWeightLimits'   => value([
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => 2000,
         DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => 2000,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME => 2000,
     ]),
     'minimumWeight'             => value(1),
 
@@ -70,6 +72,7 @@ return [
             new OnlyRecipientDefinition(),
             new SameDayDeliveryDefinition(),
             new SignatureDefinition(),
+            new TrackedDefinition(),
         ];
     }),
 

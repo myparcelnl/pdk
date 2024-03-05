@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -124,6 +125,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveSignature(): bool
     {
         return $this->canHave(SignatureDefinition::class);
+    }
+
+    public function canHaveTracked(): bool
+    {
+        return $this->canHave(TrackedDefinition::class);
     }
 
     public function canHaveWeight(?int $weight): bool

@@ -37,6 +37,10 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
+        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $this->order->deliveryOptions->packageType) {
+            return;
+        }
+
         $this->order->deliveryOptions->packageType = DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
     }
 }

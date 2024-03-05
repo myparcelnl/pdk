@@ -283,6 +283,12 @@
       "description": "settings_order_empty_parcel_weight_description"
     },
     {
+      "name": "emptyPackageSmallWeight",
+      "$component": "NumberInput",
+      "label": "settings_order_empty_package_small_weight",
+      "description": "settings_order_empty_package_small_weight_description"
+    },
+    {
       "name": "emptyMailboxWeight",
       "$component": "NumberInput",
       "label": "settings_order_empty_mailbox_weight",

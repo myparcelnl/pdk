@@ -16,7 +16,9 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
 {
     public function calculate(): void
     {
-        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME === $this->order->deliveryOptions->packageType) {
+        $deliveryOptions = $this->order->deliveryOptions;
+
+        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME === $deliveryOptions->packageType) {
             return;
         }
 
@@ -28,6 +30,8 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
+            ShipmentOptions::TRACKED           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $deliveryOptions->packageType
+                ? TriStateService::ENABLED : TriStateService::DISABLED,
         ]);
     }
 }

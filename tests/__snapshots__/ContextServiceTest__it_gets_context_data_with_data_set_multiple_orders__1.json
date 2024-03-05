@@ -19,7 +19,7 @@
               "labelDescriptionLength": 45,
               "multiCollo": true
             },
-            "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
             "shipmentOptions": {
               "ageCheck": true,
               "largeFormat": true,
@@ -60,7 +60,8 @@
           "onlyRecipient": -1,
           "return": -1,
           "sameDayDelivery": -1,
-          "signature": -1
+          "signature": -1,
+          "tracked": -1
         },
         "deliveryType": "standard",
         "packageType": "package"
@@ -126,7 +127,7 @@
               "labelDescriptionLength": 45,
               "multiCollo": true
             },
-            "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
             "shipmentOptions": {
               "ageCheck": true,
               "largeFormat": true,
@@ -167,7 +168,8 @@
           "onlyRecipient": -1,
           "return": -1,
           "sameDayDelivery": -1,
-          "signature": -1
+          "signature": -1,
+          "tracked": -1
         },
         "deliveryType": "standard",
         "packageType": "package"

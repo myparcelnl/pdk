@@ -36,6 +36,7 @@ class ProductSettings extends AbstractSettingsModel
     public const EXPORT_ONLY_RECIPIENT    = 'exportOnlyRecipient';
     public const EXPORT_RETURN            = 'exportReturn';
     public const EXPORT_SIGNATURE         = 'exportSignature';
+    public const EXPORT_TRACKED           = 'exportTracked';
     public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
     public const FIT_IN_MAILBOX           = 'fitInMailbox';
     public const PACKAGE_TYPE             = 'packageType';

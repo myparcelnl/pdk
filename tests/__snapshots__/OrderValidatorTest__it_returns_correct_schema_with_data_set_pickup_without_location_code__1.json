@@ -158,6 +158,9 @@
             },
             "signature": {
               "enum": [0, 1]
+            },
+            "tracked": {
+              "enum": [-1, 0, 1, null]
             }
           }
         }

@@ -30,6 +30,7 @@ return [
                     DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                     DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                     DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,

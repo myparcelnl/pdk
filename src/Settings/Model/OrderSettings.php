@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int         $emptyDigitalStampWeight
  * @property int         $emptyMailboxWeight
  * @property int         $emptyParcelWeight
+ * @property int         $emptyPackageSmallWeight
  * @property bool        $orderMode
  * @property int|bool    $orderStatusMail
  * @property bool        $processDirectly
@@ -41,6 +42,7 @@ final class OrderSettings extends AbstractSettingsModel
     public const EMPTY_DIGITAL_STAMP_WEIGHT = 'emptyDigitalStampWeight';
     public const EMPTY_MAILBOX_WEIGHT       = 'emptyMailboxWeight';
     public const EMPTY_PARCEL_WEIGHT        = 'emptyParcelWeight';
+    public const EMPTY_PACKAGE_SMALL_WEIGHT = 'emptyPackageSmallWeight';
     public const ORDER_MODE                 = 'orderMode';
     public const PROCESS_DIRECTLY           = 'processDirectly';
     public const SAVE_CUSTOMER_ADDRESS      = 'saveCustomerAddress';
@@ -62,6 +64,7 @@ final class OrderSettings extends AbstractSettingsModel
         self::EMPTY_DIGITAL_STAMP_WEIGHT => 0,
         self::EMPTY_MAILBOX_WEIGHT       => 0,
         self::EMPTY_PARCEL_WEIGHT        => 0,
+        self::EMPTY_PACKAGE_SMALL_WEIGHT => 0,
         self::ORDER_MODE                 => false,
         self::PROCESS_DIRECTLY           => Settings::OPTION_NONE,
         self::SAVE_CUSTOMER_ADDRESS      => false,
@@ -82,6 +85,7 @@ final class OrderSettings extends AbstractSettingsModel
         self::EMPTY_DIGITAL_STAMP_WEIGHT => 'int',
         self::EMPTY_MAILBOX_WEIGHT       => 'int',
         self::EMPTY_PARCEL_WEIGHT        => 'int',
+        self::EMPTY_PACKAGE_SMALL_WEIGHT => 'int',
         self::ORDER_MODE                 => 'bool',
         self::PROCESS_DIRECTLY           => 'string',
         self::SAVE_CUSTOMER_ADDRESS      => 'bool',

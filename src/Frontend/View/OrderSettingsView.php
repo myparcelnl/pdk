@@ -75,6 +75,7 @@ final class OrderSettingsView extends NewAbstractSettingsView
             new SettingsDivider($this->label('weight')),
 
             (new NumberInput(OrderSettings::EMPTY_PARCEL_WEIGHT))->withProp('min', 0),
+            (new NumberInput(OrderSettings::EMPTY_PACKAGE_SMALL_WEIGHT))->withProp('min', 0),
             (new NumberInput(OrderSettings::EMPTY_MAILBOX_WEIGHT))->withProp('min', 0),
             (new NumberInput(OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT))->withProp('min', 0),
 
