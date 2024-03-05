@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.33.0](https://github.com/myparcelnl/pdk/compare/v2.32.2...v2.33.0) (2024-03-05)
+
+
+### :sparkles: New Features
+
+* add package type package small ([#249](https://github.com/myparcelnl/pdk/issues/249)) ([37c6dc8](https://github.com/myparcelnl/pdk/commit/37c6dc817758880825b7ab95729a77583ff0a257))
+
 ## [2.32.2](https://github.com/myparcelnl/pdk/compare/v2.32.1...v2.32.2) (2024-02-28)
 
 
