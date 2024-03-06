@@ -75,7 +75,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
                 }, true);
 
                 return $aIndex === $bIndex
-                    ? $carrierA->subscriptionId <=> $carrierB->subscriptionId
+                    ? $carrierA->contractId <=> $carrierB->contractId
                     : $aIndex <=> $bIndex;
             })
             ->values();

@@ -31,7 +31,7 @@ function setup(): void
                 factory(Carrier::class)->fromPostNL(),
                 factory(Carrier::class)
                     ->fromDhlForYou()
-                    ->withSubscriptionId(12345)
+                    ->withContractId(12345)
             )
         )
         ->store();

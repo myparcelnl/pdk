@@ -35,16 +35,16 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
 
         $this->options = new CarrierCollection(
             array_map(static function (array $option) {
-                $subscriptionId = Carrier::TYPE_CUSTOM === $option['type'] ? $option['id'] ?? null : null;
+                $contractId = Carrier::TYPE_CUSTOM === $option['type'] ? $option['id'] ?? null : null;
 
                 return [
-                    'id'             => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
-                    'subscriptionId' => $subscriptionId,
-                    'enabled'        => $option['enabled'] ?? null,
-                    'label'          => $option['label'] ?? null,
-                    'optional'       => $option['optional'] ?? null,
-                    'primary'        => $option['primary'] ?? null,
-                    'type'           => $option['type'] ?? null,
+                    'id'         => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
+                    'contractId' => $contractId,
+                    'enabled'    => $option['enabled'] ?? null,
+                    'label'      => $option['label'] ?? null,
+                    'optional'   => $option['optional'] ?? null,
+                    'primary'    => $option['primary'] ?? null,
+                    'type'       => $option['type'] ?? null,
                 ];
             }, $options)
         );

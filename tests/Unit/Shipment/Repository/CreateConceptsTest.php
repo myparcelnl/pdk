@@ -105,7 +105,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withSubscriptionId(1234)
+                            ->withContractId(1234)
                             ->withCapabilities(
                                 factory(CarrierCapabilities::class)->withEverything()
                             )
