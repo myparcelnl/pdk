@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
