@@ -211,21 +211,27 @@ it('should disable return and only recipient when pickup is enabled', function (
     }, factory(ShipmentOptions::class), $result);
 });
 
-it('should enable tracked for postnl small package order', function () {
-    $orderFactory = factory(PdkOrder::class)
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME)
-        );
+it(
+    'should enable tracked for postnl small package order outside of the netherlands',
+    function (string $countryCode, bool $expected) {
+        $orderFactory = factory(PdkOrder::class)
+            ->withShippingAddress(factory(ShippingAddress::class)->withCc($countryCode))
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)
+                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                    ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME)
+            );
 
-    $order = $orderFactory->make();
+        $order = $orderFactory->make();
 
-    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
-    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
-    $newOrder = $service->calculate($order);
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+        $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+        $newOrder = $service->calculate($order);
 
-    $options = $newOrder->deliveryOptions->shipmentOptions->toArray();
+        $options = $newOrder->deliveryOptions->shipmentOptions->toArray();
 
-    expect($options)->toHaveKeysAndValues([ShipmentOptions::TRACKED => TriStateService::ENABLED]);
-});
+        expect($options)->toHaveKeysAndValues([
+            ShipmentOptions::TRACKED => $expected ? TriStateService::ENABLED : TriStateService::DISABLED,
+        ]);
+    }
+)->with([['cc' => 'NL', 'expected' => false], ['cc' => 'BE', 'expected' => true], ['cc' => 'DE', 'expected' => true]]);

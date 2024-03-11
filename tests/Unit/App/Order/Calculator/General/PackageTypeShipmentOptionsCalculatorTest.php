@@ -50,29 +50,3 @@ it(
         $reset();
     }
 )->with('carrierNames');
-
-it(
-    'allows tracked only for international package small',
-    function (string $countryCode, bool $expected) {
-        $reset = mockPdkProperty('orderCalculators', [PackageTypeShipmentOptionsCalculator::class]);
-
-        $order = factory(PdkOrder::class)
-            ->withShippingAddress(factory(ShippingAddress::class)->withCc($countryCode))
-            ->withDeliveryOptions(
-                factory(DeliveryOptions::class)
-                    ->withCarrier('postnl')
-                    ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME)
-            )
-            ->make();
-
-        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
-        $service  = Pdk::get(PdkOrderOptionsService::class);
-        $newOrder = $service->calculate($order);
-
-        expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toHaveKeysAndValues([
-            ShipmentOptions::TRACKED => $expected ? TriStateService::ENABLED : TriStateService::DISABLED,
-        ]);
-
-        $reset();
-    }
-)->with([['cc' => 'NL' ,'expected'=> false], ['cc' => 'BE', 'expected' => true], ['cc' => 'DE', 'expected' => true]]);
