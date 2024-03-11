@@ -25,7 +25,7 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
 
         $tracked = TriStateService::DISABLED;
 
-        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $deliveryOptions->packageType && $this->order->shippingAddress->cc === CountryCodes::CC_NL) {
+        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $deliveryOptions->packageType && $this->order->shippingAddress->cc !== CountryCodes::CC_NL) {
             $tracked = TriStateService::ENABLED;
         }
 
