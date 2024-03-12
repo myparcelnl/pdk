@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.33.1](https://github.com/myparcelnl/pdk/compare/v2.33.0...v2.33.1) (2024-03-12)
+
+
+### :bug: Bug Fixes
+
+* disable tracked for nl small packages ([#259](https://github.com/myparcelnl/pdk/issues/259)) ([e07bf35](https://github.com/myparcelnl/pdk/commit/e07bf35ab35c668875379226cd46aa2fc90c7ae5))
+
 ## [2.33.0](https://github.com/myparcelnl/pdk/compare/v2.32.2...v2.33.0) (2024-03-05)
 
 
