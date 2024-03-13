@@ -34,44 +34,5 @@
         }
       }
     }
-  },
-  "anyOf": [
-    {
-      "properties": {
-        "deliveryOptions": {
-          "properties": {
-            "shipmentOptions": {
-              "required": ["insurance"],
-              "properties": {
-                "insurance": {
-                  "enum": [0, 5000]
-                },
-                "signature": {
-                  "enum": [1]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "properties": {
-        "deliveryOptions": {
-          "properties": {
-            "shipmentOptions": {
-              "properties": {
-                "insurance": {
-                  "enum": [0, null]
-                },
-                "signature": {
-                  "enum": [0]
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  ]
+  }
 }
