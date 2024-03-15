@@ -10,7 +10,7 @@ runs:
   using: composite
   steps:
     - name: 'Handle composer cache'
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           $HOME/.composer
@@ -22,7 +22,7 @@ runs:
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
-    - uses: myparcelnl/actions/pull-docker-image@v3
+    - uses: myparcelnl/actions/pull-docker-image@v4
       with:
         image: 'ghcr.io/myparcelnl/php-xd:${{ inputs.php-version }}-cli-alpine'
 

@@ -66,28 +66,25 @@ jobs:
     outputs:
       released: ${{ steps.semantic-release.outputs.released }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: myparcelnl/actions/setup-git-credentials@v4
+        id: credentials
         with:
-          fetch-depth: 0
-          persist-credentials: false
-          token: ${{ secrets.GH_REPO_TOKEN }}
-
-      # TODO: Switch to v3 with app credentials when GitHub apps are allowed to bypass the merge queue. https://github.com/orgs/community/discussions/52652#discussioncomment-5647196
-      - uses: myparcelnl/actions/setup-git-credentials@v2
-        with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
 
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
 
-      - uses: myparcelnl/actions/yarn-install@v3
+      - uses: myparcelnl/actions/yarn-install@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
 
-      - uses: myparcelnl/actions/semantic-release@v3
+      - uses: myparcelnl/actions/semantic-release@v4
         id: semantic-release
         with:
-          token: ${{ secrets.GH_REPO_TOKEN }}
+          token: ${{ steps.credentials.outputs.token }}
           write-summary: true
 
   rebase-prs:

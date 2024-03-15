@@ -7,9 +7,7 @@ jobs:
   analyse:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: myparcelnl/actions/setup-git-credentials@v3
+      - uses: myparcelnl/actions/setup-git-credentials@v4
         id: credentials
         with:
           app-id: ${{ secrets.MYPARCEL_APP_ID }}
@@ -20,7 +18,7 @@ jobs:
           token: ${{ steps.credentials.outputs.token }}
 
       - name: 'Handle PHPStan cache'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: phpstan-cache
         with:
           path: './.cache/phpstan'
