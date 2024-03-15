@@ -162,11 +162,18 @@ it('runs down migrations on uninstall', function () {
         'order.emptyMailboxWeight' => 100,
 
         /**
-         * Expect 1.1.0 migration to not have been reversed (as it's only in the upgrade migrations)
+         * Expect 1.1.0 migration to have been reversed
          *
          * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110
          */
-        'label.description'        => null,
+        'label.description'        => 'old-description',
+
+        /**
+         * Expect 1.2.0 migration to have been reversed
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120
+         */
+        'order.barcodeInNoteTitle' => 'old-barcode-in-note',
     ]);
 });
 

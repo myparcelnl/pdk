@@ -164,10 +164,10 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * @template-covariant T of \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface
+     * @template T of \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface
      * @param  array<T> $migrations
      *
-     * @return \MyParcelNL\Pdk\Base\Support\Collection<T>
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
      */
     private function createMigrationCollection(array $migrations): Collection
     {
@@ -230,6 +230,7 @@ class InstallerService implements InstallerServiceInterface
 
     private function migrateUninstall(): void
     {
+        $this->migrateDown();
         $this->runDownMigrations($this->getInstallationMigrations());
     }
 
