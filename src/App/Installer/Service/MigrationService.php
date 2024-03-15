@@ -15,24 +15,6 @@ class MigrationService implements MigrationServiceInterface
      */
     public function all(): array
     {
-        return $this->getUpgradeMigrations();
-    }
-
-    /**
-     * @return class-string<\MyParcelNL\Pdk\App\Installer\Contract\InstallationMigrationInterface>[]
-     * @todo pull up to interface in v3.0.0
-     */
-    public function getInstallationMigrations(): array
-    {
-        return [];
-    }
-
-    /**
-     * @return class-string<\MyParcelNL\Pdk\App\Installer\Contract\UpgradeMigrationInterface>[]
-     * @todo pull up to interface in v3.0.0
-     */
-    public function getUpgradeMigrations(): array
-    {
         return [];
     }
 }
