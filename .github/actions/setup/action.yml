@@ -1,6 +1,11 @@
 name: 'Setup'
 description: ''
 
+inputs:
+  php-version:
+    description: 'PHP version'
+    required: true
+
 runs:
   using: composite
   steps:
@@ -11,14 +16,15 @@ runs:
           $HOME/.composer
           ./composer.lock
           ./vendor
-        key: composer-${{ hashFiles('**/composer.json') }}-${{ hashFiles('**/composer.lock') }}
+        key: composer-${{ inputs.php-version }}-${{ hashFiles('**/composer.json') }}-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
+          composer-${{ inputs.php-version }}-${{ hashFiles('**/composer.json') }}-
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
     - uses: myparcelnl/actions/pull-docker-image@v3
       with:
-        image: ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
+        image: 'ghcr.io/myparcelnl/php-xd:${{ inputs.php-version }}-cli-alpine'
 
     - name: 'Prepare environment'
       shell: bash

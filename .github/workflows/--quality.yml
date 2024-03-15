@@ -30,13 +30,16 @@ jobs:
         id: rector-cache
         with:
           path: './.cache/rector'
-          key: rector-cache-${{ hashFiles('composer.json') }}-${{ hashFiles('rector.php', 'src/**/*.php', 'config/**/*.php', 'tests/**/*.php') }}
+          key: rector-cache-${{ vars.PHP_VERSION }}-${{ hashFiles('composer.json') }}-${{ hashFiles('rector.php', 'src/**/*.php', 'config/**/*.php', 'tests/**/*.php') }}
           restore-keys: |
+            rector-cache-${{ vars.PHP_VERSION }}-${{ hashFiles('composer.json') }}-
             rector-cache-${{ hashFiles('composer.json') }}-
             rector-cache-
 
       - uses: ./.github/actions/setup
         if: steps.rector-cache.outputs.cache-hit != 'true'
+        with:
+          php-version: ${{ vars.PHP_VERSION }}
 
       - name: 'Run quality checks in dry-run mode'
         if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run == 'true'

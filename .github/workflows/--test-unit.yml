@@ -14,10 +14,12 @@ jobs:
         id: coverage-cache
         with:
           path: ./clover.xml
-          key: coverage-clover-${{ hashFiles('**/composer.lock', './src/**', './config/**', './tests/**', './.github/workflows/--test-unit.yml') }}
+          key: coverage-clover-${{ vars.PHP_VERSION }}-${{ hashFiles('**/composer.lock', './src/**', './config/**', './tests/**', './.github/workflows/--test-unit.yml') }}
 
       - uses: ./.github/actions/setup
         if: steps.coverage-cache.outputs.cache-hit != 'true'
+        with:
+          php-version: ${{ vars.PHP_VERSION }}
 
       - name: 'Run unit tests'
         if: steps.coverage-cache.outputs.cache-hit != 'true'

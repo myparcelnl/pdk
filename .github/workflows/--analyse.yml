@@ -24,13 +24,16 @@ jobs:
         id: phpstan-cache
         with:
           path: './.cache/phpstan'
-          key: phpstan-cache-${{ hashFiles('phpstan.neon.dist', 'composer.json') }}-${{ hashFiles('**/*.php') }}
+          key: phpstan-cache-${{ vars.PHP_VERSION }}-${{ hashFiles('phpstan.neon.dist', 'composer.json') }}-${{ hashFiles('**/*.php') }}
           restore-keys: |
+            phpstan-cache-${{ vars.PHP_VERSION }}-${{ hashFiles('phpstan.neon.dist', 'composer.json') }}-
             phpstan-cache-${{ hashFiles('phpstan.neon.dist', 'composer.json') }}-
             phpstan-cache-
 
       - uses: ./.github/actions/setup
         if: steps.phpstan-cache.outputs.cache-hit != 'true'
+        with:
+          php-version: ${{ vars.PHP_VERSION }}
 
       - name: 'Run PHPStan analysis'
         if: steps.phpstan-cache.outputs.cache-hit != 'true'
