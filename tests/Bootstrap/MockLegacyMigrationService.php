@@ -16,6 +16,7 @@ class MockLegacyMigrationService implements MigrationServiceInterface
         return [
             MockUpgradeMigration110::class,
             MockUpgradeMigration120::class,
+            MockUpgradeMigration130::class,
         ];
     }
 }
