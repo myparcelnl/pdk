@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Logger;
 
-use Psr\Log\LoggerInterface;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use Psr\Log\LogLevel;
 
-abstract class AbstractLogger implements LoggerInterface
+abstract class AbstractLogger implements PdkLoggerInterface
 {
     /**
      * @param        $level
@@ -49,6 +50,27 @@ abstract class AbstractLogger implements LoggerInterface
     public function debug($message, array $context = []): void
     {
         $this->createLog(LogLevel::DEBUG, $message, $context);
+    }
+
+    /**
+     * @param  string      $subject
+     * @param  null|string $replacement
+     * @param  array       $context
+     *
+     * @return void
+     */
+    public function deprecated(string $subject, ?string $replacement = null, array $context = []): void
+    {
+        $message = "[DEPRECATED] $subject is deprecated.";
+
+        if ($replacement) {
+            $message .= " Use $replacement instead.";
+        }
+
+        $version = Pdk::get('pdkNextMajorVersion');
+        $message .= " Will be removed in $version.";
+
+        $this->notice($message, $context);
     }
 
     /**

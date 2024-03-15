@@ -744,10 +744,7 @@ trait HasAttributes
      */
     protected function logDeprecationWarning(string $key, string $newKey): void
     {
-        Logger::warning(
-            "[DEPRECATION] Attribute '$key' is deprecated. Use '$newKey' instead.",
-            ['class' => static::class]
-        );
+        Logger::deprecated("Attribute '$key'", "'$newKey'", ['class' => static::class]);
     }
 
     /**

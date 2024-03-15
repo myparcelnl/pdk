@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\App\Webhook\Service\AbstractPdkWebhookService;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Repository\AbstractPdkSettingsRepository;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 
@@ -46,7 +46,12 @@ class MockSettingsRepository extends AbstractPdkSettingsRepository
      */
     public function reset(): void
     {
-        $this->settings = [];
+        /** @var string $installedVersionKey */
+        $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+
+        $this->settings = [
+            $installedVersionKey => null,
+        ];
     }
 
     /**

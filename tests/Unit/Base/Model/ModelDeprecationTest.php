@@ -21,6 +21,11 @@ it('warns on use of deprecated attributes and sets value in correct property', f
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = Pdk::get(LoggerInterface::class);
 
+    /**
+     * @var string $nextVersion
+     */
+    $nextVersion = Pdk::get('pdkNextMajorVersion');
+
     expect($model->property)
         ->toEqual('nice')
         ->and($model->broccoli)
@@ -28,8 +33,8 @@ it('warns on use of deprecated attributes and sets value in correct property', f
         ->and($logger->getLogs())
         ->toEqual([
             [
-                'level'   => 'warning',
-                'message' => "[PDK]: [DEPRECATION] Attribute 'broccoli' is deprecated. Use 'property' instead.",
+                'level'   => 'notice',
+                'message' => "[PDK]: [DEPRECATED] Attribute 'broccoli' is deprecated. Use 'property' instead. Will be removed in $nextVersion.",
                 'context' => [
                     'class' => MockCastModel::class,
                 ],

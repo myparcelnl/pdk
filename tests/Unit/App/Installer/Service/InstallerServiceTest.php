@@ -24,7 +24,7 @@ usesShared(
         'appInfo'  => factory(function (): AppInfo {
             return new AppInfo([
                 'name'    => 'test',
-                'version' => '1.2.0',
+                'version' => '1.3.0',
             ]);
         }),
 
@@ -37,58 +37,101 @@ usesShared(
     ])
 );
 
+afterEach(function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+
+    $settingsRepository->reset();
+});
+
+function expectSettingsToContain(array $values): void
+{
+    /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settings           = $settingsRepository->all();
+
+    expect(Arr::dot($settings->toArray()))->toHaveKeysAndValues($values);
+}
+
 it('performs a fresh install of the app, filling default values from platform and config', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
-    $createSettingsKey   = Pdk::get('createSettingsKey');
 
     // Remove the installed version from the settings:
     $settingsRepository->store($installedVersionKey, null);
 
-    expect($settingsRepository->get($installedVersionKey))
-        ->toEqual(null)
-        ->and($settingsRepository->get($createSettingsKey('checkout.deliveryOptionsHeader')))
-        ->toBe(null)
-        ->and($settingsRepository->get($createSettingsKey('checkout.pickupLocationsDefaultView')))
-        ->toBe(null);
+    expect($settingsRepository->get($installedVersionKey))->toBe(null);
 
     Installer::install();
 
     expect($settingsRepository->get($installedVersionKey))
-        ->toEqual('1.2.0')
-        ->and($settingsRepository->get($createSettingsKey('checkout.deliveryOptionsHeader')))
-        ->toBe('default')
-        ->and($settingsRepository->get($createSettingsKey('checkout.pickupLocationsDefaultView')))
-        ->toBe('map');
+        ->toEqual('1.3.0');
+
+    expectSettingsToContain([
+        /** From default settings */
+        'checkout.deliveryOptionsHeader'      => 'default',
+        'checkout.pickupLocationsDefaultView' => 'map',
+
+        /**
+         * Expect installation migration to have run
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockInstallationMigration100
+         */
+        'order.emptyParcelWeight'             => 300,
+        'order.emptyMailboxWeight'            => 200,
+
+        /**
+         * Expect 1.2.0 migration to not have run (as it's only in the upgrade migrations)
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120
+         */
+        'order.barcodeInNoteTitle'            => null,
+    ]);
 });
 
 it('upgrades app to new version', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
-    $createSettingsKey   = Pdk::get('createSettingsKey');
 
     // Set the installed version to 1.1.0:
     $settingsRepository->store($installedVersionKey, '1.1.0');
-
-    expect($settingsRepository->get($installedVersionKey))
-        ->toEqual('1.1.0')
-        ->and($settingsRepository->get($createSettingsKey('label.description')))
-        ->toBe(null)
-        ->and($settingsRepository->get($createSettingsKey('account.apiKey')))
-        ->toBe(null);
+    expect($settingsRepository->get($installedVersionKey))->toEqual('1.1.0');
 
     Installer::install();
 
-    expect($settingsRepository->get($installedVersionKey))
-        ->toEqual('1.2.0')
-        // Expect 1.1.0 migration to not have run
-        ->and($settingsRepository->get('label.description'))
-        ->toBe(null)
-        // Expect 1.2.0 migration to have run
-        ->and($settingsRepository->get('account.apiKey'))
-        ->toBe('new-api-key');
+    expect($settingsRepository->get($installedVersionKey))->toEqual('1.3.0');
+
+    expectSettingsToContain([
+        /**
+         * Expect installation migration not to have run
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockInstallationMigration100
+         */
+        'order.emptyParcelWeight'  => null,
+
+        /**
+         * Expect 1.1.0 migration to not have run
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110
+         * */
+        'label.description'        => null,
+
+        /**
+         * Expect 1.2.0 migration to have run
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120
+         */
+        'order.barcodeInNoteTitle' => 'new-barcode-in-note',
+
+        /**
+         * Expect 1.3.0 migration to have been run
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130
+         */
+        'order.emptyMailboxWeight' => 400,
+    ]);
 });
 
 it('runs down migrations on uninstall', function () {
@@ -97,30 +140,41 @@ it('runs down migrations on uninstall', function () {
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 
-    // Set the installed version to 1.1.0:
-    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($installedVersionKey, '1.3.0');
     $settingsRepository->store($createSettingsKey('account.apiKey'), '12345');
 
     expect($settingsRepository->get($installedVersionKey))
-        ->toEqual('1.1.0');
+        ->toEqual('1.3.0');
 
     Installer::uninstall();
 
     expect($settingsRepository->get($installedVersionKey))
-        ->toEqual(null)
-        // Expect 1.1.0 migration to have run
-        ->and($settingsRepository->get($createSettingsKey('label.description')))
-        ->toBe('old-description')
-        // Expect 1.2.0 migration to not have run
-        ->and($settingsRepository->get($createSettingsKey('account.apiKey')))
-        ->toBe('12345');
+        ->toEqual(null);
+
+    expectSettingsToContain([
+        /**
+         * Expect installation migration to have been reversed
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockInstallationMigration100
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130
+         */
+        'order.emptyParcelWeight'  => 200,
+        'order.emptyMailboxWeight' => 100,
+
+        /**
+         * Expect 1.1.0 migration to not have been reversed (as it's only in the upgrade migrations)
+         *
+         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110
+         */
+        'label.description'        => null,
+    ]);
 });
 
 it('passes through arbitrary arguments', function ($_, array $result) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = Pdk::get(LoggerInterface::class);
 
-    expect(Arr::last($logger->getLogs()))->toBe($result);
+    expect($logger->getLogs())->toContain($result);
 })->with([
     'install' => [
         'method' => function () {
@@ -135,6 +189,12 @@ it('passes through arbitrary arguments', function ($_, array $result) {
 
     'uninstall' => [
         'method' => function () {
+            /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
+            $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
+            $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+
+            $settingsRepository->store($installedVersionKey, '1.3.0');
+
             Installer::uninstall(12, 'peer');
         },
         'result' => [
@@ -151,14 +211,13 @@ it('does not install if version is equal', function () {
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
     $createSettingsKey   = Pdk::get('createSettingsKey');
 
-    // Set the installed version to 1.2.0:
-    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($installedVersionKey, '1.3.0');
     $settingsRepository->store($createSettingsKey('label.description'), 'description');
 
     Installer::install();
 
     expect($settingsRepository->get($installedVersionKey))
-        ->toEqual('1.2.0')
+        ->toEqual('1.3.0')
         ->and($settingsRepository->get($createSettingsKey('label.description')))
         ->toBe('description');
 });
