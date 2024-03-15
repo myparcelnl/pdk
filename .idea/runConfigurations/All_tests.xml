@@ -1,17 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All tests" type="PestRunConfigurationType">
-    <CommandLine>
-      <PhpTestInterpreterSettings>
-        <option name="interpreterName" value="php" />
-        <option name="coverageEngine" value="PCov" />
-      </PhpTestInterpreterSettings>
-    </CommandLine>
-    <option name="pestRunnerSettings">
-      <PestRunner method="" scope="ConfigurationFile" />
-    </option>
-    <option name="runnerSettings">
-      <PhpTestRunnerSettings method="" scope="ConfigurationFile" />
-    </option>
+  <configuration default="false" name="All tests" type="CompoundRunConfigurationType">
+    <toRun name="All integration tests" type="PhpBehatConfigurationType" />
+    <toRun name="All unit tests" type="PestRunConfigurationType" />
     <method v="2" />
   </configuration>
 </component>

@@ -14,7 +14,7 @@
       <option name="HEX_COLOR_UPPER_CASE" value="true" />
       <option name="HEX_COLOR_SHORT_FORMAT" value="true" />
     </CssCodeStyleSettings>
-    <DB2CodeStyleSettings version="6">
+    <DB2CodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -26,7 +26,7 @@
       <option name="IMP_DECLARE_ALIGN_TYPE" value="false" />
       <option name="IMP_DECLARE_ALIGN_EQ" value="false" />
     </DB2CodeStyleSettings>
-    <DerbyCodeStyleSettings version="6">
+    <DerbyCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -38,7 +38,7 @@
       <option name="IMP_DECLARE_ALIGN_TYPE" value="false" />
       <option name="IMP_DECLARE_ALIGN_EQ" value="false" />
     </DerbyCodeStyleSettings>
-    <H2CodeStyleSettings version="6">
+    <H2CodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -48,7 +48,7 @@
       <option name="QUOTE_TYPE" value="11" />
       <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
     </H2CodeStyleSettings>
-    <HSQLCodeStyleSettings version="6">
+    <HSQLCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -94,7 +94,7 @@
       <option name="VALUE_ALIGNMENT" value="2" />
       <option name="KEEP_SINGLE_LINE_BLOCKS" value="true" />
     </LessCodeStyleSettings>
-    <MSSQLCodeStyleSettings version="6">
+    <MSSQLCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -113,7 +113,7 @@
       <option name="WRAP_TEXT_IF_LONG" value="false" />
       <option name="WRAP_TEXT_INSIDE_BLOCKQUOTES" value="false" />
     </Markdown>
-    <MySQLCodeStyleSettings version="6">
+    <MySQLCodeStyleSettings version="7">
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
       <option name="ALIAS_CASE" value="1" />
@@ -122,7 +122,7 @@
       <option name="QUOTE_TYPE" value="11" />
       <option name="IMP_COMMON_KEEP_BLANK_LINES_IN_CODE" value="1" />
     </MySQLCodeStyleSettings>
-    <OracleCodeStyleSettings version="6">
+    <OracleCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -167,10 +167,10 @@
       <option name="PHPDOC_USE_FQCN" value="true" />
       <option name="NULL_TYPE_POSITION" value="IN_THE_BEGINNING" />
     </PHPCodeStyleSettings>
-    <PostgresCodeStyleSettings version="6">
+    <PostgresCodeStyleSettings version="7">
       <option name="USE_GENERIC_STYLE" value="true" />
     </PostgresCodeStyleSettings>
-    <SQLiteCodeStyleSettings version="6">
+    <SQLiteCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
@@ -185,7 +185,7 @@
       <option name="HEX_COLOR_SHORT_FORMAT" value="true" />
       <option name="KEEP_SINGLE_LINE_BLOCKS" value="true" />
     </ScssCodeStyleSettings>
-    <SqlCodeStyleSettings version="6">
+    <SqlCodeStyleSettings version="7">
       <option name="KEYWORD_CASE" value="2" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="TYPE_CASE" value="2" />
@@ -197,7 +197,7 @@
       <option name="IMP_DECLARE_ALIGN_TYPE" value="false" />
       <option name="IMP_DECLARE_ALIGN_EQ" value="false" />
     </SqlCodeStyleSettings>
-    <SybaseCodeStyleSettings version="6">
+    <SybaseCodeStyleSettings version="7">
       <option name="USE_GENERAL_STYLE" value="false" />
       <option name="IDENTIFIER_CASE" value="1" />
       <option name="CUSTOM_TYPE_CASE" value="0" />
