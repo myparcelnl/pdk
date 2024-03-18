@@ -7,4 +7,6 @@ namespace MyParcelNL\Pdk\App\Installer\Contract;
 /**
  * Migrations that are run during an upgrade.
  */
-interface UpgradeMigrationInterface extends MigrationInterface { }
+interface UpgradeMigrationInterface extends MigrationInterface
+{
+}
