@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Facade;
 
 use MyParcelNL\Pdk\Base\Facade;
-use Psr\Log\LoggerInterface;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 
 /**
  * @method static void log($level, $message, array $context = [])
@@ -18,7 +18,8 @@ use Psr\Log\LoggerInterface;
  * @method static void info($message, array $context = [])
  * @method static void notice($message, array $context = [])
  * @method static void warning($message, array $context = [])
- * @see \Psr\Log\LoggerInterface
+ * @method static void deprecated(string $subject, string $replacement = null, array $context = [])
+ * @see \MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface
  */
 final class Logger extends Facade
 {
@@ -27,6 +28,6 @@ final class Logger extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return LoggerInterface::class;
+        return PdkLoggerInterface::class;
     }
 }

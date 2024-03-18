@@ -8,10 +8,23 @@ use function DI\factory;
 use function DI\value;
 
 return [
+    /**
+     * The current version of the pdk according to the composer.json file.
+     */
     'pdkVersion'                => factory(function (FileSystemInterface $fileSystem): string {
-        $composerJson = json_decode($fileSystem->get(__DIR__ . '/../composer.json'), true);
+        $rootDir      = Pdk::get('rootDir');
+        $composerJson = json_decode($fileSystem->get("$rootDir/composer.json"), true);
 
         return $composerJson['version'];
+    }),
+
+    /**
+     * The next major version of the pdk. Used for deprecation messages.
+     */
+    'pdkNextMajorVersion'       => factory(function (): string {
+        $version = Pdk::get('pdkVersion');
+
+        return (int) explode('.', $version)[0] + 1 . '.0.0';
     }),
 
     /**

@@ -15,9 +15,11 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use Psr\Log\LoggerInterface;
 use function DI\autowire;
+use function DI\get;
 use function DI\value;
 
 /**
@@ -135,10 +137,18 @@ return [
     /**
      * Handles logging.
      *
-     * @see \MyParcelNL\Pdk\Logger\AbstractLogger
+     * @see        \MyParcelNL\Pdk\Logger\AbstractLogger
+     * @deprecated Will be removed in v3.0.0. Use PdkLoggerInterface instead.
      */
 
-    LoggerInterface::class => autowire(),
+    LoggerInterface::class    => autowire(),
+
+    /**
+     * Handles logging.
+     *
+     * @see        \MyParcelNL\Pdk\Logger\AbstractLogger
+     */
+    PdkLoggerInterface::class => get(LoggerInterface::class),
 
     /**
      * Exposes frontend api url and endpoints.

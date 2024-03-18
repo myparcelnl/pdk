@@ -6,17 +6,26 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockLegacyMigrationService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Log\LoggerInterface;
 use function DI\factory;
+use function DI\get;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\usesShared;
+
+/**
+ * Similar to the InstallerServiceTest, but uses the legacy migration service
+ *
+ * @todo remove in v3.0.0
+ */
 
 usesShared(
     new UsesMockPdkInstance([
@@ -34,6 +43,8 @@ usesShared(
                 CheckoutSettings::DELIVERY_OPTIONS_HEADER => 'default',
             ],
         ]),
+
+        MigrationServiceInterface::class => get(MockLegacyMigrationService::class),
     ])
 );
 
@@ -44,7 +55,7 @@ afterEach(function () {
     $settingsRepository->reset();
 });
 
-function expectSettingsToContain(array $values): void
+function expectSettingsToContainLegacy(array $values): void
 {
     /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
@@ -53,7 +64,7 @@ function expectSettingsToContain(array $values): void
     expect(Arr::dot($settings->toArray()))->toHaveKeysAndValues($values);
 }
 
-it('performs a fresh install of the app, filling default values from platform and config', function () {
+it('[legacy] performs a fresh install of the app, filling default values from platform and config', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
@@ -68,18 +79,10 @@ it('performs a fresh install of the app, filling default values from platform an
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual('1.3.0');
 
-    expectSettingsToContain([
+    expectSettingsToContainLegacy([
         /** From default settings */
         'checkout.deliveryOptionsHeader'      => 'default',
         'checkout.pickupLocationsDefaultView' => 'map',
-
-        /**
-         * Expect installation migration to have run
-         *
-         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockInstallationMigration100
-         */
-        'order.emptyParcelWeight'             => 300,
-        'order.emptyMailboxWeight'            => 200,
 
         /**
          * Expect 1.2.0 migration to not have run (as it's only in the upgrade migrations)
@@ -90,7 +93,7 @@ it('performs a fresh install of the app, filling default values from platform an
     ]);
 });
 
-it('upgrades app to new version', function () {
+it('[legacy] upgrades app to new version', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
@@ -103,14 +106,7 @@ it('upgrades app to new version', function () {
 
     expect($settingsRepository->get($installedVersionKey))->toEqual('1.3.0');
 
-    expectSettingsToContain([
-        /**
-         * Expect installation migration not to have run
-         *
-         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockInstallationMigration100
-         */
-        'order.emptyParcelWeight'  => null,
-
+    expectSettingsToContainLegacy([
         /**
          * Expect 1.1.0 migration to not have run
          *
@@ -134,7 +130,7 @@ it('upgrades app to new version', function () {
     ]);
 });
 
-it('runs down migrations on uninstall', function () {
+it('[legacy] runs down migrations on uninstall', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
@@ -151,16 +147,7 @@ it('runs down migrations on uninstall', function () {
     expect($settingsRepository->get($installedVersionKey))
         ->toEqual(null);
 
-    expectSettingsToContain([
-        /**
-         * Expect installation migration to have been reversed
-         *
-         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockInstallationMigration100
-         * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130
-         */
-        'order.emptyParcelWeight'  => 200,
-        'order.emptyMailboxWeight' => 100,
-
+    expectSettingsToContainLegacy([
         /**
          * Expect 1.1.0 migration to have been reversed
          *
@@ -177,7 +164,7 @@ it('runs down migrations on uninstall', function () {
     ]);
 });
 
-it('passes through arbitrary arguments', function ($_, array $result) {
+it('[legacy] passes through arbitrary arguments', function ($_, array $result) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = Pdk::get(LoggerInterface::class);
 
@@ -212,7 +199,7 @@ it('passes through arbitrary arguments', function ($_, array $result) {
     ],
 ]);
 
-it('does not install if version is equal', function () {
+it('[legacy] does not install if version is equal', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
@@ -229,7 +216,7 @@ it('does not install if version is equal', function () {
         ->toBe('description');
 });
 
-it('does not uninstall if is not installed', function () {
+it('[legacy] does not uninstall if is not installed', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');

@@ -88,6 +88,9 @@ class MockPdkConfig
             FrontendEndpointServiceInterface::class     => get(MockFrontendEndpointService::class),
             InstallerServiceInterface::class            => get(MockInstallerService::class),
             LanguageServiceInterface::class             => get(MockLanguageService::class),
+            /**
+             * @todo v3.0.0 use PdkLoggerInterface. Leave it for now to test backwards compatibility. :)
+             */
             LoggerInterface::class                      => get(MockLogger::class),
             MigrationServiceInterface::class            => get(MockMigrationService::class),
             OrderStatusServiceInterface::class          => get(MockOrderStatusService::class),

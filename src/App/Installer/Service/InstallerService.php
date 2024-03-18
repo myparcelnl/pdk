@@ -79,7 +79,6 @@ class InstallerService implements InstallerServiceInterface
         if ($installedVersion) {
             Logger::debug("Uninstalling $installedVersion");
             $this->executeUninstallation(...$args);
-            $this->migrateDown();
             $this->updateInstalledVersion(null);
         }
     }
@@ -92,6 +91,7 @@ class InstallerService implements InstallerServiceInterface
     protected function executeInstallation(...$args): void
     {
         $this->setDefaultSettings();
+        $this->migrateInstall();
     }
 
     /**
@@ -101,6 +101,7 @@ class InstallerService implements InstallerServiceInterface
      */
     protected function executeUninstallation(...$args): void
     {
+        $this->migrateUninstall();
     }
 
     /**
@@ -116,13 +117,20 @@ class InstallerService implements InstallerServiceInterface
      */
     protected function migrateDown(): void
     {
-        $this->getMigrations()
-            ->filter(function (MigrationInterface $migration) {
-                return version_compare($migration->getVersion(), $this->getInstalledVersion(), '<=');
-            })
-            ->each(function (MigrationInterface $migration) {
-                $migration->down();
-            });
+        $this->runDownMigrations(
+            $this->getUpgradeMigrations()
+                ->filter(function (MigrationInterface $migration) {
+                    return version_compare($migration->getVersion(), $this->getInstalledVersion(), '<=');
+                })
+        );
+    }
+
+    /**
+     * @return void
+     */
+    protected function migrateInstall(): void
+    {
+        $this->runUpMigrations($this->getInstallationMigrations());
     }
 
     /**
@@ -132,14 +140,7 @@ class InstallerService implements InstallerServiceInterface
      */
     protected function migrateUp(string $version): void
     {
-        $this->getMigrations()
-            ->filter(function (MigrationInterface $migration) use ($version) {
-                return version_compare($migration->getVersion(), $this->getInstalledVersion(), '>')
-                    && version_compare($migration->getVersion(), $version, '<=');
-            })
-            ->each(function (MigrationInterface $migration) {
-                $migration->up();
-            });
+        $this->runUpMigrations($this->getUpgradeMigrations($version));
     }
 
     /**
@@ -163,13 +164,105 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Base\Support\Collection<MigrationInterface>
+     * @template T of \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface
+     * @param  array<T> $migrations
+     *
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
      */
-    private function getMigrations(): Collection
+    private function createMigrationCollection(array $migrations): Collection
     {
-        return Collection::make($this->migrationService->all())
+        return Collection::make($migrations)
             ->map(function (string $className) {
                 return Pdk::get($className);
+            });
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\App\Installer\Contract\InstallationMigrationInterface>
+     * @todo v3.0.0 remove legacy support
+     */
+    private function getInstallationMigrations(): Collection
+    {
+        if (! method_exists($this->migrationService, 'getInstallationMigrations')) {
+            Logger::deprecated(
+                sprintf('Method "%s::all()"', MigrationServiceInterface::class),
+                'getUpgradeMigrations and getInstallationMigrations'
+            );
+
+            return new Collection();
+        }
+
+        return $this->createMigrationCollection($this->migrationService->getInstallationMigrations());
+    }
+
+    /**
+     * @param  null|string $version
+     *
+     * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\App\Installer\Contract\UpgradeMigrationInterface>
+     * @todo v3.0.0 remove legacy support
+     */
+    private function getUpgradeMigrations(?string $version = null): Collection
+    {
+        $useLegacy = ! method_exists($this->migrationService, 'getUpgradeMigrations');
+
+        if ($useLegacy) {
+            Logger::deprecated(
+                sprintf('Method "%s::all()"', MigrationServiceInterface::class),
+                'getUpgradeMigrations and getInstallationMigrations'
+            );
+        }
+
+        $migrations = $useLegacy
+            ? $this->migrationService->all()
+            : $this->migrationService->getUpgradeMigrations();
+
+        $collection = $this->createMigrationCollection($migrations);
+
+        if (! $version) {
+            return $collection;
+        }
+
+        return $collection->filter(function (MigrationInterface $migration) use ($version) {
+            return version_compare($migration->getVersion(), $this->getInstalledVersion(), '>')
+                && version_compare($migration->getVersion(), $version, '<=');
+        });
+    }
+
+    private function migrateUninstall(): void
+    {
+        $this->migrateDown();
+        $this->runDownMigrations($this->getInstallationMigrations());
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection<MigrationInterface> $migrations
+     *
+     * @return void
+     */
+    private function runDownMigrations(Collection $migrations): void
+    {
+        $migrations
+            ->sort(function (MigrationInterface $a, MigrationInterface $b) {
+                return version_compare($b->getVersion(), $a->getVersion());
+            })
+            ->each(function (MigrationInterface $migration) {
+                $migration->down();
+            });
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection<MigrationInterface> $migrations
+     *
+     * @return void
+     */
+    private function runUpMigrations(Collection $migrations): void
+    {
+        $migrations
+            ->sort(function (MigrationInterface $a, MigrationInterface $b) {
+                return version_compare($a->getVersion(), $b->getVersion());
+            })
+            ->each(function (MigrationInterface $migration) {
+                $migration->up();
             });
     }
 }

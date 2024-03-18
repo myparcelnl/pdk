@@ -7,11 +7,10 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
-use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
-class MockMigration110 implements MigrationInterface
+class MockUpgradeMigration120 implements MigrationInterface
 {
-    private const SETTING_KEY = LabelSettings::ID . '.' . LabelSettings::DESCRIPTION;
+    private const SETTING_KEY = 'order.barcodeInNoteTitle';
 
     /**
      * @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface
@@ -25,22 +24,19 @@ class MockMigration110 implements MigrationInterface
 
     public function down(): void
     {
-        $this->settingsRepository->store($this->getSettingKey(), 'old-description');
+        $this->settingsRepository->store($this->getSettingKey(), 'old-barcode-in-note');
     }
 
     public function getVersion(): string
     {
-        return '1.1.0';
+        return '1.2.0';
     }
 
     public function up(): void
     {
-        $this->settingsRepository->store($this->getSettingKey(), 'new-description');
+        $this->settingsRepository->store($this->getSettingKey(), 'new-barcode-in-note');
     }
 
-    /**
-     * @return string
-     */
     private function getSettingKey(): string
     {
         return Pdk::get('createSettingsKey')(self::SETTING_KEY);
