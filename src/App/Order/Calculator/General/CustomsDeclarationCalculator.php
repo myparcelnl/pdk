@@ -48,7 +48,7 @@ final class CustomsDeclarationCalculator extends AbstractPdkOrderOptionCalculato
                 ->map(function (PdkOrderLine $line) {
                     return CustomsDeclarationItem::fromOrderLine($line);
                 })
-                ->all(),
+                ->values(),
         ]);
     }
 }

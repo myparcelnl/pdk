@@ -1,5 +1,5 @@
 {
-  "description": "/order/customs_declaration",
+  "description": "belgie/order/customs_declaration",
   "type": "object",
   "additionalItems": false,
   "required": ["customsDeclaration"],
