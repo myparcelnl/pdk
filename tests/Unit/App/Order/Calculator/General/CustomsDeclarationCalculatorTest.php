@@ -38,7 +38,7 @@ it('calculates customs declaration', function (PdkOrderFactory $factory, ?array 
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    if (null === $expectation) {
+    if ($expectation === null) {
         expect($newOrder->customsDeclaration)->toBeNull();
     } else {
         expect($newOrder->customsDeclaration->toArrayWithoutNull())->toEqual($expectation);
@@ -73,6 +73,7 @@ it('calculates customs declaration', function (PdkOrderFactory $factory, ?array 
     'complex ROW order' => [
         'order'  => function () {
             $product = factory(PdkProduct::class)
+                ->withName('Scooter')
                 ->withPrice(1249)
                 ->withWeight(300)
                 ->withSettings(
@@ -84,9 +85,17 @@ it('calculates customs declaration', function (PdkOrderFactory $factory, ?array 
 
             // Not deliverable so should not show up on the customs declaration
             $product2 = factory(PdkProduct::class)
+                ->withName('Downloadable car')
                 ->withPrice(895)
                 ->withWeight(150)
                 ->withIsDeliverable(false)
+                ->make();
+
+            $product3 = factory(PdkProduct::class)
+                ->withName('Bike')
+                ->withPrice(349)
+                ->withWeight(250)
+                ->withSettings(factory(ProductSettings::class)->withCustomsCode('001122'))
                 ->make();
 
             return factory(PdkOrder::class)
@@ -100,23 +109,38 @@ it('calculates customs declaration', function (PdkOrderFactory $factory, ?array 
                         ->withProduct($product2)
                         ->withVat((int) ceil(895 * 0.21))
                         ->withQuantity(2),
+                    factory(PdkOrderLine::class)
+                        ->withProduct($product3)
+                        ->withVat((int) ceil(349 * 0.21))
+                        ->withQuantity(1),
                 ]);
         },
         'result' => [
             'contents' => CustomsSettings::PACKAGE_CONTENTS_GIFTS,
             'invoice'  => 'PDK-1',
-            'weight'   => 900,
+            'weight'   => 1150,
             'items'    => [
                 [
                     'amount'         => 3,
                     'classification' => '123456',
-                    'country'        => 'FR',
-                    'description'    => 'test',
+                    'country'        => CountryCodes::CC_FR,
+                    'description'    => 'Scooter',
                     'itemValue'      => [
                         'amount'   => 1249,
                         'currency' => 'EUR',
                     ],
                     'weight'         => 300,
+                ],
+                [
+                    'amount'         => 1,
+                    'classification' => '001122',
+                    'country'        => CountryCodes::CC_NL,
+                    'description'    => 'Bike',
+                    'itemValue'      => [
+                        'amount'   => 349,
+                        'currency' => 'EUR',
+                    ],
+                    'weight'         => 250,
                 ],
             ],
         ],
