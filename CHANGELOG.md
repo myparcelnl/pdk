@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.34.0](https://github.com/myparcelnl/pdk/compare/v2.33.2...v2.34.0) (2024-03-21)
+
+
+### :sparkles: New Features
+
+* **installer:** allow differentiating between migration types ([#261](https://github.com/myparcelnl/pdk/issues/261)) ([21ce3cf](https://github.com/myparcelnl/pdk/commit/21ce3cf71eba3fbad82682c913e9846b21789f41))
+
+
+### :bug: Bug Fixes
+
+* **orders:** fix customs declaration items error in row countries ([#262](https://github.com/myparcelnl/pdk/issues/262)) ([d22d491](https://github.com/myparcelnl/pdk/commit/d22d4911203e628f5a29555d2eb8468b6550c2fb))
+
 ## [2.33.2](https://github.com/myparcelnl/pdk/compare/v2.33.1...v2.33.2) (2024-03-13)
 
 
