@@ -1,5 +1,5 @@
 {
-  "description": "/order/customs_declaration",
+  "description": "myparcel/order/customs_declaration",
   "type": "object",
   "additionalItems": false,
   "required": ["customsDeclaration"],
