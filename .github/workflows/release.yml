@@ -13,7 +13,6 @@ concurrency:
 
 jobs:
   prepare:
-    if: github.event_name == 'schedule'
     runs-on: ubuntu-22.04
     outputs:
       new-commits: ${{ steps.check-release.outputs.new-commits }}
@@ -34,25 +33,25 @@ jobs:
 
   test-unit:
     needs: prepare
-    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
+    if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--test-unit.yml
     secrets: inherit
 
   test-integration:
     needs: prepare
-    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
+    if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
   analyse:
     needs: prepare
-    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
+    if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--analyse.yml
     secrets: inherit
 
   quality:
     needs: prepare
-    if: (always() && github.event_name != 'schedule') || needs.prepare.outputs.new-commits == 'true'
+    if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--quality.yml
     secrets: inherit
 
