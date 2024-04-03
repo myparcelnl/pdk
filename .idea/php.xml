@@ -329,6 +329,15 @@
     <option name="memoryLimit" value="4G" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpStepFilterConfiguration">
+    <skipped_functions>
+      <skipped_function name="Composer\Autoload\ClassLoader-&gt;loadClass" />
+      <skipped_function name="MyParcelNL\Pdk\Base\Facade::__callStatic" />
+      <skipped_function name="Composer\Autoload\ClassLoader-&gt;findFile" />
+      <skipped_function name="Composer\Autoload\ClassLoader-&gt;findFileWithExtension" />
+      <skipped_function name="Composer\Autoload\{closure:/app/vendor/composer/ClassLoader.php:581-583}" />
+    </skipped_functions>
+  </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
