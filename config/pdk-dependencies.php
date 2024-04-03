@@ -50,7 +50,7 @@ return [
         return strtr(Pdk::get('baseCdnUrl'), [
             ':name'     => '@myparcel/delivery-options',
             ':version'  => Pdk::get('deliveryOptionsVersion'),
-            ':filename' => 'myparcel.lib.js',
+            ':filename' => 'dist/myparcel.lib.js',
         ]);
     }),
 
@@ -58,7 +58,7 @@ return [
         return strtr(Pdk::get('baseCdnUrl'), [
             ':name'     => '@myparcel/delivery-options',
             ':version'  => Pdk::get('deliveryOptionsVersion'),
-            ':filename' => 'style.css',
+            ':filename' => 'dist/style.css',
         ]);
     }),
 
