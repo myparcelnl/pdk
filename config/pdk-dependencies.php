@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 use function DI\factory;
 use function DI\value;
 
@@ -46,28 +47,37 @@ return [
         return Pdk::get('vueVersion');
     }),
 
-    'deliveryOptionsCdnUrlJsLib' => factory(function (): string {
-        return strtr(Pdk::get('baseCdnUrl'), [
-            ':name'     => '@myparcel/delivery-options',
-            ':version'  => Pdk::get('deliveryOptionsVersion'),
-            ':filename' => 'dist/myparcel.lib.js',
-        ]);
+    'deliveryOptionsCdnUrlJs' => factory(function (): string {
+        /** @var \MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface $scriptService */
+        $scriptService = Pdk::get(ScriptServiceInterface::class);
+
+        return $scriptService->createCdnUrl(
+            '@myparcel/delivery-options',
+            Pdk::get('deliveryOptionsVersion'),
+            'dist/myparcel.js'
+        );
     }),
 
-    'deliveryOptionsCdnUrlJs' => factory(function (): string {
-        return strtr(Pdk::get('baseCdnUrl'), [
-            ':name'     => '@myparcel/delivery-options',
-            ':version'  => Pdk::get('deliveryOptionsVersion'),
-            ':filename' => 'dist/myparcel.js',
-        ]);
+    'deliveryOptionsCdnUrlJsLib' => factory(function (): string {
+        /** @var \MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface $scriptService */
+        $scriptService = Pdk::get(ScriptServiceInterface::class);
+
+        return $scriptService->createCdnUrl(
+            '@myparcel/delivery-options',
+            Pdk::get('deliveryOptionsVersion'),
+            'dist/myparcel.lib.js'
+        );
     }),
 
     'deliveryOptionsCdnUrlCss' => factory(function (): string {
-        return strtr(Pdk::get('baseCdnUrl'), [
-            ':name'     => '@myparcel/delivery-options',
-            ':version'  => Pdk::get('deliveryOptionsVersion'),
-            ':filename' => 'dist/style.css',
-        ]);
+        /** @var \MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface $scriptService */
+        $scriptService = Pdk::get(ScriptServiceInterface::class);
+
+        return $scriptService->createCdnUrl(
+            '@myparcel/delivery-options',
+            Pdk::get('deliveryOptionsVersion'),
+            'dist/style.css'
+        );
     }),
 
     /**

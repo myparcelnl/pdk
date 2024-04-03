@@ -391,6 +391,26 @@ it('can have direct return', function (string $carrierName, bool $outcome) {
     [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
 ]);
 
+it('can have standard delivery', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveStandardDelivery())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
+it('can have morning delivery', function (string $carrierName, bool $outcome) {
+    expect(createValidator($carrierName)->canHaveMorningDelivery())->toBe($outcome);
+})->with([
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
+    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
+]);
+
 it('can have evening delivery', function (string $carrierName, bool $outcome) {
     expect(createValidator($carrierName)->canHaveEveningDelivery())->toBe($outcome);
 })->with([
@@ -423,16 +443,6 @@ it('can have insurance', function (string $carrierName, bool $outcome) {
 
 it('can have large format', function (string $carrierName, bool $outcome) {
     expect(createValidator($carrierName)->canHaveLargeFormat())->toBe($outcome);
-})->with([
-    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
-    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
-    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
-    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
-    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
-]);
-
-it('can have morning delivery', function (string $carrierName, bool $outcome) {
-    expect(createValidator($carrierName)->canHaveMorningDelivery())->toBe($outcome);
 })->with([
     [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
     [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
