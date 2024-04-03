@@ -40,7 +40,7 @@ return [
     /**
      * CDN URL to use for frontend dependencies.
      */
-    'baseCdnUrl'             => value('https://cdnjs.cloudflare.com/ajax/libs/:name/:version/:filename'),
+    'baseCdnUrl'             => value('https://cdn.jsdelivr.net/npm/:name@:version/:filename'),
 
     /**
      * The default date format to use for date and time functions.

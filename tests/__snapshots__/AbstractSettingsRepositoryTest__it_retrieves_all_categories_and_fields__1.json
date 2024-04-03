@@ -48,6 +48,7 @@
     "postnl": {
       "id": "postnl",
       "allowDeliveryOptions": true,
+      "allowStandardDelivery": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
       "allowMorningDelivery": false,
@@ -93,12 +94,12 @@
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
       "pricePackageTypeMailbox": 0,
-      "priceSignature": 0,
-      "showDeliveryDay": true
+      "priceSignature": 0
     },
     "dhl": {
       "id": "dhl",
       "allowDeliveryOptions": false,
+      "allowStandardDelivery": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
       "allowMorningDelivery": false,
@@ -144,12 +145,12 @@
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
       "pricePackageTypeMailbox": 0,
-      "priceSignature": 0,
-      "showDeliveryDay": true
+      "priceSignature": 0
     },
     "bpost": {
       "id": "bpost",
       "allowDeliveryOptions": true,
+      "allowStandardDelivery": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
       "allowMorningDelivery": false,
@@ -195,8 +196,7 @@
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
       "pricePackageTypeMailbox": 0,
-      "priceSignature": 0,
-      "showDeliveryDay": true
+      "priceSignature": 0
     }
   }
 }

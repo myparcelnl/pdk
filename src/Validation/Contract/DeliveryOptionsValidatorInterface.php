@@ -8,8 +8,6 @@ interface DeliveryOptionsValidatorInterface
 {
     public function canHaveAgeCheck(): bool;
 
-    public function canHaveDate(): bool;
-
     public function canHaveDirectReturn(): bool;
 
     public function canHaveEveningDelivery(): bool;
@@ -31,6 +29,8 @@ interface DeliveryOptionsValidatorInterface
     public function canHaveSameDayDelivery(): bool;
 
     public function canHaveSignature(): bool;
+
+    public function canHaveStandardDelivery(): bool;
 
     public function canHaveWeight(?int $weight): bool;
 

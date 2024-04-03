@@ -83,6 +83,7 @@ it('can be instantiated from a cart', function () {
             'carrierSettings'       => [
                 'postnl' => [
                     'allowDeliveryOptions'         => false,
+                    'allowStandardDelivery'        => false,
                     'allowEveningDelivery'         => false,
                     'allowMondayDelivery'          => false,
                     'allowMorningDelivery'         => false,
@@ -92,7 +93,6 @@ it('can be instantiated from a cart', function () {
                     'allowSaturdayDelivery'        => false,
                     'allowSignature'               => false,
                     'dropOffDays'                  => [],
-                    'featureShowDeliveryDate'      => true,
                     'priceEveningDelivery'         => 0.0,
                     'priceMorningDelivery'         => 0.0,
                     'priceOnlyRecipient'           => 0.0,
@@ -154,6 +154,7 @@ it('uses correct price when price is shown as surcharge', function () {
             'carrierSettings'       => [
                 'postnl' => [
                     'allowDeliveryOptions'         => false,
+                    'allowStandardDelivery'        => false,
                     'allowEveningDelivery'         => false,
                     'allowMondayDelivery'          => false,
                     'allowMorningDelivery'         => false,
@@ -163,7 +164,6 @@ it('uses correct price when price is shown as surcharge', function () {
                     'allowSaturdayDelivery'        => false,
                     'allowSignature'               => false,
                     'dropOffDays'                  => [],
-                    'featureShowDeliveryDate'      => true,
                     'priceEveningDelivery'         => 1.4595,
                     'priceMorningDelivery'         => 1.4595,
                     'priceOnlyRecipient'           => 1.4595,

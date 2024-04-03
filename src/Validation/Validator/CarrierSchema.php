@@ -52,14 +52,14 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
     }
 
+    public function canBePackageSmall(): bool
+    {
+        return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME);
+    }
+
     public function canHaveAgeCheck(): bool
     {
         return $this->canHave(AgeCheckDefinition::class);
-    }
-
-    public function canHaveDate(): bool
-    {
-        return true;
     }
 
     public function canHaveDirectReturn(): bool
@@ -125,6 +125,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveSignature(): bool
     {
         return $this->canHave(SignatureDefinition::class);
+    }
+
+    public function canHaveStandardDelivery(): bool
+    {
+        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME);
     }
 
     public function canHaveTracked(): bool

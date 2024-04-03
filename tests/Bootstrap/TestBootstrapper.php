@@ -28,7 +28,7 @@ final class TestBootstrapper
 
         factory(Account::class)
             ->withStatus(2)
-            ->withPlatformId(Platform::FLESPAKKET_ID)
+            ->withPlatformId(Platform::MYPARCEL_ID)
             ->withShops($shops)
             ->store();
     }

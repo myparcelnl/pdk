@@ -49,17 +49,20 @@ it('can be mailbox', function () {
 it('can be package', function () {
     expect(createSchema()->canBePackage())->toBeTrue();
 });
+it('can be package_small', function () {
+    expect(createSchema()->canBePackageSmall())->toBeTrue();
+});
 
 it('can have age check', function () {
     expect(createSchema()->canHaveAgeCheck())->toBeTrue();
 });
 
-it('can have date', function () {
-    expect(createSchema()->canHaveDate())->toBeTrue();
-});
-
 it('can have direct return', function () {
     expect(createSchema()->canHaveDirectReturn())->toBeTrue();
+});
+
+it('can have standard delivery', function () {
+    expect(createSchema()->canHaveStandardDelivery())->toBeTrue();
 });
 
 it('can have evening delivery', function () {

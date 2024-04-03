@@ -3,6 +3,7 @@
   "carrierSettings": {
     "postnl": {
       "allowDeliveryOptions": true,
+      "allowStandardDelivery": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
       "allowMorningDelivery": false,
@@ -11,7 +12,6 @@
       "allowSameDayDelivery": false,
       "allowSaturdayDelivery": false,
       "allowSignature": false,
-      "featureShowDeliveryDate": true,
       "priceEveningDelivery": 0,
       "priceMorningDelivery": 0,
       "priceOnlyRecipient": 0,

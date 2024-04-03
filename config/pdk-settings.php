@@ -79,7 +79,6 @@ return [
                     CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
                     CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
                     CarrierSettings::PRICE_SIGNATURE                         => 0,
-                    CarrierSettings::SHOW_DELIVERY_DAY                       => true,
                 ],
             ],
             OrderSettings::ID   => [

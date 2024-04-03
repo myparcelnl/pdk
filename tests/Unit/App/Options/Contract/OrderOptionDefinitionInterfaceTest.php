@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DropOffDelayDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
@@ -38,7 +37,6 @@ $definitions = [
     CustomsCodeDefinition::class,
     DirectReturnDefinition::class,
     DisableDeliveryOptionsDefinition::class,
-    DropOffDelayDefinition::class,
     FitInDigitalStampDefinition::class,
     FitInMailboxDefinition::class,
     HideSenderDefinition::class,

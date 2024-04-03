@@ -268,29 +268,6 @@ it('tests attributes on PdkOrders', function (array $order, string $method, $inp
         ->toBe($output);
 })->with(
     [
-        'check delivery date'              => [
-            'order'  => [
-                'externalIdentifier' => '245',
-                'physicalProperties' => [
-                    'weight' => 20,
-                ],
-                'deliveryOptions'    => [
-                    'carrier'      => Carrier::CARRIER_POSTNL_NAME,
-                    'packageType'  => 'package',
-                    'labelAmount'  => 2,
-                    'deliveryDate' => '2022-12-12 00:00:00',
-                ],
-                'shippingAddress'    => [
-                    'cc'         => CountryCodes::CC_NL,
-                    'postalCode' => '2901AB',
-                    'city'       => 'Amstelveen',
-                    'address1'   => 'Pietjestraat 44',
-                ],
-            ],
-            'method' => 'canHaveDate',
-            'input'  => '2022-12-12 00:00:00',
-            'output' => true,
-        ],
         'check weight'                     => [
             'order'  => [
                 'externalIdentifier' => '245',
@@ -396,16 +373,6 @@ function createValidator(string $carrierName): OrderValidator
 
 it('can have age check', function (string $carrierName, bool $outcome) {
     expect(createValidator($carrierName)->canHaveAgeCheck())->toBe($outcome);
-})->with([
-    [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
-    [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],
-    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
-    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_BPOST_NAME, true],
-    [Platform::SENDMYPARCEL_NAME, Carrier::CARRIER_DPD_NAME, true],
-]);
-
-it('can have date', function (string $carrierName, bool $outcome) {
-    expect(createValidator($carrierName)->canHaveDate())->toBe($outcome);
 })->with([
     [Platform::MYPARCEL_NAME, Carrier::CARRIER_POSTNL_NAME, true],
     [Platform::MYPARCEL_NAME, Carrier::CARRIER_DHL_FOR_YOU_NAME, true],

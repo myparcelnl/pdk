@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 /**
  * @property string               $id
  * @property bool                 $allowDeliveryOptions
+ * @property bool                 $allowStandardDelivery
  * @property bool                 $allowEveningDelivery
  * @property bool                 $allowMondayDelivery
  * @property bool                 $allowMorningDelivery
@@ -67,6 +68,7 @@ class CarrierSettings extends AbstractSettingsModel
      * Settings in this category.
      */
     public const ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
+    public const ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
     public const ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
     public const ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
     public const ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
@@ -113,13 +115,13 @@ class CarrierSettings extends AbstractSettingsModel
     public const PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
     public const PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
     public const PRICE_SIGNATURE                         = 'priceSignature';
-    public const SHOW_DELIVERY_DAY                       = 'showDeliveryDay';
 
     protected $attributes = [
         'id'               => self::ID,
         self::CARRIER_NAME => null,
 
         self::ALLOW_DELIVERY_OPTIONS                  => false,
+        self::ALLOW_STANDARD_DELIVERY                 => false,
         self::ALLOW_EVENING_DELIVERY                  => false,
         self::ALLOW_MONDAY_DELIVERY                   => false,
         self::ALLOW_MORNING_DELIVERY                  => false,
@@ -163,13 +165,13 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
         self::PRICE_SIGNATURE                         => 0,
-        self::SHOW_DELIVERY_DAY                       => true,
     ];
 
     protected $casts      = [
         self::CARRIER_NAME => 'string',
 
         self::ALLOW_DELIVERY_OPTIONS                  => 'bool',
+        self::ALLOW_STANDARD_DELIVERY                 => 'bool',
         self::ALLOW_EVENING_DELIVERY                  => 'bool',
         self::ALLOW_MONDAY_DELIVERY                   => 'bool',
         self::ALLOW_MORNING_DELIVERY                  => 'bool',
@@ -213,7 +215,6 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 'float',
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
         self::PRICE_SIGNATURE                         => 'float',
-        self::SHOW_DELIVERY_DAY                       => 'bool',
     ];
 
     /**

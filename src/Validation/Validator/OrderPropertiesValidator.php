@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Validation\Validator;
 
-use DateTimeImmutable;
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
@@ -54,16 +53,6 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     public function canHaveAgeCheck(): bool
     {
         return $this->canHaveOptionDef(AgeCheckDefinition::class, self::SHIPMENT_OPTIONS_KEY);
-    }
-
-    /**
-     * @return bool
-     */
-    public function canHaveDate(): bool
-    {
-        $testDate = (new DateTimeImmutable())->format(Pdk::get('defaultDateFormat'));
-
-        return $this->canHaveOption([self::DELIVERY_OPTIONS_KEY, DeliveryOptions::DATE], $testDate);
     }
 
     /**
@@ -156,6 +145,14 @@ abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOpti
     public function canHaveSignature(): bool
     {
         return $this->canHaveOptionDef(SignatureDefinition::class, self::SHIPMENT_OPTIONS_KEY);
+    }
+
+    /**
+     * @return bool
+     */
+    public function canHaveStandardDelivery(): bool
+    {
+        return in_array(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME, $this->getAllowedDeliveryTypes(), true);
     }
 
     /**

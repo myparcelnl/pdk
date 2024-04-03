@@ -32,6 +32,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     ];
     private const CONFIG_CARRIER_SETTINGS_MAP   = [
         'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
+        'allowStandardDelivery'        => CarrierSettings::ALLOW_STANDARD_DELIVERY,
         'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
         'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
         'allowMorningDelivery'         => CarrierSettings::ALLOW_MORNING_DELIVERY,
@@ -40,7 +41,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'allowSameDayDelivery'         => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
         'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
         'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,
-        'featureShowDeliveryDate'      => CarrierSettings::SHOW_DELIVERY_DAY,
         'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
         'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
         'priceOnlyRecipient'           => CarrierSettings::PRICE_ONLY_RECIPIENT,

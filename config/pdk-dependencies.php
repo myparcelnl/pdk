@@ -37,27 +37,45 @@ return [
      *
      * @see https://github.com/myparcelnl/delivery-options/releases
      */
-    'deliveryOptionsVersion'    => value('%5E5'),
+    'deliveryOptionsVersion'    => value('6'),
 
     /**
      * The version of vue in the delivery options.
      */
-    'deliveryOptionsVueVersion' => value('2.6.13'),
+    'deliveryOptionsVueVersion' => factory(function (): string {
+        return Pdk::get('vueVersion');
+    }),
+
+    'deliveryOptionsCdnUrlJs' => factory(function (): string {
+        return strtr(Pdk::get('baseCdnUrl'), [
+            ':name'     => '@myparcel/delivery-options',
+            ':version'  => Pdk::get('deliveryOptionsVersion'),
+            ':filename' => 'myparcel.lib.js',
+        ]);
+    }),
+
+    'deliveryOptionsCdnUrlCss' => factory(function (): string {
+        return strtr(Pdk::get('baseCdnUrl'), [
+            ':name'     => '@myparcel/delivery-options',
+            ':version'  => Pdk::get('deliveryOptionsVersion'),
+            ':filename' => 'style.css',
+        ]);
+    }),
 
     /**
      * The version of vue in the PDK admin.
      */
-    'vueVersion'                => value('3.3.4'),
+    'vueVersion'               => value('3.4'),
 
     /**
-     * The version of vue demi in the PDK admin.
+     * The version of vue-demi in the PDK admin.
      */
-    'vueDemiVersion'            => value('0.14.5'),
+    'vueDemiVersion'           => value('0.14'),
 
     /**
      * Whether the current php version is supported.
      */
-    'isPhpVersionSupported'     => factory(function (): bool {
+    'isPhpVersionSupported'    => factory(function (): bool {
         return version_compare(PHP_VERSION, Pdk::get('minimumPhpVersion'), '>=');
     }),
 ];
