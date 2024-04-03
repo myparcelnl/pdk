@@ -46,11 +46,19 @@ return [
         return Pdk::get('vueVersion');
     }),
 
-    'deliveryOptionsCdnUrlJs' => factory(function (): string {
+    'deliveryOptionsCdnUrlJsLib' => factory(function (): string {
         return strtr(Pdk::get('baseCdnUrl'), [
             ':name'     => '@myparcel/delivery-options',
             ':version'  => Pdk::get('deliveryOptionsVersion'),
             ':filename' => 'dist/myparcel.lib.js',
+        ]);
+    }),
+
+    'deliveryOptionsCdnUrlJs' => factory(function (): string {
+        return strtr(Pdk::get('baseCdnUrl'), [
+            ':name'     => '@myparcel/delivery-options',
+            ':version'  => Pdk::get('deliveryOptionsVersion'),
+            ':filename' => 'dist/myparcel.js',
         ]);
     }),
 
