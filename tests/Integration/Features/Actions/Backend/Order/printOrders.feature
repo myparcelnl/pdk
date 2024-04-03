@@ -12,4 +12,4 @@ Feature: As a user I want to be able to print an order
     Then I expect the response code to be 200
     And I expect the response body to contain:
       | key            | value            |
-      | data.pdfs.data | STRING,LENGTH:92 |
+      | data.pdfs.data | STRING,LENGTH:64 |
