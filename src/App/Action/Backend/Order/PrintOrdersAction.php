@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Action\Backend\Shipment\PrintShipmentsAction;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,7 @@ class PrintOrdersAction extends PrintShipmentsAction
         $orderIds = $this->getOrderIds($request);
         $orders   = $this->pdkOrderRepository->getMany($orderIds);
 
-        $shipmentIds = $orders->getAllShipments()
+        $shipmentIds = (new Collection($orders->getAllShipments()))
             ->pluck('id')
             ->all();
 

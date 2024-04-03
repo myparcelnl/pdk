@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatPdkApiService;
 use MyParcelNL\Pdk\Tests\Integration\Exception\NoExampleException;
+use Throwable;
 
 trait MakesPdkHttpRequests
 {
@@ -60,6 +61,14 @@ trait MakesPdkHttpRequests
             self::markTestIncomplete($e->getMessage());
         } catch (ApiException $e) {
             $response = new ApiResponseWithBody($e->getResponse());
+        } catch (Throwable $e) {
+            if ($e->getPrevious()) {
+                $e = $e->getPrevious();
+            }
+
+            self::fail(
+                sprintf('Unexpected %s: %s%s%s', get_class($e), $e->getMessage(), PHP_EOL, $e->getTraceAsString())
+            );
         }
 
         $this->setResponse($response);

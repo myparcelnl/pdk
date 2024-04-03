@@ -82,6 +82,10 @@ trait ValidatesValues
                     self::assertNull($actualValue, "Value for key '$key' is not null");
                     break;
 
+                case 'STRING':
+                    self::assertIsString($actualValue, "Value for key '$key' is not a string");
+                    break;
+
                 case 'FILLED':
                     self::assertNotEmpty($actualValue, "Value for key '$key' is empty");
                     break;
