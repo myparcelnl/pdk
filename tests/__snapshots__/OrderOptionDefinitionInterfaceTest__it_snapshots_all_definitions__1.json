@@ -24,10 +24,6 @@
     "productSettingsKey": "disableDeliveryOptions"
   },
   {
-    "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\DropOffDelayDefinition",
-    "productSettingsKey": "dropOffDelay"
-  },
-  {
     "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\FitInDigitalStampDefinition",
     "productSettingsKey": "fitInDigitalStamp"
   },

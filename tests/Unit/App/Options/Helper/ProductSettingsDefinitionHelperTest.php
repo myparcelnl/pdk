@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DropOffDelayDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
@@ -46,7 +45,6 @@ it('gets value from product settings', function (string $definitionClass, $resul
     'country of origin'        => [CountryOfOriginDefinition::class, TriStateService::INHERIT],
     'customs code'             => [CustomsCodeDefinition::class, TriStateService::INHERIT],
     'disable delivery options' => [DisableDeliveryOptionsDefinition::class, TriStateService::INHERIT],
-    'drop off delay'           => [DropOffDelayDefinition::class, TriStateService::INHERIT],
     'fit in digital stamp'     => [FitInDigitalStampDefinition::class, TriStateService::INHERIT],
     'fit in mailbox'           => [FitInMailboxDefinition::class, TriStateService::INHERIT],
     'package type'             => [PackageTypeDefinition::class, TriStateService::INHERIT],
@@ -72,7 +70,6 @@ it('gets value from product settings with all options enabled', function (string
     'country of origin'        => [CountryOfOriginDefinition::class, 'NL'],
     'customs code'             => [CustomsCodeDefinition::class, '123456'],
     'disable delivery options' => [DisableDeliveryOptionsDefinition::class, true],
-    'drop off delay'           => [DropOffDelayDefinition::class, 3],
     'fit in mailbox'           => [FitInMailboxDefinition::class, 0],
     'package type'             => [PackageTypeDefinition::class, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
 ]);

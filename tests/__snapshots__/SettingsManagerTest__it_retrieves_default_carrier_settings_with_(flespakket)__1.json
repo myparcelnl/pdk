@@ -2,6 +2,7 @@
   "*": {
     "id": "carrier",
     "allowDeliveryOptions": true,
+    "allowStandardDelivery": false,
     "allowEveningDelivery": true,
     "allowMondayDelivery": true,
     "allowMorningDelivery": true,
@@ -90,12 +91,12 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0,
-    "showDeliveryDay": true
+    "priceSignature": 0
   },
   "postnl": {
     "id": "carrier",
     "allowDeliveryOptions": true,
+    "allowStandardDelivery": false,
     "allowEveningDelivery": true,
     "allowMondayDelivery": true,
     "allowMorningDelivery": true,
@@ -184,7 +185,6 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0,
-    "showDeliveryDay": true
+    "priceSignature": 0
   }
 }

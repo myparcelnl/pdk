@@ -321,34 +321,16 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     ]
                 ),
 
-                new InteractiveElement(
-                    CarrierSettings::DROP_OFF_DELAY,
-                    Components::INPUT_NUMBER
-                ),
+                new InteractiveElement(CarrierSettings::DROP_OFF_DELAY, Components::INPUT_NUMBER),
 
-                new InteractiveElement(
-                    CarrierSettings::DROP_OFF_POSSIBILITIES,
-                    Components::INPUT_DROP_OFF
-                ),
+                new InteractiveElement(CarrierSettings::DROP_OFF_POSSIBILITIES, Components::INPUT_DROP_OFF),
 
                 new SettingsDivider($this->createGenericLabel('delivery_moments'), SettingsDivider::LEVEL_4),
 
-                $this->carrierSchema->canHaveDate() ? [
-                    new InteractiveElement(
-                        CarrierSettings::SHOW_DELIVERY_DAY,
-                        Components::INPUT_TOGGLE
-                    ),
-                ] : [],
-
-                $this->createSettingWithPriceFields(
-                    CarrierSettings::ALLOW_MONDAY_DELIVERY,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY
-                ),
-
-                $this->createSettingWithPriceFields(
-                    CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY
-                ),
+                $this->carrierSchema->canHaveStandardDelivery() ? $this->createSettingWithPriceFields(
+                    CarrierSettings::ALLOW_STANDARD_DELIVERY,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD
+                ) : [],
 
                 $this->carrierSchema->canHaveMorningDelivery() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_MORNING_DELIVERY,
@@ -369,6 +351,16 @@ class CarrierSettingsItemView extends AbstractSettingsView
                         new InteractiveElement(CarrierSettings::CUTOFF_TIME_SAME_DAY, Components::INPUT_TIME),
                     ]
                 ) : [],
+
+                $this->createSettingWithPriceFields(
+                    CarrierSettings::ALLOW_MONDAY_DELIVERY,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY
+                ),
+
+                $this->createSettingWithPriceFields(
+                    CarrierSettings::ALLOW_SATURDAY_DELIVERY,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY
+                ),
 
                 new SettingsDivider($this->createGenericLabel('shipment_options'), SettingsDivider::LEVEL_4),
 
@@ -457,7 +449,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
             new InteractiveElement(CarrierSettings::DEFAULT_PACKAGE_TYPE, Components::INPUT_SELECT, [
                 'options' => $this->createPackageTypeOptions($allowedPackageTypes),
             ]),
-            new InteractiveElement(CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD, Components::INPUT_CURRENCY),
         ];
 
         if (in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $allowedPackageTypes, true)) {

@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DropOffDelayDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
@@ -41,7 +40,6 @@ function getProductOptions(): array
         'country of origin'        => new CountryOfOriginDefinition(),
         'customs code'             => new CustomsCodeDefinition(),
         'disable delivery options' => new DisableDeliveryOptionsDefinition(),
-        'drop off delay'           => new DropOffDelayDefinition(),
         'fit in digital stamp'     => new FitInDigitalStampDefinition(),
         'fit in mailbox'           => new FitInMailboxDefinition(),
         'package type'             => new PackageTypeDefinition(),

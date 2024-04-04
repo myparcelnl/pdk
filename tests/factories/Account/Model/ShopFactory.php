@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollectionFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
@@ -47,6 +48,7 @@ final class ShopFactory extends AbstractModelFactory
             factory(CarrierCollection::class)->push(
                 factory(Carrier::class)
                     ->withExternalIdentifier(PlatformFacade::get('defaultCarrier'))
+                    ->withCapabilities(factory(CarrierCapabilities::class)->withEverything())
             )
         );
     }

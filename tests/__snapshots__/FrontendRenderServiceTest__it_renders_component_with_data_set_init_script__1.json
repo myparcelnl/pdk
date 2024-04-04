@@ -211,7 +211,7 @@
   "dynamic": {
     "account": {
       "id": 1,
-      "platformId": 3,
+      "platformId": 1,
       "contactInfo": {
         "address1": "Antareslaan 31",
         "cc": "NL",
@@ -229,7 +229,7 @@
       "shops": [
         {
           "accountId": 1,
-          "platformId": 3,
+          "platformId": 1,
           "hidden": false,
           "billing": [],
           "deliveryAddress": {
@@ -257,10 +257,25 @@
               "primary": false,
               "type": "main",
               "capabilities": {
-                "deliveryTypes": [],
-                "features": [],
-                "packageTypes": [],
-                "shipmentOptions": []
+                "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+                "features": {
+                  "dropOffAtPostalPoint": true,
+                  "labelDescriptionLength": 45,
+                  "multiCollo": true
+                },
+                "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+                "shipmentOptions": {
+                  "ageCheck": true,
+                  "return": true,
+                  "hideSender": true,
+                  "largeFormat": true,
+                  "onlyRecipient": true,
+                  "sameDayDelivery": true,
+                  "signature": true,
+                  "insurance": [
+                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                  ]
+                }
               },
               "returnCapabilities": {
                 "deliveryTypes": ["standard"],
@@ -300,10 +315,25 @@
         "primary": false,
         "type": "main",
         "capabilities": {
-          "deliveryTypes": [],
-          "features": [],
-          "packageTypes": [],
-          "shipmentOptions": []
+          "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+          "features": {
+            "dropOffAtPostalPoint": true,
+            "labelDescriptionLength": 45,
+            "multiCollo": true
+          },
+          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+          "shipmentOptions": {
+            "ageCheck": true,
+            "return": true,
+            "hideSender": true,
+            "largeFormat": true,
+            "onlyRecipient": true,
+            "sameDayDelivery": true,
+            "signature": true,
+            "insurance": [
+              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
+          }
         },
         "returnCapabilities": {
           "deliveryTypes": ["standard"],
@@ -374,6 +404,7 @@
         "postnl": {
           "id": "postnl",
           "allowDeliveryOptions": false,
+          "allowStandardDelivery": false,
           "allowEveningDelivery": false,
           "allowMondayDelivery": false,
           "allowMorningDelivery": false,
@@ -419,14 +450,13 @@
           "priceOnlyRecipient": 0,
           "pricePackageTypeDigitalStamp": 0,
           "pricePackageTypeMailbox": 0,
-          "priceSignature": 0,
-          "showDeliveryDay": true
+          "priceSignature": 0
         }
       }
     },
     "shop": {
       "accountId": 1,
-      "platformId": 3,
+      "platformId": 1,
       "hidden": false,
       "billing": [],
       "deliveryAddress": {
@@ -454,10 +484,25 @@
           "primary": false,
           "type": "main",
           "capabilities": {
-            "deliveryTypes": [],
-            "features": [],
-            "packageTypes": [],
-            "shipmentOptions": []
+            "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+            "features": {
+              "dropOffAtPostalPoint": true,
+              "labelDescriptionLength": 45,
+              "multiCollo": true
+            },
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+            "shipmentOptions": {
+              "ageCheck": true,
+              "return": true,
+              "hideSender": true,
+              "largeFormat": true,
+              "onlyRecipient": true,
+              "sameDayDelivery": true,
+              "signature": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            }
           },
           "returnCapabilities": {
             "deliveryTypes": ["standard"],

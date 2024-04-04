@@ -1,6 +1,6 @@
 {
   "id": 1,
-  "platformId": 3,
+  "platformId": 1,
   "contactInfo": {
     "address1": "Antareslaan 31",
     "cc": "NL",
@@ -18,7 +18,7 @@
   "shops": [
     {
       "accountId": 1,
-      "platformId": 3,
+      "platformId": 1,
       "hidden": false,
       "billing": [],
       "deliveryAddress": {
