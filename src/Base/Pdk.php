@@ -88,14 +88,6 @@ class Pdk implements PdkInterface
     }
 
     /**
-     * @return \DI\Container
-     */
-    public function getContainer(): Container
-    {
-        return $this->container;
-    }
-
-    /**
      * @return string
      * @throws \DI\DependencyException
      * @throws \DI\NotFoundException
