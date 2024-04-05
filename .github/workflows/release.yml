@@ -90,3 +90,17 @@ jobs:
     needs: release
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit
+
+  trigger:
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        repo: ${{ fromJSON(vars.DEPENDENT_REPOS) }}
+    steps:
+      - uses: myparcelnl/actions/repository-dispatch@v4
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+          event-type: 'pdk-update'
