@@ -1,33 +1,7 @@
 {
   "checkout": {
     "strings": {
-      "addressNotFound": "delivery_options_address_not_found",
-      "cc": "delivery_options_cc",
-      "city": "delivery_options_city",
-      "closed": "delivery_options_closed",
-      "deliveryEveningTitle": "delivery_options_delivery_type_evening_title",
-      "deliveryMorningTitle": "delivery_options_delivery_type_morning_title",
-      "deliverySameDayTitle": "delivery_options_delivery_type_same_day_title",
-      "deliveryStandardTitle": "delivery_options_delivery_type_standard_title",
-      "deliveryTitle": "delivery_options_delivery_title",
-      "discount": "delivery_options_discount",
-      "free": "delivery_options_free",
-      "from": "delivery_options_from",
-      "loadMore": "delivery_options_load_more",
-      "mondayDeliveryTitle": "delivery_options_monday_delivery_title",
-      "number": "delivery_options_number",
-      "onlyRecipientTitle": "delivery_options_only_recipient_title",
-      "openingHours": "delivery_options_opening_hours",
-      "options": "delivery_options_options",
-      "packageTypeDigitalStamp": "delivery_options_package_type_digital_stamp",
-      "packageTypeMailbox": "delivery_options_package_type_mailbox",
-      "pickUpFrom": "delivery_options_pick_up_from",
-      "pickupLocationsListButton": "delivery_options_pickup_locations_list_button",
-      "pickupLocationsMapButton": "delivery_options_pickup_locations_map_button",
-      "pickupTitle": "delivery_options_pickup_title",
-      "postalCode": "delivery_options_postal_code",
-      "saturdayDeliveryTitle": "delivery_options_saturday_delivery_title",
-      "signatureTitle": "delivery_options_signature_title"
+      "morning": "Ochtend"
     },
     "settings": {
       "actions": {
