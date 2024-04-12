@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        repo: ${{ fromJSON(vars.DEPENDENT_REPOS) }}
+        repo: ${{ fromJSON(vars.PDK_DEPENDENT_REPOS) }}
     steps:
       - uses: myparcelnl/actions/repository-dispatch@v4
         with:
