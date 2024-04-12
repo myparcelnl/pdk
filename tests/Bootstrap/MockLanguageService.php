@@ -9,7 +9,10 @@ use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 class MockLanguageService implements LanguageServiceInterface
 {
     private const TRANSLATIONS = [
-        'apple_tree' => 'Appelboom',
+        'apple_tree'                     => 'Appelboom',
+        'delivery_options'               => 'Delivery options',
+        'delivery_options_morning'       => 'Ochtend',
+        'some_delivery_options_broccoli' => 'Broccoli',
     ];
 
     /**
@@ -57,7 +60,7 @@ class MockLanguageService implements LanguageServiceInterface
      */
     public function translate(string $key, ?string $language = null): string
     {
-        return self::TRANSLATIONS[$key] ?? $key;
+        return $this->getTranslations()[$key] ?? $key;
     }
 
     /**

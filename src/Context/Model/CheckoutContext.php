@@ -8,11 +8,13 @@ use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Request\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * @property null|DeliveryOptionsConfig $config
@@ -21,39 +23,6 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
  */
 class CheckoutContext extends Model
 {
-    /**
-     * Maps the name of a delivery options setting to the corresponding translation key.
-     */
-    private const TRANSLATION_MAP = [
-        'addressNotFound'           => 'delivery_options_address_not_found',
-        'cc'                        => 'delivery_options_cc',
-        'city'                      => 'delivery_options_city',
-        'closed'                    => 'delivery_options_closed',
-        'deliveryEveningTitle'      => 'delivery_options_delivery_type_evening_title',
-        'deliveryMorningTitle'      => 'delivery_options_delivery_type_morning_title',
-        'deliverySameDayTitle'      => 'delivery_options_delivery_type_same_day_title',
-        'deliveryStandardTitle'     => 'delivery_options_delivery_type_standard_title',
-        'deliveryTitle'             => 'delivery_options_delivery_title',
-        'discount'                  => 'delivery_options_discount',
-        'free'                      => 'delivery_options_free',
-        'from'                      => 'delivery_options_from',
-        'loadMore'                  => 'delivery_options_load_more',
-        'mondayDeliveryTitle'       => 'delivery_options_monday_delivery_title',
-        'number'                    => 'delivery_options_number',
-        'onlyRecipientTitle'        => 'delivery_options_only_recipient_title',
-        'openingHours'              => 'delivery_options_opening_hours',
-        'options'                   => 'delivery_options_options',
-        'packageTypeDigitalStamp'   => 'delivery_options_package_type_digital_stamp',
-        'packageTypeMailbox'        => 'delivery_options_package_type_mailbox',
-        'pickUpFrom'                => 'delivery_options_pick_up_from',
-        'pickupLocationsListButton' => 'delivery_options_pickup_locations_list_button',
-        'pickupLocationsMapButton'  => 'delivery_options_pickup_locations_map_button',
-        'pickupTitle'               => 'delivery_options_pickup_title',
-        'postalCode'                => 'delivery_options_postal_code',
-        'saturdayDeliveryTitle'     => 'delivery_options_saturday_delivery_title',
-        'signatureTitle'            => 'delivery_options_signature_title',
-    ];
-
     public    $attributes = [
         'config'    => null,
         'strings'   => [],
@@ -138,14 +107,22 @@ class CheckoutContext extends Model
      */
     private function getStrings(): array
     {
-        return array_merge(
-            Language::translateArray(self::TRANSLATION_MAP),
-            [
-                'headerDeliveryOptions' => Settings::get(
-                    CheckoutSettings::DELIVERY_OPTIONS_HEADER,
-                    CheckoutSettings::ID
-                ),
-            ]
-        );
+        $prefix  = Pdk::get('translationPrefixDeliveryOptions');
+        $strings = (new Collection(Language::getTranslations()))
+            ->filter(static function ($value, $key) use ($prefix) {
+                return Str::startsWith($key, $prefix);
+            })
+            ->map([Language::class, 'translate'])
+            ->mapWithKeys(static function ($value, $key) use ($prefix) {
+                $replacedKey = Str::after($key, $prefix);
+                $finalKey    = Str::camel($replacedKey);
+
+                return [$finalKey => $value];
+            })
+            ->toArray();
+
+        return array_merge($strings, [
+            'headerDeliveryOptions' => Settings::get(CheckoutSettings::DELIVERY_OPTIONS_HEADER, CheckoutSettings::ID),
+        ]);
     }
 }

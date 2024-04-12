@@ -136,7 +136,7 @@ return [
      * Carriers filtered by those allowed in the current platform.
      */
 
-    'carriers'           => factory(function (): CarrierCollection {
+    'carriers'                         => factory(function (): CarrierCollection {
         /** @var CarrierCollection $allCarriers */
         $allCarriers      = Pdk::get('allCarriers');
         $platformCarriers = new Collection(Platform::get('carriers'));
@@ -149,14 +149,15 @@ return [
     /**
      * Language to default to when no language is set.
      */
-    'defaultLanguage'    => value('en'),
+    'defaultLanguage'                  => value('en'),
 
     /**
      * Languages present in the translations directory after the build process.
      */
-    'availableLanguages' => value([
-        'en',
-        'nl',
-        'fr',
-    ]),
+    'availableLanguages'               => value(['en', 'nl', 'fr']),
+
+    /**
+     * The prefix to use for delivery options translations.
+     */
+    'translationPrefixDeliveryOptions' => value('delivery_options_'),
 ];

@@ -205,7 +205,10 @@
       "defaultCarrierId": 1
     },
     "translations": {
-      "apple_tree": "Appelboom"
+      "apple_tree": "Appelboom",
+      "delivery_options": "Delivery options",
+      "delivery_options_morning": "Ochtend",
+      "some_delivery_options_broccoli": "Broccoli"
     }
   },
   "dynamic": {
