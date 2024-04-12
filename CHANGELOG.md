@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.36.0](https://github.com/myparcelnl/pdk/compare/v2.35.0...v2.36.0) (2024-04-12)
+
+
+### :sparkles: New Features
+
+* include delivery options translations in context ([#266](https://github.com/myparcelnl/pdk/issues/266)) ([af2ed16](https://github.com/myparcelnl/pdk/commit/af2ed1648bbff5d74d9d4e8eb5e95ec3b47c5bcc))
+
 ## [2.35.0](https://github.com/myparcelnl/pdk/compare/v2.34.0...v2.35.0) (2024-04-04)
 
 
