@@ -16,7 +16,6 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance([
-    // We're using real translations here, so can't
     LanguageServiceInterface::class => get(MockAbstractLanguageService::class),
 ]));
 
