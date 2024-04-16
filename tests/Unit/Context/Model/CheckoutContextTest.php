@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
-use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\get;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -20,8 +19,6 @@ usesShared(new UsesMockPdkInstance([
 ]));
 
 beforeEach(function () {
-    TestBootstrapper::hasAccount();
-
     /** @var MockAbstractLanguageService $languageService */
     $languageService = Pdk::get(LanguageServiceInterface::class);
 
