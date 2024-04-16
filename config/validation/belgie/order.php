@@ -69,7 +69,7 @@ return [
                         [
                             'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
                             'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema'       => 'order/postnl/be_package',
+                            'note'         => 'Is validated using base',
                             'deliveryType' => [
                                 [
                                     'id'     => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,

@@ -41,7 +41,7 @@
                   "required": ["insurance"],
                   "properties": {
                     "insurance": {
-                      "enum": [50000]
+                      "enum": [50000, 250000, 500000]
                     },
                     "signature": {
                       "enum": [1]

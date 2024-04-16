@@ -2,9 +2,6 @@
   <configuration default="true" type="PhpBehatConfigurationType">
     <BehatRunner scenario="" scope="Yml" />
     <CommandLine workingDirectory="$PROJECT_DIR$" />
-      <PhpTestInterpreterSettings>
-        <option name="interpreterName" value="php" />
-      </PhpTestInterpreterSettings>
     <method v="2" />
   </configuration>
 </component>
