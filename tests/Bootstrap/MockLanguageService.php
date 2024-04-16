@@ -5,8 +5,16 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
-class MockLanguageService implements LanguageServiceInterface
+/**
+ * This service ignores missing translations and just returns the key, unlike the MockAbstractLanguageService. Use this
+ * service when you need to see all possible translations, rather than the ones that are actually set. For example, in
+ * the settings page, where descriptions are not rendered if there is no translation for them.
+ *
+ * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService
+ */
+class MockLanguageService implements LanguageServiceInterface, ResetInterface
 {
     private const TRANSLATIONS = [
         'apple_tree'                     => 'Appelboom',
@@ -14,6 +22,16 @@ class MockLanguageService implements LanguageServiceInterface
         'delivery_options_morning'       => 'Ochtend',
         'some_delivery_options_broccoli' => 'Broccoli',
     ];
+
+    /**
+     * @var string[]
+     */
+    private $translations = [];
+
+    public function __construct()
+    {
+        $this->reset();
+    }
 
     /**
      * @param  null|string $language
@@ -38,7 +56,7 @@ class MockLanguageService implements LanguageServiceInterface
      */
     public function getTranslations(?string $language = null): array
     {
-        return self::TRANSLATIONS;
+        return $this->translations;
     }
 
     /**
@@ -50,6 +68,24 @@ class MockLanguageService implements LanguageServiceInterface
     public function hasTranslation(string $key, ?string $language = null): bool
     {
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    public function reset(): void
+    {
+        $this->setTranslations(self::TRANSLATIONS);
+    }
+
+    /**
+     * @param  array $translations
+     *
+     * @return void
+     */
+    public function setTranslations(array $translations): void
+    {
+        $this->translations = $translations;
     }
 
     /**

@@ -8,6 +8,12 @@ use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Language\Repository\LanguageRepository;
 use MyParcelNL\Pdk\Language\Service\AbstractLanguageService;
 
+/**
+ * Use this service when you need to test actual translation logic. It does not ignore missing translations and will
+ * throw an error when using a language that is not set.
+ *
+ * @see \MyParcelNL\Pdk\Tests\Bootstrap\MockLanguageService
+ */
 class MockAbstractLanguageService extends AbstractLanguageService
 {
     /**
@@ -23,29 +29,7 @@ class MockAbstractLanguageService extends AbstractLanguageService
     {
         parent::__construct($repository, $fileSystem);
 
-        $dir                = $this->fileSystem->dirname($this->getFilePath());
-        $translationsPathNl = $this->getFilePath('nl');
-        $translationsPathEn = $this->getFilePath('en');
-
-        $this->fileSystem->mkdir($dir, true);
-
-        $this->fileSystem->put(
-            $translationsPathNl,
-            json_encode([
-                'send_help'               => 'Stuur hulp',
-                'i_am_trapped'            => 'Ik zit vast',
-                'in_a_docker_environment' => 'In een Docker-omgeving',
-            ])
-        );
-
-        $this->fileSystem->put(
-            $translationsPathEn,
-            json_encode([
-                'send_help'               => 'Send help',
-                'i_am_trapped'            => 'I am stuck',
-                'in_a_docker_environment' => 'In a Docker environment',
-            ])
-        );
+        $this->reset();
     }
 
     /**
@@ -54,6 +38,36 @@ class MockAbstractLanguageService extends AbstractLanguageService
     public function getLanguage(): string
     {
         return $this->language;
+    }
+
+    /**
+     * Set translations for all languages we support by default.
+     *
+     * @return void
+     * @see 'availableLanguages' in the config
+     */
+    public function reset(): void
+    {
+        $dir = $this->fileSystem->dirname($this->getFilePath());
+        $this->fileSystem->mkdir($dir, true);
+
+        $this->setTranslations('nl', [
+            'send_help'               => 'Stuur hulp',
+            'i_am_trapped'            => 'Ik zit vast',
+            'in_a_docker_environment' => 'In een Docker-omgeving',
+        ]);
+
+        $this->setTranslations('en', [
+            'send_help'               => 'Send help',
+            'i_am_trapped'            => 'I am stuck',
+            'in_a_docker_environment' => 'In a Docker environment',
+        ]);
+
+        $this->setTranslations('fr', [
+            'send_help'               => 'Envoyer de l\'aide',
+            'i_am_trapped'            => 'Je suis coincé',
+            'in_a_docker_environment' => 'Dans un environnement Docker',
+        ]);
     }
 
     /**
@@ -66,6 +80,22 @@ class MockAbstractLanguageService extends AbstractLanguageService
     {
         $this->language = $language;
         return $this;
+    }
+
+    /**
+     * @param  string $language
+     * @param  array  $translations
+     *
+     * @return void
+     */
+    public function setTranslations(string $language, array $translations): void
+    {
+        $translationsPath = $this->getFilePath($language);
+
+        $this->fileSystem->put($translationsPath, json_encode($translations));
+
+        // Clear repository cache for the given language
+        $this->repository->save("language_$language", null);
     }
 
     /**
