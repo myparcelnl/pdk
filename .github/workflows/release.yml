@@ -64,6 +64,9 @@ jobs:
       - quality
     outputs:
       released: ${{ steps.semantic-release.outputs.released }}
+      version: ${{ steps.semantic-release.outputs.version }}
+      previous-version: ${{ steps.semantic-release.outputs.previous-version }}
+      release-type: ${{ steps.semantic-release.outputs.release-type }}
     steps:
       - uses: myparcelnl/actions/setup-git-credentials@v4
         id: credentials
@@ -105,3 +108,9 @@ jobs:
           private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
           repository: ${{ matrix.repo }}
           event-type: 'pdk-update'
+          client-payload: |-
+            {
+              "version": "${{ needs.release.outputs.version }}",
+              "previousVersion": "${{ needs.release.outputs.previous-version }}",
+              "type": "${{ needs.release.outputs.release-type }}"
+            }
