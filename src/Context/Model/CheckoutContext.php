@@ -112,7 +112,6 @@ class CheckoutContext extends Model
             ->filter(static function ($value, $key) use ($prefix) {
                 return Str::startsWith($key, $prefix);
             })
-            ->map([Language::class, 'translate'])
             ->mapWithKeys(static function ($value, $key) use ($prefix) {
                 $replacedKey = Str::after($key, $prefix);
                 $finalKey    = Str::camel($replacedKey);

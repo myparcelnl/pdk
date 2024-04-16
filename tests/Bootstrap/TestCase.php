@@ -21,7 +21,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function getResetServices(): array
     {
         return [
+            MockAbstractLanguageService::class,
             MockCarrierSchema::class,
+            MockLanguageService::class,
             MockMemoryCacheStorage::class,
             MockOrderStatusService::class,
             MockPdkActionsService::class,
