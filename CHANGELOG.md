@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.36.1](https://github.com/myparcelnl/pdk/compare/v2.36.0...v2.36.1) (2024-04-16)
+
+
+### :bug: Bug Fixes
+
+* **checkout:** fix error when loading delivery options strings ([#268](https://github.com/myparcelnl/pdk/issues/268)) ([d56f2e4](https://github.com/myparcelnl/pdk/commit/d56f2e48c37d14efe7bb3f6294c311a44243dceb))
+
 ## [2.36.0](https://github.com/myparcelnl/pdk/compare/v2.35.0...v2.36.0) (2024-04-12)
 
 
