@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.36.2](https://github.com/myparcelnl/pdk/compare/v2.36.1...v2.36.2) (2024-04-22)
+
+
+### :bug: Bug Fixes
+
+* **insurance:** fix belgium insurance possibilities ([#267](https://github.com/myparcelnl/pdk/issues/267)) ([f577424](https://github.com/myparcelnl/pdk/commit/f57742490f6056b5ceed7a99ebb99153f97a7f21))
+
 ## [2.36.1](https://github.com/myparcelnl/pdk/compare/v2.36.0...v2.36.1) (2024-04-16)
 
 
