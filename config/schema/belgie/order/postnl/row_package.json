@@ -15,7 +15,7 @@
         "shipmentOptions": {
           "properties": {
             "insurance": {
-              "enum": [20000]
+              "enum": [0, 5000, 50000]
             },
             "largeFormat": {
               "enum": [0]
