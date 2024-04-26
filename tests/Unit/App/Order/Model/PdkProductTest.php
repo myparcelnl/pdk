@@ -120,19 +120,19 @@ it('calculates other options for child products', function (string $definitionCl
 
     'package type: package, mailbox, _ -> mailbox' => [
         'definition' => PackageTypeDefinition::class,
-        'input'      => ['package', 'mailbox', -1],
+        'input'      => ['package', 'mailbox', '-1'],
         'output'     => 'mailbox',
     ],
 
     'package type: package, _, mailbox -> mailbox' => [
         'definition' => PackageTypeDefinition::class,
-        'input'      => ['package', -1, 'mailbox'],
+        'input'      => ['package', '-1', 'mailbox'],
         'output'     => 'mailbox',
     ],
 
     'package type: _, package, mailbox -> mailbox' => [
         'definition' => PackageTypeDefinition::class,
-        'input'      => [-1, 'package', 'mailbox'],
+        'input'      => ['-1', 'package', 'mailbox'],
         'output'     => 'mailbox',
     ],
 ]);
