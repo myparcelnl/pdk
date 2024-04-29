@@ -21,9 +21,17 @@ const LINES_FITS_IN_MAILBOX = [
             'weight'        => 1,
             'isDeliverable' => true,
             'settings'      => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                'fitInMailbox' => 5,
+                'packageType'  => -1,
+                'fitInMailbox' => -1,
             ],
+            'parent' => [
+                'weight'        => 1,
+                'isDeliverable' => true,
+                'settings' => [
+                    'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    'fitInMailbox' => 5,
+                ],
+            ]
         ],
     ],
     [
