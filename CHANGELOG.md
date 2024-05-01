@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.36.3](https://github.com/myparcelnl/pdk/compare/v2.36.2...v2.36.3) (2024-05-01)
+
+
+### :bug: Bug Fixes
+
+* **checkout:** honor product variant settings ([#269](https://github.com/myparcelnl/pdk/issues/269)) ([524689f](https://github.com/myparcelnl/pdk/commit/524689f77aedbfd188a26f4a677098ebb92a8efa))
+
 ## [2.36.2](https://github.com/myparcelnl/pdk/compare/v2.36.1...v2.36.2) (2024-04-22)
 
 
