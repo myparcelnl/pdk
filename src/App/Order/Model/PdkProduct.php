@@ -130,6 +130,10 @@ class PdkProduct extends Model
         foreach ($settings->getAttributes() as $key => $value) {
             $coerced = $triStateService->coerce($settings->getAttribute($key));
 
+            if ($coerced === '-1') {
+                $coerced = (int) $coerced;
+            }
+
             if (TriStateService::INHERIT !== $coerced) {
                 continue;
             }
