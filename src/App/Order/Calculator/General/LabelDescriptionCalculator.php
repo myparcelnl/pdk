@@ -73,7 +73,7 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
     {
         $labelDescriptionFromOrder = $this->order->deliveryOptions->shipmentOptions->labelDescription;
 
-        if (is_string($labelDescriptionFromOrder)) {
+        if (is_string($labelDescriptionFromOrder) && $labelDescriptionFromOrder !== '-1') {
             return $labelDescriptionFromOrder;
         }
 

@@ -60,6 +60,10 @@ it('formats label description from order', function ($labelDescription, $output)
             'input'  => TriStateService::INHERIT,
             'output' => '',
         ],
+        'inherited label description as string'   => [
+            'input'  => (string) TriStateService::INHERIT,
+            'output' => '',
+        ],
         'empty label description'                 => [
             'input'  => '',
             'output' => '',
