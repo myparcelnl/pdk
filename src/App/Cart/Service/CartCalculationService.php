@@ -102,7 +102,7 @@ class CartCalculationService implements CartCalculationServiceInterface
     private function isWeightUnderPackageTypeLimit(PdkCart $cart, string $packageType): bool
     {
         $limit  = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);
-        $weight = Pdk::get(DeliveryOptionsService::class)->getEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
+        $weight = Pdk::get(DeliveryOptionsService::class)->getWeightByPackageType($cart->lines->getTotalWeight(), $packageType);
 
         return $weight <= $limit;
     }
