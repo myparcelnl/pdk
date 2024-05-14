@@ -6,9 +6,12 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -98,8 +101,9 @@ class CartCalculationService implements CartCalculationServiceInterface
      */
     private function isWeightUnderPackageTypeLimit(PdkCart $cart, string $packageType): bool
     {
-        $limit = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);
+        $limit  = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);
+        $weight = Pdk::get(DeliveryOptionsService::class)->getEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
 
-        return $cart->lines->getTotalWeight() <= $limit;
+        return $weight <= $limit;
     }
 }

@@ -240,7 +240,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      *
      * @return int
      */
-    private function getWeightByPackageType(int $weight, PackageType $packageType): int
+    public function getWeightByPackageType(int $weight, PackageType $packageType): int
     {
         $fullWeight = $weight;
 
