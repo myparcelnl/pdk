@@ -23,6 +23,25 @@ class WeightService implements WeightServiceInterface
     ];
 
     /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int
+    {
+        $fullWeight = $weight;
+
+        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
+
+        if ($emptyWeightSetting) {
+            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
+        }
+
+        return $fullWeight ?: 1;
+    }
+
+    /**
      * @param  int   $weight
      * @param  array $ranges
      *
@@ -86,24 +105,5 @@ class WeightService implements WeightServiceInterface
         }
 
         return (int) ceil($weight);
-    }
-
-    /**
-     * @param  int                                        $weight
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
-     *
-     * @return int
-     */
-    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int
-    {
-        $fullWeight = $weight;
-
-        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
-
-        if ($emptyWeightSetting) {
-            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
-        }
-
-        return $fullWeight ?: 1;
     }
 }
