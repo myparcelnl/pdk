@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Contract;
 
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
+
 interface WeightServiceInterface
 {
     /**
@@ -60,4 +62,12 @@ interface WeightServiceInterface
      * @return int
      */
     public function convertToGrams($weight, string $unit): int;
+
+    /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int;
 }
