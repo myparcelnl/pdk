@@ -8,7 +8,10 @@ namespace MyParcelNL\Pdk\Base\Service;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 const CUSTOM_RANGES = [
@@ -25,6 +28,7 @@ const CUSTOM_RANGES = [
 ];
 
 usesShared(new UsesMockPdkInstance());
+
 it('converts to grams', function (string $unit, $input, int $expectation) {
     /** @var \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface $weightService */
     $weightService = Pdk::get(WeightServiceInterface::class);
@@ -85,4 +89,25 @@ it('converts to digital stamp using custom range', function ($ranges, $input, $e
     [CUSTOM_RANGES, CUSTOM_RANGES[0]['max'] + 1, CUSTOM_RANGES[1]['average']],
     [CUSTOM_RANGES, CUSTOM_RANGES[1]['min'], CUSTOM_RANGES[0]['average']],
     [CUSTOM_RANGES, CUSTOM_RANGES[1]['max'], CUSTOM_RANGES[1]['average']],
+]);
+
+it('adds empty package weight', function ($weight, $packageTypeName, $expectation) {
+    factory(OrderSettings::class)
+        ->withEmptyParcelWeight(200)
+        ->withEmptyMailboxWeight(100)
+        ->withEmptyDigitalStampWeight(50)
+        ->withEmptyPackageSmallWeight(75)
+        ->store();
+
+    $packageType = factory(PackageType::class)->withName($packageTypeName)->make();
+
+    /** @var \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface $weightService */
+    $weightService = Pdk::get(WeightServiceInterface::class);
+
+    expect($weightService->addEmptyPackageWeight($weight, $packageType))->toEqual($expectation);
+})->with([
+    [1000, 'package', 1200],
+    [1000, 'mailbox', 1100],
+    [1000, 'digital_stamp', 1050],
+    [1000, 'package_small', 1075],
 ]);

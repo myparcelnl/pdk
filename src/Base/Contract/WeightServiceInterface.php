@@ -44,6 +44,14 @@ interface WeightServiceInterface
     public const UNIT_POUNDS          = 'lbs';
 
     /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int;
+
+    /**
      * Convert a weight into a digital stamp range.
      *
      * @param  int   $weight - Weight in grams.
@@ -62,12 +70,4 @@ interface WeightServiceInterface
      * @return int
      */
     public function convertToGrams($weight, string $unit): int;
-
-    /**
-     * @param  int                                        $weight
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
-     *
-     * @return int
-     */
-    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int;
 }

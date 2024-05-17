@@ -8,16 +8,12 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 const LINES_FITS_IN_MAILBOX = [
@@ -117,16 +113,7 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
 ];
 
 uses()->group('checkout');
-
-usesShared(
-    new UsesMockPdkInstance([
-        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            OrderSettings::ID => [
-                OrderSettings::EMPTY_MAILBOX_WEIGHT => 200,
-            ],
-        ]),
-    ])
-);
+usesShared(new UsesMockPdkInstance());
 
 it('calculates mailbox percentage', function (array $lines, float $expected) {
     /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
@@ -151,6 +138,10 @@ it('calculates mailbox percentage', function (array $lines, float $expected) {
 ]);
 
 it('calculates allowed package types', function (array $lines, array $result) {
+    factory(OrderSettings::class)
+        ->withEmptyMailboxWeight(200)
+        ->store();
+
     /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
