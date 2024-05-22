@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Contract;
 
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
+
 interface WeightServiceInterface
 {
     /**
@@ -40,6 +42,14 @@ interface WeightServiceInterface
     public const UNIT_KILOGRAMS       = 'kg';
     public const UNIT_OUNCES          = 'oz';
     public const UNIT_POUNDS          = 'lbs';
+
+    /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int;
 
     /**
      * Convert a weight into a digital stamp range.

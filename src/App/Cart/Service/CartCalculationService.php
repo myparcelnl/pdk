@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
@@ -32,7 +33,7 @@ class CartCalculationService implements CartCalculationServiceInterface
                 }
 
                 $allowed = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName)
-                    && $this->isWeightUnderPackageTypeLimit($cart, $packageTypeName);
+                    && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
 
                 if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
                     return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
@@ -91,15 +92,16 @@ class CartCalculationService implements CartCalculationServiceInterface
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     * @param  string                                 $packageType
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart     $cart
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
      *
      * @return bool
      */
-    private function isWeightUnderPackageTypeLimit(PdkCart $cart, string $packageType): bool
+    private function isWeightUnderPackageTypeLimit(PdkCart $cart, PackageType $packageType): bool
     {
-        $limit = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType, INF);
+        $limit  = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType->name, INF);
+        $weight = Pdk::get(WeightService::class)->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
 
-        return $cart->lines->getTotalWeight() <= $limit;
+        return $weight <= $limit;
     }
 }

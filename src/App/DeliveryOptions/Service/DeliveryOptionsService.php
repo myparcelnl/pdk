@@ -8,9 +8,12 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
@@ -24,12 +27,6 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    private const PACKAGE_TYPE_EMPTY_WEIGHT_MAP = [
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => OrderSettings::EMPTY_PARCEL_WEIGHT,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME => OrderSettings::EMPTY_PACKAGE_SMALL_WEIGHT,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => OrderSettings::EMPTY_MAILBOX_WEIGHT,
-        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
-    ];
     private const CONFIG_CARRIER_SETTINGS_MAP   = [
         'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
         'allowStandardDelivery'        => CarrierSettings::ALLOW_STANDARD_DELIVERY,
@@ -201,7 +198,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         foreach ($cart->shippingMethod->allowedPackageTypes->all() as $packageType) {
-            $weight = $this->getWeightByPackageType($cart->lines->getTotalWeight(), $packageType);
+            $weight = Pdk::get(WeightServiceInterface::class)->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
 
             $filteredCarriers = $allCarriers
                 ->filter(
@@ -232,24 +229,5 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
-    }
-
-    /**
-     * @param  int                                        $weight
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
-     *
-     * @return int
-     */
-    private function getWeightByPackageType(int $weight, PackageType $packageType): int
-    {
-        $fullWeight = $weight;
-
-        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
-
-        if ($emptyWeightSetting) {
-            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
-        }
-
-        return $fullWeight ?: 1;
     }
 }

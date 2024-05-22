@@ -8,9 +8,39 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 class WeightService implements WeightServiceInterface
 {
+    private const PACKAGE_TYPE_EMPTY_WEIGHT_MAP = [
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => OrderSettings::EMPTY_PARCEL_WEIGHT,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME => OrderSettings::EMPTY_PACKAGE_SMALL_WEIGHT,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => OrderSettings::EMPTY_MAILBOX_WEIGHT,
+        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
+    ];
+
+    /**
+     * @param  int                                        $weight
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     *
+     * @return int
+     */
+    public function addEmptyPackageWeight(int $weight, PackageType $packageType): int
+    {
+        $fullWeight = $weight;
+
+        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
+
+        if ($emptyWeightSetting) {
+            $fullWeight += Settings::get($emptyWeightSetting, OrderSettings::ID);
+        }
+
+        return $fullWeight ?: 1;
+    }
+
     /**
      * @param  int   $weight
      * @param  array $ranges

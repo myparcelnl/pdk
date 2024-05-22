@@ -9,9 +9,11 @@ use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 const LINES_FITS_IN_MAILBOX = [
@@ -82,6 +84,20 @@ const LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT = [
     ],
 ];
 
+const TOTAL_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT = [
+    [
+        'quantity' => 4,
+        'product'  => [
+            'isDeliverable' => true,
+            'weight'        => 500,
+            'settings'      => [
+                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                'fitInMailbox' => 10,
+            ],
+        ],
+    ],
+];
+
 const LINES_EXCEEDING_MAILBOX_SIZE = [
     [
         'quantity' => 5,
@@ -97,7 +113,6 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
 ];
 
 uses()->group('checkout');
-
 usesShared(new UsesMockPdkInstance());
 
 it('calculates mailbox percentage', function (array $lines, float $expected) {
@@ -123,6 +138,10 @@ it('calculates mailbox percentage', function (array $lines, float $expected) {
 ]);
 
 it('calculates allowed package types', function (array $lines, array $result) {
+    factory(OrderSettings::class)
+        ->withEmptyMailboxWeight(200)
+        ->store();
+
     /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
@@ -140,6 +159,10 @@ it('calculates allowed package types', function (array $lines, array $result) {
     ],
     'items exceeding mailbox weight'   => [
         'lines'  => LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
+        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'total exceeding mailbox weight'   => [
+        'lines'  => TOTAL_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
         'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'items exceeding mailbox size'     => [
