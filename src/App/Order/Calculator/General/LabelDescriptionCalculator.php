@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\src\Support\Str;
 
 final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
@@ -73,7 +74,7 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
     {
         $labelDescriptionFromOrder = $this->order->deliveryOptions->shipmentOptions->labelDescription;
 
-        if (is_string($labelDescriptionFromOrder)) {
+        if (is_string($labelDescriptionFromOrder) && $labelDescriptionFromOrder !== (string) TriStateService::INHERIT) {
             return $labelDescriptionFromOrder;
         }
 
