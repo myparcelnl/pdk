@@ -62,7 +62,7 @@ class CheckoutSettingsView extends AbstractSettingsView
                 ),
                 new InteractiveElement(
                     CheckoutSettings::ALLOWED_SHIPPING_METHODS,
-                    Components::INPUT_MULTI_SELECT,
+                    Components::INPUT_SHIPPING_METHODS,
                     ['options' => $this->getShippingMethodOptions()]
                 ),
                 new InteractiveElement(
