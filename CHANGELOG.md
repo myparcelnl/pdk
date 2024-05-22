@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.36.4](https://github.com/myparcelnl/pdk/compare/v2.36.3...v2.36.4) (2024-05-22)
+
+
+### :bug: Bug Fixes
+
+* allow string representation of default setting for label ([#271](https://github.com/myparcelnl/pdk/issues/271)) ([7c92a58](https://github.com/myparcelnl/pdk/commit/7c92a588bbba9ab9fa1b7858d4ae805381f585be))
+* **checkout:** consider empty package weight ([#273](https://github.com/myparcelnl/pdk/issues/273)) ([7acc786](https://github.com/myparcelnl/pdk/commit/7acc7868e07bb9ab3828a244b942eabb8e0b3d2f))
+
 ## [2.36.3](https://github.com/myparcelnl/pdk/compare/v2.36.2...v2.36.3) (2024-05-01)
 
 
