@@ -41,12 +41,12 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     }
 
     /**
-     * @param  array       $array
-     * @param  string|null $case
+     * @param  array    $array
+     * @param  null|int $flags
      *
      * @return array
      */
-    public static function changeArrayKeysCase(array $array, string $case = null): array
+    public static function changeArrayKeysCase(array $array, ?int $flags = null): array
     {
         $newArray = [];
 
@@ -54,17 +54,31 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
             $key = (string) $key;
 
             if ($value instanceof Arrayable) {
-                $value = $value->toArray();
+                $value = $value->toArray($flags & Arrayable::RECURSIVE ? $flags : null);
             }
 
-            if (is_array($value)) {
-                $value = self::changeArrayKeysCase($value, $case);
+            if ($flags & Arrayable::RECURSIVE && is_array($value)) {
+                $value = self::changeArrayKeysCase($value, $flags);
             }
 
-            $newArray[Str::{$case ?? 'camel'}($key)] = $value;
+            $newKey            = self::changeCase($key, $flags);
+            $newArray[$newKey] = $value;
         }
 
         return $newArray;
+    }
+
+    /**
+     * @param  string   $string
+     * @param  null|int $flags
+     *
+     * @return string
+     */
+    public static function changeCase(string $string, ?int $flags = null): string
+    {
+        $case = self::getFlagCase($flags);
+
+        return Str::{$case}($string);
     }
 
     /**
@@ -243,5 +257,27 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         });
 
         return $collection;
+    }
+
+    /**
+     * @param  null|int $flags
+     *
+     * @return string
+     */
+    private static function getFlagCase(?int $flags = null): string
+    {
+        if ($flags & Arrayable::CASE_SNAKE) {
+            return 'snake';
+        }
+
+        if ($flags & Arrayable::CASE_KEBAB) {
+            return 'kebab';
+        }
+
+        if ($flags & Arrayable::CASE_STUDLY) {
+            return 'studly';
+        }
+
+        return 'camel';
     }
 }

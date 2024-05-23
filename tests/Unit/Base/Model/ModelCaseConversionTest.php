@@ -28,3 +28,20 @@ it('can initialize and get properties with any case', function () {
         ->and($model->CamelCase)
         ->toEqual('camelCase');
 });
+
+it('only transforms top-level properties', function () {
+    $model = new DifferentAttributeCasingModel([
+        'snakeCase' => [
+            'nested_array'          => 1,
+            'WithKeys'              => 2,
+            'with-different-casing' => 3,
+        ],
+    ]);
+
+    expect($model->snakeCase)
+        ->toEqual([
+            'nested_array'          => 1,
+            'WithKeys'              => 2,
+            'with-different-casing' => 3,
+        ]);
+});

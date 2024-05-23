@@ -185,7 +185,7 @@ trait HasAttributes
             return null;
         }
 
-        $key = $this->convertAttributeCase($key);
+        $key = Utils::changeCase($key);
 
         if ($this->isGuarded($key)) {
             return $this->guarded[$key];
@@ -217,7 +217,7 @@ trait HasAttributes
             }
 
             if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
-                $attributes = Utils::changeArrayKeysCase($this->attributes, $this->getFlagCase($flags));
+                $attributes = Utils::changeArrayKeysCase($this->attributes, $flags);
             }
         }
 
@@ -272,7 +272,7 @@ trait HasAttributes
      */
     public function setAttribute(string $key, $value): self
     {
-        $key = $this->convertDeprecatedKey($this->convertAttributeCase($key));
+        $key = $this->convertDeprecatedKey(Utils::changeCase($key));
 
         if ($this->isGuarded($key)) {
             return $this;
@@ -305,8 +305,8 @@ trait HasAttributes
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
         foreach ($this->getCasts() as $key => $value) {
-            $originalKey = $this->convertAttributeCase($key);
-            $key         = $this->convertAttributeCase($key, $flags);
+            $originalKey = Utils::changeCase($key);
+            $key         = Utils::changeCase($key, $flags);
 
             if (! array_key_exists($key, $attributes) || in_array($key, $mutatedAttributes, true)) {
                 continue;
@@ -345,7 +345,7 @@ trait HasAttributes
             }
 
             if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
-                $attributes = Utils::changeArrayKeysCase($attributes, $this->getFlagCase($flags));
+                $attributes = Utils::changeArrayKeysCase($attributes, $flags);
             }
         }
 
@@ -362,8 +362,8 @@ trait HasAttributes
     protected function addMutatedAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
         foreach ($mutatedAttributes as $key) {
-            $originalKey = $this->convertAttributeCase($key);
-            $key         = $this->convertAttributeCase($key, $flags);
+            $originalKey = Utils::changeCase($key);
+            $key         = Utils::changeCase($key, $flags);
 
             if (! array_key_exists($key, $attributes)) {
                 continue;
@@ -504,19 +504,6 @@ trait HasAttributes
     }
 
     /**
-     * @param  string   $key
-     * @param  null|int $flags
-     *
-     * @return string
-     */
-    protected function convertAttributeCase(string $key, ?int $flags = null): string
-    {
-        $case = $this->getFlagCase($flags);
-
-        return Str::{$case}($key);
-    }
-
-    /**
      * @param  string $key
      *
      * @return string
@@ -592,7 +579,10 @@ trait HasAttributes
      */
     protected function getCastType(string $key): ?string
     {
-        return $this->getCasts()[$this->convertAttributeCase($key)];
+        $casts         = $this->getCasts();
+        $normalizedKey = Utils::changeCase($key);
+
+        return $casts[$normalizedKey];
     }
 
     /**
@@ -637,28 +627,6 @@ trait HasAttributes
     protected function getDateFormats(): array
     {
         return Pdk::get('dateFormats');
-    }
-
-    /**
-     * @param  null|int $flags
-     *
-     * @return null|string
-     */
-    protected function getFlagCase(?int $flags): ?string
-    {
-        if ($flags & Arrayable::CASE_SNAKE) {
-            return 'snake';
-        }
-
-        if ($flags & Arrayable::CASE_KEBAB) {
-            return 'kebab';
-        }
-
-        if ($flags & Arrayable::CASE_STUDLY) {
-            return 'studly';
-        }
-
-        return 'camel';
     }
 
     /**
