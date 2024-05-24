@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.36.5](https://github.com/myparcelnl/pdk/compare/v2.36.4...v2.36.5) (2024-05-24)
+
+
+### :bug: Bug Fixes
+
+* **model:** fix nested array keys case being changed ([#274](https://github.com/myparcelnl/pdk/issues/274)) ([3f93742](https://github.com/myparcelnl/pdk/commit/3f9374232691180248caa2cc548c8d74e7e89a80))
+
 ## [2.36.4](https://github.com/myparcelnl/pdk/compare/v2.36.3...v2.36.4) (2024-05-22)
 
 
