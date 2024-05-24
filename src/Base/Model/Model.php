@@ -43,7 +43,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
         $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
         $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
-        
+
         $this->initializeTraits();
 
         $convertedData = Utils::changeArrayKeysCase($data ?? []);
@@ -230,7 +230,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function offsetUnset($offset): void
     {
-        unset($this->attributes[$this->convertAttributeCase($offset)]);
+        unset($this->attributes[(Utils::changeCase($offset))]);
     }
 
     /**
@@ -323,7 +323,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
         $normalizedAttributes = [];
 
         foreach ($attributes as $initialKey => $value) {
-            $caseKey = $this->convertAttributeCase($initialKey);
+            $caseKey = Utils::changeCase($initialKey);
             $key     = $this->convertDeprecatedKey($caseKey);
 
             if (array_key_exists($key, $normalizedAttributes)) {
