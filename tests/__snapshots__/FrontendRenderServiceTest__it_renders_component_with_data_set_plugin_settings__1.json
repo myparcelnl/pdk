@@ -1559,7 +1559,7 @@
               }
             }
           ],
-          "$component": "MultiSelectInput",
+          "$component": "ShippingMethodsInput",
           "options": [],
           "label": "settings_checkout_allowed_shipping_methods",
           "description": "settings_checkout_allowed_shipping_methods_description"

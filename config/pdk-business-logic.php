@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalcul
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\factory;
 use function DI\value;
 
@@ -91,10 +92,24 @@ return [
         ];
     }),
 
-    'digitalStampRanges' => value([
+    'digitalStampRanges'         => value([
         ['min' => 0, 'max' => 20, 'average' => 15],
         ['min' => 20, 'max' => 50, 'average' => 35],
         ['min' => 50, 'max' => 350, 'average' => 200],
         ['min' => 350, 'max' => 2000, 'average' => 1175],
+    ]),
+
+    /**
+     * - Off: The shipping method does not get delivery options. Default behavior and thus not saved in the model.
+     * - Inherit: The shipping method gets delivery options and package type is calculated dynamically (using product settings, for example).
+     * - [PackageTypeName]: The shipping method gets delivery options and the package type is fixed.
+     */
+    'allowedShippingMethodsKeys' => value([
+        TriStateService::INHERIT,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+        DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
     ]),
 ];
