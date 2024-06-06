@@ -102,6 +102,7 @@ class Shop extends Model
                     'label',
                     'primary',
                     'optional',
+                    'type',
                 ], Arrayable::STORABLE_NULL);
             });
 
