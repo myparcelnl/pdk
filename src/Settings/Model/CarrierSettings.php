@@ -67,54 +67,56 @@ class CarrierSettings extends AbstractSettingsModel
     /**
      * Settings in this category.
      */
-    public const ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
-    public const ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
-    public const ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
-    public const ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
-    public const ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
-    public const ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
-    public const ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
-    public const ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
-    public const ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
-    public const ALLOW_SIGNATURE                         = 'allowSignature';
-    public const CUTOFF_TIME                             = 'cutoffTime';
-    public const CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
-    public const DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
-    public const DELIVERY_DAYS_WINDOW                    = 'deliveryDaysWindow';
-    public const DELIVERY_OPTIONS_CUSTOM_CSS             = 'deliveryOptionsCustomCss';
-    public const DELIVERY_OPTIONS_ENABLED                = 'deliveryOptionsEnabled';
-    public const DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS = 'deliveryOptionsEnabledForBackorders';
-    public const DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
-    public const DROP_OFF_DELAY                          = 'dropOffDelay';
-    public const DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
-    public const EXPORT_AGE_CHECK                        = 'exportAgeCheck';
-    public const EXPORT_HIDE_SENDER                      = 'exportHideSender';
-    public const EXPORT_INSURANCE                        = 'exportInsurance';
-    public const EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
-    public const EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
-    public const EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
-    public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
-    public const EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
-    public const EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
-    public const EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
-    public const EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
-    public const EXPORT_RETURN                           = 'exportReturn';
-    public const EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
-    public const EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
-    public const EXPORT_SIGNATURE                        = 'exportSignature';
-    public const EXPORT_TRACKED                          = 'exportTracked';
-    public const PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
-    public const PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
-    public const PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
-    public const PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
-    public const PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
-    public const PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
-    public const PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
-    public const PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
-    public const PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
-    public const PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
-    public const PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
-    public const PRICE_SIGNATURE                         = 'priceSignature';
+    public const  ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
+    public const  ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
+    public const  ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
+    public const  ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
+    public const  ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
+    public const  ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
+    public const  ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
+    public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
+    public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
+    public const  ALLOW_SIGNATURE                         = 'allowSignature';
+    public const  CUTOFF_TIME                             = 'cutoffTime';
+    public const  CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
+    public const  DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
+    public const  DELIVERY_DAYS_WINDOW                    = 'deliveryDaysWindow';
+    public const  DELIVERY_OPTIONS_CUSTOM_CSS             = 'deliveryOptionsCustomCss';
+    public const  DELIVERY_OPTIONS_ENABLED                = 'deliveryOptionsEnabled';
+    public const  DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS = 'deliveryOptionsEnabledForBackorders';
+    public const  DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
+    public const  DROP_OFF_DELAY                          = 'dropOffDelay';
+    public const  DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
+    public const  EXPORT_AGE_CHECK                        = 'exportAgeCheck';
+    public const  EXPORT_HIDE_SENDER                      = 'exportHideSender';
+    public const  EXPORT_INSURANCE                        = 'exportInsurance';
+    public const  EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
+    public const  EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
+    public const  EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
+    public const  EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
+    public const  EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
+    public const  EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
+    public const  EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
+    public const  EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
+    public const  EXPORT_RETURN                           = 'exportReturn';
+    public const  EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
+    public const  EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
+    public const  EXPORT_SIGNATURE                        = 'exportSignature';
+    public const  EXPORT_TRACKED                          = 'exportTracked';
+    public const  PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
+    public const  PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
+    public const  PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
+    public const  PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
+    public const  PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
+    public const  PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
+    public const  PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
+    public const  PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
+    public const  PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
+    public const  PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
+    public const  PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
+    public const  PRICE_SIGNATURE                         = 'priceSignature';
+    public const  ALLOW_INTERNATIONAL_MAILBOX             = 'allowInternationalMailbox';
+    public const  PRICE_INTERNATIONAL_MAILBOX             = 'priceInternationalMailbox';
 
     protected $attributes = [
         'id'               => self::ID,
@@ -165,6 +167,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
         self::PRICE_SIGNATURE                         => 0,
+        self::ALLOW_INTERNATIONAL_MAILBOX             => false,
+        self::PRICE_INTERNATIONAL_MAILBOX             => 0,
     ];
 
     protected $casts      = [
@@ -215,6 +219,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 'float',
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
         self::PRICE_SIGNATURE                         => 'float',
+        self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
+        self::PRICE_INTERNATIONAL_MAILBOX             => 'int',
     ];
 
     /**

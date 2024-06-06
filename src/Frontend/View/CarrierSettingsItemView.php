@@ -244,6 +244,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 : [],
 
             $this->carrierSchema->canHaveInsurance() ? $this->getExportInsuranceFields() : [],
+
+            $this->carrierSchema->canBeInternationalMailbox() ? $this->createSettingWithPriceFields(
+                CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
+                CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
+            ) : [],
         ];
     }
 
