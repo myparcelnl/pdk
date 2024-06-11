@@ -289,5 +289,23 @@ return [
                 ],
             ],
         ],
+        [
+            'id'           => Carrier::CARRIER_DPD_ID,
+            'name'         => Carrier::CARRIER_DPD_NAME,
+            'human'        => 'DPD',
+            'schema'       => 'order/dpd/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryCodes::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/dpd/mailbox',
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 ];

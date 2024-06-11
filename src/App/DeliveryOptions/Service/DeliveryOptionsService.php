@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
-use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -17,17 +16,14 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
-use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    private const CONFIG_CARRIER_SETTINGS_MAP   = [
+    private const CONFIG_CARRIER_SETTINGS_MAP = [
         'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
         'allowStandardDelivery'        => CarrierSettings::ALLOW_STANDARD_DELIVERY,
         'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
@@ -198,7 +194,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         foreach ($cart->shippingMethod->allowedPackageTypes->all() as $packageType) {
-            $weight = Pdk::get(WeightServiceInterface::class)->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
+            $weight = Pdk::get(WeightServiceInterface::class)
+                ->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
 
             $filteredCarriers = $allCarriers
                 ->filter(
@@ -210,16 +207,32 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             return false;
                         }
 
-                        return $this->schemaRepository->validateOption(
-                            $this->schemaRepository->getOrderValidationSchema(
-                                $carrier->name,
-                                $cart->shippingMethod->shippingAddress->cc,
-                                // TODO: support full package type class instead of string
-                                $packageType->name
-                            ),
-                            OrderPropertiesValidator::WEIGHT_KEY,
-                            $weight
+                        $package_name = $packageType->name;
+                        $schema       = $this->schemaRepository->getOrderValidationSchema(
+                            $carrier->name,
+                            $cart->shippingMethod->shippingAddress->cc,
+                            // TODO: support full package type class instead of string
+                            $packageType->name
                         );
+
+                        $validation = $this->schemaRepository->validateOption(
+                            $schema,
+                            'properties.deliveryOptions.properties.packageType',
+                            $package_name
+                        );
+
+                        //                        $weight_validation = $this->schemaRepository->validateOption(
+                        //                            $this->schemaRepository->getOrderValidationSchema(
+                        //                                $carrier->name,
+                        //                                $cart->shippingMethod->shippingAddress->cc,
+                        //                                // TODO: support full package type class instead of string
+                        //                                $packageType->name
+                        //                            ),
+                        //                            OrderPropertiesValidator::WEIGHT_KEY,
+                        //                            $weight
+                        //                        );
+
+                        return $validation;
                     }
                 );
 
