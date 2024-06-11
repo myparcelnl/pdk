@@ -68,7 +68,8 @@ class CartCalculationService implements CartCalculationServiceInterface
     {
         $hasDeliveryOptions = $this->hasDeliveryOptions($cart);
 
-        $shippingMethod = new PdkShippingMethod(['hasDeliveryOptions' => $hasDeliveryOptions]);
+        $shippingMethod                     = $cart->shippingMethod;
+        $shippingMethod->hasDeliveryOptions = $hasDeliveryOptions;
 
         if ($hasDeliveryOptions) {
             $shippingMethod->minimumDropOffDelay = $cart->lines->max('product.settings.dropOffDelay');
@@ -100,7 +101,8 @@ class CartCalculationService implements CartCalculationServiceInterface
     private function isWeightUnderPackageTypeLimit(PdkCart $cart, PackageType $packageType): bool
     {
         $limit  = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType->name, INF);
-        $weight = Pdk::get(WeightService::class)->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
+        $weight = Pdk::get(WeightService::class)
+            ->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
 
         return $weight <= $limit;
     }
