@@ -26,14 +26,14 @@ const LINES_FITS_IN_MAILBOX = [
                 'packageType'  => -1,
                 'fitInMailbox' => -1,
             ],
-            'parent' => [
+            'parent'        => [
                 'weight'        => 1,
                 'isDeliverable' => true,
-                'settings' => [
+                'settings'      => [
                     'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                     'fitInMailbox' => 5,
                 ],
-            ]
+            ],
         ],
     ],
     [
@@ -112,6 +112,17 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
     ],
 ];
 
+const SHIPPING_ADDRESS = [
+    'address1'   => 'Straatnaam 2',
+    'address2'   => 'Appartement B',
+    'area'       => 'Voor',
+    'cc'         => 'NL',
+    'city'       => 'Stad',
+    'postalCode' => '1000 BB',
+    'region'     => 'Drenthe',
+    'state'      => 'Current',
+];
+
 uses()->group('checkout');
 usesShared(new UsesMockPdkInstance());
 
@@ -172,9 +183,9 @@ it('calculates allowed package types', function (array $lines, array $result) {
 ]);
 
 it('calculates shipping method in cart', function (array $lines, array $result) {
-    $cart = new PdkCart(['lines' => $lines]);
+    $cart = new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => SHIPPING_ADDRESS]]);
 
-    expect($cart->shippingMethod->except('shippingAddress'))->toEqual($result);
+    expect($cart->shippingMethod->toArray())->toEqual($result);
 })->with([
     'no product settings' => [
         'cart'   => [
@@ -205,6 +216,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => TriStateService::INHERIT,
+            'shippingAddress' => SHIPPING_ADDRESS,
         ],
     ],
 
@@ -240,6 +252,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
                     'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 ],
             ],
+            'shippingAddress' => SHIPPING_ADDRESS,
         ],
     ],
 
@@ -262,6 +275,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'hasDeliveryOptions'  => false,
             'minimumDropOffDelay' => 0,
             'allowedPackageTypes' => [],
+            'shippingAddress' => SHIPPING_ADDRESS,
         ],
     ],
 ]);
