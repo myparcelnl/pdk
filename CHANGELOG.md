@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.37.0](https://github.com/myparcelnl/pdk/compare/v2.36.5...v2.37.0) (2024-06-07)
+
+
+### :sparkles: New Features
+
+* **settings:** add shipping methods input ([#275](https://github.com/myparcelnl/pdk/issues/275)) ([e2d75a6](https://github.com/myparcelnl/pdk/commit/e2d75a6c3f6655f7dc9d4b8570a34eb794483356))
+
 ## [2.36.5](https://github.com/myparcelnl/pdk/compare/v2.36.4...v2.36.5) (2024-05-24)
 
 
