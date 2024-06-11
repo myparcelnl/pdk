@@ -19,7 +19,6 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
-use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
