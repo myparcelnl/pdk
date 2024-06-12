@@ -61,6 +61,7 @@ return [
                                     'packageType' => [
                                         'enum' => [
                                             DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                                             DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                                         ],
                                     ],
@@ -80,6 +81,11 @@ return [
                                     'schema' => 'order/postnl/be_package_pickup',
                                 ],
                             ],
+                        ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/postnl/mailbox',
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
@@ -161,6 +167,7 @@ return [
                                     'packageType' => [
                                         'enum' => [
                                             DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                                             DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                                         ],
                                     ],
@@ -182,9 +189,30 @@ return [
                             ],
                         ],
                         [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/dhlforyou/mailbox',
+                        ],
+                        [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                             'schema' => 'order/dhlforyou/letter',
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_EU,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            null,
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
