@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
+use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
@@ -207,32 +208,26 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             return false;
                         }
 
-                        $package_name = $packageType->name;
-                        $schema       = $this->schemaRepository->getOrderValidationSchema(
+                        $schema = $this->schemaRepository->getOrderValidationSchema(
                             $carrier->name,
                             $cart->shippingMethod->shippingAddress->cc,
                             // TODO: support full package type class instead of string
                             $packageType->name
                         );
 
-                        $validation = $this->schemaRepository->validateOption(
+                        $packageTypeValidation = $this->schemaRepository->validateOption(
                             $schema,
-                            'properties.deliveryOptions.properties.packageType',
-                            $package_name
+                            OrderPropertiesValidator::PACKAGE_TYPE_KEY,
+                            $packageType->name
                         );
 
-                        //                        $weight_validation = $this->schemaRepository->validateOption(
-                        //                            $this->schemaRepository->getOrderValidationSchema(
-                        //                                $carrier->name,
-                        //                                $cart->shippingMethod->shippingAddress->cc,
-                        //                                // TODO: support full package type class instead of string
-                        //                                $packageType->name
-                        //                            ),
-                        //                            OrderPropertiesValidator::WEIGHT_KEY,
-                        //                            $weight
-                        //                        );
+                        $weightValidation = $this->schemaRepository->validateOption(
+                            $schema,
+                            OrderPropertiesValidator::WEIGHT_KEY,
+                            $weight
+                        );
 
-                        return $validation;
+                        return $packageTypeValidation && $weightValidation;
                     }
                 );
 
