@@ -51,7 +51,7 @@
           "minimum": 1
         },
         "packageType": {
-          "enum": ["package", "letter", null]
+          "enum": ["package", "mailbox", "digital_stamp", "letter", "package_small"]
         },
         "pickupLocation": {
           "type": ["object", "null"],
