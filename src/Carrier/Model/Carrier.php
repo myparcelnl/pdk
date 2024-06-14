@@ -140,6 +140,17 @@ class Carrier extends Model
     }
 
     /**
+     * Tells if the carrier can have international mailbox.
+     * Does NOT tell if the carrier supports mailbox.
+     *
+     * @return bool
+     */
+    public function canHaveInternationalMailbox(): bool
+    {
+        return $this->type === self::TYPE_CUSTOM && $this->id === self::CARRIER_POSTNL_ID;
+    }
+
+    /**
      * @return string
      * @noinspection PhpUnused
      */

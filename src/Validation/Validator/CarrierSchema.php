@@ -39,10 +39,10 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function canBeInternationalMailbox(): bool
     {
-        if ($this->carrier->type === 'custom' && $this->carrier->id === Carrier::CARRIER_POSTNL_ID) {
-            return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
-        }
-        return false;
+        return $this->carrier->canHaveInternationalMailbox()
+            && $this->canHavePackageType(
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME
+            );
     }
 
     public function canBeLetter(): bool
