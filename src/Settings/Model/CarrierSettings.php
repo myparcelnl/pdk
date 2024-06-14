@@ -220,7 +220,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
         self::PRICE_SIGNATURE                         => 'float',
         self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
-        self::PRICE_INTERNATIONAL_MAILBOX             => 'int',
+        self::PRICE_INTERNATIONAL_MAILBOX             => 'float',
     ];
 
     /**
