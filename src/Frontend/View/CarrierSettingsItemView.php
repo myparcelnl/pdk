@@ -244,11 +244,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 : [],
 
             $this->carrierSchema->canHaveInsurance() ? $this->getExportInsuranceFields() : [],
-
-            $this->carrierSchema->canBeInternationalMailbox() ? $this->createSettingWithPriceFields(
-                CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
-                CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
-            ) : [],
         ];
     }
 
@@ -468,6 +463,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
                 Components::INPUT_CURRENCY
             );
+
+            $fields[] = $this->carrierSchema->canBeInternationalMailbox() ? $this->createSettingWithPriceFields(
+                CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
+                CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
+            ) : [];
         }
 
         if (in_array(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME, $allowedPackageTypes, true)) {
