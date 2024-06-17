@@ -91,7 +91,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "postnl": {
     "id": "carrier",
@@ -185,7 +187,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "dpd": {
     "id": "carrier",
@@ -279,7 +283,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "ups": {
     "id": "carrier",
@@ -373,7 +379,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "dhlforyou": {
     "id": "carrier",
@@ -467,7 +475,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "dhlparcelconnect": {
     "id": "carrier",
@@ -561,7 +571,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "dhleuroplus": {
     "id": "carrier",
@@ -655,6 +667,8 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   }
 }

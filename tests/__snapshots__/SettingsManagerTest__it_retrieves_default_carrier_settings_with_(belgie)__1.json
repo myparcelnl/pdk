@@ -91,7 +91,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "postnl": {
     "id": "carrier",
@@ -185,7 +187,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "bpost": {
     "id": "carrier",
@@ -279,7 +283,9 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   },
   "dpd": {
     "id": "carrier",
@@ -373,6 +379,8 @@
     "priceOnlyRecipient": 0,
     "pricePackageTypeDigitalStamp": 0,
     "pricePackageTypeMailbox": 0,
-    "priceSignature": 0
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0
   }
 }
