@@ -40,7 +40,8 @@
           "externalIdentifier": "postnl",
           "enabled": true,
           "optional": false,
-          "primary": false
+          "primary": false,
+          "type": "main"
         }
       ]
     }
