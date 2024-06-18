@@ -55,6 +55,8 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withPricePackageTypeDigitalStamp(float $pricePackageTypeDigitalStamp)
  * @method $this withPricePackageTypeMailbox(float $pricePackageTypeMailbox)
  * @method $this withPriceSignature(float $priceSignature)
+ * @method $this withAllowInternationalMailbox(bool $allowInternationalMailbox)
+ * @method $this withPriceInternationalMailbox(float $priceInternationalMailbox)
  */
 final class CarrierSettingsFactory extends AbstractSettingsModelFactory
 {

@@ -174,3 +174,49 @@ it('creates carrier settings', function (array $cart) {
         ],
     ],
 ]);
+
+it('creates international mailbox carrier settings', function (array $cart) {
+    //todo: let op dat hij echt goed de checks door komt.
+    // International mailbox moet echt aan staan en toegestaan zijn
+    // Let op dat de snapshot ook klopt.
+
+    // in de cart moet mailbox 1 van de toegestane package types zijn
+    TestBootstrapper::hasAccount();
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $pdkCart = new PdkCart($cart);
+
+    $carrierSettings = $service->createAllCarrierSettings($pdkCart);
+
+    assertMatchesJsonSnapshot(json_encode($carrierSettings));
+    // in de with() staat de configuratie van de cart
+})->with([
+    'international mailbox package' => [
+        'cart' => [
+            'carrier'        => [
+                'name'            => 'postnl:123',
+                'type'            => Carrier::TYPE_CUSTOM,
+                'carrierSettings' => ['allowInternationalMailbox' => true],
+            ],
+            'shippingMethod' => [
+                'shippingAddress'     => ['cc' => 'FR'],
+                'allowedPackageTypes' => ['mailbox'],
+            ],
+            'lines'          => [
+                [
+                    'quantity' => 1,
+                    'product'  => [
+                        'weight'        => 500,
+                        'isDeliverable' => true,
+                        'settings'      => [
+                            ProductSettings::FIT_IN_MAILBOX => 5,
+                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+]);

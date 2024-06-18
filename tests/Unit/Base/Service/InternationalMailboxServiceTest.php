@@ -7,31 +7,16 @@ namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\InternationalMailbox;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('checkout');
+usesShared(new UsesMockPdkInstance());
 
-usesShared(
-    new UsesMockPdkInstance([
-        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            CarrierSettings::ID => [
-                Carrier::CARRIER_POSTNL_NAME => [
-                    CarrierSettings::DELIVERY_OPTIONS_ENABLED    => true,
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS      => true,
-                    CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX => true,
-                ],
-            ],
-        ]),
-    ])
-);
 it('checks if package is international mailbox', function () {
     /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
     $countryService = Pdk::get(CountryServiceInterface::class);
@@ -64,10 +49,24 @@ it('checks if package is international mailbox', function () {
 });
 
 it('checks if international mailbox is possible', function () {
-    // maak eerst een neppe postnl carrier aan, het moet de type custom hebben.
-    // Daarna moet je zorgen dat de setting voor international mailbox aan staat.
-    $allCarriers = AccountSettings::getCarriers();
+    //todo: maak een test voor elke mogelijke uitkomst
+    // ja-ja
+    // ja-nee
+    // nee-ja
+    // nee-nee
 
-    $result = true;
+    //ja-ja
+    $fakeCarrier = factory(Carrier::class)
+        ->withExternalIdentifier('postnl:123')
+        ->make();
+
+    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        ->withAllowInternationalMailbox(true)
+        ->withPriceInternationalMailbox(5)
+        ->withDeliveryOptionsEnabled(true)
+        ->withAllowDeliveryOptions(true)
+        ->store();
+
+    $result = InternationalMailbox::internationalMailboxPossible($fakeCarrier);
     expect($result)->toBeTrue();
 });
