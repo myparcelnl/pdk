@@ -56,7 +56,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property float                $pricePackageTypeDigitalStamp
  * @property float                $pricePackageTypeMailbox
  * @property float                $priceSignature
- * @property float                priceInternationalMailbox
+ * @property float                $priceInternationalMailbox
  */
 class CarrierSettings extends AbstractSettingsModel
 {
