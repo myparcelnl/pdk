@@ -49,13 +49,6 @@ it('checks if package is international mailbox', function () {
 });
 
 it('checks if international mailbox is possible', function () {
-    //todo: maak een test voor elke mogelijke uitkomst
-    // ja-ja
-    // ja-nee
-    // nee-ja
-    // nee-nee
-
-    //ja-ja
     $fakeCarrier = factory(Carrier::class)
         ->withExternalIdentifier('postnl:123')
         ->make();
@@ -69,4 +62,46 @@ it('checks if international mailbox is possible', function () {
 
     $result = InternationalMailbox::internationalMailboxPossible($fakeCarrier);
     expect($result)->toBeTrue();
+
+    $fakeCarrier = factory(Carrier::class)
+        ->withExternalIdentifier('postnl')
+        ->make();
+
+    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        ->withAllowInternationalMailbox(true)
+        ->withPriceInternationalMailbox(5)
+        ->withDeliveryOptionsEnabled(true)
+        ->withAllowDeliveryOptions(true)
+        ->store();
+
+    $result = InternationalMailbox::internationalMailboxPossible($fakeCarrier);
+    expect($result)->toBeFalse();
+
+    $fakeCarrier = factory(Carrier::class)
+        ->withExternalIdentifier('postnl:123')
+        ->make();
+
+    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        ->withAllowInternationalMailbox(false)
+        ->withPriceInternationalMailbox(5)
+        ->withDeliveryOptionsEnabled(true)
+        ->withAllowDeliveryOptions(true)
+        ->store();
+
+    $result = InternationalMailbox::internationalMailboxPossible($fakeCarrier);
+    expect($result)->toBeFalse();
+
+    $fakeCarrier = factory(Carrier::class)
+        ->withExternalIdentifier('postnl')
+        ->make();
+
+    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        ->withAllowInternationalMailbox(false)
+        ->withPriceInternationalMailbox(5)
+        ->withDeliveryOptionsEnabled(true)
+        ->withAllowDeliveryOptions(true)
+        ->store();
+
+    $result = InternationalMailbox::internationalMailboxPossible($fakeCarrier);
+    expect($result)->toBeFalse();
 });
