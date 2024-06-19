@@ -5,37 +5,34 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
+use MyParcelNL\Pdk\Account\Collection\ShopCollection;
+use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function DI\autowire;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 uses()->group('checkout');
 
-usesShared(
-    new UsesMockPdkInstance([
-        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
-            CarrierSettings::ID => [
-                Carrier::CARRIER_POSTNL_NAME => [
-                    CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS   => true,
-                ],
-            ],
-        ]),
-    ])
-);
+usesShared(new UsesMockPdkInstance());
 
 it('creates carrier settings', function (array $cart) {
+    $fakeCarrier = factory(Carrier::class)
+        ->withName(Carrier::CARRIER_POSTNL_NAME)
+        ->make();
+
+    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        ->withDeliveryOptionsEnabled(true)
+        ->withAllowDeliveryOptions(true)
+        ->store();
     TestBootstrapper::hasAccount();
 
     /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
@@ -176,12 +173,28 @@ it('creates carrier settings', function (array $cart) {
 ]);
 
 it('creates international mailbox carrier settings', function (array $cart) {
-    //todo: let op dat hij echt goed de checks door komt.
-    // International mailbox moet echt aan staan en toegestaan zijn
-    // Let op dat de snapshot ook klopt.
+    $fakeCarrier = factory(Carrier::class)
+        ->withExternalIdentifier('postnl:123')
+        ->make();
 
-    // in de cart moet mailbox 1 van de toegestane package types zijn
-    TestBootstrapper::hasAccount();
+    $fakeCarrierConfiguration = factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        ->withAllowInternationalMailbox(true)
+        ->withPriceInternationalMailbox(5)
+        ->withDeliveryOptionsEnabled(true)
+        ->withAllowDeliveryOptions(true)
+        ->store();
+
+    $fakeShop = factory(Shop::class)
+        ->withCarriers([$fakeCarrier])
+        ->withCarrierConfigurations([$fakeCarrierConfiguration])
+        ->make();
+
+    $fakeShopCollection = factory(ShopCollection::class)
+        ->push($fakeShop)
+        ->make();
+
+    TestBootstrapper::hasAccount(TestBootstrapper::API_KEY_VALID, $fakeShopCollection);
+
     /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
     $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
@@ -190,14 +203,11 @@ it('creates international mailbox carrier settings', function (array $cart) {
     $carrierSettings = $service->createAllCarrierSettings($pdkCart);
 
     assertMatchesJsonSnapshot(json_encode($carrierSettings));
-    // in de with() staat de configuratie van de cart
 })->with([
-    'international mailbox package' => [
+    'european international mailbox package' => [
         'cart' => [
             'carrier'        => [
-                'name'            => 'postnl:123',
-                'type'            => Carrier::TYPE_CUSTOM,
-                'carrierSettings' => ['allowInternationalMailbox' => true],
+                'externalIdentifier' => 'postnl:123',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'FR'],
@@ -219,4 +229,28 @@ it('creates international mailbox carrier settings', function (array $cart) {
         ],
     ],
 
+    'rest of world international mailbox package' => [
+        'cart' => [
+            'carrier'        => [
+                'externalIdentifier' => 'postnl:123',
+            ],
+            'shippingMethod' => [
+                'shippingAddress'     => ['cc' => 'KH'],
+                'allowedPackageTypes' => ['mailbox'],
+            ],
+            'lines'          => [
+                [
+                    'quantity' => 1,
+                    'product'  => [
+                        'weight'        => 500,
+                        'isDeliverable' => true,
+                        'settings'      => [
+                            ProductSettings::FIT_IN_MAILBOX => 5,
+                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ]);
