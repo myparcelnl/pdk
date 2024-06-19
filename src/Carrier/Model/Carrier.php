@@ -140,9 +140,6 @@ class Carrier extends Model
     }
 
     /**
-     * Tells if the carrier can have international mailbox.
-     * Does NOT tell if the carrier supports mailbox.
-     *
      * @return bool
      */
     public function canHaveInternationalMailbox(): bool
