@@ -45,6 +45,6 @@ class InternationalMailboxService implements InternationalMailboxServiceInterfac
 
         $shippingZone = $cc ? $countryService->getShippingZone($cc) : null;
 
-        return $shippingZone !== 'NL' && $shippingZone !== 'BE';
+        return $shippingZone !== 'NL' && $shippingZone !== 'BE' && $shippingZone !== null;
     }
 }
