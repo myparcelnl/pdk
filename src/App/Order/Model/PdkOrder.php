@@ -349,11 +349,10 @@ class PdkOrder extends Model
 
         [$price, $vat, $priceAfterVat] = $this->lines->reduce(
             function (array $carry, $line) {
-                $quantity = Arr::get($line, 'quantity', 1);
 
-                $carry[0] += $quantity * $line['price'];
-                $carry[1] += $quantity * $line['vat'];
-                $carry[2] += $quantity * $line['priceAfterVat'];
+                $carry[0] += $line['price'];
+                $carry[1] += $line['vat'];
+                $carry[2] += $line['priceAfterVat'];
 
                 return $carry;
             },

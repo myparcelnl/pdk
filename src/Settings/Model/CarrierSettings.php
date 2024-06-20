@@ -95,6 +95,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
     public const EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
     public const EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
+    public const EXPORT_INSURANCE_UP_TO_BE               = 'exportInsuranceUpToBe';
     public const EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
     public const EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
     public const EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
@@ -147,6 +148,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_INSURANCE_UP_TO                  => 0,
         self::EXPORT_INSURANCE_UP_TO_EU               => 0,
         self::EXPORT_INSURANCE_UP_TO_ROW              => 0,
+        self::EXPORT_INSURANCE_UP_TO_BE               => 0,
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
         self::EXPORT_LARGE_FORMAT                     => false,
         self::EXPORT_ONLY_RECIPIENT                   => false,
@@ -197,6 +199,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_INSURANCE_UP_TO                  => 'int',
         self::EXPORT_INSURANCE_UP_TO_EU               => 'int',
         self::EXPORT_INSURANCE_UP_TO_ROW              => 'int',
+        self::EXPORT_INSURANCE_UP_TO_BE               => 'int',
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 'int',
         self::EXPORT_LARGE_FORMAT                     => 'bool',
         self::EXPORT_ONLY_RECIPIENT                   => 'bool',
