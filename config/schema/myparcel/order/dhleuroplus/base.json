@@ -64,9 +64,6 @@
             },
             "hideSender": {
               "enum": [1, 0]
-            },
-            "tracked": {
-              "enum": [-1, 0, 1]
             }
           }
         }

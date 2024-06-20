@@ -106,9 +106,6 @@
           "properties": {
             "labelDescription": {
               "maxLength": 50
-            },
-            "tracked": {
-              "enum": [-1, 0, 1]
             }
           }
         }
