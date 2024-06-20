@@ -50,12 +50,15 @@ class CartCalculationService implements CartCalculationServiceInterface
      */
     public function calculateMailboxPercentage(PdkCart $cart): float
     {
-        if (! $cart->lines->every('product.mergedSettings.fitInMailbox', '>', 0)) {
+        if ($cart->lines->where('product.mergedSettings.fitInMailbox', 0)
+                ->count() > 0) {
             return INF;
         }
 
         return $cart->lines->reduce(static function ($carry, $line) {
-            return $carry + $line->quantity * (100.0 / ($line->product->mergedSettings->fitInMailbox ?: 1));
+            return $line->product->mergedSettings->fitInMailbox === -1
+                ? $carry
+                : $carry + $line->quantity * (100.0 / ($line->product->mergedSettings->fitInMailbox ?: 1));
         }, 0.0);
     }
 

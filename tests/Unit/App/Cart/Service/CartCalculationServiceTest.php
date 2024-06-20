@@ -55,6 +55,9 @@ const LINES_DONT_FIT_MAILBOX = [
         'product'  => [
             'weight'        => 1,
             'isDeliverable' => true,
+            'settings'      => [
+                'fitInMailbox' => 0,
+            ],
         ],
     ],
     [
@@ -216,7 +219,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => TriStateService::INHERIT,
-            'shippingAddress' => SHIPPING_ADDRESS,
+            'shippingAddress'     => SHIPPING_ADDRESS,
         ],
     ],
 
@@ -252,7 +255,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
                     'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 ],
             ],
-            'shippingAddress' => SHIPPING_ADDRESS,
+            'shippingAddress'     => SHIPPING_ADDRESS,
         ],
     ],
 
@@ -275,7 +278,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'hasDeliveryOptions'  => false,
             'minimumDropOffDelay' => 0,
             'allowedPackageTypes' => [],
-            'shippingAddress' => SHIPPING_ADDRESS,
+            'shippingAddress'     => SHIPPING_ADDRESS,
         ],
     ],
 ]);
