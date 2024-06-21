@@ -8,9 +8,5 @@
         }
       }
     }
-  },
-  "shipmentOptions": {
-    "type": "object",
-    "additionalProperties": false
   }
 }
