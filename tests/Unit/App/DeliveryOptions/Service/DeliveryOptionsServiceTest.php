@@ -101,6 +101,24 @@ it('creates carrier settings', function (array $cart) {
         ],
     ],
 
+    'mailbox package that is too heavy for mailbox' => [
+        'cart' => [
+            'carrier' => ['name' => 'postnl'],
+            'lines'   => [
+                [
+                    'quantity' => 5,
+                    'product'  => [
+                        'weight'        => 500,
+                        'isDeliverable' => true,
+                        'settings'      => [
+                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'mailbox package with fit in mailbox' => [
         'cart' => [
             'carrier' => ['name' => 'postnl'],

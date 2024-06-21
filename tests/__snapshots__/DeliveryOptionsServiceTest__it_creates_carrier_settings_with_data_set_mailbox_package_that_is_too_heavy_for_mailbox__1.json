@@ -1,5 +1,5 @@
 {
-  "packageType": "mailbox",
+  "packageType": "package",
   "carrierSettings": {
     "postnl": {
       "allowDeliveryOptions": true,
