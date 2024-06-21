@@ -101,7 +101,7 @@ it('creates carrier settings', function (array $cart) {
         ],
     ],
 
-    'mailbox package that does not fit in mailbox' => [
+    'mailbox package that is too heavy for mailbox' => [
         'cart' => [
             'carrier' => ['name' => 'postnl'],
             'lines'   => [
