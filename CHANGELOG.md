@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.38.0](https://github.com/myparcelnl/pdk/compare/v2.37.1...v2.38.0) (2024-06-21)
+
+
+### :sparkles: New Features
+
+* add default for bbp ([#282](https://github.com/myparcelnl/pdk/issues/282)) ([29e238f](https://github.com/myparcelnl/pdk/commit/29e238fd8c7c69725b956df38bfd857733171d92))
+
 ## [2.37.1](https://github.com/myparcelnl/pdk/compare/v2.37.0...v2.37.1) (2024-06-13)
 
 
