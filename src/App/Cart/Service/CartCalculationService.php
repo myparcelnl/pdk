@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
@@ -56,9 +57,11 @@ class CartCalculationService implements CartCalculationServiceInterface
         }
 
         return $cart->lines->reduce(static function ($carry, $line) {
-            return $line->product->mergedSettings->fitInMailbox === -1
+            $fitInMailbox = $line->product->mergedSettings->fitInMailbox;
+
+            return $fitInMailbox === TriStateService::INHERIT
                 ? $carry
-                : $carry + $line->quantity * (100.0 / ($line->product->mergedSettings->fitInMailbox ?: 1));
+                : $carry + $line->quantity * (100.0 / $fitInMailbox);
         }, 0.0);
     }
 
