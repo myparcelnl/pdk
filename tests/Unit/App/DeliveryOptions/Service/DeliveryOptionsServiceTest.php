@@ -98,6 +98,27 @@ it('creates carrier settings', function (array $cart) {
         ],
     ],
 
+    'international mailbox that becomes package' => [
+        'cart' => [
+            'carrier'        => ['name' => 'postnl'],
+            'shippingMethod' => [
+                'shippingAddress' => ['cc' => 'FR'],
+            ],
+            'lines'          => [
+                [
+                    'quantity' => 1,
+                    'product'  => [
+                        'weight'        => 500,
+                        'isDeliverable' => true,
+                        'settings'      => [
+                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'mailbox package that is too heavy for mailbox' => [
         'cart' => [
             'carrier' => ['name' => 'postnl'],
