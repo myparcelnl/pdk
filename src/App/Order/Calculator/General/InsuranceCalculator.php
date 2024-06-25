@@ -123,9 +123,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             ->getAllowedInsuranceAmounts();
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
-        $maxInsuranceValue = $this->currencyService->convertToCents(
-            $carrierSettings->getAttribute($insuranceUpToKey) ?? 0
-        );
+        $maxInsuranceValue = $carrierSettings->getAttribute($insuranceUpToKey) ?? 0;
 
         return min(
             $this->getMinimumInsuranceAmount($allowedInsuranceAmounts, $amount),
