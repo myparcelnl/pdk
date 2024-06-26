@@ -78,7 +78,7 @@ it('exports order', function (
     ]);
 
     $lastRequest = MockApi::ensureLastRequest();
-    
+
     assertMatchesJsonSnapshot(
         $lastRequest->getBody()
             ->getContents()
@@ -335,6 +335,41 @@ it('exports international orders', function (PdkOrderCollectionFactory $factory,
                                             ->withClassification('123456')
                                     )
                                 )
+                        )
+                );
+            },
+        ],
+
+        'custom postnl with international mailbox' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(
+                    factory(PdkOrder::class)
+                        ->toGermany()
+                        ->withDeliveryOptions(
+                            factory(DeliveryOptions::class)
+                                ->withCarrier(
+                                    factory(Carrier::class)
+                                        ->fromPostNL()
+                                        ->withContractId(123456)
+                                        ->withCapabilities([
+                                            'internationalMailbox' => true,
+                                        ])
+                                )
+                                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                        )
+                );
+            },
+        ],
+
+        'postnl with international mailbox filtered out' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(
+                    factory(PdkOrder::class)
+                        ->toGermany()
+                        ->withDeliveryOptions(
+                            factory(DeliveryOptions::class)
+                                ->withCarrier(factory(Carrier::class)->fromPostNL())
+                                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
                         )
                 );
             },

@@ -77,6 +77,13 @@ final class CarrierSettingsFactory extends AbstractSettingsModelFactory
         return CarrierSettings::class;
     }
 
+    public function withDeliveryOptions(): self
+    {
+        return $this
+            ->withDeliveryOptionsEnabled(true)
+            ->withAllowDeliveryOptions(true);
+    }
+
     /**
      * @param  string $id
      *

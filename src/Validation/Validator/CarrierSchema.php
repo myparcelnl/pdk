@@ -37,14 +37,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME);
     }
 
-    public function canBeInternationalMailbox(): bool
-    {
-        return $this->carrier->canHaveInternationalMailbox()
-            && $this->canHavePackageType(
-                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME
-            );
-    }
-
     public function canBeLetter(): bool
     {
         return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_LETTER_NAME);

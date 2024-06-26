@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\InternationalMailbox;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -114,16 +113,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             $identifier      = $carrier->externalIdentifier;
             $carrierSettings = $this->createCarrierSettings($carrier, $cart);
 
-            if (
-                InternationalMailbox::isInternationalMailbox(
-                    $cart->shippingMethod->shippingAddress->cc,
-                    $packageType
-                )
-                && InternationalMailbox::internationalMailboxPossible(
-                    $carrier
-                )) {
-                $carrierSettings['pricePackageTypeMailbox'] = $carrierSettings['priceInternationalMailbox'];
-            }
             $settings['carrierSettings'][$identifier] = $carrierSettings;
         }
 
@@ -218,17 +207,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
 
                         if (! $hasDeliveryOptions) {
-                            return false;
-                        }
-
-                        if (
-                            InternationalMailbox::isInternationalMailbox(
-                                $cart->shippingMethod->shippingAddress->cc,
-                                $packageType->name
-                            )
-                            && ! InternationalMailbox::internationalMailboxPossible(
-                                $carrier
-                            )) {
                             return false;
                         }
 

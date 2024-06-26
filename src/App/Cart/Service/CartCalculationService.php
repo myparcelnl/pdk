@@ -35,7 +35,7 @@ class CartCalculationService implements CartCalculationServiceInterface
 
                 $allowed = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName)
                     && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
-
+                
                 if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
                     return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
                 }

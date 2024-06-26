@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
@@ -41,6 +42,24 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
+        $carrier = $this->order->deliveryOptions->carrier;
+
+        if ($this->isInternationalMailbox($carrier)) {
+            return;
+        }
+
         $this->order->deliveryOptions->packageType = DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     *
+     * @return bool
+     */
+    private function isInternationalMailbox(Carrier $carrier): bool
+    {
+        return $carrier->name === Carrier::CARRIER_POSTNL_NAME
+            && ! $carrier->isDefault
+            && $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
     }
 }
