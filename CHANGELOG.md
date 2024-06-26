@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.38.1](https://github.com/myparcelnl/pdk/compare/v2.38.0...v2.38.1) (2024-06-26)
+
+
+### :bug: Bug Fixes
+
+* **validation:** improve validation for mailbox and letter ([#277](https://github.com/myparcelnl/pdk/issues/277)) ([6df536b](https://github.com/myparcelnl/pdk/commit/6df536b79569ada3d10fb16eef0e46ed4c68ae59))
+
 ## [2.38.0](https://github.com/myparcelnl/pdk/compare/v2.37.1...v2.38.0) (2024-06-21)
 
 
