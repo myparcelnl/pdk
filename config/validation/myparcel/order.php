@@ -61,6 +61,7 @@ return [
                                     'packageType' => [
                                         'enum' => [
                                             DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                                             DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                                         ],
                                     ],
@@ -82,6 +83,11 @@ return [
                             ],
                         ],
                         [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/postnl/mailbox',
+                        ],
+                        [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                             'schema' => 'order/postnl/letter',
@@ -95,6 +101,11 @@ return [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                             'schema' => 'order/postnl/eu_package',
+                        ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/postnl/mailbox',
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
@@ -116,6 +127,11 @@ return [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                             'schema' => 'order/postnl/row_package',
+                        ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/postnl/mailbox',
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
@@ -150,24 +166,15 @@ return [
                             'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                             'schema' => 'order/dhlforyou/mailbox',
                         ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                            'schema' => 'order/dhlforyou/letter',
+                        ],
                     ],
                 ],
                 [
                     'name'        => CountryCodes::CC_BE,
-                    'schema'      => [
-                        'properties' => [
-                            'deliveryOptions' => [
-                                'properties' => [
-                                    'packageType' => [
-                                        'enum' => [
-                                            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
                     'packageType' => [
                         [
                             'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
@@ -182,9 +189,48 @@ return [
                             ],
                         ],
                         [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/dhlforyou/mailbox',
+                        ],
+                        [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                             'schema' => 'order/dhlforyou/letter',
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_EU,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_ROW,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -284,6 +330,72 @@ return [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                             'schema' => 'order/instabox/mailbox',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        [
+            'id'           => Carrier::CARRIER_DPD_ID,
+            'name'         => Carrier::CARRIER_DPD_NAME,
+            'human'        => 'DPD',
+            'schema'       => 'order/dpd/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryCodes::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'schema' => 'order/dpd/mailbox',
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::CC_BE,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_EU,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_ROW,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],

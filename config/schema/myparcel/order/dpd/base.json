@@ -100,7 +100,7 @@
           "enum": ["standard", null]
         },
         "packageType": {
-          "enum": ["package", null]
+          "enum": ["package", "mailbox", null]
         },
         "shipmentOptions": {
           "properties": {

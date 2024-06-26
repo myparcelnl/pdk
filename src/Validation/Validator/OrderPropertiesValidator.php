@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 abstract class OrderPropertiesValidator implements SchemaInterface, DeliveryOptionsValidatorInterface
 {
     public const  WEIGHT_KEY           = 'properties.physicalProperties.properties.weight';
+    public const  PACKAGE_TYPE_KEY     = 'properties.deliveryOptions.properties.packageType';
     private const DELIVERY_OPTIONS_KEY = 'properties.deliveryOptions.properties';
     private const SHIPMENT_OPTIONS_KEY = self::DELIVERY_OPTIONS_KEY . '.shipmentOptions.properties';
 
