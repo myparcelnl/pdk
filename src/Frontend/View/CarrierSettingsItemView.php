@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -16,9 +15,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
-use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
@@ -152,29 +149,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInternationalMailboxFields(): array
     {
-        $hasCarrierMailContract = AccountSettings::hasCarrierMailContract();
-
-        if (! $hasCarrierMailContract || $this->carrier->isDefault) {
-            return [];
-        }
-
-        // todo: check if I can use the carrierschema here instead of the orderValidationSchema
-
-        // todo: shorten this code?
-        $schemaRepository = Pdk::get(SchemaRepository::class);
-        $schema           = $schemaRepository->getOrderValidationSchema(
-            $this->carrier->name,
-            CountryCodes::ZONE_ROW,
-            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME
-        );
-
-        $packageTypeValidation = $schemaRepository->validateOption(
-            $schema,
-            OrderPropertiesValidator::PACKAGE_TYPE_KEY,
-            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME
-        );
-
-        if (! $packageTypeValidation) {
+        if (! AccountSettings::hasCarrierMailContract() || ! $this->carrierSchema->canHaveCarrierMailContract()) {
             return [];
         }
 
