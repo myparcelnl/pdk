@@ -61,6 +61,32 @@ Run all tests:
 docker compose run php composer test
 ```
 
+### Linting
+
+We use Prettier to format .json, .yml, .md and .html files.
+
+Make sure Prettier is enabled in your IDE and runs on the following files:
+
+```text
+{**/*,*}.{md,html,yml,json}
+```
+
+Set up Git hooks to run Prettier on each commit, correcting any formatting issues.
+
+```shell
+yarn prepare
+```
+
+You can also run Prettier manually:
+
+```shell
+# Check formatting issues
+yarn lint
+
+# Fix formatting issues
+yarn lint:fix
+```
+
 [Developer Portal contact page]: https://developer.myparcel.nl/contact.html
 [Developer Portal]: https://developer.myparcel.nl
 [SDK]: https://github.com/myparcelnl/sdk
