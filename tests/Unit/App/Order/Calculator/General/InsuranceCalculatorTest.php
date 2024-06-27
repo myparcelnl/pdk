@@ -44,10 +44,10 @@ it('calculates insurance', function (array $input, int $result) {
                 CarrierSettings::EXPORT_INSURANCE                  => true,
                 CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
                 CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO            => 5000,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE     => 5000,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO_EU         => 5000,
-                CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW        => 5000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO            => 500000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE     => 500000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_EU         => 500000,
+                CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW        => 500000,
             ], $input['settings'] ?? [])
         )
         ->store();
@@ -188,7 +188,7 @@ it('calculates insurance', function (array $input, int $result) {
         'value € 3100, insured up to € 3000 -> € 3000' => [
             [
                 'orderPrice' => 310000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_UP_TO => 3000],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_UP_TO => 300000],
             ],
             'result' => 300000,
         ],
@@ -196,7 +196,7 @@ it('calculates insurance', function (array $input, int $result) {
         'value € 5000, insured up to € 3000 -> € 10000' => [
             [
                 'orderPrice' => 5000,
-                'settings'   => [CarrierSettings::EXPORT_INSURANCE_UP_TO => 3000],
+                'settings'   => [CarrierSettings::EXPORT_INSURANCE_UP_TO => 300000],
             ],
             'result' => 10000,
         ],
