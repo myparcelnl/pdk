@@ -31,14 +31,12 @@ use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Base\Contract\InternationalMailboxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
-use MyParcelNL\Pdk\Base\Service\InternationalMailboxService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
@@ -72,154 +70,149 @@ return [
     /**
      * The main entry point for the PDK DI container.
      */
-    PdkInterface::class                         => autowire(Pdk::class),
+    PdkInterface::class                        => autowire(Pdk::class),
 
     /**
      * Handles account settings.
      */
-    AccountSettingsServiceInterface::class      => autowire(AccountSettingsService::class),
+    AccountSettingsServiceInterface::class     => autowire(AccountSettingsService::class),
 
     /**
      * Used to make requests to the MyParcel API.
      */
-    ApiServiceInterface::class                  => autowire(MyParcelApiService::class),
+    ApiServiceInterface::class                 => autowire(MyParcelApiService::class),
 
     /**
      * Used to manage audit data.
      */
-    AuditServiceInterface::class                => autowire(AuditService::class),
+    AuditServiceInterface::class               => autowire(AuditService::class),
 
     /**
      * Retrieves carriers from the config.
      */
-    CarrierRepositoryInterface::class           => autowire(CarrierRepository::class),
+    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     /**
      * Does calculations on carts.
      */
-    CartCalculationServiceInterface::class      => autowire(CartCalculationService::class),
+    CartCalculationServiceInterface::class     => autowire(CartCalculationService::class),
 
     /**
      * Reads config files.
      */
-    ConfigInterface::class                      => autowire(Config::class),
+    ConfigInterface::class                     => autowire(Config::class),
 
     /**
      * Provides context for the admin frontend.
      */
-    ContextServiceInterface::class              => autowire(ContextService::class),
+    ContextServiceInterface::class             => autowire(ContextService::class),
 
     /**
      * Provides country codes and logic.
      */
-    CountryServiceInterface::class              => autowire(CountryService::class),
+    CountryServiceInterface::class             => autowire(CountryService::class),
 
     /**
      * Does calculations on currencies.
      */
-    CurrencyServiceInterface::class             => autowire(CurrencyService::class),
+    CurrencyServiceInterface::class            => autowire(CurrencyService::class),
 
     /**
      * Handles delivery options fees.
      */
-    DeliveryOptionsFeesServiceInterface::class  => autowire(DeliveryOptionsFeesService::class),
+    DeliveryOptionsFeesServiceInterface::class => autowire(DeliveryOptionsFeesService::class),
 
     /**
      * Handles delivery options configuration.
      */
-    DeliveryOptionsServiceInterface::class      => autowire(DeliveryOptionsService::class),
+    DeliveryOptionsServiceInterface::class     => autowire(DeliveryOptionsService::class),
 
     /**
      * Calculates drop off moments.
      */
-    DropOffServiceInterface::class              => autowire(DropOffService::class),
+    DropOffServiceInterface::class             => autowire(DropOffService::class),
 
     /**
      * Handles file system operations.
      */
-    FileSystemInterface::class                  => autowire(FileSystem::class),
+    FileSystemInterface::class                 => autowire(FileSystem::class),
 
     /**
      * Used to render parts of the admin frontend.
      */
-    FrontendRenderServiceInterface::class       => autowire(FrontendRenderService::class),
+    FrontendRenderServiceInterface::class      => autowire(FrontendRenderService::class),
 
     /**
      * Handles installation.
      */
-    InstallerServiceInterface::class            => autowire(InstallerService::class),
-
-    /**
-     * Provides international mailbox logic.
-     */
-    InternationalMailboxServiceInterface::class => autowire(InternationalMailboxService::class),
+    InstallerServiceInterface::class           => autowire(InstallerService::class),
 
     /**
      * Handles migrations.
      */
-    MigrationServiceInterface::class            => autowire(MigrationService::class),
+    MigrationServiceInterface::class           => autowire(MigrationService::class),
 
     /**
      * Handles notifications.
      */
-    NotificationServiceInterface::class         => autowire(NotificationService::class),
+    NotificationServiceInterface::class        => autowire(NotificationService::class),
 
     /**
      * Handles platform specific logic.
      */
-    PlatformManagerInterface::class             => autowire(PlatformManager::class),
+    PlatformManagerInterface::class            => autowire(PlatformManager::class),
 
     /**
      * Handles CDN urls.
      */
-    ScriptServiceInterface::class               => autowire(ScriptService::class),
+    ScriptServiceInterface::class              => autowire(ScriptService::class),
 
     /**
      * Handles retrieving settings.
      */
-    SettingsManagerInterface::class             => autowire(SettingsManager::class),
+    SettingsManagerInterface::class            => autowire(SettingsManager::class),
 
     /**
      * Default storage driver for all repositories. Defaults to in-memory storage. Can be replaced with a proper cache driver.
      */
-    StorageInterface::class                     => autowire(MemoryCacheStorage::class),
+    StorageInterface::class                    => autowire(MemoryCacheStorage::class),
 
     /**
      * Handles weight calculations and unit conversions.
      */
-    WeightServiceInterface::class               => autowire(WeightService::class),
+    WeightServiceInterface::class              => autowire(WeightService::class),
 
     /**
      * Handles tri-state values
      */
-    TriStateServiceInterface::class             => autowire(TriStateService::class),
+    TriStateServiceInterface::class            => autowire(TriStateService::class),
 
     /**
      * @todo remove in v3.0.0
      */
-    PdkAccountRepositoryInterface::class        => factory(function () {
+    PdkAccountRepositoryInterface::class       => factory(function () {
         return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
     }),
 
     /**
      * @todo remove in v3.0.0
      */
-    PdkSettingsRepositoryInterface::class       => factory(function () {
+    PdkSettingsRepositoryInterface::class      => factory(function () {
         return \MyParcelNL\Pdk\Facade\Pdk::get(SettingsRepositoryInterface::class);
     }),
 
     /**
      * Handles executing pdk actions.
      */
-    PdkActionsServiceInterface::class           => autowire(PdkActionsService::class),
+    PdkActionsServiceInterface::class          => autowire(PdkActionsService::class),
 
     /**
      * Handles order options calculation.
      */
-    PdkOrderOptionsServiceInterface::class      => autowire(PdkOrderOptionsService::class),
+    PdkOrderOptionsServiceInterface::class     => autowire(PdkOrderOptionsService::class),
 
     /**
      * Handles executing webhooks.
      */
-    PdkWebhookManagerInterface::class           => autowire(PdkWebhookManager::class),
+    PdkWebhookManagerInterface::class          => autowire(PdkWebhookManager::class),
 ];
