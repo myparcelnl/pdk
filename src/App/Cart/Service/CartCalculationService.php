@@ -7,9 +7,12 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -35,8 +38,12 @@ class CartCalculationService implements CartCalculationServiceInterface
 
                 $allowed = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName)
                     && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
-                
+
                 if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
+                    if ($this->isPackageInternational($cart)) {
+                        $allowed = $this->isCarrierInternationalMailboxOn();
+                    }
+
                     return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
                 }
 
@@ -96,6 +103,29 @@ class CartCalculationService implements CartCalculationServiceInterface
         $anyItemIsDeliverable    = $cart->lines->isDeliverable();
 
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
+    }
+
+    private function isCarrierInternationalMailboxOn(): bool
+    {
+        $allCarriers = AccountSettings::getCarriers();
+        foreach ($allCarriers as $carrier) {
+            $settings = Settings::all()->carrier->get($carrier->externalIdentifier);
+            if ($settings->allowInternationalMailbox) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isPackageInternational(PdkCart $cart): bool
+    {
+        //todo: refactoren, betere titel en geef alleen maar de cc als parameter.
+        $countryService = Pdk::get(CountryServiceInterface::class);
+        $cc             = $cart->shippingMethod->shippingAddress->cc;
+        $shippingZone   = $cc ? $countryService->getShippingZone($cc) : null;
+
+        return ! $countryService->isUnique($shippingZone);
     }
 
     /**
