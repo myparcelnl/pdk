@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -111,7 +112,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         foreach ($carriers->all() as $carrier) {
             $identifier      = $carrier->externalIdentifier;
-            $carrierSettings = $this->createCarrierSettings($carrier, $cart);
+            $carrierSettings = $this->createCarrierSettings($carrier, $cart, $packageType);
 
             $settings['carrierSettings'][$identifier] = $carrierSettings;
         }
@@ -126,7 +127,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(Carrier $carrier, PdkCart $cart): array
+    private function createCarrierSettings(Carrier $carrier, PdkCart $cart, string $packageType): array
     {
         $carrierSettings = new CarrierSettings(
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
@@ -141,6 +142,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
+
+        if ($this->swapInternationalMailboxPrice($packageType, $cart->shippingMethod->shippingAddress->cc)) {
+            $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
+        }
 
         $settings = $this->getBaseSettings($carrierSettings, $cart);
 
@@ -210,6 +215,13 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             return false;
                         }
 
+                        //todo: de schema's halen het meeste wel er uit. Maar ik denk dat hij alsnog dingen er door laat die niet mogen
+                        // dat is:
+                        // 1. omdat de schema's niet volledig zijn. UPS mist bijvoorbeel.
+                        // 2. hij kijkt bij postnl niet of het custom is.\
+                        // in de stap hiervoor bepalen wat de allowed packagetypes zijn lost dit denk ik niet op.
+                        // Want dan bepaal je dat mailbox mag en dan loop je hier tegen dezelfde problemen aan.
+
                         $schema = $this->schemaRepository->getOrderValidationSchema(
                             $carrier->name,
                             $cart->shippingMethod->shippingAddress->cc,
@@ -239,5 +251,18 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
+    }
+
+    private function swapInternationalMailboxPrice(string $packageTypeName, ?string $cc): bool
+    {
+        if ($packageTypeName !== DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME) {
+            return false;
+        }
+
+        /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
+        $countryService = Pdk::get(CountryServiceInterface::class);
+        $shippingZone   = $cc ? $countryService->getShippingZone($cc) : null;
+
+        return ! $countryService->isUnique($shippingZone);
     }
 }
