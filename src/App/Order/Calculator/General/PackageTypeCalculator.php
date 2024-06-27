@@ -30,14 +30,17 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
 
     public function calculate(): void
     {
+        // All package types are allowed when shipping within the local country.
         if ($this->countryService->isLocalCountry($this->order->shippingAddress->cc)) {
             return;
         }
 
+        // Letters are allowed outside the local country as well.
         if (DeliveryOptions::PACKAGE_TYPE_LETTER_NAME === $this->order->deliveryOptions->packageType) {
             return;
         }
 
+        // Small packages are allowed outside the local country as well.
         if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $this->order->deliveryOptions->packageType) {
             return;
         }
@@ -58,6 +61,9 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function isInternationalMailbox(Carrier $carrier): bool
     {
+        //todo: some extra logic if this store has a custom contract with the carrier that allows international mailbox packages.
+        // todo: mailbox packages are not allowed when shipping from the netherlands to belgium. check here if it is not belgium.
+        // todo: check if the admin turned on the option to allow mailbox packages to be sent internationally.
         return $carrier->name === Carrier::CARRIER_POSTNL_NAME
             && ! $carrier->isDefault
             && $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
