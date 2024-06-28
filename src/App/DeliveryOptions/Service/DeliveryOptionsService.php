@@ -46,8 +46,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
         'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
         'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
-        'priceInternationalMailbox'    => CarrierSettings::PRICE_INTERNATIONAL_MAILBOX,
     ];
+
+    /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
@@ -70,20 +74,24 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $taxService;
 
     /**
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
+        CountryServiceInterface  $countryService,
+        CurrencyServiceInterface $currencyService,
         DropOffServiceInterface  $dropOffService,
         TaxServiceInterface      $taxService,
-        SchemaRepository         $schemaRepository,
-        CurrencyServiceInterface $currencyService
+        SchemaRepository         $schemaRepository
     ) {
+        $this->countryService   = $countryService;
+        $this->currencyService  = $currencyService;
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
         $this->schemaRepository = $schemaRepository;
-        $this->currencyService  = $currencyService;
     }
 
     /**
@@ -141,7 +149,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
 
-        if ($this->swapInternationalMailboxPrice($packageType, $cart->shippingMethod->shippingAddress->cc)) {
+        if ($this->shouldUseInternationalMailboxPrice($packageType, $cart->shippingMethod->shippingAddress->cc)) {
             $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
         }
 
@@ -244,15 +252,17 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
     }
 
-    private function swapInternationalMailboxPrice(string $packageTypeName, string $cc): bool
+    /**
+     * @param  string      $packageType
+     * @param  null|string $cc
+     *
+     * @return bool
+     */
+    private function shouldUseInternationalMailboxPrice(string $packageType, ?string $cc): bool
     {
-        if ($packageTypeName !== DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME) {
-            return false;
-        }
+        $isMailbox   = $packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        $isNotUnique = $cc && ! $this->countryService->isUnique($cc);
 
-        /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
-        $countryService = Pdk::get(CountryServiceInterface::class);
-
-        return $countryService->isInternational($cc);
+        return $isMailbox && $isNotUnique;
     }
 }

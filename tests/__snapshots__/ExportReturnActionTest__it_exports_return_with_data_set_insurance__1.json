@@ -17,6 +17,7 @@
               "deliveryTypes": ["morning", "standard", "evening", "pickup"],
               "features": {
                 "labelDescriptionLength": 45,
+                "carrierMailContract": "featureCustomContractOnly",
                 "multiCollo": true
               },
               "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
@@ -281,6 +282,7 @@
               "deliveryTypes": ["morning", "standard", "evening", "pickup"],
               "features": {
                 "labelDescriptionLength": 45,
+                "carrierMailContract": "featureCustomContractOnly",
                 "multiCollo": true
               },
               "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],

@@ -8,11 +8,12 @@ use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -20,6 +21,19 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
+    /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService
+     */
+    public function __construct(CountryServiceInterface $countryService)
+    {
+        $this->countryService = $countryService;
+    }
+
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
@@ -31,7 +45,6 @@ class CartCalculationService implements CartCalculationServiceInterface
             ->sortBySize(true)
             ->filter(function (PackageType $packageType) use ($cart) {
                 $packageTypeName = $packageType->name;
-
                 if (DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageTypeName) {
                     return true;
                 }
@@ -40,11 +53,11 @@ class CartCalculationService implements CartCalculationServiceInterface
                     && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
 
                 if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
-                    if ($this->isAddressInternational($cart->shippingMethod->shippingAddress->cc)) {
-                        $allowed = $this->isCarrierInternationalMailboxOn();
-                    }
+                    $cc = $cart->shippingMethod->shippingAddress->cc;
 
-                    return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
+                    return $allowed
+                        && $this->allowMailboxToCountry($cc)
+                        && $this->calculateMailboxPercentage($cart) <= 100.0;
                 }
 
                 return $allowed;
@@ -105,24 +118,18 @@ class CartCalculationService implements CartCalculationServiceInterface
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
     }
 
-    private function isAddressInternational(string $cc): bool
+    private function allowMailboxToCountry(?string $cc): bool
     {
-        /** @var \MyParcelNL\Pdk\Base\Service\CountryService $countryService */
-        $countryService = Pdk::get(CountryServiceInterface::class);
-        return $countryService->isInternational($cc);
-    }
-
-    private function isCarrierInternationalMailboxOn(): bool
-    {
-        $allCarriers = AccountSettings::getCarriers();
-        foreach ($allCarriers as $carrier) {
-            $settings = Settings::all()->carrier->get($carrier->externalIdentifier);
-            if ($settings->allowInternationalMailbox) {
-                return true;
-            }
+        if ($cc === CountryCodes::CC_NL) {
+            return true;
         }
 
-        return false;
+        $ccIsNotNull = $cc !== null;
+
+        return $ccIsNotNull
+            && Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
+                return $carrierSettings->allowInternationalMailbox;
+            });
     }
 
     /**

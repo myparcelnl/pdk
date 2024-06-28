@@ -103,11 +103,11 @@ class AccountSettingsService implements AccountSettingsServiceInterface
      * @return bool
      * @noinspection PhpUnused
      */
-    public function hasCarrierMailContract(): bool
+    public function hasCarrierSmallPackageContract(): bool
     {
         $account = $this->getAccount();
 
-        return $account ? $account->generalSettings->hasCarrierMailContract : false;
+        return $account ? $account->generalSettings->hasCarrierSmallPackageContract : false;
     }
 
     /**

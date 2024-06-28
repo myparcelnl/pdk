@@ -13,7 +13,9 @@
   "generalSettings": {
     "isTest": false,
     "orderMode": false,
-    "hasCarrierContract": false
+    "hasCarrierContract": false,
+    "hasCarrierMailContract": false,
+    "hasCarrierSmallPackageContract": false
   },
   "shops": [
     {

@@ -1,9 +1,9 @@
 {
   "packageType": "mailbox",
   "carrierSettings": {
-    "postnl": {
+    "postnl:123": {
       "allowDeliveryOptions": true,
-      "allowStandardDelivery": true,
+      "allowStandardDelivery": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
       "allowMorningDelivery": false,
@@ -16,7 +16,7 @@
       "priceMorningDelivery": 0,
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
-      "pricePackageTypeMailbox": 5,
+      "pricePackageTypeMailbox": 1.05,
       "pricePackageTypePackageSmall": 0,
       "pricePickup": 0,
       "priceSameDayDelivery": 0,

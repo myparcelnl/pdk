@@ -1,8 +1,8 @@
 {
-  "packageType": "package",
+  "packageType": "mailbox",
   "carrierSettings": {
-    "postnl": {
-      "allowDeliveryOptions": false,
+    "postnl:123": {
+      "allowDeliveryOptions": true,
       "allowStandardDelivery": false,
       "allowEveningDelivery": false,
       "allowMondayDelivery": false,
@@ -16,13 +16,12 @@
       "priceMorningDelivery": 0,
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
-      "pricePackageTypeMailbox": 0,
+      "pricePackageTypeMailbox": 1.05,
       "pricePackageTypePackageSmall": 0,
       "pricePickup": 0,
       "priceSameDayDelivery": 0,
       "priceSignature": 0,
       "priceStandardDelivery": 0,
-      "priceInternationalMailbox": 0,
       "deliveryDaysWindow": 7,
       "dropOffDelay": 0,
       "cutoffTime": null,
