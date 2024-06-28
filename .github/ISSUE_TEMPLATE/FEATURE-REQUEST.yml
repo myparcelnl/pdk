@@ -1,6 +1,6 @@
 name: 'Feature request'
 description: 'Suggest an idea to improve the PDK.'
-labels: [ 'feature' ]
+labels: ['feature']
 
 body:
   - type: markdown

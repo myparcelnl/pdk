@@ -1,16 +1,14 @@
-<div
-  data-pdk-context="__CONTEXT__"
-  id="__ID__"></div>
+<div data-pdk-context="__CONTEXT__" id="__ID__"></div>
 <script id="__ID__-script">
-(() => {
-  var e = '__EVENT_PONG__';
-  var listener = function(event) {
-    event.detail.render('__COMPONENT__', '#__ID__');
-    document.getElementById('__ID__-script').remove();
-    document.removeEventListener(e, listener);
-  };
+  (() => {
+    var e = '__EVENT_PONG__';
+    var listener = function (event) {
+      event.detail.render('__COMPONENT__', '#__ID__');
+      document.getElementById('__ID__-script').remove();
+      document.removeEventListener(e, listener);
+    };
 
-  document.addEventListener(e, listener);
-  document.dispatchEvent(new Event('__EVENT_PING__'));
-})();
+    document.addEventListener(e, listener);
+    document.dispatchEvent(new Event('__EVENT_PING__'));
+  })();
 </script>

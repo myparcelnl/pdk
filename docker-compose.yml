@@ -5,7 +5,7 @@ x-image: &image ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
 services:
   php:
     image: *image
-    command: [ 'composer', 'install', '--no-interaction', '--no-progress', '--no-suggest' ]
+    command: ['composer', 'install', '--no-interaction', '--no-progress', '--no-suggest']
     init: true
     env_file:
       - .env.local
@@ -14,8 +14,8 @@ services:
 
   console:
     image: *image
-    command: [ ]
+    command: []
     init: true
-    entrypoint: [ 'php', 'bin/console' ]
+    entrypoint: ['php', 'bin/console']
     volumes:
       - ./:/app
