@@ -8,8 +8,11 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -54,6 +57,23 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
         $this->order->deliveryOptions->packageType = DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME;
     }
 
+    private function isAddressInternational(string $cc): bool
+    {
+        /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
+        $countryService = Pdk::get(CountryServiceInterface::class);
+        return $countryService->isInternational($cc);
+    }
+
+    private function isCarrierInternationalMailboxOn(Carrier $carrier): bool
+    {
+        $settings = Settings::all()->carrier->get($carrier->externalIdentifier);
+        if ($settings->allowInternationalMailbox) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
@@ -61,10 +81,28 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function isInternationalMailbox(Carrier $carrier): bool
     {
-        // todo: mailbox packages are not allowed when shipping from the netherlands to belgium. check here if it is not belgium.
-        // todo: check if the admin turned on the option to allow mailbox packages to be sent internationally.
-        return $carrier->name === Carrier::CARRIER_POSTNL_NAME
-            && ! $carrier->isDefault
-            && $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        if ($this->order->deliveryOptions->packageType !== DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME) {
+            return false;
+        }
+
+        $cc = $this->order->shippingAddress->cc;
+        if (! $this->isAddressInternational($cc)) {
+            return false;
+        }
+
+        $hasCarrierMailContract = AccountSettings::hasCarrierMailContract();
+        if (! $hasCarrierMailContract) {
+            return false;
+        }
+
+        /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
+        $schema = Pdk::get(CarrierSchema::class);
+        $schema->setCarrier($carrier);
+
+        if (! $schema->canHaveCarrierMailContract()) {
+            return false;
+        }
+
+        return $this->isCarrierInternationalMailboxOn($carrier);
     }
 }

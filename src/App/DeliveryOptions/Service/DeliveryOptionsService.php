@@ -111,10 +111,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         ];
 
         foreach ($carriers->all() as $carrier) {
-            $identifier      = $carrier->externalIdentifier;
-            $carrierSettings = $this->createCarrierSettings($carrier, $cart, $packageType);
-
-            $settings['carrierSettings'][$identifier] = $carrierSettings;
+            $identifier                               = $carrier->externalIdentifier;
+            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 
         return $settings;
@@ -215,24 +213,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                             return false;
                         }
 
-                        //todo: de setting wordt nooit gechecked. daar gaat het wss mis
-
-                        //todo: de schema's halen het meeste wel er uit. Maar ik denk dat hij alsnog dingen er door laat die niet mogen
-                        // dat is:
-                        // 1. omdat de schema's niet volledig zijn.
-                        // UPS mist bijvoorbeeld, en omdat ie mist pakt hij de 'base' schema en dan mag UPS ineens ALLES.
-                        // niet het probleem van jouw story!
-
-                        // 2. hij kijkt bij postnl niet of het custom is.
-
-                        // 3. Ook kijkt hij niet of international mailbox wel door de admin is aangezet.
-                        // jawel, setting is er niet als dit uit staat
-
-                        // In de stap hiervoor bepalen wat de allowed packagetypes zijn lost dit denk ik niet op.
-                        // Want dan bepaal je dat mailbox mag en dan loop je hier tegen dezelfde problemen zoals hierboven beschreven aan.
-                        // Ik moet een betere plek vinden voor de business logic omdat dat hier niet mag.
-                        // Maar hier is de plek waar je bepaalt of deze package type mag. Als je hier niet die beslissing neemt waar dan wel?
-
                         $schema = $this->schemaRepository->getOrderValidationSchema(
                             $carrier->name,
                             $cart->shippingMethod->shippingAddress->cc,
@@ -264,7 +244,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
     }
 
-    private function swapInternationalMailboxPrice(string $packageTypeName, ?string $cc): bool
+    private function swapInternationalMailboxPrice(string $packageTypeName, string $cc): bool
     {
         if ($packageTypeName !== DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME) {
             return false;
@@ -272,8 +252,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
         $countryService = Pdk::get(CountryServiceInterface::class);
-        $shippingZone   = $cc ? $countryService->getShippingZone($cc) : null;
 
-        return ! $countryService->isUnique($shippingZone);
+        return $countryService->isInternational($cc);
     }
 }

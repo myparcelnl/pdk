@@ -40,7 +40,7 @@ class CartCalculationService implements CartCalculationServiceInterface
                     && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
 
                 if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
-                    if ($this->isPackageInternational($cart)) {
+                    if ($this->isAddressInternational($cart->shippingMethod->shippingAddress->cc)) {
                         $allowed = $this->isCarrierInternationalMailboxOn();
                     }
 
@@ -105,6 +105,13 @@ class CartCalculationService implements CartCalculationServiceInterface
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
     }
 
+    private function isAddressInternational(string $cc): bool
+    {
+        /** @var \MyParcelNL\Pdk\Base\Service\CountryService $countryService */
+        $countryService = Pdk::get(CountryServiceInterface::class);
+        return $countryService->isInternational($cc);
+    }
+
     private function isCarrierInternationalMailboxOn(): bool
     {
         $allCarriers = AccountSettings::getCarriers();
@@ -116,16 +123,6 @@ class CartCalculationService implements CartCalculationServiceInterface
         }
 
         return false;
-    }
-
-    private function isPackageInternational(PdkCart $cart): bool
-    {
-        //todo: refactoren, betere titel en geef alleen maar de cc als parameter.
-        $countryService = Pdk::get(CountryServiceInterface::class);
-        $cc             = $cart->shippingMethod->shippingAddress->cc;
-        $shippingZone   = $cc ? $countryService->getShippingZone($cc) : null;
-
-        return ! $countryService->isUnique($shippingZone);
     }
 
     /**
