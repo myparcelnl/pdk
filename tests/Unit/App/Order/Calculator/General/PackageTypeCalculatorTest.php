@@ -5,7 +5,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
-use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
+use MyParcelNL\Pdk\Account\Platform as AccountPlatform;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
@@ -14,7 +15,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
@@ -102,115 +102,293 @@ it('calculates package type', function (
         ],
     ]);
 
-// - contract setting aan
-// - contract setting uit
-// - carrier setting aan
-// - carrier setting uit
-
 it('calculates international mailbox', function (
     string $platform,
     string $country,
-    string $carrierName,
     bool   $carrierSetting,
-    bool   $accountFlag
+    bool   $accountFlag,
+    string $packageType,
+    array  $carrierTests
 ) {
+    //todo:
+    // - maak voor elke accountflag/carriersetting een array aan.
+    // - maak voor elke carrier een array aan.
+    // flespakket hoef je niet te testen want is hetzelfde als myparcel.
+    // belgie ondersteund nooit mailbox, dus dat is altijd standaard package.
     mockPlatform($platform);
     mockPdkProperties([
         'orderCalculators' => [PackageTypeCalculator::class],
     ]);
 
-    factory(CarrierSettings::class, $carrierName)
-        ->withAllowInternationalMailbox($carrierSetting)
-        ->store();
+    foreach ($carrierTests as $carrierTest) {
+        $fakeCarrier = factory(Carrier::class)
+            ->withExternalIdentifier($carrierTest['carrierExternalIdentifier'])
+            ->withCapabilities(
+                factory(CarrierCapabilities::class)->fromCarrier($carrierTest['carrierName'])
+            )
+            ->make();
 
-    factory(AccountSettings::class)
-        ->withGeneralSettings([
-            'hasCarrierSmallPackageContract' => $accountFlag,
-        ])
-        ->store();
+        factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+            ->withAllowInternationalMailbox($carrierSetting)
+            ->store();
 
-    $fakeCarrier = factory(Carrier::class)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withAllOptions());
+        $order = factory(PdkOrder::class)
+            ->withShippingAddress(
+                factory(ShippingAddress::class)->withCc($country)
+            )
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)
+                    ->withCarrier($fakeCarrier)
+                    ->withPackageType($packageType)
+                    ->withAllShipmentOptions()
+            )
+            ->make();
 
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(
-            factory(ShippingAddress::class)->withCc($options['cc'] ?? Platform::get('localCountry'))
-        )
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withCarrier($fakeCarrier)
-                ->withPackageType($options['packageType'])
-                ->withAllShipmentOptions()
-        )
-        ->make();
+        factory(AccountGeneralSettings::class)
+            ->withHasCarrierSmallPackageContract($accountFlag)
+            ->store();
 
-    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
-    $service  = Pdk::get(PdkOrderOptionsService::class);
-    $newOrder = $service->calculate($order);
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+        $service  = Pdk::get(PdkOrderOptionsService::class);
+        $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->packageType)->toBe($result);
+        expect($newOrder->deliveryOptions->packageType)->toBe($carrierTest['results'][$platform]);
+    }
 })
     ->with('platforms')
     ->with([
         'gb, account flag on, carrier setting on'   => [
-            CountryCodes::CC_GB,
-            true,
-            true,
-            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'country'        => CountryCodes::CC_GB,
+            'carrierSetting' => true,
+            'accountFlag'    => true,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
         ],
         'gb, account flag on, carrier setting off'  => [
-            CountryCodes::CC_GB,
-            true,
-            false,
-            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+            'country'        => CountryCodes::CC_GB,
+            'carrierSetting' => false,
+            'accountFlag'    => true,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
         ],
         'gb, account flag off, carrier setting on'  => [
-            CountryCodes::CC_GB,
-            false,
-            true,
-            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'country'        => CountryCodes::CC_GB,
+            'carrierSetting' => true,
+            'accountFlag'    => false,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
         ],
         'gb, account flag off, carrier setting off' => [
-            // todo: maak het zoiets:
             'country'        => CountryCodes::CC_GB,
-            'carrier'        => '...',
             'carrierSetting' => false,
             'accountFlag'    => false,
-            'packageType'    => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        ],
-    ])
-    ->with([
-        'non-local country, package type mailbox, postnl' => [
-            'options'                => [
-                'cc'          => CountryCodes::CC_GB,
-                'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
             ],
-            'result'                 => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-            'accountFactory'         => function () {
-                return factory(Account::class)->withGeneralSettings([
-                    'hasCarrierSmallPackageContract' => true,
-                ]);
-            },
-            'carrierSettingsFactory' => function () {
-                return factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
-                    ->withAllowInternationalMailbox(true);
-            },
         ],
-
-        'non-local country, package type mailbox, dhl' => [
-            'options'                => [
-                'cc'          => CountryCodes::CC_GB,
-                'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'nl, account flag on, carrier setting on'   => [
+            'country'        => CountryCodes::CC_NL,
+            'carrierSetting' => true,
+            'accountFlag'    => true,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
             ],
-            'result'                 => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            'accountFactory'         => function () {
-                return factory(Account::class)->withGeneralSettings([
-                    'hasCarrierSmallPackageContract' => true,
-                ]);
-            },
-            'carrierSettingsFactory' => function () {
-                return factory(CarrierSettings::class, Carrier::CARRIER_DHL_FOR_YOU_NAME)
-                    ->withAllowInternationalMailbox(true);
-            },
+        ],
+        'nl, account flag on, carrier setting off'  => [
+            'country'        => CountryCodes::CC_NL,
+            'carrierSetting' => false,
+            'accountFlag'    => true,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
+        ],
+        'nl, account flag off, carrier setting on'  => [
+            'country'        => CountryCodes::CC_NL,
+            'carrierSetting' => true,
+            'accountFlag'    => false,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
+        ],
+        'nl, account flag off, carrier setting off' => [
+            'country'        => CountryCodes::CC_NL,
+            'carrierSetting' => false,
+            'accountFlag'    => false,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
+        ],
+        'be, account flag on, carrier setting on'   => [
+            'country'        => CountryCodes::CC_GB,
+            'carrierSetting' => true,
+            'accountFlag'    => true,
+            'packageType'    => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'carriers'       => [
+                [
+                    'carrierExternalIdentifier' => 'postnl:123',
+                    'carrierName'               => 'postnl',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+                [
+                    'carrierExternalIdentifier' => 'dhlforyou',
+                    'carrierName'               => 'dhlforyou',
+                    'results'                   => [
+                        AccountPlatform::FLESPAKKET_NAME   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::MYPARCEL_NAME     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        AccountPlatform::SENDMYPARCEL_NAME => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    ],
+                ],
+            ],
         ],
     ]);

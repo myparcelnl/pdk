@@ -120,6 +120,11 @@ class CartCalculationService implements CartCalculationServiceInterface
 
     private function allowMailboxToCountry(?string $cc): bool
     {
+        //todo: uitzoeken of bbp naar Belgie mag
+        // nl -> be mag bbp
+        // nl -> nl mag bbp
+        // nl -> row of eu heb je speciaal contract nodig
+        // waarschijnlijk dus hier isUnique doen.
         if ($cc === CountryCodes::CC_NL) {
             return true;
         }

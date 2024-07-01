@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -69,18 +70,18 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
         // todo: volgens mij hoeft dit niet, gaarne checken (met tests!!!)
         // maak carrier schema in test
         /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
-        //        $schema = Pdk::get(CarrierSchema::class);
-        //        $schema->setCarrier($carrier);
+        $schema = Pdk::get(CarrierSchema::class);
+        $schema->setCarrier($carrier);
 
         $isMailbox   = $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
         $isNotUnique = ! $this->countryService->isUnique($this->order->shippingAddress->cc);
         // zet dit aan in account settings in test
-        $enabledInAccount = AccountSettings::hasCarrierSmallPackageContract();
-        //        $canHaveCarrierMailContract = $schema->canHaveCarrierMailContract();
+        $enabledInAccount                   = AccountSettings::hasCarrierSmallPackageContract();
+        $canHaveCarrierSmallPackageContract = $schema->canHaveCarrierSmallPackageContract();
         // zet dit aan in de test
         $enabledInSettings = $carrierSettings->allowInternationalMailbox;
 
-        //        return $isMailbox && $isNotUnique && $enabledInAccount && $canHaveCarrierMailContract && $enabledInSettings;
-        return $isMailbox && $isNotUnique && $enabledInAccount && $enabledInSettings;
+        return $isMailbox && $isNotUnique && $enabledInAccount && $canHaveCarrierSmallPackageContract && $enabledInSettings;
+        //        return $isMailbox && $isNotUnique && $enabledInAccount && $enabledInSettings;
     }
 }

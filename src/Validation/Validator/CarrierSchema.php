@@ -67,6 +67,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHave(AgeCheckDefinition::class);
     }
 
+    public function canHaveCarrierSmallPackageContract(): bool
+    {
+        return $this->canHaveFeature('carrierSmallPackageContract');
+    }
+
     public function canHaveCarrierMailContract(): bool
     {
         return $this->canHaveFeature('carrierMailContract');
