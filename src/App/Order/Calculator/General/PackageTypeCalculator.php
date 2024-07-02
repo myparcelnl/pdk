@@ -64,10 +64,6 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function isInternationalMailbox(Carrier $carrier): bool
     {
-        //todo: in sommige gevallen is het mogelijk om pakketjes vanuit nederland naar belgie te sturen en vice versa.
-        // Deze logica verbied dat. Moet ik in deze story hier ook al rekening mee houden of is dat voor een andere keer?
-        // Voor zover ik weet was het al niet mogelijk. Dit moet ik nog uitzoeken.
-        // Test met de oude pdk hoe het toen werkte
         $carrierSettings = Settings::all()->carrier->get($carrier->externalIdentifier);
 
         /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
@@ -81,6 +77,5 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
         $enabledInSettings                  = $carrierSettings->allowInternationalMailbox;
 
         return $isMailbox && $isNotUnique && $enabledInAccount && $canHaveCarrierSmallPackageContract && $enabledInSettings;
-        //        return $isMailbox && $isNotUnique && $enabledInAccount && $enabledInSettings;
     }
 }
