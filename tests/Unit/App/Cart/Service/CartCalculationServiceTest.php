@@ -165,59 +165,69 @@ it('calculates mailbox percentage', function (array $lines, float $expected) {
     ],
 ]);
 
-it('calculates allowed package types', function (array $lines, array $shippingAddress, array $result) {
-    factory(Settings::class)
-        ->withCarrierPostNl(
-            factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
-                ->withAllowInternationalMailbox(true)
-        )
-        ->withOrder(
-            factory(OrderSettings::class)
-                ->withEmptyMailboxWeight(200)
-        )
-        ->store();
+it(
+    'calculates allowed package types',
+    function (array $lines, array $shippingAddress, array $result, bool $allowInternationalMailbox = false) {
+        factory(Settings::class)
+            ->withCarrierPostNl(
+                factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
+                    ->withAllowInternationalMailbox($allowInternationalMailbox)
+            )
+            ->withOrder(
+                factory(OrderSettings::class)
+                    ->withEmptyMailboxWeight(200)
+            )
+            ->store();
 
-    /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
-    $service = Pdk::get(CartCalculationServiceInterface::class);
+        /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
+        $service = Pdk::get(CartCalculationServiceInterface::class);
 
-    $allowedPackageTypes = $service->calculateAllowedPackageTypes(
-        new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => $shippingAddress]])
-    );
+        $allowedPackageTypes = $service->calculateAllowedPackageTypes(
+            new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => $shippingAddress]])
+        );
 
-    expect(Arr::pluck($allowedPackageTypes->toArray(), 'name'))->toEqual($result);
-})->with([
-    //todo: use these tests
-
-    //    'fits in mailbox'                  => [
-    //        'lines'   => LINES_FITS_IN_MAILBOX,
-    //        'address' => SHIPPING_ADDRESS_NL,
-    //        'result'  => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
-    //    ],
-    //    'fits in mailbox EU'               => [
-    //        'lines'   => LINES_FITS_IN_MAILBOX,
-    //        'address' => SHIPPING_ADDRESS_EU,
-    //        'result'  => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
-    //    ],
-    //    'one item does not fit in mailbox' => [
-    //        'lines'   => LINES_DONT_FIT_MAILBOX,
-    //        'address' => SHIPPING_ADDRESS_NL,
-    //        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
-    //    ],
-    //    'items exceeding mailbox weight'   => [
-    //        'lines'   => LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
-    //        'address' => SHIPPING_ADDRESS_NL,
-    //        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
-    //    ],
-    'total exceeding mailbox weight' => [
+        expect(Arr::pluck($allowedPackageTypes->toArray(), 'name'))->toEqual($result);
+    }
+)->with([
+    'fits in mailbox'                  => [
+        'lines'   => LINES_FITS_IN_MAILBOX,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'fits in mailbox EU, allowed'      => [
+        'lines'                     => LINES_FITS_IN_MAILBOX,
+        'address'                   => SHIPPING_ADDRESS_EU,
+        'result'                    => [
+            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        ],
+        'allowInternationalMailbox' => true,
+    ],
+    'fits in mailbox EU, not allowed'  => [
+        'lines'   => LINES_FITS_IN_MAILBOX,
+        'address' => SHIPPING_ADDRESS_EU,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'one item does not fit in mailbox' => [
+        'lines'   => LINES_DONT_FIT_MAILBOX,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'items exceeding mailbox weight'   => [
+        'lines'   => LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'total exceeding mailbox weight'   => [
         'lines'   => TOTAL_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
         'address' => SHIPPING_ADDRESS_NL,
         'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
-    //    'items exceeding mailbox size'     => [
-    //        'lines'   => LINES_EXCEEDING_MAILBOX_SIZE,
-    //        'address' => SHIPPING_ADDRESS_NL,
-    //        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
-    //    ],
+    'items exceeding mailbox size'     => [
+        'lines'   => LINES_EXCEEDING_MAILBOX_SIZE,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
 ]);
 
 it('calculates shipping method in cart', function (array $lines, array $result) {
