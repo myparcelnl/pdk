@@ -64,22 +64,21 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function isInternationalMailbox(Carrier $carrier): bool
     {
-        //maak carriersettings in test
+        //todo: in sommige gevallen is het mogelijk om pakketjes vanuit nederland naar belgie te sturen en vice versa.
+        // Deze logica verbied dat. Moet ik in deze story hier ook al rekening mee houden of is dat voor een andere keer?
+        // Voor zover ik weet was het al niet mogelijk. Dit moet ik nog uitzoeken.
+        // Test met de oude pdk hoe het toen werkte
         $carrierSettings = Settings::all()->carrier->get($carrier->externalIdentifier);
 
-        // todo: volgens mij hoeft dit niet, gaarne checken (met tests!!!)
-        // maak carrier schema in test
         /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
         $schema = Pdk::get(CarrierSchema::class);
         $schema->setCarrier($carrier);
 
-        $isMailbox   = $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
-        $isNotUnique = ! $this->countryService->isUnique($this->order->shippingAddress->cc);
-        // zet dit aan in account settings in test
+        $isMailbox                          = $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        $isNotUnique                        = ! $this->countryService->isUnique($this->order->shippingAddress->cc);
         $enabledInAccount                   = AccountSettings::hasCarrierSmallPackageContract();
         $canHaveCarrierSmallPackageContract = $schema->canHaveCarrierSmallPackageContract();
-        // zet dit aan in de test
-        $enabledInSettings = $carrierSettings->allowInternationalMailbox;
+        $enabledInSettings                  = $carrierSettings->allowInternationalMailbox;
 
         return $isMailbox && $isNotUnique && $enabledInAccount && $canHaveCarrierSmallPackageContract && $enabledInSettings;
         //        return $isMailbox && $isNotUnique && $enabledInAccount && $enabledInSettings;

@@ -186,6 +186,8 @@ it('calculates allowed package types', function (array $lines, array $shippingAd
 
     expect(Arr::pluck($allowedPackageTypes->toArray(), 'name'))->toEqual($result);
 })->with([
+    //todo: use these tests
+
     //    'fits in mailbox'                  => [
     //        'lines'   => LINES_FITS_IN_MAILBOX,
     //        'address' => SHIPPING_ADDRESS_NL,
