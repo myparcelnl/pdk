@@ -131,6 +131,7 @@ class CartCalculationService implements CartCalculationServiceInterface
 
         $ccIsNotNull = $cc !== null;
 
+        //todo: de setting moet aan staan en de carrier moet ook aan staan.
         return $ccIsNotNull
             && Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
                 return $carrierSettings->allowInternationalMailbox;
