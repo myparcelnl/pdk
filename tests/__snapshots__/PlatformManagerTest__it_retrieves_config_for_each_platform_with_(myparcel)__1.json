@@ -27,7 +27,7 @@
         },
         "features": {
           "labelDescriptionLength": 45,
-          "carrierMailContract": "featureCustomContractOnly",
+          "carrierSmallPackageContract": "featureCustomContractOnly",
           "multiCollo": true
         }
       },
