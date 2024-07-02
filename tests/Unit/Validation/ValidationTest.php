@@ -383,7 +383,7 @@ it('validates order', function (array $input) {
                 ]
             ),
         ],
-        'Allows property tracked'   => [
+        'allows property tracked'   => [
             'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
