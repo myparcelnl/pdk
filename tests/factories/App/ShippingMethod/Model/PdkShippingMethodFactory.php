@@ -20,6 +20,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withIsEnabled(bool $isEnabled)
  * @method $this withMinimumDropOffDelay(int $minimumDropOffDelay)
  * @method $this withName(string $name)
+ * @method $this withDescription(string $description)
  * @method $this withShippingAddress(Address|AddressFactory $shippingAddress)
  */
 final class PdkShippingMethodFactory extends AbstractModelFactory

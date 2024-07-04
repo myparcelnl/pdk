@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\src\Support\Str;
+use function array_map;
 
 /**
  * @deprecated use NewAbstractSettingsView instead
@@ -258,16 +259,22 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function toSelectOptions(array $array, int $displayOptions = 0): array
     {
-        $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
+        $isAssoc = Arr::isAssoc($array);
 
-        $options = array_map(static function ($value, $key) use ($displayOptions) {
-            $labelKey = $displayOptions & self::SELECT_USE_PLAIN_LABEL ? 'plainLabel' : 'label';
+        if ($isAssoc) {
+            $options = array_map(static function ($value, $key) use ($displayOptions) {
+                $labelKey = $displayOptions & self::SELECT_USE_PLAIN_LABEL ? 'plainLabel' : 'label';
 
-            return [
-                'value'   => $key,
-                $labelKey => $value,
-            ];
-        }, $associativeArray, array_keys($associativeArray));
+                return [
+                    'value'   => $key,
+                    $labelKey => $value,
+                ];
+            }, $array, array_keys($array));
+        } else {
+            $options = array_map(static function (array $selectOption) {
+                return array_filter($selectOption);
+            }, $array);
+        }
 
         return $this->addDefaultOption($options, $displayOptions);
     }

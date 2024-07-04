@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 /**
  * @property string                $id
  * @property string                $name
+ * @property string                $description
  * @property bool                  $isEnabled
  * @property bool                  $hasDeliveryOptions
  * @property int                   $minimumDropOffDelay
@@ -22,6 +23,7 @@ class PdkShippingMethod extends Model
     protected $attributes = [
         'id'                  => null,
         'name'                => null,
+        'description'         => null,
         'allowedPackageTypes' => PackageTypeCollection::class,
         'hasDeliveryOptions'  => true,
         'isEnabled'           => true,
@@ -32,6 +34,7 @@ class PdkShippingMethod extends Model
     protected $casts      = [
         'id'                  => 'string',
         'name'                => 'string',
+        'description'         => 'string',
         'allowedPackageTypes' => PackageTypeCollection::class,
         'hasDeliveryOptions'  => 'bool',
         'isEnabled'           => 'bool',
