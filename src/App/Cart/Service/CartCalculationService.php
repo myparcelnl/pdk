@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -120,22 +119,16 @@ class CartCalculationService implements CartCalculationServiceInterface
 
     private function allowMailboxToCountry(?string $cc): bool
     {
-        //todo: uitzoeken of bbp naar Belgie mag
-        // nl -> be mag bbp
-        // nl -> nl mag bbp
-        // nl -> row of eu heb je speciaal contract nodig
-        // waarschijnlijk dus hier isUnique doen.
-        if ($cc === CountryCodes::CC_NL) {
-            return true;
+        if ($cc === null) {
+            return false;
         }
 
-        $ccIsNotNull = $cc !== null;
+        $countryIsUnique           = $this->countryService->isUnique($cc);
+        $allowInternationalMailbox = Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
+            return $carrierSettings->allowInternationalMailbox;
+        });
 
-        //todo: de setting moet aan staan en de carrier moet ook aan staan.
-        return $ccIsNotNull
-            && Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
-                return $carrierSettings->allowInternationalMailbox;
-            });
+        return $countryIsUnique || $allowInternationalMailbox;
     }
 
     /**
