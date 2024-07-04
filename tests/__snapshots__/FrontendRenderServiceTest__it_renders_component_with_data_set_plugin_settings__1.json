@@ -1563,11 +1563,12 @@
           "options": [
             {
               "value": "shipping:1",
-              "plainLabel": "Shipping 1 (shipping:1)"
+              "plainLabel": "Shipping 1"
             },
             {
               "value": "shipping:3",
-              "plainLabel": "Shipping 3 (shipping:3)"
+              "plainLabel": "Shipping 3",
+              "description": "My description"
             }
           ],
           "label": "settings_checkout_allowed_shipping_methods",

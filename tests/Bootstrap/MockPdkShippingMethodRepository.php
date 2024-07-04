@@ -27,6 +27,7 @@ class MockPdkShippingMethodRepository implements PdkShippingMethodRepositoryInte
             factory(PdkShippingMethod::class)
                 ->withId('shipping:3')
                 ->withName('Shipping 3')
+                ->withDescription('My description')
                 ->withIsEnabled(true)
                 ->make(),
         ]);
