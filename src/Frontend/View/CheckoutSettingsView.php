@@ -96,9 +96,13 @@ class CheckoutSettingsView extends AbstractSettingsView
     {
         $shippingMethods = $this->shippingMethodRepository->all();
 
+        $enabledShippingMethods = $shippingMethods->filter(static function (PdkShippingMethod $shippingMethod) {
+            return $shippingMethod->isEnabled;
+        });
+
         return $this->toSelectOptions(
             array_reduce(
-                $shippingMethods->all(),
+                $enabledShippingMethods->all(),
                 static function (array $cur, PdkShippingMethod $shippingMethod) {
                     $cur[$shippingMethod->id] = "$shippingMethod->name ($shippingMethod->id)";
 

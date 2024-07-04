@@ -72,7 +72,16 @@
         }
       ],
       "$component": "ShippingMethodsInput",
-      "options": [],
+      "options": [
+        {
+          "value": "shipping:1",
+          "plainLabel": "Shipping 1 (shipping:1)"
+        },
+        {
+          "value": "shipping:3",
+          "plainLabel": "Shipping 3 (shipping:3)"
+        }
+      ],
       "label": "settings_checkout_allowed_shipping_methods",
       "description": "settings_checkout_allowed_shipping_methods_description"
     },
