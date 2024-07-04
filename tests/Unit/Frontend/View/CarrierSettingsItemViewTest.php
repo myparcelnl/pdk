@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -18,6 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -41,7 +43,7 @@ function getViewSettings(CarrierFactory $carrierFactory): array
 usesShared(new UsesMockPdkInstance());
 
 it('shows settings based on capabilities', function (CarrierCapabilitiesFactory $capabilitiesFactory, array $expected) {
-    $emptySettings            = getViewSettings(factory(Carrier::class)->withCapabilities([]));
+    $emptySettings = getViewSettings(factory(Carrier::class)->withCapabilities([]));
     $settingsWithCapabilities = getViewSettings(factory(Carrier::class)->withCapabilities($capabilitiesFactory));
 
     expect($emptySettings)->not->toContain(...$expected)
@@ -190,5 +192,78 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
             CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW,
             CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE,
         ],
+    ],
+]);
+
+it(
+    'shows international mailbox settings based on capabilities',
+    function (
+        CarrierCapabilitiesFactory $capabilitiesFactory,
+        bool                       $accountHasCarrierSmallPackageContract,
+        ?string                    $carrierExternalIdentifier,
+        bool                       $shouldHaveInternationalMailbox
+    ) {
+        factory(AccountGeneralSettings::class)
+            ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
+            ->store();
+
+        $settingsWithCapabilities = getViewSettings(
+            factory(Carrier::class)
+                ->withCapabilities($capabilitiesFactory)
+                ->withExternalIdentifier($carrierExternalIdentifier)
+        );
+
+        $internationalMailboxFields = [
+            'allowInternationalMailbox',
+            'priceInternationalMailbox',
+        ];
+        $contains                   = ! array_diff($internationalMailboxFields, $settingsWithCapabilities);
+
+        expect($contains)->toBe($shouldHaveInternationalMailbox);
+    }
+)->with([
+    'package type: international-mailbox, contract on, custom carrier' => [
+        function () {
+            return factory(CarrierCapabilities::class)
+                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+        },
+        'accountHasCarrierSmallPackageContract' => true,
+        'externalIdentifier'                    => 'postnl:12345',
+        'shouldHaveInternationalMailbox'        => true,
+    ],
+
+    'package type: international-mailbox, contract off, custom carrier' => [
+        function () {
+            return factory(CarrierCapabilities::class)
+                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+        },
+        'accountHasCarrierSmallPackageContract' => false,
+        'externalIdentifier'                    => 'postnl:12345',
+        'shouldHaveInternationalMailbox'        => false,
+    ],
+    'package type: international-mailbox, contract on, normal carrier'  => [
+        function () {
+            return factory(CarrierCapabilities::class)
+                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+        },
+        'accountHasCarrierSmallPackageContract' => true,
+        'externalIdentifier'                    => 'postnl',
+        'shouldHaveInternationalMailbox'        => false,
+
+    ],
+
+    'package type: international-mailbox, contract off, normal carrier' => [
+        function () {
+            return factory(CarrierCapabilities::class)
+                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+        },
+        'accountHasCarrierSmallPackageContract' => false,
+        'externalIdentifier'                    => 'postnl',
+        'shouldHaveInternationalMailbox'        => false,
+
     ],
 ]);
