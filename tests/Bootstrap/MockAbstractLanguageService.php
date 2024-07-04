@@ -105,6 +105,6 @@ class MockAbstractLanguageService extends AbstractLanguageService
      */
     protected function getFilePath(?string $language = null): string
     {
-        return sprintf('%s/../../config/.tmp-translations%s', __DIR__, $language ? "-$language" : '');
+        return sprintf('%s/../../.tmp/.tmp-translations%s', __DIR__, $language ? "-$language" : '');
     }
 }
