@@ -193,12 +193,12 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 300000,
         ],
 
-        'value € 5000, insured up to € 3000 -> € 10000' => [
+        'value € 5000, insured up to € 3000 -> € 3000' => [
             [
-                'orderPrice' => 5000,
+                'orderPrice' => 500000,
                 'settings'   => [CarrierSettings::EXPORT_INSURANCE_UP_TO => 300000],
             ],
-            'result' => 10000,
+            'result' => 300000,
         ],
 
         'value € 310, percentage 50 -> rounded up to € 250' => [
