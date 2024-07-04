@@ -228,7 +228,6 @@
         "isTest": false,
         "orderMode": false,
         "hasCarrierContract": false,
-        "hasCarrierMailContract": false,
         "hasCarrierSmallPackageContract": false
       },
       "shops": [

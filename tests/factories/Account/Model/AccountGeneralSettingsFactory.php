@@ -13,7 +13,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @template T of AccountGeneralSettings
  * @method AccountGeneralSettings make()
  * @method $this withHasCarrierContract(bool $hasCarrierContract)
- * @method $this withHasCarrierMailContract(bool $hasCarrierMailContract)
  * @method $this withHasCarrierSmallPackageContract(bool $hasCarrierSmallPackageContract)
  * @method $this withIsTest(bool $isTest)
  * @method $this withOrderMode(bool $orderMode)
