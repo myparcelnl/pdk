@@ -72,11 +72,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHaveFeature('carrierSmallPackageContract');
     }
 
-    public function canHaveCarrierMailContract(): bool
-    {
-        return $this->canHaveFeature('carrierMailContract');
-    }
-
     public function canHaveDirectReturn(): bool
     {
         return $this->canHave(DirectReturnDefinition::class);

@@ -27,11 +27,6 @@ interface CountryServiceInterface
     public function isEu(string $country): bool;
 
     /**
-     * Check if a country is an international country.
-     */
-    public function isInternational(string $country): bool;
-
-    /**
      * Check if a country is the local country for the current platform.
      */
     public function isLocalCountry(string $country): bool;

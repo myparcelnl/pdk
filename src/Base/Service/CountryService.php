@@ -61,12 +61,6 @@ class CountryService implements CountryServiceInterface
         return CountryCodes::ZONE_EU === $this->getShippingZone($country);
     }
 
-    public function isInternational(string $country): bool
-    {
-        $shippingZone = $this->getShippingZone($country);
-        return ! in_array($shippingZone, CountryCodes::UNIQUE_COUNTRIES, true);
-    }
-
     /**
      * @param  string $country
      *
