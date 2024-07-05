@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.39.1](https://github.com/myparcelnl/pdk/compare/v2.39.0...v2.39.1) (2024-07-05)
+
+
+### :bug: Bug Fixes
+
+* fix max insurance setting not being enforced ([#283](https://github.com/myparcelnl/pdk/issues/283)) ([86a6b83](https://github.com/myparcelnl/pdk/commit/86a6b83b5f14bca64382f00373360676ce24939b))
+
 ## [2.39.0](https://github.com/myparcelnl/pdk/compare/v2.38.1...v2.39.0) (2024-07-04)
 
 
