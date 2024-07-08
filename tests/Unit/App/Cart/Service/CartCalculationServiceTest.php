@@ -172,6 +172,7 @@ it(
             ->withCarrierPostNl(
                 factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
                     ->withAllowInternationalMailbox($allowInternationalMailbox)
+                    ->withDeliveryOptionsEnabled(true)
             )
             ->withOrder(
                 factory(OrderSettings::class)

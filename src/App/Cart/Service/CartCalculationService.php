@@ -125,7 +125,10 @@ class CartCalculationService implements CartCalculationServiceInterface
 
         $countryIsUnique           = $this->countryService->isUnique($cc);
         $allowInternationalMailbox = Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
-            return $carrierSettings->allowInternationalMailbox;
+            $allowInternationalMailbox = $carrierSettings->allowInternationalMailbox;
+            $hasDeliveryOptions        = $carrierSettings->deliveryOptionsEnabled;
+
+            return $allowInternationalMailbox && $hasDeliveryOptions;
         });
 
         return $countryIsUnique || $allowInternationalMailbox;
