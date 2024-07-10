@@ -9,18 +9,18 @@ Feature: As a user I want to be able to update my account settings
       | key                                                | value          |
       | data.context.0.dynamic.account                     | ARRAY,FILLED   |
       | data.context.0.dynamic.account.shops               | ARRAY,LENGTH:1 |
-      | data.context.0.dynamic.carriers                    | ARRAY,LENGTH:7 |
+      | data.context.0.dynamic.carriers                    | ARRAY,LENGTH:6 |
       | data.context.0.dynamic.carriers.0.human            | PostNL         |
       | data.context.0.dynamic.carriers.0.id               | 1              |
       | data.context.0.dynamic.carriers.0.name             | postnl         |
       | data.context.0.dynamic.carriers.0.type             | main           |
-      | data.context.0.dynamic.carriers.4.human            | DHL For You    |
-      | data.context.0.dynamic.carriers.4.id               | 9              |
-      | data.context.0.dynamic.carriers.4.name             | dhlforyou      |
-      | data.context.0.dynamic.carriers.4.contractId       | 12424          |
-      | data.context.0.dynamic.carriers.4.type             | custom         |
+      | data.context.0.dynamic.carriers.3.human            | DHL For You    |
+      | data.context.0.dynamic.carriers.3.id               | 9              |
+      | data.context.0.dynamic.carriers.3.name             | dhlforyou      |
+      | data.context.0.dynamic.carriers.3.contractId       | 12424          |
+      | data.context.0.dynamic.carriers.3.type             | custom         |
       | data.context.0.pluginSettingsView                  | ARRAY,FILLED   |
-      | data.context.0.pluginSettingsView.carrier.children | ARRAY,LENGTH:7 |
+      | data.context.0.pluginSettingsView.carrier.children | ARRAY,LENGTH:6 |
     And I expect the API key to be marked as valid
 
   Scenario: When API key is invalid, I expect to get an error

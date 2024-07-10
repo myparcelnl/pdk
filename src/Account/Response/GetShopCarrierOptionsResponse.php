@@ -33,20 +33,44 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
     {
         $options = json_decode($this->getBody(), true)['data']['carrier_options'] ?? [];
 
-        $this->options = new CarrierCollection(
-            array_map(static function (array $option) {
-                $contractId = Carrier::TYPE_CUSTOM === $option['type'] ? $option['id'] ?? null : null;
+        $collection = new CarrierCollection(array_map(static function (array $option) {
+            $contractId = Carrier::TYPE_CUSTOM === $option['type'] ? $option['id'] ?? null : null;
 
-                return [
-                    'id'         => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
-                    'contractId' => $contractId,
-                    'enabled'    => $option['enabled'] ?? null,
-                    'label'      => $option['label'] ?? null,
-                    'optional'   => $option['optional'] ?? null,
-                    'primary'    => $option['primary'] ?? null,
-                    'type'       => $option['type'] ?? null,
-                ];
-            }, $options)
-        );
+            return [
+                'id'         => $option['carrier_id'] ?? $option['carrier']['id'] ?? null,
+                'contractId' => $contractId,
+                'enabled'    => $option['enabled'] ?? null,
+                'label'      => $option['label'] ?? null,
+                'optional'   => $option['optional'] ?? null,
+                'primary'    => $option['primary'] ?? null,
+                'type'       => $option['type'] ?? null,
+            ];
+        }, $options));
+
+        $this->options = $this->createCarrierCollection($collection);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection $collection
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    private function createCarrierCollection(CarrierCollection $collection): CarrierCollection
+    {
+        $enabledPostNlCarriers = $collection
+            ->where('id', Carrier::CARRIER_POSTNL_ID)
+            ->where('enabled', true);
+
+        // If multiple PostNL carriers are enabled it means there's a custom PostNL contract enabled in the account.
+        if ($enabledPostNlCarriers->count() > 1) {
+            $customPostNlCarrier = $enabledPostNlCarriers->firstWhere('type', Carrier::TYPE_CUSTOM);
+
+            // Remove all PostNL carriers except the custom one.
+            return $collection->reject(static function (Carrier $carrier) use ($customPostNlCarrier) {
+                return $carrier->id === Carrier::CARRIER_POSTNL_ID && $carrier->contractId !== $customPostNlCarrier->contractId;
+            });
+        }
+
+        return $collection;
     }
 }
