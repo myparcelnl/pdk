@@ -156,7 +156,6 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkProduct $product
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function update(PdkProduct $product): void
     {

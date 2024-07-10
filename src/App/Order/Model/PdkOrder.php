@@ -209,8 +209,6 @@ class PdkOrder extends Model
 
     /**
      * @return \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     * @noinspection PhpUnused
      */
     public function getNotesAttribute(): PdkOrderNoteCollection
     {
@@ -249,7 +247,6 @@ class PdkOrder extends Model
      * Turns data into an array that should be stored in the plugin.
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
     {

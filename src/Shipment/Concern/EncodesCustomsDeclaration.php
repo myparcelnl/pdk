@@ -14,7 +14,6 @@ trait EncodesCustomsDeclaration
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment|\MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment
      *
      * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeCustomsDeclaration($shipment): ?array
     {

@@ -220,7 +220,6 @@ class Shipment extends Model
      * Returns the model as an array that can be saved in a database.
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @throws \Exception
      */
     public function toStorableArray(): array

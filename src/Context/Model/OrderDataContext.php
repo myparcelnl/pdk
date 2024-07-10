@@ -57,7 +57,6 @@ class OrderDataContext extends PdkOrder
      * @param  null|int $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toArray(?int $flags = null): array
     {
@@ -78,7 +77,6 @@ class OrderDataContext extends PdkOrder
      * Get the inherited delivery options from product and carrier settings for all available carriers.
      *
      * @return Collection<DeliveryOptions>
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      * @noinspection PhpUnused
      */
     protected function getInheritedDeliveryOptionsAttribute(): Collection

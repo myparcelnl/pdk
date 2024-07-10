@@ -48,7 +48,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
 
     /**
      * @return bool
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function validate(): bool
     {
@@ -69,7 +68,6 @@ class OrderValidator extends OrderPropertiesValidator implements OrderValidatorI
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function createOrderArray(): array
     {

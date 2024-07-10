@@ -210,7 +210,6 @@ abstract class AbstractContext extends TestCase implements ContextInterface
      * @param  string                                     $key
      *
      * @return null|mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function matchModelProperty(?Model $model, string $key)
     {

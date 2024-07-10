@@ -56,7 +56,6 @@ abstract class AbstractPdkSettingsRepository extends Repository implements PdkSe
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function get(string $key)
     {
@@ -78,7 +77,6 @@ abstract class AbstractPdkSettingsRepository extends Repository implements PdkSe
      * @param  \MyParcelNL\Pdk\Settings\Model\Settings $settings
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function storeAllSettings(Settings $settings): void
     {
@@ -91,7 +89,6 @@ abstract class AbstractPdkSettingsRepository extends Repository implements PdkSe
      * @param  AbstractSettingsModel|SettingsModelCollection $settings
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function storeSettings($settings): void
     {
@@ -132,7 +129,6 @@ abstract class AbstractPdkSettingsRepository extends Repository implements PdkSe
      * @param  string                                                      $settingsId
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function updateSettingsFromCollection(
         Settings                $settings,
@@ -158,7 +154,6 @@ abstract class AbstractPdkSettingsRepository extends Repository implements PdkSe
      * @param  null|string                                          $id
      *
      * @return Settings
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function updateSettingsFromModel(
         Settings              $settings,

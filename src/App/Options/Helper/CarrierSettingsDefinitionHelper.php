@@ -28,7 +28,6 @@ final class CarrierSettingsDefinitionHelper extends AbstractOptionDefinitionHelp
      * @param  string $attribute
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getValue(string $attribute)
     {

@@ -21,7 +21,6 @@ trait HasAudits
      * @param  null|array  $arguments
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function addAudit(string $action, ?string $type = null, ?array $arguments = []): void
     {
@@ -41,7 +40,6 @@ trait HasAudits
 
     /**
      * @return \MyParcelNL\Pdk\Audit\Collection\AuditCollection
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getAuditsAttribute(): AuditCollection
     {

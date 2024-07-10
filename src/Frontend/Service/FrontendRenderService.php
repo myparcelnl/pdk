@@ -199,7 +199,6 @@ class FrontendRenderService implements FrontendRenderServiceInterface
      * @param  null|\MyParcelNL\Pdk\Context\Model\ContextBag $context
      *
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function encodeContext(?ContextBag $context): string
     {

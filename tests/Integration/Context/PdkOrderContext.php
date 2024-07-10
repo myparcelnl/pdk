@@ -63,7 +63,6 @@ final class PdkOrderContext extends AbstractContext
 
     /**
      * @Given I expect order :id to have the following delivery options:
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function iExpectOrderToHaveTheFollowingDeliveryOptions(string $orderId, TableNode $table): void
     {

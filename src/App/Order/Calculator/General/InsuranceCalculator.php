@@ -39,7 +39,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 
     /**
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function calculate(): void
     {
@@ -52,7 +51,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      * @param  null|int $amount
      *
      * @return int
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function calculateInsurance(?int $amount): int
     {
@@ -114,7 +112,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      * @param  int                                            $amount
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount)
     {

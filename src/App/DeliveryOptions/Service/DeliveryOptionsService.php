@@ -98,7 +98,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function createAllCarrierSettings(PdkCart $cart): array
     {
@@ -131,7 +130,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function createCarrierSettings(Carrier $carrier, PdkCart $cart, string $packageType): array
     {
@@ -173,7 +171,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart         $cart
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getBaseSettings(CarrierSettings $carrierSettings, PdkCart $cart): array
     {

@@ -42,7 +42,6 @@ abstract class AbstractSettingsModel extends Model
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
     {

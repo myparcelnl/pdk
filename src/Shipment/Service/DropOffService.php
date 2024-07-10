@@ -39,7 +39,6 @@ class DropOffService implements DropOffServiceInterface
      * @param  \DateTimeImmutable|null                        $date
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\DropOffDayCollection
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getPossibleDropOffDays(
         CarrierSettings   $settings,
