@@ -1,164 +1,128 @@
 [
-    {
-        "property": "deliveryOptions.shipmentOptions.ageCheck",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
-        "message": "Does not have a value in the enumeration [1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.onlyRecipient",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/onlyRecipient",
-        "message": "Does not have a value in the enumeration [1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.signature",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
-        "message": "Does not have a value in the enumeration [1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.ageCheck",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
-        "message": "Does not have a value in the enumeration [0]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0
-        ]
-    },
-    {
-        "property": "",
-        "pointer": "",
-        "message": "Failed to match at least one schema",
-        "constraint": "anyOf",
-        "context": 1
-    },
-    {
-        "property": "",
-        "pointer": "",
-        "message": "Failed to match all schemas",
-        "constraint": "allOf",
-        "context": 1
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.insurance",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/insurance",
-        "message": "Does not have a value in the enumeration [0,null]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            null
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.signature",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
-        "message": "Does not have a value in the enumeration [0]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.ageCheck",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/ageCheck",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.hideSender",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/hideSender",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.largeFormat",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/largeFormat",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.onlyRecipient",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/onlyRecipient",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.return",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/return",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.sameDayDelivery",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/sameDayDelivery",
-        "message": "Does not have a value in the enumeration [0]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.signature",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/signature",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    },
-    {
-        "property": "deliveryOptions.shipmentOptions.tracked",
-        "pointer": "\/deliveryOptions\/shipmentOptions\/tracked",
-        "message": "Does not have a value in the enumeration [0,1]",
-        "constraint": "enum",
-        "context": 1,
-        "enum": [
-            0,
-            1
-        ]
-    }
+  {
+    "property": "deliveryOptions.shipmentOptions.ageCheck",
+    "pointer": "/deliveryOptions/shipmentOptions/ageCheck",
+    "message": "Does not have a value in the enumeration [1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.onlyRecipient",
+    "pointer": "/deliveryOptions/shipmentOptions/onlyRecipient",
+    "message": "Does not have a value in the enumeration [1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.signature",
+    "pointer": "/deliveryOptions/shipmentOptions/signature",
+    "message": "Does not have a value in the enumeration [1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.ageCheck",
+    "pointer": "/deliveryOptions/shipmentOptions/ageCheck",
+    "message": "Does not have a value in the enumeration [0]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0]
+  },
+  {
+    "property": "",
+    "pointer": "",
+    "message": "Failed to match at least one schema",
+    "constraint": "anyOf",
+    "context": 1
+  },
+  {
+    "property": "",
+    "pointer": "",
+    "message": "Failed to match all schemas",
+    "constraint": "allOf",
+    "context": 1
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.insurance",
+    "pointer": "/deliveryOptions/shipmentOptions/insurance",
+    "message": "Does not have a value in the enumeration [0,null]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, null]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.signature",
+    "pointer": "/deliveryOptions/shipmentOptions/signature",
+    "message": "Does not have a value in the enumeration [0]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.ageCheck",
+    "pointer": "/deliveryOptions/shipmentOptions/ageCheck",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.hideSender",
+    "pointer": "/deliveryOptions/shipmentOptions/hideSender",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.largeFormat",
+    "pointer": "/deliveryOptions/shipmentOptions/largeFormat",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.onlyRecipient",
+    "pointer": "/deliveryOptions/shipmentOptions/onlyRecipient",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.return",
+    "pointer": "/deliveryOptions/shipmentOptions/return",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.sameDayDelivery",
+    "pointer": "/deliveryOptions/shipmentOptions/sameDayDelivery",
+    "message": "Does not have a value in the enumeration [0]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.signature",
+    "pointer": "/deliveryOptions/shipmentOptions/signature",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.tracked",
+    "pointer": "/deliveryOptions/shipmentOptions/tracked",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  }
 ]
