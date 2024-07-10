@@ -4,19 +4,28 @@ on:
   merge_group:
 
 jobs:
+  # Run setup initially to save cache and time on subsequent jobs
+  setup:
+    uses: ./.github/workflows/--setup.yml
+    secrets: inherit
+
   test-unit:
+    needs: setup
     uses: ./.github/workflows/--test-unit.yml
     secrets: inherit
 
   test-integration:
+    needs: setup
     uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
   analyse:
+    needs: setup
     uses: ./.github/workflows/--analyse.yml
     secrets: inherit
 
   quality:
+    needs: setup
     uses: ./.github/workflows/--quality.yml
     secrets: inherit
     with:

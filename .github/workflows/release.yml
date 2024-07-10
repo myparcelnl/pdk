@@ -24,26 +24,32 @@ jobs:
       - uses: myparcelnl/actions/has-refs-between@v4
         id: has-refs
 
-  test-unit:
+  # Run setup initially to save cache and time on subsequent jobs
+  setup:
     needs: prepare
+    uses: ./.github/workflows/--setup.yml
+    secrets: inherit
+
+  test-unit:
+    needs: setup
     if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--test-unit.yml
     secrets: inherit
 
   test-integration:
-    needs: prepare
+    needs: setup
     if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--test-integration.yml
     secrets: inherit
 
   analyse:
-    needs: prepare
+    needs: setup
     if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--analyse.yml
     secrets: inherit
 
   quality:
-    needs: prepare
+    needs: setup
     if: needs.prepare.outputs.new-commits == 'true'
     uses: ./.github/workflows/--quality.yml
     secrets: inherit

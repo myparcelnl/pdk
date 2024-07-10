@@ -1,0 +1,13 @@
+name: '🏗️ Setup'
+
+on: workflow_call
+
+jobs:
+  setup:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup
+        with:
+          php-version: ${{ vars.PHP_VERSION }}
