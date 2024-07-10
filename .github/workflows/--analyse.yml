@@ -36,6 +36,6 @@ jobs:
       - name: 'Run PHPStan analysis'
         if: steps.phpstan-cache.outputs.cache-hit != 'true'
         shell: bash
-        #language=sh
+        #language=bash
         run: |
           docker compose run php php -dmemory_limit=-1 vendor/bin/phpstan analyse --no-progress --no-interaction

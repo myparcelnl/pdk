@@ -15,5 +15,6 @@ jobs:
 
       - name: 'Run integration tests'
         shell: bash
+        #language=bash
         run: |
           docker compose run php vendor/bin/behat --colors --no-interaction

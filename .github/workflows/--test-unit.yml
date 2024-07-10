@@ -24,7 +24,7 @@ jobs:
       - name: 'Run unit tests'
         if: steps.coverage-cache.outputs.cache-hit != 'true'
         shell: bash
-        #language=sh
+        #language=bash
         run: |
           docker compose run php \
             php -dpcov.enabled=1 \

@@ -42,14 +42,14 @@ jobs:
       - name: 'Run quality checks in dry-run mode'
         if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run == 'true'
         shell: bash
-        #language=sh
+        #language=bash
         run: |
           docker compose run php composer quality
 
       - name: 'Run quality checks and apply changes'
         if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run != 'true'
         shell: bash
-        #language=sh
+        #language=bash
         run: |
           docker compose run php composer quality:fix
 

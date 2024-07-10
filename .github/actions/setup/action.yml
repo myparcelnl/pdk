@@ -28,12 +28,13 @@ runs:
 
     - name: 'Prepare environment'
       shell: bash
+      #language=bash
       run: |
         touch .env.local
 
     - name: 'Install composer dependencies'
       shell: bash
-      #language=sh
+      #language=bash
       run: |
         docker compose run \
           --volume $HOME/.composer:/root/.composer \
