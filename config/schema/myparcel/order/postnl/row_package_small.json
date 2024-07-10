@@ -14,6 +14,7 @@
           "enum": ["standard", "pickup", null]
         },
         "shipmentOptions": {
+          "required": ["tracked"],
           "properties": {
             "insurance": {
               "enum": [0, 5000, null]
@@ -28,7 +29,7 @@
               "enum": [0]
             },
             "tracked": {
-              "enum": [-1, 0, 1]
+              "enum": [1]
             }
           }
         }

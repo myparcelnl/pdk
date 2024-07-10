@@ -134,6 +134,14 @@
     "enum": [0, 1]
   },
   {
+    "property": "deliveryOptions.shipmentOptions.tracked",
+    "pointer": "/deliveryOptions/shipmentOptions/tracked",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
+  },
+  {
     "property": "customsDeclaration.weight",
     "pointer": "/customsDeclaration/weight",
     "message": "The property weight is required",

@@ -162,7 +162,6 @@ it('validates order', function (array $input) {
     $isValid = $validator->validate();
 
     $errors = Arr::dot($validator->getErrors());
-
     expect($isValid)->toBe(empty($errors));
 
     if (! empty($errors)) {
@@ -384,5 +383,34 @@ it('validates order', function (array $input) {
                 ]
             ),
         ],
+        'allows property tracked'   => [
+            'input' => arrayMergeOrder(
+                STANDARD_INPUT,
+                [
+                    'deliveryOptions' => [
+                        'shipmentOptions' => [
+                            'tracked' => 1,
+                        ]
+                    ]
+                ]
+            )
+        ],
+        'Small packets not NL tracked' => [
+            'input' => arrayMergeOrder(
+                STANDARD_INPUT,
+                [
+                    'deliveryOptions' => [
+                        'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                        'shipmentOptions' => [
+                            'tracked' => 0,
+                        ]
+                    ],
+                    'recipient'          => [
+                        'cc' => 'FR',
+                    ]
+                ]
+            )
+        ]
     ]
 );
+
