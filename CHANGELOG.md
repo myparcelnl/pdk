@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.39.2](https://github.com/myparcelnl/pdk/compare/v2.39.1...v2.39.2) (2024-07-10)
+
+
+### :bug: Bug Fixes
+
+* **validation:** fix error caused by tracked property ([#280](https://github.com/myparcelnl/pdk/issues/280)) ([0b73fef](https://github.com/myparcelnl/pdk/commit/0b73fef881a850244d0944656ddb54836ae3cb6e))
+
 ## [2.39.1](https://github.com/myparcelnl/pdk/compare/v2.39.0...v2.39.1) (2024-07-05)
 
 
