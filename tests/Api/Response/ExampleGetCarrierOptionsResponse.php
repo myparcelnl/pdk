@@ -74,19 +74,6 @@ final class ExampleGetCarrierOptionsResponse extends ExampleJsonResponse
                 'type'       => 'main',
             ],
             [
-                'id'          => 23991,
-                'carrier_id'  => 1,
-                'carrier'     => [
-                    'id'   => 1,
-                    'name' => 'postnl',
-                ],
-                'enabled'     => 1,
-                'optional'    => 1,
-                'primary'     => 0,
-                'type'        => 'custom',
-                'contract_id' => 8123,
-            ],
-            [
                 'id'         => 8942,
                 'carrier_id' => 10,
                 'carrier'    => [
