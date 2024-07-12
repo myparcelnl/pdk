@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.39.3](https://github.com/myparcelnl/pdk/compare/v2.39.2...v2.39.3) (2024-07-12)
+
+
+### :bug: Bug Fixes
+
+* fix duplicate carriers when custom postnl contract is enabled ([#287](https://github.com/myparcelnl/pdk/issues/287)) ([ab78bf3](https://github.com/myparcelnl/pdk/commit/ab78bf3700b2ba8236e6dcdf0ae00dff9ac7cd0a)), closes [#284](https://github.com/myparcelnl/pdk/issues/284)
+
 ## [2.39.2](https://github.com/myparcelnl/pdk/compare/v2.39.1...v2.39.2) (2024-07-10)
 
 
