@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -48,6 +49,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     ];
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
+
+    /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
      */
     private $currencyService;
@@ -68,20 +74,24 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $taxService;
 
     /**
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      */
     public function __construct(
+        CountryServiceInterface  $countryService,
+        CurrencyServiceInterface $currencyService,
         DropOffServiceInterface  $dropOffService,
         TaxServiceInterface      $taxService,
-        SchemaRepository         $schemaRepository,
-        CurrencyServiceInterface $currencyService
+        SchemaRepository         $schemaRepository
     ) {
+        $this->countryService   = $countryService;
+        $this->currencyService  = $currencyService;
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
         $this->schemaRepository = $schemaRepository;
-        $this->currencyService  = $currencyService;
     }
 
     /**
@@ -110,8 +120,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         foreach ($carriers->all() as $carrier) {
             $identifier                               = $carrier->externalIdentifier;
-            $settings['carrierSettings'][$identifier] =
-                $this->createCarrierSettings($carrier, $cart);
+            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 
         return $settings;
@@ -124,7 +133,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @return array
      * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
-    private function createCarrierSettings(Carrier $carrier, PdkCart $cart): array
+    private function createCarrierSettings(Carrier $carrier, PdkCart $cart, string $packageType): array
     {
         $carrierSettings = new CarrierSettings(
             Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
@@ -139,6 +148,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
+
+        if ($this->shouldUseInternationalMailboxPrice($packageType, $cart->shippingMethod->shippingAddress->cc)) {
+            $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
+        }
 
         $settings = $this->getBaseSettings($carrierSettings, $cart);
 
@@ -237,5 +250,19 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
+    }
+
+    /**
+     * @param  string      $packageType
+     * @param  null|string $cc
+     *
+     * @return bool
+     */
+    private function shouldUseInternationalMailboxPrice(string $packageType, ?string $cc): bool
+    {
+        $isMailbox   = $packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        $isNotUnique = $cc && ! $this->countryService->isUnique($cc);
+
+        return $isMailbox && $isNotUnique;
     }
 }

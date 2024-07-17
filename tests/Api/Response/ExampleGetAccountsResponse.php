@@ -25,21 +25,22 @@ class ExampleGetAccountsResponse extends ExampleJsonResponse
                 'email'              => 'felicia@myparcel.nl',
                 'phone'              => '06123456789',
                 'general_settings'   => [
-                    'is_test'                   => 1,
-                    'order_mode'                => 1,
-                    'affiliate_bcc'             => 1,
-                    'affiliate_fee'             => [
+                    'is_test'                            => 1,
+                    'order_mode'                         => 1,
+                    'affiliate_bcc'                      => 1,
+                    'affiliate_fee'                      => [
                         'amount'   => 10,
                         'currency' => 'EUR',
                     ],
-                    'order_settings'            => [
+                    'order_settings'                     => [
                         'shipment_label' => 'none',
                     ],
-                    'has_carrier_contract'      => 0,
-                    'show_cumulio_dashboard'    => 0,
-                    'allow_printerless_return'  => 1,
-                    'has_carrier_mail_contract' => 0,
-                    'use_mfa'                   => 0,
+                    'show_cumulio_dashboard'             => 0,
+                    'allow_printerless_return'           => 1,
+                    'has_carrier_contract'               => 0,
+                    'has_carrier_mail_contract'          => 0,
+                    'has_carrier_small_package_contract' => 0,
+                    'use_mfa'                            => 0,
                 ],
                 'additional_info'    => [
                     'ecommerce_platform' => '17',

@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Facade\Platform;
  * @property null|int                 $contractId
  * @property bool                     $enabled
  * @property bool                     $primary
+ * @property bool                     $isCustom
  * @property bool                     $isDefault
  * @property bool                     $optional
  * @property null|string              $label
@@ -152,6 +153,15 @@ class Carrier extends Model
         }
 
         return $identifier ?: '?';
+    }
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function getIsCustomAttribute(): bool
+    {
+        return ! $this->isDefault;
     }
 
     /**

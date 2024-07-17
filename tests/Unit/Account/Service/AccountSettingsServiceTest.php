@@ -124,4 +124,29 @@ it('checks subscription features in account', function () {
     expect($result)->toBeTrue();
 });
 
+it('checks account small package contract', function () {
+    TestBootstrapper::hasAccount();
+
+    factory(Account::class)
+        ->withGeneralSettings([
+            'hasCarrierSmallPackageContract' => true,
+        ])
+        ->store();
+
+    $result = AccountSettings::hasCarrierSmallPackageContract();
+
+    expect($result)->toBeTrue();
+
+    TestBootstrapper::hasAccount();
+
+    factory(Account::class)
+        ->withGeneralSettings([
+            'hasCarrierSmallPackageContract' => false,
+        ])
+        ->store();
+
+    $result = AccountSettings::hasCarrierSmallPackageContract();
+
+    expect($result)->toBeFalse();
+});
 

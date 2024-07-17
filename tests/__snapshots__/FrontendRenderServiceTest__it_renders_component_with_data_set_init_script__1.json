@@ -227,7 +227,8 @@
       "generalSettings": {
         "isTest": false,
         "orderMode": false,
-        "hasCarrierContract": false
+        "hasCarrierContract": false,
+        "hasCarrierSmallPackageContract": false
       },
       "shops": [
         {
@@ -453,7 +454,9 @@
           "priceOnlyRecipient": 0,
           "pricePackageTypeDigitalStamp": 0,
           "pricePackageTypeMailbox": 0,
-          "priceSignature": 0
+          "priceSignature": 0,
+          "allowInternationalMailbox": false,
+          "priceInternationalMailbox": 0
         }
       }
     },

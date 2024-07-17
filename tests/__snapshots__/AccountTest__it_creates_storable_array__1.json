@@ -13,7 +13,8 @@
   "generalSettings": {
     "isTest": false,
     "orderMode": false,
-    "hasCarrierContract": false
+    "hasCarrierContract": false,
+    "hasCarrierSmallPackageContract": false
   },
   "shops": [
     {
@@ -40,7 +41,8 @@
           "externalIdentifier": "postnl",
           "enabled": true,
           "optional": false,
-          "primary": false
+          "primary": false,
+          "type": "main"
         }
       ]
     }

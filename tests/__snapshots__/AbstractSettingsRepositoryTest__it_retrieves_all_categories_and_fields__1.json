@@ -94,7 +94,9 @@
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
       "pricePackageTypeMailbox": 0,
-      "priceSignature": 0
+      "priceSignature": 0,
+      "allowInternationalMailbox": false,
+      "priceInternationalMailbox": 0
     },
     "dhl": {
       "id": "dhl",
@@ -145,7 +147,9 @@
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
       "pricePackageTypeMailbox": 0,
-      "priceSignature": 0
+      "priceSignature": 0,
+      "allowInternationalMailbox": false,
+      "priceInternationalMailbox": 0
     },
     "bpost": {
       "id": "bpost",
@@ -196,7 +200,9 @@
       "priceOnlyRecipient": 0,
       "pricePackageTypeDigitalStamp": 0,
       "pricePackageTypeMailbox": 0,
-      "priceSignature": 0
+      "priceSignature": 0,
+      "allowInternationalMailbox": false,
+      "priceInternationalMailbox": 0
     }
   }
 }

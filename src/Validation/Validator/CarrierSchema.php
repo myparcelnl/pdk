@@ -23,6 +23,11 @@ use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {
     /**
+     * Used for features to indicate that the feature is only available for custom contracts.
+     */
+    public const FEATURE_CUSTOM_CONTRACT_ONLY = 'featureCustomContractOnly';
+
+    /**
      * @var array
      */
     protected $cache = [];
@@ -60,6 +65,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveAgeCheck(): bool
     {
         return $this->canHave(AgeCheckDefinition::class);
+    }
+
+    public function canHaveCarrierSmallPackageContract(): bool
+    {
+        return $this->canHaveFeature('carrierSmallPackageContract');
     }
 
     public function canHaveDirectReturn(): bool
@@ -104,7 +114,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function canHaveMultiCollo(): bool
     {
-        return (bool) $this->getFeature('multiCollo');
+        return $this->canHaveFeature('multiCollo');
     }
 
     public function canHaveOnlyRecipient(): bool
@@ -189,6 +199,22 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         $this->carrier = $carrier;
 
         return $this;
+    }
+
+    /**
+     * @param  string $feature
+     *
+     * @return bool
+     */
+    protected function canHaveFeature(string $feature): bool
+    {
+        $value = $this->getFeature($feature);
+
+        if (self::FEATURE_CUSTOM_CONTRACT_ONLY === $value) {
+            return $this->carrier->isCustom;
+        }
+
+        return (bool) $value;
     }
 
     /**

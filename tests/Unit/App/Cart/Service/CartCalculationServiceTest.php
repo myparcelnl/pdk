@@ -8,8 +8,11 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -115,11 +118,22 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
     ],
 ];
 
-const SHIPPING_ADDRESS = [
+const SHIPPING_ADDRESS_NL = [
     'address1'   => 'Straatnaam 2',
     'address2'   => 'Appartement B',
     'area'       => 'Voor',
     'cc'         => 'NL',
+    'city'       => 'Stad',
+    'postalCode' => '1000 BB',
+    'region'     => 'Drenthe',
+    'state'      => 'Current',
+];
+
+const SHIPPING_ADDRESS_EU = [
+    'address1'   => 'Straatnaam 2',
+    'address2'   => 'Appartement B',
+    'area'       => 'Voor',
+    'cc'         => 'FR',
     'city'       => 'Stad',
     'postalCode' => '1000 BB',
     'region'     => 'Drenthe',
@@ -151,42 +165,74 @@ it('calculates mailbox percentage', function (array $lines, float $expected) {
     ],
 ]);
 
-it('calculates allowed package types', function (array $lines, array $result) {
-    factory(OrderSettings::class)
-        ->withEmptyMailboxWeight(200)
-        ->store();
+it(
+    'calculates allowed package types',
+    function (array $lines, array $shippingAddress, array $result, bool $allowInternationalMailbox = false) {
+        factory(Settings::class)
+            ->withCarrierPostNl(
+                factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
+                    ->withAllowInternationalMailbox($allowInternationalMailbox)
+                    ->withDeliveryOptionsEnabled(true)
+            )
+            ->withOrder(
+                factory(OrderSettings::class)
+                    ->withEmptyMailboxWeight(200)
+            )
+            ->store();
 
-    /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
-    $service = Pdk::get(CartCalculationServiceInterface::class);
+        /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
+        $service = Pdk::get(CartCalculationServiceInterface::class);
 
-    $allowedPackageTypes = $service->calculateAllowedPackageTypes(new PdkCart(['lines' => $lines]));
+        $allowedPackageTypes = $service->calculateAllowedPackageTypes(
+            new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => $shippingAddress]])
+        );
 
-    expect(Arr::pluck($allowedPackageTypes->toArray(), 'name'))->toEqual($result);
-})->with([
+        expect(Arr::pluck($allowedPackageTypes->toArray(), 'name'))->toEqual($result);
+    }
+)->with([
     'fits in mailbox'                  => [
-        'lines'  => LINES_FITS_IN_MAILBOX,
-        'result' => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+        'lines'   => LINES_FITS_IN_MAILBOX,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'fits in mailbox EU, allowed'      => [
+        'lines'                     => LINES_FITS_IN_MAILBOX,
+        'address'                   => SHIPPING_ADDRESS_EU,
+        'result'                    => [
+            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        ],
+        'allowInternationalMailbox' => true,
+    ],
+    'fits in mailbox EU, not allowed'  => [
+        'lines'   => LINES_FITS_IN_MAILBOX,
+        'address' => SHIPPING_ADDRESS_EU,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'one item does not fit in mailbox' => [
-        'lines'  => LINES_DONT_FIT_MAILBOX,
-        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+        'lines'   => LINES_DONT_FIT_MAILBOX,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'items exceeding mailbox weight'   => [
-        'lines'  => LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
-        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+        'lines'   => LINES_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'total exceeding mailbox weight'   => [
-        'lines'  => TOTAL_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
-        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+        'lines'   => TOTAL_EXCEEDING_MAILBOX_MAXIMUM_WEIGHT,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'items exceeding mailbox size'     => [
-        'lines'  => LINES_EXCEEDING_MAILBOX_SIZE,
-        'result' => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+        'lines'   => LINES_EXCEEDING_MAILBOX_SIZE,
+        'address' => SHIPPING_ADDRESS_NL,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
 ]);
 
 it('calculates shipping method in cart', function (array $lines, array $result) {
-    $cart = new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => SHIPPING_ADDRESS]]);
+    $cart = new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => SHIPPING_ADDRESS_NL]]);
 
     expect($cart->shippingMethod->toArray())->toEqual($result);
 })->with([
@@ -220,7 +266,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => TriStateService::INHERIT,
-            'shippingAddress'     => SHIPPING_ADDRESS,
+            'shippingAddress'     => SHIPPING_ADDRESS_NL,
         ],
     ],
 
@@ -257,7 +303,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
                     'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 ],
             ],
-            'shippingAddress'     => SHIPPING_ADDRESS,
+            'shippingAddress'     => SHIPPING_ADDRESS_NL,
         ],
     ],
 
@@ -281,7 +327,7 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'hasDeliveryOptions'  => false,
             'minimumDropOffDelay' => 0,
             'allowedPackageTypes' => [],
-            'shippingAddress'     => SHIPPING_ADDRESS,
+            'shippingAddress'     => SHIPPING_ADDRESS_NL,
         ],
     ],
 ]);

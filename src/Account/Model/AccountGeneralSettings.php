@@ -10,18 +10,21 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property bool $isTest
  * @property bool $orderMode
  * @property bool $hasCarrierContract
+ * @property bool $hasCarrierSmallPackageContract
  */
 class AccountGeneralSettings extends Model
 {
     public $attributes = [
-        'isTest'             => false,
-        'orderMode'          => false,
-        'hasCarrierContract' => false,
+        'isTest'                         => false,
+        'orderMode'                      => false,
+        'hasCarrierContract'             => false,
+        'hasCarrierSmallPackageContract' => false,
     ];
 
     public $casts      = [
-        'isTest'             => 'bool',
-        'orderMode'          => 'bool',
-        'hasCarrierContract' => 'bool',
+        'isTest'                         => 'bool',
+        'orderMode'                      => 'bool',
+        'hasCarrierContract'             => 'bool',
+        'hasCarrierSmallPackageContract' => 'bool',
     ];
 }

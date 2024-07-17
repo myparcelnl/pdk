@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormAfterUpdateBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
@@ -140,6 +141,22 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $name,
             Components::INPUT_SELECT,
             ['options' => $this->toSelectOptions($options, AbstractSettingsView::SELECT_USE_PLAIN_LABEL)]
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function createInternationalMailboxFields(): array
+    {
+        if (! AccountSettings::hasCarrierSmallPackageContract()
+            || ! $this->carrierSchema->canHaveCarrierSmallPackageContract()) {
+            return [];
+        }
+
+        return $this->createSettingWithPriceFields(
+            CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
+            CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
         );
     }
 
@@ -463,6 +480,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
                 Components::INPUT_CURRENCY
             );
+
+            $fields[] = $this->createInternationalMailboxFields();
         }
 
         if (in_array(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME, $allowedPackageTypes, true)) {

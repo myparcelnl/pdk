@@ -11,7 +11,8 @@
     "capabilities": {
       "deliveryTypes": ["morning", "standard", "evening", "pickup"],
       "features": {
-        "labelDescriptionLength": 45
+        "labelDescriptionLength": 45,
+        "carrierSmallPackageContract": "featureCustomContractOnly"
       },
       "packageTypes": ["package", "mailbox", "letter", "digital_stamp"],
       "shipmentOptions": {

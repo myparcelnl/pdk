@@ -7,9 +7,12 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -17,6 +20,19 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
+    /**
+     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
+     */
+    private $countryService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService
+     */
+    public function __construct(CountryServiceInterface $countryService)
+    {
+        $this->countryService = $countryService;
+    }
+
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
@@ -28,7 +44,6 @@ class CartCalculationService implements CartCalculationServiceInterface
             ->sortBySize(true)
             ->filter(function (PackageType $packageType) use ($cart) {
                 $packageTypeName = $packageType->name;
-
                 if (DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageTypeName) {
                     return true;
                 }
@@ -37,7 +52,11 @@ class CartCalculationService implements CartCalculationServiceInterface
                     && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
 
                 if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
-                    return $allowed && $this->calculateMailboxPercentage($cart) <= 100.0;
+                    $cc = $cart->shippingMethod->shippingAddress->cc;
+
+                    return $allowed
+                        && $this->allowMailboxToCountry($cc)
+                        && $this->calculateMailboxPercentage($cart) <= 100.0;
                 }
 
                 return $allowed;
@@ -96,6 +115,23 @@ class CartCalculationService implements CartCalculationServiceInterface
         $anyItemIsDeliverable    = $cart->lines->isDeliverable();
 
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
+    }
+
+    private function allowMailboxToCountry(?string $cc): bool
+    {
+        if ($cc === null) {
+            return false;
+        }
+
+        $countryIsUnique           = $this->countryService->isUnique($cc);
+        $allowInternationalMailbox = Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
+            $allowInternationalMailbox = $carrierSettings->allowInternationalMailbox;
+            $hasDeliveryOptions        = $carrierSettings->deliveryOptionsEnabled;
+
+            return $allowInternationalMailbox && $hasDeliveryOptions;
+        });
+
+        return $countryIsUnique || $allowInternationalMailbox;
     }
 
     /**

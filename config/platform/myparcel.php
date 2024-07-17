@@ -6,6 +6,7 @@ use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 return [
     'name'             => 'myparcel',
@@ -62,8 +63,9 @@ return [
                     ],
                 ],
                 'features'        => [
-                    'labelDescriptionLength' => 45,
-                    'multiCollo'             => true,
+                    'labelDescriptionLength'      => 45,
+                    'carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY,
+                    'multiCollo'                  => true,
                 ],
             ],
             'returnCapabilities' => [
