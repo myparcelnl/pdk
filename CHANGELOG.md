@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.40.0](https://github.com/myparcelnl/pdk/compare/v2.39.3...v2.40.0) (2024-07-17)
+
+
+### :sparkles: New Features
+
+* add international mailbox for carriers with custom contract ([#279](https://github.com/myparcelnl/pdk/issues/279)) ([468ed0f](https://github.com/myparcelnl/pdk/commit/468ed0f9f62b1a780c6c45203eeda36a3d4c13b5))
+* **model:** remove throwing cast errors from models ([#286](https://github.com/myparcelnl/pdk/issues/286)) ([5f0ac54](https://github.com/myparcelnl/pdk/commit/5f0ac548d3ca096b50298c6b9f2cd1e1b8e5d818))
+
 ## [2.39.3](https://github.com/myparcelnl/pdk/compare/v2.39.2...v2.39.3) (2024-07-12)
 
 
