@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use Exception;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
@@ -116,7 +117,6 @@ trait HasAttributes
      * @param  null|int $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function attributesToArray(?int $flags = null): array
     {
@@ -130,7 +130,6 @@ trait HasAttributes
      * @param  null|int     $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function except($attributes, ?int $flags = null): array
     {
@@ -177,7 +176,6 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getAttribute(string $key)
     {
@@ -255,7 +253,6 @@ trait HasAttributes
      * @param  null|int     $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function only($attributes, ?int $flags = null): array
     {
@@ -300,7 +297,6 @@ trait HasAttributes
      * @param  null|int $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
@@ -385,11 +381,11 @@ trait HasAttributes
      * @param  mixed $value
      *
      * @return \DateTimeImmutable
-     * @throws \Exception
      */
     protected function asDate($value): DateTimeImmutable
     {
-        return $this->asDateTime($value)
+        return $this
+            ->asDateTime($value)
             ->setTime(0, 0);
     }
 
@@ -399,7 +395,6 @@ trait HasAttributes
      * @param  \DateTimeInterface|string|array{date: string, timezone: string, timezone_type: int} $value
      *
      * @return \DateTimeImmutable
-     * @throws \Exception
      */
     protected function asDateTime($value): DateTimeImmutable
     {
@@ -412,7 +407,19 @@ trait HasAttributes
         }
 
         if (is_array($value) && isset($value['date'])) {
-            return new DateTimeImmutable($value['date'], new DateTimeZone($value['timezone']));
+            try {
+                return new DateTimeImmutable($value['date'], new DateTimeZone($value['timezone']));
+            } catch (Exception $e) {
+                Logger::error(
+                    sprintf('Failed to create %s from array', DateTimeImmutable::class),
+                    [
+                        'value'     => $value,
+                        'exception' => $e,
+                    ]
+                );
+
+                return new DateTimeImmutable();
+            }
         }
 
         foreach ($this->getDateFormats() as $dateFormat) {
@@ -437,11 +444,11 @@ trait HasAttributes
      * @param  mixed $value
      *
      * @return int
-     * @throws \Exception
      */
     protected function asTimestamp($value): int
     {
-        return $this->asDateTime($value)
+        return $this
+            ->asDateTime($value)
             ->getTimestamp();
     }
 
@@ -452,8 +459,6 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     * @throws \Exception
      */
     protected function castAttribute(string $key, $value)
     {
@@ -526,7 +531,6 @@ trait HasAttributes
      * @param  null|int $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function createArrayFromAttributes(array $attributes, ?int $flags): array
     {
@@ -555,7 +559,6 @@ trait HasAttributes
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getAttributeValue(string $key)
     {
@@ -563,7 +566,6 @@ trait HasAttributes
     }
 
     /**
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getCastAttribute(string $string)
     {
@@ -602,7 +604,6 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function getClassCastableAttributeValue(string $key, $value)
     {
@@ -787,7 +788,6 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function transformModelValue(string $key, $value)
     {
@@ -818,7 +818,6 @@ trait HasAttributes
      * @param  mixed  $value
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getCastModel(string $key, $value)
     {
@@ -841,7 +840,11 @@ trait HasAttributes
         try {
             return new $class($arguments);
         } catch (Throwable $e) {
-            throw new InvalidCastException($key, $class, $arguments, $e);
+            $exception = new InvalidCastException($key, $class, $arguments, $e);
+
+            Logger::error($exception->getMessage(), ['exception' => $exception]);
+
+            return null;
         }
     }
 

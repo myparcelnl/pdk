@@ -31,7 +31,6 @@ class UpdatePluginSettingsAction implements ActionInterface
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function handle(Request $request): Response
     {

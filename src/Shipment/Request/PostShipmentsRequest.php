@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -47,7 +48,7 @@ class PostShipmentsRequest extends Request
     {
         return json_encode([
             'data' => [
-                'shipments' => $this->collection
+                'shipments' => (new Collection($this->collection))
                     ->map(function (Shipment $shipment) {
                         return $this->encodeShipment($shipment);
                     })
@@ -86,7 +87,6 @@ class PostShipmentsRequest extends Request
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function encodeShipment(Shipment $shipment): array
     {
@@ -134,7 +134,6 @@ class PostShipmentsRequest extends Request
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return null|array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getDropOffPoint(Shipment $shipment): ?array
     {
@@ -161,7 +160,6 @@ class PostShipmentsRequest extends Request
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getOptions(Shipment $shipment): array
     {

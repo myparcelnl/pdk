@@ -35,7 +35,6 @@ class PostOrdersRequest extends Request
 
     /**
      * @return string
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getBody(): string
     {
@@ -68,7 +67,6 @@ class PostOrdersRequest extends Request
      * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeOrder(Order $order): array
     {
@@ -120,7 +118,6 @@ class PostOrdersRequest extends Request
      * @param  \MyParcelNL\Pdk\Fulfilment\Model\Order $order
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getShipment(Order $order): array
     {
@@ -146,7 +143,6 @@ class PostOrdersRequest extends Request
      * @param  \MyParcelNL\Pdk\Fulfilment\Model\Shipment $shipment
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getShipmentOptions(Shipment $shipment): array
     {

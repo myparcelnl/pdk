@@ -90,7 +90,6 @@ class Shop extends Model
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
     {

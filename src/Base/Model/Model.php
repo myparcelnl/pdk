@@ -84,7 +84,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      * @param  array  $parameters
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __call(string $method, array $parameters)
     {
@@ -118,7 +117,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      * @param  string $key
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __get(string $key)
     {
@@ -131,7 +129,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      * @param  string $key
      *
      * @return bool
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __isset(string $key)
     {
@@ -188,7 +185,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      * @param  mixed $offset
      *
      * @return bool
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function offsetExists($offset): bool
     {
@@ -201,7 +197,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      * @param  mixed $offset
      *
      * @return mixed
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function offsetGet($offset)
     {
@@ -239,7 +234,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      * @param  null|int $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toArray(?int $flags = null): array
     {
@@ -247,7 +241,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     }
 
     /**
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
+     * @return array
      */
     public function toArrayWithoutNull(): array
     {
@@ -256,7 +250,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toKebabCaseArray(): array
     {
@@ -265,7 +258,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toSnakeCaseArray(): array
     {
@@ -274,7 +266,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
     {
@@ -283,7 +274,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStudlyCaseArray(): array
     {

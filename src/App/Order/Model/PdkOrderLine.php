@@ -36,8 +36,6 @@ class PdkOrderLine extends Model
 
     /**
      * @param  null|array $data
-     *
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function __construct(?array $data = null)
     {

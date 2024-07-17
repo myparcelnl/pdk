@@ -73,7 +73,6 @@ class PdkProduct extends Model
 
     /**
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toStorableArray(): array
     {
@@ -85,8 +84,6 @@ class PdkProduct extends Model
 
     /**
      * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
-     * @noinspection PhpUnused
      */
     protected function getMergedSettingsAttribute(): ProductSettings
     {
@@ -115,7 +112,6 @@ class PdkProduct extends Model
 
     /**
      * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function resolveMergedSettings(): ProductSettings
     {

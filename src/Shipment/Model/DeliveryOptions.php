@@ -164,7 +164,6 @@ class DeliveryOptions extends Model
 
     /**
      * @return null|\DateTime
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getDateAttribute(): ?DateTimeInterface
     {
@@ -207,7 +206,6 @@ class DeliveryOptions extends Model
      * @param  null|int $flags
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function toArray(?int $flags = null): array
     {

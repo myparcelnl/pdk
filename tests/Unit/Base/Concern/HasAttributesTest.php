@@ -7,8 +7,8 @@ namespace MyParcelNL\Pdk\Base\Concern;
 
 use DateTime;
 use DateTimeImmutable;
-use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Mocks\ClassWithGuardedAttributes;
 use MyParcelNL\Pdk\Tests\Mocks\InvalidCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
@@ -16,6 +16,8 @@ use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use Psr\Log\LoggerInterface;
+use function expect;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('model');
@@ -103,13 +105,23 @@ it('can use casted properties', function () {
         ->toBeInstanceOf(MockCastModel::class);
 });
 
-it('throws error on invalid cast', function () {
-    $model = new InvalidCastingModel([
-        'value' => new DateTime(),
-    ]);
+it('returns null and logs error on invalid cast', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+    $value  = new DateTime();
 
-    $model->toArray();
-})->throws(InvalidCastException::class);
+    $model = new InvalidCastingModel(['value' => $value]);
+
+    $result = $model->toArray();
+    $logs   = $logger->getLogs();
+
+    expect($result['value'])
+        ->toBeNull()
+        ->and($logs)
+        ->toHaveLength(1)
+        ->and($logs[0]['message'])
+        ->toContain(sprintf('Failed to cast "value" to "%s"', MockCastModel::class));
+});
 
 it('gets only requested elements', function () {
     $model = new MockMutateModel();

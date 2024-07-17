@@ -147,7 +147,6 @@ final class SettingsFactory extends AbstractModelFactory
      * @param  T $model
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     protected function save(Model $model): void
     {

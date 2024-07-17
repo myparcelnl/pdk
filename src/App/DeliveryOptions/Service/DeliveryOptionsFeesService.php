@@ -49,7 +49,6 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
      * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $deliveryOptions
      *
      * @return \MyParcelNL\Pdk\App\Cart\Collection\PdkCartFeeCollection
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     public function getFees(DeliveryOptions $deliveryOptions): PdkCartFeeCollection
     {
@@ -76,7 +75,6 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
      * @param  \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $deliveryOptions
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function getShipmentOptionsFees(DeliveryOptions $deliveryOptions): array
     {

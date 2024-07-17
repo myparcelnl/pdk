@@ -74,7 +74,6 @@ class PostReturnShipmentsRequest extends Request
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      *
      * @return array
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function encodeReturnOptions(Shipment $shipment): array
     {

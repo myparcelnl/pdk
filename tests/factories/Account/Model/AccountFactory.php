@@ -84,7 +84,6 @@ final class AccountFactory extends AbstractModelFactory
      * @param  \MyParcelNL\Pdk\Account\Model\Account $model
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Tests\Factory\Exception\NotImplementedException
      */
     protected function save(Model $model): void
     {

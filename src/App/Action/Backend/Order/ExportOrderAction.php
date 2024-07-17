@@ -212,7 +212,6 @@ class ExportOrderAction extends AbstractOrderAction
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $exportedOrders
      *
      * @return void
-     * @throws \MyParcelNL\Pdk\Base\Exception\InvalidCastException
      */
     private function addAudits(Request $request, PdkOrderCollection $exportedOrders): void
     {
