@@ -1,15 +1,18 @@
 <?php
+/** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Tests\Uses;
+namespace MyParcelNL\Pdk\Tests\Hook;
 
-final class ClearContainerCache implements BaseMock
+use PHPUnit\Runner\BeforeFirstTestHook;
+
+final class ClearContainerCacheHook implements BeforeFirstTestHook
 {
     private const CACHE_DIR            = __DIR__ . '/../../.cache';
     private const CONTAINER_CACHE_FILE = self::CACHE_DIR . '/CompiledContainer.php';
 
-    public function beforeAll(): void
+    public function executeBeforeFirstTest(): void
     {
         putenv('PDK_DISABLE_CACHE=1');
 
