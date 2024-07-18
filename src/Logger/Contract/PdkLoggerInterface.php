@@ -18,7 +18,9 @@ interface PdkLoggerInterface extends LoggerInterface
     public function deprecated(string $subject, ?string $replacement = null, array $context = []): void;
 
     /**
-     * @return array
+     * Get all logs as an associative array with log levels as keys and log file paths as values.
+     *
+     * @return array{notice?: string, warning?: string, error?: string, critical?: string, alert?: string, emergency?: string}
      */
-    public function getLogs(): array;
+    public function getLogFiles(): array;
 }
