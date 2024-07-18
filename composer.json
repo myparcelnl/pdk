@@ -6,6 +6,7 @@
     "homepage": "https://myparcel.nl",
     "license": "MIT",
     "require": {
+        "ext-zip": "*",
         "justinrainbow/json-schema": "^5.2",
         "myparcelnl/sdk": ">= 7",
         "php": ">=7.1.0",
