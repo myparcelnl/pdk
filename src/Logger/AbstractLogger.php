@@ -96,6 +96,15 @@ abstract class AbstractLogger implements PdkLoggerInterface
     }
 
     /**
+     * @TODO: remove this default in v3.0.0, for now it's here to prevent breaking changes
+     * @return array
+     */
+    public function getLogs(): array
+    {
+        return [];
+    }
+
+    /**
      * @param  string $message
      * @param  array  $context
      *

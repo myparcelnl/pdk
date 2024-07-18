@@ -22,9 +22,10 @@ runs:
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
-    - uses: myparcelnl/actions/pull-docker-image@v4
+    - uses: myparcelnl/actions/build-docker-image@v4
       with:
-        image: 'ghcr.io/myparcelnl/php-xd:${{ inputs.php-version }}-cli-alpine'
+        image: 'myparcelnl-pdk:php${{ inputs.php-version }}'
+        buildkit: true
 
     - name: 'Prepare environment'
       shell: bash
