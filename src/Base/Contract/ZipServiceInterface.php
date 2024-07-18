@@ -9,7 +9,7 @@ interface ZipServiceInterface
     /**
      * Add a file to the zip archive. Optionally specify a target filename.
      */
-    public function addFile(string $filename, ?string $targetFilename): void;
+    public function addFile(string $filename, ?string $targetFilename = null): void;
 
     /**
      * Add a file to the zip archive from a string.

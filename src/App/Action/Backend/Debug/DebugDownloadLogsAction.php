@@ -6,44 +6,25 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Debug;
 
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
-use MyParcelNL\Pdk\Base\FileSystemInterface;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use ZipArchive;
 
 class DebugDownloadLogsAction implements ActionInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
-     */
-    protected $fileSystem;
-
-    /**
-     * @var \MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface
-     */
-    protected $logger;
-
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\ZipServiceInterface
      */
     private $zipService;
 
     /**
-     * @param  \MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface $logger
-     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface           $fileSystem
-     * @param  \MyParcelNL\Pdk\Base\Contract\ZipServiceInterface  $zipService
+     * @param  \MyParcelNL\Pdk\Base\Contract\ZipServiceInterface $zipService
      */
-    public function __construct(
-        PdkLoggerInterface  $logger,
-        FileSystemInterface $fileSystem,
-        ZipServiceInterface $zipService
-    ) {
-        $this->logger     = $logger;
-        $this->fileSystem = $fileSystem;
+    public function __construct(ZipServiceInterface $zipService)
+    {
         $this->zipService = $zipService;
     }
 
@@ -61,6 +42,7 @@ class DebugDownloadLogsAction implements ActionInterface
         $response = new BinaryFileResponse($path);
 
         $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, basename($path));
+
         $response->headers->set('Content-Disposition', $disposition);
         $response->deleteFileAfterSend();
 
@@ -74,16 +56,12 @@ class DebugDownloadLogsAction implements ActionInterface
      */
     protected function createLogsZip(string $path): void
     {
-        $logs = $this->logger->getLogs();
+        $logFiles = Logger::getLogFiles();
 
         $this->zipService->create($path);
 
-        foreach ($logs as $level => $log) {
-            if (empty($log)) {
-                continue;
-            }
-
-            $this->zipService->addFromString("$level.log", $log);
+        foreach ($logFiles as $filePath) {
+            $this->zipService->addFile($filePath);
         }
 
         $this->zipService->close();
@@ -99,6 +77,6 @@ class DebugDownloadLogsAction implements ActionInterface
         $timestamp = date('Y-m-d_H-i-s');
         $filename  = "{$timestamp}_{$appInfo->name}_logs.zip";
 
-        return $appInfo->path . $filename;
+        return $appInfo->createPath($filename);
     }
 }

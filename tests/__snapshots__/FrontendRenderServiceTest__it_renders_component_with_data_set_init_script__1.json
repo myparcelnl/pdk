@@ -4,7 +4,7 @@
       "name": "pest",
       "title": "Pest",
       "version": "1.0.0",
-      "path": "APP_PATH",
+      "path": "/app/.tmp/",
       "url": "APP_URL"
     },
     "baseUrl": "BACKEND_URL",
@@ -181,6 +181,14 @@
         },
         "path": "",
         "property": "webhooks"
+      },
+      "debugDownloadLogs": {
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "debugDownloadLogs"
+        },
+        "path": ""
       },
       "fetchContext": {
         "headers": [],

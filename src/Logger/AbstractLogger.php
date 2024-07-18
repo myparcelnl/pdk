@@ -96,10 +96,11 @@ abstract class AbstractLogger implements PdkLoggerInterface
     }
 
     /**
-     * @TODO: remove this default in v3.0.0, for now it's here to prevent breaking changes
-     * @return array
+     * @TODO   : remove this default in v3.0.0, for now it's here to prevent breaking changes
+     * @return array{notice?: string, warning?: string, error?: string, critical?: string, alert?: string, emergency?: string}
+     * @codeCoverageIgnore
      */
-    public function getLogs(): array
+    public function getLogFiles(): array
     {
         return [];
     }
