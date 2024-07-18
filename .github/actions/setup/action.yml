@@ -6,6 +6,10 @@ inputs:
     description: 'PHP version'
     required: true
 
+  token:
+    description: 'Token'
+    required: true
+
 runs:
   using: composite
   steps:
@@ -24,8 +28,8 @@ runs:
 
     - uses: myparcelnl/actions/build-docker-image-reg@v4
       with:
-        registry-password: ${{ secrets.GITHUB_TOKEN }}
         registry-user: ${{ github.actor }}
+        registry-password: ${{ inputs.token }}
         image: 'myparcelnl-pdk:php${{ inputs.php-version }}'
 
     - name: 'Prepare environment'
