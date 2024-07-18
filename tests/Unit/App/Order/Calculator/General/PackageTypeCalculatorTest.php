@@ -71,6 +71,7 @@ const CONFIG = [
 const DESTINATION_INTERNATIONAL_COUNTRIES = [
     CountryCodes::CC_FR,
     CountryCodes::CC_US,
+    CountryCodes::CC_BE,
 ];
 
 usesShared(new UsesEachMockPdkInstance());

@@ -123,7 +123,7 @@ class CartCalculationService implements CartCalculationServiceInterface
             return false;
         }
 
-        $countryIsUnique           = $this->countryService->isUnique($cc);
+        $countryIsLocal            = $this->countryService->isLocalCountry($cc);
         $allowInternationalMailbox = Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
             $allowInternationalMailbox = $carrierSettings->allowInternationalMailbox;
             $hasDeliveryOptions        = $carrierSettings->deliveryOptionsEnabled;
@@ -131,7 +131,7 @@ class CartCalculationService implements CartCalculationServiceInterface
             return $allowInternationalMailbox && $hasDeliveryOptions;
         });
 
-        return $countryIsUnique || $allowInternationalMailbox;
+        return $countryIsLocal || $allowInternationalMailbox;
     }
 
     /**
