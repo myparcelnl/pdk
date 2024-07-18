@@ -28,9 +28,7 @@ runs:
 
     - uses: myparcelnl/actions/build-docker-image-reg@v4
       with:
-        registry-user: ${{ github.actor }}
         registry-password: ${{ inputs.token }}
-        image: 'myparcelnl-pdk'
 
     - name: 'Prepare environment'
       shell: bash
