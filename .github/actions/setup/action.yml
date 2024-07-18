@@ -30,7 +30,7 @@ runs:
       with:
         registry-user: ${{ github.actor }}
         registry-password: ${{ inputs.token }}
-        image: 'myparcelnl-pdk:php${{ inputs.php-version }}'
+        image: 'myparcelnl-pdk'
 
     - name: 'Prepare environment'
       shell: bash
