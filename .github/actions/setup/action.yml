@@ -22,10 +22,11 @@ runs:
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
-    - uses: myparcelnl/actions/build-docker-image@v4
+    - uses: myparcelnl/actions/build-docker-image-reg@v4
       with:
+        registry-password: ${{ secrets.GITHUB_TOKEN }}
+        registry-user: ${{ github.actor }}
         image: 'myparcelnl-pdk:php${{ inputs.php-version }}'
-        buildkit: true
 
     - name: 'Prepare environment'
       shell: bash
