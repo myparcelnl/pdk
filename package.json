@@ -13,7 +13,7 @@
     "__lint:fix": "prettier --cache --write .",
     "__quality": "yarn docker composer quality",
     "__quality:fix": "yarn docker composer quality:fix",
-    "__test:coverage": "yarn test:unit:coverage",
+    "__test:coverage": "yarn docker composer test:unit:coverage",
     "__test:integration": "yarn docker composer test:integration",
     "__test:unit": "yarn docker composer test:unit",
     "analyse": "nx run @myparcel/php-pdk:__analyse",
@@ -180,6 +180,9 @@
         "inputs": [
           "!{workspaceRoot}/tests/Integration/**/*",
           "test"
+        ],
+        "outputs": [
+          "{workspaceRoot}/clover.xml"
         ]
       },
       "__test:integration": {
