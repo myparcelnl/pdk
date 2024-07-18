@@ -1,5 +1,3 @@
-version: '3.9'
-
 x-image: &image ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
 
 services:

@@ -32,7 +32,8 @@ class TypeCollection extends Collection
      */
     public function __toString(): string
     {
-        return $this->getTypeStrings()
+        return $this
+            ->getTypeStrings()
             ->implode('|');
     }
 
@@ -41,7 +42,8 @@ class TypeCollection extends Collection
      */
     public function getNames(): array
     {
-        return $this->getTypeStrings()
+        return $this
+            ->getTypeStrings()
             ->all();
     }
 
@@ -50,9 +52,11 @@ class TypeCollection extends Collection
      */
     public function toStorableArray(): array
     {
-        return array_map(function (Type $type) {
-            return $this->typeParser->getTypeAsString($type);
-        }, $this->items);
+        return $this
+            ->map(function (Type $type) {
+                return $this->typeParser->getTypeAsString($type);
+            })
+            ->toArray();
     }
 
     /**

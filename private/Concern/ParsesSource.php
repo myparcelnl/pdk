@@ -12,8 +12,19 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @uses \MyParcelNL\Pdk\Console\Types\Shared\Concern\UsesCache
+ */
 trait ParsesSource
 {
+    /**
+     * @return string[]
+     */
+    protected function getDefaultSourceDirectories(): array
+    {
+        return ['src'];
+    }
+
     /**
      * @param  \Symfony\Component\Console\Input\InputInterface   $input
      * @param  \Symfony\Component\Console\Output\OutputInterface $output
@@ -24,11 +35,11 @@ trait ParsesSource
     {
         /** @var \MyParcelNL\Pdk\Console\PhpLoader $loader */
         $loader = Pdk::get(PhpLoader::class);
-        $loader->setCommandContext($input, $output);
+        $loader->setCommandContext($this->getName(), $input, $output);
 
         /** @var \MyParcelNL\Pdk\Console\Types\Shared\Service\PhpSourceParser $parser */
         $parser = Pdk::get(PhpSourceParser::class);
-        $parser->setCommandContext($input, $output);
+        $parser->setCommandContext($this->getName(), $input, $output);
 
         $files = $input->getArgument('files');
 

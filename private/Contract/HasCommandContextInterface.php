@@ -12,5 +12,5 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 interface HasCommandContextInterface
 {
-    public function setCommandContext(InputInterface $input, OutputInterface $output): void;
+    public function setCommandContext(string $commandName, InputInterface $input, OutputInterface $output): void;
 }

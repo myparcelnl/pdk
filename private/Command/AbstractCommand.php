@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Console\Concern\HasCommandContext;
 use MyParcelNL\Pdk\Console\Contract\HasCommandContextInterface;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,6 +44,9 @@ abstract class AbstractCommand extends Command implements HasCommandContextInter
 
     protected function configure(): void
     {
+        $this->addArgument('readCache', InputArgument::OPTIONAL, 'Read from cache', true);
+        $this->addArgument('writeCache', InputArgument::OPTIONAL, 'Write to cache', true);
+
         $this->addOption(
             'rootDir',
             'r',
@@ -60,7 +64,7 @@ abstract class AbstractCommand extends Command implements HasCommandContextInter
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setCommandContext($input, $output);
+        $this->setCommandContext($this->getName(), $input, $output);
     }
 
     /**

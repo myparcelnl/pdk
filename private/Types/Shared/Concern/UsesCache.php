@@ -4,46 +4,65 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Types\Shared\Concern;
 
-use MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorage;
+use InvalidArgumentException;
+use MyParcelNL\Pdk\Console\Storage\ConsoleFileCacheStorage;
+use MyParcelNL\Pdk\Console\Storage\ConsoleMemoryCacheStorage;
+use MyParcelNL\Pdk\Console\Storage\Contract\ConsoleStorageInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Sdk\src\Support\Str;
+use function sprintf;
 
 trait UsesCache
 {
     /**
-     * @var \MyParcelNL\Pdk\Console\Types\Storage\CacheFileStorage
+     * @var class-string<ConsoleStorageInterface>[]
      */
-    private static $cacheFileStorage;
+    private static $caches = [];
 
     /**
-     * @var \MyParcelNL\Pdk\Storage\MemoryCacheStorage
+     * @var bool
      */
-    private static $memoryCache;
+    protected $readsFromCache = true;
 
     /**
-     * @param  string   $key
-     * @param  callable $callback
-     * @param  string   $driverName
+     * @var bool
+     */
+    protected $writesToCache = true;
+
+    /**
+     * @param  string                                $key
+     * @param  callable                              $callback
+     * @param  class-string<ConsoleStorageInterface> $driverClass
      *
      * @return mixed
      */
-    protected function cache(string $key, callable $callback, string $driverName = 'memory')
+    protected function cache(string $key, callable $callback, string $driverClass = ConsoleMemoryCacheStorage::class)
     {
-        $driver = $this->getDriver($driverName);
+        $driver = $this->getDriver($driverClass);
 
-        if ($driver->has($key)) {
-            $contents = $driver->get($key);
-
-            return $this->tryUnserialize($contents);
+        if ($this->readsFromCache && $driver->has($key)) {
+            return $this->tryUnserialize($driver->get($key));
         }
 
         $result = $callback();
 
-        $driver->set($key, $result);
+        if ($this->writesToCache) {
+            $driver->set($key, $result);
+        }
 
         return $result;
+    }
+
+    /**
+     * @return void
+     */
+    protected function clearCache(): void
+    {
+        foreach (self::$caches as $cache) {
+            $this
+                ->getDriver($cache)
+                ->clear();
+        }
     }
 
     /**
@@ -55,27 +74,28 @@ trait UsesCache
     protected function fileCache(string $key, callable $callback)
     {
         return $this->cache($key, function () use ($key, $callback) {
-            return $this->cache($key, $callback, 'file');
+            return $this->cache($key, $callback, ConsoleFileCacheStorage::class);
         });
     }
 
     /**
-     * @param  string $driverName
+     * @template T of ConsoleStorageInterface
+     * @param  class-string<T> $driverClass
      *
-     * @return \MyParcelNL\Pdk\Storage\Contract\StorageInterface
+     * @return T
      */
-    private function getDriver(string $driverName): StorageInterface
+    private function getDriver(string $driverClass): ConsoleStorageInterface
     {
-        switch ($driverName) {
-            case 'file':
-                self::$cacheFileStorage = self::$cacheFileStorage ?? Pdk::get(CacheFileStorage::class);
-                $driver                 = self::$cacheFileStorage;
-                break;
+        $driver = Pdk::get($driverClass);
 
-            default:
-                self::$memoryCache = self::$memoryCache ?? Pdk::get(MemoryCacheStorage::class);
-                $driver            = self::$memoryCache;
-                break;
+        if (! $driver instanceof ConsoleStorageInterface) {
+            throw new InvalidArgumentException(
+                sprintf('Driver %s must implement %s', $driverClass, ConsoleStorageInterface::class)
+            );
+        }
+
+        if (! in_array($driverClass, self::$caches, true)) {
+            self::$caches[] = $driverClass;
         }
 
         return $driver;

@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Console\Command;
 use MyParcelNL\Pdk\Console\Concern\ParsesSource;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Throwable;
 
 abstract class AbstractGenerateTypesCommand extends AbstractCommand
 {
@@ -34,36 +33,16 @@ abstract class AbstractGenerateTypesCommand extends AbstractCommand
     {
         parent::execute($input, $output);
 
-        $output->writeln(sprintf('<info>Running %s...</info>', $this->getName()));
+        $this->log(sprintf('<info>Running %s...</info>', $this->getName()));
 
-        $generator = $this->getGeneratorClass();
+        $generator   = $this->getGeneratorClass();
+        $definitions = $this->parseSourceDirectories($input, $output);
 
-        try {
-            $definitions = $this->parseSourceDirectories($input, $output);
+        $generatorInstance = new $generator($definitions, $input->getOption('rootDir'));
+        $generatorInstance->setCommandContext($this->getName(), $input, $output);
 
-            /** @var \MyParcelNL\Pdk\Console\Types\Shared\AbstractHelperGenerator $generatorInstance */
-            $generatorInstance = new $generator(
-                $input,
-                $output,
-                $definitions,
-                $input->getOption('rootDir')
-            );
-
-            $generatorInstance->run();
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-
-            return self::FAILURE;
-        }
+        $generatorInstance->run();
 
         return self::SUCCESS;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getDefaultSourceDirectories(): array
-    {
-        return ['src'];
     }
 }

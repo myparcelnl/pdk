@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Concern;
 
-use MyParcelNL\Pdk\Base\Support\Utils;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,27 +24,34 @@ trait HasCommandContext
     protected $output;
 
     /**
+     * @var string
+     */
+    private $commandName;
+
+    /**
+     * @param  string                                            $name
      * @param  \Symfony\Component\Console\Input\InputInterface   $input
      * @param  \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return void
      */
-    public function setCommandContext(InputInterface $input, OutputInterface $output): void
+    public function setCommandContext(string $name, InputInterface $input, OutputInterface $output): void
     {
-        $this->input  = $input;
-        $this->output = $output;
+        $this->commandName = $name;
+        $this->input       = $input;
+        $this->output      = $output;
 
         $this->extendOutputStyles($output);
     }
 
     /**
-     * @param  string $content
+     * @param  string ...$content
      *
      * @return void
      */
-    protected function log(string $content): void
+    protected function log(string ...$content): void
     {
-        $this->output->writeln(sprintf('<context>[%s]</context> %s', Utils::classBasename(static::class), $content));
+        $this->output->writeln(sprintf('<context>[%s]</context> %s', $this->commandName, ...$content));
     }
 
     /**

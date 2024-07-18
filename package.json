@@ -3,22 +3,40 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "analyse": "yarn docker composer analyse",
+    "__analyse": "yarn docker composer analyse",
+    "__console:generate:docs": "yarn console -- generate:docs",
+    "__console:generate:factory": "yarn console -- generate:factory",
+    "__console:generate:ide-helper": "yarn console -- generate:ide-helper",
+    "__console:generate:typescript": "yarn console -- generate:typescript",
+    "__console:parse": "yarn console -- parse",
+    "__lint": "prettier --cache --check .",
+    "__lint:fix": "prettier --cache --write .",
+    "__quality": "yarn docker composer quality",
+    "__quality:fix": "yarn docker composer quality:fix",
+    "__test:coverage": "yarn test:unit:coverage",
+    "__test:integration": "yarn docker composer test:integration",
+    "__test:unit": "yarn docker composer test:unit",
+    "analyse": "nx run @myparcel/php-pdk:__analyse",
     "analyse:generate": "yarn docker composer analyse:generate",
-    "analyze": "yarn analyse",
-    "analyze:generate": "yarn analyse:generate",
+    "analyze": "yarn run analyse",
+    "analyze:generate": "yarn run analyse:generate",
     "console": "yarn docker composer console",
+    "console:generate:docs": "nx run @myparcel/php-pdk:__console:generate:docs",
+    "console:generate:factory": "nx run @myparcel/php-pdk:__console:generate:factory",
+    "console:generate:ide-helper": "nx run @myparcel/php-pdk:__console:generate:ide-helper",
+    "console:generate:typescript": "nx run @myparcel/php-pdk:__console:generate:typescript",
+    "console:parse": "nx run @myparcel/php-pdk:__console:parse",
     "docker": "docker compose run --rm -T php",
+    "lint": "nx run @myparcel/php-pdk:__lint",
+    "lint:fix": "nx run @myparcel/php-pdk:__lint:fix",
     "prepare": "is-ci || husky init",
-    "quality": "yarn docker composer quality",
-    "quality:fix": "yarn docker composer quality:fix",
-    "lint": "prettier --cache --check .",
-    "lint:fix": "prettier --cache --write .",
-    "test": "yarn docker composer test",
-    "test:coverage": "yarn test:unit:coverage",
-    "test:integration": "yarn docker composer test:integration",
-    "test:unit": "yarn docker composer test:unit",
-    "test:unit:coverage": "yarn docker composer test:unit:coverage",
+    "quality": "nx run @myparcel/php-pdk:__quality",
+    "quality:fix": "nx run @myparcel/php-pdk:__quality:fix",
+    "test": "yarn test:unit && yarn test:integration",
+    "test:coverage": "nx run @myparcel/php-pdk:__test:coverage",
+    "test:integration": "nx run @myparcel/php-pdk:__test:integration",
+    "test:unit": "nx run @myparcel/php-pdk:__test:unit",
+    "test:unit:coverage": "nx run @myparcel/php-pdk:__test:coverage",
     "test:unit:snapshot": "yarn docker composer test:unit:snapshot",
     "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
   },
@@ -35,10 +53,142 @@
     "husky": "^9.0.0",
     "is-ci": "^3.0.1",
     "lint-staged": "^15.0.0",
+    "nx": "^19.5.0",
     "prettier": "^3.0.0"
   },
   "volta": {
     "node": "18.17.0",
     "yarn": "4.3.1"
+  },
+  "nx": {
+    "namedInputs": {
+      "production": [
+        "!{workspaceRoot}/**/.tmp/**/*",
+        "!{workspaceRoot}/**/.cache/**/*",
+        "{workspaceRoot}/composer.json",
+        "{workspaceRoot}/config/**/*",
+        "{workspaceRoot}/src/**/*"
+      ],
+      "test": [
+        "production",
+        "{workspaceRoot}/tests/**/*"
+      ],
+      "console": [
+        "production",
+        "{workspaceRoot}/private/**/*"
+      ]
+    },
+    "targets": {
+      "__console:parse": {
+        "cache": true,
+        "inputs": [
+          "console"
+        ],
+        "outputs": [
+          "{workspaceRoot}/.cache/console"
+        ]
+      },
+      "__console:generate:docs": {
+        "cache": true,
+        "dependsOn": [
+          "__console:parse"
+        ],
+        "inputs": [
+          "console"
+        ],
+        "outputs": [
+          "{workspaceRoot}/docs"
+        ]
+      },
+      "__console:generate:ide-helper": {
+        "cache": true,
+        "dependsOn": [
+          "__console:parse"
+        ],
+        "inputs": [
+          "console"
+        ],
+        "outputs": [
+          "{workspaceRoot}/.meta/pdk_ide_helper.php"
+        ]
+      },
+      "__console:generate:typescript": {
+        "cache": true,
+        "dependsOn": [
+          "__console:parse"
+        ],
+        "inputs": [
+          "console"
+        ],
+        "outputs": []
+      },
+      "__console:generate:factory": {
+        "cache": true,
+        "dependsOn": [
+          "__console:parse"
+        ],
+        "inputs": [
+          "console"
+        ],
+        "outputs": []
+      },
+      "__quality": {
+        "cache": true,
+        "inputs": [
+          "production"
+        ]
+      },
+      "__quality:fix": {
+        "cache": true,
+        "inputs": [
+          "production"
+        ]
+      },
+      "__lint": {
+        "cache": true,
+        "inputs": [
+          "production"
+        ],
+        "outputs": [
+          "{workspaceRoot}/node_modules/.cache/prettier"
+        ]
+      },
+      "__lint:fix": {
+        "cache": true,
+        "inputs": [
+          "production"
+        ],
+        "outputs": [
+          "{workspaceRoot}/node_modules/.cache/prettier"
+        ]
+      },
+      "__analyse": {
+        "cache": true,
+        "inputs": [
+          "test"
+        ]
+      },
+      "__test:unit": {
+        "cache": true,
+        "inputs": [
+          "!{workspaceRoot}/tests/Integration/**/*",
+          "test"
+        ]
+      },
+      "__test:coverage": {
+        "cache": true,
+        "inputs": [
+          "!{workspaceRoot}/tests/Integration/**/*",
+          "test"
+        ]
+      },
+      "__test:integration": {
+        "cache": true,
+        "inputs": [
+          "!{workspaceRoot}/tests/Unit/**/*",
+          "test"
+        ]
+      }
+    }
   }
 }

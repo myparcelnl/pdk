@@ -8,8 +8,11 @@ namespace MyParcelNL\Pdk\Base\Support;
 use DateTime;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
+use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
+use ReflectionMethod;
 use stdClass;
+use function expect;
 
 it('gets parents of class recursively', function () {
     expect(Utils::getClassParentsRecursive(new MockClassWithTrait()))
@@ -128,3 +131,25 @@ it('converts input to array', function ($input, array $output) {
     'numbers in array'       => [['1', 2, 3], ['1', '2', '3']],
     'semicolons and values'  => [['1;2;3', 4, 5], ['1', '2', '3', '4', '5']],
 ]);
+
+it('casts stuff', function () {
+    $result = Utils::cast(MockCastModel::class, [
+        'property' => 'hello',
+    ]);
+
+    expect($result)
+        ->toBeInstanceOf(MockCastModel::class)
+        ->and($result->property)
+        ->toBe('hello');
+});
+
+it('can cast non-serializable input', function () {
+    $result = Utils::cast(MockCastModel::class, [
+        'property' => new ReflectionMethod(MockCastModel::class, 'toArray'),
+    ]);
+
+    expect($result)
+        ->toBeInstanceOf(MockCastModel::class)
+        ->and($result->property)
+        ->toBeInstanceOf(ReflectionMethod::class);
+});

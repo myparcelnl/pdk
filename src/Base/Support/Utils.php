@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Sdk\src\Support\Str;
+use Throwable;
 
 class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
 {
@@ -20,10 +21,11 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
     private static $classCastCache = [];
 
     /**
-     * @param  string $class
-     * @param  mixed  ...$args
+     * @template T
+     * @param  class-string<T> $class
+     * @param  mixed           ...$args
      *
-     * @return mixed
+     * @return T
      */
     public static function cast(string $class, ...$args)
     {
@@ -31,13 +33,18 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
             return $args[0];
         }
 
-        $cacheKey = sprintf('%s-%s', $class, md5(serialize($args)));
+        try {
+            $cacheKey = sprintf('%s-%s', $class, md5(serialize($args)));
 
-        if (! isset(self::$classCastCache[$cacheKey])) {
-            self::$classCastCache[$cacheKey] = new $class(...$args);
+            if (! isset(self::$classCastCache[$cacheKey])) {
+                self::$classCastCache[$cacheKey] = new $class(...$args);
+            }
+
+            return self::$classCastCache[$cacheKey];
+        } catch (Throwable $e) {
+            // Skip cache if instantiation fails, for example when input contains something that can't be serialized.
+            return new $class(...$args);
         }
-
-        return self::$classCastCache[$cacheKey];
     }
 
     /**

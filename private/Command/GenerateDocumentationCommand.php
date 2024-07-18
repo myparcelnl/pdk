@@ -24,4 +24,3 @@ final class GenerateDocumentationCommand extends AbstractGenerateTypesCommand
         return DocumentationGenerator::class;
     }
 }
-

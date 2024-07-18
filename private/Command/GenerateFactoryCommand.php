@@ -32,7 +32,7 @@ final class GenerateFactoryCommand extends AbstractCommand
      * @param  \Symfony\Component\Console\Input\InputInterface   $input
      * @param  \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @return void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -49,7 +49,7 @@ final class GenerateFactoryCommand extends AbstractCommand
 
                 /** @var \MyParcelNL\Pdk\Console\GenerateFactory\Contract\FactoryServiceInterface $service */
                 $service = Pdk::get($class);
-                $service->setCommandContext($this->input, $this->output);
+                $service->setCommandContext($this->getName(), $this->input, $this->output);
                 $service->generate($definition);
             });
 

@@ -45,7 +45,9 @@ class TsTypeParser
      */
     public function getType(string $string, bool $asReference = false): string
     {
-        return $this->cache(sprintf('ts_type_%s', "{$string}_$asReference"), function () use ($asReference, $string) {
+        $key = sprintf('ts_type_%s', "{$string}_$asReference");
+
+        return $this->fileCache($key, function () use ($asReference, $string) {
             $string = trim($string);
 
             $result = $string;

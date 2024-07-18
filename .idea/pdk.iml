@@ -110,6 +110,8 @@
       <excludePattern pattern=".tmp" />
       <excludePattern pattern=".cache" />
       <excludePattern pattern="phpstan-baseline.php" />
+      <excludePattern pattern=".nx" />
+      <excludePattern pattern="*.cache" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

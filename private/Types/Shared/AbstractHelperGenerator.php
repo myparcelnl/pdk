@@ -14,8 +14,6 @@ use MyParcelNL\Pdk\Console\Types\Shared\Concern\ReportsTiming;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\ParsesPhpDocs;
 use MyParcelNL\Pdk\Facade\Pdk;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractHelperGenerator
 {
@@ -44,19 +42,11 @@ abstract class AbstractHelperGenerator
     private $handles;
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
      * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
      * @param  string                                                                    $baseDir
      */
-    public function __construct(
-        InputInterface            $input,
-        OutputInterface           $output,
-        ClassDefinitionCollection $definitions,
-        string                    $baseDir
-    ) {
-        $this->setCommandContext($input, $output);
-
+    public function __construct(ClassDefinitionCollection $definitions, string $baseDir)
+    {
         $this->definitions = $definitions
             ->filter(function (ClassDefinition $definition): bool {
                 return $this->classAllowed($definition);
@@ -95,11 +85,11 @@ abstract class AbstractHelperGenerator
         $time          = $this->getTime();
         $classBasename = Utils::classBasename(static::class);
 
-        $this->output->writeln(sprintf('🧬 Running %s...', $classBasename));
+        $this->log(sprintf('🧬 Running %s...', $classBasename));
 
         $this->generate();
 
-        $this->output->writeln(sprintf('🏁 Finished running %s in %s', $classBasename, $this->printTimeSince($time)));
+        $this->log(sprintf('🏁 Finished running %s in %s', $classBasename, $this->printTimeSince($time)));
     }
 
     /**
@@ -130,7 +120,7 @@ abstract class AbstractHelperGenerator
     {
         $this->fileSystem->closeStream($handle);
         $path = $this->fileSystem->realpath($filename);
-        $this->output->writeln("️✏️ Wrote to $path");
+        $this->log("✏️ Wrote to $path");
     }
 
     /**

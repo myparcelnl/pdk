@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Console\Command\GenerateDocumentationCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateFactoryCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateIdeHelperCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateTypeScriptTypesCommand;
+use MyParcelNL\Pdk\Console\Command\ParseSourceCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -23,10 +24,13 @@ final class PdkConsoleApp
     {
         $app = new Application();
 
-        $app->add(new GenerateDocumentationCommand());
-        $app->add(new GenerateFactoryCommand());
-        $app->add(new GenerateIdeHelperCommand());
-        $app->add(new GenerateTypeScriptTypesCommand());
+        $app->addCommands([
+            new ParseSourceCommand(),
+            new GenerateDocumentationCommand(),
+            new GenerateFactoryCommand(),
+            new GenerateIdeHelperCommand(),
+            new GenerateTypeScriptTypesCommand(),
+        ]);
 
         $app->run();
     }

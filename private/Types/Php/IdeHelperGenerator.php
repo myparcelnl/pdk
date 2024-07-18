@@ -15,8 +15,6 @@ use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\src\Support\Str;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyInfo\Type;
 
 final class IdeHelperGenerator extends AbstractHelperGenerator
@@ -27,18 +25,12 @@ final class IdeHelperGenerator extends AbstractHelperGenerator
     private $typeParser;
 
     /**
-     * @param  \Symfony\Component\Console\Input\InputInterface                           $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface                         $output
      * @param  \MyParcelNL\Pdk\Console\Types\Shared\Collection\ClassDefinitionCollection $definitions
      * @param  string                                                                    $baseDir
      */
-    public function __construct(
-        InputInterface            $input,
-        OutputInterface           $output,
-        ClassDefinitionCollection $definitions,
-        string                    $baseDir
-    ) {
-        parent::__construct($input, $output, $definitions, $baseDir);
+    public function __construct(ClassDefinitionCollection $definitions, string $baseDir)
+    {
+        parent::__construct($definitions, $baseDir);
 
         $this->typeParser = Pdk::get(PhpTypeParser::class);
     }
