@@ -69,7 +69,7 @@ class MockPdkConfig
                     'name'    => 'pest',
                     'title'   => 'Pest',
                     'version' => '1.0.0',
-                    'path'    => 'APP_PATH',
+                    'path'    => '/app/.tmp/',
                     'url'     => 'APP_URL',
                 ]);
             }),
