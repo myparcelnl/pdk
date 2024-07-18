@@ -22,7 +22,7 @@ class MockLogger extends AbstractLogger
     }
 
     /**
-     * @return void
+     * @return array
      */
     public function getLogs(): array
     {

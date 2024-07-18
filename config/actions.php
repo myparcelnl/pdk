@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateSubscriptionFeaturesAction;
+use MyParcelNL\Pdk\App\Action\Backend\Debug\DebugDownloadLogsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
@@ -31,6 +32,7 @@ use MyParcelNL\Pdk\App\Request\Account\DeleteAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateSubscriptionFeaturesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Debug\DebugDownloadLogsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PostOrderNotesEndpointRequest;
@@ -214,6 +216,14 @@ return [
         PdkBackendActions::FETCH_WEBHOOKS          => [
             'request' => FetchWebhooksEndpointRequest::class,
             'action'  => FetchWebhooksAction::class,
+        ],
+
+        /**
+         * Download logs
+         */
+        PdkBackendActions::DEBUG_DOWNLOAD_LOGS     => [
+            'request' => DebugDownloadLogsEndpointRequest::class,
+            'action'  => DebugDownloadLogsAction::class,
         ],
     ],
 ];
