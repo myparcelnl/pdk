@@ -9,7 +9,7 @@
           "items": [
             {
               "amount": 1,
-              "classification": "",
+              "classification": "000000",
               "country": "NL",
               "description": "test",
               "item_value": {

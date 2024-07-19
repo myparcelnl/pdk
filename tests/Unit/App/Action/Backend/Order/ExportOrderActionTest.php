@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
@@ -13,6 +14,7 @@ use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -35,6 +37,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -284,35 +287,54 @@ it('exports pickup order without signature', function () {
         ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
 });
 
-it('exports international orders', function (PdkOrderCollectionFactory $factory, bool $orderMode) {
-    MockApi::enqueue(
-        ...$orderMode
-        ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
-        : [new ExamplePostShipmentsResponse()]
-    );
+it(
+    'exports international orders',
+    function (
+        PdkOrderCollectionFactory $factory,
+        bool                      $accountFlag,
+        bool                      $carrierSetting,
+        bool                      $orderMode
+    ) {
+        MockApi::enqueue(
+            ...$orderMode
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
+        );
 
-    factory(OrderSettings::class)
-        ->withConceptShipments(true)
-        ->store();
+        factory(OrderSettings::class)
+            ->withConceptShipments(true)
+            ->store();
 
-    $collection = $factory
-        ->store()
-        ->make();
+        $collection  = $factory
+            ->store()
+            ->make();
+        $fakeCarrier = $collection->first()->deliveryOptions->carrier;
 
-    $orderIds = $collection->pluck('externalIdentifier');
+        factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+            ->withAllowInternationalMailbox($carrierSetting)
+            ->store();
 
-    Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds->toArray()]);
+        factory(AccountGeneralSettings::class)
+            ->withHasCarrierSmallPackageContract($accountFlag)
+            ->store();
 
-    $lastRequest = MockApi::ensureLastRequest();
-    $stream      = $lastRequest->getBody();
+        $orderIds = $collection->pluck('externalIdentifier');
 
-    assertMatchesJsonSnapshot($stream->getContents());
-})
+        Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds->toArray()]);
+
+        $lastRequest = MockApi::ensureLastRequest();
+        $stream      = $lastRequest->getBody();
+
+        assertMatchesJsonSnapshot($stream->getContents());
+    }
+)
     ->with([
         'without customs declaration' => [
             function () {
                 return factory(PdkOrderCollection::class)->push(factory(PdkOrder::class)->toTheUnitedStates());
             },
+            'accountFlag'    => false,
+            'carrierSetting' => false,
         ],
 
         'with customs declaration (deprecated)' => [
@@ -338,6 +360,35 @@ it('exports international orders', function (PdkOrderCollectionFactory $factory,
                         )
                 );
             },
+            'accountFlag'    => false,
+            'carrierSetting' => false,
+        ],
+
+        'custom postnl with international mailbox to Belgium' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(
+                    factory(PdkOrder::class)
+                        ->toBelgium()
+                        ->withDeliveryOptions(
+                            factory(DeliveryOptions::class)
+                                ->withCarrier(
+                                    factory(Carrier::class)
+                                        ->fromPostNL()
+                                        ->withContractId(123456)
+                                        ->withCapabilities(
+                                            factory(CarrierCapabilities::class)
+                                                ->withFeatures(
+                                                    ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
+                                                )
+                                                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME])
+                                        )
+                                )
+                                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                        )
+                );
+            },
+            'accountFlag'    => true,
+            'carrierSetting' => true,
         ],
 
         'custom postnl with international mailbox' => [
@@ -351,14 +402,20 @@ it('exports international orders', function (PdkOrderCollectionFactory $factory,
                                     factory(Carrier::class)
                                         ->fromPostNL()
                                         ->withContractId(123456)
-                                        ->withCapabilities([
-                                            'internationalMailbox' => true,
-                                        ])
+                                        ->withCapabilities(
+                                            factory(CarrierCapabilities::class)
+                                                ->withFeatures(
+                                                    ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
+                                                )
+                                                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME])
+                                        )
                                 )
                                 ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
                         )
                 );
             },
+            'accountFlag'    => true,
+            'carrierSetting' => true,
         ],
 
         'postnl with international mailbox filtered out' => [
@@ -373,6 +430,8 @@ it('exports international orders', function (PdkOrderCollectionFactory $factory,
                         )
                 );
             },
+            'accountFlag'    => true,
+            'carrierSetting' => true,
         ],
     ])
     ->with('orderModeToggle');
