@@ -291,8 +291,8 @@ it(
     'exports international orders',
     function (
         PdkOrderCollectionFactory $factory,
-        bool                      $accountFlag,
-        bool                      $carrierSetting,
+        bool                      $accountHasCarrierSmallPackageContract,
+        bool                      $carrierHasInternationalMailboxAllowed,
         bool                      $orderMode
     ) {
         MockApi::enqueue(
@@ -311,11 +311,11 @@ it(
         $fakeCarrier = $collection->first()->deliveryOptions->carrier;
 
         factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
-            ->withAllowInternationalMailbox($carrierSetting)
+            ->withAllowInternationalMailbox($carrierHasInternationalMailboxAllowed)
             ->store();
 
         factory(AccountGeneralSettings::class)
-            ->withHasCarrierSmallPackageContract($accountFlag)
+            ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
             ->store();
 
         $orderIds = $collection->pluck('externalIdentifier');
@@ -333,8 +333,8 @@ it(
             function () {
                 return factory(PdkOrderCollection::class)->push(factory(PdkOrder::class)->toTheUnitedStates());
             },
-            'accountFlag'    => false,
-            'carrierSetting' => false,
+            'accountHasCarrierSmallPackageContract' => false,
+            'carrierHasInternationalMailboxAllowed' => false,
         ],
 
         'with customs declaration (deprecated)' => [
@@ -360,8 +360,8 @@ it(
                         )
                 );
             },
-            'accountFlag'    => false,
-            'carrierSetting' => false,
+            'accountHasCarrierSmallPackageContract' => false,
+            'carrierHasInternationalMailboxAllowed' => false,
         ],
 
         'custom postnl with international mailbox to Belgium' => [
@@ -387,8 +387,8 @@ it(
                         )
                 );
             },
-            'accountFlag'    => true,
-            'carrierSetting' => true,
+            'accountHasCarrierSmallPackageContract' => true,
+            'carrierHasInternationalMailboxAllowed' => true,
         ],
 
         'custom postnl with international mailbox' => [
@@ -414,8 +414,8 @@ it(
                         )
                 );
             },
-            'accountFlag'    => true,
-            'carrierSetting' => true,
+            'accountHasCarrierSmallPackageContract' => true,
+            'carrierHasInternationalMailboxAllowed' => true,
         ],
 
         'postnl with international mailbox filtered out' => [
@@ -430,8 +430,8 @@ it(
                         )
                 );
             },
-            'accountFlag'    => true,
-            'carrierSetting' => true,
+            'accountHasCarrierSmallPackageContract' => true,
+            'carrierHasInternationalMailboxAllowed' => true,
         ],
     ])
     ->with('orderModeToggle');
