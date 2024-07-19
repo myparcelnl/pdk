@@ -301,10 +301,6 @@ it(
             : [new ExamplePostShipmentsResponse()]
         );
 
-        factory(OrderSettings::class)
-            ->withConceptShipments(true)
-            ->store();
-
         $collection  = $factory
             ->store()
             ->make();
@@ -312,6 +308,10 @@ it(
 
         factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
             ->withAllowInternationalMailbox($carrierHasInternationalMailboxAllowed)
+            ->store();
+
+        factory(OrderSettings::class)
+            ->withConceptShipments(true)
             ->store();
 
         factory(AccountGeneralSettings::class)
