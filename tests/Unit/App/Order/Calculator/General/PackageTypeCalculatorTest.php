@@ -42,23 +42,23 @@ const CARRIERS            = [
 ];
 
 const ACCOUNT_FLAG_ON_CARRIER_SETTING_ON = [
-    'accountFlag'    => true,
-    'carrierSetting' => true,
+    'accountHasCarrierSmallPackageContract' => true,
+    'carrierHasInternationalMailboxAllowed' => true,
 ];
 
 const ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF = [
-    'accountFlag'    => true,
-    'carrierSetting' => false,
+    'accountHasCarrierSmallPackageContract' => true,
+    'carrierHasInternationalMailboxAllowed' => false,
 ];
 
 const ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON = [
-    'accountFlag'    => false,
-    'carrierSetting' => true,
+    'accountHasCarrierSmallPackageContract' => false,
+    'carrierHasInternationalMailboxAllowed' => true,
 ];
 
 const ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF = [
-    'accountFlag'    => false,
-    'carrierSetting' => false,
+    'accountHasCarrierSmallPackageContract' => false,
+    'carrierHasInternationalMailboxAllowed' => false,
 ];
 
 const CONFIG = [
@@ -158,8 +158,8 @@ it('calculates international mailbox', function (
     $country,
     $carrierExternalIdentifier,
     $carrierName,
-    $accountFlag,
-    $carrierSetting
+    $accountHasCarrierSmallPackageContract,
+    $carrierHasInternationalMailboxAllowed
 ) {
     mockPlatform($platform);
     mockPdkProperties([
@@ -174,7 +174,7 @@ it('calculates international mailbox', function (
         ->make();
 
     factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
-        ->withAllowInternationalMailbox($carrierSetting)
+        ->withAllowInternationalMailbox($carrierHasInternationalMailboxAllowed)
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -190,7 +190,7 @@ it('calculates international mailbox', function (
         ->make();
 
     factory(AccountGeneralSettings::class)
-        ->withHasCarrierSmallPackageContract($accountFlag)
+        ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
         ->store();
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
