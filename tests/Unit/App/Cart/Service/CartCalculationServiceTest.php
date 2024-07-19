@@ -141,12 +141,12 @@ const SHIPPING_ADDRESS_EU = [
     'state'      => 'Current',
 ];
 const SHIPPING_ADDRESS_BE = [
-    'address1'   => 'Straatnaam 2',
+    'address1'   => 'Adriaan Brouwerstraat 16',
     'address2'   => 'Appartement B',
     'area'       => 'Voor',
     'cc'         => CountryCodes::CC_BE,
-    'city'       => 'Stad',
-    'postalCode' => '1000 BB',
+    'city'       => 'Antwerpen',
+    'postalCode' => '1000',
     'region'     => 'Antwerpen',
     'state'      => 'Current',
 ];
