@@ -147,9 +147,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
 
+        $cc = $cart->shippingMethod->shippingAddress->cc ?? null;
         if (
-            $cart->shippingMethod->shippingAddress->cc !== null
-            && $this->shouldUseInternationalMailboxPrice($packageType, $cart->shippingMethod->shippingAddress->cc)) {
+            $cc
+            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)) {
             $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
         }
 
