@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.41.0](https://github.com/myparcelnl/pdk/compare/v2.40.0...v2.41.0) (2024-07-29)
+
+
+### :sparkles: New Features
+
+* add international mailbox support when shipping to belgium ([#289](https://github.com/myparcelnl/pdk/issues/289)) ([ef5c714](https://github.com/myparcelnl/pdk/commit/ef5c714a38247d7bdbee5164867a399162ff73b9))
+
 ## [2.40.0](https://github.com/myparcelnl/pdk/compare/v2.39.3...v2.40.0) (2024-07-17)
 
 
