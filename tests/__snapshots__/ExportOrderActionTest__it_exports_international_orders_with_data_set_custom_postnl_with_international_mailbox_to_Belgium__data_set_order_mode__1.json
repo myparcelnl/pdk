@@ -15,12 +15,12 @@
           "weight": 0
         },
         "recipient": {
-          "cc": "DE",
-          "city": "Berlin",
+          "cc": "BE",
+          "city": "Antwerpen",
           "company": "MyParcel",
           "person": "Felicia Parcel",
-          "postal_code": "10117",
-          "street": "Musterstrasse 1",
+          "postal_code": "1000",
+          "street": "Adriaan Brouwerstraat 16",
           "vat_number": "NL123456789B01"
         },
         "reference_identifier": "PDK-1"

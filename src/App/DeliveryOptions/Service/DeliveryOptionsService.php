@@ -147,7 +147,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
 
-        if ($this->shouldUseInternationalMailboxPrice($packageType, $cart->shippingMethod->shippingAddress->cc)) {
+        $cc = $cart->shippingMethod->shippingAddress->cc ?? null;
+        if (
+            $cc
+            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)) {
             $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
         }
 
@@ -250,16 +253,16 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
-     * @param  string      $packageType
-     * @param  null|string $cc
+     * @param  string $packageType
+     * @param  string $cc
      *
      * @return bool
      */
-    private function shouldUseInternationalMailboxPrice(string $packageType, ?string $cc): bool
+    private function shouldUseInternationalMailboxPrice(string $packageType, string $cc): bool
     {
-        $isMailbox   = $packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
-        $isNotUnique = $cc && ! $this->countryService->isUnique($cc);
+        $isMailbox  = $packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        $isNotLocal = ! $this->countryService->isLocalCountry($cc);
 
-        return $isMailbox && $isNotUnique;
+        return $isMailbox && $isNotLocal;
     }
 }
