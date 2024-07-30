@@ -345,6 +345,11 @@ return [
                     'name'        => CountryCodes::CC_NL,
                     'packageType' => [
                         [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/dpd/base',
+                        ],
+                        [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                             'schema' => 'order/dpd/mailbox',
