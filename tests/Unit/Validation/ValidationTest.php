@@ -284,6 +284,19 @@ it('validates order', function (array $input) {
                 ]
             ),
         ],
+        'BE small package'                            => [
+            'input' => arrayMergeOrder(
+                STANDARD_INPUT,
+                [
+                    'recipient'       => [
+                        'cc' => 'BE',
+                    ],
+                    'deliveryOptions' => [
+                        'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                    ],
+                ]
+            ),
+        ],
         'EU package without insurance'                => [
             'input' => arrayMergeOrder(
                 STANDARD_INPUT,
@@ -383,34 +396,34 @@ it('validates order', function (array $input) {
                 ]
             ),
         ],
-        'allows property tracked'   => [
+        'allows property tracked'                     => [
             'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
                         'shipmentOptions' => [
                             'tracked' => 1,
-                        ]
-                    ]
+                        ],
+                    ],
                 ]
-            )
+            ),
         ],
-        'Small packets not NL tracked' => [
+        'Small packets not NL tracked'                => [
             'input' => arrayMergeOrder(
                 STANDARD_INPUT,
                 [
                     'deliveryOptions' => [
-                        'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                        'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
                         'shipmentOptions' => [
                             'tracked' => 0,
-                        ]
+                        ],
                     ],
-                    'recipient'          => [
+                    'recipient'       => [
                         'cc' => 'FR',
-                    ]
+                    ],
                 ]
-            )
-        ]
+            ),
+        ],
     ]
 );
 
