@@ -159,7 +159,7 @@
     {
       "name": "dpd",
       "capabilities": {
-        "packageTypes": ["package"],
+        "packageTypes": ["package", "mailbox"],
         "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": {
           "ageCheck": false,
