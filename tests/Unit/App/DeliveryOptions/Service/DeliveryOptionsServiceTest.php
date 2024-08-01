@@ -241,6 +241,41 @@ it(
         },
     ],
 
+    'custom postnl: be mailbox package' => [
+        'cart'                   => [
+            'carrier'        => [
+                'externalIdentifier' => 'postnl:123',
+            ],
+            'shippingMethod' => [
+                'shippingAddress'     => ['cc' => 'BE'],
+                'allowedPackageTypes' => ['mailbox'],
+            ],
+            'lines'          => [
+                [
+                    'quantity' => 1,
+                    'product'  => [
+                        'weight'        => 500,
+                        'isDeliverable' => true,
+                        'settings'      => [
+                            ProductSettings::FIT_IN_MAILBOX => 5,
+                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'carrierFactory'         => function () {
+            return factory(Carrier::class)->withExternalIdentifier('postnl:123');
+        },
+        'carrierSettingsFactory' => function () {
+            return function (CarrierSettingsFactory $factory) {
+                return $factory
+                    ->withAllowInternationalMailbox(true)
+                    ->withPriceInternationalMailbox(5);
+            };
+        },
+    ],
+
     'custom postnl: row mailbox package' => [
         'cart'                   => [
             'carrier'        => [

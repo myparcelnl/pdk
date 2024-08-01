@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -139,6 +140,16 @@ const SHIPPING_ADDRESS_EU = [
     'region'     => 'Drenthe',
     'state'      => 'Current',
 ];
+const SHIPPING_ADDRESS_BE = [
+    'address1'   => 'Adriaan Brouwerstraat 16',
+    'address2'   => 'Appartement B',
+    'area'       => 'Voor',
+    'cc'         => CountryCodes::CC_BE,
+    'city'       => 'Antwerpen',
+    'postalCode' => '1000',
+    'region'     => 'Antwerpen',
+    'state'      => 'Current',
+];
 
 uses()->group('checkout');
 usesShared(new UsesMockPdkInstance());
@@ -194,6 +205,20 @@ it(
         'lines'   => LINES_FITS_IN_MAILBOX,
         'address' => SHIPPING_ADDRESS_NL,
         'result'  => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
+    ],
+    'fits in mailbox BE, allowed'      => [
+        'lines'                     => LINES_FITS_IN_MAILBOX,
+        'address'                   => SHIPPING_ADDRESS_BE,
+        'result'                    => [
+            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        ],
+        'allowInternationalMailbox' => true,
+    ],
+    'fits in mailbox BE, not allowed'  => [
+        'lines'   => LINES_FITS_IN_MAILBOX,
+        'address' => SHIPPING_ADDRESS_BE,
+        'result'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
     ],
     'fits in mailbox EU, allowed'      => [
         'lines'                     => LINES_FITS_IN_MAILBOX,
