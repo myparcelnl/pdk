@@ -188,6 +188,59 @@ it('maps carriers correctly with custom postnl contract', function () {
         ->pluck('externalIdentifier')
         ->all();
 
-    // If custom PostNL carrier is present, all other PostNL entries should be removed
+    // If multiple PostNL carriers are present, the custom contract should be used.
     expect($externalIdentifiers)->toBe(['postnl:23991']);
+});
+
+it('maps carriers correctly with multiple non-contract postnl entries', function () {
+    executeUpdateAccount(['apiKey' => 'test-api-key'], null, [
+        [
+            'id'         => 1,
+            'label'      => null,
+            'carrier_id' => 1,
+            'carrier'    => [
+                'id'   => 1,
+                'name' => 'postnl',
+            ],
+            'enabled'    => 1,
+            'optional'   => 1,
+            'primary'    => 1,
+            'type'       => 'main',
+        ],
+        [
+            'id'         => 1,
+            'label'      => 'postnl_package_small_nl',
+            'carrier_id' => 1,
+            'carrier'    => [
+                'id'   => 1,
+                'name' => 'postnl',
+            ],
+            'enabled'    => 1,
+            'optional'   => 0,
+            'primary'    => 1,
+            'type'       => 'main',
+        ],
+        [
+            'id'         => 1,
+            'label'      => 'postnl_flespakket_on_myparcel',
+            'carrier_id' => 1,
+            'carrier'    => [
+                'id'   => 1,
+                'name' => 'postnl',
+            ],
+            'enabled'    => 0,
+            'optional'   => 1,
+            'primary'    => 1,
+            'type'       => 'main',
+        ],
+    ]);
+
+    $firstShop = AccountSettings::getAccount()->shops->first();
+
+    $externalIdentifiers = $firstShop->carriers
+        ->pluck('externalIdentifier')
+        ->all();
+
+    // If multiple PostNL carriers are present, but no custom contract, only the first one should be kept.
+    expect($externalIdentifiers)->toBe(['postnl']);
 });
