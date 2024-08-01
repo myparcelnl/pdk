@@ -233,6 +233,20 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
             'primary'    => 1,
             'type'       => 'main',
         ],
+        // Add a dhl for you carrier to make sure it's not removed.
+        [
+            'id'          => 12424,
+            'carrier_id'  => 9,
+            'carrier'     => [
+                'id'   => 9,
+                'name' => 'dhlforyou',
+            ],
+            'enabled'     => 1,
+            'optional'    => 1,
+            'primary'     => 0,
+            'type'        => 'custom',
+            'contract_id' => 677,
+        ],
     ]);
 
     $firstShop = AccountSettings::getAccount()->shops->first();
@@ -242,5 +256,5 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
         ->all();
 
     // If multiple PostNL carriers are present, but no custom contract, only the first one should be kept.
-    expect($externalIdentifiers)->toBe(['postnl']);
+    expect($externalIdentifiers)->toBe(['dhlforyou:12424', 'postnl']);
 });
