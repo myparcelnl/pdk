@@ -51,6 +51,10 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
     }
 
     /**
+     * If multiple PostNL carriers are enabled it can mean there's a custom PostNL contract enabled in the account and
+     * that one needs to be used. Otherwise, use the first PostNL Carrier. There should never be multiple PostNL
+     * carriers enabled or shown in our app.
+     *
      * @param  \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection $collection
      *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
@@ -61,14 +65,14 @@ class GetShopCarrierOptionsResponse extends ApiResponseWithBody
             ->where('id', Carrier::CARRIER_POSTNL_ID)
             ->where('enabled', true);
 
-        // If multiple PostNL carriers are enabled it means there's a custom PostNL contract enabled in the account.
         if ($enabledPostNlCarriers->count() > 1) {
-            $customPostNlCarrier = $enabledPostNlCarriers->firstWhere('type', Carrier::TYPE_CUSTOM);
+            $preservedCarrier = $enabledPostNlCarriers->firstWhere('type', Carrier::TYPE_CUSTOM)
+                ?? $enabledPostNlCarriers->first();
 
-            // Remove all PostNL carriers except the custom one.
-            return $collection->reject(static function (Carrier $carrier) use ($customPostNlCarrier) {
-                return $carrier->id === Carrier::CARRIER_POSTNL_ID && $carrier->contractId !== $customPostNlCarrier->contractId;
-            });
+            // Remove all PostNL carriers except the chosen one, including disabled ones.
+            return $collection
+                ->where('id', '!=', Carrier::CARRIER_POSTNL_ID)
+                ->push($preservedCarrier);
         }
 
         return $collection;
