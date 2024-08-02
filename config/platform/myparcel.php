@@ -286,6 +286,7 @@ return [
             'capabilities' => [
                 'packageTypes'    => [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
