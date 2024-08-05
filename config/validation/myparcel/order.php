@@ -63,6 +63,7 @@ return [
                                             DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                                             DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                                             DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
                                         ],
                                     ],
                                 ],
