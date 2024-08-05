@@ -58,7 +58,7 @@
         "labelDescriptionLength": 45,
         "needsCustomerInfo": true
       },
-      "packageTypes": ["package"],
+      "packageTypes": ["package", "mailbox"],
       "shipmentOptions": {
         "ageCheck": false,
         "onlyRecipient": false,

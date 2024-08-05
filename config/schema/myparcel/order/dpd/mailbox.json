@@ -19,7 +19,7 @@
               "enum": [0]
             },
             "insurance": {
-              "enum": [0, null]
+              "enum": [0, 52000]
             },
             "largeFormat": {
               "enum": [0]
