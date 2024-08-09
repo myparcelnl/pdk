@@ -82,7 +82,7 @@ it('creates multiple webhook subscriptions', function () {
     });
 });
 
-it('can refresh the url', function () {
+it('refreshes the url on each generation', function () {
     /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $repo */
     $repo = Pdk::get(PdkWebhooksRepositoryInterface::class);
 
@@ -98,7 +98,7 @@ it('can refresh the url', function () {
     $oldWebhooks = $repo->getAll();
     $oldUrl      = $oldWebhooks->first()->url;
 
-    createWebhooks(['hooks' => WebhookSubscription::SHIPMENT_STATUS_CHANGE, 'refresh' => true]);
+    createWebhooks(['hooks' => WebhookSubscription::SHIPMENT_STATUS_CHANGE]);
 
     $allWebhooks = $repo->getAll();
 
