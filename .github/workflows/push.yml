@@ -48,3 +48,15 @@ jobs:
       - quality
     uses: ./.github/workflows/--rebase-prs.yml
     secrets: inherit
+
+  notify-on-failure:
+    needs:
+      - setup
+      - test-unit
+      - test-integration
+      - analyse
+      - quality
+      - rebase-prs
+    if: always() && contains(needs.*.result, 'failure')
+    uses: myparcelnl/actions/.github/workflows/notify-on-failure.yml@v4
+    secrets: inherit
