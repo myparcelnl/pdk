@@ -53,11 +53,11 @@ jobs:
         run: |
           docker compose run php composer quality:fix
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run != 'true'
-        with:
-          commit_message: 'style(rector): apply changes'
-          commit_options: '--no-verify --signoff'
-          commit_user_name: ${{ steps.credentials.outputs.git-name }}
-          commit_user_email: ${{ steps.credentials.outputs.git-email }}
-          commit_author: '${{ steps.credentials.outputs.git-name }} <${{ steps.credentials.outputs.git-email }}>'
+#      - uses: stefanzweifel/git-auto-commit-action@v4
+#        if: steps.rector-cache.outputs.cache-hit != 'true' && github.event.inputs.dry-run != 'true'
+#        with:
+#          commit_message: 'style(rector): apply changes'
+#          commit_options: '--no-verify --signoff'
+#          commit_user_name: ${{ steps.credentials.outputs.git-name }}
+#          commit_user_email: ${{ steps.credentials.outputs.git-email }}
+#          commit_author: '${{ steps.credentials.outputs.git-name }} <${{ steps.credentials.outputs.git-email }}>'
