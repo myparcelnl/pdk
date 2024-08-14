@@ -6,7 +6,7 @@
     "homepage": "https://myparcel.nl",
     "license": "MIT",
     "require": {
-        "justinrainbow/json-schema": "^5.2",
+        "justinrainbow/json-schema": "^5.2 || ^6.0",
         "myparcelnl/sdk": ">= 7",
         "php": ">=7.1.0",
         "php-di/php-di": ">= 6",
