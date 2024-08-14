@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.42.0](https://github.com/myparcelnl/pdk/compare/v2.41.0...v2.42.0) (2024-08-14)
+
+
+### :sparkles: New Features
+
+* add options for small package Belgium ([#290](https://github.com/myparcelnl/pdk/issues/290)) ([ae77717](https://github.com/myparcelnl/pdk/commit/ae77717a6b5eb2e0daf772a9c9d9d449fdab3e84))
+* add support for DPD BBP ([#291](https://github.com/myparcelnl/pdk/issues/291)) ([f97b148](https://github.com/myparcelnl/pdk/commit/f97b1481f72cbf2a9a2b61aa8c97225bb31751a2))
+
+
+### :bug: Bug Fixes
+
+* **carriers:** fix errors in another postnl carrier configuration ([#292](https://github.com/myparcelnl/pdk/issues/292)) ([80134d0](https://github.com/myparcelnl/pdk/commit/80134d048e786c93c4fe520bf2c319251e6bda69))
+
 ## [2.42.0](https://github.com/myparcelnl/pdk/compare/v2.41.0...v2.42.0) (2024-08-05)
 
 
