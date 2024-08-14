@@ -108,3 +108,17 @@ jobs:
               "previousVersion": "${{ needs.release.outputs.previous-version }}",
               "type": "${{ needs.release.outputs.release-type }}"
             }
+
+  notify-on-failure:
+    needs:
+      - prepare
+      - setup
+      - test-unit
+      - test-integration
+      - analyse
+      - quality
+      - rebase-prs
+      - trigger
+    if: always() && contains(needs.*.result, 'failure')
+    uses: myparcelnl/actions/.github/workflows/notify-on-failure.yml@v4
+    secrets: inherit
