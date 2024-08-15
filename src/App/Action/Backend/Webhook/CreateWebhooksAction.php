@@ -52,13 +52,9 @@ class CreateWebhooksAction extends AbstractWebhooksAction
      */
     private function getWebhookUrl(Request $request): string
     {
-        $url = $this->pdkWebhooksRepository->getHashedUrl();
+        $url = $this->webhookActions->createUrl();
 
-        if (! $url || $request->get('refresh', false)) {
-            $url = $this->webhookActions->createUrl();
-
-            $this->pdkWebhooksRepository->storeHashedUrl($url);
-        }
+        $this->pdkWebhooksRepository->storeHashedUrl($url);
 
         return $url;
     }
