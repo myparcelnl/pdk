@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.42.1](https://github.com/myparcelnl/pdk/compare/v2.42.0...v2.42.1) (2024-08-15)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** fix errors in another postnl carrier configuration ([#292](https://github.com/myparcelnl/pdk/issues/292)) ([9996991](https://github.com/myparcelnl/pdk/commit/9996991f68aa598624709620d1e60d0dbe649571))
+* **webhooks:** always refresh base url on regeneration of webhooks ([#293](https://github.com/myparcelnl/pdk/issues/293)) ([eb72819](https://github.com/myparcelnl/pdk/commit/eb72819b05b7b567d02b63f3ccceca0b9fc62ecf))
+
 ## [2.42.0](https://github.com/myparcelnl/pdk/compare/v2.41.0...v2.42.0) (2024-08-05)
 
 
