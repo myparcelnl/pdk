@@ -183,6 +183,36 @@ it('calculates options for dhl parcel connect', function (
     ],
 ]);
 
+it('removes delivery date for dpd', function (string $date, ?string $expected) {
+    $reset = mockPdkProperty('orderCalculators', [CarrierSpecificCalculator::class]);
+
+    $orderFactory = factory(PdkOrder::class)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withDate($date)
+                ->withCarrier(Carrier::CARRIER_DPD_NAME)
+        );
+
+    $order = $orderFactory->make();
+
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
+
+    expect($newOrder->deliveryOptions->date)->toBe($expected);
+
+    $reset();
+})->with([
+    'real date' => [
+        (new \DateTimeImmutable('tomorrow'))->format('Y-m-d'),
+        null,
+    ],
+    'past date' => [
+        '2022-01-01',
+        null,
+    ],
+]);
+
 it('should do nothing for other carriers', function (string $carrierName) {
     $result = [
         ShipmentOptions::AGE_CHECK      => TriStateService::ENABLED,
