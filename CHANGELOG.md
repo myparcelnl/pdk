@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.42.2](https://github.com/myparcelnl/pdk/compare/v2.42.1...v2.42.2) (2024-08-30)
+
+
+### :bug: Bug Fixes
+
+* **export:** allow dpd shipments ([#296](https://github.com/myparcelnl/pdk/issues/296)) ([8efb772](https://github.com/myparcelnl/pdk/commit/8efb7724b57b588cc601140639e8eb8f6ae1faa9))
+
 ## [2.42.1](https://github.com/myparcelnl/pdk/compare/v2.42.0...v2.42.1) (2024-08-15)
 
 
