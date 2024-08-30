@@ -10,7 +10,7 @@
               "required": ["deliveryType", "pickupLocation"],
               "properties": {
                 "deliveryType": {
-                  "enum": ["standard", "pickup"]
+                  "enum": ["pickup"]
                 },
                 "pickupLocation": {
                   "properties": {
@@ -30,23 +30,6 @@
               "properties": {
                 "deliveryType": {
                   "enum": ["standard", null]
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "deliveryOptions": {
-              "required": ["date", "email"],
-              "properties": {
-                "date": {
-                  "type": "string",
-                  "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
-                },
-                "email": {
-                  "type": "string",
-                  "format": "email"
                 }
               }
             }
@@ -96,6 +79,9 @@
     },
     "deliveryOptions": {
       "properties": {
+        "date": {
+          "type": "null"
+        },
         "deliveryType": {
           "enum": ["standard", null]
         },

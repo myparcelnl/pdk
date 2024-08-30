@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlEuroplus\DhlEuroplusCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlForYou\DhlForYouCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlParcelConnect\DhlParcelConnectCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\Dpd\DpdCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\PostNl\PostNLCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -22,6 +23,7 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
         Carrier::CARRIER_DHL_FOR_YOU_NAME        => DhlForYouCalculator::class,
         Carrier::CARRIER_DHL_EUROPLUS_NAME       => DhlEuroplusCalculator::class,
         Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME => DhlParcelConnectCalculator::class,
+        Carrier::CARRIER_DPD_NAME                => DpdCalculator::class,
     ];
 
     public function calculate(): void
