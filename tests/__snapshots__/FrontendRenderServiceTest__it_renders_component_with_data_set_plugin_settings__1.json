@@ -1634,6 +1634,33 @@
           "$component": "CodeEditor",
           "label": "settings_checkout_delivery_options_custom_css",
           "description": "settings_checkout_delivery_options_custom_css_description"
+        },
+        {
+          "name": "pickupLocationsDefaultView",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "enableDeliveryOptions"
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "SelectInput",
+          "options": [
+            {
+              "value": "list",
+              "label": "settings_checkout_pickup_locations_default_view_option_list"
+            },
+            {
+              "value": "map",
+              "label": "settings_checkout_pickup_locations_default_view_option_map"
+            }
+          ],
+          "label": "settings_checkout_pickup_locations_default_view",
+          "description": "settings_checkout_pickup_locations_default_view_description"
         }
       ],
       "children": null
