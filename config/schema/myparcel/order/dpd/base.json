@@ -83,7 +83,7 @@
           "type": "null"
         },
         "deliveryType": {
-          "enum": ["standard", null]
+          "enum": ["pickup", "standard", null]
         },
         "packageType": {
           "enum": ["package", "mailbox", null]
