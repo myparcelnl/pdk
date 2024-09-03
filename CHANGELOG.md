@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.42.3](https://github.com/myparcelnl/pdk/compare/v2.42.2...v2.42.3) (2024-09-03)
+
+
+### :bug: Bug Fixes
+
+* **export:** allow dpd pickup ([#299](https://github.com/myparcelnl/pdk/issues/299)) ([f609749](https://github.com/myparcelnl/pdk/commit/f609749d47b2328ed508a713c97828023cb0dec2))
+
 ## [2.42.2](https://github.com/myparcelnl/pdk/compare/v2.42.1...v2.42.2) (2024-08-30)
 
 
