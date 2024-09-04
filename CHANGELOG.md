@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.0](https://github.com/myparcelnl/pdk/compare/v2.42.3...v2.43.0) (2024-09-04)
+
+
+### :sparkles: New Features
+
+* add default pickup view setting ([#298](https://github.com/myparcelnl/pdk/issues/298)) ([7b59e0c](https://github.com/myparcelnl/pdk/commit/7b59e0cae5e039bf5f921215f7e395f55f840702))
+
 ## [2.42.3](https://github.com/myparcelnl/pdk/compare/v2.42.2...v2.42.3) (2024-09-03)
 
 
