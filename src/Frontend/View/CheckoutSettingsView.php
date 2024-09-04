@@ -76,7 +76,20 @@ class CheckoutSettingsView extends AbstractSettingsView
                     ]
                 ),
                 new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_HEADER, Components::INPUT_TEXT),
-                new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_CUSTOM_CSS, Components::INPUT_CODE_EDITOR)
+                new InteractiveElement(CheckoutSettings::DELIVERY_OPTIONS_CUSTOM_CSS, Components::INPUT_CODE_EDITOR),
+                new InteractiveElement(
+                    CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
+                    Components::INPUT_SELECT,
+                    [
+                        'options' => $this->createSelectOptions(
+                            CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
+                            [
+                                CheckoutSettings::PICKUP_LOCATIONS_VIEW_LIST,
+                                CheckoutSettings::PICKUP_LOCATIONS_VIEW_MAP,
+                            ]
+                        ),
+                    ]
+                )
             ),
         ];
     }
