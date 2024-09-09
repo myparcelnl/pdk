@@ -132,7 +132,7 @@ class ShipmentRepository extends ApiRepository
      */
     public function getByReferenceIdentifiers(array $referenceIdentifiers, ?int $size = null): ShipmentCollection
     {
-        return $this->query(['reference_identifier' => $referenceIdentifiers, 'size' => $size]);
+        return $this->query(['referenceIdentifier' => $referenceIdentifiers, 'size' => $size]);
     }
 
     /**

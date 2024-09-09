@@ -9,10 +9,10 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
 
 const MODEL_DATA = [
-    'my_value' => 1,
-    'myModel'  => [
+    'myValue' => 1,
+    'myModel' => [
         'myModel' => [
-            'my_value' => null,
+            'myValue' => null,
         ],
     ],
 ];

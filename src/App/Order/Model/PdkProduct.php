@@ -84,6 +84,7 @@ class PdkProduct extends Model
 
     /**
      * @return \MyParcelNL\Pdk\Settings\Model\ProductSettings
+     * @noinspection PhpUnused
      */
     protected function getMergedSettingsAttribute(): ProductSettings
     {
@@ -121,12 +122,13 @@ class PdkProduct extends Model
             return $settings;
         }
 
+        /** @var \MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface $triStateService */
         $triStateService = Pdk::get(TriStateServiceInterface::class);
 
         foreach ($settings->getAttributes() as $key => $value) {
             $coerced = $triStateService->coerce($settings->getAttribute($key));
 
-            if ($coerced === '-1') {
+            if ((string) TriStateService::INHERIT === $coerced) {
                 $coerced = (int) $coerced;
             }
 

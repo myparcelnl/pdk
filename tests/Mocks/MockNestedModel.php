@@ -9,12 +9,12 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class MockNestedModel extends Model
 {
     public    $attributes = [
-        'my_value' => null,
-        'myModel'  => null,
+        'myValue' => null,
+        'myModel' => null,
     ];
 
     protected $casts      = [
-        'my_value' => 'string',
-        'myModel'  => MockNestedModel::class,
+        'myValue' => 'string',
+        'myModel' => MockNestedModel::class,
     ];
 }
