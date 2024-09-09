@@ -9,8 +9,9 @@ use MyParcelNL\Pdk\Base\Concern\HasAttributes;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
+use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Str;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Sdk\src\Support\Str;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -29,6 +30,8 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     protected static $traitInitializers;
 
+    protected        $lazy = [];
+
     /**
      * @var bool
      */
@@ -41,14 +44,29 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     {
         $this->bootIfNotBooted();
 
-        $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
-        $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
+        $this->attributes = $this->guarded + $this->attributes;
 
         $this->initializeTraits();
 
-        $convertedData = Utils::changeArrayKeysCase($data ?? []);
+        // filter out the items that are in $this->lazy
+        $attributes = Utils::changeArrayKeysCase($data ?? []) + $this->attributes;
 
-        $this->fill($convertedData + $this->attributes);
+        $filteredAttributes = count($this->lazy)
+            ? Arr::where($attributes, function ($value, $key) {
+                return $value !== null || ! $this->isLazy($key);
+            }) : $attributes;
+
+        $this->fill($filteredAttributes);
+    }
+
+    /**
+     * @param  string $key
+     *
+     * @return bool
+     */
+    private function isLazy(string $key): bool
+    {
+        return in_array($key, $this->lazy, true);
     }
 
     public static function isBooted(): bool
@@ -225,7 +243,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function offsetUnset($offset): void
     {
-        unset($this->attributes[(Utils::changeCase($offset))]);
+        unset($this->attributes[(Str::changeCase($offset))]);
     }
 
     /**
@@ -313,7 +331,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
         $normalizedAttributes = [];
 
         foreach ($attributes as $initialKey => $value) {
-            $caseKey = Utils::changeCase($initialKey);
+            $caseKey = Str::changeCase($initialKey);
             $key     = $this->convertDeprecatedKey($caseKey);
 
             if (array_key_exists($key, $normalizedAttributes)) {

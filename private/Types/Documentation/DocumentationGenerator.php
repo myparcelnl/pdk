@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Console\Types\Shared\AbstractHelperGenerator;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 use ReflectionClass;
 
 final class DocumentationGenerator extends AbstractHelperGenerator
