@@ -55,3 +55,18 @@ it('gets strings with custom header', function () {
         'headerDeliveryOptions' => 'Joepie',
     ]);
 });
+
+it('can add custom properties to settings', function () {
+    factory(CheckoutSettings::class)->store();
+
+    $context           = new CheckoutContext();
+    $context->settings = array_merge($context->settings, [
+        'test' => 1,
+    ]);
+
+    $array = $context->toArray();
+
+    expect($array['settings'])->toHaveKeysAndValues([
+        'test' => 1,
+    ]);
+});

@@ -77,7 +77,9 @@ class CheckoutContext extends Model
      */
     private function getSettings(): array
     {
-        return [
+        $settings = $this->getAttributeValue('settings');
+
+        return array_merge($settings, [
             /** General */
             'actions'                            => $this->getActions(),
 
@@ -99,7 +101,7 @@ class CheckoutContext extends Model
             'carriersWithTaxFields'              => AccountSettings::hasTaxFields()
                 ? Pdk::get('carriersWithTaxFields')
                 : [],
-        ];
+        ]);
     }
 
     /**
