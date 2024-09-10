@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.1](https://github.com/myparcelnl/pdk/compare/v2.43.0...v2.43.1) (2024-09-10)
+
+
+### :bug: Bug Fixes
+
+* **checkout:** allow adding properties to checkout context settings ([#300](https://github.com/myparcelnl/pdk/issues/300)) ([3158959](https://github.com/myparcelnl/pdk/commit/3158959125492fb2485d35043e2c714152834d8b))
+
 ## [2.43.0](https://github.com/myparcelnl/pdk/compare/v2.42.3...v2.43.0) (2024-09-04)
 
 
