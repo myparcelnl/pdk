@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Base\Model;
 
 use ArrayAccess;
 use MyParcelNL\Pdk\Base\Concern\HasAttributes;
+use MyParcelNL\Pdk\Base\Concern\OffsetGetByPhpVersion;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
@@ -17,6 +18,7 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 class Model implements StorableArrayable, ArrayAccess, ModelInterface
 {
+    use OffsetGetByPhpVersion;
     use HasAttributes;
 
     /**
@@ -189,18 +191,6 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     public function offsetExists($offset): bool
     {
         return null !== $this->getAttribute($offset);
-    }
-
-    /**
-     * Get the value for a given offset.
-     *
-     * @param  mixed $offset
-     *
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return $this->getAttribute($offset);
     }
 
     /**
