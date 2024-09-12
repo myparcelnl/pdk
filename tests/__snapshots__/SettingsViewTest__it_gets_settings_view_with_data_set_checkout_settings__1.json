@@ -59,11 +59,31 @@
       "description": "settings_checkout_delivery_options_position_description"
     },
     {
+      "name": "toggleCustomPackageType",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "enableDeliveryOptions"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "ToggleInput",
+      "label": "settings_checkout_toggle_custom_package_type",
+      "description": "settings_checkout_toggle_custom_package_type_description"
+    },
+    {
       "name": "allowedShippingMethods",
       "$builders": [
         {
           "$visibleWhen": {
             "$if": [
+              {
+                "$target": "toggleCustomPackageType"
+              },
               {
                 "$target": "enableDeliveryOptions"
               }
@@ -85,6 +105,38 @@
       ],
       "label": "settings_checkout_allowed_shipping_methods",
       "description": "settings_checkout_allowed_shipping_methods_description"
+    },
+    {
+      "name": "AllowedShippingMethodsSimple",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "toggleCustomPackageType",
+                "$eq": false
+              },
+              {
+                "$target": "enableDeliveryOptions"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "MultiSelectInput",
+      "options": [
+        {
+          "value": "shipping:1",
+          "plainLabel": "Shipping 1"
+        },
+        {
+          "value": "shipping:3",
+          "plainLabel": "Shipping 3",
+          "description": "My description"
+        }
+      ],
+      "label": "settings_checkout__allowed_shipping_methods_simple",
+      "description": "settings_checkout__allowed_shipping_methods_simple_description"
     },
     {
       "name": "priceType",

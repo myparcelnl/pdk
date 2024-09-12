@@ -38,14 +38,17 @@ class CheckoutSettings extends AbstractSettingsModel
     public const PICKUP_LOCATIONS_VIEW_LIST = 'list';
     public const PICKUP_LOCATIONS_VIEW_MAP  = 'map';
     /** Price types */
-    public const DEFAULT_PRICE_TYPE  = self::PRICE_TYPE_INCLUDED;
-    public const PRICE_TYPE_EXCLUDED = 'excluded';
-    public const PRICE_TYPE_INCLUDED = 'included';
+    public const DEFAULT_PRICE_TYPE              = self::PRICE_TYPE_INCLUDED;
+    public const PRICE_TYPE_EXCLUDED             = 'excluded';
+    public const PRICE_TYPE_INCLUDED             = 'included';
+    public const TOGGLE_CUSTOM_PACKAGE_TYPE      = 'toggleCustomPackageType';
+    public const ALLOWED_SHIPPING_METHODS_SIMPLE = 'AllowedShippingMethodsSimple';
 
     protected $attributes = [
         'id' => self::ID,
 
         self::ALLOWED_SHIPPING_METHODS                  => [],
+        self::ALLOWED_SHIPPING_METHODS_SIMPLE           => [],
         self::DELIVERY_OPTIONS_CUSTOM_CSS               => null,
         self::DELIVERY_OPTIONS_HEADER                   => null,
         self::DELIVERY_OPTIONS_POSITION                 => null,
@@ -54,10 +57,12 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS                   => true,
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
+        self::TOGGLE_CUSTOM_PACKAGE_TYPE                => false,
     ];
 
     protected $casts      = [
         self::ALLOWED_SHIPPING_METHODS                  => Collection::class,
+        self::ALLOWED_SHIPPING_METHODS_SIMPLE           => Collection::class,
         self::DELIVERY_OPTIONS_CUSTOM_CSS               => 'string',
         self::DELIVERY_OPTIONS_HEADER                   => 'string',
         self::DELIVERY_OPTIONS_POSITION                 => 'string',
@@ -66,5 +71,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS                   => 'bool',
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => 'bool',
         self::USE_SEPARATE_ADDRESS_FIELDS               => 'bool',
+        self::TOGGLE_CUSTOM_PACKAGE_TYPE                => 'bool',
     ];
 }

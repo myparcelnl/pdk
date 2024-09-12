@@ -399,10 +399,12 @@
       "checkout": {
         "id": "checkout",
         "allowedShippingMethods": [],
+        "allowedShippingMethodsSimple": [],
         "priceType": "included",
         "enableDeliveryOptions": true,
         "enableDeliveryOptionsWhenNotInStock": true,
-        "useSeparateAddressFields": false
+        "useSeparateAddressFields": false,
+        "toggleCustomPackageType": false
       },
       "carrier": {
         "postnl": {

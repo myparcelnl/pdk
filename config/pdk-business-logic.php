@@ -22,7 +22,6 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalcul
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\factory;
 use function DI\value;
 
@@ -99,13 +98,12 @@ return [
         ['min' => 350, 'max' => 2000, 'average' => 1175],
     ]),
 
+    //todo: kijken of hier iets mee moet gebeuren
     /**
      * - Off: The shipping method does not get delivery options. Default behavior and thus not saved in the model.
-     * - Inherit: The shipping method gets delivery options and package type is calculated dynamically (using product settings, for example).
      * - [PackageTypeName]: The shipping method gets delivery options and the package type is fixed.
      */
     'allowedShippingMethodsKeys' => value([
-        TriStateService::INHERIT,
         DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
         DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,

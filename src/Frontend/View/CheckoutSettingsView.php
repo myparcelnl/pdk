@@ -36,6 +36,7 @@ class CheckoutSettingsView extends AbstractSettingsView
      */
     protected function createElements(): ?array
     {
+        $this->getShippingMethodOptions();
         return [
             new InteractiveElement(CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS, Components::INPUT_TOGGLE),
             new SettingsDivider($this->getSettingKey('delivery_options')),
@@ -61,9 +62,28 @@ class CheckoutSettingsView extends AbstractSettingsView
                     ]
                 ),
                 new InteractiveElement(
-                    CheckoutSettings::ALLOWED_SHIPPING_METHODS,
-                    Components::INPUT_SHIPPING_METHODS,
-                    ['options' => $this->getShippingMethodOptions()]
+                    CheckoutSettings::TOGGLE_CUSTOM_PACKAGE_TYPE,
+                    Components::INPUT_TOGGLE
+                ),
+                $this->withOperation(
+                    function (FormOperationBuilder $builder) {
+                        $builder->visibleWhen(CheckoutSettings::TOGGLE_CUSTOM_PACKAGE_TYPE);
+                    },
+                    new InteractiveElement(
+                        CheckoutSettings::ALLOWED_SHIPPING_METHODS,
+                        Components::INPUT_SHIPPING_METHODS,
+                        ['options' => $this->getShippingMethodOptions()]
+                    )
+                ),
+                $this->withOperation(
+                    function (FormOperationBuilder $builder) {
+                        $builder->visibleWhen(CheckoutSettings::TOGGLE_CUSTOM_PACKAGE_TYPE, false);
+                    },
+                    new InteractiveElement(
+                        CheckoutSettings::ALLOWED_SHIPPING_METHODS_SIMPLE,
+                        Components::INPUT_MULTI_SELECT,
+                        ['options' => $this->getShippingMethodOptions()]
+                    )
                 ),
                 new InteractiveElement(
                     CheckoutSettings::PRICE_TYPE,
