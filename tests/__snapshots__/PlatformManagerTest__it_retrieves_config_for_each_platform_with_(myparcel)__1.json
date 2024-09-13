@@ -164,8 +164,7 @@
         "shipmentOptions": {
           "ageCheck": false,
           "onlyRecipient": false,
-          "return": false,
-          "insurance": [52000]
+          "return": false
         },
         "features": {
           "labelDescriptionLength": 45,
