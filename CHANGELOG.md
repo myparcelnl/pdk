@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.2](https://github.com/myparcelnl/pdk/compare/v2.43.1...v2.43.2) (2024-09-13)
+
+
+### :bug: Bug Fixes
+
+* dpd shipment default insurance ([#304](https://github.com/myparcelnl/pdk/issues/304)) ([ac2ac72](https://github.com/myparcelnl/pdk/commit/ac2ac72eb3ac34bd03d8286ae732b3fccbee02ac))
+
 ## [2.43.1](https://github.com/myparcelnl/pdk/compare/v2.43.0...v2.43.1) (2024-09-10)
 
 
