@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignore Generic.Files.OneTraitPerFile, Generic.Files.OneObjectStructurePerFile
 
 declare(strict_types=1);
 
