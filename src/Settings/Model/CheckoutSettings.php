@@ -41,7 +41,7 @@ class CheckoutSettings extends AbstractSettingsModel
     public const DEFAULT_PRICE_TYPE              = self::PRICE_TYPE_INCLUDED;
     public const PRICE_TYPE_EXCLUDED             = 'excluded';
     public const PRICE_TYPE_INCLUDED             = 'included';
-    public const TOGGLE_CUSTOM_PACKAGE_TYPE      = 'toggleCustomPackageType';
+    public const ENABLE_CUSTOM_PACKAGE_TYPE      = 'enableCustomPackageType';
     public const ALLOWED_SHIPPING_METHODS_SIMPLE = 'AllowedShippingMethodsSimple';
 
     protected $attributes = [
@@ -57,7 +57,7 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS                   => true,
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
-        self::TOGGLE_CUSTOM_PACKAGE_TYPE                => false,
+        self::ENABLE_CUSTOM_PACKAGE_TYPE                => false,
     ];
 
     protected $casts      = [
@@ -71,6 +71,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS                   => 'bool',
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => 'bool',
         self::USE_SEPARATE_ADDRESS_FIELDS               => 'bool',
-        self::TOGGLE_CUSTOM_PACKAGE_TYPE                => 'bool',
+        self::ENABLE_CUSTOM_PACKAGE_TYPE                => 'bool',
     ];
 }

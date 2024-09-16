@@ -1547,7 +1547,7 @@
           "description": "settings_checkout_delivery_options_position_description"
         },
         {
-          "name": "toggleCustomPackageType",
+          "name": "enableCustomPackageType",
           "$builders": [
             {
               "$visibleWhen": {
@@ -1560,8 +1560,8 @@
             }
           ],
           "$component": "ToggleInput",
-          "label": "settings_checkout_toggle_custom_package_type",
-          "description": "settings_checkout_toggle_custom_package_type_description"
+          "label": "settings_checkout_enable_custom_package_type",
+          "description": "settings_checkout_enable_custom_package_type_description"
         },
         {
           "name": "allowedShippingMethods",
@@ -1570,7 +1570,7 @@
               "$visibleWhen": {
                 "$if": [
                   {
-                    "$target": "toggleCustomPackageType"
+                    "$target": "enableCustomPackageType"
                   },
                   {
                     "$target": "enableDeliveryOptions"
@@ -1601,7 +1601,7 @@
               "$visibleWhen": {
                 "$if": [
                   {
-                    "$target": "toggleCustomPackageType",
+                    "$target": "enableCustomPackageType",
                     "$eq": false
                   },
                   {

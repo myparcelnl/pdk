@@ -62,12 +62,12 @@ class CheckoutSettingsView extends AbstractSettingsView
                     ]
                 ),
                 new InteractiveElement(
-                    CheckoutSettings::TOGGLE_CUSTOM_PACKAGE_TYPE,
+                    CheckoutSettings::ENABLE_CUSTOM_PACKAGE_TYPE,
                     Components::INPUT_TOGGLE
                 ),
                 $this->withOperation(
                     function (FormOperationBuilder $builder) {
-                        $builder->visibleWhen(CheckoutSettings::TOGGLE_CUSTOM_PACKAGE_TYPE);
+                        $builder->visibleWhen(CheckoutSettings::ENABLE_CUSTOM_PACKAGE_TYPE);
                     },
                     new InteractiveElement(
                         CheckoutSettings::ALLOWED_SHIPPING_METHODS,
@@ -77,7 +77,7 @@ class CheckoutSettingsView extends AbstractSettingsView
                 ),
                 $this->withOperation(
                     function (FormOperationBuilder $builder) {
-                        $builder->visibleWhen(CheckoutSettings::TOGGLE_CUSTOM_PACKAGE_TYPE, false);
+                        $builder->visibleWhen(CheckoutSettings::ENABLE_CUSTOM_PACKAGE_TYPE, false);
                     },
                     new InteractiveElement(
                         CheckoutSettings::ALLOWED_SHIPPING_METHODS_SIMPLE,

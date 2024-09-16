@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalcul
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\factory;
 use function DI\value;
 
@@ -109,5 +110,9 @@ return [
         DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
         DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
         DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+    ]),
+
+    'allowedShippingMethodsSimpleKeys' => value([
+        TriStateService::INHERIT,
     ]),
 ];
