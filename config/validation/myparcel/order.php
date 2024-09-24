@@ -84,6 +84,17 @@ return [
                             ],
                         ],
                         [
+                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                            'deliveryType' => [
+                                [
+                                    'id'     => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                                    'name'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                                    'schema' => 'order/postnl/be_package_small_pickup',
+                                ],
+                            ],
+                        ],
+                        [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
                             'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                             'schema' => 'order/postnl/mailbox',
