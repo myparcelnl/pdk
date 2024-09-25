@@ -24,7 +24,6 @@ use MyParcelNL\Pdk\Facade\Platform;
  * @property null|string              $type
  * @property null|CarrierCapabilities $capabilities
  * @property null|CarrierCapabilities $returnCapabilities
- * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
  */
 class Carrier extends Model
 {
@@ -102,13 +101,6 @@ class Carrier extends Model
         'type'               => 'string',
         'capabilities'       => CarrierCapabilities::class,
         'returnCapabilities' => CarrierCapabilities::class,
-    ];
-
-    /**
-     * @todo remove in v3.0.0
-     */
-    protected $deprecated = [
-        'subscriptionId' => 'contractId',
     ];
 
     /**

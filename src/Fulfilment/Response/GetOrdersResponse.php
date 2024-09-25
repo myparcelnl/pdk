@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
+use MyParcelNL\Pdk\Api\Concern\DecodesAddressFields;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 
 class GetOrdersResponse extends ApiResponseWithBody
 {
+    use DecodesAddressFields;
+
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
      */
@@ -43,7 +48,7 @@ class GetOrdersResponse extends ApiResponseWithBody
     private function createOrders(array $orders): void
     {
         $this->orders = new OrderCollection(
-            array_map(static function (array $order) {
+            array_map(function (array $order) {
                 return [
                     'uuid'                        => $order['uuid'],
                     'shopId'                      => $order['shop_id'],
@@ -57,13 +62,31 @@ class GetOrdersResponse extends ApiResponseWithBody
                     'price'                       => $order['price'],
                     'vat'                         => $order['vat'],
                     'priceAfterVat'               => $order['price_after_vat'],
-                    'invoiceAddress'              => $order['invoice_address'],
+                    'invoiceAddress'              => $this->decodeAddress($order['invoice_address']),
                     'lines'                       => $order['order_lines'] ?? [],
-                    'shipment'                    => $order['shipment'] ?? [],
+                    'shipment'                    => $this->decodeShipment($order['shipment'] ?? []),
                     'createdAt'                   => $order['created_at'],
                     'updatedAt'                   => $order['updated_at'],
                 ];
             }, $orders)
         );
+    }
+
+    /**
+     * @param  array $shipment
+     *
+     * @return array
+     */
+    private function decodeShipment(array $shipment): array
+    {
+        $data = Utils::changeArrayKeysCase($this->filter($shipment) ?? [], Arrayable::RECURSIVE);
+
+        $additionalData = [
+            'options'   => $data['options'] ?? [],
+            'recipient' => $this->decodeAddress($data['recipient']),
+            'sender'    => $this->decodeAddress($data['sender']),
+        ];
+
+        return array_replace($data, $additionalData);
     }
 }

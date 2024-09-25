@@ -20,7 +20,6 @@ use MyParcelNL\Sdk\src\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
-use function array_map;
 
 final class PhpSourceParser
 {

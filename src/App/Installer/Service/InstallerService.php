@@ -179,19 +179,9 @@ class InstallerService implements InstallerServiceInterface
 
     /**
      * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\App\Installer\Contract\InstallationMigrationInterface>
-     * @todo v3.0.0 remove legacy support
      */
     private function getInstallationMigrations(): Collection
     {
-        if (! method_exists($this->migrationService, 'getInstallationMigrations')) {
-            Logger::deprecated(
-                sprintf('Method "%s::all()"', MigrationServiceInterface::class),
-                'getUpgradeMigrations and getInstallationMigrations'
-            );
-
-            return new Collection();
-        }
-
         return $this->createMigrationCollection($this->migrationService->getInstallationMigrations());
     }
 
@@ -199,23 +189,10 @@ class InstallerService implements InstallerServiceInterface
      * @param  null|string $version
      *
      * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\App\Installer\Contract\UpgradeMigrationInterface>
-     * @todo v3.0.0 remove legacy support
      */
     private function getUpgradeMigrations(?string $version = null): Collection
     {
-        $useLegacy = ! method_exists($this->migrationService, 'getUpgradeMigrations');
-
-        if ($useLegacy) {
-            Logger::deprecated(
-                sprintf('Method "%s::all()"', MigrationServiceInterface::class),
-                'getUpgradeMigrations and getInstallationMigrations'
-            );
-        }
-
-        $migrations = $useLegacy
-            ? $this->migrationService->all()
-            : $this->migrationService->getUpgradeMigrations();
-
+        $migrations = $this->migrationService->getUpgradeMigrations();
         $collection = $this->createMigrationCollection($migrations);
 
         if (! $version) {

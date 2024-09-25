@@ -26,5 +26,10 @@
   "4.pointer": "",
   "4.message": "Failed to match all schemas",
   "4.constraint": "allOf",
-  "4.context": 1
+  "4.context": 1,
+  "5.property": "shippingAddress.cc",
+  "5.pointer": "/shippingAddress/cc",
+  "5.message": "The property cc is required",
+  "5.constraint": "required",
+  "5.context": 1
 }

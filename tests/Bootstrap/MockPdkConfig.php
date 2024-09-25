@@ -33,12 +33,12 @@ use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
-use Psr\Log\LoggerInterface;
 use function DI\factory;
 use function DI\get;
 use function DI\value;
@@ -88,16 +88,13 @@ class MockPdkConfig
             FrontendEndpointServiceInterface::class     => get(MockFrontendEndpointService::class),
             InstallerServiceInterface::class            => get(MockInstallerService::class),
             LanguageServiceInterface::class             => get(MockLanguageService::class),
-            /**
-             * @todo v3.0.0 use PdkLoggerInterface. Leave it for now to test backwards compatibility. :)
-             */
-            LoggerInterface::class                      => get(MockLogger::class),
             MigrationServiceInterface::class            => get(MockMigrationService::class),
             OrderStatusServiceInterface::class          => get(MockOrderStatusService::class),
             PdkAccountRepositoryInterface::class        => get(MockPdkAccountRepository::class),
             PdkActionsServiceInterface::class           => get(MockPdkActionsService::class),
             PdkCartRepositoryInterface::class           => get(MockPdkCartRepository::class),
             PdkInterface::class                         => get(MockPdk::class),
+            PdkLoggerInterface::class                   => get(MockLogger::class),
             PdkOrderNoteRepositoryInterface::class      => get(MockPdkOrderNoteRepository::class),
             PdkOrderRepositoryInterface::class          => get(MockPdkOrderRepository::class),
             PdkProductRepositoryInterface::class        => get(MockPdkProductRepository::class),

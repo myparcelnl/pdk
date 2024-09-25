@@ -30,12 +30,12 @@ use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApiExceptionAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\get;
 use function DI\value;
@@ -121,7 +121,7 @@ it('returns and logs error response when error is thrown', function () {
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
+    $logger = Pdk::get(PdkLoggerInterface::class);
 
     $response = $endpoint->call('nonexistent', PdkEndpoint::CONTEXT_BACKEND);
 

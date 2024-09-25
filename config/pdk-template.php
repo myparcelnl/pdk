@@ -17,9 +17,7 @@ use MyParcelNL\Pdk\Frontend\Contract\ViewServiceInterface;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
-use Psr\Log\LoggerInterface;
 use function DI\autowire;
-use function DI\get;
 use function DI\value;
 
 /**
@@ -137,18 +135,9 @@ return [
     /**
      * Handles logging.
      *
-     * @see        \MyParcelNL\Pdk\Logger\AbstractLogger
-     * @deprecated Will be removed in v3.0.0. Use PdkLoggerInterface instead.
+     * @see \MyParcelNL\Pdk\Logger\AbstractLogger
      */
-
-    LoggerInterface::class    => autowire(),
-
-    /**
-     * Handles logging.
-     *
-     * @see        \MyParcelNL\Pdk\Logger\AbstractLogger
-     */
-    PdkLoggerInterface::class => get(LoggerInterface::class),
+    PdkLoggerInterface::class       => autowire(),
 
     /**
      * Exposes frontend api url and endpoints.

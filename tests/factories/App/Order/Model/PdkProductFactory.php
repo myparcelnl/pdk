@@ -35,9 +35,49 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class PdkProductFactory extends AbstractModelFactory
 {
+    use UsesCurrency;
+
     public function getModel(): string
     {
         return PdkProduct::class;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withAllFields(): self
+    {
+        $id = $this->getNextId('product');
+
+        return $this
+            ->withExternalIdentifier("product-$id")
+            ->withSku("sku-$id")
+            ->withEan("ean-$id")
+            ->withName("product-name ($id)");
+    }
+
+    /**
+     * @return $this
+     */
+    public function withEverything(): self
+    {
+        return $this
+            ->withAllFields()
+            ->withPhysicalProperties()
+            ->withSettingsWithAllOptions()
+            ->withPrice(1000);
+    }
+
+    /**
+     * @return $this
+     */
+    public function withPhysicalProperties(): self
+    {
+        return $this
+            ->withHeight(10)
+            ->withLength(10)
+            ->withWeight(10)
+            ->withWidth(10);
     }
 
     /**
@@ -47,11 +87,7 @@ final class PdkProductFactory extends AbstractModelFactory
      */
     public function withPrice($price): self
     {
-        if (is_numeric($price)) {
-            $price = factory(Currency::class)->withAmount($price);
-        }
-
-        return $this->with(['price' => $price]);
+        return $this->withCurrencyField('price', $price);
     }
 
     /**
