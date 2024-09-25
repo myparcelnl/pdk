@@ -6,7 +6,7 @@
   "accountId": 123456,
   "dropOffPoint": null,
   "invoiceAddress": {
-    "address1": null,
+    "address1": "Antareslaan 31",
     "address2": null,
     "area": null,
     "cc": "NL",

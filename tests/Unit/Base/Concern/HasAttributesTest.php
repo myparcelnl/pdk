@@ -9,6 +9,7 @@ use DateTime;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Tests\Mocks\ClassWithGuardedAttributes;
 use MyParcelNL\Pdk\Tests\Mocks\InvalidCastingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastingModel;
@@ -16,8 +17,6 @@ use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockMutateModel;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use Psr\Log\LoggerInterface;
-use function expect;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('model');
@@ -107,7 +106,7 @@ it('can use casted properties', function () {
 
 it('returns null and logs error on invalid cast', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
+    $logger = Pdk::get(PdkLoggerInterface::class);
     $value  = new DateTime();
 
     $model = new InvalidCastingModel(['value' => $value]);

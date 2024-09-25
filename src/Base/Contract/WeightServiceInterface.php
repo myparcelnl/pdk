@@ -8,40 +8,10 @@ use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 interface WeightServiceInterface
 {
-    /**
-     * @deprecated use Pdk::get('digitalStampRanges'). Will be removed in v3.0.0
-     */
-    public const DIGITAL_STAMP_RANGES = [
-        [
-            'min'     => 0,
-            'max'     => 20,
-            'average' => 15,
-        ],
-        [
-            'min'     => 20,
-            'max'     => 50,
-            'average' => 35,
-        ],
-        [
-            'min'     => 50,
-            'max'     => 100,
-            'average' => 75,
-        ],
-        [
-            'min'     => 100,
-            'max'     => 350,
-            'average' => 225,
-        ],
-        [
-            'min'     => 350,
-            'max'     => 2000,
-            'average' => 1175,
-        ],
-    ];
-    public const UNIT_GRAMS           = 'g';
-    public const UNIT_KILOGRAMS       = 'kg';
-    public const UNIT_OUNCES          = 'oz';
-    public const UNIT_POUNDS          = 'lbs';
+    public const UNIT_GRAMS     = 'g';
+    public const UNIT_KILOGRAMS = 'kg';
+    public const UNIT_OUNCES    = 'oz';
+    public const UNIT_POUNDS    = 'lbs';
 
     /**
      * @param  int                                        $weight

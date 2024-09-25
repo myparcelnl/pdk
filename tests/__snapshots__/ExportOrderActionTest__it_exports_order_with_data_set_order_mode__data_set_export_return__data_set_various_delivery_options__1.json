@@ -16,8 +16,8 @@
         "order_lines": [
           {
             "quantity": 5,
-            "price": 0,
-            "price_after_vat": 0,
+            "price": 1000,
+            "price_after_vat": 1000,
             "product": {
               "sku": "test",
               "external_identifier": "PDK-2",
@@ -79,8 +79,8 @@
         "order_lines": [
           {
             "quantity": 1,
-            "price": 0,
-            "price_after_vat": 0,
+            "price": 1000,
+            "price_after_vat": 1000,
             "product": {
               "sku": "test",
               "external_identifier": "PDK-3",
@@ -143,8 +143,8 @@
         "order_lines": [
           {
             "quantity": 1,
-            "price": 0,
-            "price_after_vat": 0,
+            "price": 1000,
+            "price_after_vat": 1000,
             "product": {
               "sku": "test",
               "external_identifier": "PDK-4",

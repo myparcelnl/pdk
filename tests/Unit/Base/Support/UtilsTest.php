@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
 use ReflectionMethod;
 use stdClass;
-use function expect;
 
 it('gets parents of class recursively', function () {
     expect(Utils::getClassParentsRecursive(new MockClassWithTrait()))

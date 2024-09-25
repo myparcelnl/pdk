@@ -70,6 +70,16 @@ class ApiResponse implements ApiResponseInterface
     }
 
     /**
+     * @param  null|array $item
+     *
+     * @return null|array
+     */
+    protected function filter(?array $item): ?array
+    {
+        return array_filter($item ?? []) ?: null;
+    }
+
+    /**
      * @return void
      */
     protected function parseErrors(): void

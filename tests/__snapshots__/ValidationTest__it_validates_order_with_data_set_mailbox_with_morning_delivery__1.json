@@ -1,9 +1,7 @@
 {
-  "0.property": "deliveryOptions.deliveryType",
-  "0.pointer": "/deliveryOptions/deliveryType",
-  "0.message": "Does not have a value in the enumeration [\"standard\",null]",
-  "0.constraint": "enum",
-  "0.context": 1,
-  "0.enum.0": "standard",
-  "0.enum.1": null
+  "0.property": "shippingAddress.cc",
+  "0.pointer": "/shippingAddress/cc",
+  "0.message": "The property cc is required",
+  "0.constraint": "required",
+  "0.context": 1
 }

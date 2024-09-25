@@ -41,8 +41,4 @@ class PdkShippingMethod extends Model
         'minimumDropOffDelay' => 'int',
         'shippingAddress'     => Address::class,
     ];
-
-    protected $deprecated = [
-        'allowPackageTypes' => 'allowedPackageTypes',
-    ];
 }

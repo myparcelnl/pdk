@@ -44,7 +44,7 @@ class OrderRepository extends ApiRepository
         /** @var \MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse $response */
         $response = $this->api->doRequest(new PostOrdersRequest($collection), PostOrdersResponse::class);
 
-        return $response->getOrderCollection();
+        return $response->getOrders();
     }
 
     /**

@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
@@ -18,7 +19,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -34,7 +34,7 @@ it('executes "update account" action', function (string $hook, string $expectedC
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
+    $logger = Pdk::get(PdkLoggerInterface::class);
 
     $repository->storeHashedUrl('https://example.com/hook/1234567890abcdef');
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
@@ -110,7 +110,7 @@ it('executes update subscription features action', function (string $hook, strin
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
     $cronService = Pdk::get(CronServiceInterface::class);
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
+    $logger = Pdk::get(PdkLoggerInterface::class);
 
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
 

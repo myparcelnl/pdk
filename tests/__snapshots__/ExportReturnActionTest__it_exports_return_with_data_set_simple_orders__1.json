@@ -202,9 +202,9 @@
         "lines": [
           {
             "quantity": 1,
-            "price": 0,
+            "price": 1000,
             "vat": 0,
-            "priceAfterVat": 0,
+            "priceAfterVat": 1000,
             "product": {
               "externalIdentifier": "PDK-1",
               "sku": "test",
@@ -263,12 +263,12 @@
         "shipmentPrice": 100,
         "shipmentPriceAfterVat": 121,
         "shipmentVat": 21,
-        "orderPrice": 0,
-        "orderPriceAfterVat": 0,
+        "orderPrice": 1000,
+        "orderPriceAfterVat": 1000,
         "orderVat": 0,
-        "totalPrice": 100,
+        "totalPrice": 1100,
         "totalVat": 21,
-        "totalPriceAfterVat": 121,
+        "totalPriceAfterVat": 1121,
         "audits": []
       },
       {
@@ -365,9 +365,9 @@
         "lines": [
           {
             "quantity": 1,
-            "price": 0,
+            "price": 1000,
             "vat": 0,
-            "priceAfterVat": 0,
+            "priceAfterVat": 1000,
             "product": {
               "externalIdentifier": "PDK-2",
               "sku": "test",
@@ -426,12 +426,12 @@
         "shipmentPrice": 100,
         "shipmentPriceAfterVat": 121,
         "shipmentVat": 21,
-        "orderPrice": 0,
-        "orderPriceAfterVat": 0,
+        "orderPrice": 1000,
+        "orderPriceAfterVat": 1000,
         "orderVat": 0,
-        "totalPrice": 100,
+        "totalPrice": 1100,
         "totalVat": 21,
-        "totalPriceAfterVat": 121,
+        "totalPriceAfterVat": 1121,
         "audits": []
       }
     ]

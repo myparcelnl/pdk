@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalPropertiesFactory;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
+use MyParcelNL\Pdk\App\Order\Model\UsesCurrency;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\ContactDetailsFactory;
 use MyParcelNL\Pdk\Base\Model\Currency;
@@ -54,6 +55,8 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class ShipmentFactory extends AbstractModelFactory
 {
+    use UsesCurrency;
+
     public function getModel(): string
     {
         return Shipment::class;
@@ -106,14 +109,10 @@ final class ShipmentFactory extends AbstractModelFactory
     /**
      * @param  int|array|Currency|CurrencyFactory $price
      *
-     * @return self
+     * @return $this
      */
     public function withPrice($price): self
     {
-        if (is_int($price)) {
-            $price = factory(Currency::class)->withAmount($price);
-        }
-
-        return $this->with(['price' => $price]);
+        return $this->withCurrencyField('price', $price);
     }
 }
