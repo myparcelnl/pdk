@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.3](https://github.com/myparcelnl/pdk/compare/v2.43.2...v2.43.3) (2024-09-25)
+
+
+### :bug: Bug Fixes
+
+* fix deprecation warning on arrayAccess::offsetGet ([#305](https://github.com/myparcelnl/pdk/issues/305)) ([82eb15b](https://github.com/myparcelnl/pdk/commit/82eb15bd1a854340db841736f00f787813beca74))
+
 ## [2.43.2](https://github.com/myparcelnl/pdk/compare/v2.43.1...v2.43.2) (2024-09-13)
 
 
