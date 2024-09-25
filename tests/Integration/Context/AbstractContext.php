@@ -18,12 +18,12 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
 use MyParcelNL\Pdk\Tests\Integration\Context\Concern\ResolvesModels;
 use MyParcelNL\Pdk\Tests\Integration\Context\Concern\ValidatesValues;
 use MyParcelNL\Pdk\Tests\Integration\Context\Contract\ContextInterface;
-use Psr\Log\LoggerInterface;
 
 abstract class AbstractContext extends TestCase implements ContextInterface
 {
@@ -110,7 +110,7 @@ abstract class AbstractContext extends TestCase implements ContextInterface
     protected static function withLogs(string $message): string
     {
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-        $logger   = Pdk::get(LoggerInterface::class);
+        $logger   = Pdk::get(PdkLoggerInterface::class);
         $logsJson = json_encode($logger->getLogs(), JSON_PRETTY_PRINT);
 
         return trim(sprintf('%s Logs: %s', $message, $logsJson));
