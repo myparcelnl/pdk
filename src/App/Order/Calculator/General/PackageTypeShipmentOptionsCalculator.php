@@ -23,13 +23,6 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             return;
         }
 
-        $tracked = TriStateService::DISABLED;
-        if (DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $deliveryOptions->packageType
-            && CountryCodes::CC_NL !== $this->order->shippingAddress->cc
-        ) {
-            $tracked = TriStateService::ENABLED;
-        }
-
         $this->order->deliveryOptions->shipmentOptions->fill([
             ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
             ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
@@ -38,7 +31,20 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
-            ShipmentOptions::TRACKED           => $tracked,
+            ShipmentOptions::TRACKED           => $this->calculateTracked(),
         ]);
+    }
+
+    /**
+     * @return int
+     */
+    private function calculateTracked(): int
+    {
+        $isPackageSmall = DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $this->order->deliveryOptions->packageType;
+        $isNotNl        = CountryCodes::CC_NL !== $this->order->shippingAddress->cc;
+
+        return $isPackageSmall && $isNotNl ?
+            TriStateService::ENABLED
+            : TriStateService::DISABLED;
     }
 }
