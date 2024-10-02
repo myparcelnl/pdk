@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Base\Service;
 use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
 use RuntimeException;
 use ZipArchive;
-use function basename;
 
 class ZipService implements ZipServiceInterface
 {
