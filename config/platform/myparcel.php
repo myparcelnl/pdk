@@ -12,6 +12,7 @@ return [
     'name'             => 'myparcel',
     'human'            => 'MyParcel',
     'backofficeUrl'    => 'https://backoffice.myparcel.nl',
+    'supportUrl'       => 'https://developer.myparcel.nl/contact',
     'localCountry'     => CountryCodes::CC_NL,
     'defaultCarrier'   => Carrier::CARRIER_POSTNL_NAME,
     'defaultCarrierId' => Carrier::CARRIER_POSTNL_ID,

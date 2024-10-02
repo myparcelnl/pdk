@@ -12,6 +12,7 @@ return [
     'name'             => 'flespakket',
     'human'            => 'Flespakket',
     'backofficeUrl'    => 'https://backoffice.flespakket.nl',
+    'supportUrl'       => 'https://developer.myparcel.nl/contact',
     'localCountry'     => CountryCodes::CC_NL,
     'defaultCarrier'   => Carrier::CARRIER_POSTNL_NAME,
     'defaultCarrierId' => Carrier::CARRIER_POSTNL_ID,

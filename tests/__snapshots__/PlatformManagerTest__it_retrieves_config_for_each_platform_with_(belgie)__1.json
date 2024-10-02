@@ -2,6 +2,7 @@
   "name": "belgie",
   "human": "SendMyParcel",
   "backofficeUrl": "https://backoffice.sendmyparcel.be",
+  "supportUrl": "https://developer.myparcel.nl/contact",
   "localCountry": "BE",
   "defaultCarrier": "bpost",
   "defaultCarrierId": 2,

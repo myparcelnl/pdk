@@ -79,6 +79,7 @@ class GlobalContext extends Model
                 'name',
                 'human',
                 'backofficeUrl',
+                'supportUrl',
                 'localCountry',
                 'defaultCarrier',
                 'defaultCarrierId',
