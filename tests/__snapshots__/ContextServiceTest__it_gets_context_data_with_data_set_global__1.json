@@ -182,11 +182,11 @@
         "path": "",
         "property": "webhooks"
       },
-      "debugDownloadLogs": {
+      "downloadLogs": {
         "headers": [],
         "method": "GET",
         "parameters": {
-          "action": "debugDownloadLogs"
+          "action": "downloadLogs"
         },
         "path": ""
       },

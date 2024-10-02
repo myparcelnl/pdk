@@ -34,7 +34,7 @@ test('it downloads logs', function () {
     Logger::debug('debug message 2');
     Logger::debug('debug message 3');
 
-    $request = new Request(['action' => PdkBackendActions::DEBUG_DOWNLOAD_LOGS]);
+    $request = new Request(['action' => PdkBackendActions::DOWNLOAD_LOGS]);
 
     /** @var \Symfony\Component\HttpFoundation\BinaryFileResponse $response */
     $response = Actions::execute($request);

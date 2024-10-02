@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class DebugDownloadLogsAction implements ActionInterface
+class DownloadLogsAction implements ActionInterface
 {
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\ZipServiceInterface
