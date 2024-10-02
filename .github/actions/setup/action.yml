@@ -22,10 +22,10 @@ runs:
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
-    - uses: myparcelnl/actions/build-docker-image@v4
+    - uses: myparcelnl/actions/build-docker-image-reg@v4
       with:
         image: 'ghcr.io/myparcelnl/pdk:${{ inputs.php-version }}'
-        key: ${{ github.repository }}-${{ hashFiles('Dockerfile') }}
+        registry-password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: 'Prepare environment'
       shell: bash
