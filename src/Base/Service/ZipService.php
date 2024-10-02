@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
-use RuntimeException;
+use MyParcelNL\Pdk\Base\Exception\ZipException;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use ZipArchive;
 
 class ZipService implements ZipServiceInterface
@@ -16,19 +17,33 @@ class ZipService implements ZipServiceInterface
     private $currentFile;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\FileSystemInterface
+     */
+    private $fileSystem;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem
+     */
+    public function __construct(FileSystemInterface $fileSystem)
+    {
+        $this->fileSystem = $fileSystem;
+    }
+
+    /**
      * @param  string      $filename
      * @param  null|string $targetFilename
      *
      * @return void
-     * @throws \RuntimeException
+     * @throws \MyParcelNL\Pdk\Base\Exception\ZipException
      */
     public function addFile(string $filename, ?string $targetFilename = null): void
     {
         $this->validateHasFile();
+
         $success = $this->currentFile->addFile($filename, $targetFilename ?? basename($filename));
 
         if (! $success) {
-            throw new RuntimeException('Failed to add file to zip');
+            throw new ZipException('Failed to add file to zip');
         }
     }
 
@@ -37,6 +52,7 @@ class ZipService implements ZipServiceInterface
      * @param  string $targetFilename
      *
      * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\ZipException
      */
     public function addFromString(string $string, string $targetFilename): void
     {
@@ -46,30 +62,45 @@ class ZipService implements ZipServiceInterface
 
     /**
      * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\ZipException
      */
     public function close(): void
     {
         $this->validateHasFile();
-        $this->currentFile->close();
-        $this->currentFile = null;
+        $success = $this->currentFile->close();
+
+        if ($success) {
+            $this->currentFile = null;
+        } else {
+            throw new ZipException('Failed to close zip file');
+        }
     }
 
     /**
      * @param  string $filename
      *
      * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\ZipException
      */
     public function create(string $filename): void
     {
-        $zip = new ZipArchive();
+        $zip     = new ZipArchive();
+        $dirname = $this->fileSystem->dirname($filename);
 
-        $zip->open($filename, ZipArchive::CREATE);
+        $this->fileSystem->mkdir($dirname, true);
 
-        $this->currentFile = $zip;
+        $success = $zip->open($filename, ZipArchive::CREATE);
+
+        if ($success) {
+            $this->currentFile = $zip;
+        } else {
+            throw new ZipException('Failed to create zip file');
+        }
     }
 
     /**
      * @return void
+     * @throws \MyParcelNL\Pdk\Base\Exception\ZipException
      */
     private function validateHasFile(): void
     {
@@ -77,6 +108,6 @@ class ZipService implements ZipServiceInterface
             return;
         }
 
-        throw new RuntimeException('No zip file is open');
+        throw new ZipException('No zip file is open');
     }
 }
