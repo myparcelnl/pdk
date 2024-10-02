@@ -6,6 +6,4 @@ namespace MyParcelNL\Pdk\App\Request\Debug;
 
 use MyParcelNL\Pdk\App\Request\AbstractEndpointRequest;
 
-class DebugDownloadLogsEndpointRequest extends AbstractEndpointRequest
-{
-}
+class DownloadLogsEndpointRequest extends AbstractEndpointRequest { }
