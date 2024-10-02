@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,10 +40,10 @@ class DownloadLogsAction implements ActionInterface
 
         $this->createLogsZip($path);
 
-        $response = new BinaryFileResponse($path);
-
+        $response    = new BinaryFileResponse($path);
         $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, basename($path));
 
+        $response->headers->set('Content-Type', 'application/zip');
         $response->headers->set('Content-Disposition', $disposition);
         $response->deleteFileAfterSend();
 
@@ -57,6 +58,10 @@ class DownloadLogsAction implements ActionInterface
     protected function createLogsZip(string $path): void
     {
         $logFiles = Logger::getLogFiles();
+
+        if (empty($logFiles)) {
+            throw new RuntimeException('No log files found');
+        }
 
         $this->zipService->create($path);
 
@@ -75,7 +80,7 @@ class DownloadLogsAction implements ActionInterface
         $appInfo = Pdk::getAppInfo();
 
         $timestamp = date('Y-m-d_H-i-s');
-        $filename  = "{$timestamp}_{$appInfo->name}_logs.zip";
+        $filename  = "logs/{$timestamp}_{$appInfo->name}_logs.zip";
 
         return $appInfo->createPath($filename);
     }
