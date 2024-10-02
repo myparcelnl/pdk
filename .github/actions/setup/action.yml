@@ -6,10 +6,6 @@ inputs:
     description: 'PHP version'
     required: true
 
-  token:
-    description: 'Token'
-    required: true
-
 runs:
   using: composite
   steps:
@@ -26,9 +22,9 @@ runs:
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
-    - uses: myparcelnl/actions/build-docker-image-reg@v4
+    - uses: myparcelnl/actions/pull-docker-image@v4
       with:
-        registry-password: ${{ inputs.token }}
+        image: 'ghcr.io/myparcelnl/php-xd:${{ inputs.php-version }}-cli-alpine'
 
     - name: 'Prepare environment'
       shell: bash
