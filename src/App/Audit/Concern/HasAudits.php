@@ -43,7 +43,11 @@ trait HasAudits
      */
     protected function getAuditsAttribute(): AuditCollection
     {
-        return Audits::allByModel(static::class, $this->getAttribute($this->auditIdentifier));
+        $identifier = $this->getAttribute($this->auditIdentifier);
+
+        return $identifier
+            ? Audits::allByModel(static::class, $identifier)
+            : new AuditCollection();
     }
 
     /**

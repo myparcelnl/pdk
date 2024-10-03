@@ -1,5 +1,6 @@
 [
   {
+    "externalIdentifier": "postnl",
     "id": 1,
     "name": "postnl",
     "human": "PostNL",
@@ -44,6 +45,7 @@
     }
   },
   {
+    "externalIdentifier": "dpd",
     "id": 4,
     "name": "dpd",
     "human": "DPD",
@@ -67,6 +69,7 @@
     }
   },
   {
+    "externalIdentifier": "ups",
     "id": 8,
     "name": "ups",
     "human": "UPS",
@@ -89,6 +92,7 @@
     }
   },
   {
+    "externalIdentifier": "dhlforyou",
     "id": 9,
     "name": "dhlforyou",
     "human": "DHL For You",
@@ -133,6 +137,7 @@
     }
   },
   {
+    "externalIdentifier": "dhlparcelconnect",
     "id": 10,
     "name": "dhlparcelconnect",
     "human": "DHL Parcel Connect",
@@ -176,6 +181,7 @@
     }
   },
   {
+    "externalIdentifier": "dhleuroplus",
     "id": 11,
     "name": "dhleuroplus",
     "human": "DHL Europlus",

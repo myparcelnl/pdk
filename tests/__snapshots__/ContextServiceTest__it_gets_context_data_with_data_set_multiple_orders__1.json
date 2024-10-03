@@ -86,6 +86,24 @@
       "totalPrice": 0,
       "totalVat": 0,
       "totalPriceAfterVat": 0,
+      "inheritedDeliveryOptions": {
+        "postnl": {
+          "labelAmount": 1,
+          "shipmentOptions": {
+            "insurance": 0,
+            "ageCheck": 0,
+            "hideSender": 0,
+            "largeFormat": 0,
+            "onlyRecipient": 0,
+            "return": 0,
+            "sameDayDelivery": 0,
+            "signature": 0,
+            "tracked": 0
+          },
+          "deliveryType": "standard",
+          "packageType": "package"
+        }
+      },
       "digitalStampRanges": [
         {
           "min": 0,
@@ -195,6 +213,24 @@
       "totalPrice": 0,
       "totalVat": 0,
       "totalPriceAfterVat": 0,
+      "inheritedDeliveryOptions": {
+        "postnl": {
+          "labelAmount": 1,
+          "shipmentOptions": {
+            "insurance": 0,
+            "ageCheck": 0,
+            "hideSender": 0,
+            "largeFormat": 0,
+            "onlyRecipient": 0,
+            "return": 0,
+            "sameDayDelivery": 0,
+            "signature": 0,
+            "tracked": 0
+          },
+          "deliveryType": "standard",
+          "packageType": "package"
+        }
+      },
       "digitalStampRanges": [
         {
           "min": 0,

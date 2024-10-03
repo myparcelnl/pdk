@@ -209,8 +209,8 @@ trait HasAttributes
 
         if ($flags) {
             if ($flags & Arrayable::SKIP_NULL) {
-                $attributes = array_filter($attributes, static function ($value) {
-                    return null !== $value;
+                $attributes = Arr::where($attributes, function ($value, $key) {
+                    return null !== $value || $this->hasGetMutator($key);
                 });
             }
 
@@ -536,9 +536,9 @@ trait HasAttributes
     {
         $mutatedAttributes = $this->getMutatedAttributes();
 
-        $attributes = $this->addMutatedAttributesToArray($attributes, $mutatedAttributes, $flags);
+        $addedAttributes = $this->addMutatedAttributesToArray($attributes, $mutatedAttributes, $flags);
 
-        return $this->addCastAttributesToArray($attributes, $mutatedAttributes, $flags);
+        return $this->addCastAttributesToArray($addedAttributes, $mutatedAttributes, $flags);
     }
 
     /**
@@ -566,8 +566,11 @@ trait HasAttributes
     }
 
     /**
+     * @param  string $string
+     *
+     * @return mixed
      */
-    protected function getCastAttribute(string $string)
+    protected function getCastAttributeValue(string $string)
     {
         return $this->castAttribute($string, $this->attributes[$string]);
     }

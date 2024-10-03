@@ -6,6 +6,7 @@
   "externalIdentifier": "3SMYPA056396924",
   "barcode": "3SMYPA056396924",
   "carrier": {
+    "externalIdentifier": "postnl",
     "id": 1,
     "name": "postnl",
     "human": "PostNL",

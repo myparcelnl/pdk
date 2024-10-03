@@ -5,6 +5,7 @@
   "referenceIdentifier": "",
   "barcode": "",
   "carrier": {
+    "externalIdentifier": "dhlforyou",
     "id": 9,
     "name": "dhlforyou",
     "human": "DHL For You",

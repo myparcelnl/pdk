@@ -32,10 +32,5 @@
   "4.enum.0": 0,
   "4.enum.1": 5000,
   "4.enum.2": 50000,
-  "4.enum.3": null,
-  "5.property": "customsDeclaration.weight",
-  "5.pointer": "/customsDeclaration/weight",
-  "5.message": "The property weight is required",
-  "5.constraint": "required",
-  "5.context": 1
+  "4.enum.3": null
 }

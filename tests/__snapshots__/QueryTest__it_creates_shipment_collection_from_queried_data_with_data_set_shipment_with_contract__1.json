@@ -6,6 +6,7 @@
   "externalIdentifier": "3SMYPA060119130",
   "barcode": "3SMYPA123456789",
   "carrier": {
+    "externalIdentifier": "dhlforyou:10932623",
     "id": 9,
     "name": "dhlforyou",
     "human": "DHL For You",
