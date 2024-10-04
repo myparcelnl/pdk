@@ -59,7 +59,6 @@
           "delivery_type": 2,
           "age_check": 1,
           "hide_sender": 1,
-          "return": 1,
           "signature": 1
         },
         "physical_properties": {
