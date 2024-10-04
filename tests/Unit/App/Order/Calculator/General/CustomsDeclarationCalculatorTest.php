@@ -38,7 +38,7 @@ it('calculates customs declaration', function (PdkOrderFactory $factory, ?array 
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    if ($expectation === null) {
+    if (null === $expectation) {
         expect($newOrder->customsDeclaration)->toBeNull();
     } else {
         expect($newOrder->customsDeclaration->toArrayWithoutNull())->toEqual($expectation);

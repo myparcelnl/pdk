@@ -117,9 +117,14 @@ class CartCalculationService implements CartCalculationServiceInterface
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
     }
 
+    /**
+     * @param  null|string $cc
+     *
+     * @return bool
+     */
     private function allowMailboxToCountry(?string $cc): bool
     {
-        if ($cc === null) {
+        if (null === $cc) {
             return false;
         }
 

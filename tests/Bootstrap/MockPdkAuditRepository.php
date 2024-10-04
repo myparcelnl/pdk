@@ -46,10 +46,7 @@ class MockPdkAuditRepository implements PdkAuditRepositoryInterface
      *
      * @return void
      */
-    public function save(string $key, $data): void
-    {
-        return;
-    }
+    public function save(string $key, $data): void { }
 
     /**
      * @param  \MyParcelNL\Pdk\Audit\Model\Audit $audit

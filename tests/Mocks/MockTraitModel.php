@@ -9,6 +9,4 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class MockTraitModel extends Model
 {
     use MockHasCatsTrait;
-
-    protected $attributes = [];
 }

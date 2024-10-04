@@ -49,7 +49,7 @@ it('updates order status', function (string $settingName, $value, $result) {
         ->and($response->getStatusCode())
         ->toBe(204);
 
-    if ($result === null) {
+    if (null === $result) {
         expect($updates)->toBeEmpty();
     } else {
         expect($updates)->toBe([

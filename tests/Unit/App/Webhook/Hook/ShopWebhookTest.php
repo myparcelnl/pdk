@@ -148,7 +148,7 @@ it('executes update subscription features action', function (string $hook, strin
             'level'   => 'debug',
             'message' => '[PDK]: Webhook processed',
             'context' => ['hook' => $expectedClass],
-        ], $logs->toArray())
+        ], $logs->toArray(), true)
     )
         ->toBeTrue();
 })->with([

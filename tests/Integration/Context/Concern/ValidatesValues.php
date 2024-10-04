@@ -38,9 +38,6 @@ trait ValidatesValues
      */
     protected function validateByCurrentFirstOrLast(string $value, array $body, string $key): void
     {
-        $type   = Str::before($value, '_');
-        $entity = Str::after($value, "{$type}_");
-
         $actualValue = Arr::get($body, $key);
 
         $this->validateByType($value, $key, $actualValue);
