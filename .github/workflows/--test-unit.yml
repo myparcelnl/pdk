@@ -19,6 +19,7 @@ jobs:
       - uses: ./.github/actions/setup
         if: steps.coverage-cache.outputs.cache-hit != 'true'
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           php-version: ${{ vars.PHP_VERSION }}
 
       - name: 'Run unit tests'
