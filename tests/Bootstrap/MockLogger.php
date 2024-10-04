@@ -66,7 +66,7 @@ class MockLogger extends AbstractLogger
     }
 
     /**
-     * @inheritDoc
+     * @return string[]
      */
     public function getLogFiles(): array
     {

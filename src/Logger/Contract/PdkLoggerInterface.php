@@ -20,7 +20,7 @@ interface PdkLoggerInterface extends LoggerInterface
     /**
      * Get all logs as an associative array with log levels as keys and log file paths as values.
      *
-     * @return array{notice?: string, warning?: string, error?: string, critical?: string, alert?: string, emergency?: string}
+     * @return string[]
      */
     public function getLogFiles(): array;
 }
