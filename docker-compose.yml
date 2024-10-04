@@ -1,6 +1,7 @@
 x-common: &common
   init: true
-  image: 'ghcr.io/myparcelnl/pdk:7.4'
+  # Set in .env
+  image: $IMAGE_NAME
   build:
     context: .
     dockerfile: Dockerfile
@@ -10,9 +11,9 @@ x-common: &common
 services:
   php:
     <<: *common
-    command: ['composer', 'install', '--no-interaction', '--no-progress', '--no-suggest']
+    command: ['composer', 'install', '--no-interaction', '--no-progress']
     env_file:
-      - .env.local
+      - .env
 
   console:
     <<: *common
