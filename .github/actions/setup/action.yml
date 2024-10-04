@@ -13,6 +13,11 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: myparcelnl/actions/build-docker-image-reg@v4
+      id: build
+      with:
+        registry-password: ${{ inputs.token }}
+
     - name: 'Handle composer cache'
       uses: actions/cache@v4
       with:
@@ -26,23 +31,21 @@ runs:
           composer-${{ hashFiles('**/composer.json') }}-
           composer-
 
-    - uses: myparcelnl/actions/build-docker-image-reg@v4
-      with:
-        image: 'ghcr.io/myparcelnl/pdk:${{ inputs.php-version }}'
-        registry-password: ${{ inputs.token }}
-
     - name: 'Prepare environment'
       shell: bash
       #language=bash
       run: |
-        touch .env.local
+        touch .env
+        echo "COMPOSER_HOME=/root/.composer" >> .env
+        echo "COMPOSER_MEMORY_LIMIT=-1" >> .env
 
     - name: 'Install composer dependencies'
       shell: bash
+      env:
+        IMAGE_NAME: ${{ steps.build.outputs.tagged-image }}
       #language=bash
       run: |
         docker compose run \
           --volume $HOME/.composer:/root/.composer \
-          --env COMPOSER_CACHE_DIR=/root/.composer \
           php \
           composer update --no-progress --no-scripts --no-plugins
