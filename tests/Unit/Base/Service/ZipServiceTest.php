@@ -6,10 +6,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
+use MyParcelNL\Pdk\Base\Exception\ZipException;
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use RuntimeException;
 use function MyParcelNL\Pdk\Tests\readZip;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -80,7 +80,7 @@ it('throws error when calling method while no zip is open', function (callable $
 
     $callback($zipService);
 })
-    ->throws(RuntimeException::class)
+    ->throws(ZipException::class)
     ->with([
         'addFromString' => function () {
             return function (ZipServiceInterface $zipService) {
