@@ -183,8 +183,10 @@
         "property": "webhooks"
       },
       "downloadLogs": {
-        "headers": [],
-        "method": "GET",
+        "headers": {
+          "Accept": "application/zip"
+        },
+        "method": "POST",
         "parameters": {
           "action": "downloadLogs"
         },
