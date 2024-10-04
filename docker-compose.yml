@@ -1,21 +1,24 @@
 x-common: &common
-  init: true
-  # Set in .env
-  image: $IMAGE_NAME
   build:
     context: .
     dockerfile: Dockerfile
-  volumes:
-    - ./:/app
+  # Set in .env
+  image: $IMAGE_NAME
 
 services:
   php:
     <<: *common
+    init: true
     command: ['composer', 'install', '--no-interaction', '--no-progress']
     env_file:
       - .env
+    volumes:
+      - ./:/app
 
   console:
     <<: *common
+    init: true
     command: []
     entrypoint: ['php', 'bin/console']
+    volumes:
+      - ./:/app
