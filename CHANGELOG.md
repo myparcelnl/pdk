@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.4](https://github.com/myparcelnl/pdk/compare/v2.43.3...v2.43.4) (2024-10-08)
+
+
+### :bug: Bug Fixes
+
+* **carriers:** remove return option for dhlforyou ([#309](https://github.com/myparcelnl/pdk/issues/309)) ([9cf0ad5](https://github.com/myparcelnl/pdk/commit/9cf0ad57d70a76ef453e0c60b60520bb7cef7b0b))
+
 ## [2.43.3](https://github.com/myparcelnl/pdk/compare/v2.43.2...v2.43.3) (2024-09-25)
 
 
