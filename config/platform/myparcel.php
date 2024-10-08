@@ -119,7 +119,7 @@ return [
                     'ageCheck'         => true,
                     'largeFormat'      => false,
                     'onlyRecipient'    => true,
-                    'return'           => true,
+                    'return'           => false,
                     'sameDayDelivery'  => true,
                     'signature'        => true,
                     'saturdayDelivery' => true,
