@@ -43,8 +43,8 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
         $isPackageSmall = DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $this->order->deliveryOptions->packageType;
         $isNotNl        = CountryCodes::CC_NL !== $this->order->shippingAddress->cc;
 
-        return $isPackageSmall && $isNotNl ?
-            TriStateService::ENABLED
+        return $isPackageSmall && $isNotNl
+            ? TriStateService::ENABLED
             : TriStateService::DISABLED;
     }
 }
