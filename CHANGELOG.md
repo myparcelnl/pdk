@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.5](https://github.com/myparcelnl/pdk/compare/v2.43.4...v2.43.5) (2024-10-09)
+
+
+### :bug: Bug Fixes
+
+* fix attributes with mutator being omitted when skipping null ([#308](https://github.com/myparcelnl/pdk/issues/308)) ([cf5d191](https://github.com/myparcelnl/pdk/commit/cf5d191e8542c9f4e53f10a6a516605bfd531b1c))
+
 ## [2.43.4](https://github.com/myparcelnl/pdk/compare/v2.43.3...v2.43.4) (2024-10-08)
 
 
