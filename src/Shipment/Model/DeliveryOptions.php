@@ -167,7 +167,7 @@ class DeliveryOptions extends Model
      */
     public function getDateAttribute(): ?DateTimeInterface
     {
-        $date = $this->getCastAttribute(self::DATE);
+        $date = $this->getCastAttributeValue(self::DATE);
 
         if (! $date || $date < new DateTime('now')) {
             return null;

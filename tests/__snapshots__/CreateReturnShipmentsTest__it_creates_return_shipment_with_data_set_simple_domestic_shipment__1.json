@@ -7,6 +7,7 @@
     "externalIdentifier": "CV515676839NL",
     "barcode": "CV515676839NL",
     "carrier": {
+      "externalIdentifier": "postnl",
       "id": 1,
       "name": "postnl",
       "human": "PostNL",

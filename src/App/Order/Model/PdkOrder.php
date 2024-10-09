@@ -213,7 +213,7 @@ class PdkOrder extends Model
     public function getNotesAttribute(): PdkOrderNoteCollection
     {
         if (isset($this->attributes['notes'])) {
-            return $this->getCastAttribute('notes');
+            return $this->getCastAttributeValue('notes');
         }
 
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $orderNoteRepository */

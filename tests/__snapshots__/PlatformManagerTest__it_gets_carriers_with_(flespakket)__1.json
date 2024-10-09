@@ -1,5 +1,6 @@
 [
   {
+    "externalIdentifier": "postnl",
     "id": 1,
     "name": "postnl",
     "human": "PostNL",

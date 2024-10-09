@@ -92,14 +92,14 @@ class OrderDataContext extends PdkOrder
 
             $clonedOrder->deliveryOptions->carrier = $newCarrier;
 
-            $clonedOrder = $service->calculateShipmentOptions(
+            $calculatedOrder = $service->calculateShipmentOptions(
                 $clonedOrder,
                 PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS
             );
 
-            $clonedOrder->deliveryOptions->offsetUnset('carrier');
+            $calculatedOrder->deliveryOptions->offsetUnset('carrier');
 
-            return [$carrier->externalIdentifier => $clonedOrder->deliveryOptions->toArrayWithoutNull()];
+            return [$carrier->externalIdentifier => $calculatedOrder->deliveryOptions->toArrayWithoutNull()];
         });
     }
 }

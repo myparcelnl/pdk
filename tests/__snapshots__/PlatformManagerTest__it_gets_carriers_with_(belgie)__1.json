@@ -1,5 +1,6 @@
 [
   {
+    "externalIdentifier": "postnl",
     "id": 1,
     "name": "postnl",
     "human": "PostNL",
@@ -32,6 +33,7 @@
     }
   },
   {
+    "externalIdentifier": "bpost",
     "id": 2,
     "name": "bpost",
     "human": "bpost",
@@ -55,6 +57,7 @@
     }
   },
   {
+    "externalIdentifier": "dpd",
     "id": 4,
     "name": "dpd",
     "human": "DPD",

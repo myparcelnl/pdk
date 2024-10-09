@@ -5,6 +5,7 @@
         "externalIdentifier": "701",
         "deliveryOptions": {
           "carrier": {
+            "externalIdentifier": "postnl",
             "id": 1,
             "name": "postnl",
             "human": "PostNL",
@@ -230,6 +231,7 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
+                "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -247,6 +249,7 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
+                "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -254,6 +257,7 @@
             }
           }
         ],
+        "notes": [],
         "orderDate": "2030-01-01 12:00:00",
         "exported": false,
         "shipmentPrice": 100,
@@ -264,7 +268,8 @@
         "orderVat": 0,
         "totalPrice": 100,
         "totalVat": 21,
-        "totalPriceAfterVat": 121
+        "totalPriceAfterVat": 121,
+        "audits": []
       },
       {
         "externalIdentifier": "247",
@@ -389,6 +394,7 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
+                "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -406,6 +412,7 @@
                 "exportOnlyRecipient": -1,
                 "exportReturn": -1,
                 "exportSignature": -1,
+                "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -413,6 +420,7 @@
             }
           }
         ],
+        "notes": [],
         "orderDate": "2030-01-01 12:00:00",
         "exported": false,
         "shipmentPrice": 100,
@@ -423,7 +431,8 @@
         "orderVat": 0,
         "totalPrice": 100,
         "totalVat": 21,
-        "totalPriceAfterVat": 121
+        "totalPriceAfterVat": 121,
+        "audits": []
       }
     ]
   }
