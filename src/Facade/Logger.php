@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
  * @method static void notice($message, array $context = [])
  * @method static void warning($message, array $context = [])
  * @method static void deprecated(string $subject, string $replacement = null, array $context = [])
+ * @method static array getLogFiles()
  * @see \MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface
  */
 final class Logger extends Facade

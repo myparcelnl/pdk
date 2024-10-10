@@ -1,19 +1,24 @@
-x-image: &image ghcr.io/myparcelnl/php-xd:7.4-cli-alpine
+x-common: &common
+  build:
+    context: .
+    dockerfile: Dockerfile
+  # Set in .env
+  image: $IMAGE_NAME
 
 services:
   php:
-    image: *image
-    command: ['composer', 'install', '--no-interaction', '--no-progress', '--no-suggest']
+    <<: *common
     init: true
+    command: ['composer', 'install', '--no-interaction', '--no-progress']
     env_file:
-      - .env.local
+      - .env
     volumes:
       - ./:/app
 
   console:
-    image: *image
-    command: []
+    <<: *common
     init: true
+    command: []
     entrypoint: ['php', 'bin/console']
     volumes:
       - ./:/app

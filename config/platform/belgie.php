@@ -11,6 +11,7 @@ return [
     'name'             => 'belgie',
     'human'            => 'SendMyParcel',
     'backofficeUrl'    => 'https://backoffice.sendmyparcel.be',
+    'supportUrl'       => 'https://developer.myparcel.nl/contact',
     'localCountry'     => CountryCodes::CC_BE,
     'defaultCarrier'   => Carrier::CARRIER_BPOST_NAME,
     'defaultCarrierId' => Carrier::CARRIER_BPOST_ID,
