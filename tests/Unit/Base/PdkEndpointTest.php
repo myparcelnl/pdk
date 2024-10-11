@@ -28,10 +28,12 @@ use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\get;
 use function DI\value;
@@ -62,7 +64,7 @@ usesShared(
     ])
 );
 
-dataset('backendActions', function () {
+dataset('backend actions', function () {
     return [
         PdkBackendActions::CREATE_WEBHOOKS,
         PdkBackendActions::DELETE_ACCOUNT,
@@ -85,7 +87,7 @@ dataset('backendActions', function () {
     ];
 });
 
-dataset('frontendActions', function () {
+dataset('frontend actions', function () {
     return [
         PdkFrontendActions::FETCH_CHECKOUT_CONTEXT,
         PdkSharedActions::FETCH_CONTEXT,
@@ -106,49 +108,95 @@ function testEndpoint(string $action, string $context): void
 
 it('calls pdk backend endpoints', function (string $action) {
     testEndpoint($action, PdkEndpoint::CONTEXT_BACKEND);
-})
-    ->with('backendActions');
+})->with('backend actions');
 
 it('calls pdk frontend endpoints', function (string $action) {
     testEndpoint($action, PdkEndpoint::CONTEXT_FRONTEND);
-})
-    ->with('frontendActions');
+})->with('frontend actions');
 
-it('returns error response on nonexistent action', function () {
+it('returns and logs error response when error is thrown', function () {
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+
     $response = $endpoint->call('nonexistent', PdkEndpoint::CONTEXT_BACKEND);
+
+    $responseContent = json_decode($response->getContent(), true);
+    $logs            = $logger->getLogs();
+
+    // Check if the file and line are set.
+    expect(Arr::get($responseContent, 'errors.0.file'))
+        ->toMatch('/\.php$/')
+        ->and(Arr::get($responseContent, 'errors.0.line'))
+        ->toBeInt();
+
+    // Remove trace properties before comparing as they are not static.
+    Arr::forget($responseContent, 'errors.0.trace');
+    Arr::forget($logs, '0.context.response.errors.0.trace');
+
+    $responseContext = [
+        'message' => 'Action "nonexistent" does not exist.',
+        'errors'  => [
+            // Add the expected error response to the response context so that we don't have to manually compare the
+            // file and line as they can change.
+            array_replace(Arr::get($responseContent, 'errors.0'), [
+                'message' => 'Action "nonexistent" does not exist.',
+                'code'    => 0,
+            ]),
+        ],
+    ];
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and(json_decode($response->getContent(), true))
+        ->and($responseContent)
+        ->toBe($responseContext)
+        ->and($logs)
         ->toBe([
-            'message' => 'Action "nonexistent" does not exist.',
-            'errors'  => [
-                [
-                    'status'  => 422,
-                    'code'    => 0,
-                    'message' => 'Action "nonexistent" does not exist.',
-                    'trace'   => 'Enable development mode to see stack trace.',
+            [
+                'level'   => 'error',
+                'message' => '[PDK]: An exception was thrown while executing an action',
+                'context' => [
+                    'action'   => 'nonexistent',
+                    'context'  => PdkEndpoint::CONTEXT_BACKEND,
+                    'response' => $responseContext,
                 ],
             ],
         ]);
 });
 
-it('shows stack trace in development mode', function () {
-    PdkFactory::create(MockPdkConfig::create(['mode' => value(\MyParcelNL\Pdk\Base\Pdk::MODE_DEVELOPMENT)]));
-
+it('hides stack trace in frontend context', function () {
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
-    $response = $endpoint->call('nonexistent', PdkEndpoint::CONTEXT_BACKEND);
+    $response = $endpoint->call('nonexistent', PdkEndpoint::CONTEXT_FRONTEND);
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
         ->and(json_decode($response->getContent(), true)['errors'][0]['trace'])
-        ->toBeArray();
+        ->toBe('Enable development mode to see stack trace.');
 });
 
-it('throws exception when using the wrong context', function (string $action) {
+it('shows stack trace in frontend context in development mode', function () {
+    PdkFactory::create(MockPdkConfig::create(['mode' => value(\MyParcelNL\Pdk\Base\Pdk::MODE_DEVELOPMENT)]));
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+
+    $response = $endpoint->call('nonexistent', PdkEndpoint::CONTEXT_FRONTEND);
+
+    $trace = Arr::get(json_decode($response->getContent(), true), 'errors.0.trace');
+
+    expect($response->getStatusCode())
+        ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->and($trace)
+        ->toBeArray()
+        ->and($trace)
+        ->not->toBeEmpty()
+        ->and($trace[0])
+        ->toHaveKeys(['file', 'line', 'function', 'class']);
+});
+
+it('returns error response when using the wrong context', function (string $action) {
     /** @var PdkEndpoint $endpoint */
     $endpoint = Pdk::get(PdkEndpoint::class);
     $response = $endpoint->call($action, PdkEndpoint::CONTEXT_FRONTEND);
@@ -158,18 +206,9 @@ it('throws exception when using the wrong context', function (string $action) {
         return;
     }
 
+    $responseContent = json_decode($response->getContent(), true);
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and(json_decode($response->getContent(), true))
-        ->toBe([
-            'message' => "Action \"$action\" does not exist.",
-            'errors'  => [
-                [
-                    'status'  => 422,
-                    'code'    => 0,
-                    'message' => "Action \"$action\" does not exist.",
-                    'trace'   => 'Enable development mode to see stack trace.',
-                ],
-            ],
-        ]);
-})->with('backendActions');
+        ->and($responseContent['message'])
+        ->toBe("Action \"$action\" does not exist.");
+})->with('backend actions');

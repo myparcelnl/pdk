@@ -55,43 +55,41 @@ abstract class AbstractApiService implements ApiServiceInterface
         ];
 
         $logContext = [
-            'uri'     => $uri,
-            'method'  => $method,
-            'headers' => $options['headers'],
-            'body'    => $options['body'] ? json_decode($options['body'], true) : null,
+            'request' => [
+                'uri'     => $uri,
+                'method'  => $method,
+                'headers' => $options['headers'],
+                'body'    => $options['body'] ? json_decode($options['body'], true) : null,
+            ],
         ];
-
-        Logger::debug('Sending request to MyParcel', $logContext);
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
         } catch (Throwable $e) {
             Logger::error(
-                'Error sending request to MyParcel',
-                ['error' => $e->getMessage()] + $logContext
+                'An exception was thrown while sending request',
+                array_replace($logContext, ['error' => $e->getMessage()])
             );
+
             throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
 
         /** @var \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface $responseObject */
         $responseObject = new $responseClass($response);
+        $body           = $responseObject->getBody();
+
+        $logContext['response'] = [
+            'code' => $responseObject->getStatusCode(),
+            'body' => $body ? json_decode($body, true) : null,
+        ];
 
         if ($responseObject->isErrorResponse()) {
-            Logger::error(
-                'Received an error response from MyParcel',
-                [
-                    'code'   => $response->getStatusCode(),
-                    'errors' => $responseObject->getErrors(),
-                ] + $logContext
-            );
+            Logger::error('Received an error response', $logContext);
+
             throw new ApiException($response);
         }
 
-        $body = $responseObject->getBody();
-
-        Logger::debug('Received response from MyParcel', [
-            'response' => $body ? json_decode($body, true) : null,
-        ]);
+        Logger::debug('Successfully sent request', $logContext);
 
         return $responseObject;
     }
