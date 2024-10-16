@@ -16,7 +16,7 @@
               "enum": [0]
             },
             "signature": {
-              "enum": [0]
+              "enum": [0, 1]
             }
           }
         }
