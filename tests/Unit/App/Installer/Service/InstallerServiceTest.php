@@ -10,10 +10,10 @@ use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use Psr\Log\LoggerInterface;
 use function DI\factory;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -179,7 +179,7 @@ it('runs down migrations on uninstall', function () {
 
 it('passes through arbitrary arguments', function ($_, array $result) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
+    $logger = Pdk::get(PdkLoggerInterface::class);
 
     expect($logger->getLogs())->toContain($result);
 })->with([
