@@ -9,23 +9,40 @@ use PHPUnit\Runner\AfterLastTestHook;
 
 final class DeleteTemporaryFilesHook implements AfterLastTestHook
 {
+    private const TMP_DIR = __DIR__ . '/../../.tmp';
+
     /**
      * @return void
      */
     public function executeAfterLastTest(): void
     {
-        $files = scandir('.tmp/');
+        $this->deleteDirectory(self::TMP_DIR);
+    }
 
-        foreach ($files as $file) {
-            if ('.' === $file || '..' === $file) {
+    /**
+     * @param  string $dir
+     * @param  bool   $deleteDir
+     *
+     * @return void
+     */
+    private function deleteDirectory(string $dir, bool $deleteDir = false): void
+    {
+        $paths = scandir($dir);
+
+        foreach ($paths as $path) {
+            if ('.' === $path || '..' === $path) {
                 continue;
             }
 
-            if (is_dir(".tmp//$file")) {
-                rmdir(".tmp//$file");
+            if (is_dir("$dir/$path")) {
+                $this->deleteDirectory("$dir/$path", true);
             } else {
-                unlink(".tmp//$file");
+                unlink("$dir/$path");
             }
+        }
+
+        if ($deleteDir) {
+            rmdir($dir);
         }
     }
 }
