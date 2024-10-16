@@ -32,12 +32,14 @@ use MyParcelNL\Pdk\Base\Contract\ConfigInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Pdk;
 use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
+use MyParcelNL\Pdk\Base\Service\ZipService;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
@@ -215,4 +217,9 @@ return [
      * Handles executing webhooks.
      */
     PdkWebhookManagerInterface::class          => autowire(PdkWebhookManager::class),
+
+    /**
+     * Handles zipping files.
+     */
+    ZipServiceInterface::class                 => autowire(ZipService::class),
 ];
