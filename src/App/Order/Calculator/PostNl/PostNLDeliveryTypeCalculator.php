@@ -17,9 +17,28 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
 {
     public function calculate(): void
     {
+        //todo: check if we can move this business logic somewhere else
         $deliveryOptions = $this->order->deliveryOptions;
+        $cc = $this->order->shippingAddress->cc;
 
-        if (CountryCodes::CC_NL !== $this->order->shippingAddress->cc) {
+        $isMorningOrEveningDelivery = $deliveryOptions->deliveryType === DeliveryOptions::DELIVERY_TYPE_MORNING_NAME
+            || $deliveryOptions->deliveryType === DeliveryOptions::DELIVERY_TYPE_EVENING_NAME;
+
+        if (CountryCodes::CC_NL !== $cc && $isMorningOrEveningDelivery) {
+            $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
+
+            return;
+        }
+
+        $postNLPickupCountries = [
+            CountryCodes::CC_NL,
+            CountryCodes::CC_BE,
+            CountryCodes::CC_DE,
+            CountryCodes::CC_DK,
+            CountryCodes::CC_SE,
+        ];
+
+        if (! in_array($cc, $postNLPickupCountries, true)) {
             $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
 
             return;
