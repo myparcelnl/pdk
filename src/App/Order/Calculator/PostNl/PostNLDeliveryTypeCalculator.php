@@ -43,7 +43,6 @@ final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculato
                     $deliveryOptions->shipmentOptions->signature = TriStateService::ENABLED;
                 }
                 break;
-            // Todo: testcase dat alleen nederland hier komt.
             case DeliveryOptions::DELIVERY_TYPE_MORNING_NAME:
             case DeliveryOptions::DELIVERY_TYPE_EVENING_NAME:
                 if (CountryCodes::CC_NL !== $cc) {
