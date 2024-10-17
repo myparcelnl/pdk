@@ -2,60 +2,91 @@
   "description": "myparcel/order/postnl/eu_package",
   "properties": {
     "deliveryType": {
-      "enum": ["standard", null]
-    },
-    "deliveryOptions": {
-      "properties": {
-        "deliveryType": {
-          "enum": ["standard", null]
-        },
-        "shipmentOptions": {
-          "properties": {
-            "insurance": {
-              "enum": [0, 5000, 50000, null]
-            }
-          }
-        }
-      }
+      "enum": ["standard", "pickup", null]
     }
   },
-  "anyOf": [
+  "allOf": [
     {
-      "properties": {
-        "deliveryOptions": {
+      "anyOf": [
+        {
           "properties": {
-            "shipmentOptions": {
-              "required": ["insurance"],
+            "deliveryOptions": {
               "properties": {
-                "insurance": {
-                  "enum": [5000, 50000]
+                "deliveryType": {
+                  "enum": ["standard", null]
                 },
-                "signature": {
-                  "enum": [1]
+                "shipmentOptions": {
+                  "properties": {
+                    "insurance": {
+                      "enum": [0, 5000, 50000, null]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType", "pickupLocation"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["pickup"]
+                },
+                "shipmentOptions": {
+                  "properties": {
+                    "signature": {
+                      "enum": [0]
+                    }
+                  }
                 }
               }
             }
           }
         }
-      }
+      ]
     },
     {
-      "properties": {
-        "deliveryOptions": {
+      "anyOf": [
+        {
           "properties": {
-            "shipmentOptions": {
+            "deliveryOptions": {
               "properties": {
-                "insurance": {
-                  "enum": [0, null]
-                },
-                "signature": {
-                  "enum": [0]
+                "shipmentOptions": {
+                  "required": ["insurance"],
+                  "properties": {
+                    "insurance": {
+                      "enum": [5000, 50000]
+                    },
+                    "signature": {
+                      "enum": [1]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "shipmentOptions": {
+                  "properties": {
+                    "insurance": {
+                      "enum": [0, null]
+                    },
+                    "signature": {
+                      "enum": [0]
+                    }
+                  }
                 }
               }
             }
           }
         }
-      }
+      ]
     }
   ]
 }
