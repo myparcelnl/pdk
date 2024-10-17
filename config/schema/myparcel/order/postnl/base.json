@@ -137,9 +137,6 @@
                     "onlyRecipient": {
                       "enum": [0]
                     },
-                    "signature": {
-                      "enum": [1]
-                    },
                     "return": {
                       "enum": [0]
                     }
