@@ -3,90 +3,59 @@
   "properties": {
     "deliveryType": {
       "enum": ["standard", "pickup", null]
+    },
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [0, 5000, 50000, null]
+            }
+          }
+        }
+      }
     }
   },
-  "allOf": [
+  "anyOf": [
     {
-      "anyOf": [
-        {
+      "properties": {
+        "deliveryOptions": {
           "properties": {
-            "deliveryOptions": {
+            "shipmentOptions": {
+              "required": ["insurance"],
               "properties": {
-                "deliveryType": {
-                  "enum": ["standard", null]
+                "insurance": {
+                  "enum": [5000, 50000]
                 },
-                "shipmentOptions": {
-                  "properties": {
-                    "insurance": {
-                      "enum": [0, 5000, 50000, null]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "deliveryOptions": {
-              "required": ["deliveryType", "pickupLocation"],
-              "properties": {
-                "deliveryType": {
-                  "enum": ["pickup"]
-                },
-                "shipmentOptions": {
-                  "properties": {
-                    "signature": {
-                      "enum": [0]
-                    }
-                  }
+                "signature": {
+                  "enum": [1]
                 }
               }
             }
           }
         }
-      ]
+      }
     },
     {
-      "anyOf": [
-        {
+      "properties": {
+        "deliveryOptions": {
           "properties": {
-            "deliveryOptions": {
+            "shipmentOptions": {
               "properties": {
-                "shipmentOptions": {
-                  "required": ["insurance"],
-                  "properties": {
-                    "insurance": {
-                      "enum": [5000, 50000]
-                    },
-                    "signature": {
-                      "enum": [1]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "deliveryOptions": {
-              "properties": {
-                "shipmentOptions": {
-                  "properties": {
-                    "insurance": {
-                      "enum": [0, null]
-                    },
-                    "signature": {
-                      "enum": [0]
-                    }
-                  }
+                "insurance": {
+                  "enum": [0, null]
+                },
+                "signature": {
+                  "enum": [0]
                 }
               }
             }
           }
         }
-      ]
+      }
     }
   ]
 }
