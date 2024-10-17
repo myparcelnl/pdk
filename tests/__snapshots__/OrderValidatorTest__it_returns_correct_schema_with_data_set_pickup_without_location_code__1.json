@@ -306,9 +306,6 @@
                     "onlyRecipient": {
                       "enum": [0]
                     },
-                    "signature": {
-                      "enum": [1]
-                    },
                     "return": {
                       "enum": [0]
                     }
@@ -330,6 +327,38 @@
           }
         }
       ]
+    }
+  ],
+  "anyOf": [
+    {
+      "properties": {
+        "deliveryOptions": {
+          "required": ["deliveryType", "pickupLocation"],
+          "properties": {
+            "deliveryType": {
+              "enum": ["pickup"]
+            },
+            "shipmentOptions": {
+              "properties": {
+                "signature": {
+                  "enum": [1]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "deliveryOptions": {
+          "properties": {
+            "deliveryType": {
+              "enum": ["morning", "standard", "evening", null]
+            }
+          }
+        }
+      }
     }
   ]
 }
