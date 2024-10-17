@@ -10,6 +10,8 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
+use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -27,6 +29,8 @@ use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
@@ -249,43 +253,117 @@ it('exports order and directly returns barcode if concept shipments is off', fun
         ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
 });
 
-it('exports pickup order without signature', function () {
-    factory(CarrierSettings::class)
-        ->withId((string) Carrier::CARRIER_POSTNL_ID)
-        ->withExportSignature(false)
-        ->store();
+it(
+    'exports pickup order without signature',
+    function (?RetailLocationFactory $pickupLocation, ShippingAddressFactory $shippingAddress) {
+        factory(CarrierSettings::class)
+            ->withId((string) Carrier::CARRIER_POSTNL_ID)
+            ->withExportSignature(false)
+            ->store();
 
-    $orderWithPickup = factory(PdkOrder::class)
-        ->withOrderDate('2020-01-01T00:00:00+00:00')
-        ->withDeliveryOptionsWithPickupLocation()
-        ->store()
-        ->make();
+        $orderWithPickup = factory(PdkOrder::class)
+            ->withOrderDate('2020-01-01T00:00:00+00:00')
+            ->withDeliveryOptionsWithPickupLocation($pickupLocation)
+            ->withShippingAddress($shippingAddress)
+            ->store()
+            ->make();
 
-    $collection = factory(PdkOrderCollection::class)
-        ->push($orderWithPickup)
-        ->store()
-        ->make();
+        $collection = factory(PdkOrderCollection::class)
+            ->push($orderWithPickup)
+            ->store()
+            ->make();
 
-    MockApi::enqueue(new ExamplePostShipmentsResponse());
+        MockApi::enqueue(new ExamplePostShipmentsResponse());
 
-    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
-        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
-    ]);
+        $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+            'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+        ]);
 
-    $content = json_decode($response->getContent(), true);
+        $content = json_decode($response->getContent(), true);
 
-    $responseOrders    = $content['data']['orders'];
-    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+        $responseOrders    = $content['data']['orders'];
+        $responseShipments = Arr::pluck($responseOrders, 'shipments');
 
-    expect($response)
-        ->toBeInstanceOf(Response::class)
-        ->and($responseOrders)
-        ->toHaveLength(count($responseOrders))
-        ->and($response->getStatusCode())
-        ->toBe(200)
-        ->and($responseShipments)->each->toHaveLength(1)
-        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
-});
+        expect($response)
+            ->toBeInstanceOf(Response::class)
+            ->and($responseOrders)
+            ->toHaveLength(count($responseOrders))
+            ->and($response->getStatusCode())
+            ->toBe(200)
+            ->and($responseShipments)->each->toHaveLength(1)
+            ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+    }
+)
+    ->with(
+        [
+            'dutch shipping location'   => [
+                function () {
+                    return factory(RetailLocation::class)->inTheNetherlands();
+                },
+                function () {
+                    return factory(ShippingAddress::class)->inTheNetherlands();
+                },
+            ],
+            'foreign shipping location' => [
+                null,
+                function () {
+                    return factory(ShippingAddress::class)->inTheUnitedKingdom();
+                },
+            ],
+        ]
+    );
+
+it(
+    'exports evening order',
+    function (ShippingAddressFactory $shippingAddress) {
+        factory(CarrierSettings::class)
+            ->withId((string) Carrier::CARRIER_POSTNL_ID)
+            ->store();
+
+        $order = factory(PdkOrder::class)
+            ->withOrderDate('2020-01-01T00:00:00+00:00')
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)
+                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+            )
+            ->withShippingAddress($shippingAddress)
+            ->store()
+            ->make();
+
+        $collection = factory(PdkOrderCollection::class)
+            ->push($order)
+            ->store()
+            ->make();
+
+        MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+        $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+            'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+        ]);
+
+        $content = json_decode($response->getContent(), true);
+
+        $responseOrders    = $content['data']['orders'];
+        $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+        expect($response)
+            ->toBeInstanceOf(Response::class)
+            ->and($responseOrders)
+            ->toHaveLength(count($responseOrders))
+            ->and($response->getStatusCode())
+            ->toBe(200)
+            ->and($responseShipments)->each->toHaveLength(1)
+            ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+    }
+)
+    ->with(
+        [
+            'foreign shipping location' =>
+                function () {
+                    return factory(ShippingAddress::class)->inTheUnitedKingdom();
+                },
+        ]
+    );
 
 it(
     'exports international orders',

@@ -15,30 +15,45 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  */
 final class PostNLDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
+    private $postNLPickupCountries = [
+        CountryCodes::CC_NL,
+        CountryCodes::CC_BE,
+        CountryCodes::CC_DE,
+        CountryCodes::CC_DK,
+        CountryCodes::CC_SE,
+    ];
+
     public function calculate(): void
     {
         $deliveryOptions = $this->order->deliveryOptions;
+        $cc              = $this->order->shippingAddress->cc;
 
-        if (CountryCodes::CC_NL !== $this->order->shippingAddress->cc) {
-            $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
-
-            return;
-        }
-
-        switch ($this->order->deliveryOptions->deliveryType) {
+        switch ($deliveryOptions->deliveryType) {
             case DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME:
-                $deliveryOptions->shipmentOptions->signature     = TriStateService::ENABLED;
+                if (! in_array($cc, $this->postNLPickupCountries, true)) {
+                    $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
+
+                    return;
+                }
                 $deliveryOptions->shipmentOptions->onlyRecipient = TriStateService::DISABLED;
                 $deliveryOptions->shipmentOptions->return        = TriStateService::DISABLED;
-                break;
+                $deliveryOptions->shipmentOptions->signature     = TriStateService::DISABLED;
 
+                if (CountryCodes::CC_NL === $cc) {
+                    $deliveryOptions->shipmentOptions->signature = TriStateService::ENABLED;
+                }
+                break;
             case DeliveryOptions::DELIVERY_TYPE_MORNING_NAME:
             case DeliveryOptions::DELIVERY_TYPE_EVENING_NAME:
-                $shipmentOptions = $deliveryOptions->shipmentOptions;
+                if (CountryCodes::CC_NL !== $cc) {
+                    $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
 
-                $shipmentOptions->ageCheck      = TriStateService::DISABLED;
-                $shipmentOptions->onlyRecipient = TriStateService::ENABLED;
-                $shipmentOptions->signature     = TriStateService::ENABLED;
+                    return;
+                }
+
+                $deliveryOptions->shipmentOptions->ageCheck      = TriStateService::DISABLED;
+                $deliveryOptions->shipmentOptions->onlyRecipient = TriStateService::ENABLED;
+                $deliveryOptions->shipmentOptions->signature     = TriStateService::ENABLED;
                 break;
         }
     }

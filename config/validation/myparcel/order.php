@@ -79,7 +79,7 @@ return [
                                 [
                                     'id'     => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
                                     'name'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                                    'schema' => 'order/postnl/be_package_pickup',
+                                    'schema' => 'order/postnl/eu_package_pickup',
                                 ],
                             ],
                         ],
@@ -95,13 +95,52 @@ return [
                         ],
                     ],
                 ],
+                //                [
+                //                    'name'        => CountryCodes::CC_DE,
+                //                    'packageType' => [
+                //                        [
+                //                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                //                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                //                            'schema'       => 'order/postnl/de_package',
+                //                            'deliveryType' => [
+                //                                [
+                //                                    'id'     => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                //                                    'name'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                //                                    'schema' => 'order/postnl/eu_package_pickup',
+                //                                ],
+                //                            ],
+                //                        ],
+                //                        [
+                //                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+                //                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                //                            'schema' => 'order/postnl/mailbox',
+                //                        ],
+                //                        [
+                //                            'id'     => DeliveryOptions::PACKAGE_TYPE_LETTER_ID,
+                //                            'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                //                            'schema' => 'order/postnl/letter',
+                //                        ],
+                //                        [
+                //                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+                //                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                //                            'schema' => 'order/postnl/row_package_small',
+                //                        ],
+                //                    ],
+                //                ],
                 [
                     'name'        => CountryCodes::ZONE_EU,
                     'packageType' => [
                         [
-                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema' => 'order/postnl/eu_package',
+                            'id'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'         => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema'       => 'order/postnl/eu_package',
+                            'deliveryType' => [
+                                [
+                                    'id'     => DeliveryOptions::DELIVERY_TYPE_PICKUP_ID,
+                                    'name'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                                    'schema' => 'order/postnl/eu_package_pickup',
+                                ],
+                            ],
                         ],
                         [
                             'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
