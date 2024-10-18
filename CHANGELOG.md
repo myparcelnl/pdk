@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.43.6](https://github.com/myparcelnl/pdk/compare/v2.43.5...v2.43.6) (2024-10-18)
+
+
+### :bug: Bug Fixes
+
+* resolve dpd export issue for belgium ([#311](https://github.com/myparcelnl/pdk/issues/311)) ([7a7bbdb](https://github.com/myparcelnl/pdk/commit/7a7bbdbdf7e675eb567296c3187884b58ea988b7))
+
 ## [2.43.5](https://github.com/myparcelnl/pdk/compare/v2.43.4...v2.43.5) (2024-10-09)
 
 
