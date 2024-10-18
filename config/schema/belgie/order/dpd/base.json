@@ -85,9 +85,6 @@
             "ageCheck": {
               "enum": [0]
             },
-            "insurance": {
-              "enum": [52000]
-            },
             "labelDescription": {
               "maxLength": 50
             },
