@@ -28,4 +28,16 @@ class AppInfo extends Model
         'path'    => 'string',
         'url'     => 'string',
     ];
+
+    /**
+     * @param  string $path
+     *
+     * @return string
+     */
+    public function createPath(string $path): string
+    {
+        $pattern = sprintf('/\%s+/', DIRECTORY_SEPARATOR);
+
+        return preg_replace($pattern, DIRECTORY_SEPARATOR, "$this->path/$path");
+    }
 }

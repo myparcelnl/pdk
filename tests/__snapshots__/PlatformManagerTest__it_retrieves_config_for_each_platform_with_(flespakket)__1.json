@@ -2,6 +2,7 @@
   "name": "flespakket",
   "human": "Flespakket",
   "backofficeUrl": "https://backoffice.flespakket.nl",
+  "supportUrl": "https://developer.myparcel.nl/contact",
   "localCountry": "NL",
   "defaultCarrier": "postnl",
   "defaultCarrierId": 1,
