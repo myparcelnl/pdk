@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Console\Types\Shared\Collection\KeyValueCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Concern\ReportsTiming;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
