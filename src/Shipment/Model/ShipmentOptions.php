@@ -31,6 +31,7 @@ class ShipmentOptions extends Model
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
+    public const RECEIPT_CODE      = 'receiptCode';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
@@ -43,6 +44,7 @@ class ShipmentOptions extends Model
         self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
+        self::RECEIPT_CODE      => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -56,5 +58,6 @@ class ShipmentOptions extends Model
         self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
+        self::RECEIPT_CODE      => TriStateService::TYPE_STRICT,
     ];
 }

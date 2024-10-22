@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
@@ -125,6 +126,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHavePickup(): bool
     {
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME);
+    }
+
+    public function canHaveReceiptCode(): bool
+    {
+        return $this->canHave(ReceiptCodeDefinition::class);
     }
 
     public function canHaveSameDayDelivery(): bool
