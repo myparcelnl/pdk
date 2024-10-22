@@ -57,7 +57,13 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
             return $response;
         }
 
-        $this->cronService->dispatch([$this, 'processWebhook'], $input);
+        /**
+         * TODO: restore async calling using cronService when this is fixed in WordPress
+         * besides fixing the wp_schedule_single_event, you also need a Facade to call processWebhook statically
+         * $this->cronService->dispatch([$this, 'processWebhook'], $input);
+         * For now: process immediately
+         */
+        $this->processWebhook($input);
 
         return $response;
     }
