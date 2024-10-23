@@ -46,9 +46,13 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
      */
     public function getIso2(?string $language = null): string
     {
-        $lang = substr($language ?? $this->getLanguage(), 0, 2);
+        if ($language) {
+            return $this->getIsoFromIetf($language);
+        }
 
-        return in_array($lang, Pdk::get('availableLanguages')) ? $lang : Pdk::get('defaultLanguage');
+        $iso = $this->getIsoFromIetf($this->getLanguage());
+
+        return in_array($iso, Pdk::get('availableLanguages'), true) ? $iso : Pdk::get('defaultLanguage');
     }
 
     /**
@@ -56,8 +60,7 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
      */
     public function getTranslations(?string $language = null): array
     {
-        $lang = $language ?? $this->getLanguage();
-        $iso2 = substr($lang, 0, 2);
+        $iso2 = $this->getIso2($language);
 
         return $this->repository->getTranslations($iso2, function () use ($iso2) {
             return json_decode($this->fileSystem->get($this->getFilePath($iso2)), true);
@@ -113,5 +116,15 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
                 ? $this->translateArray($value, $language)
                 : $this->translate($value, $language);
         }, $array);
+    }
+
+    /**
+     * @param  string $language
+     *
+     * @return string
+     */
+    private function getIsoFromIetf(string $language): string
+    {
+        return (string) substr($language, 0, 2);
     }
 }
