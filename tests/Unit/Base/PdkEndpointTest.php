@@ -31,12 +31,15 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApiExceptionAction;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\get;
 use function DI\value;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('endpoints');
@@ -212,3 +215,76 @@ it('returns error response when using the wrong context', function (string $acti
         ->and($responseContent['message'])
         ->toBe("Action \"$action\" does not exist.");
 })->with('backend actions');
+
+it('returns error response on api exception', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockApiExceptionAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $responseContent = json_decode($response->getContent(), true);
+
+    expect($response)
+        ->getStatusCode()
+        ->toBe(Response::HTTP_BAD_REQUEST)
+        ->and($responseContent)
+        ->toBe([
+            'message'    => 'Request failed. Status code: 400. Message: boom',
+            'request_id' => '12345',
+            'errors'     => [
+                [
+                    'code'    => 24920,
+                    'message' => 'Something went wrong',
+                ],
+                [
+                    'code'    => 74892,
+                    'message' => 'Something else also went wrong',
+                ],
+            ],
+        ]);
+});
+
+it('returns error response on unknown exception', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockExceptionAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $responseContent = json_decode($response->getContent(), true);
+
+    // Check if the file and line are set.
+    expect(Arr::get($responseContent, 'errors.0.file'))
+        ->toMatch('/\.php$/')
+        ->and(Arr::get($responseContent, 'errors.0.line'))
+        ->toBeInt()
+        ->and(Arr::get($responseContent, 'errors.0.trace'))
+        ->not->toBeEmpty();
+
+    // Remove trace properties before comparing as they are not static.
+    Arr::forget($responseContent, 'errors.0.trace');
+    Arr::forget($responseContent, 'errors.0.file');
+    Arr::forget($responseContent, 'errors.0.line');
+    Arr::forget($responseContent, 'errors.1.trace');
+    Arr::forget($responseContent, 'errors.1.file');
+    Arr::forget($responseContent, 'errors.1.line');
+
+    expect($response)
+        ->getStatusCode()
+        ->toBe(Response::HTTP_BAD_REQUEST)
+        ->and($responseContent)
+        ->toBe([
+            'message' => 'Something went terribly wrong',
+            'errors'  => [
+                [
+                    'code'    => 5,
+                    'message' => 'Something went terribly wrong',
+                ],
+                [
+                    'code'    => 1,
+                    'message' => 'Previous exception',
+                ],
+            ],
+        ]);
+});

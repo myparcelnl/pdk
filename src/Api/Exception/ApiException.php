@@ -40,7 +40,7 @@ class ApiException extends Exception
 
         parent::__construct(
             sprintf(
-                'Request failed. Status code: %s. Errors: %s',
+                'Request failed. Status code: %s. Message: %s',
                 $response->getStatusCode(),
                 $body['message']
             ),
