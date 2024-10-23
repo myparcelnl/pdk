@@ -12,6 +12,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\FactoryFactory;
 use ZipArchive;
 
+const TMP_DIR = __DIR__ . '/../.tmp';
+
 function mockPdkProperties(array $properties): callable
 {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $mockPdk */
@@ -77,3 +79,29 @@ function readZip(string $filename): array
     return $files;
 }
 
+/**
+ * @param  string $dir
+ * @param  bool   $deleteDir
+ *
+ * @return void
+ */
+function deleteTemporaryFiles(string $dir = TMP_DIR, bool $deleteDir = false): void
+{
+    $paths = scandir($dir);
+
+    foreach ($paths as $path) {
+        if ('.' === $path || '..' === $path) {
+            continue;
+        }
+
+        if (is_dir("$dir/$path")) {
+            deleteTemporaryFiles("$dir/$path", true);
+        } else {
+            unlink("$dir/$path");
+        }
+    }
+
+    if ($deleteDir) {
+        rmdir($dir);
+    }
+}

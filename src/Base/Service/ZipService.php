@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Base\Service;
 use MyParcelNL\Pdk\Base\Contract\ZipServiceInterface;
 use MyParcelNL\Pdk\Base\Exception\ZipException;
 use MyParcelNL\Pdk\Base\FileSystemInterface;
+use Throwable;
 use ZipArchive;
 
 class ZipService implements ZipServiceInterface
@@ -67,12 +68,12 @@ class ZipService implements ZipServiceInterface
     public function close(): void
     {
         $this->validateHasFile();
-        $success = $this->currentFile->close();
 
-        if ($success) {
+        try {
+            $this->currentFile->close();
             $this->currentFile = null;
-        } else {
-            throw new ZipException('Failed to close zip file');
+        } catch (Throwable $e) {
+            throw new ZipException('Failed to close zip file', 0, $e);
         }
     }
 
@@ -89,12 +90,12 @@ class ZipService implements ZipServiceInterface
 
         $this->fileSystem->mkdir($dirname, true);
 
-        $success = $zip->open($filename, ZipArchive::CREATE);
+        $status = $zip->open($filename, ZipArchive::CREATE);
 
-        if ($success) {
+        if (true === $status) {
             $this->currentFile = $zip;
         } else {
-            throw new ZipException('Failed to create zip file');
+            throw new ZipException("Failed to create zip file. Error code: $status");
         }
     }
 
