@@ -18,36 +18,6 @@
   </component>
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/vendor/opis/closure" />
-      <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
-      <path value="$PROJECT_DIR$/vendor/mikey179/vfsstream" />
-      <path value="$PROJECT_DIR$/vendor/fakerphp/faker" />
-      <path value="$PROJECT_DIR$/vendor/evenement/evenement" />
-      <path value="$PROJECT_DIR$/vendor/react/event-loop" />
-      <path value="$PROJECT_DIR$/vendor/react/stream" />
-      <path value="$PROJECT_DIR$/vendor/react/child-process" />
-      <path value="$PROJECT_DIR$/vendor/jeremeamia/superclosure" />
-      <path value="$PROJECT_DIR$/vendor/haydenpierce/class-finder" />
-      <path value="$PROJECT_DIR$/vendor/allure-framework/allure-php-api" />
-      <path value="$PROJECT_DIR$/vendor/allure-framework/allure-phpunit" />
-      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
-      <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
-      <path value="$PROJECT_DIR$/vendor/jms/serializer" />
-      <path value="$PROJECT_DIR$/vendor/jms/metadata" />
-      <path value="$PROJECT_DIR$/vendor/psr/cache" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/annotations" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
-      <path value="$PROJECT_DIR$/vendor/symfony/mime" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/common" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/collections" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/cache" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/orm" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/inflector" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/persistence" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/dbal" />
-      <path value="$PROJECT_DIR$/vendor/doctrine/event-manager" />
       <path value="$PROJECT_DIR$/vendor/symfony/property-access" />
       <path value="$PROJECT_DIR$/vendor/doctrine/deprecations" />
       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
@@ -141,6 +111,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/vendor/spatie/pest-plugin-snapshots" />
       <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/squizlabs/php_codesniffer" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -159,8 +130,8 @@
   <component name="PhpInterpretersPhpInfoCache">
     <phpInfoCache>
       <interpreter name="php">
-        <phpinfo binary_type="PHP" php_cgi="/usr/local/bin/php-cgi" php_cli="/usr/local/bin/php" path_separator=":" version="7.4.33">
-          <additional_php_ini>/usr/local/etc/php/conf.d/docker-php-ext-pcov.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/zzz-pcov.ini, /usr/local/etc/php/conf.d/zzz-xdebug.ini</additional_php_ini>
+        <phpinfo binary_type="PHP" php_cli="/usr/local/bin/php" path_separator=":" version="7.4.33">
+          <additional_php_ini>/usr/local/etc/php/conf.d/docker-php-ext-pcov.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/docker-php-ext-zip.ini, /usr/local/etc/php/conf.d/zzz-pcov.ini, /usr/local/etc/php/conf.d/zzz-xdebug.ini</additional_php_ini>
           <configuration_file />
           <configuration_options>
             <configuration_option name="include_path" value=".:/usr/local/lib/php" />
@@ -205,6 +176,7 @@
             <extension name="xml" />
             <extension name="xmlreader" />
             <extension name="xmlwriter" />
+            <extension name="zip" />
             <extension name="zlib" />
           </loaded_extensions>
         </phpinfo>
@@ -224,6 +196,7 @@
       <extension name="apache" enabled="false" />
       <extension name="apcu" enabled="false" />
       <extension name="bcmath" enabled="false" />
+      <extension name="brotli" enabled="false" />
       <extension name="bz2" enabled="false" />
       <extension name="calendar" enabled="false" />
       <extension name="cassandra" enabled="false" />
@@ -276,6 +249,7 @@
       <extension name="oauth" enabled="false" />
       <extension name="oci8" enabled="false" />
       <extension name="odbc" enabled="false" />
+      <extension name="opentelemetry" enabled="false" />
       <extension name="pcntl" enabled="false" />
       <extension name="pcov" enabled="true" />
       <extension name="pdflib" enabled="false" />
@@ -314,7 +288,6 @@
       <extension name="xsl" enabled="false" />
       <extension name="yaml" enabled="false" />
       <extension name="zend" enabled="false" />
-      <extension name="zip" enabled="false" />
       <extension name="zmq" enabled="false" />
     </extensions>
   </component>

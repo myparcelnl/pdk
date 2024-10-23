@@ -31,4 +31,6 @@ final class PdkBackendActions
     public const CREATE_WEBHOOKS = 'createWebhooks';
     public const DELETE_WEBHOOKS = 'deleteWebhooks';
     public const FETCH_WEBHOOKS  = 'fetchWebhooks';
+    // Debugging
+    public const DOWNLOAD_LOGS = 'downloadLogs';
 }

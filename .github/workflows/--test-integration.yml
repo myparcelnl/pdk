@@ -11,6 +11,7 @@ jobs:
 
       - uses: ./.github/actions/setup
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           php-version: ${{ vars.PHP_VERSION }}
 
       - name: 'Run integration tests'
