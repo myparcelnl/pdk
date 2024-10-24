@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Api;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Exception\PdkEndpointException;
 use MyParcelNL\Pdk\App\Api\Contract\PdkApiInterface;
+use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,16 +25,16 @@ class PdkEndpoint implements PdkApiInterface
     ];
 
     /**
-     * @var \MyParcelNL\Pdk\App\Api\PdkActions
+     * @var \MyParcelNL\Pdk\App\Api\Service\PdkActionsService
      */
-    private $actions;
+    private $actionsService;
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Api\PdkActions $actions
+     * @param  \MyParcelNL\Pdk\App\Api\Service\PdkActionsService $actions
      */
-    public function __construct(PdkActions $actions)
+    public function __construct(PdkActionsService $actions)
     {
-        $this->actions = $actions;
+        $this->actionsService = $actions;
     }
 
     /**
@@ -45,7 +46,7 @@ class PdkEndpoint implements PdkApiInterface
     public function call($input, string $context): Response
     {
         try {
-            return $this->actions
+            return $this->actionsService
                 ->setContext($context)
                 ->execute($input);
         } catch (ApiException $e) {
