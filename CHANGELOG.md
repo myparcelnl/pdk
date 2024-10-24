@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.45.0](https://github.com/myparcelnl/pdk/compare/v2.44.0...v2.45.0) (2024-10-24)
+
+
+### :sparkles: New Features
+
+* improve logging ([#310](https://github.com/myparcelnl/pdk/issues/310)) ([95b0ddc](https://github.com/myparcelnl/pdk/commit/95b0ddc2caff53545f0dd1bcebacc55054057313))
+
 ## [2.44.0](https://github.com/myparcelnl/pdk/compare/v2.43.6...v2.44.0) (2024-10-24)
 
 
