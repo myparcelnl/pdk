@@ -47,6 +47,7 @@ return [
                     'return'          => true,
                     'sameDayDelivery' => false,
                     'signature'       => true,
+                    'receiptCode'     => true,
                     'insurance'       => [
                         0,
                         10000,

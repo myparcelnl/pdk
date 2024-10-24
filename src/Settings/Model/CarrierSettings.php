@@ -105,6 +105,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
     public const  EXPORT_SIGNATURE                        = 'exportSignature';
     public const  EXPORT_TRACKED                          = 'exportTracked';
+    public const  EXPORT_RECEIPT_CODE                     = 'exportReceiptCode';
     public const  PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
     public const  PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
     public const  PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
@@ -144,6 +145,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::DROP_OFF_DELAY                          => 0,
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
         self::EXPORT_AGE_CHECK                        => false,
+        self::EXPORT_RECEIPT_CODE                     => false,
         self::EXPORT_HIDE_SENDER                      => false,
         self::EXPORT_INSURANCE                        => false,
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
@@ -197,6 +199,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::DROP_OFF_DELAY                          => 'int',
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
         self::EXPORT_AGE_CHECK                        => 'bool',
+        self::EXPORT_RECEIPT_CODE                     => 'bool',
         self::EXPORT_INSURANCE                        => 'bool',
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 'int',
         self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 'float',

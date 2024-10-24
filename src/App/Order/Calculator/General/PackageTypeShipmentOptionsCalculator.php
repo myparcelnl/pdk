@@ -31,6 +31,7 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
+            ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
             ShipmentOptions::TRACKED           => $this->calculateTracked(),
         ]);
     }

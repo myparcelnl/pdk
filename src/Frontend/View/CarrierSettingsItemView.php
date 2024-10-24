@@ -248,6 +248,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     : []
             ),
 
+            $this->carrierSchema->canHaveReceiptCode() ? [
+                new InteractiveElement(CarrierSettings::EXPORT_RECEIPT_CODE, Components::INPUT_TOGGLE),
+            ] : [],
+
             $this->carrierSchema->canHaveLargeFormat()
                 ? [new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE)]
                 : [],
