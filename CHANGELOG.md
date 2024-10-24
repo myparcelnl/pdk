@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.44.0](https://github.com/myparcelnl/pdk/compare/v2.43.6...v2.44.0) (2024-10-24)
+
+
+### :sparkles: New Features
+
+* **debug:** add action to download logs ([#288](https://github.com/myparcelnl/pdk/issues/288)) ([a421c52](https://github.com/myparcelnl/pdk/commit/a421c526d595aa0a7de2fd41641425de012e39b2))
+* **pickup:** add postnl pickup for non nl countries ([#312](https://github.com/myparcelnl/pdk/issues/312)) ([68290ae](https://github.com/myparcelnl/pdk/commit/68290ae5310769d45a6936bdc3633790cc939f03))
+
 ## [2.43.6](https://github.com/myparcelnl/pdk/compare/v2.43.5...v2.43.6) (2024-10-18)
 
 
