@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $sameDayDelivery
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
+ * @property int<-1|0|1>         $receiptCode
  */
 class ShipmentOptions extends Model
 {

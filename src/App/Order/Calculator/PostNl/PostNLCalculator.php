@@ -13,6 +13,7 @@ final class PostNLCalculator extends AbstractCarrierOptionsCalculator
         return [
             PostNLCountryShipmentOptionsCalculator::class,
             PostNLAgeCheckCalculator::class,
+            PostNLReceiptCodeCalculator::class,
             PostNLDeliveryTypeCalculator::class,
         ];
     }
