@@ -15,7 +15,7 @@
           "enum": ["standard", "pickup", null]
         },
         "packageType": {
-          "enum": ["letter", "mailbox", "package", null]
+          "enum": ["letter", "mailbox", "package", "package_small", null]
         },
         "shipmentOptions": {
           "properties": {

@@ -179,6 +179,11 @@ return [
                             'name'   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
                             'schema' => 'order/dhlforyou/letter',
                         ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                            'schema' => 'order/dhlforyou/nl_package_small',
+                        ],
                     ],
                 ],
                 [
