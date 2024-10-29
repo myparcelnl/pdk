@@ -15,7 +15,7 @@
               "enum": [0, 1]
             },
             "receiptCode": {
-              "enum": [-1, 0, 1]
+              "enum": [-1]
             }
           }
         }
