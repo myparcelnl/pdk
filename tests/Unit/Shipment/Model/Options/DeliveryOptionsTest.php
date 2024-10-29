@@ -54,6 +54,7 @@ it('instantiates shipment options', function () {
             'return'           => true,
             'sameDayDelivery'  => true,
             'signature'        => true,
+            'receiptCode'      => true,
         ],
     ]);
 
@@ -69,6 +70,7 @@ it('instantiates shipment options', function () {
             'sameDayDelivery'  => true,
             'signature'        => true,
             'tracked'          => true,
+            'receiptCode'      => true,
         ]);
 });
 

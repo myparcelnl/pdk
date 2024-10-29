@@ -67,6 +67,7 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
+    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -163,6 +164,7 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
+    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -259,6 +261,7 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
+    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -355,6 +358,7 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
+    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
