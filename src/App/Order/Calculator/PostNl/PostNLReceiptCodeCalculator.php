@@ -35,7 +35,7 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
         $shipmentOptions->largeFormat   = TriStateService::DISABLED;
         $shipmentOptions->return        = TriStateService::DISABLED;
 
-        if ($shipmentOptions->insurance <= TriStateService::ENABLED) {
+        if ($shipmentOptions->insurance <= 1) {
             $shipmentOptions->insurance = 10000;
         }
     }
