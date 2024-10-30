@@ -1,22 +1,38 @@
-.gitattributes        export-ignore
-.gitignore            export-ignore
-.prettierrc           export-ignore
-.yarnrc.yml           export-ignore
-/.github              export-ignore
-/.idea                export-ignore
-/.yarn                export-ignore
-/coverage             export-ignore
-/private              export-ignore
-/tests/Mocks          export-ignore
-/tests/Unit           export-ignore
-/tests/__snapshots__  export-ignore
+# Ignore all files and folders starting with a dot
+.*  export-ignore
+
+# But keep the phpstorm meta file, because it can be used even if it's in a dependency.
+.meta/                    -export-ignore
+.meta/.phpstorm.meta.php  -export-ignore
+
+# Folders
+bin/       export-ignore
+coverage/  export-ignore
+docs/      export-ignore
+private/   export-ignore
+types/     export-ignore
+
+# The rest of the files in tests/ should be included
+tests/Datasets/       export-ignore
+tests/Mocks/          export-ignore
+tests/Unit/           export-ignore
+tests/__snapshots__/  export-ignore
+
+# Anything related to development tools
+phpmd*    export-ignore
+phpstan*  export-ignore
+phpunit*  export-ignore
+rector*   export-ignore
+
+# Other configuration files
+*.xml              export-ignore
+release.config.js  export-ignore
+
+# Docker
 Dockerfile            export-ignore
 docker-compose.yml    export-ignore
-package.json          export-ignore
-phpmd.xml             export-ignore
-phpstan-baseline.php  export-ignore
-phpstan.neon.dist     export-ignore
-phpunit.xml           export-ignore
-rector.php            export-ignore
-release.config.js     export-ignore
-yarn.lock             export-ignore
+docker-compose.*.yml  export-ignore
+
+# Yarn
+package.json  export-ignore
+yarn.lock     export-ignore
