@@ -12,6 +12,9 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -44,4 +47,62 @@ it('disables signature, only recipient, large format and return when receipt cod
         ->and($shipmentOptions->return)->toBe(TriStateService::DISABLED);
 
     $reset();
-}); 
+});
+
+it('sets minimum insurance when receipt code is enabled and insurance is not set', function () {
+    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+
+    $carrier = factory(\MyParcelNL\Pdk\Carrier\Model\Carrier::class)
+        ->withName(Carrier::CARRIER_POSTNL_NAME)
+        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]]))
+        ->make();
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withReceiptCode(TriStateService::ENABLED)
+                        ->withInsurance(0)
+                )
+        )
+        ->make();
+
+    $calculator = new PostNLReceiptCodeCalculator($order);
+    $calculator->calculate();
+
+    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(10000);
+
+    $reset();
+});
+
+it('does not change insurance when receipt code is enabled and insurance is already set', function () {
+    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+
+    $carrier = factory(\MyParcelNL\Pdk\Carrier\Model\Carrier::class)
+        ->withName(Carrier::CARRIER_POSTNL_NAME)
+        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]]))
+        ->make();
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withReceiptCode(TriStateService::ENABLED)
+                        ->withInsurance(10000)
+                )
+        )
+        ->make();
+
+    $calculator = new PostNLReceiptCodeCalculator($order);
+    $calculator->calculate();
+
+    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(10000);
+
+    $reset();
+});
