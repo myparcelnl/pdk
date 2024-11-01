@@ -50,33 +50,21 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
-     * @param  int[] $insuranceAmounts
+     * @param  int[] $insuranceAmount
      * @param  int   $orderAmount
      *
      * @return int
      */
-    private function getMinimumInsuranceAmount(array $insuranceAmounts, int $orderAmount): int
+    private function getMinimumInsuranceAmount(array $insuranceAmount, int $orderAmount): int
     {
-        if (empty($insuranceAmounts)) {
-            return 0;
-        }
-
-        sort($insuranceAmounts);
-
-        if (in_array($orderAmount, $insuranceAmounts)) {
-            return $orderAmount;
-        }
-
-        if ($orderAmount > end($insuranceAmounts)) {
-            return end($insuranceAmounts);
-        }
-
-        foreach ($insuranceAmounts as $amount) {
-            if ($amount > $orderAmount) {
-                return $amount;
+        foreach ($insuranceAmount as $allowedInsuranceAmount) {
+            if ($allowedInsuranceAmount < $orderAmount) {
+                continue;
             }
+
+            return $allowedInsuranceAmount;
         }
 
-        return end($insuranceAmounts);
+        return $orderAmount;
     }
 }
