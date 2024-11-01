@@ -67,9 +67,13 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
             return $orderAmount;
         }
 
-        foreach ($insuranceAmounts as $allowedInsuranceAmount) {
-            if ($allowedInsuranceAmount >= $orderAmount) {
-                return $allowedInsuranceAmount;
+        if ($orderAmount > end($insuranceAmounts)) {
+            return end($insuranceAmounts);
+        }
+
+        foreach ($insuranceAmounts as $amount) {
+            if ($amount > $orderAmount) {
+                return $amount;
             }
         }
 
