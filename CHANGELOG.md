@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.46.0](https://github.com/myparcelnl/pdk/compare/v2.45.0...v2.46.0) (2024-11-07)
+
+
+### :sparkles: New Features
+
+* allow dhlforyou pickup locations ([#316](https://github.com/myparcelnl/pdk/issues/316)) ([58ae608](https://github.com/myparcelnl/pdk/commit/58ae608f163943f52e591315a11ac41d9a318bce))
+
 ## [2.45.0](https://github.com/myparcelnl/pdk/compare/v2.44.0...v2.45.0) (2024-10-24)
 
 
