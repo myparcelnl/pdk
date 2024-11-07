@@ -511,6 +511,21 @@ it(
             'accountHasCarrierSmallPackageContract' => true,
             'carrierHasInternationalMailboxAllowed' => true,
         ],
+
+        'ups' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(
+                    factory(PdkOrder::class)
+                        ->toTheUnitedStates()
+                        ->withDeliveryOptions(
+                            factory(DeliveryOptions::class)
+                                ->withCarrier(factory(Carrier::class)->fromUPS())
+                        )
+                );
+            },
+            'accountHasCarrierSmallPackageContract' => false,
+            'carrierHasInternationalMailboxAllowed' => false,
+        ],
     ])
     ->with('orderModeToggle');
 
