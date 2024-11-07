@@ -9,7 +9,6 @@
         "ext-zip": "*",
         "illuminate/support": ">= 8",
         "justinrainbow/json-schema": "^5.2",
-        "myparcelnl/sdk": ">= 7",
         "php": ">=7.1.0",
         "php-di/php-di": ">= 6",
         "psr/log": "^1 || ^2 || ^3",
