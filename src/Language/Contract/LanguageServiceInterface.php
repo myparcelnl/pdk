@@ -7,7 +7,8 @@ namespace MyParcelNL\Pdk\Language\Contract;
 interface LanguageServiceInterface
 {
     /**
-     * Get iso 2 language code.
+     * Get iso 2 language code by given language, or $this->getLanguage(). If instance language is used and the language
+     * is not supported, a fallback language will be returned.
      *
      * @example en
      * @example nl
