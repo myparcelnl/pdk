@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 
 /**
  * @deprecated use NewAbstractSettingsView instead

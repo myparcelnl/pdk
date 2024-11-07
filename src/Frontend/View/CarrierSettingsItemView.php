@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

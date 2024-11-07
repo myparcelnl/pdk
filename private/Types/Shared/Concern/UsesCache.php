@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Console\Storage\ConsoleFileCacheStorage;
 use MyParcelNL\Pdk\Console\Storage\ConsoleMemoryCacheStorage;
 use MyParcelNL\Pdk\Console\Storage\Contract\ConsoleStorageInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 
 trait UsesCache
 {

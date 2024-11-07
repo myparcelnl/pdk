@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\Contract\InteractiveElementBuilderInterface;
 use MyParcelNL\Pdk\Frontend\Form\FormBuilder;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 
 /**
  * @todo rename to AbstractSettingsView when all forms are converted

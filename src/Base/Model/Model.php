@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
