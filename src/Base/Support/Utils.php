@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Support\Str;
 use Throwable;
 
-class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
+class Utils
 {
     /**
      * @var array
