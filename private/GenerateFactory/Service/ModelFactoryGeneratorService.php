@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Console\Types\Shared\Collection\TypeCollection;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassProperty;
 use MyParcelNL\Pdk\Tests\Factory\FactoryFactory;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 use Throwable;
 
 final class ModelFactoryGeneratorService extends AbstractFactoryGeneratorService

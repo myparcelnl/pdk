@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Console\Concern\HasCommandContext;
 use MyParcelNL\Pdk\Console\Types\Shared\Concern\ReportsTiming;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\ParsesPhpDocs;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 use Nette\Loaders\RobotLoader;
 
 final class PhpLoader
