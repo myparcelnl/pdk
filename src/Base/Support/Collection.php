@@ -6,11 +6,9 @@ namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
-use MyParcelNL\Sdk\src\Support\Arr;
-use MyParcelNL\Sdk\src\Support\Collection as SdkCollection;
 use Throwable;
 
-class Collection extends SdkCollection implements StorableArrayable
+class Collection extends \Illuminate\Support\Collection implements StorableArrayable
 {
     /**
      * Defines a class items should be cast into.
@@ -30,13 +28,13 @@ class Collection extends SdkCollection implements StorableArrayable
 
     /**
      * @param  string $key
-     * @param         $default
+     * @param  mixed  $default
      *
      * @return mixed
      */
-    public function dataGet(string $key, $default = null)
+    public function getByKey(string $key, $default = null)
     {
-        return (new Helpers())->data_get($this->toArray(), $key, $default);
+        return Arr::get($this->toArray(), $key, $default);
     }
 
     /**
