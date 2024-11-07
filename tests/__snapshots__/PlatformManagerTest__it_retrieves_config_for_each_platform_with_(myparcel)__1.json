@@ -52,7 +52,7 @@
     {
       "name": "dhlforyou",
       "capabilities": {
-        "packageTypes": ["package", "mailbox"],
+        "packageTypes": ["package", "mailbox", "package_small"],
         "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": {
           "ageCheck": true,

@@ -14,7 +14,7 @@
     "features": {
       "labelDescriptionLength": 45
     },
-    "packageTypes": ["package", "mailbox"],
+    "packageTypes": ["package", "mailbox", "package_small"],
     "shipmentOptions": {
       "ageCheck": true,
       "largeFormat": false,
