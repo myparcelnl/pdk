@@ -180,3 +180,78 @@ it('returns 0 when no valid insurance amounts are available', function () {
 
     $reset();
 });
+
+it('disables receipt code when shipping to a non-NL country', function () {
+    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => 'BE'])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withReceiptCode(TriStateService::ENABLED)
+                        ->withSignature(TriStateService::ENABLED)
+                        ->withOnlyRecipient(TriStateService::ENABLED)
+                        ->withLargeFormat(TriStateService::ENABLED)
+                        ->withReturn(TriStateService::ENABLED)
+                )
+        )
+        ->make();
+
+    $calculator = new PostNLReceiptCodeCalculator($order);
+    $calculator->calculate();
+
+    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
+
+    expect($shipmentOptions->receiptCode)
+        ->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->signature)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->onlyRecipient)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->largeFormat)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->return)
+        ->toBe(TriStateService::ENABLED);
+
+    $reset();
+});
+
+it('disables receipt code when age check is enabled', function () {
+    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withReceiptCode(TriStateService::ENABLED)
+                        ->withAgeCheck(TriStateService::ENABLED)
+                        ->withSignature(TriStateService::ENABLED)
+                        ->withOnlyRecipient(TriStateService::ENABLED)
+                        ->withLargeFormat(TriStateService::ENABLED)
+                        ->withReturn(TriStateService::ENABLED)
+                )
+        )
+        ->make();
+
+    $calculator = new PostNLReceiptCodeCalculator($order);
+    $calculator->calculate();
+
+    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
+
+    expect($shipmentOptions->receiptCode)
+        ->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->signature)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->onlyRecipient)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->largeFormat)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->return)
+        ->toBe(TriStateService::ENABLED);
+
+    $reset();
+});
