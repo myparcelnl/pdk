@@ -114,3 +114,69 @@ it('does not change insurance when receipt code is enabled and insurance is alre
 
     $reset();
 });
+
+it('does nothing when receipt code is disabled', function () {
+    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withReceiptCode(TriStateService::DISABLED)
+                        ->withSignature(TriStateService::ENABLED)
+                        ->withOnlyRecipient(TriStateService::ENABLED)
+                        ->withLargeFormat(TriStateService::ENABLED)
+                        ->withReturn(TriStateService::ENABLED)
+                )
+        )
+        ->make();
+
+    $calculator = new PostNLReceiptCodeCalculator($order);
+    $calculator->calculate();
+
+    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
+
+    expect($shipmentOptions->signature)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->onlyRecipient)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->largeFormat)
+        ->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->return)
+        ->toBe(TriStateService::ENABLED);
+
+    $reset();
+});
+
+it('returns 0 when no valid insurance amounts are available', function () {
+    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+
+    $carrier = factory(Carrier::class)
+        ->withName(Carrier::CARRIER_POSTNL_NAME)
+        ->withCapabilities(
+            factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [0]])
+        )
+        ->make();
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withReceiptCode(TriStateService::ENABLED)
+                        ->withInsurance(TriStateService::DISABLED)
+                )
+        )
+        ->make();
+
+    $calculator = new PostNLReceiptCodeCalculator($order);
+    $calculator->calculate();
+
+    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(0);
+
+    $reset();
+});
