@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.46.1](https://github.com/myparcelnl/pdk/compare/v2.46.0...v2.46.1) (2024-11-08)
+
+
+### :bug: Bug Fixes
+
+* **language:** correctly use fallback language when unsupported language is used ([#315](https://github.com/myparcelnl/pdk/issues/315)) ([86952c1](https://github.com/myparcelnl/pdk/commit/86952c19ca7d5959c32cbb67a2983f3563ab058f)), closes [myparcelnl/woocommerce#1177](https://github.com/myparcelnl/woocommerce/issues/1177)
+
 ## [2.46.0](https://github.com/myparcelnl/pdk/compare/v2.45.0...v2.46.0) (2024-11-07)
 
 
