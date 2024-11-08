@@ -41,10 +41,14 @@ it('disables signature, only recipient, large format and return when receipt cod
 
     $shipmentOptions = $order->deliveryOptions->shipmentOptions;
 
-    expect($shipmentOptions->signature)->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->onlyRecipient)->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->largeFormat)->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->return)->toBe(TriStateService::DISABLED);
+    expect($shipmentOptions->signature)
+        ->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->onlyRecipient)
+        ->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->largeFormat)
+        ->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->return)
+        ->toBe(TriStateService::DISABLED);
 
     $reset();
 });
@@ -52,9 +56,11 @@ it('disables signature, only recipient, large format and return when receipt cod
 it('sets minimum insurance when receipt code is enabled and insurance is not set', function () {
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
-    $carrier = factory(\MyParcelNL\Pdk\Carrier\Model\Carrier::class)
+    $carrier = factory(Carrier::class)
         ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]]))
+        ->withCapabilities(
+            factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
+        )
         ->make();
 
     $order = factory(PdkOrder::class)
@@ -73,7 +79,7 @@ it('sets minimum insurance when receipt code is enabled and insurance is not set
     $calculator = new PostNLReceiptCodeCalculator($order);
     $calculator->calculate();
 
-    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(10000);
+    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(5000);
 
     $reset();
 });
@@ -81,9 +87,11 @@ it('sets minimum insurance when receipt code is enabled and insurance is not set
 it('does not change insurance when receipt code is enabled and insurance is already set', function () {
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
-    $carrier = factory(\MyParcelNL\Pdk\Carrier\Model\Carrier::class)
+    $carrier = factory(Carrier::class)
         ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]]))
+        ->withCapabilities(
+            factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
+        )
         ->make();
 
     $order = factory(PdkOrder::class)

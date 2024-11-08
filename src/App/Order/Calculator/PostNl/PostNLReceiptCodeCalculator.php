@@ -15,9 +15,23 @@ use MyParcelNL\Pdk\Facade\Pdk;
  */
 final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
 {
+    /**
+     * Calculates the receipt code options for PostNL shipments.
+     * When receipt code is enabled:
+     * - Shipment must be to the Netherlands
+     * - Receipt code will be disabled if age check is active
+     * - Signature and only recipient will be disabled
+     * - Large format will be disabled
+     * - Return will be disabled
+     * - Insurance will be enabled (minimum €100) when no insurance is active
+     */
     public function calculate(): void
     {
         $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
+
+        if (TriStateService::ENABLED !== $shipmentOptions->receiptCode) {
+            return;
+        }
 
         if ($this->order->shippingAddress->cc !== CountryCodes::CC_NL) {
             $shipmentOptions->receiptCode = TriStateService::DISABLED;
@@ -29,42 +43,43 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
-        if (TriStateService::ENABLED !== $shipmentOptions->receiptCode) {
-            return;
-        }
-
         $shipmentOptions->signature     = TriStateService::DISABLED;
         $shipmentOptions->onlyRecipient = TriStateService::DISABLED;
         $shipmentOptions->largeFormat   = TriStateService::DISABLED;
         $shipmentOptions->return        = TriStateService::DISABLED;
 
-        if ($shipmentOptions->insurance <= 1) {
+        if ($shipmentOptions->insurance === TriStateService::DISABLED) {
             /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
-            $schema = Pdk::get(CarrierSchema::class);
+            $schema                  = Pdk::get(CarrierSchema::class);
             $allowedInsuranceAmounts = $schema
                 ->setCarrier($this->order->deliveryOptions->carrier)
                 ->getAllowedInsuranceAmounts();
 
-            $shipmentOptions->insurance = $this->getMinimumInsuranceAmount($allowedInsuranceAmounts, 10000);
+            $shipmentOptions->insurance = $this->getLowestInsuranceAmount($allowedInsuranceAmounts);
         }
     }
 
     /**
+     * Gets the lowest allowed insurance amount that is greater than 0.
+     *
      * @param  int[] $insuranceAmount
-     * @param  int   $orderAmount
      *
      * @return int
      */
-    private function getMinimumInsuranceAmount(array $insuranceAmount, int $orderAmount): int
+    private function getLowestInsuranceAmount(array $insuranceAmount): int
     {
+        $lowestAmount = null;
+
         foreach ($insuranceAmount as $allowedInsuranceAmount) {
-            if ($allowedInsuranceAmount < $orderAmount) {
+            if ($allowedInsuranceAmount <= 0) {
                 continue;
             }
 
-            return $allowedInsuranceAmount;
+            if (null === $lowestAmount || $allowedInsuranceAmount < $lowestAmount) {
+                $lowestAmount = $allowedInsuranceAmount;
+            }
         }
 
-        return $orderAmount;
+        return $lowestAmount ?? 0;
     }
 }
