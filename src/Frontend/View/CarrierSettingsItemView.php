@@ -265,6 +265,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 : [],
 
             $this->carrierSchema->canHaveInsurance() ? $this->getExportInsuranceFields() : [],
+
+            $this->carrierSchema->canHaveCollect()
+                ? [new interactiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
+                : [],
         ];
     }
 
@@ -393,7 +397,13 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 $this->carrierSchema->canHaveOnlyRecipient() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_ONLY_RECIPIENT,
                     CarrierSettings::PRICE_ONLY_RECIPIENT
-                ) : []
+                ) : [],
+
+                $this->carrierSchema->canHaveExpressDelivery() ?
+                    $this->createSettingWithPriceFields(
+                        CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
+                        CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS
+                    ) : []
             ),
 
             /**
