@@ -10,7 +10,7 @@
               "required": ["deliveryType"],
               "properties": {
                 "deliveryType": {
-                  "enum": ["standard", null]
+                  "enum": ["standard", null, "express"]
                 }
               }
             }
@@ -43,7 +43,7 @@
     "deliveryOptions": {
       "properties": {
         "deliveryType": {
-          "enum": ["standard", null]
+          "enum": ["standard", null, "express"]
         },
         "packageType": {
           "enum": ["package", null]

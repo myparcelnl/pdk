@@ -164,6 +164,9 @@
             },
             "receiptCode": {
               "enum": [-1, 0, 1]
+            },
+            "collect": {
+              "enum": [-1, 0, 1]
             }
           }
         }

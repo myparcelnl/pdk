@@ -44,6 +44,12 @@ class DeliveryOptions extends Model
     public const DELIVERY_TYPE_STANDARD_NAME = 'standard';
     public const DELIVERY_TYPE_PICKUP_ID     = 4;
     public const DELIVERY_TYPE_PICKUP_NAME   = 'pickup';
+    //todo: toevoegen aan order.php en evt aan schema.
+    // calculator toevoegen voor:
+    //  - deliveryType
+    //  - shipment options
+    public const DELIVERY_TYPE_EXPRESS_ID   = 7; //todo in order.php bij ups alleen nederland
+    public const DELIVERY_TYPE_EXPRESS_NAME = 'express';
     /**
      * @var int[]
      */
@@ -52,6 +58,7 @@ class DeliveryOptions extends Model
         self::DELIVERY_TYPE_STANDARD_ID,
         self::DELIVERY_TYPE_EVENING_ID,
         self::DELIVERY_TYPE_PICKUP_ID,
+        self::DELIVERY_TYPE_EXPRESS_ID,
     ];
     /**
      * @var string[]
@@ -61,6 +68,7 @@ class DeliveryOptions extends Model
         self::DELIVERY_TYPE_STANDARD_NAME,
         self::DELIVERY_TYPE_EVENING_NAME,
         self::DELIVERY_TYPE_PICKUP_NAME,
+        self::DELIVERY_TYPE_EXPRESS_NAME,
     ];
     /**
      * @var array
@@ -70,6 +78,7 @@ class DeliveryOptions extends Model
         self::DELIVERY_TYPE_STANDARD_NAME => self::DELIVERY_TYPE_STANDARD_ID,
         self::DELIVERY_TYPE_EVENING_NAME  => self::DELIVERY_TYPE_EVENING_ID,
         self::DELIVERY_TYPE_PICKUP_NAME   => self::DELIVERY_TYPE_PICKUP_ID,
+        self::DELIVERY_TYPE_EXPRESS_NAME  => self::DELIVERY_TYPE_EXPRESS_ID,
     ];
     public const DEFAULT_DELIVERY_TYPE_ID     = self::DELIVERY_TYPE_STANDARD_ID;
     public const DEFAULT_DELIVERY_TYPE_NAME   = self::DELIVERY_TYPE_STANDARD_NAME;

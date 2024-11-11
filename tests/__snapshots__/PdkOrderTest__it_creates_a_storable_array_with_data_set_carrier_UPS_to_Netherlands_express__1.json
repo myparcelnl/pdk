@@ -1,0 +1,26 @@
+[
+  {
+    "exported": false,
+    "deliveryOptions": {
+      "carrier": {
+        "externalIdentifier": "ups"
+      },
+      "labelAmount": 1,
+      "shipmentOptions": {
+        "insurance": -1,
+        "ageCheck": -1,
+        "hideSender": -1,
+        "largeFormat": -1,
+        "onlyRecipient": -1,
+        "return": -1,
+        "sameDayDelivery": -1,
+        "signature": -1,
+        "tracked": -1,
+        "collect": -1
+      },
+      "deliveryType": "express",
+      "packageType": "package"
+    },
+    "physicalProperties": []
+  }
+]
