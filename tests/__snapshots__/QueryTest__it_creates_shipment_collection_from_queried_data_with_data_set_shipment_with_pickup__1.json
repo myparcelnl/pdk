@@ -51,7 +51,8 @@
       "return": 0,
       "sameDayDelivery": 0,
       "signature": 1,
-      "tracked": -1
+      "tracked": -1,
+      "receiptCode": -1
     },
     "deliveryType": "pickup",
     "packageType": "package"

@@ -143,6 +143,9 @@
             },
             "tracked": {
               "enum": [0, 1]
+            },
+            "receiptCode": {
+              "enum": [0, 1]
             }
           }
         }

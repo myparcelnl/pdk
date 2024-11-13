@@ -62,5 +62,13 @@
     "constraint": "enum",
     "context": 1,
     "enum": [0, 1]
+  },
+  {
+    "property": "deliveryOptions.shipmentOptions.receiptCode",
+    "pointer": "/deliveryOptions/shipmentOptions/receiptCode",
+    "message": "Does not have a value in the enumeration [0,1]",
+    "constraint": "enum",
+    "context": 1,
+    "enum": [0, 1]
   }
 ]

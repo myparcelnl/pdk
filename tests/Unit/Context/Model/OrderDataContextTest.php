@@ -86,6 +86,7 @@ it('exposes inherited options', function () {
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
             ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
             ShipmentOptions::TRACKED           => TriStateService::INHERIT,
+            ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
@@ -106,6 +107,7 @@ it('exposes inherited options', function () {
                     // Enabled by carrier
                     ShipmentOptions::SIGNATURE         => TriStateService::ENABLED,
                     ShipmentOptions::TRACKED           => TriStateService::DISABLED,
+                    ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                 ],
             ],
             'dhlforyou:12345' => [
@@ -124,6 +126,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                     ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
                     ShipmentOptions::TRACKED           => TriStateService::DISABLED,
+                    ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                 ],
             ],
         ]);
