@@ -181,11 +181,11 @@ it('returns 0 when no valid insurance amounts are available', function () {
     $reset();
 });
 
-it('disables receipt code when shipping to a non-NL country', function () {
+it('disables receipt code when shipping to a non-NL/BE country', function () {
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
     $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => 'BE'])
+        ->withShippingAddress(['cc' => 'DE'])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withShipmentOptions(
