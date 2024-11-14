@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Support\Str;
 use MyParcelNL\Pdk\Tests\Mocks\MockNestedModel;
 
 const MODEL_DATA = [
@@ -81,7 +82,7 @@ it('can use toArrayWithoutNull', function () {
 });
 
 it('can combine case and skipping null', function () {
-    expect((new MockNestedModel(MODEL_DATA))->toArray(Arrayable::SKIP_NULL | Arrayable::CASE_KEBAB))->toBe([
+    expect((new MockNestedModel(MODEL_DATA))->toArray(Arrayable::SKIP_NULL | Str::CASE_KEBAB))->toBe([
         'my-value' => '1',
         'my-model' => [
             'my-model' => [],

@@ -214,7 +214,7 @@ trait HasAttributes
                 });
             }
 
-            if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
+            if ($flags & Str::CASE_SNAKE || $flags & Str::CASE_KEBAB || $flags & Str::CASE_STUDLY) {
                 $attributes = Utils::changeArrayKeysCase($this->attributes, $flags);
             }
         }
@@ -340,7 +340,7 @@ trait HasAttributes
                 }
             }
 
-            if ($flags & Arrayable::CASE_SNAKE || $flags & Arrayable::CASE_KEBAB || $flags & Arrayable::CASE_STUDLY) {
+            if ($flags & Str::CASE_SNAKE || $flags & Str::CASE_KEBAB || $flags & Str::CASE_STUDLY) {
                 $attributes = Utils::changeArrayKeysCase($attributes, $flags);
             }
         }

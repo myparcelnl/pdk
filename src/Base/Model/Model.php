@@ -254,7 +254,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function toKebabCaseArray(): array
     {
-        return $this->toArray(Arrayable::CASE_KEBAB);
+        return $this->toArray(Str::CASE_KEBAB);
     }
 
     /**
@@ -262,7 +262,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function toSnakeCaseArray(): array
     {
-        return $this->toArray(Arrayable::CASE_SNAKE);
+        return $this->toArray(Str::CASE_SNAKE);
     }
 
     /**
@@ -278,7 +278,7 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function toStudlyCaseArray(): array
     {
-        return $this->toArray(Arrayable::CASE_STUDLY);
+        return $this->toArray(Str::CASE_STUDLY);
     }
 
     /**

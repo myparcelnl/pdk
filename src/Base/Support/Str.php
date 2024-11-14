@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
-
 class Str extends \Illuminate\Support\Str
 {
+    public const CASE_SNAKE  = 1;
+    public const CASE_KEBAB  = 2;
+    public const CASE_STUDLY = 4;
+
     /**
      * @var array
      */
@@ -35,7 +37,11 @@ class Str extends \Illuminate\Support\Str
      */
     public static function limit($value, $limit = 100, $end = '...'): string
     {
-        return parent::limit($value, $limit - strlen($end), $end);
+        if (mb_strwidth($value, 'UTF-8') <= $limit) {
+            return $value;
+        }
+
+        return rtrim(mb_strimwidth($value, 0, $limit - mb_strwidth($end, 'UTF-8'), '', 'UTF-8')) . $end;
     }
 
     /**
@@ -48,15 +54,15 @@ class Str extends \Illuminate\Support\Str
         if (! isset(self::$flagCaseCache[$flags])) {
             $case = 'camel';
 
-            if ($flags & Arrayable::CASE_SNAKE) {
+            if ($flags & self::CASE_SNAKE) {
                 $case = 'snake';
             }
 
-            if ($flags & Arrayable::CASE_KEBAB) {
+            if ($flags & self::CASE_KEBAB) {
                 $case = 'kebab';
             }
 
-            if ($flags & Arrayable::CASE_STUDLY) {
+            if ($flags & self::CASE_STUDLY) {
                 $case = 'studly';
             }
 

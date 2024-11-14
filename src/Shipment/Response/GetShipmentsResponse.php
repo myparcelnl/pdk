@@ -6,8 +6,8 @@ namespace MyParcelNL\Pdk\Shipment\Response;
 
 use MyParcelNL\Pdk\Api\Concern\DecodesAddressFields;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Str;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -102,7 +102,7 @@ class GetShipmentsResponse extends ApiResponseWithBody
      */
     private function getShipmentOptions(array $options): array
     {
-        $keys            = array_keys((new ShipmentOptions())->getAttributes(Arrayable::CASE_SNAKE));
+        $keys            = array_keys((new ShipmentOptions())->getAttributes(Str::CASE_SNAKE));
         $shipmentOptions = Arr::only($options, $keys);
 
         $shipmentOptions['insurance'] = $options['insurance']['amount'] ?? null;
