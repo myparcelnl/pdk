@@ -14,12 +14,12 @@ use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Exception\InvalidCastException;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Str;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Base\Support\Str;
 use Throwable;
 
 /**
@@ -183,7 +183,7 @@ trait HasAttributes
             return null;
         }
 
-        $key = Utils::changeCase($key);
+        $key = Str::changeCase($key);
 
         if ($this->isGuarded($key)) {
             return $this->guarded[$key];
@@ -269,7 +269,7 @@ trait HasAttributes
      */
     public function setAttribute(string $key, $value): self
     {
-        $key = $this->convertDeprecatedKey(Utils::changeCase($key));
+        $key = $this->convertDeprecatedKey(Str::changeCase($key));
 
         if ($this->isGuarded($key)) {
             return $this;
@@ -301,8 +301,8 @@ trait HasAttributes
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
         foreach ($this->getCasts() as $key => $value) {
-            $originalKey = Utils::changeCase($key);
-            $key         = Utils::changeCase($key, $flags);
+            $originalKey = Str::changeCase($key);
+            $key         = Str::changeCase($key, $flags);
 
             if (! array_key_exists($key, $attributes) || in_array($key, $mutatedAttributes, true)) {
                 continue;
@@ -358,8 +358,8 @@ trait HasAttributes
     protected function addMutatedAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
         foreach ($mutatedAttributes as $key) {
-            $originalKey = Utils::changeCase($key);
-            $key         = Utils::changeCase($key, $flags);
+            $originalKey = Str::changeCase($key);
+            $key         = Str::changeCase($key, $flags);
 
             if (! array_key_exists($key, $attributes)) {
                 continue;
@@ -585,7 +585,7 @@ trait HasAttributes
     protected function getCastType(string $key): ?string
     {
         $casts         = $this->getCasts();
-        $normalizedKey = Utils::changeCase($key);
+        $normalizedKey = Str::changeCase($key);
 
         return $casts[$normalizedKey];
     }
@@ -597,7 +597,7 @@ trait HasAttributes
      */
     protected function getCasts(): array
     {
-        return Utils::changeArrayKeysCase($this->casts);
+        return $this->casts;
     }
 
     /**

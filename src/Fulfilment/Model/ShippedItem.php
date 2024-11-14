@@ -13,12 +13,12 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class ShippedItem extends Model
 {
     public    $attributes = [
-        'order_line_identifier' => null,
-        'quantity'              => 1,
+        'orderLineIdentifier' => null,
+        'quantity'            => 1,
     ];
 
     protected $casts      = [
-        'order_line_identifier' => 'string',
-        'quantity'              => 'int',
+        'orderLineIdentifier' => 'string',
+        'quantity'            => 'int',
     ];
 }

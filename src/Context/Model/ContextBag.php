@@ -39,4 +39,19 @@ class ContextBag extends Model
         Context::ID_PRODUCT_DATA          => ProductDataContextCollection::class,
         Context::ID_PRODUCT_SETTINGS_VIEW => ProductSettingsViewContext::class,
     ];
+
+    public $lazy       = [
+        Context::ID_GLOBAL,
+        Context::ID_DYNAMIC,
+        Context::ID_CHECKOUT,
+        Context::ID_ORDER_DATA,
+        Context::ID_PLUGIN_SETTINGS_VIEW,
+        Context::ID_PRODUCT_DATA,
+        Context::ID_PRODUCT_SETTINGS_VIEW,
+    ];
+
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+    }
 }
