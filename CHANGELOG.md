@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.47.1](https://github.com/myparcelnl/pdk/compare/v2.47.0...v2.47.1) (2024-11-14)
+
+
+### :bug: Bug Fixes
+
+* **ups:** do not include delivery date for ups when exporting ([#317](https://github.com/myparcelnl/pdk/issues/317)) ([fc1eabc](https://github.com/myparcelnl/pdk/commit/fc1eabc6b7ae43963e6d66196aabae78a615148a))
+
 ## [2.47.0](https://github.com/myparcelnl/pdk/compare/v2.46.1...v2.47.0) (2024-11-13)
 
 
