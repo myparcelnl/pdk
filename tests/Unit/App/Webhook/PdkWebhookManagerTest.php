@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
@@ -27,23 +28,19 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('webhook');
 
-usesShared(new UsesMockPdkInstance(), new UsesMockEachCron());
+usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
-it('dispatches and executes webhooks', function (string $hook, string $calledClass, bool $useHeader) {
-    /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $repository */
-    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkWebhookManager $webhookManager */
-    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
-    $cronService = Pdk::get(CronServiceInterface::class);
-
-    $repository->storeHashedUrl('https://example.com/hashed-url');
-    $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
-
-    $time = time();
-
-    $request = Request::create(
-        $repository->getHashedUrl(),
+/**
+ * @param  string $url
+ * @param  string $hook
+ * @param  bool   $useHeader
+ *
+ * @return \Symfony\Component\HttpFoundation\Request
+ */
+function createWebhookRequest(string $url, string $hook, bool $useHeader = false): Request
+{
+    return Request::create(
+        $url,
         Request::METHOD_POST,
         [],
         [],
@@ -57,16 +54,42 @@ it('dispatches and executes webhooks', function (string $hook, string $calledCla
             ],
         ])
     );
+}
 
-    $response = $webhookManager->call($request);
+function sendWebhook(string $hook, bool $useHeader = false): Response
+{
+    /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $webhooksRepository */
+    $webhooksRepository = Pdk::get(PdkWebhooksRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkWebhookManager $webhookManager */
+    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
+
+    $subscriptions = new WebhookSubscriptionCollection([
+        [
+            'hook' => $hook,
+            'url'  => $webhooksRepository->getHashedUrl(),
+        ],
+    ]);
+
+    $webhooksRepository->storeHashedUrl('https://example.com/hashed-url');
+    $webhooksRepository->store($subscriptions);
+
+    return $webhookManager->call(createWebhookRequest($webhooksRepository->getHashedUrl(), $hook, $useHeader));
+}
+
+it('dispatches and executes webhooks', function (string $hook, string $calledClass, bool $useHeader) {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkWebhookManager $webhookManager */
+    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
+    $cronService = Pdk::get(CronServiceInterface::class);
+
+    $time     = time();
+    $response = sendWebhook($hook, $useHeader);
 
     $scheduled = $cronService->getScheduledTasks();
     $timestamp = $scheduled->first()['timestamp'];
 
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
-        ->and($request->headers->get('x-myparcel-hook'))
-        ->toBe($hook)
         ->and($response->getStatusCode())
         ->toBe(Response::HTTP_ACCEPTED)
         ->and($scheduled->all())
@@ -77,9 +100,7 @@ it('dispatches and executes webhooks', function (string $hook, string $calledCla
         ->and($timestamp)
         ->toBeLessThanOrEqual($time + 10)
         ->and($scheduled->first()['callback'])
-        ->toBe([$webhookManager, 'processWebhook'])
-        ->and($scheduled->first()['args'])
-        ->toBe([$request]);
+        ->toBe([$webhookManager, 'processWebhook']);
 
     $cronService->executeScheduledTask();
 
@@ -130,3 +151,39 @@ it('dispatches and executes webhooks', function (string $hook, string $calledCla
         'no header' => [false],
         'header'    => [true],
     ]);
+
+it('throws error if webhook is not found', function () {
+    /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $repository */
+    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkWebhookManager $webhookManager */
+    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
+
+    $repository->storeHashedUrl('https://example.com/hashed-url');
+
+    $request = createWebhookRequest($repository->getHashedUrl(), 'unknown');
+
+    $response = $webhookManager->call($request);
+
+    expect($response->getStatusCode())->toBe(Response::HTTP_ACCEPTED);
+});
+
+it('does nothing if webhook is called with invalid context', function () {
+    /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $repository */
+    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkWebhookManager $webhookManager */
+    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
+    $cronService = Pdk::get(CronServiceInterface::class);
+
+    $repository->storeHashedUrl('https://example.com/hashed-url');
+
+    $request  = createWebhookRequest($repository->getHashedUrl(), 'unknown');
+    $response = $webhookManager->call($request, 'invalid_context');
+
+    $scheduledTasks = $cronService->getScheduledTasks();
+
+    expect($response->getStatusCode())
+        ->toBe(Response::HTTP_ACCEPTED)
+        ->and($scheduledTasks)
+        ->toBeEmpty();
+});

@@ -80,10 +80,20 @@ class MockLogger extends AbstractLogger
     }
 
     /**
+     * @param  null|string $level
+     *
      * @return array
      */
-    public function getLogs(): array
+    public function getLogs(string $level = null): array
     {
+        if ($level) {
+            $byLevel = array_filter($this->logs, static function (array $log) use ($level) {
+                return $log['level'] === $level;
+            });
+
+            return array_values($byLevel);
+        }
+
         return $this->logs;
     }
 
