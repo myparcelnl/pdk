@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
@@ -37,6 +38,28 @@ final class TestBootstrapper
     {
         factory(AccountSettings::class)
             ->withApiKey($apiKey)
+            ->store();
+    }
+
+    public static function hasShippingMethods(): void
+    {
+        factory(PdkShippingMethod::class)
+            ->withId('shipping:1')
+            ->withName('Shipping 1')
+            ->withIsEnabled(true)
+            ->store();
+
+        factory(PdkShippingMethod::class)
+            ->withId('shipping:2')
+            ->withName('Shipping 2')
+            ->withIsEnabled(false)
+            ->store();
+
+        factory(PdkShippingMethod::class)
+            ->withId('shipping:3')
+            ->withName('Shipping 3')
+            ->withDescription('My description')
+            ->withIsEnabled(true)
             ->store();
     }
 }

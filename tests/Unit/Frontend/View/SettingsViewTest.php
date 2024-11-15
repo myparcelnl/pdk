@@ -18,6 +18,7 @@ usesShared(new UsesMockPdkInstance());
 
 it('gets settings view', function (string $class) {
     TestBootstrapper::hasAccount();
+    TestBootstrapper::hasShippingMethods();
 
     /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
     $view = Pdk::get($class);

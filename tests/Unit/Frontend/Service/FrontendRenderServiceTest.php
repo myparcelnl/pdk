@@ -22,6 +22,7 @@ usesShared(new UsesMockPdkInstance());
 
 beforeEach(function () {
     TestBootstrapper::hasAccount();
+    TestBootstrapper::hasShippingMethods();
 
     factory(Settings::class)->store();
 });
