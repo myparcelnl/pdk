@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 
-dataset('pdkOrdersDomestic', [
+dataset('pdk orders domestic', [
     'single order' => function () {
         return factory(PdkOrderCollection::class)->push(
             factory(PdkOrder::class)

@@ -1,10 +1,15 @@
 <?php
+/** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\PostNl;
 
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -12,145 +17,121 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
 
 usesShared(new UsesMockPdkInstance());
 
-it('disables signature, only recipient, large format and return when receipt code is enabled', function () {
+it('handles receipt code', function (array $input, array $expected, string $cc = 'NL') {
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => 'NL'])
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withShipmentOptions(
-                    factory(ShipmentOptions::class)
-                        ->withSignature(TriStateService::ENABLED)
-                        ->withOnlyRecipient(TriStateService::ENABLED)
-                        ->withLargeFormat(TriStateService::ENABLED)
-                        ->withReturn(TriStateService::ENABLED)
-                        ->withReceiptCode(TriStateService::ENABLED)
-                )
-        )
-        ->make();
-
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
-
-    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
-
-    expect($shipmentOptions->signature)
-        ->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->onlyRecipient)
-        ->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->largeFormat)
-        ->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->return)
-        ->toBe(TriStateService::DISABLED);
-
-    $reset();
-});
-
-it('sets minimum insurance when receipt code is enabled and insurance is not set', function () {
-    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
-
-    $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withCapabilities(
-            factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
-        )
-        ->make();
+    $defaults = [
+        ShipmentOptions::LABEL_DESCRIPTION => TriStateService::INHERIT,
+        ShipmentOptions::INSURANCE         => TriStateService::INHERIT,
+        ShipmentOptions::AGE_CHECK         => TriStateService::INHERIT,
+        ShipmentOptions::DIRECT_RETURN     => TriStateService::INHERIT,
+        ShipmentOptions::HIDE_SENDER       => TriStateService::INHERIT,
+        ShipmentOptions::LARGE_FORMAT      => TriStateService::INHERIT,
+        ShipmentOptions::ONLY_RECIPIENT    => TriStateService::INHERIT,
+        ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
+        ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
+        ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
+        ShipmentOptions::TRACKED           => TriStateService::INHERIT,
+    ];
 
     $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->withShippingAddress(['cc' => $cc])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier($carrier)
-                ->withShipmentOptions(
-                    factory(ShipmentOptions::class)
-                        ->withReceiptCode(TriStateService::ENABLED)
-                        ->withInsurance(0)
+                ->withCarrier(
+                    factory(Carrier::class)
+                        ->withName(Carrier::CARRIER_POSTNL_NAME)
+                        ->withCapabilities(
+                            factory(CarrierCapabilities::class)
+                                ->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
+                        )
                 )
+                ->withShipmentOptions(factory(ShipmentOptions::class)->with(array_replace($defaults, $input)))
         )
         ->make();
 
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
 
-    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(5000);
+    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toBe(array_replace($defaults, $expected));
 
     $reset();
-});
+})->with([
+    'changes nothing when receipt code is disabled' => [
+        [ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED],
+        [ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED],
+    ],
 
-it('does not change insurance when receipt code is enabled and insurance is already set', function () {
-    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
+    'disables receipt code when age check is enabled' => [
+        [
+            ShipmentOptions::AGE_CHECK    => TriStateService::ENABLED,
+            ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED,
+        ],
+        [
+            ShipmentOptions::AGE_CHECK    => TriStateService::ENABLED,
+            ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED,
+        ],
+    ],
 
-    $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withCapabilities(
-            factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
-        )
-        ->make();
+    'disables receipt code when shipping to a non-NL country' => [
+        [ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED],
+        [ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED],
+        'BE',
+    ],
 
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withCarrier($carrier)
-                ->withShipmentOptions(
-                    factory(ShipmentOptions::class)
-                        ->withReceiptCode(TriStateService::ENABLED)
-                        ->withInsurance(10000)
-                )
-        )
-        ->make();
+    'disables signature, only recipient, large format and return when receipt code is enabled' => [
+        [
+            ShipmentOptions::RECEIPT_CODE   => TriStateService::ENABLED,
+            ShipmentOptions::SIGNATURE      => TriStateService::ENABLED,
+            ShipmentOptions::ONLY_RECIPIENT => TriStateService::ENABLED,
+            ShipmentOptions::LARGE_FORMAT   => TriStateService::ENABLED,
+            ShipmentOptions::DIRECT_RETURN  => TriStateService::ENABLED,
+        ],
+        [
+            ShipmentOptions::RECEIPT_CODE   => TriStateService::ENABLED,
+            ShipmentOptions::SIGNATURE      => TriStateService::DISABLED,
+            ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
+            ShipmentOptions::LARGE_FORMAT   => TriStateService::DISABLED,
+            ShipmentOptions::DIRECT_RETURN  => TriStateService::DISABLED,
+        ],
+    ],
 
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
+    'does not change insurance when receipt code is enabled and insurance is already set' => [
+        [
+            ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED,
+            ShipmentOptions::INSURANCE    => 10000,
+        ],
+        [
+            ShipmentOptions::RECEIPT_CODE   => TriStateService::ENABLED,
+            ShipmentOptions::INSURANCE      => 10000,
+            ShipmentOptions::SIGNATURE      => TriStateService::DISABLED,
+            ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
+            ShipmentOptions::LARGE_FORMAT   => TriStateService::DISABLED,
+            ShipmentOptions::DIRECT_RETURN  => TriStateService::DISABLED,
+        ],
+    ],
 
-    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(10000);
+    'sets minimum insurance when receipt code is enabled and insurance is not set' => [
+        [
+            ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED,
+            ShipmentOptions::INSURANCE    => TriStateService::DISABLED,
+        ],
+        [
+            ShipmentOptions::RECEIPT_CODE   => TriStateService::ENABLED,
+            ShipmentOptions::INSURANCE      => 5000,
+            ShipmentOptions::SIGNATURE      => TriStateService::DISABLED,
+            ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
+            ShipmentOptions::LARGE_FORMAT   => TriStateService::DISABLED,
+            ShipmentOptions::DIRECT_RETURN  => TriStateService::DISABLED,
+        ],
+    ],
+]);
 
-    $reset();
-});
-
-it('does nothing when receipt code is disabled', function () {
-    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
-
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withShipmentOptions(
-                    factory(ShipmentOptions::class)
-                        ->withReceiptCode(TriStateService::DISABLED)
-                        ->withSignature(TriStateService::ENABLED)
-                        ->withOnlyRecipient(TriStateService::ENABLED)
-                        ->withLargeFormat(TriStateService::ENABLED)
-                        ->withReturn(TriStateService::ENABLED)
-                )
-        )
-        ->make();
-
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
-
-    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
-
-    expect($shipmentOptions->signature)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->onlyRecipient)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->largeFormat)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->return)
-        ->toBe(TriStateService::ENABLED);
-
-    $reset();
-});
-
-it('returns 0 when no valid insurance amounts are available', function () {
+it('sets insurance to 0 when no valid insurance amounts are available', function () {
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
     $carrier = factory(Carrier::class)
@@ -161,7 +142,7 @@ it('returns 0 when no valid insurance amounts are available', function () {
         ->make();
 
     $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
+        ->toTheNetherlands()
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
@@ -173,85 +154,11 @@ it('returns 0 when no valid insurance amounts are available', function () {
         )
         ->make();
 
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
 
-    expect($order->deliveryOptions->shipmentOptions->insurance)->toBe(0);
-
-    $reset();
-});
-
-it('disables receipt code when shipping to a non-NL country', function () {
-    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
-
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => 'BE'])
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withShipmentOptions(
-                    factory(ShipmentOptions::class)
-                        ->withReceiptCode(TriStateService::ENABLED)
-                        ->withSignature(TriStateService::ENABLED)
-                        ->withOnlyRecipient(TriStateService::ENABLED)
-                        ->withLargeFormat(TriStateService::ENABLED)
-                        ->withReturn(TriStateService::ENABLED)
-                )
-        )
-        ->make();
-
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
-
-    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
-
-    expect($shipmentOptions->receiptCode)
-        ->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->signature)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->onlyRecipient)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->largeFormat)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->return)
-        ->toBe(TriStateService::ENABLED);
-
-    $reset();
-});
-
-it('disables receipt code when age check is enabled', function () {
-    $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
-
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(['cc' => CountryCodes::CC_NL])
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withShipmentOptions(
-                    factory(ShipmentOptions::class)
-                        ->withReceiptCode(TriStateService::ENABLED)
-                        ->withAgeCheck(TriStateService::ENABLED)
-                        ->withSignature(TriStateService::ENABLED)
-                        ->withOnlyRecipient(TriStateService::ENABLED)
-                        ->withLargeFormat(TriStateService::ENABLED)
-                        ->withReturn(TriStateService::ENABLED)
-                )
-        )
-        ->make();
-
-    $calculator = new PostNLReceiptCodeCalculator($order);
-    $calculator->calculate();
-
-    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
-
-    expect($shipmentOptions->receiptCode)
-        ->toBe(TriStateService::DISABLED)
-        ->and($shipmentOptions->signature)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->onlyRecipient)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->largeFormat)
-        ->toBe(TriStateService::ENABLED)
-        ->and($shipmentOptions->return)
-        ->toBe(TriStateService::ENABLED);
+    expect($newOrder->deliveryOptions->shipmentOptions->insurance)->toBe(0);
 
     $reset();
 });

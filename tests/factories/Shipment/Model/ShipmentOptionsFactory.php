@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @method $this withLabelDescription(int|string $labelDescription)
  * @method $this withLargeFormat(int $largeFormat)
  * @method $this withOnlyRecipient(int $onlyRecipient)
+ * @method $this withReceiptCode(int $receiptCode)
  * @method $this withReturn(int $return)
  * @method $this withSameDayDelivery(int $sameDayDelivery)
  * @method $this withSignature(int $signature)
@@ -37,6 +38,7 @@ final class ShipmentOptionsFactory extends AbstractModelFactory
             ->withLabelDescription('test')
             ->withLargeFormat(TriStateService::ENABLED)
             ->withOnlyRecipient(TriStateService::ENABLED)
+            ->withReceiptCode(TriStateService::ENABLED)
             ->withReturn(TriStateService::ENABLED)
             ->withSameDayDelivery(TriStateService::ENABLED)
             ->withSignature(TriStateService::ENABLED);

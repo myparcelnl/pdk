@@ -40,6 +40,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withExportInsuranceUpToUnique(int $exportInsuranceUpToUnique)
  * @method $this withExportLargeFormat(bool $exportLargeFormat)
  * @method $this withExportOnlyRecipient(bool $exportOnlyRecipient)
+ * @method $this withExportReceiptCode(bool $exportReceiptCode)
  * @method $this withExportReturn(bool $exportReturn)
  * @method $this withExportReturnLargeFormat(bool $exportReturnLargeFormat)
  * @method $this withExportReturnPackageType(string $exportReturnPackageType)

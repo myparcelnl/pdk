@@ -6,9 +6,13 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use function MyParcelNL\Pdk\Tests\factory;
 
-dataset('carrierExportSettings', [
+dataset('carrier export settings', [
     'export age check' => function () {
         return factory(CarrierSettings::class)->withExportAgeCheck(true);
+    },
+
+    'export hide sender' => function () {
+        return factory(CarrierSettings::class)->withExportHideSender(true);
     },
 
     'export large format' => function () {
@@ -19,8 +23,16 @@ dataset('carrierExportSettings', [
         return factory(CarrierSettings::class)->withExportOnlyRecipient(true);
     },
 
+    'export receipt code' => function () {
+        return factory(CarrierSettings::class)->withExportReceiptCode(true);
+    },
+
     'export return' => function () {
         return factory(CarrierSettings::class)->withExportReturn(true);
+    },
+
+    'export return large format' => function () {
+        return factory(CarrierSettings::class)->withExportReturnLargeFormat(true);
     },
 
     'export signature' => function () {

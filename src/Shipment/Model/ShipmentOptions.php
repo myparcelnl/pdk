@@ -14,51 +14,51 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $hideSender
  * @property int<-1|0|1>         $largeFormat
  * @property int<-1|0|1>         $onlyRecipient
+ * @property int<-1|0|1>         $receiptCode
  * @property int<-1|0|1>         $return
  * @property int<-1|0|1>         $sameDayDelivery
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
- * @property int<-1|0|1>         $receiptCode
  */
 class ShipmentOptions extends Model
 {
-    public const AGE_CHECK         = 'ageCheck';
-    public const HIDE_SENDER       = 'hideSender';
-    public const INSURANCE         = 'insurance';
     public const LABEL_DESCRIPTION = 'labelDescription';
+    public const INSURANCE         = 'insurance';
+    public const AGE_CHECK         = 'ageCheck';
+    public const DIRECT_RETURN     = 'return';
+    public const HIDE_SENDER       = 'hideSender';
     public const LARGE_FORMAT      = 'largeFormat';
     public const ONLY_RECIPIENT    = 'onlyRecipient';
-    public const DIRECT_RETURN     = 'return';
+    public const RECEIPT_CODE      = 'receiptCode';
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
-    public const RECEIPT_CODE      = 'receiptCode';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
         self::INSURANCE         => TriStateService::INHERIT,
         self::AGE_CHECK         => TriStateService::INHERIT,
+        self::DIRECT_RETURN     => TriStateService::INHERIT,
         self::HIDE_SENDER       => TriStateService::INHERIT,
         self::LARGE_FORMAT      => TriStateService::INHERIT,
         self::ONLY_RECIPIENT    => TriStateService::INHERIT,
-        self::DIRECT_RETURN     => TriStateService::INHERIT,
+        self::RECEIPT_CODE      => TriStateService::INHERIT,
         self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
-        self::RECEIPT_CODE      => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
         self::LABEL_DESCRIPTION => TriStateService::TYPE_STRING,
         self::INSURANCE         => 'int',
         self::AGE_CHECK         => TriStateService::TYPE_STRICT,
+        self::DIRECT_RETURN     => TriStateService::TYPE_STRICT,
         self::HIDE_SENDER       => TriStateService::TYPE_STRICT,
         self::LARGE_FORMAT      => TriStateService::TYPE_STRICT,
         self::ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
-        self::DIRECT_RETURN     => TriStateService::TYPE_STRICT,
+        self::RECEIPT_CODE      => TriStateService::TYPE_STRICT,
         self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
-        self::RECEIPT_CODE      => TriStateService::TYPE_STRICT,
     ];
 }

@@ -49,7 +49,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesMockPdkInstance(), new UsesApiMock(), new UsesNotificationsMock(), new UsesSettingsMock());
 
-dataset('orderModeToggle', [
+dataset('order mode toggle', [
     'default'    => [false],
     'order mode' => [true],
 ]);
@@ -118,9 +118,9 @@ it('exports order', function (
             ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
     }
 })
-    ->with('orderModeToggle')
-    ->with('carrierExportSettings')
-    ->with('pdkOrdersDomestic');
+    ->with('order mode toggle')
+    ->with('carrier export settings')
+    ->with('pdk orders domestic');
 
 it('exports multicollo order', function (
     PdkOrderCollectionFactory $orderFactory,
@@ -527,7 +527,7 @@ it(
             'carrierHasInternationalMailboxAllowed' => false,
         ],
     ])
-    ->with('orderModeToggle');
+    ->with('order mode toggle');
 
 it('creates audit after export', function () {
     factory(OrderSettings::class)

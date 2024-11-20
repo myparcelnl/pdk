@@ -170,7 +170,7 @@ it('creates a storable array', function (PdkOrderCollectionFactory $orderFactory
     $collection = $orderFactory->make();
 
     assertMatchesJsonSnapshot(json_encode($collection->toStorableArray()));
-})->with('pdkOrdersDomestic');
+})->with('pdk orders domestic');
 
 it('can check whether an order is deliverable', function (array $lines, bool $result) {
     $pdkOrder = factory(PdkOrder::class)
