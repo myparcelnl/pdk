@@ -114,7 +114,7 @@ class PdkActionsService implements PdkActionsServiceInterface
 
         $actions = new Collection(Config::get('actions'));
 
-        $match       = $actions->dataGet("$this->context.$action") ?? $actions->dataGet("shared.$action");
+        $match       = $actions->getByKey("$this->context.$action") ?? $actions->getByKey("shared.$action");
         $actionClass = $match['action'] ?? null;
 
         if (! $actionClass || ! class_exists($actionClass)) {

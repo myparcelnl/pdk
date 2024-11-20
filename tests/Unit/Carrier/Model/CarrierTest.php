@@ -7,10 +7,10 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Sdk\src\Support\Collection;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;

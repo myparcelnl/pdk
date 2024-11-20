@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\App\Order\Model\PdkProductFactory;
+use MyParcelNL\Pdk\App\Order\Model\UsesCurrency;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\CurrencyFactory;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
@@ -23,7 +24,6 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withLength(int $length)
  * @method $this withName(string $name)
  * @method $this withParent(array|PdkProduct|PdkProductFactory|PdkProductFactory $parent)
- * @method $this withPrice(array|Currency|CurrencyFactory|CurrencyFactory $price)
  * @method $this withSettings(array|ProductSettings|ProductSettingsFactory|ProductSettingsFactory $settings)
  * @method $this withSku(string $sku)
  * @method $this withWeight(int $weight)
@@ -31,8 +31,20 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  */
 final class ProductDataContextFactory extends AbstractModelFactory
 {
+    use UsesCurrency;
+
     public function getModel(): string
     {
         return ProductDataContext::class;
+    }
+
+    /**
+     * @param  int|array|Currency|CurrencyFactory $price
+     *
+     * @return $this
+     */
+    public function withPrice($price): self
+    {
+        return $this->withCurrencyField('price', $price);
     }
 }

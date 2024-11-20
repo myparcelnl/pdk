@@ -1,0 +1,96 @@
+{
+  "externalIdentifier": "PDK-1",
+  "invoiceAddress": {
+    "address1": "Antareslaan 31",
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "postalCode": "2132 JE",
+    "email": "support@myparcel.nl",
+    "person": "Felicia Parcel",
+    "company": "MyParcel"
+  },
+  "language": "nl",
+  "orderDate": "2030-01-01 12:00:00",
+  "lines": [
+    {
+      "quantity": 3,
+      "price": 300,
+      "vat": 27,
+      "priceAfterVat": 327,
+      "product": {
+        "sku": "sku-1",
+        "ean": "ean-1",
+        "externalIdentifier": "product-1",
+        "name": "product-name (1)",
+        "width": 10,
+        "length": 10,
+        "height": 10,
+        "weight": 10
+      }
+    },
+    {
+      "quantity": 1,
+      "price": 300,
+      "vat": 63,
+      "priceAfterVat": 363,
+      "product": {
+        "sku": "sku-2",
+        "ean": "ean-2",
+        "externalIdentifier": "product-2",
+        "name": "product-name (2)",
+        "width": 10,
+        "length": 10,
+        "height": 10,
+        "weight": 10
+      }
+    },
+    {
+      "quantity": 6,
+      "price": 1800,
+      "vat": 378,
+      "priceAfterVat": 2178,
+      "product": {
+        "sku": "sku-3",
+        "ean": "ean-3",
+        "externalIdentifier": "product-3",
+        "name": "product-name (3)",
+        "width": 10,
+        "length": 10,
+        "height": 10,
+        "weight": 10
+      }
+    }
+  ],
+  "notes": [],
+  "shipment": {
+    "carrier": 1,
+    "options": {
+      "ageCheck": false,
+      "deliveryType": 2,
+      "hideSender": false,
+      "insurance": 0,
+      "labelDescription": "",
+      "largeFormat": false,
+      "onlyRecipient": false,
+      "packageType": 1,
+      "return": false,
+      "sameDayDelivery": false,
+      "signature": false
+    },
+    "recipient": {
+      "address1": "Musterstrasse 1",
+      "cc": "DE",
+      "city": "Berlin",
+      "postalCode": "10117",
+      "email": "support@myparcel.nl",
+      "person": "Felicia Parcel",
+      "company": "MyParcel"
+    },
+    "physicalProperties": {
+      "weight": 100
+    }
+  },
+  "price": 12000,
+  "vat": 2412,
+  "priceAfterVat": 14412
+}

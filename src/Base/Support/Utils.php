@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Support;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Sdk\src\Support\Str;
 use Throwable;
 
-class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
+class Utils
 {
     /**
      * @var array
@@ -68,24 +67,11 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
                 $value = self::changeArrayKeysCase($value, $flags);
             }
 
-            $newKey            = self::changeCase($key, $flags);
+            $newKey            = Str::changeCase($key, $flags);
             $newArray[$newKey] = $value;
         }
 
         return $newArray;
-    }
-
-    /**
-     * @param  string   $string
-     * @param  null|int $flags
-     *
-     * @return string
-     */
-    public static function changeCase(string $string, ?int $flags = null): string
-    {
-        $case = self::getFlagCase($flags);
-
-        return Str::{$case}($string);
     }
 
     /**
@@ -264,27 +250,5 @@ class Utils extends \MyParcelNL\Sdk\src\Helper\Utils
         });
 
         return $collection;
-    }
-
-    /**
-     * @param  null|int $flags
-     *
-     * @return string
-     */
-    private static function getFlagCase(?int $flags = null): string
-    {
-        if ($flags & Arrayable::CASE_SNAKE) {
-            return 'snake';
-        }
-
-        if ($flags & Arrayable::CASE_KEBAB) {
-            return 'kebab';
-        }
-
-        if ($flags & Arrayable::CASE_STUDLY) {
-            return 'studly';
-        }
-
-        return 'camel';
     }
 }

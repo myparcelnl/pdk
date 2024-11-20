@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use Psr\Log\LoggerInterface;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesEachMockPdkInstance());
@@ -19,7 +19,7 @@ it('warns on use of deprecated attributes and sets value in correct property', f
     ]);
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
+    $logger = Pdk::get(PdkLoggerInterface::class);
 
     /**
      * @var string $nextVersion

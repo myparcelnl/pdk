@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 
 class CountryService implements CountryServiceInterface
 {
