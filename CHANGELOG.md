@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.47.2](https://github.com/myparcelnl/pdk/compare/v2.47.1...v2.47.2) (2024-11-20)
+
+
+### :bug: Bug Fixes
+
+* **validation:** remove receipt_code requirement from package to belgium ([4e099f6](https://github.com/myparcelnl/pdk/commit/4e099f6f893aef0dc015094387457ac30b6d1b51))
+
 ## [2.47.1](https://github.com/myparcelnl/pdk/compare/v2.47.0...v2.47.1) (2024-11-14)
 
 
