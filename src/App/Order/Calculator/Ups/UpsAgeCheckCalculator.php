@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  */
 final class UPSAgeCheckCalculator extends AbstractPdkOrderOptionCalculator
 {
-    //todo: increase coverage
     public function calculate(): void
     {
         $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;

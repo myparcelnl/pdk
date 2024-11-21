@@ -44,12 +44,8 @@ class DeliveryOptions extends Model
     public const DELIVERY_TYPE_STANDARD_NAME = 'standard';
     public const DELIVERY_TYPE_PICKUP_ID     = 4;
     public const DELIVERY_TYPE_PICKUP_NAME   = 'pickup';
-    //todo: toevoegen aan order.php en evt aan schema.
-    // calculator toevoegen voor:
-    //  - deliveryType
-    //  - shipment options
-    public const DELIVERY_TYPE_EXPRESS_ID   = 7; //todo in order.php bij ups alleen nederland
-    public const DELIVERY_TYPE_EXPRESS_NAME = 'express';
+    public const DELIVERY_TYPE_EXPRESS_ID    = 7;
+    public const DELIVERY_TYPE_EXPRESS_NAME  = 'express';
     /**
      * @var int[]
      */

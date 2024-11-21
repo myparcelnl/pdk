@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 class UPSDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
-    //todo: increase coverage
     /**
      * @inheritDoc
      */
