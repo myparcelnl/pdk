@@ -66,5 +66,3 @@ class ShipmentOptions extends Model
         self::COLLECT           => TriStateService::TYPE_STRICT,
     ];
 }
-//collect
-//delivery type express :7
