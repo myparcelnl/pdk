@@ -1,12 +1,12 @@
 <?php
 
-namespace MyParcelNL\Pdk\App\Order\Calculator\Ups;
+namespace MyParcelNL\Pdk\App\Order\Calculator\UPS;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
-class UpsDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
+class UPSDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
     //todo: increase coverage
     /**
