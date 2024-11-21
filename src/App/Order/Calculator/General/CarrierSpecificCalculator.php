@@ -11,13 +11,11 @@ use MyParcelNL\Pdk\App\Order\Calculator\DhlParcelConnect\DhlParcelConnectCalcula
 use MyParcelNL\Pdk\App\Order\Calculator\Dpd\DpdCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\PostNl\PostNLCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPS\UPSCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\Ups\TempUpsCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
-    //todo: fix duplicate array key after rebase
     /**
      * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
@@ -28,7 +26,6 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
         Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME => DhlParcelConnectCalculator::class,
         Carrier::CARRIER_DPD_NAME                => DpdCalculator::class,
         Carrier::CARRIER_UPS_NAME                => UPSCalculator::class,
-        Carrier::CARRIER_UPS_NAME                => TempUpsCalculator::class,
     ];
 
     public function calculate(): void
