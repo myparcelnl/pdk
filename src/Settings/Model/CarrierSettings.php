@@ -47,7 +47,6 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                  $exportInsuranceUpToRow
  * @property int                  $exportInsuranceUpToUnique
  * @property string               $exportReturnPackageType
- * @property bool                 $exportTracked // todo: remove, ik denk dat dit express had moeten zijn
  * @property float                $priceDeliveryTypeEvening
  * @property float                $priceDeliveryTypeMonday
  * @property float                $priceDeliveryTypeMorning
@@ -73,17 +72,17 @@ class CarrierSettings extends AbstractSettingsModel
     /**
      * Settings in this category.
      */
-    public const ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
-    public const ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
-    public const ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
-    public const ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
-    public const ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
-    public const ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
-    public const ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
-    public const ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
-    public const ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
-    public const ALLOW_SIGNATURE                         = 'allowSignature';
-    public const ALLOW_DELIVERY_TYPE_EXPRESS             = 'allowDeliveryTypeExpress';
+    public const  ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
+    public const  ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
+    public const  ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
+    public const  ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
+    public const  ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
+    public const  ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
+    public const  ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
+    public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
+    public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
+    public const  ALLOW_SIGNATURE                         = 'allowSignature';
+    public const  ALLOW_DELIVERY_TYPE_EXPRESS             = 'allowDeliveryTypeExpress';
     public const  CUTOFF_TIME                             = 'cutoffTime';
     public const  CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
     public const  DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
@@ -105,8 +104,8 @@ class CarrierSettings extends AbstractSettingsModel
     public const  EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
     public const  EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
     public const  EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
-    public const EXPORT_RECEIPT_CODE                     = 'exportReceiptCode';
-    public const EXPORT_RETURN                           = 'exportReturn';
+    public const  EXPORT_RECEIPT_CODE                     = 'exportReceiptCode';
+    public const  EXPORT_RETURN                           = 'exportReturn';
     public const  EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
     public const  EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
     public const  EXPORT_SIGNATURE                        = 'exportSignature';

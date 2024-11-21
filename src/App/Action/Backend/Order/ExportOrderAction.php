@@ -185,7 +185,6 @@ class ExportOrderAction extends AbstractOrderAction
 
                 $validatorErrors = $validator->getErrors();
 
-                //todo: kijk of je het schema kan aanpassen zodat de property collect niet mag behalve bij ups
                 Logger::error('Failed to export order', [
                     'order'       => $order->externalIdentifier,
                     'description' => $validator->getDescription(),
