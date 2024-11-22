@@ -35,6 +35,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
         ShipmentOptions::TRACKED           => TriStateService::INHERIT,
+        ShipmentOptions::COLLECT           => TriStateService::INHERIT,
     ];
 
     $order = factory(PdkOrder::class)

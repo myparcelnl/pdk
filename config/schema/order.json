@@ -44,7 +44,7 @@
           "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
         },
         "deliveryType": {
-          "enum": ["morning", "standard", "evening", "pickup"]
+          "enum": ["morning", "standard", "evening", "pickup", "express"]
         },
         "labelAmount": {
           "type": ["integer", "null"],
@@ -146,6 +146,9 @@
             },
             "receiptCode": {
               "enum": [0, 1]
+            },
+            "collect": {
+              "enum": [-1, 0, 1]
             }
           }
         }

@@ -48,6 +48,7 @@ return [
                     'sameDayDelivery' => false,
                     'signature'       => true,
                     'receiptCode'     => true,
+                    'collect'         => false,
                     'insurance'       => [
                         0,
                         10000,
@@ -99,6 +100,7 @@ return [
                     'onlyRecipient'   => true,
                     'sameDayDelivery' => false,
                     'largeFormat'     => true,
+                    'collect'         => false,
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
@@ -112,7 +114,7 @@ return [
                 'packageTypes'    => [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                     DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
@@ -127,6 +129,7 @@ return [
                     'signature'        => true,
                     'saturdayDelivery' => true,
                     'hideSender'       => true,
+                    'collect'          => false,
                     'insurance'        => [
                         0,
                         50000,
@@ -162,6 +165,7 @@ return [
                     'onlyRecipient'   => true,
                     'sameDayDelivery' => true,
                     'largeFormat'     => true,
+                    'collect'         => false,
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
@@ -187,6 +191,7 @@ return [
                     'signature'        => true,
                     'saturdayDelivery' => false,
                     'hideSender'       => false,
+                    'collect'          => false,
                     'insurance'        => [
                         0,
                         50000,
@@ -222,6 +227,7 @@ return [
                     'onlyRecipient'   => false,
                     'sameDayDelivery' => false,
                     'largeFormat'     => false,
+                    'collect'         => false,
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
@@ -273,11 +279,14 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME,
                 ],
                 'shipmentOptions' => [
-                    'ageCheck'      => false,
-                    'onlyRecipient' => false,
-                    'return'        => false,
+                    'ageCheck'      => true,
+                    'onlyRecipient' => true,
+                    'return'        => true,
+                    'signature'     => true,
+                    'collect'       => true,
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
@@ -299,6 +308,7 @@ return [
                     'ageCheck'      => false,
                     'onlyRecipient' => false,
                     'return'        => false,
+                    'collect'       => false,
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,

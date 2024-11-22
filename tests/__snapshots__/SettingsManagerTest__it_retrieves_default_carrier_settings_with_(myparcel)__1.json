@@ -11,6 +11,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -82,6 +83,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -94,7 +96,9 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   },
   "postnl": {
     "id": "carrier",
@@ -108,6 +112,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -179,6 +184,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -191,7 +197,9 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   },
   "dpd": {
     "id": "carrier",
@@ -205,6 +213,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -276,6 +285,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -288,7 +298,9 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   },
   "ups": {
     "id": "carrier",
@@ -302,6 +314,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -373,6 +386,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -385,7 +399,9 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   },
   "dhlforyou": {
     "id": "carrier",
@@ -399,6 +415,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -470,6 +487,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -482,7 +500,9 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   },
   "dhlparcelconnect": {
     "id": "carrier",
@@ -496,6 +516,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -567,6 +588,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -579,7 +601,9 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   },
   "dhleuroplus": {
     "id": "carrier",
@@ -593,6 +617,7 @@
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
     "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
     "cutoffTime": "17:00",
     "cutoffTimeSameDay": "09:00",
     "defaultPackageType": "package",
@@ -664,6 +689,7 @@
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
     "exportSignature": false,
+    "exportCollect": false,
     "priceDeliveryTypeEvening": 0,
     "priceDeliveryTypeMonday": 0,
     "priceDeliveryTypeMorning": 0,
@@ -676,6 +702,8 @@
     "pricePackageTypeMailbox": 0,
     "priceSignature": 0,
     "allowInternationalMailbox": false,
-    "priceInternationalMailbox": 0
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
   }
 }

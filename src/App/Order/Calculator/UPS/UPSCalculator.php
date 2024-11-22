@@ -12,6 +12,8 @@ final class UPSCalculator extends AbstractCarrierOptionsCalculator
     {
         return [
             UPSCountryShipmentOptionsCalculator::class,
+            UPSAgeCheckCalculator::class,
+            UPSDeliveryTypeCalculator::class,
         ];
     }
 }

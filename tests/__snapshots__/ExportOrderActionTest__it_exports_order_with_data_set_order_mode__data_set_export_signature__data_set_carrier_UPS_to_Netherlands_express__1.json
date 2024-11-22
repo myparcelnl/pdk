@@ -1,0 +1,70 @@
+{
+  "data": {
+    "orders": [
+      {
+        "external_identifier": "PDK-1",
+        "fulfilment_partner_identifier": null,
+        "invoice_address": {
+          "street": "Antareslaan 31 ",
+          "city": "Hoofddorp",
+          "company": "MyParcel",
+          "cc": "NL",
+          "person": "Felicia Parcel",
+          "postal_code": "2132 JE"
+        },
+        "order_date": "2030-01-01 12:00:00",
+        "order_lines": [
+          {
+            "quantity": 1,
+            "price": 0,
+            "price_after_vat": 0,
+            "product": {
+              "sku": "test",
+              "external_identifier": "PDK-1",
+              "name": "test",
+              "width": 0,
+              "length": 0,
+              "height": 0,
+              "weight": 0
+            }
+          }
+        ],
+        "shipment": {
+          "carrier": 8,
+          "contract_id": null,
+          "customs_declaration": null,
+          "drop_off_point": null,
+          "options": {
+            "age_check": 0,
+            "collect": 0,
+            "delivery_type": 7,
+            "hide_sender": 0,
+            "insurance": {
+              "amount": 0,
+              "currency": "EUR"
+            },
+            "label_description": "",
+            "large_format": 0,
+            "only_recipient": 0,
+            "package_type": 1,
+            "return": 0,
+            "same_day_delivery": 0,
+            "signature": 1
+          },
+          "physical_properties": {
+            "weight": 0
+          },
+          "pickup": null,
+          "recipient": {
+            "street": "Antareslaan 31 ",
+            "city": "Hoofddorp",
+            "company": "MyParcel",
+            "cc": "NL",
+            "person": "Felicia Parcel",
+            "postal_code": "2132 JE"
+          }
+        }
+      }
+    ]
+  }
+}

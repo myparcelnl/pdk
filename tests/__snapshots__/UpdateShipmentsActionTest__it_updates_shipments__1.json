@@ -29,7 +29,8 @@
             "sameDayDelivery": -1,
             "signature": 0,
             "tracked": -1,
-            "receiptCode": -1
+            "receiptCode": -1,
+            "collect": 0
           },
           "deliveryType": "standard",
           "packageType": "package"

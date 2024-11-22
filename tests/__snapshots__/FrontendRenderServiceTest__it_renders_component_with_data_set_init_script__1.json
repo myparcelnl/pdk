@@ -272,7 +272,7 @@
               "primary": false,
               "type": "main",
               "capabilities": {
-                "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+                "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
                 "features": {
                   "dropOffAtPostalPoint": true,
                   "labelDescriptionLength": 45,
@@ -307,7 +307,8 @@
                   "ageCheck": true,
                   "onlyRecipient": true,
                   "sameDayDelivery": false,
-                  "largeFormat": true
+                  "largeFormat": true,
+                  "collect": false
                 }
               }
             }
@@ -330,7 +331,7 @@
         "primary": false,
         "type": "main",
         "capabilities": {
-          "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+          "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
           "features": {
             "dropOffAtPostalPoint": true,
             "labelDescriptionLength": 45,
@@ -365,7 +366,8 @@
             "ageCheck": true,
             "onlyRecipient": true,
             "sameDayDelivery": false,
-            "largeFormat": true
+            "largeFormat": true,
+            "collect": false
           }
         }
       }
@@ -428,6 +430,7 @@
           "allowSameDayDelivery": false,
           "allowSaturdayDelivery": false,
           "allowSignature": false,
+          "allowDeliveryTypeExpress": false,
           "cutoffTime": "16:00",
           "cutoffTimeSameDay": "10:00",
           "defaultPackageType": "package",
@@ -456,6 +459,7 @@
           "exportReturnLargeFormat": false,
           "exportReturnPackageType": "package",
           "exportSignature": false,
+          "exportCollect": false,
           "priceDeliveryTypeEvening": 0,
           "priceDeliveryTypeMonday": 0,
           "priceDeliveryTypeMorning": 0,
@@ -468,7 +472,9 @@
           "pricePackageTypeMailbox": 0,
           "priceSignature": 0,
           "allowInternationalMailbox": false,
-          "priceInternationalMailbox": 0
+          "priceInternationalMailbox": 0,
+          "priceCollect": 0,
+          "priceDeliveryTypeExpress": 0
         }
       }
     },
@@ -502,7 +508,7 @@
           "primary": false,
           "type": "main",
           "capabilities": {
-            "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+            "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
             "features": {
               "dropOffAtPostalPoint": true,
               "labelDescriptionLength": 45,
@@ -537,7 +543,8 @@
               "ageCheck": true,
               "onlyRecipient": true,
               "sameDayDelivery": false,
-              "largeFormat": true
+              "largeFormat": true,
+              "collect": false
             }
           }
         }
