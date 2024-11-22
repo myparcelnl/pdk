@@ -54,14 +54,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             'body'    => $request->getBody(),
         ];
 
-        $logContext = [
-            'request' => [
-                'uri'     => $uri,
-                'method'  => $method,
-                'headers' => $options['headers'],
-                'body'    => $options['body'] ? json_decode($options['body'], true) : null,
-            ],
-        ];
+        $logContext = $this->createLogContext($uri, $method, $options);
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
@@ -127,5 +120,31 @@ abstract class AbstractApiService implements ApiServiceInterface
         }
 
         return $url;
+    }
+
+    /**
+     * @param  string $uri
+     * @param  string $method
+     * @param  array  $options
+     *
+     * @return array[]
+     */
+    private function createLogContext(string $uri, string $method, array $options): array
+    {
+        $headers = array_combine(array_map('strtolower', array_keys($options['headers'])), $options['headers']);
+
+        // Obfuscate the authorization header if present
+        if (isset($headers['authorization'])) {
+            $headers['authorization'] = '***';
+        }
+
+        return [
+            'request' => [
+                'uri'     => $uri,
+                'method'  => $method,
+                'headers' => $headers,
+                'body'    => $options['body'] ? json_decode($options['body'], true) : null,
+            ],
+        ];
     }
 }
