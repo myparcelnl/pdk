@@ -16,13 +16,13 @@ class UPSDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
     public function calculate(): void
     {
         $deliveryOptions = $this->order->deliveryOptions;
-        $cc              = $this->order->shippingAddress->cc;
 
-        switch ($deliveryOptions->deliveryType) {
-            case DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME:
-                if ($cc !== CountryCodes::CC_NL) {
-                    $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
-                }
+        $isExpress = $deliveryOptions->deliveryType === DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME;
+        if (
+            $isExpress
+            && $this->order->shippingAddress->cc !== CountryCodes::CC_NL
+        ) {
+            $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
         }
     }
 }

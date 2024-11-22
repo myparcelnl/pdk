@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
- * When age check is enabled, signature and only recipient are required.
+ * When age check is enabled, signature is required.
  */
 final class UPSAgeCheckCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -20,7 +20,6 @@ final class UPSAgeCheckCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
-        $shipmentOptions->signature     = TriStateService::ENABLED;
-        $shipmentOptions->onlyRecipient = TriStateService::ENABLED;
+        $shipmentOptions->signature = TriStateService::ENABLED;
     }
 }

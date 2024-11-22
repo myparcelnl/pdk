@@ -10,7 +10,6 @@
           "package_type": 1,
           "delivery_type": 7,
           "age_check": 1,
-          "only_recipient": 1,
           "signature": 1
         },
         "physical_properties": {
