@@ -18,7 +18,7 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * Calculates the receipt code options for PostNL shipments.
      * When receipt code is enabled:
-     * - Shipment must be to the Netherlands
+     * - Shipment must be to the Netherlands or Belgium
      * - Receipt code will be disabled if age check is active
      * - Signature and only recipient will be disabled
      * - Large format will be disabled
