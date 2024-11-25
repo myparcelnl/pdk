@@ -33,7 +33,7 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
-        if ($this->order->shippingAddress->cc !== CountryCodes::CC_NL) {
+        if (! in_array($this->order->shippingAddress->cc, [CountryCodes::CC_NL, CountryCodes::CC_BE])) {
             $shipmentOptions->receiptCode = TriStateService::DISABLED;
             return;
         }
