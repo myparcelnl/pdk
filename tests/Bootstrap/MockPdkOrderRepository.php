@@ -43,6 +43,11 @@ class MockPdkOrderRepository extends AbstractPdkOrderRepository
         });
     }
 
+    public function getByApiIdentifier(string $uuid): ?PdkOrder
+    {
+        return new PdkOrder(['externalIdentifier' => 197]);
+    }
+
     protected function getKeyPrefix(): string
     {
         return static::class;

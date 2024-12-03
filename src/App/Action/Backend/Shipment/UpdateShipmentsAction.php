@@ -55,6 +55,10 @@ class UpdateShipmentsAction extends AbstractOrderAction
         $orders    = $this->pdkOrderRepository->getMany($this->getOrderIds($request));
         $shipments = $this->shipmentRepository->getShipments($this->getShipmentIds($request, $orders));
 
+        if ($request->get('linkFirstShipmentToFirstOrder')) {
+            $shipments->first()->orderId = $orders->first()->getExternalIdentifier();
+        }
+
         if ($orders->isNotEmpty()) {
             $orders->updateShipments($shipments);
             $this->pdkOrderRepository->updateMany($orders);
@@ -103,4 +107,3 @@ class UpdateShipmentsAction extends AbstractOrderAction
             });
     }
 }
-
