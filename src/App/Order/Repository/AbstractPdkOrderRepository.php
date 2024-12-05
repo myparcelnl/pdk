@@ -19,6 +19,8 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
      */
     abstract public function get($input): PdkOrder;
 
+    abstract public function getByApiIdentifier(string $uuid): ?PdkOrder;
+
     /**
      * @param  string|string[] $orderIds
      *
