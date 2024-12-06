@@ -10,6 +10,8 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -23,7 +25,7 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
-it('handles a genuine api request', function (string $hook, string $expectedClass, array $hookBody) {
+it('handles an api request', function (string $hook, string $expectedClass, array $hookBody) {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
     /** @var PdkWebhookManagerInterface $webhookManager */
@@ -35,6 +37,7 @@ it('handles a genuine api request', function (string $hook, string $expectedClas
 
     $repository->storeHashedUrl('https://example.com/hook/1234567890abcdef');
     $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
+    MockApi::enqueue(new ExampleGetShipmentsResponse());
 
     $request = Request::create(
         $repository->getHashedUrl(),
@@ -60,11 +63,10 @@ it('handles a genuine api request', function (string $hook, string $expectedClas
         unset($log['context']['request']);
         return $log;
     });
+    // Omit the shipment response from the logs.
+    unset($logs[1]);
 
-    var_dump($logs->toArray());
-    die(' joep meloen koepenoen');
-
-    expect($logs->toArray())->toBe([
+    expect(array_values($logs->toArray()))->toBe([
         [
             'level'   => 'debug',
             'message' => '[PDK]: Webhook received',
@@ -79,7 +81,7 @@ it('handles a genuine api request', function (string $hook, string $expectedClas
 })->with([
     'shipment updated' => [
         'hook'  => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
-        'class' => ShopUpdatedWebhook::class,
+        'class' => ShipmentStatusChangeWebhook::class,
         'body'  => [
             'shipment_id' => 192031595,
             'account_id' => 162450,

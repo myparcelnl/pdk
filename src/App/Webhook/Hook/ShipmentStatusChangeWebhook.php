@@ -22,12 +22,9 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
     {
         $content = $this->getHookBody($request);
 
-        // translate order_id (which is api uuid) to local order id for db
-        if (! is_int($content['order_id'])) {
-            $repo = Pdk::get(PdkOrderRepositoryInterface::class);
-            $order = $repo->getByUuid($content['order_id']);
-            var_dump($order);
-            die(' vogeltjes');
+        // translate order_id (which is api identifier / uuid) to local order id for db
+        $order = Pdk::get(PdkOrderRepositoryInterface::class)->getByApiIdentifier($content['order_id']);
+        if ($order) {
             $content['order_id'] = $order->getId();
         }
 
