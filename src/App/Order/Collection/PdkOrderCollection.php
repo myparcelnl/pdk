@@ -170,4 +170,3 @@ class PdkOrderCollection extends Collection
         return $merged;
     }
 }
-
