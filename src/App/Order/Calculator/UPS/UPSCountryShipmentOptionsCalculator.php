@@ -23,7 +23,7 @@ class UPSCountryShipmentOptionsCalculator extends AbstractPdkOrderOptionCalculat
     public function calculate(): void
     {
         $cc = $this->order->shippingAddress->cc;
-        if ($this->countryService->isRow($cc) || $this->countryService->isEu($cc)) {
+        if ($this->countryService->isRow($cc) || $this->countryService->isEu($cc) || $this->countryService->isLocalCountry($cc)) {
             $this->order->deliveryOptions->date = null;
         }
     }
