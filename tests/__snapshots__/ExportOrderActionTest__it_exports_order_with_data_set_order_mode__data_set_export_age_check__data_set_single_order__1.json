@@ -36,6 +36,7 @@
           "drop_off_point": null,
           "options": {
             "age_check": 1,
+            "collect": 0,
             "delivery_type": 2,
             "hide_sender": 0,
             "insurance": {

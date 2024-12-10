@@ -81,4 +81,28 @@ dataset('pdk orders domestic', [
                 )
         );
     },
+
+    'carrier UPS to Belgium' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(Carrier::CARRIER_UPS_NAME)
+                        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
+                )
+                ->toBelgium()
+        );
+    },
+
+    'carrier UPS to Netherlands express' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(Carrier::CARRIER_UPS_NAME)
+                        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
+                )
+                ->toTheNetherlands()
+        );
+    },
 ]);

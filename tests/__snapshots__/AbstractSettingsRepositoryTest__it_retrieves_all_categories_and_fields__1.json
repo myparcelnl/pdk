@@ -57,6 +57,7 @@
       "allowSameDayDelivery": false,
       "allowSaturdayDelivery": false,
       "allowSignature": false,
+      "allowDeliveryTypeExpress": false,
       "cutoffTime": "17:00",
       "cutoffTimeSameDay": "10:00",
       "defaultPackageType": "package",
@@ -85,6 +86,7 @@
       "exportReturnLargeFormat": false,
       "exportReturnPackageType": "package",
       "exportSignature": false,
+      "exportCollect": false,
       "priceDeliveryTypeEvening": 0,
       "priceDeliveryTypeMonday": 0,
       "priceDeliveryTypeMorning": 0,
@@ -97,7 +99,9 @@
       "pricePackageTypeMailbox": 0,
       "priceSignature": 0,
       "allowInternationalMailbox": false,
-      "priceInternationalMailbox": 0
+      "priceInternationalMailbox": 0,
+      "priceCollect": 0,
+      "priceDeliveryTypeExpress": 0
     },
     "dhl": {
       "id": "dhl",
@@ -111,6 +115,7 @@
       "allowSameDayDelivery": false,
       "allowSaturdayDelivery": false,
       "allowSignature": false,
+      "allowDeliveryTypeExpress": false,
       "cutoffTime": "16:00",
       "cutoffTimeSameDay": "10:00",
       "defaultPackageType": "package",
@@ -139,6 +144,7 @@
       "exportReturnLargeFormat": false,
       "exportReturnPackageType": "package",
       "exportSignature": false,
+      "exportCollect": false,
       "priceDeliveryTypeEvening": 0,
       "priceDeliveryTypeMonday": 0,
       "priceDeliveryTypeMorning": 0,
@@ -151,7 +157,9 @@
       "pricePackageTypeMailbox": 0,
       "priceSignature": 0,
       "allowInternationalMailbox": false,
-      "priceInternationalMailbox": 0
+      "priceInternationalMailbox": 0,
+      "priceCollect": 0,
+      "priceDeliveryTypeExpress": 0
     },
     "bpost": {
       "id": "bpost",
@@ -165,6 +173,7 @@
       "allowSameDayDelivery": false,
       "allowSaturdayDelivery": false,
       "allowSignature": false,
+      "allowDeliveryTypeExpress": false,
       "cutoffTime": "16:00",
       "cutoffTimeSameDay": "10:00",
       "defaultPackageType": "package",
@@ -193,6 +202,7 @@
       "exportReturnLargeFormat": false,
       "exportReturnPackageType": "package",
       "exportSignature": false,
+      "exportCollect": false,
       "priceDeliveryTypeEvening": 0,
       "priceDeliveryTypeMonday": 0,
       "priceDeliveryTypeMorning": 0,
@@ -205,7 +215,9 @@
       "pricePackageTypeMailbox": 0,
       "priceSignature": 0,
       "allowInternationalMailbox": false,
-      "priceInternationalMailbox": 0
+      "priceInternationalMailbox": 0,
+      "priceCollect": 0,
+      "priceDeliveryTypeExpress": 0
     }
   }
 }

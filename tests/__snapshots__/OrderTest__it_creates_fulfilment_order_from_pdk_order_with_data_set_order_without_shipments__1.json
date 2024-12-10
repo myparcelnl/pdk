@@ -42,6 +42,7 @@
     },
     "options": {
       "ageCheck": false,
+      "collect": false,
       "deliveryType": 2,
       "hideSender": false,
       "insurance": 0,

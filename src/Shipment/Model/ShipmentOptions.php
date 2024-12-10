@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $sameDayDelivery
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
+ * @property int<-1|0|1>         $collect
  */
 class ShipmentOptions extends Model
 {
@@ -33,6 +34,7 @@ class ShipmentOptions extends Model
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
+    public const COLLECT           = 'collect';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
@@ -46,6 +48,7 @@ class ShipmentOptions extends Model
         self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
+        self::COLLECT           => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -60,5 +63,6 @@ class ShipmentOptions extends Model
         self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
+        self::COLLECT           => TriStateService::TYPE_STRICT,
     ];
 }

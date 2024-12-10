@@ -25,6 +25,7 @@
           "sameDayDelivery": false,
           "signature": true,
           "receiptCode": true,
+          "collect": false,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
         "features": {
@@ -43,7 +44,8 @@
           "ageCheck": true,
           "onlyRecipient": true,
           "sameDayDelivery": false,
-          "largeFormat": true
+          "largeFormat": true,
+          "collect": false
         },
         "features": {
           "labelDescriptionLength": 45
@@ -64,6 +66,7 @@
           "signature": true,
           "saturdayDelivery": true,
           "hideSender": true,
+          "collect": false,
           "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
         "features": {
@@ -80,7 +83,8 @@
           "ageCheck": true,
           "onlyRecipient": true,
           "sameDayDelivery": true,
-          "largeFormat": true
+          "largeFormat": true,
+          "collect": false
         },
         "features": {
           "labelDescriptionLength": 45
@@ -100,6 +104,7 @@
           "signature": true,
           "saturdayDelivery": false,
           "hideSender": false,
+          "collect": false,
           "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
         "features": {
@@ -116,7 +121,8 @@
           "ageCheck": false,
           "onlyRecipient": false,
           "sameDayDelivery": false,
-          "largeFormat": false
+          "largeFormat": false,
+          "collect": false
         },
         "features": {
           "labelDescriptionLength": 45
@@ -147,11 +153,13 @@
       "name": "ups",
       "capabilities": {
         "packageTypes": ["package"],
-        "deliveryTypes": ["standard"],
+        "deliveryTypes": ["standard", "express"],
         "shipmentOptions": {
-          "ageCheck": false,
-          "onlyRecipient": false,
-          "return": false
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "collect": true
         },
         "features": {
           "labelDescriptionLength": 45
@@ -166,7 +174,8 @@
         "shipmentOptions": {
           "ageCheck": false,
           "onlyRecipient": false,
-          "return": false
+          "return": false,
+          "collect": false
         },
         "features": {
           "labelDescriptionLength": 45,

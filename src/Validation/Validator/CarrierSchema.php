@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 use BadMethodCallException;
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
@@ -73,6 +74,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHaveFeature('carrierSmallPackageContract');
     }
 
+    public function canHaveCollect(): bool
+    {
+        return $this->canHave(CollectDefinition::class);
+    }
+
     public function canHaveDirectReturn(): bool
     {
         return $this->canHave(DirectReturnDefinition::class);
@@ -81,6 +87,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveEveningDelivery(): bool
     {
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME);
+    }
+
+    public function canHaveExpressDelivery(): bool
+    {
+        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME);
     }
 
     /**

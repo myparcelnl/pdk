@@ -2873,6 +2873,57 @@
               "description": "settings_carrier_price_only_recipient_description"
             },
             {
+              "name": "allowDeliveryTypeExpress",
+              "$builders": [
+                {
+                  "$visibleWhen": {
+                    "$if": [
+                      {
+                        "$and": [
+                          {
+                            "$target": "deliveryOptionsEnabled"
+                          },
+                          {
+                            "$target": "allowDeliveryOptions"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "$component": "ToggleInput",
+              "label": "settings_carrier_allow_delivery_type_express",
+              "description": "settings_carrier_allow_delivery_type_express_description"
+            },
+            {
+              "name": "priceDeliveryTypeExpress",
+              "$builders": [
+                {
+                  "$visibleWhen": {
+                    "$if": [
+                      {
+                        "$target": "allowDeliveryTypeExpress"
+                      },
+                      {
+                        "$and": [
+                          {
+                            "$target": "deliveryOptionsEnabled"
+                          },
+                          {
+                            "$target": "allowDeliveryOptions"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "$component": "CurrencyInput",
+              "label": "settings_carrier_price_delivery_type_express",
+              "description": "settings_carrier_price_delivery_type_express_description"
+            },
+            {
               "$builders": [
                 {
                   "$visibleWhen": {

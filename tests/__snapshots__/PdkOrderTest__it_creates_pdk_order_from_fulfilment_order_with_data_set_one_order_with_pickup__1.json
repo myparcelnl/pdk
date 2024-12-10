@@ -27,6 +27,7 @@
             "sameDayDelivery": false,
             "signature": true,
             "receiptCode": true,
+            "collect": false,
             "insurance": [
               0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
             ]
@@ -47,7 +48,8 @@
             "ageCheck": true,
             "onlyRecipient": true,
             "sameDayDelivery": false,
-            "largeFormat": true
+            "largeFormat": true,
+            "collect": false
           }
         }
       },
@@ -62,7 +64,8 @@
         "sameDayDelivery": -1,
         "signature": -1,
         "tracked": -1,
-        "receiptCode": -1
+        "receiptCode": -1,
+        "collect": -1
       },
       "deliveryType": "standard",
       "packageType": "package"
