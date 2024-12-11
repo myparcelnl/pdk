@@ -20,7 +20,13 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
      */
     abstract public function get($input): PdkOrder;
 
-    // TODO: v3.0.0 make method abstract to force implementation
+    /**
+     * TODO: v3.0.0 make method abstract to force implementation
+     *
+     * @param  string $uuid
+     *
+     * @return null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder
+     */
     public function getByApiIdentifier(string $uuid): ?PdkOrder
     {
         Logger::notice(
