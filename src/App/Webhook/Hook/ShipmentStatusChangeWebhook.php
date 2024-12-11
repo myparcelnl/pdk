@@ -36,6 +36,7 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
         ]);
     }
 
+
     /**
      * @return string
      */
