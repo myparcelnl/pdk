@@ -47,7 +47,7 @@ it('updates order', function () {
     expect($newOrder)->toBeInstanceOf(PdkOrder::class);
 });
 
-it('gets order by apiIdentifier', function () {
+it('gets order by api identifier', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = Pdk::get(LoggerInterface::class);
     class MockPdkOrderRepository extends AbstractPdkOrderRepository
