@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('webhook');
-
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
 it('handles an api request', function (string $hook, string $expectedClass, array $hookBody) {
