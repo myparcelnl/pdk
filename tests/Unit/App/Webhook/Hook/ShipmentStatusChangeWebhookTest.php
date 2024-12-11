@@ -25,7 +25,6 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
-
 it('handles an api request', function (string $hook, string $expectedClass, array $hookBody) {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
@@ -94,3 +93,4 @@ it('handles an api request', function (string $hook, string $expectedClass, arra
         ],
     ],
 ]);
+
