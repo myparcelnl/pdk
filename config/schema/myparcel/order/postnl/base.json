@@ -62,26 +62,11 @@
                   }
                 }
               }
-            },
-            "physicalProperties": {
-              "properties": {
-                "weight": {
-                  "maximum": 30000
-                }
-              }
             }
           }
         },
         {
-          "properties": {
-            "physicalProperties": {
-              "properties": {
-                "weight": {
-                  "maximum": 23000
-                }
-              }
-            }
-          }
+          "properties": {}
         }
       ]
     },
