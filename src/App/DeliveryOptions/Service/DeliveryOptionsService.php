@@ -36,6 +36,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'allowSameDayDelivery'         => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
         'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
         'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,
+        'allowExpressDelivery'         => CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
         'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
         'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
         'priceOnlyRecipient'           => CarrierSettings::PRICE_ONLY_RECIPIENT,
