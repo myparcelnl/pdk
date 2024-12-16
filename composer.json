@@ -37,7 +37,7 @@
         "nette/robot-loader": ">= 3",
         "pestphp/pest": ">= 1",
         "phpdocumentor/reflection-docblock": "^5",
-        "phpstan/phpstan": ">= 1",
+        "phpstan/phpstan": "^1",
         "rector/rector": ">= 1",
         "spatie/pest-plugin-snapshots": ">= 1",
         "symfony/console": "*"
