@@ -12,6 +12,7 @@
       "allowSameDayDelivery": false,
       "allowSaturdayDelivery": false,
       "allowSignature": false,
+      "allowExpressDelivery": false,
       "priceEveningDelivery": 0,
       "priceMorningDelivery": 0,
       "priceOnlyRecipient": 0,
