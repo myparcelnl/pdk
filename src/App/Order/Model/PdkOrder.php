@@ -62,18 +62,15 @@ class PdkOrder extends Model
 
         'deliveryOptions' => DeliveryOptions::class,
 
-        'senderAddress'      => null,
-        'billingAddress'     => null,
-        'shippingAddress'    => ShippingAddress::class,
+        'senderAddress'   => null,
+        'billingAddress'  => null,
+        'shippingAddress' => ShippingAddress::class,
 
         /**
          * Order shipments. Applicable when NOT using order mode.
          */
-        'shipments'          => ShipmentCollection::class,
+        'shipments'       => ShipmentCollection::class,
 
-        /**
-         * @deprecated Do not use, will be generated automatically. Will be removed in v3.0.0
-         */
         'customsDeclaration' => null,
 
         'physicalProperties' => PdkPhysicalProperties::class,
@@ -133,14 +130,6 @@ class PdkOrder extends Model
         'totalPrice'            => 'int',
         'totalVat'              => 'int',
         'totalPriceAfterVat'    => 'int',
-    ];
-
-    // TODO: v3.0.0 stop supporting deprecated attributes
-    protected $deprecated = [
-        'orderLines' => 'lines',
-        'orderNotes' => 'notes',
-        'recipient'  => 'shippingAddress',
-        'sender'     => 'senderAddress',
     ];
 
     /**

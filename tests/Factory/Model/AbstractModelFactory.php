@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Exception\NotImplementedException;
 use MyParcelNL\Pdk\Tests\Factory\FactoryFactory;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Base\Support\Str;
 use ReflectionClass;
 
 abstract class AbstractModelFactory extends AbstractFactory implements ModelFactoryInterface

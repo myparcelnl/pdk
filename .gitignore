@@ -4,6 +4,7 @@
 .yarn-*.log
 composer.lock
 clover.xml
+junit.xml
 
 docker-compose.override.yml
 .env

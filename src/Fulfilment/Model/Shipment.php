@@ -66,10 +66,10 @@ class Shipment extends Model
     public static function fromPdkShipment(?PdkShipment $pdkShipment): self
     {
         if (! $pdkShipment) {
-            return new self();
+            return new static();
         }
 
-        return new self([
+        return new static([
             'orderId'            => $pdkShipment->orderId,
             'carrier'            => $pdkShipment->carrier->id,
             'contractId'         => $pdkShipment->carrier->contractId,
