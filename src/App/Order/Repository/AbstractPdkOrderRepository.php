@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Facade\Logger;
 
 abstract class AbstractPdkOrderRepository extends Repository implements PdkOrderRepositoryInterface
 {
@@ -18,6 +19,25 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
      * @return \MyParcelNL\Pdk\App\Order\Model\PdkOrder
      */
     abstract public function get($input): PdkOrder;
+
+    /**
+     * TODO: v3.0.0 make method abstract to force implementation
+     *
+     * @param  string $uuid
+     *
+     * @return null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder
+     */
+    public function getByApiIdentifier(string $uuid): ?PdkOrder
+    {
+        Logger::notice(
+            'Implement getByApiIdentifier, in PDK v3 it will be required.',
+            [
+                'class' => self::class,
+            ]
+        );
+
+        return $this->get(['order_id' => $uuid]);
+    }
 
     /**
      * @param  string|string[] $orderIds
@@ -38,6 +58,7 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
     {
         return $this->save($order->externalIdentifier, $order);
     }
+
 
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $collection

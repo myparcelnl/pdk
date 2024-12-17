@@ -8,7 +8,9 @@ namespace MyParcelNL\Pdk\App\Order\Repository;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use Psr\Log\LoggerInterface;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -44,3 +46,33 @@ it('updates order', function () {
 
     expect($newOrder)->toBeInstanceOf(PdkOrder::class);
 });
+
+it('gets order by api identifier', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+    class MockPdkOrderRepository extends AbstractPdkOrderRepository
+    {
+        public function get($input): PdkOrder
+        {
+            return new PdkOrder();
+        }
+    }
+    $repository = new MockPdkOrderRepository(Pdk::get(StorageInterface::class));
+    $order      = $repository->getByApiIdentifier('123');
+
+    expect($order)
+        ->toBeInstanceOf(PdkOrder::class)
+        ->and($logger->getLogs())
+        ->toEqual([
+                [
+                    'level'   => 'notice',
+                    'message' => '[PDK]: Implement getByApiIdentifier, in PDK v3 it will be required.',
+                    'context' =>
+                        [
+                            'class'   => 'MyParcelNL\\Pdk\\App\\Order\\Repository\\AbstractPdkOrderRepository',
+                        ],
+                ],
+            ]
+        );
+});
+

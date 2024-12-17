@@ -154,6 +154,7 @@ class PdkOrderCollection extends Collection
         return $orderShipments->values();
     }
 
+
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
@@ -170,4 +171,3 @@ class PdkOrderCollection extends Collection
         return $merged;
     }
 }
-
