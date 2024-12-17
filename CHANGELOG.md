@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.48.0](https://github.com/myparcelnl/pdk/compare/v2.47.2...v2.48.0) (2024-12-17)
+
+
+### :sparkles: New Features
+
+* **webhooks:** link shipment to order ([#327](https://github.com/myparcelnl/pdk/issues/327)) ([e61fc9d](https://github.com/myparcelnl/pdk/commit/e61fc9dce9d50c2b4fa990dc0eaba9aa0cd8500f))
+
 ## [2.47.2](https://github.com/myparcelnl/pdk/compare/v2.47.1...v2.47.2) (2024-11-20)
 
 
