@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.49.0](https://github.com/myparcelnl/pdk/compare/v2.48.0...v2.49.0) (2024-12-18)
+
+
+### :sparkles: New Features
+
+* add ups to nl, be and lu ([#324](https://github.com/myparcelnl/pdk/issues/324)) ([065e50f](https://github.com/myparcelnl/pdk/commit/065e50f8e87da9a56482032d99371ba19898f06a))
+
 ## [2.48.0](https://github.com/myparcelnl/pdk/compare/v2.47.2...v2.48.0) (2024-12-17)
 
 
