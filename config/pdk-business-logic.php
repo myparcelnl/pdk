@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
@@ -76,6 +77,7 @@ return [
             new SignatureDefinition(),
             new TrackedDefinition(),
             new ReceiptCodeDefinition(),
+            new CollectDefinition(),
         ];
     }),
 

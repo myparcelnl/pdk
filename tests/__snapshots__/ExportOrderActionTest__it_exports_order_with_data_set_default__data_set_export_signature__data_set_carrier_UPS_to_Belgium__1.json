@@ -1,0 +1,30 @@
+{
+  "data": {
+    "shipments": [
+      {
+        "carrier": 8,
+        "general_settings": {
+          "save_recipient_address": 0
+        },
+        "options": {
+          "package_type": 1,
+          "delivery_type": 2,
+          "signature": 1
+        },
+        "physical_properties": {
+          "weight": 0
+        },
+        "recipient": {
+          "cc": "BE",
+          "city": "Antwerpen",
+          "company": "MyParcel",
+          "person": "Felicia Parcel",
+          "postal_code": "1000",
+          "street": "Adriaan Brouwerstraat 16",
+          "vat_number": "NL123456789B01"
+        },
+        "reference_identifier": "PDK-1"
+      }
+    ]
+  }
+}
