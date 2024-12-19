@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.49.1](https://github.com/myparcelnl/pdk/compare/v2.49.0...v2.49.1) (2024-12-19)
+
+
+### :bug: Bug Fixes
+
+* **schema:** update PostNL BE base schema validation rules ([#329](https://github.com/myparcelnl/pdk/issues/329)) ([e2a4a5c](https://github.com/myparcelnl/pdk/commit/e2a4a5cb9db9ffca45c23b0b4e579b1ea75c38a9))
+
 ## [2.49.0](https://github.com/myparcelnl/pdk/compare/v2.48.0...v2.49.0) (2024-12-18)
 
 
