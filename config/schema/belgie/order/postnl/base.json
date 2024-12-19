@@ -7,48 +7,10 @@
         {
           "properties": {
             "deliveryOptions": {
-              "properties": {
-                "shipmentOptions": {
-                  "required": ["largeFormat"],
-                  "properties": {
-                    "largeFormat": {
-                      "enum": [1]
-                    }
-                  }
-                }
-              }
-            },
-            "physicalProperties": {
-              "properties": {
-                "weight": {
-                  "maximum": 30000
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "physicalProperties": {
-              "properties": {
-                "weight": {
-                  "maximum": 20000
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "anyOf": [
-        {
-          "properties": {
-            "deliveryOptions": {
               "required": ["deliveryType"],
               "properties": {
                 "deliveryType": {
-                  "enum": ["standard", null]
+                  "enum": ["standard", "pickup", null]
                 }
               }
             }
@@ -74,78 +36,11 @@
         {
           "properties": {
             "deliveryOptions": {
-              "required": ["deliveryType", "pickupLocation"],
               "properties": {
-                "deliveryType": {
-                  "enum": ["pickup"]
-                },
-                "pickupLocation": {
-                  "type": "object",
-                  "required": ["locationCode"],
-                  "properties": {
-                    "locationCode": {
-                      "type": "string"
-                    }
-                  }
-                },
                 "shipmentOptions": {
                   "properties": {
                     "signature": {
-                      "enum": [1]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "deliveryOptions": {
-              "properties": {
-                "deliveryType": {
-                  "enum": ["standard", null]
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    {
-      "anyOf": [
-        {
-          "properties": {
-            "deliveryOptions": {
-              "properties": {
-                "shipmentOptions": {
-                  "required": ["insurance"],
-                  "properties": {
-                    "insurance": {
-                      "enum": [
-                        10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                      ]
-                    },
-                    "onlyRecipient": {
-                      "enum": [1]
-                    },
-                    "signature": {
-                      "enum": [1]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "properties": {
-            "deliveryOptions": {
-              "properties": {
-                "shipmentOptions": {
-                  "properties": {
-                    "insurance": {
-                      "enum": [0, null]
+                      "enum": [0, 1]
                     }
                   }
                 }
@@ -155,35 +50,5 @@
         }
       ]
     }
-  ],
-  "properties": {
-    "physicalProperties": {
-      "properties": {
-        "weight": {
-          "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf",
-          "minimum": 1
-        }
-      }
-    },
-    "deliveryOptions": {
-      "properties": {
-        "shipmentOptions": {
-          "properties": {
-            "deliveryType": {
-              "enum": ["standard", "pickup", null]
-            },
-            "labelDescription": {
-              "maxLength": 50
-            },
-            "sameDayDelivery": {
-              "enum": [0]
-            },
-            "tracked": {
-              "enum": [0, 1]
-            }
-          }
-        }
-      }
-    }
-  }
+  ]
 }
