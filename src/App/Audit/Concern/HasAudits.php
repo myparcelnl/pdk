@@ -43,6 +43,7 @@ trait HasAudits
      */
     protected function getAuditsAttribute(): AuditCollection
     {
+        file_put_contents('/tmp/plugins/woocommerce-myparcel/joeri.log',"get audit attribute\n",FILE_APPEND);
         $identifier = $this->getAttribute($this->auditIdentifier);
 
         return $identifier
@@ -55,11 +56,9 @@ trait HasAudits
      */
     protected function initializeHasAudits(): void
     {
+        file_put_contents('/tmp/plugins/woocommerce-myparcel/joeri.log',"initializeHasAudits() 2\n",FILE_APPEND);
         if (null === $this->auditIdentifier) {
             throw new InvalidArgumentException('Audit identifier is not set');
         }
-
-        $this->attributes['audits'] = null;
-        $this->casts['audits']      = AuditCollection::class;
     }
 }

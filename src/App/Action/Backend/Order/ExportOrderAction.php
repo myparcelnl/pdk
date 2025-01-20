@@ -65,10 +65,16 @@ class ExportOrderAction extends AbstractOrderAction
         $originalOrders = $this->updateOrders($request);
         $validOrders    = $this->validateOrders($originalOrders, $request);
         $exportedOrders = $this->export($validOrders, $request);
+        $isAutomatic    = Audit::TYPE_AUTOMATIC === $request->get('actionType');
+
+        $exportedOrders->each(function (PdkOrder $order) use ($isAutomatic) {
+            if (true === $order->autoExported) {
+                return;
+            }
+            $order->autoExported = $isAutomatic;
+        });
 
         $this->saveOrders($exportedOrders, $originalOrders);
-
-        $this->addAudits($request, $exportedOrders);
 
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, [
             'orderIds' => $this->getOrderIds($request),
@@ -167,6 +173,10 @@ class ExportOrderAction extends AbstractOrderAction
             ->filter(function (PdkOrder $order) use ($isAutomatic) {
                 if (! $isAutomatic) {
                     return true;
+                }
+
+                if (isset($order->autoExported)) {
+                    return ! $order->autoExported;
                 }
 
                 return ! $order->audits

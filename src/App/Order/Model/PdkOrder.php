@@ -36,6 +36,7 @@ use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties       $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
+ * @property bool                                                        $autoExported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
  * @property int                                                         $shipmentVat
@@ -89,6 +90,7 @@ class PdkOrder extends Model
          * Whether the order has been exported as an entire order. Applicable only when using order mode.
          */
         'exported'           => false,
+        'autoExported'       => false,
 
         'shipmentPrice'         => 0,
         'shipmentPriceAfterVat' => 0,
@@ -124,6 +126,7 @@ class PdkOrder extends Model
         'orderDate'             => 'datetime',
         'referenceIdentifier'   => 'string',
         'exported'              => 'bool',
+        'autoExported'          => 'bool',
         'shipmentPrice'         => 'int',
         'shipmentPriceAfterVat' => 'int',
         'shipmentVat'           => 'int',
@@ -253,6 +256,7 @@ class PdkOrder extends Model
         return Utils::filterNull([
             'apiIdentifier'      => $this->apiIdentifier,
             'exported'           => $this->exported,
+            'autoExported'       => $this->autoExported,
             'deliveryOptions'    => $this->deliveryOptions->toStorableArray(),
             'physicalProperties' => $this->physicalProperties->toStorableArray(),
         ]);
