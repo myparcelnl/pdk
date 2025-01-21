@@ -35,6 +35,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withBillingAddress(array|ContactDetails|ContactDetailsFactory $billingAddress)
  * @method $this withCustomsDeclaration(array|CustomsDeclaration|CustomsDeclarationFactory $customsDeclaration)
  * @method $this withExported(bool $exported)
+ * @method $this withAutoExported(bool $exported)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withOrderDate(string|DateTimeImmutable $orderDate)
  * @method $this withReferenceIdentifier(string $referenceIdentifier)

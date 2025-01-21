@@ -56,17 +56,12 @@ dataset('order mode toggle', [
 dataset('action type toggle', [
     'auto'   => 'automatic',
     'manual' => 'manual',
+    'none'   => null,
 ]);
 
-it('remembers whether it was auto exported', function (string $actionType) {
+it('remembers whether it was auto exported', function (?string $actionType) {
     $orderFactory = factory(PdkOrderCollection::class)->push(
-        factory(PdkOrder::class)
-            ->withDeliveryOptions(
-                factory(DeliveryOptions::class)
-                    ->withCarrier(Carrier::CARRIER_UPS_NAME)
-                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
-            )
-            ->toTheNetherlands()
+        factory(PdkOrder::class)->toTheNetherlands()
     );
     $orders       = new Collection($orderFactory->make());
 
@@ -83,7 +78,10 @@ it('remembers whether it was auto exported', function (string $actionType) {
             ->pluck('externalIdentifier')
             ->toArray(),
     ]);
-    expect(json_decode($response->getContent(), false)->data->orders[0]->autoExported)->toBe('automatic' === $actionType);
+
+    expect(json_decode($response->getContent(), false)->data->orders[0]->autoExported)->toBe(
+        'automatic' === $actionType
+    );
 })
     ->with('action type toggle');
 
