@@ -29,6 +29,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
@@ -51,6 +52,40 @@ dataset('order mode toggle', [
     'default'    => [false],
     'order mode' => [true],
 ]);
+
+dataset('action type toggle', [
+    'auto'   => 'automatic',
+    'manual' => 'manual',
+]);
+
+it('remembers whether it was auto exported', function (string $actionType) {
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)
+                    ->withCarrier(Carrier::CARRIER_UPS_NAME)
+                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
+            )
+            ->toTheNetherlands()
+    );
+    $orders       = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+    MockApi::enqueue(new ExampleGetShipmentLabelsLinkResponse());
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+    MockApi::enqueue(new ExampleGetShipmentLabelsLinkResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'actionType' => $actionType,
+        'orderIds'   => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+    expect(json_decode($response->getContent(), false)->data->orders[0]->autoExported)->toBe('automatic' === $actionType);
+})
+    ->with('action type toggle');
 
 it('exports order', function (
     bool                      $orderMode,
