@@ -19,7 +19,7 @@ trait HasAudits
      * @param  string      $action
      * @param  null|string $type
      * @param  null|array  $arguments
-     *
+     * @deprecated only used in test now
      * @return void
      */
     public function addAudit(string $action, ?string $type = null, ?array $arguments = []): void
@@ -43,7 +43,7 @@ trait HasAudits
      */
     protected function getAuditsAttribute(): AuditCollection
     {
-        file_put_contents('/tmp/plugins/woocommerce-myparcel/joeri.log',"get audit attribute\n",FILE_APPEND);
+        //file_put_contents('/tmp/plugins/woocommerce-myparcel/joeri.log',"get audit attribute\n",FILE_APPEND);
         $identifier = $this->getAttribute($this->auditIdentifier);
 
         return $identifier
@@ -56,7 +56,7 @@ trait HasAudits
      */
     protected function initializeHasAudits(): void
     {
-        file_put_contents('/tmp/plugins/woocommerce-myparcel/joeri.log',"initializeHasAudits() 2\n",FILE_APPEND);
+        //file_put_contents('/tmp/plugins/woocommerce-myparcel/joeri.log',"initializeHasAudits() 2\n",FILE_APPEND);
         if (null === $this->auditIdentifier) {
             throw new InvalidArgumentException('Audit identifier is not set');
         }
