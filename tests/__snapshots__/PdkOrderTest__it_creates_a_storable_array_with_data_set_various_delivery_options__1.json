@@ -1,7 +1,6 @@
 [
     {
         "exported": false,
-        "autoExported": false,
         "deliveryOptions": {
             "carrier": {
                 "externalIdentifier": "postnl"
@@ -27,7 +26,6 @@
     },
     {
         "exported": false,
-        "autoExported": false,
         "deliveryOptions": {
             "date": "2077-10-23 09:47:51",
             "carrier": {
@@ -54,7 +52,6 @@
     },
     {
         "exported": false,
-        "autoExported": false,
         "deliveryOptions": {
             "carrier": {
                 "externalIdentifier": "dhlforyou"

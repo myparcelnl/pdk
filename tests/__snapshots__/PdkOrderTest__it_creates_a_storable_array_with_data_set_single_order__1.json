@@ -1,7 +1,6 @@
 [
     {
         "exported": false,
-        "autoExported": false,
         "deliveryOptions": {
             "carrier": {
                 "externalIdentifier": "postnl"
