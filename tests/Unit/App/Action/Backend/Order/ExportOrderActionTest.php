@@ -56,10 +56,9 @@ dataset('order mode toggle', [
 dataset('action type toggle', [
     'auto'   => 'automatic',
     'manual' => 'manual',
-    'none'   => null,
 ]);
 
-it('remembers whether it was auto exported', function (?string $actionType) {
+it('handles auto exported flag', function (?string $actionType) {
     $orderFactory = factory(PdkOrderCollection::class)->push(
         factory(PdkOrder::class)->toTheNetherlands()
     );
@@ -70,7 +69,6 @@ it('remembers whether it was auto exported', function (?string $actionType) {
     MockApi::enqueue(new ExamplePostShipmentsResponse());
     MockApi::enqueue(new ExampleGetShipmentLabelsLinkResponse());
     MockApi::enqueue(new ExamplePostShipmentsResponse());
-    MockApi::enqueue(new ExampleGetShipmentLabelsLinkResponse());
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
         'actionType' => $actionType,
@@ -82,6 +80,44 @@ it('remembers whether it was auto exported', function (?string $actionType) {
     expect(json_decode($response->getContent(), false)->data->orders[0]->autoExported)->toBe(
         'automatic' === $actionType
     );
+
+    // if it was already auto-exported, you can not auto-export again
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)->toTheNetherlands()->withAutoExported('automatic' === $actionType)
+    );
+    $orders       = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'actionType' => 'automatic',
+        'orderIds'   => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    expect(count(json_decode($response->getContent(), false)->data->orders[0]->shipments))->toBe('automatic' === $actionType ? 0 : 1);
+
+    // if it was already auto-exported, you can manually export it no problem
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)->toTheNetherlands()->withAutoExported('automatic' === $actionType)
+    );
+    $orders       = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'actionType' => 'manual',
+        'orderIds'   => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    expect(count(json_decode($response->getContent(), false)->data->orders[0]->shipments))->toBe(1);
 })
     ->with('action type toggle');
 
