@@ -415,7 +415,8 @@
         "priceType": "included",
         "enableDeliveryOptions": true,
         "enableDeliveryOptionsWhenNotInStock": true,
-        "useSeparateAddressFields": false
+        "useSeparateAddressFields": false,
+        "showTaxFields": true
       },
       "carrier": {
         "postnl": {
@@ -444,7 +445,6 @@
             "dropOffDaysDeviations": []
           },
           "exportAgeCheck": false,
-          "exportReceiptCode": false,
           "exportHideSender": false,
           "exportInsurance": false,
           "exportInsuranceFromAmount": 0,
@@ -455,6 +455,7 @@
           "exportInsuranceUpToUnique": 0,
           "exportLargeFormat": false,
           "exportOnlyRecipient": false,
+          "exportReceiptCode": false,
           "exportReturn": false,
           "exportReturnLargeFormat": false,
           "exportReturnPackageType": "package",

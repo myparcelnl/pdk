@@ -42,7 +42,8 @@
     "priceType": "included",
     "enableDeliveryOptions": true,
     "enableDeliveryOptionsWhenNotInStock": true,
-    "useSeparateAddressFields": false
+    "useSeparateAddressFields": false,
+    "showTaxFields": true
   },
   "carrier": []
 }
