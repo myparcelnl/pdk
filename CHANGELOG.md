@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.50.0](https://github.com/myparcelnl/pdk/compare/v2.49.1...v2.50.0) (2025-01-22)
+
+
+### :sparkles: New Features
+
+* add toggle for EU VAT and EORI fields in checkout settings ([#332](https://github.com/myparcelnl/pdk/issues/332)) ([22c9e77](https://github.com/myparcelnl/pdk/commit/22c9e77d527aa2c1928ee66f1a5a45f2eabf0dfe))
+* **logging:** obfuscate authorization header in logs ([#325](https://github.com/myparcelnl/pdk/issues/325)) ([b5a0d17](https://github.com/myparcelnl/pdk/commit/b5a0d17224fb804eaf567e0525bb0f53353a4e69))
+
 ## [2.49.1](https://github.com/myparcelnl/pdk/compare/v2.49.0...v2.49.1) (2024-12-19)
 
 
