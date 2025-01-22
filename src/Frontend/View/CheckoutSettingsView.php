@@ -89,7 +89,8 @@ class CheckoutSettingsView extends AbstractSettingsView
                             ]
                         ),
                     ]
-                )
+                ),
+                new InteractiveElement(CheckoutSettings::SHOW_TAX_FIELDS, Components::INPUT_TOGGLE)
             ),
         ];
     }

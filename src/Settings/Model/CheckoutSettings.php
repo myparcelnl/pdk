@@ -41,6 +41,7 @@ class CheckoutSettings extends AbstractSettingsModel
     public const DEFAULT_PRICE_TYPE  = self::PRICE_TYPE_INCLUDED;
     public const PRICE_TYPE_EXCLUDED = 'excluded';
     public const PRICE_TYPE_INCLUDED = 'included';
+    public const SHOW_TAX_FIELDS     = 'showTaxFields';
 
     protected $attributes = [
         'id' => self::ID,
@@ -54,6 +55,7 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS                   => true,
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
+        self::SHOW_TAX_FIELDS                           => true,
     ];
 
     protected $casts      = [
@@ -66,5 +68,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS                   => 'bool',
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => 'bool',
         self::USE_SEPARATE_ADDRESS_FIELDS               => 'bool',
+        self::SHOW_TAX_FIELDS                           => 'bool',
     ];
 }

@@ -173,6 +173,23 @@
       ],
       "label": "settings_checkout_pickup_locations_default_view",
       "description": "settings_checkout_pickup_locations_default_view_description"
+    },
+    {
+      "name": "showTaxFields",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "enableDeliveryOptions"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "ToggleInput",
+      "label": "settings_checkout_show_tax_fields",
+      "description": "settings_checkout_show_tax_fields_description"
     }
   ],
   "children": null
