@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Base\Concern\HasPrices;
 use MyParcelNL\Pdk\Base\Model\Model;
 
@@ -64,5 +65,20 @@ class OrderLine extends Model
     {
         parent::__construct($data);
         $this->calculateVatTotals();
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrderLine $pdkOrderLine
+     *
+     * @return self
+     */
+    public static function fromPdkOrderLine(PdkOrderLine $pdkOrderLine): self
+    {
+        $data = array_replace(
+            $pdkOrderLine->toArray(),
+            ['product' => Product::fromPdkProduct($pdkOrderLine->product)]
+        );
+
+        return new static($data);
     }
 }

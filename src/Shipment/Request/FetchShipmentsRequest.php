@@ -6,8 +6,8 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Sdk\src\Support\Collection;
 
 class FetchShipmentsRequest extends Request
 {

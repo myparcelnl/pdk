@@ -6,13 +6,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Support;
 
 use DateTime;
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Tests\Mocks\MockBeConcerned;
 use MyParcelNL\Pdk\Tests\Mocks\MockCastModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockClassWithTrait;
 use ReflectionMethod;
 use stdClass;
-use function expect;
 
 it('gets parents of class recursively', function () {
     expect(Utils::getClassParentsRecursive(new MockClassWithTrait()))
@@ -29,8 +27,8 @@ it('changes case of array keys', function (?int $flags, $expectation) {
     expect(Utils::changeArrayKeysCase($input, $flags))->toEqual($expectation);
 })->with([
     'to camelCase'  => [null, ['snakeCase' => 1, 'camelCase' => 2, 'studlyCase' => 3]],
-    'to snake_case' => [Arrayable::CASE_SNAKE, ['snake_case' => 1, 'camel_case' => 2, 'studly_case' => 3]],
-    'to StudlyCase' => [Arrayable::CASE_STUDLY, ['SnakeCase' => 1, 'CamelCase' => 2, 'StudlyCase' => 3]],
+    'to snake_case' => [Str::CASE_SNAKE, ['snake_case' => 1, 'camel_case' => 2, 'studly_case' => 3]],
+    'to StudlyCase' => [Str::CASE_STUDLY, ['SnakeCase' => 1, 'CamelCase' => 2, 'StudlyCase' => 3]],
 ]);
 
 it('converts id to name', function ($input, $output) {

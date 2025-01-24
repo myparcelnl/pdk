@@ -1,8 +1,13 @@
 {
-  "0.property": "deliveryOptions.shipmentOptions.sameDayDelivery",
-  "0.pointer": "/deliveryOptions/shipmentOptions/sameDayDelivery",
-  "0.message": "Does not have a value in the enumeration [0]",
-  "0.constraint": "enum",
+  "0.property": "shippingAddress.cc",
+  "0.pointer": "/shippingAddress/cc",
+  "0.message": "The property cc is required",
+  "0.constraint": "required",
   "0.context": 1,
-  "0.enum.0": 0
+  "1.property": "deliveryOptions.shipmentOptions.sameDayDelivery",
+  "1.pointer": "/deliveryOptions/shipmentOptions/sameDayDelivery",
+  "1.message": "Does not have a value in the enumeration [0]",
+  "1.constraint": "enum",
+  "1.context": 1,
+  "1.enum.0": 0
 }

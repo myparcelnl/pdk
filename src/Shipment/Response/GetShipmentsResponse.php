@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Response;
 
+use MyParcelNL\Pdk\Api\Concern\DecodesAddressFields;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Str;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 
 class GetShipmentsResponse extends ApiResponseWithBody
 {
+    use DecodesAddressFields;
+
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
@@ -79,9 +82,9 @@ class GetShipmentsResponse extends ApiResponseWithBody
             'partnerTrackTraces'       => $data['partner_tracktraces'],
             'physicalProperties'       => $physicalProperties,
             'price'                    => $data['price'],
-            'recipient'                => $this->filter($data['recipient']),
+            'recipient'                => $this->decodeAddress($data['recipient']),
             'referenceIdentifier'      => $data['reference_identifier'],
-            'sender'                   => $this->filter($data['sender']),
+            'sender'                   => $this->decodeAddress($data['sender']),
             'shipmentType'             => $data['shipment_type'],
             'status'                   => $data['status'],
 
@@ -93,23 +96,13 @@ class GetShipmentsResponse extends ApiResponseWithBody
     }
 
     /**
-     * @param  null|array $item
-     *
-     * @return null|array
-     */
-    private function filter(?array $item): ?array
-    {
-        return array_filter($item ?? []) ?: null;
-    }
-
-    /**
      * @param  array $options
      *
      * @return array
      */
     private function getShipmentOptions(array $options): array
     {
-        $keys            = array_keys((new ShipmentOptions())->getAttributes(Arrayable::CASE_SNAKE));
+        $keys            = array_keys((new ShipmentOptions())->getAttributes(Str::CASE_SNAKE));
         $shipmentOptions = Arr::only($options, $keys);
 
         $shipmentOptions['insurance'] = $options['insurance']['amount'] ?? null;

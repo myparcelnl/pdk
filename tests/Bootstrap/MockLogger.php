@@ -8,9 +8,6 @@ use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Logger\AbstractLogger;
 use Psr\Log\LogLevel;
-use function array_filter;
-use function array_reduce;
-use function json_encode;
 
 class MockLogger extends AbstractLogger
 {

@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
-use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
@@ -52,9 +50,7 @@ use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
 use MyParcelNL\Pdk\Platform\PlatformManager;
 use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
-use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Service\DropOffService;
@@ -63,7 +59,6 @@ use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\autowire;
-use function DI\factory;
 
 /**
  * Pre-defined services.
@@ -188,20 +183,6 @@ return [
      * Handles tri-state values
      */
     TriStateServiceInterface::class            => autowire(TriStateService::class),
-
-    /**
-     * @todo remove in v3.0.0
-     */
-    PdkAccountRepositoryInterface::class       => factory(function () {
-        return \MyParcelNL\Pdk\Facade\Pdk::get(AccountRepositoryInterface::class);
-    }),
-
-    /**
-     * @todo remove in v3.0.0
-     */
-    PdkSettingsRepositoryInterface::class      => factory(function () {
-        return \MyParcelNL\Pdk\Facade\Pdk::get(SettingsRepositoryInterface::class);
-    }),
 
     /**
      * Handles executing pdk actions.

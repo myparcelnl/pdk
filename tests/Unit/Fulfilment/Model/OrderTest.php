@@ -5,122 +5,75 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderFactory;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(new UsesMockPdkInstance());
 
-it('creates fulfilment order from pdk order', function (array $input) {
-    $pdkOrder = new PdkOrder($input);
+it('creates fulfilment order from pdk order', function (PdkOrderFactory $factory) {
+    $product1 = factory(PdkProduct::class)
+        ->withEverything()
+        ->withPrice(100);
+    $product2 = factory(PdkProduct::class)
+        ->withEverything()
+        ->withPrice(200);
 
+    $product3 = factory(PdkProduct::class)
+        ->withEverything()
+        ->withPrice(300);
+
+    $factory->withLines(
+        factory(PdkOrderLineCollection::class)->push(
+            factory(PdkOrderLine::class)
+                ->withProduct($product1)
+                ->withQuantity(3)
+                ->withPrice(3 * 100)
+                ->withVat((int) (3 * 100 * 0.09)),
+
+            factory(PdkOrderLine::class)
+                ->withProduct($product2)
+                ->withPrice(300)
+                ->withVat((int) (300 * 0.21)),
+
+            factory(PdkOrderLine::class)
+                ->withProduct($product3)
+                ->withQuantity(6)
+                ->withPrice(6 * 300)
+                ->withVat((int) (6 * 300 * 0.21))
+        )
+    );
+
+    $pdkOrder        = $factory->make();
     $fulfilmentOrder = Order::fromPdkOrder($pdkOrder);
+
     expect($fulfilmentOrder)->toBeInstanceOf(Order::class);
     assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArrayWithoutNull()));
 })->with([
-    'empty order'             => [[]],
-    'order without shipments' => [
-        'input' => [
-            'externalIdentifier'    => 'ABC123456',
-            'orderDate'             => '2023-01-01 00:00:00',
-            'customsDeclaration'    => [
-                'contents' => '00',
-                'invoice'  => 'ABC123456',
-                'items'    => [
-                    [
-                        'amount'         => 10,
-                        'classification' => '12345',
-                        'country'        => 'NL',
-                        'description'    => 'A word',
-                        'itemValue'      => [
-                            'amount'   => 100,
-                            'currency' => 'EUR',
-                        ],
-                        'weight'         => 100,
-                    ],
-                ],
-                'weight'   => 1000,
-            ],
-            'deliveryOptions'       => [
-                'carrier'         => 'postnl',
-                'date'            => '2020-01-01',
-                'deliveryType'    => 'standard',
-                'labelAmount'     => 1,
-                'packageType'     => 'package',
-                'pickupLocation'  => null,
-                'shipmentOptions' => [
-                    'onlyRecipient' => true,
-                    'signature'     => true,
-                ],
-            ],
-            'lines'                 => [
-                [
-                    'externalIdentifier' => 'ABC123456-1',
-                    'quantity'           => 10,
-                    'price'              => 295,
-                    'vat'                => 62,
-                    'priceAfterVat'      => 357,
-                    'product'            => [
-                        'sku'    => 'ABC123456',
-                        'ean'    => '1234567890123',
-                        'name'   => 'Product name',
-                        'weight' => 100,
-                    ],
-                ],
-            ],
-            'physicalProperties'    => [
-                'weight' => 1000,
-                'height' => 100,
-                'width'  => 100,
-                'length' => 100,
-            ],
-            'recipient'             => [
-                'company'    => 'MyParcel',
-                'email'      => 'test@myparcel.nl',
-                'person'     => 'Ms. Parcel',
-                'phone'      => '0612356789',
-                'cc'         => 'NL',
-                'city'       => 'Hoofddorp',
-                'address1'   => 'Antareslaan 31',
-                'postalCode' => '2132JE',
-                'region'     => 'Noord-Holland',
-                'state'      => 'Noord-Holland',
-            ],
-            'sender'                => null,
-            'shipments'             => [],
-            'shipmentPrice'         => 695,
-            'shipmentVat'           => 146,
-            'shipmentPriceAfterVat' => 841,
-            'orderPrice'            => 2950,
-            'orderVat'              => 620,
-            'orderPriceAfterVat'    => 3570,
-            'totalPrice'            => 3645,
-            'totalVat'              => 766,
-            'totalPriceAfterVat'    => 4411,
-        ],
-    ],
-    'order with shipments'    => [
-        'input' => [
-            'shipments' => [
-                [
-                    'deliveryOptions' => [
-                        'carrier'         => 'postnl',
-                        'date'            => '2020-01-01',
-                        'deliveryType'    => 'standard',
-                        'labelAmount'     => 1,
-                        'packageType'     => 'package',
-                        'pickupLocation'  => null,
-                        'shipmentOptions' => [
-                            'onlyRecipient' => true,
-                            'signature'     => true,
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
-]);
+        'simple order' => function () {
+            return factory(PdkOrder::class);
+        },
+
+        'order with delivery options' => function () {
+            return factory(PdkOrder::class)->withDeliveryOptionsWithAllOptions();
+        },
+
+        'order to pickup location' => function () {
+            return factory(PdkOrder::class)->withDeliveryOptionsWithPickupLocation();
+        },
+
+        'order to germany' => function () {
+            return factory(PdkOrder::class)->toGermany();
+        },
+
+    ]
+);
 
 it('returns empty fulfilment order when no pdk order is passed', function () {
     $fulfilmentOrder = Order::fromPdkOrder(null);
