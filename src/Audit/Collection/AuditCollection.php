@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Audit\Collection;
 
+use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Support\Collection;
 
@@ -21,7 +22,7 @@ class AuditCollection extends Collection
      */
     public function automatic(): self
     {
-        return $this->where('type', Audit::TYPE_AUTOMATIC);
+        return $this->where('type', ExportOrderAction::TYPE_AUTOMATIC);
     }
 
     /**
