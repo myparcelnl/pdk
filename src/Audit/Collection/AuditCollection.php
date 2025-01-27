@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 
 /**
  * @property \MyParcelNL\Pdk\Audit\Model\Audit[] $items
+ * @deprecated Audits functionality will be removed in the next major release
  */
 class AuditCollection extends Collection
 {
@@ -16,6 +17,7 @@ class AuditCollection extends Collection
 
     /**
      * @return self
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function automatic(): self
     {
@@ -26,6 +28,7 @@ class AuditCollection extends Collection
      * @param  string $action
      *
      * @return bool
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function hasAction(string $action): bool
     {

@@ -19,6 +19,8 @@ class AuditService implements AuditServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface $auditRepository
+     *
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function __construct(PdkAuditRepositoryInterface $auditRepository)
     {
@@ -29,6 +31,7 @@ class AuditService implements AuditServiceInterface
      * @param  \MyParcelNL\Pdk\Audit\Model\Audit $audit
      *
      * @return \MyParcelNL\Pdk\Audit\Model\Audit
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function add(Audit $audit): Audit
     {
@@ -39,6 +42,7 @@ class AuditService implements AuditServiceInterface
 
     /**
      * @return \MyParcelNL\Pdk\Audit\Collection\AuditCollection
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function all(): AuditCollection
     {
@@ -50,6 +54,7 @@ class AuditService implements AuditServiceInterface
      * @param  string              $identifier
      *
      * @return \MyParcelNL\Pdk\Audit\Collection\AuditCollection
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function allByModel(string $model, string $identifier): AuditCollection
     {

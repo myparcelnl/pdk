@@ -45,8 +45,8 @@ class InstallerService implements InstallerServiceInterface
      */
     public function install(...$args): void
     {
-        $installedVersion = $this->getInstalledVersion();
-        $currentVersion   = Pdk::getAppInfo()->version;
+        $installedVersion = '5.2.0';//$this->getInstalledVersion();
+        $currentVersion   = '5.2.1';//Pdk::getAppInfo()->version;
 
         if ($installedVersion === $currentVersion) {
             return;
@@ -223,7 +223,7 @@ class InstallerService implements InstallerServiceInterface
         }
 
         return $collection->filter(function (MigrationInterface $migration) use ($version) {
-            return version_compare($migration->getVersion(), $this->getInstalledVersion(), '>')
+            return version_compare($migration->getVersion(), $this->getInstalledVersion(), '>=')
                 && version_compare($migration->getVersion(), $version, '<=');
         });
     }
