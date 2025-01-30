@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Audit\Service;
 
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Audit\Collection\AuditCollection;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
@@ -61,5 +64,24 @@ class AuditService implements AuditServiceInterface
         return $this->all()
             ->where('model', $model)
             ->where('modelIdentifier', $identifier);
+    }
+
+    /**
+     * @param  PdkOrderRepositoryInterface $orderRepository
+     *
+     * @deprecated Audits functionality will be removed in the next major release
+     */
+    public function migrateExportedPropertyToOrders(PdkOrderRepositoryInterface $orderRepository): void
+    {
+        $autoExportedOrders = $this->all()
+            ->where('action', PdkBackendActions::EXPORT_ORDERS)
+            ->where('model', PdkOrder::class)
+            ->automatic();
+
+        $autoExportedOrders->each(function (Audit $audit) use ($orderRepository) {
+            $order = $orderRepository->get($audit->modelIdentifier);
+            $order->autoExported = true;
+            $orderRepository->update($order);
+        });
     }
 }
