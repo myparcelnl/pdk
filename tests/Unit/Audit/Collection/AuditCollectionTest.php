@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Audit\Collection;
 
+use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -18,11 +19,11 @@ it('filters by automatic type', function () {
         ->push(
             factory(Audit::class)
                 ->withModelIdentifier('123')
-                ->withType(Audit::TYPE_MANUAL)
+                ->withType(ExportOrderAction::TYPE_MANUAL)
                 ->withAction(PdkBackendActions::EXPORT_ORDERS),
             factory(Audit::class)
                 ->withModelIdentifier('456')
-                ->withType(Audit::TYPE_AUTOMATIC)
+                ->withType(ExportOrderAction::TYPE_AUTOMATIC)
                 ->withAction(PdkBackendActions::EXPORT_ORDERS)
         )
         ->make();
@@ -34,7 +35,7 @@ it('filters by automatic type', function () {
         ->and($automaticAudits->first()->modelIdentifier)
         ->toBe('456')
         ->and($automaticAudits->first()->type)
-        ->toBe(Audit::TYPE_AUTOMATIC);
+        ->toBe(ExportOrderAction::TYPE_AUTOMATIC);
 });
 
 it('checks if action is present', function () {
@@ -42,11 +43,11 @@ it('checks if action is present', function () {
         ->push(
             factory(Audit::class)
                 ->withModelIdentifier('123')
-                ->withType(Audit::TYPE_MANUAL)
+                ->withType(ExportOrderAction::TYPE_MANUAL)
                 ->withAction(PdkBackendActions::EXPORT_ORDERS),
             factory(Audit::class)
                 ->withModelIdentifier('456')
-                ->withType(Audit::TYPE_AUTOMATIC)
+                ->withType(ExportOrderAction::TYPE_AUTOMATIC)
                 ->withAction(PdkBackendActions::PRINT_ORDERS)
         )
         ->make();

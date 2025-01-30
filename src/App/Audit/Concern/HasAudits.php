@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Audits;
 
 /**
  * @property AuditCollection $audits
+ * @deprecated Audits functionality will be removed in the next major release
  */
 trait HasAudits
 {
@@ -21,6 +22,7 @@ trait HasAudits
      * @param  null|array  $arguments
      *
      * @return void
+     * @deprecated Audits functionality will be removed in the next major release
      */
     public function addAudit(string $action, ?string $type = null, ?array $arguments = []): void
     {
@@ -40,6 +42,7 @@ trait HasAudits
 
     /**
      * @return \MyParcelNL\Pdk\Audit\Collection\AuditCollection
+     * @deprecated Audits functionality will be removed in the next major release
      */
     protected function getAuditsAttribute(): AuditCollection
     {
@@ -52,14 +55,12 @@ trait HasAudits
 
     /**
      * @return void
+     * @deprecated Audits functionality will be removed in the next major release
      */
     protected function initializeHasAudits(): void
     {
         if (null === $this->auditIdentifier) {
             throw new InvalidArgumentException('Audit identifier is not set');
         }
-
-        $this->attributes['audits'] = null;
-        $this->casts['audits']      = AuditCollection::class;
     }
 }

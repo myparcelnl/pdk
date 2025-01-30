@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Audit\Model;
 
+use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
@@ -14,11 +15,18 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property null|class-string<Model> $model
  * @property null|string              $modelIdentifier
  * @property null|\DateTime           $created
+ * @deprecated Audits functionality will be removed in the next major release
  */
 class Audit extends Model
 {
+    /**
+     * @deprecated Audits functionality will be removed in the next major release
+     */
     public const TYPE_AUTOMATIC = 'automatic';
-    public const TYPE_MANUAL    = 'manual';
+    /**
+     * @deprecated Audits functionality will be removed in the next major release
+     */
+    public const TYPE_MANUAL = 'manual';
 
     /**
      * @var array
@@ -26,7 +34,7 @@ class Audit extends Model
     protected $attributes = [
         'id'              => null,
         'arguments'       => [],
-        'type'            => self::TYPE_MANUAL,
+        'type'            => ExportOrderAction::TYPE_MANUAL,
         'action'          => null,
 
         /**
