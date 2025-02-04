@@ -10,6 +10,8 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @property string      $format
  * @property string      $output
  * @property int[]       $position
+ * @property bool        $directPrint
+ * @property string      $printerGroupId
  * @property bool        $prompt
  */
 class LabelSettings extends AbstractSettingsModel
@@ -21,11 +23,13 @@ class LabelSettings extends AbstractSettingsModel
     /**
      * Settings in this category.
      */
-    public const DESCRIPTION = 'description';
-    public const FORMAT      = 'format';
-    public const OUTPUT      = 'output';
-    public const POSITION    = 'position';
-    public const PROMPT      = 'prompt';
+    public const DESCRIPTION      = 'description';
+    public const FORMAT           = 'format';
+    public const OUTPUT           = 'output';
+    public const POSITION         = 'position';
+    public const DIRECT_PRINT     = 'directPrint';
+    public const PRINTER_GROUP_ID = 'printerGroupId';
+    public const PROMPT           = 'prompt';
     /**
      * Format options.
      */
@@ -53,18 +57,22 @@ class LabelSettings extends AbstractSettingsModel
     protected $attributes = [
         'id' => self::ID,
 
-        self::DESCRIPTION => null,
-        self::FORMAT      => self::DEFAULT_FORMAT,
-        self::OUTPUT      => self::DEFAULT_OUTPUT,
-        self::POSITION    => self::DEFAULT_POSITION,
-        self::PROMPT      => false,
+        self::DESCRIPTION      => null,
+        self::FORMAT           => self::DEFAULT_FORMAT,
+        self::OUTPUT           => self::DEFAULT_OUTPUT,
+        self::POSITION         => self::DEFAULT_POSITION,
+        self::DIRECT_PRINT     => false,
+        self::PRINTER_GROUP_ID => '',
+        self::PROMPT           => false,
     ];
 
     protected $casts      = [
-        self::DESCRIPTION => 'string',
-        self::FORMAT      => 'string',
-        self::OUTPUT      => 'string',
-        self::POSITION    => 'array',
-        self::PROMPT      => 'bool',
+        self::DESCRIPTION      => 'string',
+        self::FORMAT           => 'string',
+        self::OUTPUT           => 'string',
+        self::POSITION         => 'array',
+        self::DIRECT_PRINT     => 'bool',
+        self::PRINTER_GROUP_ID => 'string',
+        self::PROMPT           => 'bool',
     ];
 }

@@ -20,19 +20,32 @@ final class LabelSettingsView extends NewAbstractSettingsView
     private $printOptionsView;
 
     /**
-     * @param  \MyParcelNL\Pdk\Frontend\View\PrintOptionsView $printOptionsView
+     * @var \MyParcelNL\Pdk\Frontend\View\PrinterGroupIdView
      */
-    public function __construct(PrintOptionsView $printOptionsView)
+    private $printerGroupIdView;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Frontend\View\PrintOptionsView   $printOptionsView
+     * @param  \MyParcelNL\Pdk\Frontend\View\PrinterGroupIdView $printerGroupIdView
+     */
+    public function __construct(PrintOptionsView $printOptionsView, PrinterGroupIdView $printerGroupIdView)
     {
         parent::__construct();
 
-        $this->printOptionsView = $printOptionsView;
+        $this->printOptionsView   = $printOptionsView;
+        $this->printerGroupIdView = $printerGroupIdView;
     }
 
     protected function addElements(): void
     {
         $this->formBuilder->add(
             new TextInput(LabelSettings::DESCRIPTION),
+            new ToggleInput(LabelSettings::DIRECT_PRINT),
+        );
+
+        $this->formBuilder->add(...$this->printerGroupIdView->all());
+
+        $this->formBuilder->add(
             new ToggleInput(LabelSettings::PROMPT),
             new SettingsDivider($this->label('defaults'))
         );
