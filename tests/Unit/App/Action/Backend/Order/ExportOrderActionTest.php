@@ -12,14 +12,12 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
-use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
@@ -31,6 +29,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
+use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
@@ -53,6 +52,74 @@ dataset('order mode toggle', [
     'default'    => [false],
     'order mode' => [true],
 ]);
+
+dataset('action type toggle', [
+    'auto'   => 'automatic',
+    'manual' => 'manual',
+]);
+
+it('handles auto exported flag', function (?string $actionType) {
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)->toTheNetherlands()
+    );
+    $orders       = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+    MockApi::enqueue(new ExampleGetShipmentLabelsLinkResponse());
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'actionType' => $actionType,
+        'orderIds'   => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    expect(json_decode($response->getContent(), false)->data->orders[0]->autoExported)->toBe(
+        'automatic' === $actionType
+    );
+
+    // if it was already auto-exported, you can not auto-export again
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)->toTheNetherlands()->withAutoExported('automatic' === $actionType)
+    );
+    $orders       = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'actionType' => 'automatic',
+        'orderIds'   => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    expect(count(json_decode($response->getContent(), false)->data->orders[0]->shipments))->toBe('automatic' === $actionType ? 0 : 1);
+
+    // if it was already auto-exported, you can manually export it no problem
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)->toTheNetherlands()->withAutoExported('automatic' === $actionType)
+    );
+    $orders       = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'actionType' => 'manual',
+        'orderIds'   => $orders
+            ->pluck('externalIdentifier')
+            ->toArray(),
+    ]);
+
+    expect(count(json_decode($response->getContent(), false)->data->orders[0]->shipments))->toBe(1);
+})
+    ->with('action type toggle');
 
 it('exports order', function (
     bool                      $orderMode,
@@ -528,33 +595,3 @@ it(
         ],
     ])
     ->with('order mode toggle');
-
-it('creates audit after export', function () {
-    factory(OrderSettings::class)
-        ->withConceptShipments(true)
-        ->store();
-
-    $order = factory(PdkOrder::class)
-        ->store()
-        ->make();
-
-    MockApi::enqueue(new ExamplePostShipmentsResponse(), new ExampleGetShipmentsResponse());
-
-    Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => [$order->externalIdentifier]]);
-
-    $auditService = Pdk::get(AuditServiceInterface::class);
-    $audit        = $auditService->all()
-        ->first();
-
-    expect($audit)->not->toBeNull()
-        ->and($audit->modelIdentifier)
-        ->toBe($order->externalIdentifier)
-        ->and($audit->model)
-        ->toBe(PdkOrder::class)
-        ->and($audit->action)
-        ->toBe(PdkBackendActions::EXPORT_ORDERS)
-        ->and($audit->arguments)
-        ->toBe([
-            'mode' => 'shipment',
-        ]);
-});

@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -29,6 +28,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExportOrderAction extends AbstractOrderAction
 {
+    public const TYPE_AUTOMATIC = 'automatic';
+    public const TYPE_MANUAL    = 'manual';
+
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Repository\OrderRepository
      */
@@ -65,10 +67,16 @@ class ExportOrderAction extends AbstractOrderAction
         $originalOrders = $this->updateOrders($request);
         $validOrders    = $this->validateOrders($originalOrders, $request);
         $exportedOrders = $this->export($validOrders, $request);
+        $isAutomatic    = self::TYPE_AUTOMATIC === $request->get('actionType');
+
+        $exportedOrders->each(function (PdkOrder $order) use ($isAutomatic) {
+            if (true === $order->autoExported) {
+                return;
+            }
+            $order->autoExported = $isAutomatic;
+        });
 
         $this->saveOrders($exportedOrders, $originalOrders);
-
-        $this->addAudits($request, $exportedOrders);
 
         return Actions::execute(PdkBackendActions::FETCH_ORDERS, [
             'orderIds' => $this->getOrderIds($request),
@@ -161,12 +169,16 @@ class ExportOrderAction extends AbstractOrderAction
     {
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $orderService */
         $orderService = Pdk::get(PdkOrderOptionsServiceInterface::class);
-        $isAutomatic  = Audit::TYPE_AUTOMATIC === $request->get('actionType');
+        $isAutomatic  = self::TYPE_AUTOMATIC === $request->get('actionType');
 
         return $orders
             ->filter(function (PdkOrder $order) use ($isAutomatic) {
                 if (! $isAutomatic) {
                     return true;
+                }
+
+                if (isset($order->autoExported)) {
+                    return ! $order->autoExported;
                 }
 
                 return ! $order->audits
@@ -205,25 +217,6 @@ class ExportOrderAction extends AbstractOrderAction
 
                 return false;
             });
-    }
-
-    /**
-     * @param  \Symfony\Component\HttpFoundation\Request               $request
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection $exportedOrders
-     *
-     * @return void
-     */
-    private function addAudits(Request $request, PdkOrderCollection $exportedOrders): void
-    {
-        $exportedOrders->each(function (PdkOrder $order) use ($request) {
-            $order->addAudit(
-                PdkBackendActions::EXPORT_ORDERS,
-                $request->get('actionType'),
-                [
-                    'mode' => Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID) ? 'order' : 'shipment',
-                ]
-            );
-        });
     }
 
     /**

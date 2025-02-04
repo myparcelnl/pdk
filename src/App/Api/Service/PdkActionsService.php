@@ -6,9 +6,9 @@ namespace MyParcelNL\Pdk\App\Api\Service;
 
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Exception\PdkEndpointException;
+use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
-use MyParcelNL\Pdk\Audit\Model\Audit;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -52,7 +52,7 @@ class PdkActionsService implements PdkActionsServiceInterface
      */
     public function executeAutomatic($action, array $parameters = []): Response
     {
-        return $this->execute($action, array_replace($parameters, ['actionType' => Audit::TYPE_AUTOMATIC]));
+        return $this->execute($action, array_replace($parameters, ['actionType' => ExportOrderAction::TYPE_AUTOMATIC]));
     }
 
     /**

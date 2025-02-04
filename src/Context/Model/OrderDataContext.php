@@ -27,6 +27,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties       $physicalProperties
  * @property null|\DateTimeImmutable                                     $orderDate
  * @property bool                                                        $exported
+ * @property bool                                                        $autoExported
  * @property int                                                         $shipmentPrice
  * @property int                                                         $shipmentPriceAfterVat
  * @property int                                                         $shipmentVat
