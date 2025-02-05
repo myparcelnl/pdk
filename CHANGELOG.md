@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.51.0](https://github.com/myparcelnl/pdk/compare/v2.50.0...v2.51.0) (2025-02-05)
+
+
+### :sparkles: New Features
+
+* remember when order is auto exported ([#331](https://github.com/myparcelnl/pdk/issues/331)) ([16c6f0d](https://github.com/myparcelnl/pdk/commit/16c6f0db6ac94416084aaee9c6e94acaf0f356e2))
+
 ## [2.50.0](https://github.com/myparcelnl/pdk/compare/v2.49.1...v2.50.0) (2025-01-22)
 
 
