@@ -23,7 +23,7 @@ class PrintShipmentsRequest extends PostShipmentsRequest
         return array_replace(
             parent::getHeaders(),
             [
-                'Accept' => "application/vnd.shipment+json+print;printer-group-id=$printerGroupId;charset=utf-8;version=1.1",
+                'Accept' => "application/vnd.shipment_label+json+print;printer-group-id=$printerGroupId",
             ]
         );
     }
