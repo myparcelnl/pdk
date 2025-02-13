@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePrinterGroupIdResponse;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -19,6 +21,10 @@ usesShared(new UsesMockPdkInstance());
 it('gets settings view', function (string $class) {
     TestBootstrapper::hasAccount();
     TestBootstrapper::hasShippingMethods();
+
+    if ($class === PrinterGroupIdView::class) {
+        MockApi::enqueue(new ExamplePrinterGroupIdResponse());
+    }
 
     /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
     $view = Pdk::get($class);
