@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\SelectInput;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
@@ -24,22 +25,27 @@ final class PrinterGroupIdView extends NewAbstractSettingsView
             'path'   => 'printer-groups',
         ]);
         $api     = Pdk::get(ApiServiceInterface::class);
-        $api->setBaseUrl('https://printing.api.myparcel.nl');
+        $api->setBaseUrl(Pdk::get('printingApiUrl'));
+
         try {
             $response = $api->doRequest($request, ApiResponseWithBody::class);
             $groups   = json_decode($response->getBody(), false)->results;
-            $options  = [];
-            foreach ($groups as $group) {
-                $options[$group->id] = $group->name;
-            }
-            $this->formBuilder->add(
-                (new SelectInput(LabelSettings::PRINTER_GROUP_ID))
-                    ->withOptions($options)
-                    ->visibleWhen(LabelSettings::DIRECT_PRINT)
-            );
         } catch (\Throwable $e) {
             Logger::error($e->getMessage());
+
+            return;
         }
+
+        $options  = [];
+        foreach ($groups as $group) {
+            $options[$group->id] = $group->name;
+        }
+
+        $this->formBuilder->add(
+            (new SelectInput(LabelSettings::PRINTER_GROUP_ID))
+                ->withOptions($options, ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL)
+                ->visibleWhen(LabelSettings::DIRECT_PRINT)
+        );
     }
 
     /**
