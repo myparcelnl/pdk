@@ -12,7 +12,7 @@ The MyParcel PDK (Plugin Development Kit) is meant for developing entire plugins
 
 ## Requirements
 
-- PHP >=7.1
+- PHP >=7.4
 - Composer
 
 ## Documentation
