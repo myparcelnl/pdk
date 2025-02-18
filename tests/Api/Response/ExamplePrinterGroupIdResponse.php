@@ -8,6 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExamplePrinterGroupIdResponse extends ExampleJsonResponse
 {
+    public function getContent(): array
+    {
+        return [
+            'results' => $this->responseContent ?? $this->getDefaultResponseContent(),
+        ];
+    }
+
     /**
      * @return int
      */
@@ -21,19 +28,7 @@ class ExamplePrinterGroupIdResponse extends ExampleJsonResponse
      */
     protected function getDefaultResponseContent(): array
     {
-        return [
-            [
-                'id' => '55b53b20-91aa-4a53-8bb2-c4c120df9921',
-                'name'=>'Test name',
-            ],
-        ];
+        return [];
     }
 
-    /**
-     * @return string
-     */
-    protected function getResponseProperty(): string
-    {
-        return 'results';
-    }
 }
