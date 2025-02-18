@@ -38,6 +38,9 @@ final class PrinterGroupIdView extends NewAbstractSettingsView
 
         $options  = [];
         foreach ($groups as $group) {
+            if (!isset($group->id, $group->name)) {
+                continue;
+            }
             $options[$group->id] = $group->name;
         }
 
