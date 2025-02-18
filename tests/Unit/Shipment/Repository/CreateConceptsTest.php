@@ -11,6 +11,8 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollectionFactory;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -332,3 +334,51 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
         'contentType' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
     ],
 ]);
+
+it('direct prints', function ($input, $printerGroupId, $accept) {
+    factory(Settings::class)
+        ->withLabel(
+            factory(LabelSettings::class)
+                ->withDirectPrint(true)
+                ->withPrinterGroupId($printerGroupId)
+        )
+        ->store();
+    MockApi::enqueue(new ExamplePostIdsResponse());
+
+    $repository = Pdk::get(ShipmentRepository::class);
+
+    $response = $repository->createConcepts(new ShipmentCollection($input));
+    $request  = MockApi::ensureLastRequest();
+
+    $uri          = $request->getUri();
+    $acceptHeader = Arr::first($request->getHeaders()['Accept']);
+
+    expect($acceptHeader)
+        ->toBe($accept)
+        ->and($response)
+        ->toBeInstanceOf(ShipmentCollection::class);
+})->with([
+    'missing printer group'   => [
+        'input'          => [
+            [
+                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'recipient' => DEFAULT_INPUT_RECIPIENT,
+                'sender'    => DEFAULT_INPUT_SENDER,
+            ],
+        ],
+        'printerGroupId' => null,
+        'accept'         => null,
+    ],
+    'available printer group' => [
+        'input'          => [
+            [
+                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'recipient' => DEFAULT_INPUT_RECIPIENT,
+                'sender'    => DEFAULT_INPUT_SENDER,
+            ],
+        ],
+        'printerGroupId' => 'yakon-kaviaar-bliep',
+        'accept'         => 'application/vnd.shipment_label+json+print;printer-group-id=yakon-kaviaar-bliep',
+    ],
+]);
+
