@@ -16,6 +16,13 @@ interface LanguageServiceInterface
     public function getIso2(?string $language = null): string;
 
     /**
+     * Given an ISO-639-1 language code, returns the language code back if supported or a fallback language if not.
+     * @param string $isoCode
+     * @return string
+     */
+    public function getLanguageWithFallback(string $isoCode): string;
+
+    /**
      * Returns the IETF language tag of the current language.
      *
      * @example en-US

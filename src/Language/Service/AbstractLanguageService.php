@@ -40,7 +40,7 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
     abstract protected function getFilePath(?string $language = null): string;
 
     /**
-     * @param  null|string $language
+     * @param  null|string $language The language code in IETF format (eg. en, en-US)
      *
      * @return string
      */
@@ -50,9 +50,19 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
             return $this->getIsoFromIetf($language);
         }
 
-        $iso = $this->getIsoFromIetf($this->getLanguage());
+        return $this->getLanguageWithFallback(
+            $this->getIsoFromIetf($this->getLanguage())
+        );
 
-        return in_array($iso, Pdk::get('availableLanguages'), true) ? $iso : Pdk::get('defaultLanguage');
+    }
+
+    /**
+     * @param string $isoCode
+     * @return string
+     */
+    public function getLanguageWithFallback(string $isoCode): string
+    {
+        return in_array($isoCode, Pdk::get('availableLanguages'), true) ? $isoCode : Pdk::get('defaultLanguage');
     }
 
     /**
@@ -60,10 +70,10 @@ abstract class AbstractLanguageService implements LanguageServiceInterface
      */
     public function getTranslations(?string $language = null): array
     {
-        $iso2 = $this->getIso2($language);
+        $lang = $this->getLanguageWithFallback($this->getIso2($language));
 
-        return $this->repository->getTranslations($iso2, function () use ($iso2) {
-            return json_decode($this->fileSystem->get($this->getFilePath($iso2)), true);
+        return $this->repository->getTranslations($lang, function () use ($lang) {
+            return json_decode($this->fileSystem->get($this->getFilePath($lang)), true);
         });
     }
 
