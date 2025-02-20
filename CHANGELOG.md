@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.51.1](https://github.com/myparcelnl/pdk/compare/v2.51.0...v2.51.1) (2025-02-19)
+
+
+### :bug: Bug Fixes
+
+* correctly list php 7.4 as the minimum required version ([#334](https://github.com/myparcelnl/pdk/issues/334)) ([78be974](https://github.com/myparcelnl/pdk/commit/78be9747410802ddf9b0c37a6170a2523c038c21))
+
 ## [2.51.0](https://github.com/myparcelnl/pdk/compare/v2.50.0...v2.51.0) (2025-02-05)
 
 
