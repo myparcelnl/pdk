@@ -9,9 +9,11 @@ namespace MyParcelNL\Pdk\Settings\Model;
  * @template T of LabelSettings
  * @method LabelSettings make()
  * @method $this withDescription(string $description)
+ * @method $this withDirectPrint(bool $directPrint)
  * @method $this withFormat(string $format)
  * @method $this withOutput(string $output)
  * @method $this withPosition(int[] $position)
+ * @method $this withPrinterGroupId(string $printerGroupId)
  * @method $this withPrompt(bool $prompt)
  */
 final class LabelSettingsFactory extends AbstractSettingsModelFactory
