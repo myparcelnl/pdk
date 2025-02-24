@@ -8,9 +8,11 @@ use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\SelectInput;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 
 final class PrinterGroupIdView extends NewAbstractSettingsView
@@ -32,6 +34,7 @@ final class PrinterGroupIdView extends NewAbstractSettingsView
             $groups   = json_decode($response->getBody(), false)->results;
         } catch (\Throwable $e) {
             Logger::error($e->getMessage());
+            Notifications::error('Failed to fetch printer groups', [], Notification::CATEGORY_GENERAL);
 
             return;
         }
