@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.51.2](https://github.com/myparcelnl/pdk/compare/v2.51.1...v2.51.2) (2025-02-27)
+
+
+### :bug: Bug Fixes
+
+* **language:** return fallback translations even if language argument is specifically provided, and language is not supported ([#335](https://github.com/myparcelnl/pdk/issues/335)) ([befa2f7](https://github.com/myparcelnl/pdk/commit/befa2f7355fc6e577480deaa330f4ac6169e319d)), closes [#1252](https://github.com/myparcelnl/pdk/issues/1252)
+
 ## [2.51.1](https://github.com/myparcelnl/pdk/compare/v2.51.0...v2.51.1) (2025-02-19)
 
 
