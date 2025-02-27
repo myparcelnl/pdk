@@ -44,6 +44,15 @@ class MockLanguageService implements LanguageServiceInterface, ResetInterface
     }
 
     /**
+     * @param string $isoCode
+     * @return string
+     */
+    public function getLanguageWithFallback(string $isoCode): string
+    {
+        return $isoCode;
+    }
+
+    /**
      * @return string
      */
     public function getLanguage(): string

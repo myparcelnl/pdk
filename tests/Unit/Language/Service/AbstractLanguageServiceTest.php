@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUndefinedMethodInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -10,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Language\Contract\LanguageServiceInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAbstractLanguageService;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+
 use function DI\get;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -33,6 +35,12 @@ it('gets current language', function () {
 it('loads translations from file', function (?string $language) {
     expect(Language::getTranslations($language))->toBeArray();
 })->with('languages');
+
+
+it('loads fallback translations from file if language is not supported', function () {
+    expect(Language::getTranslations('tr-TR'))->toBeArray(['send_help' => 'Send help']);
+});
+
 
 it('translates strings in current language', function (?string $language, string $translation) {
     if ($language) {
