@@ -46,8 +46,8 @@ final class LabelSettingsView extends NewAbstractSettingsView
         $this->formBuilder->add(...$this->printerGroupIdView->all());
 
         $this->formBuilder->add(
-            new ToggleInput(LabelSettings::PROMPT),
-            new SettingsDivider($this->label('defaults'))
+            (new ToggleInput(LabelSettings::PROMPT))->visibleWhen(LabelSettings::DIRECT_PRINT, false),
+            (new SettingsDivider($this->label('defaults')))->visibleWhen(LabelSettings::DIRECT_PRINT, false),
         );
 
         $this->formBuilder->add(...$this->printOptionsView->all());
