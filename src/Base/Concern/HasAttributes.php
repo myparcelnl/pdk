@@ -587,7 +587,7 @@ trait HasAttributes
         $casts         = $this->getCasts();
         $normalizedKey = Utils::changeCase($key);
 
-        return $casts[$normalizedKey];
+        return $casts[$normalizedKey] ?? null;
     }
 
     /**
