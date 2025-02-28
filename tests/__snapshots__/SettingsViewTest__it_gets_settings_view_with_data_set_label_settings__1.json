@@ -17,11 +17,35 @@
         },
         {
             "name": "prompt",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "directPrint",
+                                "$eq": false
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "ToggleInput",
             "label": "settings_label_prompt",
             "description": "settings_label_prompt_description"
         },
         {
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "directPrint",
+                                "$eq": false
+                            }
+                        ]
+                    }
+                }
+            ],
             "$component": "SettingsDivider",
             "$wrapper": false,
             "level": 2,
