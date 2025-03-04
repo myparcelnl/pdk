@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 use MyParcelNL\Pdk\Api\Response\PostIdsResponse;
 use MyParcelNL\Pdk\Base\Repository\ApiRepository;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Request\FetchShipmentsRequest;
@@ -15,6 +16,7 @@ use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\PostReturnShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Request\PostShipmentsRequest;
+use MyParcelNL\Pdk\Shipment\Request\PrintShipmentsRequest;
 use MyParcelNL\Pdk\Shipment\Response\GetLabelsPdfResponse;
 use MyParcelNL\Pdk\Shipment\Response\GetLabelsResponse;
 use MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse;
@@ -31,8 +33,10 @@ class ShipmentRepository extends ApiRepository
      */
     public function createConcepts(ShipmentCollection $collection): ShipmentCollection
     {
+        $request = Settings::get(LabelSettings::DIRECT_PRINT, LabelSettings::ID)
+            ? new PrintShipmentsRequest($collection) : new PostShipmentsRequest($collection);
         /** @var \MyParcelNL\Pdk\Api\Response\PostIdsResponse $response */
-        $response = $this->api->doRequest(new PostShipmentsRequest($collection), PostIdsResponse::class);
+        $response = $this->api->doRequest($request, PostIdsResponse::class);
 
         return $collection->addIds($response->getIds());
     }

@@ -42,7 +42,7 @@ class ApiException extends Exception
             sprintf(
                 'Request failed. Status code: %s. Message: %s',
                 $response->getStatusCode(),
-                $body['message']
+                $body['message'] ?? $body['Message'] ?? ''
             ),
             $code,
             $previous

@@ -22,4 +22,6 @@ interface ApiServiceInterface
         RequestInterface $request,
         string           $responseClass = ApiResponse::class
     ): ApiResponseInterface;
+
+    public function setBaseUrl(string $baseUrl): self;
 }

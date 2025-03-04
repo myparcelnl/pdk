@@ -103,6 +103,13 @@ abstract class AbstractApiService implements ApiServiceInterface
         return [];
     }
 
+    public function setBaseUrl(string $baseUrl): ApiServiceInterface
+    {
+        $this->baseUrl = $baseUrl;
+
+        return $this;
+    }
+
     /**
      * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
      *

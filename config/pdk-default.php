@@ -36,6 +36,7 @@ return [
      * Url to the API.
      */
     'apiUrl'                 => env('PDK_API_URL', 'https://api.myparcel.nl'),
+    'printingApiUrl'         => env('PDK_PRINTING_API_URL', 'https://printing.api.myparcel.nl'),
 
     /**
      * CDN URL to use for frontend dependencies.
