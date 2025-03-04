@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.52.0](https://github.com/myparcelnl/pdk/compare/v2.51.2...v2.52.0) (2025-03-04)
+
+
+### :sparkles: New Features
+
+* add direct printing ([#333](https://github.com/myparcelnl/pdk/issues/333)) ([7c56e42](https://github.com/myparcelnl/pdk/commit/7c56e4285e33b9fb858991028d77da34bbebc3a0))
+
 ## [2.51.2](https://github.com/myparcelnl/pdk/compare/v2.51.1...v2.51.2) (2025-02-27)
 
 
