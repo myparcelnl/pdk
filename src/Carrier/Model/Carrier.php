@@ -127,10 +127,16 @@ class Carrier extends Model
         }
 
         if (! isset($data['name'], $data['id'])) {
-            $found = $repository->get([
-                'id'   => $data['id'] ?? null,
-                'name' => $data['name'] ?? Platform::get('defaultCarrier'),
-            ]);
+            $carrierInput = [];
+            $carrierInput['id'] = $data['id'] ?? null;
+            $carrierInput['name'] = $data['name'] ?? null;
+
+            // If neither the id or name is provided, fallback to the default carrier
+            // Prevents the default carrier being returned if an unknown ID is provided
+            if (!$carrierInput['id'] && !$carrierInput['name']) {
+                $carrierInput['name'] = Platform::get('defaultCarrier');
+            }
+            $found = $repository->get($carrierInput);
 
             if ($found) {
                 $existing = $found->getAttributes();

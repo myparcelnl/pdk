@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUndefinedMethodInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Sdk\src\Support\Collection;
+
 use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -30,6 +32,19 @@ it('creates default carrier for platform', function (string $platform) {
 
     $reset();
 })->with('platforms');
+
+
+it('does not return a carrier for an unknown ID', function (string $platform) {
+    $reset = mockPlatform($platform);
+
+    $carrier = new Carrier(['id' => 1337]);
+
+    expect($carrier->name)
+        ->toBeNull();
+
+    $reset();
+})->with('platforms');
+
 
 it('generates external identifier', function (array $input, string $identifier) {
     $carrier = new Carrier($input);
