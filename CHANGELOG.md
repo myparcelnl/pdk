@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.52.1](https://github.com/myparcelnl/pdk/compare/v2.52.0...v2.52.1) (2025-03-05)
+
+
+### :bug: Bug Fixes
+
+* **carrier:** fix unknown carrier ids falling back to default carrier ([#336](https://github.com/myparcelnl/pdk/issues/336)) ([dfa07e6](https://github.com/myparcelnl/pdk/commit/dfa07e6ab26fdf93b5d3e1a1083767d5b37e674b))
+
 ## [2.52.0](https://github.com/myparcelnl/pdk/compare/v2.51.2...v2.52.0) (2025-03-04)
 
 
