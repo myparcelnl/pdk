@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -84,13 +85,33 @@ class PdkOrderCollection extends Collection
     {
         return $this->getAllShipments()
             ->groupBy('orderId')
-            ->reduce(static function (ShipmentCollection $collection, ShipmentCollection $shipments) {
+            ->reduce(function (ShipmentCollection $collection, ShipmentCollection $shipments) {
                 $lastShipment = $shipments->last();
                 $labelAmount  = $lastShipment->deliveryOptions->labelAmount;
                 $offset       = $shipments->count() - $labelAmount;
                 $allShipments = $shipments->slice($offset, $labelAmount);
 
-                $allShipments->each(static function (Shipment $shipment) use ($collection) {
+                $allShipments->each(function (Shipment $shipment) use ($collection) {
+                    // Ensure recipient data is present
+                    if (!$shipment->recipient && $shipment->orderId) {
+                        $order = $this->firstWhere('externalIdentifier', $shipment->orderId);
+                        if ($order && $order->shippingAddress) {
+                            // Create a new ContactDetails object from the shipping address
+                            $shipment->recipient = new ContactDetails([
+                                'address1' => $order->shippingAddress->address1,
+                                'address2' => $order->shippingAddress->address2,
+                                'cc' => $order->shippingAddress->cc,
+                                'city' => $order->shippingAddress->city,
+                                'postalCode' => $order->shippingAddress->postalCode,
+                                'region' => $order->shippingAddress->region,
+                                'state' => $order->shippingAddress->state,
+                                'email' => $order->shippingAddress->email,
+                                'phone' => $order->shippingAddress->phone,
+                                'person' => $order->shippingAddress->person,
+                                'company' => $order->shippingAddress->company
+                            ]);
+                        }
+                    }
                     $collection->push($shipment);
                 });
 
@@ -113,61 +134,38 @@ class PdkOrderCollection extends Collection
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
      *
-     * @return $this
+     * @return void
      */
-    public function updateShipments(ShipmentCollection $shipments): self
+    public function updateShipments(ShipmentCollection $shipments): void
     {
-        $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
+        foreach ($this as $order) {
+            $orderShipments = $shipments->filter(function (Shipment $shipment) use ($order) {
+                return $shipment->orderId === $order->externalIdentifier;
+            });
 
-        $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
-            $order->shipments = $useOrderId
-                ? $this->mergeShipmentsByOrder($shipments, $order)
-                : $this->mergeShipmentsById($shipments, $order);
-        });
-
-        return $this;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
-    private function mergeShipmentsById(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
-    {
-        $idShipments    = $shipments->keyBy('id');
-        $orderShipments = $order->shipments->keyBy('id');
-
-        foreach ($orderShipments as $id => $orderShipment) {
-            /** @var null|\MyParcelNL\Pdk\Shipment\Model\Shipment $matchingShipment */
-            $matchingShipment = $idShipments->get($id);
-
-            if (! $matchingShipment) {
+            if ($orderShipments->isEmpty()) {
                 continue;
             }
 
-            $matchingShipment->orderId = $order->externalIdentifier;
-            $orderShipments->put($id, $matchingShipment);
+            // Update the recipient data from the shipping address
+            $lastShipment = $orderShipments->last();
+            if ($lastShipment && $order->shippingAddress) {
+                $lastShipment->recipient = new ContactDetails([
+                    'address1' => $order->shippingAddress->address1,
+                    'address2' => $order->shippingAddress->address2,
+                    'cc' => $order->shippingAddress->cc,
+                    'city' => $order->shippingAddress->city,
+                    'postalCode' => $order->shippingAddress->postalCode,
+                    'region' => $order->shippingAddress->region,
+                    'state' => $order->shippingAddress->state,
+                    'email' => $order->shippingAddress->email,
+                    'phone' => $order->shippingAddress->phone,
+                    'person' => $order->shippingAddress->person,
+                    'company' => $order->shippingAddress->company
+                ]);
+            }
+
+            $order->shipments = $orderShipments;
         }
-
-        return $orderShipments->values();
-    }
-
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
-     */
-    private function mergeShipmentsByOrder(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
-    {
-        $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
-
-        /** @var ShipmentCollection $merged */
-        $merged = $order->shipments->mergeByKey($byOrderId, 'id');
-
-        return $merged;
     }
 }
