@@ -168,57 +168,97 @@ class PdkOrderCollection extends Collection
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
      *
-     * @return void
+     * @return $this
      */
-    public function updateShipments(ShipmentCollection $shipments): void
+    public function updateShipments(ShipmentCollection $shipments): self
     {
-        foreach ($this as $order) {
-            $orderShipments = $shipments->filter(function (Shipment $shipment) use ($order) {
-                return $shipment->orderId === $order->externalIdentifier;
-            });
+        $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
 
-            if ($orderShipments->isEmpty()) {
+        $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
+            $order->shipments = $useOrderId
+                ? $this->mergeShipmentsByOrder($shipments, $order)
+                : $this->mergeShipmentsById($shipments, $order);
+        });
+
+        return $this;
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    private function mergeShipmentsById(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
+    {
+        $idShipments    = $shipments->keyBy('id');
+        $orderShipments = $order->shipments->keyBy('id');
+
+        foreach ($orderShipments as $id => $orderShipment) {
+            /** @var null|\MyParcelNL\Pdk\Shipment\Model\Shipment $matchingShipment */
+            $matchingShipment = $idShipments->get($id);
+
+            if (! $matchingShipment) {
                 continue;
             }
 
-            // Update existing shipments
-            foreach ($order->shipments as $existingShipment) {
-                $updatedShipment = $orderShipments->firstWhere('id', $existingShipment->id);
-                if ($updatedShipment) {
-                    // Always update status
-                    $existingShipment->setAttribute('status', $updatedShipment->status);
-                    
-                    // Update other attributes only if they are not null
-                    foreach ($updatedShipment->getAttributes() as $key => $value) {
-                        if ($key !== 'status' && $value !== null) {
-                            $existingShipment->setAttribute($key, $value);
-                        }
-                    }
-                }
+            $matchingShipment->orderId = $order->externalIdentifier;
+            
+            // Update recipient data if needed
+            if (!$matchingShipment->recipient && null !== $order->shippingAddress) {
+                $matchingShipment->recipient = new ContactDetails([
+                    'address1' => $order->shippingAddress->address1,
+                    'address2' => $order->shippingAddress->address2,
+                    'cc' => $order->shippingAddress->cc,
+                    'city' => $order->shippingAddress->city,
+                    'postalCode' => $order->shippingAddress->postalCode,
+                    'region' => $order->shippingAddress->region,
+                    'state' => $order->shippingAddress->state,
+                    'email' => $order->shippingAddress->email,
+                    'phone' => $order->shippingAddress->phone,
+                    'person' => $order->shippingAddress->person,
+                    'company' => $order->shippingAddress->company
+                ]);
             }
-
-            // Add new shipments that don't exist yet
-            $orderShipments->each(function (Shipment $shipment) use ($order) {
-                if (!$order->shipments->firstWhere('id', $shipment->id)) {
-                    // Update the recipient data from the shipping address
-                    if ($order->shippingAddress) {
-                        $shipment->recipient = new ContactDetails([
-                            'address1' => $order->shippingAddress->address1,
-                            'address2' => $order->shippingAddress->address2,
-                            'cc' => $order->shippingAddress->cc,
-                            'city' => $order->shippingAddress->city,
-                            'postalCode' => $order->shippingAddress->postalCode,
-                            'region' => $order->shippingAddress->region,
-                            'state' => $order->shippingAddress->state,
-                            'email' => $order->shippingAddress->email,
-                            'phone' => $order->shippingAddress->phone,
-                            'person' => $order->shippingAddress->person,
-                            'company' => $order->shippingAddress->company
-                        ]);
-                    }
-                    $order->shipments->push($shipment);
-                }
-            });
+            
+            $orderShipments->put($id, $matchingShipment);
         }
+
+        return $orderShipments->values();
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder               $order
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     */
+    private function mergeShipmentsByOrder(ShipmentCollection $shipments, PdkOrder $order): ShipmentCollection
+    {
+        $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
+
+        // Update recipient data for new shipments
+        $byOrderId->each(function (Shipment $shipment) use ($order) {
+            if (!$shipment->recipient && null !== $order->shippingAddress) {
+                $shipment->recipient = new ContactDetails([
+                    'address1' => $order->shippingAddress->address1,
+                    'address2' => $order->shippingAddress->address2,
+                    'cc' => $order->shippingAddress->cc,
+                    'city' => $order->shippingAddress->city,
+                    'postalCode' => $order->shippingAddress->postalCode,
+                    'region' => $order->shippingAddress->region,
+                    'state' => $order->shippingAddress->state,
+                    'email' => $order->shippingAddress->email,
+                    'phone' => $order->shippingAddress->phone,
+                    'person' => $order->shippingAddress->person,
+                    'company' => $order->shippingAddress->company
+                ]);
+            }
+        });
+
+        /** @var ShipmentCollection $merged */
+        $merged = $order->shipments->mergeByKey($byOrderId, 'id');
+
+        return $merged;
     }
 }

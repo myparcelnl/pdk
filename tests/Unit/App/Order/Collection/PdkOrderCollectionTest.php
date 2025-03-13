@@ -125,8 +125,8 @@ it('updates order shipments by shipment ids', function () {
 
     $orders->updateShipments(
         new ShipmentCollection([
-            ['id' => 30000, 'status' => 7],
-            ['id' => 30010, 'status' => 7],
+            ['id' => 30000, 'status' => 7, 'orderId' => '🐰'],
+            ['id' => 30010, 'status' => 7, 'orderId' => '🐸'],
             ['id' => 30020, 'status' => 7],
         ])
     );
