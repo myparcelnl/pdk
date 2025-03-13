@@ -12,6 +12,9 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -57,6 +60,37 @@ class PdkOrderCollection extends Collection
         });
 
         return $newShipments;
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \Exception
+     */
+    public function generateReturnShipments(): ShipmentCollection
+    {
+        $shipments = $this->getLastShipments();
+        
+        foreach ($shipments as $shipment) {
+            $schema = Pdk::get(CarrierSchema::class);
+            $schema->setCarrier($shipment->carrier);
+
+            if (!$schema->hasReturnCapabilities()) {
+                Notifications::warning(
+                    "{$shipment->carrier->human} has no return capabilities",
+                    'Return shipment exported with default carrier postnl',
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                continue;
+            }
+
+            $shipment->isReturn = true;
+        }
+
+        return $shipments;
     }
 
     /**
@@ -147,25 +181,44 @@ class PdkOrderCollection extends Collection
                 continue;
             }
 
-            // Update the recipient data from the shipping address
-            $lastShipment = $orderShipments->last();
-            if ($lastShipment && $order->shippingAddress) {
-                $lastShipment->recipient = new ContactDetails([
-                    'address1' => $order->shippingAddress->address1,
-                    'address2' => $order->shippingAddress->address2,
-                    'cc' => $order->shippingAddress->cc,
-                    'city' => $order->shippingAddress->city,
-                    'postalCode' => $order->shippingAddress->postalCode,
-                    'region' => $order->shippingAddress->region,
-                    'state' => $order->shippingAddress->state,
-                    'email' => $order->shippingAddress->email,
-                    'phone' => $order->shippingAddress->phone,
-                    'person' => $order->shippingAddress->person,
-                    'company' => $order->shippingAddress->company
-                ]);
+            // Update existing shipments
+            foreach ($order->shipments as $existingShipment) {
+                $updatedShipment = $orderShipments->firstWhere('id', $existingShipment->id);
+                if ($updatedShipment) {
+                    // Always update status
+                    $existingShipment->setAttribute('status', $updatedShipment->status);
+                    
+                    // Update other attributes only if they are not null
+                    foreach ($updatedShipment->getAttributes() as $key => $value) {
+                        if ($key !== 'status' && $value !== null) {
+                            $existingShipment->setAttribute($key, $value);
+                        }
+                    }
+                }
             }
 
-            $order->shipments = $orderShipments;
+            // Add new shipments that don't exist yet
+            $orderShipments->each(function (Shipment $shipment) use ($order) {
+                if (!$order->shipments->firstWhere('id', $shipment->id)) {
+                    // Update the recipient data from the shipping address
+                    if ($order->shippingAddress) {
+                        $shipment->recipient = new ContactDetails([
+                            'address1' => $order->shippingAddress->address1,
+                            'address2' => $order->shippingAddress->address2,
+                            'cc' => $order->shippingAddress->cc,
+                            'city' => $order->shippingAddress->city,
+                            'postalCode' => $order->shippingAddress->postalCode,
+                            'region' => $order->shippingAddress->region,
+                            'state' => $order->shippingAddress->state,
+                            'email' => $order->shippingAddress->email,
+                            'phone' => $order->shippingAddress->phone,
+                            'person' => $order->shippingAddress->person,
+                            'company' => $order->shippingAddress->company
+                        ]);
+                    }
+                    $order->shipments->push($shipment);
+                }
+            });
         }
     }
 }

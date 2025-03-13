@@ -98,27 +98,26 @@ class PostReturnShipmentsRequest extends Request
                 'name' => $recipient->person,
                 'options' => [
                     'package_type' => $shipment->deliveryOptions->getPackageTypeId()
-                ],
-                'sender' => [
-                    'cc' => $recipient->cc,
-                    'city' => $recipient->city,
-                    'person' => $recipient->person,
-                    'postal_code' => $recipient->postalCode,
-                    'street' => $recipient->address1,
-                    'number' => '',
-                    'region' => $recipient->region,
-                    'company' => $recipient->company,
-                    'phone' => $recipient->phone
                 ]
             ];
 
-            // Remove any null values from the main array and sender array
-            $returnShipment = array_filter($returnShipment, function($value) {
+            // Add sender details from recipient data
+            $returnShipment['sender'] = array_filter([
+                'cc' => $recipient->cc,
+                'city' => $recipient->city,
+                'person' => $recipient->person,
+                'postal_code' => $recipient->postalCode,
+                'street' => $recipient->address1,
+                'number' => '',
+                'region' => $recipient->region,
+                'company' => $recipient->company,
+                'phone' => $recipient->phone
+            ], function($value) {
                 return $value !== null;
             });
 
-            // Remove any null values from the sender array
-            $returnShipment['sender'] = array_filter($returnShipment['sender'], function($value) {
+            // Remove any null values from the main array
+            $returnShipment = array_filter($returnShipment, function($value) {
                 return $value !== null;
             });
 
