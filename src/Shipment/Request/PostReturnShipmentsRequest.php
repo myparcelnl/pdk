@@ -91,13 +91,13 @@ class PostReturnShipmentsRequest extends Request
 
             // Create a new array with only the required fields
             $returnShipment = [
-                'parent' => (int) $shipment->id,
+                'parent' => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
-                'carrier' => (int) $shipment->carrier->id,
+                'carrier' => $shipment->carrier->id,
                 'email' => $recipient->email,
                 'name' => $recipient->person,
                 'options' => [
-                    'package_type' => (int) $shipment->deliveryOptions->getPackageTypeId()
+                    'package_type' => $shipment->deliveryOptions->getPackageTypeId()
                 ],
                 'sender' => [
                     'cc' => $recipient->cc,
@@ -106,9 +106,9 @@ class PostReturnShipmentsRequest extends Request
                     'postal_code' => $recipient->postalCode,
                     'street' => $recipient->address1,
                     'number' => '',
-                    'region' => $recipient->region ?? '',
-                    'company' => $recipient->company ?? '',
-                    'phone' => $recipient->phone ?? ''
+                    'region' => $recipient->region,
+                    'company' => $recipient->company,
+                    'phone' => $recipient->phone
                 ]
             ];
 
