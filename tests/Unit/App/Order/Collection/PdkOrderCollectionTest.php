@@ -300,3 +300,62 @@ it('skips shipments from carriers without return capabilities when generating re
         ->toBeGreaterThan(0);
 });
 
+it('updates recipient data for shipments when missing', function () {
+    // Create an order with shipping address but shipment without recipient
+    $orders = new PdkOrderCollection([
+        new PdkOrder([
+            'externalIdentifier' => 'ORDER-1',
+            'shippingAddress' => [
+                'address1' => 'Test Street 123',
+                'address2' => 'Apartment 4B',
+                'cc' => 'NL',
+                'city' => 'Amsterdam',
+                'postalCode' => '1234AB',
+                'region' => 'North Holland',
+                'state' => 'NH',
+                'email' => 'test@example.com',
+                'phone' => '0612345678',
+                'person' => 'John Doe',
+                'company' => 'Test Company'
+            ],
+            'shipments' => [
+                [
+                    'id' => 12345,
+                    'status' => 1,
+                    // No recipient data
+                ]
+            ]
+        ])
+    ]);
+
+    // Create a shipment collection with a shipment that matches the order's shipment
+    $shipments = new ShipmentCollection([
+        [
+            'id' => 12345,
+            'status' => 2,
+            'orderId' => 'ORDER-1'
+            // No recipient data
+        ]
+    ]);
+
+    // Update the shipments
+    $orders->updateShipments($shipments);
+
+    // Get all shipments from the orders
+    $updatedShipments = $orders->getAllShipments();
+
+    // Check if the recipient data was added to the shipment
+    expect($updatedShipments->count())
+        ->toBe(1)
+        ->and($updatedShipments->first()->recipient)
+        ->not->toBeNull()
+        ->and($updatedShipments->first()->recipient->address1)
+        ->toBe('Test Street 123')
+        ->and($updatedShipments->first()->recipient->email)
+        ->toBe('test@example.com')
+        ->and($updatedShipments->first()->recipient->person)
+        ->toBe('John Doe')
+        ->and($updatedShipments->first()->status)
+        ->toBe(2); // Check if the status was updated
+});
+
