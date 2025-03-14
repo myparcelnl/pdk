@@ -17,7 +17,9 @@
     "email": null,
     "phone": null,
     "person": "Felicia Parcel",
-    "company": null
+    "company": null,
+    "eoriNumber": null,
+    "vatNumber": null
   },
   "language": "nl",
   "orderDate": "2022-11-24 20:16:45",
@@ -117,7 +119,9 @@
       "email": null,
       "phone": null,
       "person": "Felicia Parcel",
-      "company": null
+      "company": null,
+      "eoriNumber": null,
+      "vatNumber": null
     },
     "physicalProperties": {
       "height": null,
