@@ -9,9 +9,14 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Pdk;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
 
 it('holds PdkOrders', function () {
     $pdkOrderCollection = new PdkOrderCollection([
@@ -197,5 +202,101 @@ it('updates order shipments by order ids', function () {
         ['orderId' => '🐷', 'id' => 30020, 'status' => 7],
         ['orderId' => '🦊', 'id' => 30070, 'status' => 1],
     ]);
+});
+
+it('can generate return shipments', function () {
+    // Create a mock for CarrierSchema
+    $carrierSchema = new class extends CarrierSchema {
+        public function setCarrier(\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier): CarrierSchema
+        {
+            return $this;
+        }
+        
+        public function hasReturnCapabilities()
+        {
+            return true;
+        }
+    };
+    
+    mockPdkProperties([CarrierSchema::class => $carrierSchema]);
+    
+    $pdkOrderCollection = new PdkOrderCollection([
+        new PdkOrder([
+            'externalIdentifier' => 'MP-1', 
+            'shipments' => [
+                [
+                    'id' => 100020,
+                    'carrier' => ['name' => 'postnl'],
+                    'referenceIdentifier' => 'REF-1',
+                    'isReturn' => false
+                ]
+            ]
+        ]),
+        new PdkOrder([
+            'externalIdentifier' => 'MP-2', 
+            'shipments' => [
+                [
+                    'id' => 100021,
+                    'carrier' => ['name' => 'postnl'],
+                    'referenceIdentifier' => 'REF-2',
+                    'isReturn' => false
+                ]
+            ]
+        ]),
+    ]);
+
+    $returnShipments = $pdkOrderCollection->generateReturnShipments();
+
+    expect($returnShipments)
+        ->toBeInstanceOf(ShipmentCollection::class)
+        ->and($returnShipments->count())
+        ->toBe(2)
+        ->and($returnShipments->every('isReturn', '===', true))
+        ->toBeTrue();
+});
+
+it('skips shipments from carriers without return capabilities when generating return shipments', function () {
+    // Create a mock for CarrierSchema
+    $carrierSchema = new class extends CarrierSchema {
+        public function setCarrier(\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier): CarrierSchema
+        {
+            return $this;
+        }
+        
+        public function hasReturnCapabilities()
+        {
+            return false;
+        }
+    };
+    
+    mockPdkProperties([CarrierSchema::class => $carrierSchema]);
+    
+    $pdkOrderCollection = new PdkOrderCollection([
+        new PdkOrder([
+            'externalIdentifier' => 'MP-1', 
+            'shipments' => [
+                [
+                    'id' => 100020,
+                    'carrier' => ['name' => 'dhl', 'human' => 'DHL'],
+                    'referenceIdentifier' => 'REF-1',
+                    'isReturn' => false
+                ]
+            ]
+        ]),
+    ]);
+
+    $returnShipments = $pdkOrderCollection->generateReturnShipments();
+    
+    // Check if a warning notification was added
+    $notifications = Notifications::all();
+    
+    expect($returnShipments)
+        ->toBeInstanceOf(ShipmentCollection::class)
+        ->and($returnShipments->count())
+        ->toBe(1)
+        ->and($returnShipments->first()->isReturn)
+        ->toBeFalsy()
+        ->and($notifications->count())
+        ->toBeGreaterThan(0);
 });
 
