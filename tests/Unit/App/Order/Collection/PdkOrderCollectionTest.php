@@ -359,3 +359,56 @@ it('updates recipient data for shipments when missing', function () {
         ->toBe(2); // Check if the status was updated
 });
 
+it('updates shipment recipient data when missing', function () {
+    $orders = new PdkOrderCollection([
+        [
+            'externalIdentifier' => 'ORDER-1',
+            'shippingAddress'    => [
+                'address1'   => 'Main Street',
+                'address2'   => 'Apt 123',
+                'cc'         => 'NL',
+                'city'       => 'Amsterdam',
+                'postalCode' => '1234AB',
+                'region'     => 'Noord-Holland',
+                'state'      => 'NH',
+                'email'      => 'test@example.com',
+                'phone'      => '0612345678',
+                'person'     => 'John Doe',
+                'company'    => 'Test Company'
+            ],
+            'shipments'          => [
+                ['id' => 100001, 'recipient' => null]
+            ],
+        ]
+    ]);
+
+    // Create a shipment without recipient data
+    $shipmentToUpdate = new ShipmentCollection([
+        [
+            'id'      => 100001,
+            'orderId' => 'ORDER-1',
+            'recipient' => null
+        ]
+    ]);
+
+    // Update the shipments
+    $orders->updateShipments($shipmentToUpdate);
+
+    // Get the updated shipment
+    $updatedShipment = $orders->getShipmentsByIds([100001])->first();
+
+    // Check if recipient data was updated
+    expect($updatedShipment->recipient)->not->toBeNull()
+        ->and($updatedShipment->recipient->address1)->toBe('Main Street')
+        ->and($updatedShipment->recipient->address2)->toBe('Apt 123')
+        ->and($updatedShipment->recipient->cc)->toBe('NL')
+        ->and($updatedShipment->recipient->city)->toBe('Amsterdam')
+        ->and($updatedShipment->recipient->postalCode)->toBe('1234AB')
+        ->and($updatedShipment->recipient->region)->toBe('Noord-Holland')
+        ->and($updatedShipment->recipient->state)->toBe('NH')
+        ->and($updatedShipment->recipient->email)->toBe('test@example.com')
+        ->and($updatedShipment->recipient->phone)->toBe('0612345678')
+        ->and($updatedShipment->recipient->person)->toBe('John Doe')
+        ->and($updatedShipment->recipient->company)->toBe('Test Company');
+});
+
