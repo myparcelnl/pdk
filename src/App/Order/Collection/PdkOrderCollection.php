@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -77,7 +78,7 @@ class PdkOrderCollection extends Collection
             if (!$schema->hasReturnCapabilities()) {
                 Notifications::warning(
                     "{$shipment->carrier->human} has no return capabilities",
-                    'Return shipment exported with default carrier postnl',
+                    'Return shipment exported with default carrier ' . Platform::get('defaultCarrier'),
                     Notification::CATEGORY_ACTION,
                     [
                         'action'   => PdkBackendActions::EXPORT_RETURN,
@@ -131,19 +132,7 @@ class PdkOrderCollection extends Collection
                         $order = $this->firstWhere('externalIdentifier', $shipment->orderId);
                         if ($order && $order->shippingAddress) {
                             // Create a new ContactDetails object from the shipping address
-                            $shipment->recipient = new ContactDetails([
-                                'address1' => $order->shippingAddress->address1,
-                                'address2' => $order->shippingAddress->address2,
-                                'cc' => $order->shippingAddress->cc,
-                                'city' => $order->shippingAddress->city,
-                                'postalCode' => $order->shippingAddress->postalCode,
-                                'region' => $order->shippingAddress->region,
-                                'state' => $order->shippingAddress->state,
-                                'email' => $order->shippingAddress->email,
-                                'phone' => $order->shippingAddress->phone,
-                                'person' => $order->shippingAddress->person,
-                                'company' => $order->shippingAddress->company
-                            ]);
+                            $shipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
                         }
                     }
                     $collection->push($shipment);
@@ -206,19 +195,7 @@ class PdkOrderCollection extends Collection
             
             // Update recipient data if needed
             if (!$matchingShipment->recipient && null !== $order->shippingAddress) {
-                $matchingShipment->recipient = new ContactDetails([
-                    'address1' => $order->shippingAddress->address1,
-                    'address2' => $order->shippingAddress->address2,
-                    'cc' => $order->shippingAddress->cc,
-                    'city' => $order->shippingAddress->city,
-                    'postalCode' => $order->shippingAddress->postalCode,
-                    'region' => $order->shippingAddress->region,
-                    'state' => $order->shippingAddress->state,
-                    'email' => $order->shippingAddress->email,
-                    'phone' => $order->shippingAddress->phone,
-                    'person' => $order->shippingAddress->person,
-                    'company' => $order->shippingAddress->company
-                ]);
+                $matchingShipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
             }
             
             $orderShipments->put($id, $matchingShipment);
@@ -240,19 +217,7 @@ class PdkOrderCollection extends Collection
         // Update recipient data for new shipments
         $byOrderId->each(function (Shipment $shipment) use ($order) {
             if (!$shipment->recipient && null !== $order->shippingAddress) {
-                $shipment->recipient = new ContactDetails([
-                    'address1' => $order->shippingAddress->address1,
-                    'address2' => $order->shippingAddress->address2,
-                    'cc' => $order->shippingAddress->cc,
-                    'city' => $order->shippingAddress->city,
-                    'postalCode' => $order->shippingAddress->postalCode,
-                    'region' => $order->shippingAddress->region,
-                    'state' => $order->shippingAddress->state,
-                    'email' => $order->shippingAddress->email,
-                    'phone' => $order->shippingAddress->phone,
-                    'person' => $order->shippingAddress->person,
-                    'company' => $order->shippingAddress->company
-                ]);
+                $shipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
             }
         });
 
@@ -260,5 +225,29 @@ class PdkOrderCollection extends Collection
         $merged = $order->shipments->mergeByKey($byOrderId, 'id');
 
         return $merged;
+    }
+
+    /**
+     * Creates a ContactDetails object from a shipping address
+     *
+     * @param  object $shippingAddress
+     *
+     * @return \MyParcelNL\Pdk\Base\Model\ContactDetails
+     */
+    private function contactDetailsFromShippingAddress(object $shippingAddress): ContactDetails
+    {
+        return new ContactDetails([
+            'address1'   => $shippingAddress->address1,
+            'address2'   => $shippingAddress->address2,
+            'cc'         => $shippingAddress->cc,
+            'city'       => $shippingAddress->city,
+            'postalCode' => $shippingAddress->postalCode,
+            'region'     => $shippingAddress->region,
+            'state'      => $shippingAddress->state,
+            'email'      => $shippingAddress->email,
+            'phone'      => $shippingAddress->phone,
+            'person'     => $shippingAddress->person,
+            'company'    => $shippingAddress->company
+        ]);
     }
 }
