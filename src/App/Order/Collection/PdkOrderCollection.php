@@ -78,7 +78,7 @@ class PdkOrderCollection extends Collection
             if (!$schema->hasReturnCapabilities()) {
                 Notifications::warning(
                     "{$shipment->carrier->human} has no return capabilities",
-                    'Return shipment exported with default carrier ' . Platform::get('defaultCarrier'),
+                    "Skipping return shipment for carrier without return capabilities",
                     Notification::CATEGORY_ACTION,
                     [
                         'action'   => PdkBackendActions::EXPORT_RETURN,

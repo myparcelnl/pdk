@@ -38,13 +38,11 @@ class PostReturnShipmentsRequest extends Request
      */
     public function getBody(): string
     {
-        $data = [
+        return json_encode([
             'data' => [
                 'return_shipments' => $this->encodeReturnShipments(),
             ],
-        ];
-
-        return json_encode($data);
+        ]);
     }
 
     /**
