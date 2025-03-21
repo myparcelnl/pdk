@@ -49,6 +49,7 @@ use MyParcelNL\Pdk\App\Request\Shipment\UpdateShipmentsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Webhook\CreateWebhooksEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Webhook\DeleteWebhooksEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Webhook\FetchWebhooksEndpointRequest;
+use MyParcelNL\Pdk\Api\Controller\AddressesProxyController;
 
 return [
     PdkEndpoint::CONTEXT_SHARED => [
@@ -224,6 +225,23 @@ return [
         PdkBackendActions::DOWNLOAD_LOGS           => [
             'request' => DownloadLogsEndpointRequest::class,
             'action'  => DownloadLogsAction::class,
+        ],
+
+        /**
+         * Addresses microservice proxy endpoints
+         */
+        'proxy_addresses_list' => [
+            'path' => '/addresses',
+            'controller' => AddressesProxyController::class,
+            'action' => 'proxy',
+            'methods' => ['GET'],
+        ],
+        
+        'proxy_addresses_validate' => [
+            'path' => '/validate',
+            'controller' => AddressesProxyController::class,
+            'action' => 'proxy',
+            'methods' => ['GET'],
         ],
     ],
 ];
