@@ -37,6 +37,13 @@ return [
      */
     'apiUrl'                 => env('PDK_API_URL', 'https://api.myparcel.nl'),
     'printingApiUrl'         => env('PDK_PRINTING_API_URL', 'https://printing.api.myparcel.nl'),
+    'addressesServiceUrl'    => env('PDK_ADDRESSES_SERVICE_URL', 'https://address.api.myparcel.nl'),
+    
+    /**
+     * Security settings for the proxy
+     */
+    'allowedProxyHosts'      => env('PDK_ALLOWED_PROXY_HOSTS', ['myparcel.local', 'pdk.myparcel.nl']),
+    'allowedProxyOrigins'    => env('PDK_ALLOWED_PROXY_ORIGINS', []),
 
     /**
      * CDN URL to use for frontend dependencies.
