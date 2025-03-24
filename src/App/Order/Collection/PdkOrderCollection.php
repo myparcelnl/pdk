@@ -7,10 +7,15 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -60,6 +65,37 @@ class PdkOrderCollection extends Collection
 
     /**
      * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
+     * @throws \Exception
+     */
+    public function generateReturnShipments(): ShipmentCollection
+    {
+        $shipments = $this->getLastShipments();
+        
+        foreach ($shipments as $shipment) {
+            $schema = Pdk::get(CarrierSchema::class);
+            $schema->setCarrier($shipment->carrier);
+
+            if (!$schema->hasReturnCapabilities()) {
+                Notifications::warning(
+                    "{$shipment->carrier->human} has no return capabilities",
+                    "Skipping return shipment for carrier without return capabilities",
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                continue;
+            }
+
+            $shipment->isReturn = true;
+        }
+
+        return $shipments;
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
     public function getAllShipments(): ShipmentCollection
     {
@@ -84,13 +120,21 @@ class PdkOrderCollection extends Collection
     {
         return $this->getAllShipments()
             ->groupBy('orderId')
-            ->reduce(static function (ShipmentCollection $collection, ShipmentCollection $shipments) {
+            ->reduce(function (ShipmentCollection $collection, ShipmentCollection $shipments) {
                 $lastShipment = $shipments->last();
                 $labelAmount  = $lastShipment->deliveryOptions->labelAmount;
                 $offset       = $shipments->count() - $labelAmount;
                 $allShipments = $shipments->slice($offset, $labelAmount);
 
-                $allShipments->each(static function (Shipment $shipment) use ($collection) {
+                $allShipments->each(function (Shipment $shipment) use ($collection) {
+                    // Ensure recipient data is present
+                    if (!$shipment->recipient && $shipment->orderId) {
+                        $order = $this->firstWhere('externalIdentifier', $shipment->orderId);
+                        if ($order && $order->shippingAddress) {
+                            // Create a new ContactDetails object from the shipping address
+                            $shipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
+                        }
+                    }
                     $collection->push($shipment);
                 });
 
@@ -148,12 +192,17 @@ class PdkOrderCollection extends Collection
             }
 
             $matchingShipment->orderId = $order->externalIdentifier;
+            
+            // Update recipient data if needed
+            if (!$matchingShipment->recipient && null !== $order->shippingAddress) {
+                $matchingShipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
+            }
+            
             $orderShipments->put($id, $matchingShipment);
         }
 
         return $orderShipments->values();
     }
-
 
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
@@ -165,9 +214,40 @@ class PdkOrderCollection extends Collection
     {
         $byOrderId = $shipments->where('orderId', $order->externalIdentifier);
 
+        // Update recipient data for new shipments
+        $byOrderId->each(function (Shipment $shipment) use ($order) {
+            if (!$shipment->recipient && null !== $order->shippingAddress) {
+                $shipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
+            }
+        });
+
         /** @var ShipmentCollection $merged */
         $merged = $order->shipments->mergeByKey($byOrderId, 'id');
 
         return $merged;
+    }
+
+    /**
+     * Creates a ContactDetails object from a shipping address
+     *
+     * @param  object $shippingAddress
+     *
+     * @return \MyParcelNL\Pdk\Base\Model\ContactDetails
+     */
+    private function contactDetailsFromShippingAddress(object $shippingAddress): ContactDetails
+    {
+        return new ContactDetails([
+            'address1'   => $shippingAddress->address1,
+            'address2'   => $shippingAddress->address2,
+            'cc'         => $shippingAddress->cc,
+            'city'       => $shippingAddress->city,
+            'postalCode' => $shippingAddress->postalCode,
+            'region'     => $shippingAddress->region,
+            'state'      => $shippingAddress->state,
+            'email'      => $shippingAddress->email,
+            'phone'      => $shippingAddress->phone,
+            'person'     => $shippingAddress->person,
+            'company'    => $shippingAddress->company
+        ]);
     }
 }

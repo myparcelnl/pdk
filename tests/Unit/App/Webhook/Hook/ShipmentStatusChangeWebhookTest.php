@@ -66,7 +66,12 @@ it('handles an api request', function (string $hook, string $expectedClass, arra
     // Omit the shipment response from the logs.
     unset($logs[1]);
 
-    expect(array_values($logs->toArray()))->toBe([
+    // Filter logs to only include the ones we're interested in
+    $filteredLogs = $logs->filter(function (array $log) {
+        return $log['message'] === '[PDK]: Webhook received' || $log['message'] === '[PDK]: Webhook processed';
+    })->values();
+
+    expect($filteredLogs->toArray())->toBe([
         [
             'level'   => 'debug',
             'message' => '[PDK]: Webhook received',

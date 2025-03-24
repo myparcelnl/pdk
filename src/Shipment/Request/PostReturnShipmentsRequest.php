@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
 
 class PostReturnShipmentsRequest extends Request
 {
@@ -71,50 +72,57 @@ class PostReturnShipmentsRequest extends Request
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     */
-    private function encodeReturnOptions(Shipment $shipment): array
-    {
-        /** @var \MyParcelNL\Pdk\Types\Service\TriStateService $triStateService */
-        $triStateService = Pdk::get(TriStateService::class);
-
-        $shipmentOptions = $shipment->deliveryOptions->shipmentOptions;
-        $options         = array_map(static function ($item) use ($triStateService) {
-            return $triStateService->resolve($item);
-        }, $shipmentOptions->toSnakeCaseArray());
-
-        return array_filter(
-            [
-                'package_type' => $shipment->deliveryOptions->getPackageTypeId(),
-                'insurance'    => $options['insurance']
-                    ? [
-                        'amount'   => $options['insurance'],
-                        'currency' => 'EUR',
-                    ] : null,
-            ] + $options
-        );
-    }
-
-    /**
      * @return array
      */
     private function encodeReturnShipments(): array
     {
-        return $this->collection->map(function (Shipment $shipment) {
+        $returnShipments = [];
+        
+        foreach ($this->collection as $shipment) {
             $shipment = $this->ensureReturnCapabilities($shipment);
 
-            return [
-                'parent'               => $shipment->id,
+            // Get the original recipient data
+            $recipient = $shipment->recipient;
+            if (!$recipient) {
+                throw new \RuntimeException('Recipient data is required for return shipments');
+            }
+
+            // Create a new array with only the required fields
+            $returnShipment = [
+                'parent' => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
-                'carrier'              => $shipment->carrier->id,
-                'email'                => $shipment->recipient->email,
-                'name'                 => $shipment->recipient->person,
-                'options'              => $this->encodeReturnOptions($shipment),
+                'carrier' => $shipment->carrier->id,
+                'email' => $recipient->email,
+                'name' => $recipient->person,
+                'options' => [
+                    'package_type' => $shipment->deliveryOptions->getPackageTypeId()
+                ]
             ];
-        })
-            ->toArray();
+
+            // Add sender details from recipient data
+            $returnShipment['sender'] = array_filter([
+                'cc' => $recipient->cc,
+                'city' => $recipient->city,
+                'person' => $recipient->person,
+                'postal_code' => $recipient->postalCode,
+                'street' => $recipient->address1,
+                'number' => '',
+                'region' => $recipient->region,
+                'company' => $recipient->company,
+                'phone' => $recipient->phone
+            ], function($value) {
+                return $value !== null;
+            });
+
+            // Remove any null values from the main array
+            $returnShipment = array_filter($returnShipment, function($value) {
+                return $value !== null;
+            });
+
+            $returnShipments[] = $returnShipment;
+        }
+
+        return $returnShipments;
     }
 
     /**

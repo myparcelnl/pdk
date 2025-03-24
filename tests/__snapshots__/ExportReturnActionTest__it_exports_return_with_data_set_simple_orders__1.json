@@ -239,6 +239,15 @@
                         "price": {
                             "amount": 100,
                             "currency": "EUR"
+                        },
+                        "recipient": {
+                            "address1": "Antareslaan 31",
+                            "cc": "NL",
+                            "city": "Hoofddorp",
+                            "postalCode": "2132 JE",
+                            "email": "support@myparcel.nl",
+                            "person": "Felicia Parcel",
+                            "company": "MyParcel"
                         }
                     }
                 ],
@@ -523,6 +532,21 @@
                 "totalPrice": 100,
                 "totalVat": 21,
                 "totalPriceAfterVat": 121
+            }
+        ],
+        "notifications": [
+            {
+                "category": "action",
+                "content": [
+                    "return_shipment_created_description"
+                ],
+                "tags": {
+                    "action": "exportReturn",
+                    "orderIds": "701,247"
+                },
+                "timeout": false,
+                "title": "return_shipment_created_title",
+                "variant": "success"
             }
         ]
     }

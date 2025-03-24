@@ -36,7 +36,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property array                                                  $partnerTrackTraces
  * @property null|\MyParcelNL\Pdk\Shipment\Model\PhysicalProperties $physicalProperties
  * @property \MyParcelNL\Pdk\Base\Model\Currency                    $price
- * @property null|\MyParcelNL\Pdk\App\Order\Model\ShippingAddress   $recipient
+ * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $recipient
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails         $sender
  * @property null|int                                               $shipmentType
  * @property null|int                                               $status

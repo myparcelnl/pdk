@@ -50,6 +50,11 @@ it('updates shipments', function () {
 });
 
 it('updates barcode in note', function () {
+    // Setup account and shop
+    factory(\MyParcelNL\Pdk\Account\Model\Account::class)
+        ->withShops(factory(\MyParcelNL\Pdk\Account\Model\Shop::class))
+        ->store();
+
     $collection = factory(PdkOrderCollection::class)
         ->push(
             factory(PdkOrder::class)->withShipments([factory(Shipment::class)->withId()]),
