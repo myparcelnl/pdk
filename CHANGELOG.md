@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.53.0](https://github.com/myparcelnl/pdk/compare/v2.52.1...v2.53.0) (2025-03-24)
+
+
+### :sparkles: New Features
+
+* allow return shipments in PDK order collection ([#337](https://github.com/myparcelnl/pdk/issues/337)) ([bbca72b](https://github.com/myparcelnl/pdk/commit/bbca72b37239a18340701bce2a4bea3f356f17b2))
+
 ## [2.52.1](https://github.com/myparcelnl/pdk/compare/v2.52.0...v2.52.1) (2025-03-05)
 
 
