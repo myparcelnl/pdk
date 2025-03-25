@@ -65,7 +65,6 @@ use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Api\Service\HostDetectionService;
 use function DI\autowire;
 use function DI\factory;
 
@@ -198,7 +197,6 @@ return [
      */
     AddressesApiService::class                 => autowire(),
     AddressesProxyController::class            => autowire(),
-    HostDetectionService::class                => autowire(),
 
     /**
      * @todo remove in v3.0.0
