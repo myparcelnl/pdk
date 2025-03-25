@@ -43,7 +43,7 @@ return [
      * Security settings for the proxy
      */
     'allowedProxyHosts'      => env('PDK_ALLOWED_PROXY_HOSTS', ['myparcel.local', 'pdk.myparcel.nl']),
-    'allowedProxyOrigins'    => env('PDK_ALLOWED_PROXY_ORIGINS', []),
+    'allowedProxyOrigins'    => env('PDK_ALLOWED_PROXY_ORIGINS', ['self']),
 
     /**
      * CDN URL to use for frontend dependencies.

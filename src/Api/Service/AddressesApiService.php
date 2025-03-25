@@ -29,7 +29,7 @@ class AddressesApiService extends AbstractApiService
         $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
         
         return [
-            'X-API-Key' => $apiKey,
+            'Authorization' => sprintf('bearer %s', base64_encode($apiKey)),
             'User-Agent' => $this->getUserAgentHeader(),
         ];
     }
