@@ -50,6 +50,7 @@ use MyParcelNL\Pdk\App\Request\Webhook\CreateWebhooksEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Webhook\DeleteWebhooksEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Webhook\FetchWebhooksEndpointRequest;
 use MyParcelNL\Pdk\Api\Controller\AddressesProxyController;
+use MyParcelNL\Pdk\Api\PdkAddressActions;
 
 return [
     PdkEndpoint::CONTEXT_SHARED => [
@@ -230,14 +231,14 @@ return [
         /**
          * Addresses microservice proxy endpoints
          */
-        'proxy_addresses_list' => [
+        PdkAddressActions::PROXY_ADDRESSES_LIST => [
             'path' => '/addresses',
             'controller' => AddressesProxyController::class,
             'action' => 'proxy',
             'methods' => ['GET'],
         ],
         
-        'proxy_addresses_validate' => [
+        PdkAddressActions::PROXY_ADDRESSES_VALIDATE => [
             'path' => '/validate',
             'controller' => AddressesProxyController::class,
             'action' => 'proxy',
