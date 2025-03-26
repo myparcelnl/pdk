@@ -8,11 +8,14 @@
     "require": {
         "ext-zip": "*",
         "justinrainbow/json-schema": "^5.2",
-        "myparcelnl/sdk": ">= 7",
+        "myparcelnl/sdk": "^7.0.0",
         "php": ">=7.4.0",
-        "php-di/php-di": ">= 6",
-        "psr/log": "^1 || ^2 || ^3",
-        "symfony/http-foundation": ">= 2 || >= 3 || >= 4 || >= 5"
+        "php-di/php-di": "^6.0.0",
+        "psr/log": "^1.0.0 || ^2.0.0 || ^3.0.0",
+        "symfony/http-foundation": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
+    },
+    "platform": {
+        "php": "7.4"
     },
     "scripts": {
         "analyse": "php -dmemory_limit=-1 vendor/bin/phpstan analyse",
@@ -33,14 +36,14 @@
         "behat/behat": "^3.13",
         "brick/varexporter": "^0.4",
         "guzzlehttp/guzzle": "^7.5",
-        "myparcelnl/devtools": ">= 1",
-        "nette/robot-loader": ">= 3",
-        "pestphp/pest": ">= 1",
-        "phpdocumentor/reflection-docblock": "^5",
-        "phpstan/phpstan": "^1",
-        "rector/rector": ">= 1",
-        "spatie/pest-plugin-snapshots": ">= 1",
-        "symfony/console": "*"
+        "myparcelnl/devtools": "^1.0.0",
+        "nette/robot-loader": "^3.0.0",
+        "pestphp/pest": "^1.0.0",
+        "phpdocumentor/reflection-docblock": "^5.0.0",
+        "phpstan/phpstan": "^1.0.0",
+        "rector/rector": "^1.0.0",
+        "spatie/pest-plugin-snapshots": "^1.0.0",
+        "symfony/console": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
     },
     "autoload": {
         "psr-4": {
