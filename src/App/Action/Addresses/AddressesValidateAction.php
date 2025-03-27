@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Addresses;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
+use MyParcelNL\Pdk\Api\Response\AddressResponse;
 use MyParcelNL\Pdk\Api\Request\ProxyRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +42,7 @@ class AddressesValidateAction implements ActionInterface
             'postalCode' => $query['postalCode'] ?? null,
             'houseNumber' => $query['houseNumber'] ?? null,
             'query' => $query['query'] ?? null,
+            'limit' => 5,
         ];
 
         // Filter out null values
@@ -55,9 +57,9 @@ class AddressesValidateAction implements ActionInterface
             $queryParams
         );
 
-        $response = $this->apiService->doRequest($proxyRequest);
-        $responseData = json_decode($response->getBody() ?? '{"data":[],"errors":[]}', true);
+        /** @var AddressResponse $response */
+        $response = $this->apiService->doRequest($proxyRequest, AddressResponse::class);
 
-        return new JsonResponse($responseData);
+        return new JsonResponse($response->getResults());
     }
 } 
