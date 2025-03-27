@@ -78,10 +78,10 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ],
     ],
 
-    'disables receipt code when shipping to a non-NL country' => [
+    'disables receipt code when shipping to a non-NL or BE country' => [
         [ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED],
         [ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED],
-        'BE',
+        'FR',
     ],
 
     'disables signature, only recipient, large format and return when receipt code is enabled' => [
