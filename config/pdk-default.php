@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+
 use function DI\env;
 use function DI\factory;
 use function DI\value;
@@ -161,4 +162,9 @@ return [
      * The prefix to use for delivery options translations.
      */
     'translationPrefixDeliveryOptions' => value('delivery_options_'),
+
+    /**
+     * Whether to replace native address fields with the address widget
+     */
+    'useAddressWidget'                 => value(false),
 ];

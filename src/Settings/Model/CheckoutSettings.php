@@ -31,6 +31,7 @@ class CheckoutSettings extends AbstractSettingsModel
     public const DELIVERY_OPTIONS_POSITION                 = 'deliveryOptionsPosition';
     public const PICKUP_LOCATIONS_DEFAULT_VIEW             = 'pickupLocationsDefaultView';
     public const PRICE_TYPE                                = 'priceType';
+    public const ENABLE_ADDRESS_WIDGET                     = 'enableAddressWidget';
     public const ENABLE_DELIVERY_OPTIONS                   = 'enableDeliveryOptions';
     public const ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK = 'enableDeliveryOptionsWhenNotInStock';
     public const USE_SEPARATE_ADDRESS_FIELDS               = 'useSeparateAddressFields';
