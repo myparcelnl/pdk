@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Api\Handler;
 
+use Fruitcake\Cors\CorsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,16 +14,16 @@ use Symfony\Component\HttpFoundation\Response;
 class CorsHandler
 {
     /**
-     * @var array
+     * @var CorsService
      */
-    private $options;
+    private $cors;
 
     /**
      * @param array $options
      */
     public function __construct(array $options)
     {
-        $this->options = $options;
+        $this->cors = new CorsService($options);
     }
 
     /**
@@ -37,9 +38,7 @@ class CorsHandler
             return null;
         }
 
-        $response = new Response('', Response::HTTP_NO_CONTENT);
-        $this->addCorsHeaders($request, $response);
-        return $response;
+        return $this->cors->handlePreflightRequest($request);
     }
 
     /**
@@ -50,36 +49,11 @@ class CorsHandler
      */
     public function addCorsHeaders(Request $request, Response $response): void
     {
-        $origin = $request->headers->get('Origin');
-        
-        if (!$origin) {
-            return;
-        }
-
-        // Check if origin is allowed
-        if (in_array('*', $this->options['allowedOrigins'])) {
-            $response->headers->set('Access-Control-Allow-Origin', '*');
-        } elseif (in_array($origin, $this->options['allowedOrigins'])) {
-            $response->headers->set('Access-Control-Allow-Origin', $origin);
-        } elseif (in_array('self', $this->options['allowedOrigins'])) {
-            $response->headers->set('Access-Control-Allow-Origin', $request->getSchemeAndHttpHost());
-        }
-
-        if ($request->getMethod() === 'OPTIONS') {
-            $response->headers->set('Access-Control-Allow-Methods', implode(', ', $this->options['allowedMethods']));
-            $response->headers->set('Access-Control-Allow-Headers', implode(', ', $this->options['allowedHeaders']));
-            
-            if ($this->options['maxAge']) {
-                $response->headers->set('Access-Control-Max-Age', $this->options['maxAge']);
+        if ($this->cors->isCorsRequest($request)) {
+            $origin = $request->headers->get('Origin');
+            if ($origin) {
+                $this->cors->addActualRequestHeaders($response, $request);
             }
         }
-
-        if ($this->options['supportsCredentials']) {
-            $response->headers->set('Access-Control-Allow-Credentials', 'true');
-        }
-
-        if ($this->options['exposedHeaders']) {
-            $response->headers->set('Access-Control-Expose-Headers', implode(', ', $this->options['exposedHeaders']));
-        }
     }
-} 
+}
