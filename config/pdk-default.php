@@ -42,7 +42,7 @@ return [
     /**
      * Security settings for the proxy
      */
-    'allowedProxyHosts'      => env('PDK_ALLOWED_PROXY_HOSTS', ['myparcel.local', 'pdk.myparcel.nl']),
+    'allowedProxyHosts'      => env('PDK_ALLOWED_PROXY_HOSTS', ['self']),
     'allowedProxyOrigins'    => env('PDK_ALLOWED_PROXY_ORIGINS', ['self']),
 
     /**
