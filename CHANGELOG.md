@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.53.1](https://github.com/myparcelnl/pdk/compare/v2.53.0...v2.53.1) (2025-03-31)
+
 ## [2.53.0](https://github.com/myparcelnl/pdk/compare/v2.52.1...v2.53.0) (2025-03-24)
 
 
