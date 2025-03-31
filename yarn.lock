@@ -120,7 +120,7 @@ __metadata:
   resolution: "@myparcel/php-pdk@workspace:."
   dependencies:
     "@myparcel/prettier-config": "npm:^1.1.0"
-    "@myparcel/semantic-release-config": "npm:^5.0.0"
+    "@myparcel/semantic-release-config": "npm:^5.1.0"
     husky: "npm:^9.0.0"
     is-ci: "npm:^3.0.1"
     lint-staged: "npm:^15.0.0"
@@ -136,9 +136,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@myparcel/semantic-release-config@npm:^5.0.0":
-  version: 5.0.1
-  resolution: "@myparcel/semantic-release-config@npm:5.0.1"
+"@myparcel/semantic-release-config@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@myparcel/semantic-release-config@npm:5.1.0"
   dependencies:
     "@iwavesmedia/semantic-release-composer": "npm:^1.0.0"
     "@semantic-release/changelog": "npm:^6.0.1"
@@ -150,7 +150,7 @@ __metadata:
     "@semantic-release/release-notes-generator": "npm:^10.0.0"
     conventional-changelog-conventionalcommits: "npm:^4.0.0 || ^5.0.0"
     semantic-release: "npm:^21.0.0"
-  checksum: 10c0/0b487504f38163167dd7c0e410ca9fee60b3d9b3004fcaf580320a2d70d5448471856b47780d022bad25fcdf9ee1d541f2e1b5101c898fe40a4485ab86cc65ef
+  checksum: 10c0/e43369a6cd7b65ba1adf8470edf36f98a1f46cadf83304ff92f7eed3105af3b59a4e0edf96046bd8700ebf192ac7938683ec3defe77798e3a03770df3d6c2d6a
   languageName: node
   linkType: hard
 
