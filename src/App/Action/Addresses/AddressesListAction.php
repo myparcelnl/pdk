@@ -7,8 +7,9 @@ namespace MyParcelNL\Pdk\App\Action\Addresses;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
-use MyParcelNL\Pdk\Api\Response\AddressResponse;
+use MyParcelNL\Pdk\Api\Response\ListAddressResponse;
 use MyParcelNL\Pdk\Api\Request\ProxyRequest;
+use MyParcelNL\Pdk\Facade\Platform;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,7 @@ class AddressesListAction implements ActionInterface
     private $apiService;
 
     /**
-     * @param \MyParcelNL\Pdk\Api\Service\AddressesApiService $apiService
+     * @param  \MyParcelNL\Pdk\Api\Service\AddressesApiService $apiService
      */
     public function __construct(AddressesApiService $apiService)
     {
@@ -38,11 +39,11 @@ class AddressesListAction implements ActionInterface
 
         // Ensure required parameters are present with correct format
         $queryParams = [
-            'countryCode' => $query['cc'] ?? 'NL',
-            'postalCode' => $query['postalCode'] ?? null,
+            'countryCode' => $query['cc'] ?? null,
+            'postalCode'  => $query['postalCode'] ?? null,
             'houseNumber' => $query['houseNumber'] ?? null,
-            'query' => $query['query'] ?? null,
-            'limit' => 5,
+            'query'       => $query['query'] ?? null,
+            'limit'       => 5,
         ];
 
         // Filter out null values
@@ -57,9 +58,9 @@ class AddressesListAction implements ActionInterface
             $queryParams
         );
 
-        /** @var AddressResponse $response */
-        $response = $this->apiService->doRequest($proxyRequest, AddressResponse::class);
+        /** @var ListAddressResponse $response */
+        $response = $this->apiService->doRequest($proxyRequest, ListAddressResponse::class);
 
         return new JsonResponse($response->getResults());
     }
-} 
+}

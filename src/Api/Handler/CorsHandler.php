@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Handler for CORS related functionality
+ * Proxy handler for CORS related functionality
  */
 class CorsHandler
 {
@@ -19,7 +19,7 @@ class CorsHandler
     private $cors;
 
     /**
-     * @param array $options
+     * @param  array $options
      */
     public function __construct(array $options)
     {
@@ -27,26 +27,41 @@ class CorsHandler
     }
 
     /**
-     * Handle CORS preflight request
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  \Symfony\Component\HttpFoundation\Response $response
      *
-     * @param Request $request
-     * @return Response|null
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function handlePreflight(Request $request): ?Response
+    public function addCorsHeaders(Request $request, Response $response): Response
     {
+        return $this->cors->addActualRequestHeaders($response, $request);
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     */
+    public function handlePreflightRequest(Request $request): ?Response
+    {
+        if ($request->getMethod() !== 'OPTIONS') {
+            return null;
+        }
+
         return $this->cors->handlePreflightRequest($request);
     }
 
     /**
-     * Add CORS headers to response
+     * Proxy all method calls to the CorsService
      *
-     * @param Request  $request
-     * @param Response $response
+     * @param  string $name
+     * @param  array  $arguments
+     *
+     * @return mixed
      */
-    public function addCorsHeaders(Request $request, Response $response): void
+    public function __call(string $name, array $arguments)
     {
-        if ($this->cors->isOriginAllowed($request)) {
-            $this->cors->addActualRequestHeaders($response, $request);
-        }
+        return $this->cors->$name(...$arguments);
     }
 }
+
