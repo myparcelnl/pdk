@@ -28,37 +28,42 @@ class AddressesProxyController
     private $corsHandler;
 
     /**
-     * @param AddressesApiService $addressesApiService
-     * @param CorsHandler $corsHandler
+     * @param  AddressesApiService $addressesApiService
+     * @param  CorsHandler         $corsHandler
      */
     public function __construct(
         AddressesApiService $addressesApiService,
-        CorsHandler $corsHandler
+        CorsHandler         $corsHandler
     ) {
         $this->addressesApiService = $addressesApiService;
-        $this->corsHandler = $corsHandler;
+        $this->corsHandler         = $corsHandler;
     }
 
     /**
      * Handles a proxy request
      *
-     * @param Request $request
-     * @param string $path
+     * @param  Request $request
+     * @param  string  $path
+     *
      * @return Response
      */
     public function proxy(Request $request, string $path): Response
     {
         // Handle CORS preflight request
-        $preflightResponse = $this->corsHandler->handlePreflight($request);
-        if ($preflightResponse) {
+        $preflightResponse = $this->corsHandler->handlePreflightRequest($request);
+        if ($preflightResponse instanceof Response) {
             return $preflightResponse;
         }
 
         // Check if origin is allowed
-        $origin = $request->headers->get('Origin');
+        $origin         = $request->headers->get('Origin');
         $allowedOrigins = Pdk::get('proxy.cors.allowedOrigins');
-        
-        if ($origin && !in_array($origin, $allowedOrigins) && !in_array('*', $allowedOrigins) && !in_array('self', $allowedOrigins)) {
+
+        if ($origin && ! in_array($origin, $allowedOrigins) && ! in_array('*', $allowedOrigins)
+            && ! in_array(
+                'self',
+                $allowedOrigins
+            )) {
             return new Response('Unauthorized origin', Response::HTTP_FORBIDDEN);
         }
 
@@ -73,7 +78,7 @@ class AddressesProxyController
 
         // Send the request and return the response
         try {
-            $response = $this->addressesApiService->doRequest($proxyRequest);
+            $response     = $this->addressesApiService->doRequest($proxyRequest);
             $jsonResponse = new Response(
                 $response->getBody(),
                 $response->getStatusCode(),

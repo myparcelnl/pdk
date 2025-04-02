@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Addresses;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
-use MyParcelNL\Pdk\Api\Response\AddressValidateResponse;
+use MyParcelNL\Pdk\Api\Response\ValidateAddressResponse;
 use MyParcelNL\Pdk\Api\Request\ProxyRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ class AddressesValidateAction implements ActionInterface
     private $apiService;
 
     /**
-     * @param \MyParcelNL\Pdk\Api\Service\AddressesApiService $apiService
+     * @param  \MyParcelNL\Pdk\Api\Service\AddressesApiService $apiService
      */
     public function __construct(AddressesApiService $apiService)
     {
@@ -38,10 +38,9 @@ class AddressesValidateAction implements ActionInterface
 
         // Ensure required parameters are present with correct format
         $queryParams = [
-            'countryCode' => $query['cc'] ?? 'NL',
-            'postalCode' => $query['postalCode'] ?? null,
+            'countryCode' => $query['cc'] ?? null,
+            'postalCode'  => $query['postalCode'] ?? null,
             'houseNumber' => $query['houseNumber'] ?? null,
-            'query' => $query['query'] ?? null,
         ];
 
         // Filter out null values
@@ -56,11 +55,11 @@ class AddressesValidateAction implements ActionInterface
             $queryParams
         );
 
-        /** @var AddressValidateResponse $response */
-        $response = $this->apiService->doRequest($proxyRequest, AddressValidateResponse::class);
+        /** @var ValidateAddressResponse $response */
+        $response = $this->apiService->doRequest($proxyRequest, ValidateAddressResponse::class);
 
         return new JsonResponse([
-            'valid' => $response->isValid()
+            'valid' => $response->isValid(),
         ]);
     }
-} 
+}

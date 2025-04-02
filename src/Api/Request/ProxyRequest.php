@@ -5,56 +5,56 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Request;
 
 /**
- * Request object for proxying requests to the Addresses microservice
+ * Request object for proxying requests to a MyParcel microservice
  */
 class ProxyRequest implements RequestInterface
 {
     /**
-     * @var string
-     */
-    private $method;
-    
-    /**
-     * @var string
-     */
-    private $path;
-    
-    /**
      * @var string|null
      */
     private $body;
-    
+
     /**
      * @var array
      */
     private $headers;
-    
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var string
+     */
+    private $path;
+
     /**
      * @var array
      */
     private $queryParams;
-    
+
     /**
-     * @param string      $method
-     * @param string      $path
-     * @param string|null $body
-     * @param array       $queryParams
-     * @param array       $headers
+     * @param  string      $method
+     * @param  string      $path
+     * @param  string|null $body
+     * @param  array       $queryParams
+     * @param  array       $headers
      */
     public function __construct(
-        string $method,
-        string $path,
+        string  $method,
+        string  $path,
         ?string $body = null,
-        array $queryParams = [],
-        array $headers = []
+        array   $queryParams = [],
+        array   $headers = []
     ) {
-        $this->method = $method;
-        $this->path = $path;
-        $this->body = $body;
+        $this->method      = $method;
+        $this->path        = $path;
+        $this->body        = $body;
         $this->queryParams = $queryParams;
-        $this->headers = $headers;
+        $this->headers     = $headers;
     }
-    
+
     /**
      * @return string|null
      */
@@ -62,7 +62,7 @@ class ProxyRequest implements RequestInterface
     {
         return $this->body;
     }
-    
+
     /**
      * @return array
      */
@@ -70,7 +70,7 @@ class ProxyRequest implements RequestInterface
     {
         return $this->headers;
     }
-    
+
     /**
      * @return string
      */
@@ -78,7 +78,7 @@ class ProxyRequest implements RequestInterface
     {
         return $this->method;
     }
-    
+
     /**
      * @return string
      */
@@ -86,7 +86,7 @@ class ProxyRequest implements RequestInterface
     {
         return $this->path;
     }
-    
+
     /**
      * @return string|null
      */
@@ -94,7 +94,7 @@ class ProxyRequest implements RequestInterface
     {
         return null;
     }
-    
+
     /**
      * @return string
      */
@@ -102,7 +102,7 @@ class ProxyRequest implements RequestInterface
     {
         return http_build_query($this->queryParams);
     }
-    
+
     /**
      * @return string|null
      */
@@ -110,4 +110,4 @@ class ProxyRequest implements RequestInterface
     {
         return null;
     }
-} 
+}
