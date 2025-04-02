@@ -6,19 +6,22 @@ namespace MyParcelNL\Pdk\Api\Response;
 
 use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 
-class AddressResponse extends ApiResponseWithBody
+/**
+ * Base class for address related responses
+ */
+abstract class AddressResponse extends ApiResponseWithBody
 {
     /**
      * @var array
      */
-    private $results = [];
+    protected $data = [];
 
     /**
      * @return array
      */
-    public function getResults(): array
+    public function getData(): array
     {
-        return $this->results;
+        return $this->data;
     }
 
     /**
@@ -26,7 +29,6 @@ class AddressResponse extends ApiResponseWithBody
      */
     protected function parseResponseBody(): void
     {
-        $data = json_decode($this->getBody() ?? '{"results":[]}', true);
-        $this->results = $data['results'] ?? [];
+        $this->data = json_decode($this->getBody() ?? '{}', true) ?? [];
     }
-} 
+}
