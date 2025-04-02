@@ -15,6 +15,9 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use RuntimeException;
 use Throwable;
 
+/**
+ * Abstract base class for API services
+ */
 abstract class AbstractApiService implements ApiServiceInterface
 {
     /**
@@ -55,6 +58,7 @@ abstract class AbstractApiService implements ApiServiceInterface
         ];
 
         $logContext = $this->createLogContext($uri, $method, $options);
+        $response = null;
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
@@ -103,16 +107,18 @@ abstract class AbstractApiService implements ApiServiceInterface
         return [];
     }
 
+    /**
+     * @param string $baseUrl
+     * @return ApiServiceInterface
+     */
     public function setBaseUrl(string $baseUrl): ApiServiceInterface
     {
         $this->baseUrl = $baseUrl;
-
         return $this;
     }
 
     /**
      * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
-     *
      * @return string
      */
     protected function buildUri(RequestInterface $request): string
@@ -122,7 +128,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             trim($request->getPath(), '/'),
         ]);
 
-        if (! empty($request->getQueryString())) {
+        if (!empty($request->getQueryString())) {
             $url .= "?{$request->getQueryString()}";
         }
 
@@ -133,16 +139,17 @@ abstract class AbstractApiService implements ApiServiceInterface
      * @param  string $uri
      * @param  string $method
      * @param  array  $options
-     *
-     * @return array[]
+     * @return array
      */
     private function createLogContext(string $uri, string $method, array $options): array
     {
         $headers = array_combine(array_map('strtolower', array_keys($options['headers'])), $options['headers']);
 
-        // Obfuscate the authorization header if present
-        if (isset($headers['authorization'])) {
-            $headers['authorization'] = '***';
+        // Obfuscate sensitive headers
+        foreach (['authorization', 'x-api-key', 'api-key'] as $sensitiveHeader) {
+            if (isset($headers[$sensitiveHeader])) {
+                $headers[$sensitiveHeader] = '***';
+            }
         }
 
         return [
