@@ -57,12 +57,12 @@ class AddressesProxyController
 
         // Check if origin is allowed
         $origin         = $request->headers->get('Origin');
-        $allowedOrigins = Pdk::get('proxy.cors.allowedOrigins');
+        $allowedHosts = Pdk::get('allowedProxyHosts');
 
-        if ($origin && ! in_array($origin, $allowedOrigins) && ! in_array('*', $allowedOrigins)
+        if ($origin && ! in_array($origin, $allowedHosts) && ! in_array('*', $allowedHosts)
             && ! in_array(
                 'self',
-                $allowedOrigins
+                $allowedHosts
             )) {
             return new Response('Unauthorized origin', Response::HTTP_FORBIDDEN);
         }

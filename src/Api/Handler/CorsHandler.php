@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Handler;
 
 use Fruitcake\Cors\CorsService;
+use MyParcelNL\Pdk\Facade\Pdk;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,9 +22,33 @@ class CorsHandler
     /**
      * @param  array $options
      */
-    public function __construct(array $options)
+    public function __construct(array $options = [])
     {
-        $this->cors = new CorsService($options);
+        $allowedHosts = Pdk::get('allowedProxyHosts');
+
+        $defaultOptions = [
+            'allowedOrigins'      => $allowedHosts,
+            'allowedMethods'      => ['GET', 'POST', 'OPTIONS'],
+            'allowedHeaders'      => ['Content-Type', 'Accept', 'Authorization', 'Origin'],
+            'exposedHeaders'      => [],
+            'maxAge'              => 0,
+            'supportsCredentials' => false,
+        ];
+
+        $this->cors = new CorsService(array_merge($defaultOptions, $options));
+    }
+
+    /**
+     * Proxy all method calls to the CorsService
+     *
+     * @param  string $name
+     * @param  array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call(string $name, array $arguments)
+    {
+        return $this->cors->$name(...$arguments);
     }
 
     /**
@@ -50,18 +75,4 @@ class CorsHandler
 
         return $this->cors->handlePreflightRequest($request);
     }
-
-    /**
-     * Proxy all method calls to the CorsService
-     *
-     * @param  string $name
-     * @param  array  $arguments
-     *
-     * @return mixed
-     */
-    public function __call(string $name, array $arguments)
-    {
-        return $this->cors->$name(...$arguments);
-    }
 }
-

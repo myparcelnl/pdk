@@ -38,9 +38,14 @@ class AddressesValidateAction implements ActionInterface
 
         // Ensure required parameters are present with correct format
         $queryParams = [
-            'countryCode' => $query['cc'] ?? null,
-            'postalCode'  => $query['postalCode'] ?? null,
-            'houseNumber' => $query['houseNumber'] ?? null,
+            'countryCode'       => $query['cc'] ?? null,
+            'postalCode'        => $query['postalCode'] ?? null,
+            'houseNumber'       => $query['houseNumber'] ?? null,
+            'houseNumberSuffix' => $query['houseNumberSuffix'] ?? null,
+            'city'              => $query['city'] ?? null,
+            'region'            => $query['region'] ?? null,
+            'street'            => $query['street'] ?? null,
+            'validationType'    => $query['validationType'] ?? null,
         ];
 
         // Filter out null values
