@@ -27,24 +27,24 @@ class AddressesApiService extends AbstractApiService
     public function getHeaders(): array
     {
         $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
-        
+
         return [
             'Authorization' => sprintf('bearer %s', base64_encode($apiKey)),
-            'User-Agent' => $this->getUserAgentHeader(),
+            'User-Agent'    => $this->getUserAgentHeader(),
         ];
     }
-    
+
     /**
      * @return string
      */
     protected function getUserAgentHeader(): string
     {
         $userAgentStrings = [];
-        $userAgents = array_merge(
+        $userAgents       = array_merge(
             Pdk::get('userAgent'),
             [
                 'MyParcelNL-PDK' => Pdk::get('pdkVersion'),
-                'php' => PHP_VERSION,
+                'php'            => PHP_VERSION,
             ]
         );
 
@@ -54,4 +54,4 @@ class AddressesApiService extends AbstractApiService
 
         return implode(' ', $userAgentStrings);
     }
-} 
+}
