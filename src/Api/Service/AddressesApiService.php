@@ -18,7 +18,13 @@ class AddressesApiService extends AbstractApiService
      */
     public function getBaseUrl(): string
     {
-        return $this->baseUrl ?? Pdk::get('addressesServiceUrl');
+        $baseUrl = $this->baseUrl ?? Pdk::get('addressesServiceUrl');
+
+        if (!$baseUrl) {
+            throw new \RuntimeException('Addresses service URL is not configured');
+        }
+
+        return $baseUrl;
     }
 
     /**
@@ -27,6 +33,10 @@ class AddressesApiService extends AbstractApiService
     public function getHeaders(): array
     {
         $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
+
+        if (!$apiKey) {
+            throw new \RuntimeException('API key is not configured');
+        }
 
         return [
             'Authorization' => sprintf('bearer %s', base64_encode($apiKey)),
@@ -41,7 +51,7 @@ class AddressesApiService extends AbstractApiService
     {
         $userAgentStrings = [];
         $userAgents       = array_merge(
-            Pdk::get('userAgent'),
+            Pdk::get('userAgent') ?? [],
             [
                 'MyParcelNL-PDK' => Pdk::get('pdkVersion'),
                 'php'            => PHP_VERSION,
@@ -49,7 +59,9 @@ class AddressesApiService extends AbstractApiService
         );
 
         foreach ($userAgents as $platform => $version) {
-            $userAgentStrings[] = sprintf('%s/%s', $platform, $version);
+            if ($version) {
+                $userAgentStrings[] = sprintf('%s/%s', $platform, $version);
+            }
         }
 
         return implode(' ', $userAgentStrings);
