@@ -6,9 +6,11 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Shipment;
 
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Backend\Order\AbstractOrderAction;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
+use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -67,6 +69,8 @@ class UpdateShipmentsAction extends AbstractOrderAction
             $this->pdkOrderRepository->updateMany($orders);
 
             $this->addBarcodeNotes($shipments);
+
+            $this->updateOrderStatus($shipments);
         }
 
         return new JsonResponse([
@@ -107,6 +111,17 @@ class UpdateShipmentsAction extends AbstractOrderAction
                 ]);
 
                 $this->pdkOrderNoteRepository->add($note);
+            });
+    }
+
+    private function updateOrderStatus(ShipmentCollection $shipments): void
+    {
+        $shipments
+            ->each(function (Shipment $shipment) {
+                Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
+                    'orderIds' => [$shipment->orderId],
+                    'setting'  => OrderSettings::STATUS_ON_LABEL_CREATE,
+                ]);
             });
     }
 }
