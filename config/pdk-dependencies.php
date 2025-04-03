@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
+
 use function DI\factory;
 use function DI\value;
 
@@ -53,7 +54,7 @@ return [
 
         return $scriptService->createCdnUrl(
             '@myparcel/delivery-options',
-            Pdk::get('deliveryOptionsVersion'),
+            Pdk::get('addressWidgetVersion'),
             'dist/myparcel.js'
         );
     }),
@@ -64,7 +65,7 @@ return [
 
         return $scriptService->createCdnUrl(
             '@myparcel/delivery-options',
-            Pdk::get('deliveryOptionsVersion'),
+            Pdk::get('addressWidgetVersion'),
             'dist/myparcel.lib.js'
         );
     }),
@@ -75,8 +76,44 @@ return [
 
         return $scriptService->createCdnUrl(
             '@myparcel/delivery-options',
-            Pdk::get('deliveryOptionsVersion'),
+            Pdk::get('addressWidgetVersion'),
             'dist/style.css'
+        );
+    }),
+
+    /**
+     * The version of the delivery options in the checkout.
+     *
+     * @see https://github.com/myparcelnl/delivery-options/releases
+     */
+    'addressWidgetVersion'    => value('1'),
+
+    /**
+     * The version of vue in the delivery options.
+     */
+    'addressWidgetVueVersion' => factory(function (): string {
+        return Pdk::get('vueVersion');
+    }),
+
+    'addressWidgetCdnUrlJs' => factory(function (): string {
+        /** @var \MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface $scriptService */
+        $scriptService = Pdk::get(ScriptServiceInterface::class);
+
+        return $scriptService->createCdnUrl(
+            '@myparcel/delivery-options',
+            Pdk::get('addressWidgetVersion'),
+            'dist/main.js'
+        );
+    }),
+
+    'addressWidgetCdnUrlCss' => factory(function (): string {
+        /** @var \MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface $scriptService */
+        $scriptService = Pdk::get(ScriptServiceInterface::class);
+
+        return $scriptService->createCdnUrl(
+            '@myparcel/delivery-options',
+            Pdk::get('addressWidgetVersion'),
+            'dist/main.css'
         );
     }),
 
