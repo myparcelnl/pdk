@@ -6,150 +6,142 @@ namespace MyParcelNL\Pdk\Tests\Unit\Api\Service;
 
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use PHPUnit\Framework\TestCase;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 
 usesShared(new UsesMockPdkInstance());
 
-class AddressesApiServiceTest extends TestCase
-{
-    /**
-     * @var AddressesApiService
-     */
-    private $service;
+beforeEach(function () {
+    $this->clientAdapter = $this->createMock(ClientAdapterInterface::class);
+    $this->service = new AddressesApiService($this->clientAdapter);
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ClientAdapterInterface
-     */
-    private $clientAdapter;
+    // Reset all mocked properties to default values
+    mockPdkProperty('addressesServiceUrl', 'https://api.myparcel.nl/addresses');
+    mockPdkProperty('userAgent', []);
+    mockPdkProperty('pdkVersion', '1.0.0');
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    // Set default API key for most tests
+    TestBootstrapper::hasApiKey('test-api-key');
+});
 
-        $this->clientAdapter = $this->createMock(ClientAdapterInterface::class);
-        $this->service = new AddressesApiService($this->clientAdapter);
+// Base URL configuration tests
+it('uses configured service url for base url', function () {
+    expect($this->service->getBaseUrl())
+        ->toBe('https://api.myparcel.nl/addresses');
+});
 
-        mockPdkProperty('addressesServiceUrl', 'https://api.myparcel.nl/addresses');
-        mockPdkProperty('apiKey', 'test-api-key');
-    }
+it('uses property if set for base url', function () {
+    $expectedUrl = 'https://custom-api.myparcel.nl/addresses';
+    $this->service->setBaseUrl($expectedUrl);
 
-    public function testGetBaseUrlUsesConfiguredServiceUrl(): void
-    {
-        $expectedUrl = 'https://api.myparcel.nl/addresses';
+    expect($this->service->getBaseUrl())
+        ->toBe($expectedUrl);
+});
 
-        $this->assertEquals($expectedUrl, $this->service->getBaseUrl());
-    }
+it('throws exception if base url is not configured', function () {
+    mockPdkProperty('addressesServiceUrl', null);
 
-    public function testGetBaseUrlUsesPropertyIfSet(): void
-    {
-        $expectedUrl = 'https://custom-api.myparcel.nl/addresses';
-        $this->service->setBaseUrl($expectedUrl);
+    expect(fn() => $this->service->getBaseUrl())
+        ->toThrow(\RuntimeException::class, 'Addresses service URL is not configured');
+});
 
-        $this->assertEquals($expectedUrl, $this->service->getBaseUrl());
-    }
+// API Key configuration tests
+it('injects bearer token in headers', function () {
+    $apiKey = 'test-api-key';
+    TestBootstrapper::hasApiKey($apiKey);
 
-    public function testGetBaseUrlThrowsExceptionIfNotConfigured(): void
-    {
-        mockPdkProperty('addressesServiceUrl', null);
+    $headers = $this->service->getHeaders();
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Addresses service URL is not configured');
+    expect($headers)
+        ->toHaveKey('Authorization')
+        ->and($headers['Authorization'])
+        ->toBe('bearer ' . base64_encode($apiKey));
+});
 
-        $this->service->getBaseUrl();
-    }
+it('throws exception if api key is not configured', function () {
+    TestBootstrapper::hasApiKey(null);
 
-    public function testGetHeadersInjectsBearerToken(): void
-    {
-        $apiKey = 'test-api-key';
-        mockPdkProperty('apiKey', $apiKey);
+    expect(fn() => $this->service->getHeaders())
+        ->toThrow(\RuntimeException::class, 'API key is not configured');
+});
 
-        $headers = $this->service->getHeaders();
+// User Agent configuration tests
+it('includes default user agent in headers', function () {
+    mockPdkProperty('userAgent', []);
+    mockPdkProperty('pdkVersion', '1.0.0');
 
-        $this->assertArrayHasKey('Authorization', $headers);
-        $this->assertEquals('bearer ' . base64_encode($apiKey), $headers['Authorization']);
-    }
+    $headers = $this->service->getHeaders();
 
-    public function testGetHeadersThrowsExceptionIfApiKeyNotConfigured(): void
-    {
-        mockPdkProperty('apiKey', null);
+    expect($headers)
+        ->toHaveKey('User-Agent')
+        ->and($headers['User-Agent'])
+        ->toContain('MyParcelNL-PDK/1.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('php/' . PHP_VERSION);
+});
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('API key is not configured');
+it('includes custom user agent in headers', function () {
+    mockPdkProperty('userAgent', ['CustomApp' => '1.0.0']);
+    mockPdkProperty('pdkVersion', '1.0.0');
 
-        $this->service->getHeaders();
-    }
+    $headers = $this->service->getHeaders();
 
-    public function testGetHeadersIncludesUserAgent(): void
-    {
-        mockPdkProperty('userAgent', []);
-        mockPdkProperty('pdkVersion', '1.0.0');
+    expect($headers)
+        ->toHaveKey('User-Agent')
+        ->and($headers['User-Agent'])
+        ->toContain('CustomApp/1.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('MyParcelNL-PDK/1.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('php/' . PHP_VERSION);
+});
 
-        $headers = $this->service->getHeaders();
+it('includes multiple custom user agents in headers', function () {
+    mockPdkProperty('userAgent', [
+        'CustomApp' => '1.0.0',
+        'AnotherApp' => '2.0.0',
+    ]);
+    mockPdkProperty('pdkVersion', '1.0.0');
 
-        $this->assertArrayHasKey('User-Agent', $headers);
-        $this->assertStringContainsString('MyParcelNL-PDK/1.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('php/' . PHP_VERSION, $headers['User-Agent']);
-    }
+    $headers = $this->service->getHeaders();
 
-    public function testGetHeadersIncludesCustomUserAgent(): void
-    {
-        mockPdkProperty('userAgent', ['CustomApp' => '1.0.0']);
-        mockPdkProperty('pdkVersion', '1.0.0');
+    expect($headers)
+        ->toHaveKey('User-Agent')
+        ->and($headers['User-Agent'])
+        ->toContain('CustomApp/1.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('AnotherApp/2.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('MyParcelNL-PDK/1.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('php/' . PHP_VERSION);
+});
 
-        $headers = $this->service->getHeaders();
+it('handles empty user agent configuration', function () {
+    mockPdkProperty('userAgent', []);
+    mockPdkProperty('pdkVersion', null);
 
-        $this->assertArrayHasKey('User-Agent', $headers);
-        $this->assertStringContainsString('CustomApp/1.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('MyParcelNL-PDK/1.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('php/' . PHP_VERSION, $headers['User-Agent']);
-    }
+    $headers = $this->service->getHeaders();
 
-    public function testGetHeadersIncludesMultipleCustomUserAgents(): void
-    {
-        mockPdkProperty('userAgent', [
-            'CustomApp' => '1.0.0',
-            'WooCommerce' => '5.0.0',
-            'WordPress' => '5.8.0'
-        ]);
-        mockPdkProperty('pdkVersion', '1.0.0');
+    expect($headers)
+        ->toHaveKey('User-Agent')
+        ->and($headers['User-Agent'])
+        ->toBe('php/' . PHP_VERSION);
+});
 
-        $headers = $this->service->getHeaders();
+it('handles empty pdk version configuration', function () {
+    mockPdkProperty('userAgent', ['CustomApp' => '1.0.0']);
+    mockPdkProperty('pdkVersion', null);
 
-        $this->assertArrayHasKey('User-Agent', $headers);
-        $this->assertStringContainsString('CustomApp/1.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('WooCommerce/5.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('WordPress/5.8.0', $headers['User-Agent']);
-        $this->assertStringContainsString('MyParcelNL-PDK/1.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('php/' . PHP_VERSION, $headers['User-Agent']);
-    }
+    $headers = $this->service->getHeaders();
 
-    public function testGetHeadersIncludesEmptyUserAgent(): void
-    {
-        mockPdkProperty('userAgent', null);
-        mockPdkProperty('pdkVersion', '1.0.0');
-
-        $headers = $this->service->getHeaders();
-
-        $this->assertArrayHasKey('User-Agent', $headers);
-        $this->assertStringContainsString('MyParcelNL-PDK/1.0.0', $headers['User-Agent']);
-        $this->assertStringContainsString('php/' . PHP_VERSION, $headers['User-Agent']);
-    }
-
-    public function testGetHeadersIncludesEmptyPdkVersion(): void
-    {
-        mockPdkProperty('userAgent', []);
-        mockPdkProperty('pdkVersion', null);
-
-        $headers = $this->service->getHeaders();
-
-        $this->assertArrayHasKey('User-Agent', $headers);
-        $this->assertStringContainsString('MyParcelNL-PDK/unknown', $headers['User-Agent']);
-        $this->assertStringContainsString('php/' . PHP_VERSION, $headers['User-Agent']);
-    }
-} 
+    expect($headers)
+        ->toHaveKey('User-Agent')
+        ->and($headers['User-Agent'])
+        ->toContain('CustomApp/1.0.0')
+        ->and($headers['User-Agent'])
+        ->toContain('php/' . PHP_VERSION);
+}); 

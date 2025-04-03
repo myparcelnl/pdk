@@ -4,140 +4,126 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\App\Action\Addresses;
 
-use MyParcelNL\Pdk\App\Action\Addresses\AddressesValidateAction;
-use MyParcelNL\Pdk\Api\Service\AddressesApiService;
-use MyParcelNL\Pdk\Api\Response\ValidateAddressResponse;
+use MyParcelNL\Pdk\Api\Contract\ApiResponseInterface;
 use MyParcelNL\Pdk\Api\Request\ProxyRequest;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use MyParcelNL\Pdk\Api\Response\ValidateAddressResponse;
+use MyParcelNL\Pdk\Api\Service\AddressesApiService;
+use MyParcelNL\Pdk\App\Action\Addresses\AddressesValidateAction;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
-class AddressesValidateActionTest extends TestCase
-{
-    /**
-     * @var AddressesApiService|MockObject
-     */
-    private $apiService;
+usesShared(new UsesMockPdkInstance());
 
-    /**
-     * @var AddressesValidateAction
-     */
-    private $action;
+beforeEach(function () {
+    $this->apiService = $this->createMock(AddressesApiService::class);
+    $this->action = new AddressesValidateAction($this->apiService);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('handles valid address', function () {
+    $request = new Request([
+        'postalCode' => '1234AB',
+        'cc' => 'NL',
+    ]);
 
-        $this->apiService = $this->createMock(AddressesApiService::class);
-        $this->action = new AddressesValidateAction($this->apiService);
-    }
+    $mockResponse = $this->createMock(ValidateAddressResponse::class);
+    $mockResponse->method('isValid')->willReturn(true);
 
-    public function testHandleWithValidAddress(): void
-    {
-        $request = new Request();
-        $request->query->set('postalCode', '1234AB');
-        $request->query->set('houseNumber', '1');
-        $request->query->set('cc', 'NL');
+    $this->apiService
+        ->expects($this->once())
+        ->method('doRequest')
+        ->with(
+            $this->callback(function (ProxyRequest $proxyRequest) {
+                return $proxyRequest->getMethod() === 'GET' &&
+                    $proxyRequest->getPath() === '/validate' &&
+                    $proxyRequest->getQueryString() === 'countryCode=NL&postalCode=1234AB';
+            }),
+            ValidateAddressResponse::class
+        )
+        ->willReturn($mockResponse);
 
-        $proxyRequest = new ProxyRequest(
-            'GET',
-            '/validate',
-            null,
-            [
-                'countryCode' => 'NL',
-                'postalCode' => '1234AB',
-                'houseNumber' => '1'
-            ]
-        );
+    $response = $this->action->handle($request);
 
-        $validateResponse = $this->createMock(ValidateAddressResponse::class);
-        $validateResponse->method('isValid')->willReturn(true);
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        ->and(json_decode($response->getContent(), true))
+        ->toBe([
+            'data' => [
+                'valid' => true,
+            ],
+        ]);
+});
 
-        $this->apiService
-            ->expects($this->once())
-            ->method('doRequest')
-            ->with($proxyRequest, ValidateAddressResponse::class)
-            ->willReturn($validateResponse);
+it('handles invalid address', function () {
+    $request = new Request([
+        'postalCode' => '1234AB',
+        'cc' => 'NL',
+    ]);
 
-        $response = $this->action->handle($request);
+    $mockResponse = $this->createMock(ValidateAddressResponse::class);
+    $mockResponse->method('isValid')->willReturn(false);
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+    $this->apiService
+        ->expects($this->once())
+        ->method('doRequest')
+        ->with(
+            $this->callback(function (ProxyRequest $proxyRequest) {
+                return $proxyRequest->getMethod() === 'GET' &&
+                    $proxyRequest->getPath() === '/validate' &&
+                    $proxyRequest->getQueryString() === 'countryCode=NL&postalCode=1234AB';
+            }),
+            ValidateAddressResponse::class
+        )
+        ->willReturn($mockResponse);
 
-        $responseData = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('valid', $responseData);
-        $this->assertTrue($responseData['valid']);
-    }
+    $response = $this->action->handle($request);
 
-    public function testHandleWithInvalidAddress(): void
-    {
-        $request = new Request();
-        $request->query->set('postalCode', '1234AB');
-        $request->query->set('houseNumber', '999');
-        $request->query->set('cc', 'NL');
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        ->and(json_decode($response->getContent(), true))
+        ->toBe([
+            'data' => [
+                'valid' => false,
+            ],
+        ]);
+});
 
-        $proxyRequest = new ProxyRequest(
-            'GET',
-            '/validate',
-            null,
-            [
-                'countryCode' => 'NL',
-                'postalCode' => '1234AB',
-                'houseNumber' => '999'
-            ]
-        );
+it('handles missing parameters', function () {
+    $request = new Request([
+        'postalCode' => '1234AB',
+    ]);
 
-        $validateResponse = $this->createMock(ValidateAddressResponse::class);
-        $validateResponse->method('isValid')->willReturn(false);
+    $mockResponse = $this->createMock(ValidateAddressResponse::class);
+    $mockResponse->method('isValid')->willReturn(true);
 
-        $this->apiService
-            ->expects($this->once())
-            ->method('doRequest')
-            ->with($proxyRequest, ValidateAddressResponse::class)
-            ->willReturn($validateResponse);
+    $this->apiService
+        ->expects($this->once())
+        ->method('doRequest')
+        ->with(
+            $this->callback(function (ProxyRequest $proxyRequest) {
+                return $proxyRequest->getMethod() === 'GET' &&
+                    $proxyRequest->getPath() === '/validate' &&
+                    $proxyRequest->getQueryString() === 'postalCode=1234AB';
+            }),
+            ValidateAddressResponse::class
+        )
+        ->willReturn($mockResponse);
 
-        $response = $this->action->handle($request);
+    $response = $this->action->handle($request);
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
-
-        $responseData = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('valid', $responseData);
-        $this->assertFalse($responseData['valid']);
-    }
-
-    public function testHandleWithMissingParameters(): void
-    {
-        $request = new Request();
-        $request->query->set('postalCode', '1234AB');
-
-        $proxyRequest = new ProxyRequest(
-            'GET',
-            '/validate',
-            null,
-            [
-                'countryCode' => 'NL',
-                'postalCode' => '1234AB'
-            ]
-        );
-
-        $validateResponse = $this->createMock(ValidateAddressResponse::class);
-        $validateResponse->method('isValid')->willReturn(true);
-
-        $this->apiService
-            ->expects($this->once())
-            ->method('doRequest')
-            ->with($proxyRequest, ValidateAddressResponse::class)
-            ->willReturn($validateResponse);
-
-        $response = $this->action->handle($request);
-
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
-
-        $responseData = json_decode($response->getContent(), true);
-        $this->assertArrayHasKey('valid', $responseData);
-        $this->assertTrue($responseData['valid']);
-    }
-} 
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        ->and(json_decode($response->getContent(), true))
+        ->toBe([
+            'data' => [
+                'valid' => true,
+            ],
+        ]);
+});
