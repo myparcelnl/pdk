@@ -116,12 +116,13 @@ class UpdateShipmentsAction extends AbstractOrderAction
 
     private function updateOrderStatus(ShipmentCollection $shipments): void
     {
-        $shipments
-            ->each(function (Shipment $shipment) {
-                Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
-                    'orderIds' => [$shipment->orderId],
-                    'setting'  => OrderSettings::STATUS_ON_LABEL_CREATE,
-                ]);
-            });
+        $orderIds = $shipments->map(function($s) { return $s->orderId; });
+
+        if (count($orderIds)) {
+            Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
+                'orderIds' => $orderIds,
+                'setting'  => OrderSettings::STATUS_ON_LABEL_CREATE,
+            ]);
+        }
     }
 }
