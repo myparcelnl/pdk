@@ -23,6 +23,9 @@ class ValidateAddressResponse extends AddressResponse
     protected function parseResponseBody(): void
     {
         parent::parseResponseBody();
-        $this->data = ['valid' => $this->data['valid'] ?? false];
+        if (!isset($this->data['valid'])) {
+            $this->data['valid'] = false;
+        }
+        $this->data = ['valid' => $this->data['valid']];
     }
 }

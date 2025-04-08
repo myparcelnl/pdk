@@ -56,7 +56,7 @@ class AddressesProxyController
         }
 
         // Check if origin is allowed
-        $origin         = $request->headers->get('Origin');
+        $origin       = $request->headers->get('Origin');
         $allowedHosts = Pdk::get('allowedProxyHosts');
 
         if ($origin && ! in_array($origin, $allowedHosts) && ! in_array('*', $allowedHosts)
@@ -85,6 +85,7 @@ class AddressesProxyController
                 ['Content-Type' => 'application/json']
             );
             $this->corsHandler->addCorsHeaders($request, $jsonResponse);
+
             return $jsonResponse;
         } catch (ApiException $e) {
             $errorResponse = new Response(
@@ -93,6 +94,7 @@ class AddressesProxyController
                 ['Content-Type' => 'application/json']
             );
             $this->corsHandler->addCorsHeaders($request, $errorResponse);
+
             return $errorResponse;
         }
     }
