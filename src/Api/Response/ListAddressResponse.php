@@ -23,6 +23,9 @@ class ListAddressResponse extends AddressResponse
     protected function parseResponseBody(): void
     {
         parent::parseResponseBody();
-        $this->data = ['results' => $this->data['results'] ?? []];
+        if (!isset($this->data['results'])) {
+            $this->data['results'] = [];
+        }
+        $this->data = ['results' => $this->data['results']];
     }
 }
