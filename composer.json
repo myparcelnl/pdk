@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "ext-zip": "*",
-        "justinrainbow/json-schema": "^5.2",
+        "justinrainbow/json-schema": "^5.2 || ^6.0",
         "myparcelnl/sdk": "^7.0.0",
         "php": ">=7.4.0",
         "php-di/php-di": "^6.0.0",
