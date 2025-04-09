@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.53.2](https://github.com/myparcelnl/pdk/compare/v2.53.1...v2.53.2) (2025-04-09)
+
+
+### :bug: Bug Fixes
+
+* update order status on webhook ([#344](https://github.com/myparcelnl/pdk/issues/344)) ([0a7379d](https://github.com/myparcelnl/pdk/commit/0a7379da6867203a45cf18447a0f7822e127cfc3))
+
 ## [2.53.1](https://github.com/myparcelnl/pdk/compare/v2.53.0...v2.53.1) (2025-03-31)
 
 ## [2.53.0](https://github.com/myparcelnl/pdk/compare/v2.52.1...v2.53.0) (2025-03-24)
