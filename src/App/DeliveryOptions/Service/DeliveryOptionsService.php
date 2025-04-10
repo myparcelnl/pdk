@@ -190,6 +190,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     ? $value + $this->currencyService->convertToEuros($cart->shipmentPrice)
                     : $value;
 
+                // Prevent negative prices when free shipping is selected
+                $subtotal = max(0, $subtotal);
+
                 return $this->taxService->getShippingDisplayPrice((float) $subtotal);
             }
 
