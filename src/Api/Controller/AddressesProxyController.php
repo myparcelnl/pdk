@@ -56,7 +56,7 @@ class AddressesProxyController
         }
 
         // Check if origin is allowed
-        $origin         = $request->headers->get('Origin');
+        $origin       = $request->headers->get('Origin');
         $allowedHosts = Pdk::get('allowedProxyHosts');
 
         // Origin header is required
