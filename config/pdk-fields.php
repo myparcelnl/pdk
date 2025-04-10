@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
+
 use function DI\factory;
 use function DI\value;
 
@@ -109,5 +110,15 @@ return [
 
     'checkoutHiddenInputName' => factory(function () {
         return sprintf('%s_checkout_data', PdkFacade::getAppInfo()->name);
+    }),
+
+    /**
+     * The name of the hidden inputs in the checkout where address data are stored.
+     */
+    'checkoutBillingAddressInputName' => factory(function () {
+        return sprintf('%s_address_data', PdkFacade::getAppInfo()->name);
+    }),
+    'checkoutShippingAddressInputName' => factory(function () {
+        return sprintf('%s_address_data', PdkFacade::getAppInfo()->name);
     }),
 ];

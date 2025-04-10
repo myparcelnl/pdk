@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 class CheckoutContext extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'config'    => null,
         'strings'   => [],
         'settings'  => [],
@@ -82,6 +82,14 @@ class CheckoutContext extends Model
         return array_merge($settings, [
             /** General */
             'actions'                            => $this->getActions(),
+
+            /** Address widget */
+            'hasAddressWidget'                   => Settings::get(
+                CheckoutSettings::ENABLE_ADDRESS_WIDGET,
+                CheckoutSettings::ID
+            ),
+            'checkoutBillingAddressInputName'    => Pdk::get('checkoutBillingAddressInputName'),
+            'checkoutShippingAddressInputName'   => Pdk::get('checkoutShippingAddressInputName'),
 
             /** Delivery options */
             'allowedShippingMethods'             => Settings::get(
