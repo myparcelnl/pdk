@@ -26,6 +26,5 @@ class ValidateAddressResponse extends AddressResponse
         if (!isset($this->data['valid'])) {
             $this->data['valid'] = false;
         }
-        $this->data = ['valid' => $this->data['valid']];
     }
 }

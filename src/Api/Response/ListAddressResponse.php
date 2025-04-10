@@ -26,6 +26,5 @@ class ListAddressResponse extends AddressResponse
         if (!isset($this->data['results'])) {
             $this->data['results'] = [];
         }
-        $this->data = ['results' => $this->data['results']];
     }
 }
