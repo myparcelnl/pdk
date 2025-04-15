@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.54.0](https://github.com/myparcelnl/pdk/compare/v2.53.2...v2.54.0) (2025-04-15)
+
+
+### :bug: Bug Fixes
+
+* disable delivery date selection for Bpost carrier ([#346](https://github.com/myparcelnl/pdk/issues/346)) ([6f5ce0e](https://github.com/myparcelnl/pdk/commit/6f5ce0e560c3cdbef2a57187d089d716dc0258a7))
+
+
+### :sparkles: New Features
+
+* **address:** add pdk settings for the address widget ([#347](https://github.com/myparcelnl/pdk/issues/347)) ([d0bc2c3](https://github.com/myparcelnl/pdk/commit/d0bc2c3d14630f3dbd08f1d3bbf2b76bcddb3ee6))
+
 ## [2.53.2](https://github.com/myparcelnl/pdk/compare/v2.53.1...v2.53.2) (2025-04-09)
 
 
