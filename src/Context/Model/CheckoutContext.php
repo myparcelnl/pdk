@@ -23,7 +23,7 @@ use MyParcelNL\Sdk\src\Support\Str;
  */
 class CheckoutContext extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'config'    => null,
         'strings'   => [],
         'settings'  => [],
@@ -93,6 +93,7 @@ class CheckoutContext extends Model
                 CheckoutSettings::ID
             ),
             'hiddenInputName'                    => Pdk::get('checkoutHiddenInputName'),
+            'checkoutAddressHiddenInputName'     => Pdk::get('checkoutAddressHiddenInputName'),
 
             /** Separate address fields */
             'countriesWithSeparateAddressFields' => Pdk::get('countriesWithSeparateAddressFields'),
