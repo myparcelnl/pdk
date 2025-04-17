@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.54.1](https://github.com/myparcelnl/pdk/compare/v2.54.0...v2.54.1) (2025-04-17)
+
+
+### :bug: Bug Fixes
+
+* Prevent negative fee ([#345](https://github.com/myparcelnl/pdk/issues/345)) ([e9c213c](https://github.com/myparcelnl/pdk/commit/e9c213c688fe0d0802628de103fda42ec8488bc0))
+
 ## [2.54.0](https://github.com/myparcelnl/pdk/compare/v2.53.2...v2.54.0) (2025-04-15)
 
 
