@@ -173,7 +173,7 @@ it('uses correct price when price is shown as surcharge', function () {
                     'pricePackageTypeDigitalStamp' => 1.4595,
                     'pricePackageTypeMailbox'      => 1.4595,
                     'pricePackageTypePackageSmall' => 1.4595,
-                    'pricePickup'                  => 1.4595,
+                    'pricePickup'                  => 0.0,
                     'priceSameDayDelivery'         => 1.4595,
                     'priceSignature'               => 1.4595,
                     'priceStandardDelivery'        => 1.4595,

@@ -190,6 +190,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     ? $value + $this->currencyService->convertToEuros($cart->shipmentPrice)
                     : $value;
 
+                // For pickup price, ensure it doesn't exceed shipping costs
+                if ($key === CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP) {
+                    $shippingCost = $this->currencyService->convertToEuros($cart->shipmentPrice);
+                    $subtotal = max(-$shippingCost, $value);
+                }
+
                 return $this->taxService->getShippingDisplayPrice((float) $subtotal);
             }
 
