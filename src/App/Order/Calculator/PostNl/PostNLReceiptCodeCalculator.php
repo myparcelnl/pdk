@@ -38,7 +38,12 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
-        if (TriStateService::ENABLED === $shipmentOptions->ageCheck) {
+        // For Belgium: if receipt code is enabled, disable age check
+        if ($this->order->shippingAddress->cc === CountryCodes::CC_BE && TriStateService::ENABLED === $shipmentOptions->receiptCode) {
+            $shipmentOptions->ageCheck = TriStateService::DISABLED;
+        }
+        // For Netherlands: if age check is enabled, disable receipt code
+        elseif ($this->order->shippingAddress->cc === CountryCodes::CC_NL && TriStateService::ENABLED === $shipmentOptions->ageCheck) {
             $shipmentOptions->receiptCode = TriStateService::DISABLED;
             return;
         }
