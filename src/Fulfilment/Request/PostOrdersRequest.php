@@ -6,18 +6,18 @@ namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Model\ContactDetails;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
 use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 
 class PostOrdersRequest extends Request
 {
     use EncodesCustomsDeclaration;
+    use EncodesRecipient;
 
     /**
      * @var \MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection
@@ -73,7 +73,7 @@ class PostOrdersRequest extends Request
         return [
             'external_identifier'           => $order->externalIdentifier,
             'fulfilment_partner_identifier' => $order->fulfilmentPartnerIdentifier,
-            'invoice_address'               => $this->getAddress($order->invoiceAddress),
+            'invoice_address'               => $this->encodeRecipient($order->invoiceAddress),
             'order_date'                    => $order->orderDate
                 ? $order->orderDate->format(Pdk::get('defaultDateFormat'))
                 : null,
@@ -87,31 +87,6 @@ class PostOrdersRequest extends Request
             ),
             'shipment'                      => $this->getShipment($order),
         ];
-    }
-
-    /**
-     * @param  null|\MyParcelNL\Pdk\Base\Model\ContactDetails $address
-     *
-     * @return null|array
-     */
-    private function getAddress(?ContactDetails $address): ?array
-    {
-        if (! $address) {
-            return null;
-        }
-
-        return Utils::filterNull([
-            'street'      => implode(' ', [$address->address1, $address->address2]),
-            'city'        => $address->city,
-            'area'        => $address->area,
-            'company'     => $address->company,
-            'cc'          => $address->cc,
-            'email'       => $address->email,
-            'person'      => $address->person,
-            'phone'       => $address->phone,
-            'postal_code' => $address->postalCode,
-            'region'      => $address->region,
-        ]);
     }
 
     /**
@@ -135,7 +110,7 @@ class PostOrdersRequest extends Request
             'pickup'              => $shipment->pickup
                 ? $shipment->pickup->toArray(Arrayable::ENCODED)
                 : null,
-            'recipient'           => $this->getAddress($shipment->recipient),
+            'recipient'           => $this->encodeRecipient($shipment->recipient),
         ];
     }
 

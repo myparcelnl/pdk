@@ -36,14 +36,14 @@
     "shipmentOptions": {
       "insurance": 0,
       "ageCheck": -1,
+      "return": -1,
       "hideSender": -1,
       "largeFormat": -1,
       "onlyRecipient": -1,
-      "return": -1,
+      "receiptCode": -1,
       "sameDayDelivery": -1,
       "signature": -1,
       "tracked": -1,
-      "receiptCode": -1,
       "collect": -1
     },
     "deliveryType": "standard",
@@ -60,17 +60,19 @@
     "currency": "EUR"
   },
   "recipient": {
-    "address1": "Antareslaan 31",
     "cc": "NL",
     "city": "Hoofddorp",
+    "number": "31",
     "postalCode": "2132JE",
+    "street": "Antareslaan",
     "person": "Jaap Krekel"
   },
   "sender": {
-    "address1": "Antareslaan 31",
     "cc": "NL",
     "city": "Hoofddorp",
+    "number": "31",
     "postalCode": "2132 JE",
+    "street": "Antareslaan",
     "email": "spam@myparcel.nl",
     "phone": "0612345678",
     "person": "Bye Felicia",

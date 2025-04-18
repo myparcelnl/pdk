@@ -37,10 +37,10 @@
     "locationCode": "34653"
   },
   "recipient": {
-    "address1": "Antareslaan 31",
     "cc": "NL",
     "city": "Hoofddorp",
     "postalCode": "2132JE",
+    "street": "Antareslaan 31",
     "email": "test@myparcel.nl",
     "phone": "0612345678",
     "person": "Felicia Parcel",

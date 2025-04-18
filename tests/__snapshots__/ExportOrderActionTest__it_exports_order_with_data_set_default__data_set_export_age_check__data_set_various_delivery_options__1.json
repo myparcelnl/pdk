@@ -17,9 +17,10 @@
           "cc": "NL",
           "city": "Hoofddorp",
           "company": "MyParcel",
+          "number": "31",
           "person": "Felicia Parcel",
           "postal_code": "2132 JE",
-          "street": "Antareslaan 31"
+          "street": "Antareslaan"
         },
         "reference_identifier": "PDK-1"
       },
@@ -42,9 +43,10 @@
           "cc": "NL",
           "city": "Hoofddorp",
           "company": "MyParcel",
+          "number": "31",
           "person": "Felicia Parcel",
           "postal_code": "2132 JE",
-          "street": "Antareslaan 31"
+          "street": "Antareslaan"
         },
         "reference_identifier": "PDK-2"
       },
@@ -67,9 +69,10 @@
           "cc": "NL",
           "city": "Hoofddorp",
           "company": "MyParcel",
+          "number": "31",
           "person": "Felicia Parcel",
           "postal_code": "2132 JE",
-          "street": "Antareslaan 31"
+          "street": "Antareslaan"
         },
         "reference_identifier": "PDK-3"
       }

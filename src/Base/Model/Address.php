@@ -4,50 +4,63 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Model;
 
+use MyParcelNL\Pdk\Base\Concern\DeprecatedAddressProperties;
 use MyParcelNL\Pdk\Base\Support\Utils;
 
 /**
- * @property null|string $address1
- * @property null|string $address2
- * @property null|string $area
- * @property null|string $cc
+ * Address based on API Address Object Definition
+ * @see https://developer.myparcel.nl/api-reference/07.shipment-related-object-definitions.html#_7-b-1
+ *
+ * @property null|string $boxNumber Only applicable to Belgian addresses
+ * @property null|string $cc Country code
  * @property null|string $city
+ * @property null|string $number
+ * @property null|string $numberSuffix
  * @property null|string $postalCode
- * @property null|string $region
- * @property null|string $state
+ * @property null|string $region The region, department, state or province of the address.
+ * @property null|string $state Depending on the carrier and destination this field should contain address state. Up to 2 characters long.
+ * @property null|string $street
+ * @property null|string $streetAdditionalInfo
  */
 class Address extends Model
 {
-    private const FIELD_STREET        = 'street';
-    private const FIELD_NUMBER        = 'number';
-    private const FIELD_NUMBER_SUFFIX = 'numberSuffix';
-    private const FIELD_BOX_NUMBER    = 'boxNumber';
+    use DeprecatedAddressProperties;
+
+    private const ADDRESS1 = 'address1';
+    private const ADDRESS2 = 'address2';
+    private const AREA = 'area';
 
     protected $attributes = [
-        'address1'   => null,
-        'address2'   => null,
-        'area'       => null,
-        'cc'         => null,
-        'city'       => null,
-        'postalCode' => null,
-        'region'     => null,
-        'state'      => null,
+        'boxNumber'     => null,
+        'cc'            => null,
+        'city'          => null,
+        'number'        => null,
+        'numberSuffix'  => null,
+        'postalCode'    => null,
+        'region'        => null,
+        'state'         => null,
+        'street'        => null,
+        'streetAdditionalInfo' => null,
     ];
 
-    protected $casts      = [
-        'address1'   => 'string',
-        'address2'   => 'string',
-        'area'       => 'string',
-        'cc'         => 'string',
-        'city'       => 'string',
-        'postalCode' => 'string',
-        'region'     => 'string',
-        'state'      => 'string',
+    protected $casts = [
+        'boxNumber'     => 'string',
+        'cc'            => 'string',
+        'city'          => 'string',
+        'number'        => 'string',
+        'numberSuffix'  => 'string',
+        'postalCode'    => 'string',
+        'region'        => 'string',
+        'state'         => 'string',
+        'street'        => 'string',
+        'streetAdditionalInfo' => 'string',
     ];
 
+    /*
+    * Deprecated fields that can be mapped to a new field 1 on 1.
+    */
     protected $deprecated = [
-        'fullStreet'           => 'address1',
-        'streetAdditionalInfo' => 'address2',
+        'fullStreet' => 'street',
     ];
 
     /**
@@ -56,10 +69,9 @@ class Address extends Model
      * @var string[]
      */
     private $additionalDeprecated = [
-        self::FIELD_STREET,
-        self::FIELD_NUMBER,
-        self::FIELD_NUMBER_SUFFIX,
-        self::FIELD_BOX_NUMBER,
+        self::ADDRESS1,
+        self::ADDRESS2,
+        self::AREA,
     ];
 
     /**
@@ -79,30 +91,22 @@ class Address extends Model
      */
     private function handleDeprecatedFields(?array $data): ?array
     {
-        // if street, number, and optionally (number_suffix or box_number) are set, combine them into address1
-        if (isset($data[self::FIELD_STREET], $data[self::FIELD_NUMBER])) {
-            $data['address1'] = trim(
-                implode(' ', [
-                    $data[self::FIELD_STREET],
-                    $data[self::FIELD_NUMBER],
-                    $data[self::FIELD_NUMBER_SUFFIX] ?? $data[self::FIELD_BOX_NUMBER] ?? '',
-                ])
-            );
-
-            foreach ($this->additionalDeprecated as $field) {
-                unset($data[$field]);
+        // Merge address1 and 2 into "street" and then put address2 also as "streetAdditionalInfo"
+        if (!isset($data['street']) && (isset($data['address1']) || isset($data['address2']))) {
+            $data['street'] = trim(implode(' ', [$data['address1'], $data['address2']])) ?: null;
+            if (isset($data['address1']) && isset($data['address2'])) {
+                $data['streetAdditionalInfo'] = $data['address2'];
             }
+        }
 
-            $this->logDeprecationWarning(
-                sprintf(
-                    '%s, %s, and optionally %s or %s',
-                    self::FIELD_STREET,
-                    self::FIELD_NUMBER,
-                    self::FIELD_NUMBER_SUFFIX,
-                    self::FIELD_BOX_NUMBER
-                ),
-                'address1'
-            );
+        foreach ($this->additionalDeprecated as $field) {
+            if (isset($data[$field])) {
+                unset($data[$field]);
+                $this->logDeprecationWarning(
+                    sprintf('%s', $field),
+                    'street, number, numberSuffix, streetAdditionalInfo',
+                );
+            }
         }
 
         return $data;
