@@ -55,12 +55,12 @@
       "signature": true
     },
     "recipient": {
-      "address1": "Antareslaan 31",
       "cc": "NL",
       "city": "Hoofddorp",
       "postalCode": "2132JE",
       "region": "Noord-Holland",
       "state": "Noord-Holland",
+      "street": "Antareslaan 31",
       "email": "test@myparcel.nl",
       "phone": "0612356789",
       "person": "Ms. Parcel",

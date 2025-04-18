@@ -5,12 +5,13 @@
         "external_identifier": "PDK-1",
         "fulfilment_partner_identifier": null,
         "invoice_address": {
-          "street": "Antareslaan 31 ",
+          "cc": "NL",
           "city": "Hoofddorp",
           "company": "MyParcel",
-          "cc": "NL",
+          "number": "31",
           "person": "Felicia Parcel",
-          "postal_code": "2132 JE"
+          "postal_code": "2132 JE",
+          "street": "Antareslaan"
         },
         "order_date": "2030-01-01 12:00:00",
         "order_lines": [
@@ -56,12 +57,14 @@
           },
           "pickup": null,
           "recipient": {
-            "street": "Antareslaan 31 ",
+            "cc": "NL",
             "city": "Hoofddorp",
             "company": "MyParcel",
-            "cc": "NL",
+            "number": "31",
             "person": "Felicia Parcel",
-            "postal_code": "2132 JE"
+            "postal_code": "2132 JE",
+            "street": "Antareslaan",
+            "vat_number": "NL123456789B01"
           }
         }
       }

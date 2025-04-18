@@ -59,10 +59,10 @@
         "labelDescription": ""
       },
       "recipient": {
-        "address1": "Antareslaan 31",
         "cc": "NL",
         "city": "Hoofddorp",
         "postalCode": "2132JE",
+        "street": "Antareslaan 31",
         "person": "Jaap Krekel"
       },
       "physicalProperties": {

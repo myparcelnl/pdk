@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,11 +12,12 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
-use function MyParcelNL\Pdk\Tests\usesShared;
-use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Pdk;
+
+use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
 
@@ -138,11 +140,13 @@ it('updates order shipments by shipment ids', function () {
     );
 
     // TODO: simplify when collections support "only" method
-    $shipments = array_map(function (array $shipment) {
-        return Arr::only($shipment, ['id', 'orderId', 'status']);
-    },
+    $shipments = array_map(
+        function (array $shipment) {
+            return Arr::only($shipment, ['id', 'orderId', 'status']);
+        },
         $orders->getAllShipments()
-            ->toArray());
+            ->toArray()
+    );
 
     expect($shipments)->toBe([
         ['orderId' => '🐰', 'id' => 29090, 'status' => 1],
@@ -189,11 +193,13 @@ it('updates order shipments by order ids', function () {
     );
 
     // TODO: simplify when collections support "only" method
-    $shipments = array_map(function (array $shipment) {
-        return Arr::only($shipment, ['id', 'orderId', 'status']);
-    },
+    $shipments = array_map(
+        function (array $shipment) {
+            return Arr::only($shipment, ['id', 'orderId', 'status']);
+        },
         $orders->getAllShipments()
-            ->toArray());
+            ->toArray()
+    );
 
     expect($shipments)->toBe([
         ['orderId' => '🐰', 'id' => 29090, 'status' => 1],
@@ -207,7 +213,7 @@ it('updates order shipments by order ids', function () {
 
 it('can generate return shipments', function () {
     // Create a mock for CarrierSchema
-    $carrierSchema = new class extends CarrierSchema {
+    $carrierSchema = new class () extends CarrierSchema {
         public function setCarrier(Carrier $carrier): CarrierSchema
         {
             return $this;
@@ -258,7 +264,7 @@ it('can generate return shipments', function () {
 
 it('skips shipments from carriers without return capabilities when generating return shipments', function () {
     // Create a mock for CarrierSchema
-    $carrierSchema = new class extends CarrierSchema {
+    $carrierSchema = new class () extends CarrierSchema {
         public function setCarrier(Carrier $carrier): CarrierSchema
         {
             return $this;
@@ -307,8 +313,9 @@ it('updates recipient data for shipments when missing', function () {
         new PdkOrder([
             'externalIdentifier' => 'ORDER-1',
             'shippingAddress'    => [
-                'address1'   => 'Test Street 123',
-                'address2'   => 'Apartment 4B',
+                'street'       => 'Hoofdstraat',
+                'number'       => '123',
+                'numberSuffix' => 'A',
                 'cc'         => 'NL',
                 'city'       => 'Amsterdam',
                 'postalCode' => '1234AB',
@@ -350,8 +357,12 @@ it('updates recipient data for shipments when missing', function () {
         ->toBe(1)
         ->and($updatedShipments->first()->recipient)
         ->not->toBeNull()
-        ->and($updatedShipments->first()->recipient->address1)
-        ->toBe('Test Street 123')
+        ->and($updatedShipments->first()->recipient->street)
+        ->toBe('Hoofdstraat')
+        ->and($updatedShipments->first()->recipient->number)
+        ->toBe('123')
+        ->and($updatedShipments->first()->recipient->numberSuffix)
+        ->toBe('A')
         ->and($updatedShipments->first()->recipient->email)
         ->toBe('test@example.com')
         ->and($updatedShipments->first()->recipient->person)
@@ -365,8 +376,9 @@ it('updates shipment recipient data when missing', function () {
         [
             'externalIdentifier' => 'ORDER-1',
             'shippingAddress'    => [
-                'address1'   => 'Main Street',
-                'address2'   => 'Apt 123',
+                'street'       => 'Hoofdstraat',
+                'number'       => '123',
+                'numberSuffix' => 'A',
                 'cc'         => 'NL',
                 'city'       => 'Amsterdam',
                 'postalCode' => '1234AB',
@@ -401,10 +413,12 @@ it('updates shipment recipient data when missing', function () {
 
     // Check if recipient data was updated
     expect($updatedShipment->recipient)->not->toBeNull()
-        ->and($updatedShipment->recipient->address1)
-        ->toBe('Main Street')
-        ->and($updatedShipment->recipient->address2)
-        ->toBe('Apt 123')
+        ->and($updatedShipment->recipient->street)
+        ->toBe('Hoofdstraat')
+        ->and($updatedShipment->recipient->number)
+        ->toBe('123')
+        ->and($updatedShipment->recipient->numberSuffix)
+        ->toBe('A')
         ->and($updatedShipment->recipient->cc)
         ->toBe('NL')
         ->and($updatedShipment->recipient->city)
@@ -431,18 +445,19 @@ it('creates contact details from shipping address', function () {
     // Create a mock order with shipping address
     $order = new PdkOrder([
         'externalIdentifier' => 'ORDER-1',
-        'shippingAddress'    => [
-            'address1'   => 'Main Street',
-            'address2'   => 'Apt 123',
-            'cc'         => 'NL',
-            'city'       => 'Amsterdam',
-            'postalCode' => '1234AB',
-            'region'     => 'Noord-Holland',
-            'state'      => 'NH',
-            'email'      => 'test@example.com',
-            'phone'      => '0612345678',
-            'person'     => 'John Doe',
-            'company'    => 'Test Company',
+        'shippingAddress' => [
+            'street'       => 'Hoofdstraat',
+            'number'       => '123',
+            'numberSuffix' => 'A',
+            'cc'           => 'NL',
+            'city'         => 'Amsterdam',
+            'postalCode'   => '1234AB',
+            'region'       => 'Noord-Holland',
+            'state'        => 'NH',
+            'email'        => 'test@example.com',
+            'phone'        => '0612345678',
+            'person'       => 'John Doe',
+            'company'      => 'Test Company',
         ],
     ]);
 
@@ -469,10 +484,12 @@ it('creates contact details from shipping address', function () {
 
     // Verify that the contact details were created correctly
     expect($updatedShipment->recipient)->not->toBeNull()
-        ->and($updatedShipment->recipient->address1)
-        ->toBe('Main Street')
-        ->and($updatedShipment->recipient->address2)
-        ->toBe('Apt 123')
+        ->and($updatedShipment->recipient->street)
+        ->toBe('Hoofdstraat')
+        ->and($updatedShipment->recipient->number)
+        ->toBe('123')
+        ->and($updatedShipment->recipient->numberSuffix)
+        ->toBe('A')
         ->and($updatedShipment->recipient->cc)
         ->toBe('NL')
         ->and($updatedShipment->recipient->city)

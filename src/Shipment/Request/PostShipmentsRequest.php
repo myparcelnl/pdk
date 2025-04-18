@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -19,6 +20,7 @@ use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 class PostShipmentsRequest extends Request
 {
     use EncodesCustomsDeclaration;
+    use EncodesRecipient;
 
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
@@ -103,7 +105,7 @@ class PostShipmentsRequest extends Request
             'options'              => $this->getOptions($shipment),
             'physical_properties'  => ['weight' => $this->getWeight($shipment)],
             'pickup'               => $this->getPickupLocation($shipment),
-            'recipient'            => $this->getRecipient($shipment),
+            'recipient'            => $this->encodeRecipient($shipment->recipient),
             'reference_identifier' => $shipment->referenceIdentifier,
             'secondary_shipments'  => $this->encodeSecondaryShipments($shipment),
         ]);
@@ -215,34 +217,6 @@ class PostShipmentsRequest extends Request
             'city'              => $address->city,
             'region'            => $address->region,
             'state'             => $address->state,
-        ]);
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
-     *
-     * @return array
-     */
-    private function getRecipient(Shipment $shipment): array
-    {
-        $recipient = $shipment->recipient;
-        $street    = trim(implode(' ', [$recipient->address1, $recipient->address2])) ?: null;
-
-        return Utils::filterNull([
-            'area'                   => $recipient->area,
-            'cc'                     => $recipient->cc,
-            'city'                   => $recipient->city,
-            'company'                => $recipient->company,
-            'email'                  => $recipient->email,
-            'person'                 => $recipient->person,
-            'phone'                  => $recipient->phone,
-            'postal_code'            => $recipient->postalCode,
-            'region'                 => $recipient->region,
-            'state'                  => $recipient->state,
-            'street'                 => $street,
-            'street_additional_info' => $recipient->address2,
-            'eori_number'            => $recipient->eoriNumber,
-            'vat_number'             => $recipient->vatNumber,
         ]);
     }
 

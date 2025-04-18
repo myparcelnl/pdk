@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Model;
 
 /**
- * @property null|string $company
- * @property null|string $email
- * @property null|string $person
- * @property null|string $phone
- * @property null|string $address1
- * @property null|string $address2
- * @property null|string $area
- * @property null|string $cc
- * @property null|string $city
- * @property null|string $postalCode
- * @property null|string $region
- * @property null|string $state
- * @property null|string $eoriNumber
- * @property null|string $vatNumber
+ * Extend the Address class to add personal contact details.
+ *
+ * @property string|null $email
+ * @property string|null $phone
+ * @property string|null $person
+ * @property string|null $company
+ * @property string|null $eoriNumber
+ * @property string|null $vatNumber
+ *
+ * @inheritDoc
  */
 class ContactDetails extends Address
 {
