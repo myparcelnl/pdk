@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.55.0](https://github.com/myparcelnl/pdk/compare/v2.54.1...v2.55.0) (2025-04-18)
+
+
+### :sparkles: New Features
+
+* allow receipt code be ([#326](https://github.com/myparcelnl/pdk/issues/326)) ([0d82a1b](https://github.com/myparcelnl/pdk/commit/0d82a1b51a358dfb7f74f12a76c5d87d8865ecf3))
+
 ## [2.54.1](https://github.com/myparcelnl/pdk/compare/v2.54.0...v2.54.1) (2025-04-17)
 
 
