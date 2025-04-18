@@ -10,8 +10,7 @@
     },
     "physical_properties": {
       "weight": 0
-    },
-    "recipient": []
+    }
   },
   {
     "carrier": 9,
@@ -24,7 +23,6 @@
     },
     "physical_properties": {
       "weight": 0
-    },
-    "recipient": []
+    }
   }
 ]

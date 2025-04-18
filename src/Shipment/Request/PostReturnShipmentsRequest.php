@@ -6,18 +6,19 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Notifications;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 
 class PostReturnShipmentsRequest extends Request
 {
+    use EncodesRecipient;
+
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
      */
@@ -77,7 +78,7 @@ class PostReturnShipmentsRequest extends Request
     private function encodeReturnShipments(): array
     {
         $returnShipments = [];
-        
+
         foreach ($this->collection as $shipment) {
             $shipment = $this->ensureReturnCapabilities($shipment);
 
@@ -100,26 +101,10 @@ class PostReturnShipmentsRequest extends Request
             ];
 
             // Add sender details from recipient data
-            $returnShipment['sender'] = array_filter([
-                'cc' => $recipient->cc,
-                'city' => $recipient->city,
-                'person' => $recipient->person,
-                'postal_code' => $recipient->postalCode,
-                'street' => $recipient->address1,
-                'number' => '',
-                'region' => $recipient->region,
-                'company' => $recipient->company,
-                'phone' => $recipient->phone
-            ], function($value) {
-                return $value !== null;
-            });
+            $returnShipment['sender'] = $this->encodeRecipient($recipient);
 
-            // Remove any null values from the main array
-            $returnShipment = array_filter($returnShipment, function($value) {
-                return $value !== null;
-            });
 
-            $returnShipments[] = $returnShipment;
+            $returnShipments[] = Utils::filterNull($returnShipment);
         }
 
         return $returnShipments;

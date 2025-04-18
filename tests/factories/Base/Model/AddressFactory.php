@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -30,7 +31,8 @@ final class AddressFactory extends AbstractModelFactory
     public function inBelgium(): self
     {
         return $this
-            ->withAddress1('Adriaan Brouwerstraat 16')
+            ->withStreet('Adriaan Brouwerstraat')
+            ->withNumber('16')
             ->withCc('BE')
             ->withCity('Antwerpen')
             ->withPostalCode('1000');
@@ -39,7 +41,8 @@ final class AddressFactory extends AbstractModelFactory
     public function inFrance(): self
     {
         return $this
-            ->withAddress1('Rue de Rivoli 1')
+            ->withStreet('Rue de Rivoli')
+            ->withNumber('1')
             ->withCc('FR')
             ->withCity('Paris')
             ->withPostalCode('75001');
@@ -48,7 +51,7 @@ final class AddressFactory extends AbstractModelFactory
     public function inGermany(): self
     {
         return $this
-            ->withAddress1('Musterstrasse 1')
+            ->withStreet('Musterstrasse 1')
             ->withCc('DE')
             ->withCity('Berlin')
             ->withPostalCode('10117');
@@ -57,7 +60,8 @@ final class AddressFactory extends AbstractModelFactory
     public function inTheNetherlands(): self
     {
         return $this
-            ->withAddress1('Antareslaan 31')
+            ->withStreet('Antareslaan')
+            ->withNumber('31')
             ->withCc('NL')
             ->withCity('Hoofddorp')
             ->withPostalCode('2132 JE');
@@ -66,7 +70,7 @@ final class AddressFactory extends AbstractModelFactory
     public function inTheUnitedKingdom(): self
     {
         return $this
-            ->withAddress1('1 Primrose Street')
+            ->withStreet('1 Primrose Street')
             ->withCc('GB')
             ->withCity('London')
             ->withPostalCode('EC2A 2EX');
@@ -75,7 +79,7 @@ final class AddressFactory extends AbstractModelFactory
     public function inTheUnitedStates(): self
     {
         return $this
-            ->withAddress1('1 Infinite Loop')
+            ->withStreet('1 Infinite Loop')
             ->withCc('US')
             ->withCity('Cupertino')
             ->withState('CA')
@@ -84,7 +88,7 @@ final class AddressFactory extends AbstractModelFactory
 
     public function withDifficultStreet(): self
     {
-        return $this->withAddress1('Plein 1940-45 3');
+        return $this->withStreet('Plein 1940-45 3');
     }
 
     protected function createDefault(): FactoryInterface

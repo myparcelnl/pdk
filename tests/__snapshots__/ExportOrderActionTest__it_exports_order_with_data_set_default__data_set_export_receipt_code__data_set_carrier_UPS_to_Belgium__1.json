@@ -17,9 +17,10 @@
           "cc": "BE",
           "city": "Antwerpen",
           "company": "MyParcel",
+          "number": "16",
           "person": "Felicia Parcel",
           "postal_code": "1000",
-          "street": "Adriaan Brouwerstraat 16",
+          "street": "Adriaan Brouwerstraat",
           "vat_number": "NL123456789B01"
         },
         "reference_identifier": "PDK-1"

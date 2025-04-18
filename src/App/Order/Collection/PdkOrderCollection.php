@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -70,7 +71,7 @@ class PdkOrderCollection extends Collection
     public function generateReturnShipments(): ShipmentCollection
     {
         $shipments = $this->getLastShipments();
-        
+
         foreach ($shipments as $shipment) {
             $schema = Pdk::get(CarrierSchema::class);
             $schema->setCarrier($shipment->carrier);
@@ -192,12 +193,12 @@ class PdkOrderCollection extends Collection
             }
 
             $matchingShipment->orderId = $order->externalIdentifier;
-            
+
             // Update recipient data if needed
             if (!$matchingShipment->recipient && null !== $order->shippingAddress) {
                 $matchingShipment->recipient = $this->contactDetailsFromShippingAddress($order->shippingAddress);
             }
-            
+
             $orderShipments->put($id, $matchingShipment);
         }
 
@@ -228,26 +229,14 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * Creates a ContactDetails object from a shipping address
+     * Converts a ContactDetails object to a ShippingAddress object.
      *
-     * @param  object $shippingAddress
+     * @param  ShippingAddress $shippingAddress
      *
      * @return \MyParcelNL\Pdk\Base\Model\ContactDetails
      */
-    private function contactDetailsFromShippingAddress(object $shippingAddress): ContactDetails
+    private function contactDetailsFromShippingAddress(ShippingAddress $shippingAddress): ContactDetails
     {
-        return new ContactDetails([
-            'address1'   => $shippingAddress->address1,
-            'address2'   => $shippingAddress->address2,
-            'cc'         => $shippingAddress->cc,
-            'city'       => $shippingAddress->city,
-            'postalCode' => $shippingAddress->postalCode,
-            'region'     => $shippingAddress->region,
-            'state'      => $shippingAddress->state,
-            'email'      => $shippingAddress->email,
-            'phone'      => $shippingAddress->phone,
-            'person'     => $shippingAddress->person,
-            'company'    => $shippingAddress->company
-        ]);
+        return new ContactDetails($shippingAddress->getAttributes());
     }
 }
