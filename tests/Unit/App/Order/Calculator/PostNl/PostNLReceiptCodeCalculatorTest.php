@@ -67,7 +67,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         [ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED],
     ],
 
-    'disables receipt code when age check is enabled' => [
+    'disables receipt code for NL when age check is enabled' => [
         [
             ShipmentOptions::AGE_CHECK    => TriStateService::ENABLED,
             ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED,
@@ -76,12 +76,29 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
             ShipmentOptions::AGE_CHECK    => TriStateService::ENABLED,
             ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED,
         ],
+        'NL',
     ],
 
-    'disables receipt code when shipping to a non-NL country' => [
+    'disables age check for BE when receipt code is enabled' => [
+        [
+            ShipmentOptions::AGE_CHECK    => TriStateService::ENABLED,
+            ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED,
+        ],
+        [
+            ShipmentOptions::AGE_CHECK    => TriStateService::DISABLED,
+            ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED,
+            ShipmentOptions::SIGNATURE      => TriStateService::DISABLED,
+            ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
+            ShipmentOptions::LARGE_FORMAT   => TriStateService::DISABLED,
+            ShipmentOptions::DIRECT_RETURN  => TriStateService::DISABLED,
+        ],
+        'BE',
+    ],
+
+    'disables receipt code when shipping to a non-NL or BE country' => [
         [ShipmentOptions::RECEIPT_CODE => TriStateService::ENABLED],
         [ShipmentOptions::RECEIPT_CODE => TriStateService::DISABLED],
-        'BE',
+        'FR',
     ],
 
     'disables signature, only recipient, large format and return when receipt code is enabled' => [

@@ -18,7 +18,7 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * Calculates the receipt code options for PostNL shipments.
      * When receipt code is enabled:
-     * - Shipment must be to the Netherlands
+     * - Shipment must be to the Netherlands or Belgium
      * - Receipt code will be disabled if age check is active
      * - Signature and only recipient will be disabled
      * - Large format will be disabled
@@ -33,12 +33,17 @@ final class PostNLReceiptCodeCalculator extends AbstractPdkOrderOptionCalculator
             return;
         }
 
-        if ($this->order->shippingAddress->cc !== CountryCodes::CC_NL) {
+        if (! in_array($this->order->shippingAddress->cc, [CountryCodes::CC_NL, CountryCodes::CC_BE])) {
             $shipmentOptions->receiptCode = TriStateService::DISABLED;
             return;
         }
 
-        if (TriStateService::ENABLED === $shipmentOptions->ageCheck) {
+        // For Belgium: if receipt code is enabled, disable age check
+        if ($this->order->shippingAddress->cc === CountryCodes::CC_BE && TriStateService::ENABLED === $shipmentOptions->receiptCode) {
+            $shipmentOptions->ageCheck = TriStateService::DISABLED;
+        }
+        // For Netherlands: if age check is enabled, disable receipt code
+        elseif ($this->order->shippingAddress->cc === CountryCodes::CC_NL && TriStateService::ENABLED === $shipmentOptions->ageCheck) {
             $shipmentOptions->receiptCode = TriStateService::DISABLED;
             return;
         }
