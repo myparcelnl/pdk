@@ -6,6 +6,9 @@ use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
+use MyParcelNL\Pdk\Api\Controller\AddressesProxyController;
+use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
@@ -188,6 +191,12 @@ return [
      * Handles tri-state values
      */
     TriStateServiceInterface::class            => autowire(TriStateService::class),
+
+    /**
+     * Addresses microservice proxy
+     */
+    AddressesApiService::class                 => autowire(),
+    AddressesProxyController::class            => autowire(),
 
     /**
      * @todo remove in v3.0.0
