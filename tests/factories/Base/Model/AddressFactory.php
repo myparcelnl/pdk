@@ -52,6 +52,7 @@ final class AddressFactory extends AbstractModelFactory
     {
         return $this
             ->withStreet('Musterstrasse 1')
+            ->withNumber(false) // workaround: cannot set to null and is otherwise inherited from earlier instances
             ->withCc('DE')
             ->withCity('Berlin')
             ->withPostalCode('10117');
@@ -71,6 +72,7 @@ final class AddressFactory extends AbstractModelFactory
     {
         return $this
             ->withStreet('1 Primrose Street')
+            ->withNumber(false) // workaround: cannot set to null and is otherwise inherited from earlier instances
             ->withCc('GB')
             ->withCity('London')
             ->withPostalCode('EC2A 2EX');
@@ -80,6 +82,7 @@ final class AddressFactory extends AbstractModelFactory
     {
         return $this
             ->withStreet('1 Infinite Loop')
+            ->withNumber(false) // workaround: cannot set to null and is otherwise inherited from earlier instances
             ->withCc('US')
             ->withCity('Cupertino')
             ->withState('CA')
