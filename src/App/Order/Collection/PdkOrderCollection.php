@@ -229,7 +229,7 @@ class PdkOrderCollection extends Collection
     }
 
     /**
-     * Converts a ContactDetails object to a ShippingAddress object.
+     * Converts a ShippingAddress object to a ContactDetails object.
      *
      * @param  ShippingAddress $shippingAddress
      *
