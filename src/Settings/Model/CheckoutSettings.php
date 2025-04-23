@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property string                                  $priceType
  * @property bool                                    $showDeliveryDay
  * @property bool                                    $useSeparateAddressFields
+ * @property bool                                    $enableAddressWidget
  */
 class CheckoutSettings extends AbstractSettingsModel
 {
@@ -42,6 +43,8 @@ class CheckoutSettings extends AbstractSettingsModel
     public const PRICE_TYPE_EXCLUDED = 'excluded';
     public const PRICE_TYPE_INCLUDED = 'included';
     public const SHOW_TAX_FIELDS     = 'showTaxFields';
+    /** Address widget */
+    public const ENABLE_ADDRESS_WIDGET = 'enableAddressWidget';
 
     protected $attributes = [
         'id' => self::ID,
@@ -56,6 +59,7 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
         self::SHOW_TAX_FIELDS                           => true,
+        self::ENABLE_ADDRESS_WIDGET                     => false
     ];
 
     protected $casts      = [
@@ -69,5 +73,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => 'bool',
         self::USE_SEPARATE_ADDRESS_FIELDS               => 'bool',
         self::SHOW_TAX_FIELDS                           => 'bool',
+        self::ENABLE_ADDRESS_WIDGET                     => 'bool',
     ];
 }

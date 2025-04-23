@@ -11,6 +11,12 @@
       "description": "settings_checkout_use_separate_address_fields_description"
     },
     {
+      "name": "enableAddressWidget",
+      "$component": "ToggleInput",
+      "label": "settings_checkout_enable_address_widget",
+      "description": "settings_checkout_enable_address_widget_description"
+    },
+    {
       "$component": "SettingsDivider",
       "$wrapper": false,
       "content": "settings_checkout_delivery_options_description",

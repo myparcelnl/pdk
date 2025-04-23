@@ -38,6 +38,7 @@ class CheckoutSettingsView extends AbstractSettingsView
     {
         return [
             new InteractiveElement(CheckoutSettings::USE_SEPARATE_ADDRESS_FIELDS, Components::INPUT_TOGGLE),
+            new InteractiveElement(CheckoutSettings::ENABLE_ADDRESS_WIDGET, Components::INPUT_TOGGLE),
             new SettingsDivider($this->getSettingKey('delivery_options')),
             new InteractiveElement(CheckoutSettings::ENABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
 
@@ -45,7 +46,6 @@ class CheckoutSettingsView extends AbstractSettingsView
                 function (FormOperationBuilder $builder) {
                     $builder->visibleWhen(CheckoutSettings::ENABLE_DELIVERY_OPTIONS);
                 },
-
                 new InteractiveElement(
                     CheckoutSettings::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK,
                     Components::INPUT_TOGGLE
