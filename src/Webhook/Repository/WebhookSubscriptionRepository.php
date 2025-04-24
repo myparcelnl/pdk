@@ -126,8 +126,17 @@ class WebhookSubscriptionRepository extends ApiRepository
      */
     public function unsubscribe(int $id): bool
     {
-        return $this->api
-            ->doRequest(new DeleteWebhookSubscriptionRequest($id))
-            ->isOkResponse();
+        try {
+            return $this->api
+                ->doRequest(new DeleteWebhookSubscriptionRequest($id))
+                ->isOkResponse();
+        } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'deleteResourceOwnedByOthers') !== false) {
+                // Log that we couldn't delete this webhook because it's owned by another shop
+                return true; // Return true since we can consider this webhook "removed" from our perspective
+            }
+            
+            throw $e;
+        }
     }
 }
