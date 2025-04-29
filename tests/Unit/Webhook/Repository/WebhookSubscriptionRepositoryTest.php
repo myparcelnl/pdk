@@ -96,3 +96,20 @@ it('unsubscribes from a webhook', function () {
 
     expect($repository->unsubscribe(1))->toBeTrue();
 });
+
+it('returns true if unsubscribe fails with deleteResourceOwnedByOthers error', function () {
+    /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
+    $repository = Pdk::get(WebhookSubscriptionRepository::class);
+
+    $apiMock = new class {
+        public function doRequest() {
+            throw new \Exception('Permission Denied. (deleteResourceOwnedByOthers)');
+        }
+    };
+    $reflection = new \ReflectionClass($repository);
+    $property = $reflection->getProperty('api');
+    $property->setAccessible(true);
+    $property->setValue($repository, $apiMock);
+
+    expect($repository->unsubscribe(123))->toBeTrue();
+});
