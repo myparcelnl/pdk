@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostWebhooksResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
@@ -105,4 +106,27 @@ it('refreshes the url on each generation', function () {
     expect($allWebhooks)
         ->toHaveLength(1)
         ->and($allWebhooks->first()->url)->not->toBe($oldUrl);
+});
+
+it('deletes all webhooks and clears local storage', function () {
+    MockApi::enqueue(
+        new ExampleGetWebhookSubscriptionsResponse(), // ophalen bestaande webhooks
+        new Example204NoContentResponse(),            // verwijderen webhook 1
+        new Example204NoContentResponse()             // verwijderen webhook 2
+    );
+
+    createWebhooks([
+        'hooks' => implode(',', [
+            WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+            WebhookSubscription::ORDER_STATUS_CHANGE,
+        ]),
+    ]);
+
+    /** @var \MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface $repo */
+    $repo = Pdk::get(PdkWebhooksRepositoryInterface::class);
+    expect($repo->getAll())->not->toBeEmpty();
+
+    Actions::execute(new Request(['action' => PdkBackendActions::DELETE_WEBHOOKS]));
+
+    expect($repo->getAll())->toBeEmpty();
 });

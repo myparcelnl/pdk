@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Webhook\Repository;
 
 use BadMethodCallException;
+use Exception;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
@@ -15,6 +16,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
+use ReflectionClass;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('webhook');
@@ -101,15 +103,34 @@ it('returns true if unsubscribe fails with deleteResourceOwnedByOthers error', f
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
 
-    $apiMock = new class {
-        public function doRequest() {
-            throw new \Exception('Permission Denied. (deleteResourceOwnedByOthers)');
+    $apiMock    = new class {
+        public function doRequest()
+        {
+            throw new Exception('Permission Denied. (deleteResourceOwnedByOthers)');
         }
     };
-    $reflection = new \ReflectionClass($repository);
-    $property = $reflection->getProperty('api');
+    $reflection = new ReflectionClass($repository);
+    $property   = $reflection->getProperty('api');
     $property->setAccessible(true);
     $property->setValue($repository, $apiMock);
 
     expect($repository->unsubscribe(123))->toBeTrue();
+});
+
+it('throws other exceptions from unsubscribe', function () {
+    /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
+    $repository = Pdk::get(WebhookSubscriptionRepository::class);
+
+    $apiMock    = new class {
+        public function doRequest()
+        {
+            throw new Exception('Something');
+        }
+    };
+    $reflection = new ReflectionClass($repository);
+    $property   = $reflection->getProperty('api');
+    $property->setAccessible(true);
+    $property->setValue($repository, $apiMock);
+
+    expect(fn() => $repository->unsubscribe(456))->toThrow(Exception::class, 'Something');
 });
