@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.56.0](https://github.com/myparcelnl/pdk/compare/v2.55.0...v2.56.0) (2025-05-02)
+
+
+### :sparkles: New Features
+
+* **address:** prefer split address fields, deprecate address1/2 ([#348](https://github.com/myparcelnl/pdk/issues/348)) ([4d7d17f](https://github.com/myparcelnl/pdk/commit/4d7d17ff573a702d76dc7bc0b034f52b9fe5c010)), closes [#101](https://github.com/myparcelnl/pdk/issues/101)
+
 ## [2.55.0](https://github.com/myparcelnl/pdk/compare/v2.54.1...v2.55.0) (2025-04-18)
 
 
