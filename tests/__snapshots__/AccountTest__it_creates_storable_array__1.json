@@ -2,10 +2,11 @@
   "id": 1,
   "platformId": 1,
   "contactInfo": {
-    "address1": "Antareslaan 31",
     "cc": "NL",
     "city": "Hoofddorp",
+    "number": "31",
     "postalCode": "2132 JE",
+    "street": "Antareslaan",
     "email": "support@myparcel.nl",
     "person": "Felicia Parcel",
     "company": "MyParcel"
@@ -23,10 +24,11 @@
       "hidden": false,
       "billing": [],
       "deliveryAddress": {
-        "address1": "Antareslaan 31",
         "cc": "NL",
         "city": "Hoofddorp",
+        "number": "31",
         "postalCode": "2132 JE",
+        "street": "Antareslaan",
         "email": "support@myparcel.nl",
         "person": "Felicia Parcel",
         "company": "MyParcel"

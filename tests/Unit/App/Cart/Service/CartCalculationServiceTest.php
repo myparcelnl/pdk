@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -7,6 +8,7 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -17,6 +19,7 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -120,30 +123,27 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
 ];
 
 const SHIPPING_ADDRESS_NL = [
-    'address1'   => 'Straatnaam 2',
-    'address2'   => 'Appartement B',
-    'area'       => 'Voor',
-    'cc'         => 'NL',
+    'street'   => 'Straatnaam 2',
+    'number'   => 'Appartement B',
+    'cc'         => CountryCodes::CC_NL,
     'city'       => 'Stad',
     'postalCode' => '1000 BB',
     'region'     => 'Drenthe',
-    'state'      => 'Current',
+    'state'      => 'DT',
 ];
 
 const SHIPPING_ADDRESS_EU = [
-    'address1'   => 'Straatnaam 2',
-    'address2'   => 'Appartement B',
-    'area'       => 'Voor',
-    'cc'         => 'FR',
-    'city'       => 'Stad',
+    'street'   => 'Straatnaam 2',
+    'cc'         => CountryCodes::CC_FR,
+    'city'       => 'Paris',
     'postalCode' => '1000 BB',
-    'region'     => 'Drenthe',
-    'state'      => 'Current',
+    'region'     => 'Paris',
+    'state'      => 'CP',
 ];
 const SHIPPING_ADDRESS_BE = [
-    'address1'   => 'Adriaan Brouwerstraat 16',
-    'address2'   => 'Appartement B',
-    'area'       => 'Voor',
+    'street'   => '16',
+    'number'   => 'Appartement B',
+    'numberSuffix' => 'Appartement B',
     'cc'         => CountryCodes::CC_BE,
     'city'       => 'Antwerpen',
     'postalCode' => '1000',
@@ -259,7 +259,7 @@ it(
 it('calculates shipping method in cart', function (array $lines, array $result) {
     $cart = new PdkCart(['lines' => $lines, 'shippingMethod' => ['shippingAddress' => SHIPPING_ADDRESS_NL]]);
 
-    expect($cart->shippingMethod->toArray())->toEqual($result);
+    expect($cart->shippingMethod->toArray(Arrayable::SKIP_NULL))->toEqual($result);
 })->with([
     'no product settings' => [
         'cart'   => [
@@ -279,9 +279,6 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
-            'id'                  => null,
-            'name'                => null,
-            'description'         => null,
             'isEnabled'           => true,
             'allowedPackageTypes' => [
                 [
@@ -316,9 +313,6 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
-            'id'                  => null,
-            'name'                => null,
-            'description'         => null,
             'isEnabled'           => true,
             'hasDeliveryOptions'  => true,
             'minimumDropOffDelay' => 2,
@@ -345,12 +339,8 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
-            'id'                  => null,
-            'name'                => null,
-            'description'         => null,
             'isEnabled'           => true,
             'hasDeliveryOptions'  => false,
-            'minimumDropOffDelay' => 0,
             'allowedPackageTypes' => [],
             'shippingAddress'     => SHIPPING_ADDRESS_NL,
         ],

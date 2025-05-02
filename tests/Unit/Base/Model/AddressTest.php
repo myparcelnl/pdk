@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -7,6 +8,7 @@ namespace MyParcelNL\Pdk\Base\Model;
 
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -16,52 +18,40 @@ it('correctly transforms deprecated fields', function (array $input, array $outp
 
     expect(Utils::filterNull($address->toArray()))->toBe($output);
 })->with([
-    'full_street'            => [
+    'full_street' => [
         'input'  => [
             'full_street' => 'street 123 b',
         ],
         'output' => [
-            'address1' => 'street 123 b',
+            'street' => 'street 123 b',
         ],
     ],
-    'street_additional_info' => [
+    'address1' => [
         'input'  => [
-            'street_additional_info' => '2F',
+            'address1' => 'Wegstraat 2F',
         ],
         'output' => [
-            'address2' => '2F',
-        ],
-    ],
-
-    'street and number' => [
-        'input'  => [
-            'street' => 'street',
-            'number' => '123',
-        ],
-        'output' => [
-            'address1' => 'street 123',
+            'street' => 'Wegstraat 2F',
         ],
     ],
 
-    'street, number and number_suffix' => [
+    'address2' => [
         'input'  => [
-            'street'        => 'street',
-            'number'        => '123',
-            'number_suffix' => 'b',
+            'address2' => 'Wegstraat 2',
         ],
         'output' => [
-            'address1' => 'street 123 b',
+            'street' => 'Wegstraat 2',
         ],
     ],
 
-    'street, number and box_number' => [
+    'address1 and address2' => [
         'input'  => [
-            'street'     => 'street',
-            'number'     => '123',
-            'box_number' => 'b',
+            'address1'      => 'street 123',
+            'address2'        => 'b',
         ],
         'output' => [
-            'address1' => 'street 123 b',
+            'street'        => 'street 123 b',
+            'streetAdditionalInfo' => 'b',
         ],
     ],
 ]);
