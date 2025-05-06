@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.57.0](https://github.com/myparcelnl/pdk/compare/v2.56.0...v2.57.0) (2025-05-06)
+
+
+### :bug: Bug Fixes
+
+* allow bpost pickups ([#351](https://github.com/myparcelnl/pdk/issues/351)) ([0e981d5](https://github.com/myparcelnl/pdk/commit/0e981d56b3c95a8fcfdf21c415fbf42a14fe9a7f))
+
+
+### :sparkles: New Features
+
+* **address:** add a setting to enable the optional address widget ([#349](https://github.com/myparcelnl/pdk/issues/349)) ([62b9919](https://github.com/myparcelnl/pdk/commit/62b9919851281c4b79f7e8812326b2d7b3c39be3))
+
 ## [2.56.0](https://github.com/myparcelnl/pdk/compare/v2.55.0...v2.56.0) (2025-05-02)
 
 
