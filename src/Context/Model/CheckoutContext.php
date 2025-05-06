@@ -102,6 +102,12 @@ class CheckoutContext extends Model
             'carriersWithTaxFields'              => AccountSettings::hasTaxFields()
                 ? Pdk::get('carriersWithTaxFields')
                 : [],
+
+            /* Address widget */
+            'hasAddressWidget'                    => Settings::get(
+                CheckoutSettings::ENABLE_ADDRESS_WIDGET,
+                CheckoutSettings::ID
+            ),
         ]);
     }
 

@@ -48,7 +48,8 @@
       "hiddenInputName": "pest_checkout_data",
       "checkoutAddressHiddenInputName": "pest_checkout_address",
       "countriesWithSeparateAddressFields": ["NL", "BE"],
-      "carriersWithTaxFields": []
+      "carriersWithTaxFields": [],
+      "hasAddressWidget": false
     },
     "endpoints": []
   }
