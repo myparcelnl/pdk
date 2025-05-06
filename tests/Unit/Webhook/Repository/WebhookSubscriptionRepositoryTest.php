@@ -8,12 +8,14 @@ namespace MyParcelNL\Pdk\Webhook\Repository;
 use BadMethodCallException;
 use Exception;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Tests\Api\Response\Example204NoContentResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetWebhookSubscriptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use ReflectionClass;
@@ -21,7 +23,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('webhook');
 
-usesShared(new UsesMockPdkInstance(), new UsesApiMock());
+usesShared(new UsesMockPdkInstance(), new UsesApiMock(), new UsesMockEachLogger());
 
 it('creates WebhookSubscription from api response', function () {
     MockApi::enqueue(new ExampleGetWebhookSubscriptionsResponse());
@@ -99,7 +101,7 @@ it('unsubscribes from a webhook', function () {
     expect($repository->unsubscribe(1))->toBeTrue();
 });
 
-it('returns true if unsubscribe fails with deleteResourceOwnedByOthers error', function () {
+it('returns true and logs warning if unsubscribe fails with deleteResourceOwnedByOthers error', function () {
     /** @var \MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository $repository */
     $repository = Pdk::get(WebhookSubscriptionRepository::class);
 
@@ -115,6 +117,18 @@ it('returns true if unsubscribe fails with deleteResourceOwnedByOthers error', f
     $property->setValue($repository, $apiMock);
 
     expect($repository->unsubscribe(123))->toBeTrue();
+
+    $logs = Logger::getLogs();
+    $log = reset($logs);
+
+    expect($log)->toBe([
+        'level'   => 'warning',
+        'message' => '[PDK]: Could not delete webhook because it is owned by another shop',
+        'context' => [
+            'webhook_id' => 123,
+            'error'      => 'Permission Denied. (deleteResourceOwnedByOthers)',
+        ],
+    ]);
 });
 
 it('throws other exceptions from unsubscribe', function () {
