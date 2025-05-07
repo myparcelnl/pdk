@@ -9,6 +9,6 @@ namespace MyParcelNL\Pdk\Api;
  */
 class PdkAddressActions
 {
-    public const PROXY_ADDRESSES_LIST     = 'proxy_addresses_list';
-    public const PROXY_ADDRESSES_VALIDATE = 'proxy_addresses_validate';
+    public const PROXY_ADDRESSES_LIST     = 'proxyAddressList';
+    public const PROXY_ADDRESSES_VALIDATE = 'proxyAddressValidate';
 }
