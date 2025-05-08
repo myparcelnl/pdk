@@ -6,11 +6,11 @@ namespace MyParcelNL\Pdk\App\Action\Addresses;
 
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
-use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\Api\Response\ValidateAddressResponse;
-use MyParcelNL\Pdk\Api\Request\ProxyRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use MyParcelNL\Pdk\Api\Request\Request as ApiRequest;
+use MyParcelNL\Pdk\Api\Response\AddressResponse;
 
 class AddressesValidateAction implements ActionInterface
 {
@@ -28,13 +28,13 @@ class AddressesValidateAction implements ActionInterface
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * Build an outgoing request to the address microservice.
+     * @param Request $incomingRequest
+     * @return ApiRequest
      */
-    public function handle(Request $request): Response
+    public function buildRequest(Request $incomingRequest): ApiRequest
     {
-        $query = $request->query->all();
+        $query = $incomingRequest->query->all();
 
         // Ensure required parameters are present with correct format
         $queryParams = [
@@ -53,18 +53,22 @@ class AddressesValidateAction implements ActionInterface
             return $value !== null;
         });
 
-        $proxyRequest = new ProxyRequest(
-            'GET',
-            '/validate',
-            null,
-            $queryParams
-        );
-
-        /** @var ValidateAddressResponse $response */
-        $response = $this->apiService->doRequest($proxyRequest, ValidateAddressResponse::class);
-
-        return new JsonResponse([
-            'valid' => $response->isValid(),
+        return new ApiRequest([
+            'method' => 'GET',
+            'path' => '/validate',
+            'parameters' => $queryParams
         ]);
+    }
+
+    /**
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function handle(Request $request): Response
+    {
+        /** @var AddressResponse $response */
+        $response = $this->apiService->doRequest($this->buildRequest($request), AddressResponse::class);
+        return $response->getSymfonyResponse();
     }
 }
