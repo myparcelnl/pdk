@@ -5,30 +5,38 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Api\Response;
 
 use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Base class for address related responses
+ * Response for address microservice requests
  */
-abstract class AddressResponse extends ApiResponseWithBody
+class AddressResponse extends ApiResponse
 {
     /**
-     * @var array
+     * @var null|string
      */
-    protected $data = [];
+    private $body;
 
     /**
-     * @return array
+     * @var null|int
      */
-    public function getData(): array
+    private $statusCode;
+
+
+    public function __construct(ClientResponseInterface $response)
     {
-        return $this->data;
+        parent::__construct($response);
+        $this->body = $response->getBody();
+        $this->statusCode = $response->getStatusCode();
     }
 
-    /**
-     * @return void
-     */
-    protected function parseResponseBody(): void
+    public function getBody(): ?string
     {
-        $this->data = json_decode($this->getBody() ?? '{}', true) ?? [];
+        return $this->body;
+    }
+
+    public function getSymfonyResponse(): Response
+    {
+        return new Response($this->body, $this->statusCode, ['Content-Type' => 'application/json']);
     }
 }
