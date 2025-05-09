@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.57.1](https://github.com/myparcelnl/pdk/compare/v2.57.0...v2.57.1) (2025-05-09)
+
+
+### :bug: Bug Fixes
+
+* allow webhook delete even when delete returns resourceOwnedByOthers ([#350](https://github.com/myparcelnl/pdk/issues/350)) ([54aacde](https://github.com/myparcelnl/pdk/commit/54aacde3e2139a3304bfd481fd75018b9015460c))
+
 ## [2.57.0](https://github.com/myparcelnl/pdk/compare/v2.56.0...v2.57.0) (2025-05-06)
 
 
