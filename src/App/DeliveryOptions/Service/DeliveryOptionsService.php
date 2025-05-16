@@ -15,10 +15,13 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Frontend\Form\Element\TriStateInput;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\OrderPropertiesValidator;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -76,24 +79,32 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $taxService;
 
     /**
+     * @var \MyParcelNL\Pdk\Types\Service\TriStateService
+     */
+    private $triStateService;
+
+    /**
      * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
+     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService    $triStateService
      */
     public function __construct(
         CountryServiceInterface  $countryService,
         CurrencyServiceInterface $currencyService,
         DropOffServiceInterface  $dropOffService,
         TaxServiceInterface      $taxService,
-        SchemaRepository         $schemaRepository
+        SchemaRepository         $schemaRepository,
+        TriStateService          $triStateService
     ) {
         $this->countryService   = $countryService;
         $this->currencyService  = $currencyService;
         $this->dropOffService   = $dropOffService;
         $this->taxService       = $taxService;
         $this->schemaRepository = $schemaRepository;
+        $this->triStateService  = $triStateService;
     }
 
     /**
@@ -221,7 +232,29 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $allCarriers     = AccountSettings::getCarriers();
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
-        foreach ($cart->shippingMethod->allowedPackageTypes->all() as $packageType) {
+        // Get the package types from the cart
+        $cartPackageTypes = $cart->lines->pluck('product.settings.packageType');
+
+        // Convert TriState::INHERIT to the default package type.
+        $cartPackageTypes = $cartPackageTypes->map(
+            function ($packageType) {
+                if ($this->triStateService->cast($packageType) === TriStateService::INHERIT) {
+                    return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
+                }
+
+                return $packageType;
+            }
+        );
+
+        // Get the largest package type first.
+        // This will ensure we do not show delivery options with a smaller package type than fits what is in the cart.
+        foreach ($cart->shippingMethod->allowedPackageTypes->sortBySize() as $packageType) {
+
+            // Skip package types that do not match any of the items in the cart
+            if (! $cartPackageTypes->contains($packageType->name)) {
+                continue;
+            }
+
             $weight = Pdk::get(WeightServiceInterface::class)
                 ->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
 
