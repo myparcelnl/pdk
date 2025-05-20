@@ -50,7 +50,7 @@ final class OrderSettingsView extends NewAbstractSettingsView
                 ->withOptions($orderStatusOptions, $orderStatusOptionsFlags),
 
             new ToggleInput(OrderSettings::SEND_RETURN_EMAIL),
-            new ToggleInput(OrderSettings::SAVE_CUSTOMER_ADDRESS),
+            (new ToggleInput(OrderSettings::SAVE_CUSTOMER_ADDRESS))->visibleWhen(OrderSettings::ORDER_MODE, false),
             new ToggleInput(OrderSettings::SHARE_CUSTOMER_INFORMATION),
 
             new SettingsDivider($this->label('status')),
