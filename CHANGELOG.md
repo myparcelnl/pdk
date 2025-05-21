@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.0](https://github.com/myparcelnl/pdk/compare/v2.57.1...v2.58.0) (2025-05-21)
+
+
+### :sparkles: New Features
+
+* add address microservice proxy ([#338](https://github.com/myparcelnl/pdk/issues/338)) ([dd9d3b1](https://github.com/myparcelnl/pdk/commit/dd9d3b13444a3bb72a07c51becb839e020644b57))
+
 ## [2.57.1](https://github.com/myparcelnl/pdk/compare/v2.57.0...v2.57.1) (2025-05-09)
 
 
