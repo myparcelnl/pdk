@@ -34,7 +34,12 @@ final class TestBootstrapper
             ->store();
     }
 
-    public static function hasApiKey(string $apiKey = self::API_KEY_VALID): void
+    /**
+     * @param  string|null $apiKey
+     *
+     * @return void
+     */
+    public static function hasApiKey(?string $apiKey = self::API_KEY_VALID): void
     {
         factory(AccountSettings::class)
             ->withApiKey($apiKey)

@@ -30,6 +30,28 @@
             "property": "context",
             "responseProperty": null
           },
+          "proxyAddressList": {
+            "body": null,
+            "headers": [],
+            "method": "GET",
+            "parameters": {
+              "action": "proxyAddressList"
+            },
+            "path": "",
+            "property": "addresses",
+            "responseProperty": null
+          },
+          "proxyAddressValidate": {
+            "body": null,
+            "headers": [],
+            "method": "GET",
+            "parameters": {
+              "action": "proxyAddressValidate"
+            },
+            "path": "",
+            "property": "validate",
+            "responseProperty": null
+          },
           "fetchContext": {
             "body": null,
             "headers": [],
