@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Exception\PdkEndpointException;
 use MyParcelNL\Pdk\App\Api\Contract\PdkApiInterface;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,11 +78,18 @@ class PdkEndpoint implements PdkApiInterface
      */
     public function createApiErrorResponse(ApiException $exception): JsonResponse
     {
-        return new JsonResponse([
+        $data = [
             'message'    => $exception->getMessage(),
             'request_id' => $exception->getRequestId(),
             'errors'     => $exception->getErrors(),
-        ], Response::HTTP_BAD_REQUEST);
+        ];
+
+        if (Notifications::isNotEmpty()) {
+            $data['notifications'] = Notifications::all()
+                ->toArrayWithoutNull();
+        }
+
+        return new JsonResponse($data, Response::HTTP_BAD_REQUEST);
     }
 
     /**
