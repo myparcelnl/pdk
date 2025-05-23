@@ -85,6 +85,18 @@
     },
     {
       "name": "saveCustomerAddress",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "orderMode",
+                "$eq": false
+              }
+            ]
+          }
+        }
+      ],
       "$component": "ToggleInput",
       "label": "settings_order_save_customer_address",
       "description": "settings_order_save_customer_address_description"
