@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.1](https://github.com/myparcelnl/pdk/compare/v2.58.0...v2.58.1) (2025-05-23)
+
+
+### :bug: Bug Fixes
+
+* **settings:** remove save address option when unavailable ([#355](https://github.com/myparcelnl/pdk/issues/355)) ([7af6cbb](https://github.com/myparcelnl/pdk/commit/7af6cbba1f6245f01bbc0717414de5a12edf0571))
+
 ## [2.58.0](https://github.com/myparcelnl/pdk/compare/v2.57.1...v2.58.0) (2025-05-21)
 
 
