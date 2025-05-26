@@ -108,7 +108,6 @@ class TriStateService implements TriStateServiceInterface
                 continue;
             }
 
-            // Dan controleren of het een geldige waarde is
             if ($value === 'none' || empty($value)) {
                 continue;
             }
