@@ -71,7 +71,7 @@ it('casts everything properly to array', function () {
         'date'             => '2022-01-10 00:00:00',
         'datetime'         => '2022-01-10 14:03:00',
         'dateFromArr'      => '2022-12-25 17:02:32',
-        'timestamp'        => 1641823380,
+        'timestamp'        => 1641819780,
         'stringBool'       => true,
         'stringFalseBool'  => false,
         'stringFalseInt'   => 0,
