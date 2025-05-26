@@ -148,19 +148,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         date_default_timezone_set('Europe/Amsterdam');
         $currentTime = date('H:i');
 
-        var_dump([
-            'sameDayCutoffTime' => $carrierSettings['cutoffTimeSameDay'] ?? null,
-            'cutoffTime' => $dropOff->cutoffTime ?? null,
-            'currentTime' => $currentTime,
-            'serverTimezone' => date_default_timezone_get(),
-            'serverDateTime' => date('Y-m-d H:i:s'),
-            'timeComparison' => [
-                'currentTime' => $currentTime,
-                'cutoffTime' => $carrierSettings['cutoffTimeSameDay'],
-                'result' => $currentTime <= ($carrierSettings['cutoffTimeSameDay'] ?? '00:00')
-            ]
-        ]);
-
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
@@ -179,8 +166,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             [
                 'deliveryDaysWindow'   => $carrierSettings->deliveryDaysWindow,
                 'dropOffDelay'         => max($minimumDropOffDelay, $carrierSettings->dropOffDelay),
-                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) 
-                    && 0 === $minimumDropOffDelay 
+                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false)
+                    && 0 === $minimumDropOffDelay
                     && $currentTime <= ($carrierSettings['cutoffTimeSameDay'] ?? '00:00'),
                 'cutoffTime'           => $dropOff->cutoffTime ?? null,
                 'cutoffTimeSameDay'    => $carrierSettings['cutoffTimeSameDay'] ?? null,
@@ -211,7 +198,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 // For pickup price, ensure it doesn't exceed shipping costs
                 if ($key === CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP) {
                     $shippingCost = $this->currencyService->convertToEuros($cart->shipmentPrice);
-                    $subtotal = max(-$shippingCost, $value);
+                    $subtotal     = max(-$shippingCost, $value);
                 }
 
                 return $this->taxService->getShippingDisplayPrice((float) $subtotal);
