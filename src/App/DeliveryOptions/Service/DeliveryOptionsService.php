@@ -145,6 +145,22 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             ->pluck('weekday')
             ->toArray();
 
+        date_default_timezone_set('Europe/Amsterdam');
+        $currentTime = date('H:i');
+
+        var_dump([
+            'sameDayCutoffTime' => $carrierSettings['cutoffTimeSameDay'] ?? null,
+            'cutoffTime' => $dropOff->cutoffTime ?? null,
+            'currentTime' => $currentTime,
+            'serverTimezone' => date_default_timezone_get(),
+            'serverDateTime' => date('Y-m-d H:i:s'),
+            'timeComparison' => [
+                'currentTime' => $currentTime,
+                'cutoffTime' => $carrierSettings['cutoffTimeSameDay'],
+                'result' => $currentTime <= ($carrierSettings['cutoffTimeSameDay'] ?? '00:00')
+            ]
+        ]);
+
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
@@ -163,9 +179,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             [
                 'deliveryDaysWindow'   => $carrierSettings->deliveryDaysWindow,
                 'dropOffDelay'         => max($minimumDropOffDelay, $carrierSettings->dropOffDelay),
-                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) && 0 === $minimumDropOffDelay,
+                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) 
+                    && 0 === $minimumDropOffDelay 
+                    && $currentTime <= ($carrierSettings['cutoffTimeSameDay'] ?? '00:00'),
                 'cutoffTime'           => $dropOff->cutoffTime ?? null,
-                'cutoffTimeSameDay'    => $dropOff->sameDayCutoffTime ?? null,
+                'cutoffTimeSameDay'    => $carrierSettings['cutoffTimeSameDay'] ?? null,
                 'dropOffDays'          => $dropOffDays,
             ]
         );
