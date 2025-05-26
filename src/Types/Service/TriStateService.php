@@ -104,9 +104,16 @@ class TriStateService implements TriStateServiceInterface
                 return self::DISABLED;
             }
 
-            if (! empty($value) && self::INHERIT !== $value) {
-                return $value;
+            if (self::INHERIT === $value || $value === '-1') {
+                continue;
             }
+
+            // Dan controleren of het een geldige waarde is
+            if ($value === 'none' || empty($value)) {
+                continue;
+            }
+
+            return $value;
         }
 
         return null;

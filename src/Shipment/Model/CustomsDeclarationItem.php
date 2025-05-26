@@ -61,9 +61,9 @@ class CustomsDeclarationItem extends Model
         );
 
         $country = $triStateService->resolveString(
-            $productSettings->countryOfOrigin,
+            // $productSettings->countryOfOrigin,
             Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID),
-            Platform::get('localCountry')
+            // Platform::get('localCountry')
         );
 
         return new static(
