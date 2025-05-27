@@ -145,8 +145,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             ->pluck('weekday')
             ->toArray();
 
-        date_default_timezone_set('Europe/Amsterdam');
-        $currentTime = date('H:i');
+        $timezone = new \DateTimeZone('Europe/Amsterdam');
+        $currentTime = (new \DateTimeImmutable('now', $timezone))->format('H:i');
 
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
