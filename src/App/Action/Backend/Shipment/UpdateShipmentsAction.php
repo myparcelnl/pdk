@@ -120,7 +120,7 @@ class UpdateShipmentsAction extends AbstractOrderAction
         $shipments
             ->each(function (Shipment $shipment) use ($status) {
                 Logger::debug('Update status', [
-                    'orderId' => $shipment->getExternalIdentifier(),
+                    'orderId' => $shipment->orderId,
                     'status'  => $status,
                 ]);
                 Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
