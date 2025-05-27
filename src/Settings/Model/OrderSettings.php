@@ -98,4 +98,30 @@ final class OrderSettings extends AbstractSettingsModel
         self::TRACK_TRACE_IN_ACCOUNT     => 'bool',
         self::TRACK_TRACE_IN_EMAIL       => 'bool',
     ];
+
+    /**
+     * @param  int $apiStatus
+     *
+     * @return string the setting value for the given API status.
+     *
+     * @see https://developer.myparcel.nl/api-reference/04.data-types.html#shipment-status
+     */
+    public static function getStatus(int $apiStatus): string
+    {
+        switch ($apiStatus) {
+            case 3:
+            case 4:
+            case 5:
+                return self::STATUS_WHEN_LABEL_SCANNED;
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 19:
+                return self::STATUS_WHEN_DELIVERED;
+            default: // for backwards compatibility return label create in other cases
+                return self::STATUS_ON_LABEL_CREATE;
+        }
+    }
 }

@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -41,6 +42,7 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
         Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [
             'orderIds'                      => $orderIds,
             'shipmentIds'                   => [$content['shipment_id']],
+            'orderStatus'                   => OrderSettings::getStatus((int)($content['status'] ?? null)),
             'linkFirstShipmentToFirstOrder' => true,
         ]);
     }
