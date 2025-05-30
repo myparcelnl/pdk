@@ -43,7 +43,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
