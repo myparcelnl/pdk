@@ -13,8 +13,8 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * - Evening delivery is only allowed in the Netherlands.
- * - When evening delivery is enabled same-day delivery is not available
- * - Only recipient is disabled when pickup is selected
+ * - When evening delivery is enabled, same-day delivery is not available.
+ * - The 'only recipient' option is disabled when the 'pickup' delivery type is selected.
  */
 final class DhlForYouDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
