@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Types\Service;
 
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 
 class TriStateService implements TriStateServiceInterface
 {
@@ -108,7 +109,7 @@ class TriStateService implements TriStateServiceInterface
                 continue;
             }
 
-            if ($value === 'none' || empty($value)) {
+            if ($value === ProductSettings::COUNTRY_OF_ORIGIN_NONE || empty($value)) {
                 continue;
             }
 
