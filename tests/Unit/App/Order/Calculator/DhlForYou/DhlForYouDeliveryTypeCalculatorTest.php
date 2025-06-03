@@ -31,3 +31,21 @@ it('disables onlyRecipient for pickup delivery type for DHL For You', function (
     expect($order->deliveryOptions->shipmentOptions->onlyRecipient)
         ->toBe(TriStateService::DISABLED);
 });
+
+it('sets deliveryType to standard when evening delivery is selected for a non-local country', function () {
+    $order = new PdkOrder([
+        'deliveryOptions' => new DeliveryOptions([
+            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+            'shipmentOptions' => new ShipmentOptions([]),
+        ]),
+        'shippingAddress' => [
+            'cc' => 'FR', 
+        ],
+    ]);
+
+    $calculator = new DhlForYouDeliveryTypeCalculator($order);
+    $calculator->calculate();
+
+    expect($order->deliveryOptions->deliveryType)
+        ->toBe(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME);
+});
