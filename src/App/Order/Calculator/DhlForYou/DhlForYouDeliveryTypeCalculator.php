@@ -44,7 +44,7 @@ final class DhlForYouDeliveryTypeCalculator extends AbstractPdkOrderOptionCalcul
                 break;
             case DeliveryOptions::DELIVERY_TYPE_EVENING_NAME:
                 if (! $this->countryService->isLocalCountry($cc)) {
-                    $this->order->deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
+                    $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
                     break;
                 }
                 $deliveryOptions->shipmentOptions->sameDayDelivery = TriStateService::DISABLED;
