@@ -270,7 +270,7 @@ it('merges partial payload with existing order', function (
         ->toBeInstanceOf(Response::class)
         ->and($responseOrders)
         ->toHaveLength(count($orders))
-        // Check to make sure the carrier did not reset to the default - this is the only part that is easy to test due to not being affected to calculators
+        // Check to make sure the carrier did not reset to the default - this is the only part that is easy to test due to not being affected by calculators
         ->and($responseOrders[0]['deliveryOptions'][DeliveryOptions::CARRIER])
         ->toBe($mergedDeliveryOptions[DeliveryOptions::CARRIER])
         ->and($response->getStatusCode())
