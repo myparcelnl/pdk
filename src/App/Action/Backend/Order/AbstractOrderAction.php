@@ -80,7 +80,7 @@ abstract class AbstractOrderAction implements ActionInterface
              Explicit unsets must be done by setting the value to null.
              This is currently implemented only for deliveryOptions, but could (should) be extended to other attributes in the future.
             */
-            if (isset($attributes['deliveryOptions']) && $attributes['deliveryOptions'] !== null) {
+            if (array_key_exists('deliveryOptions', $attributes) && $attributes['deliveryOptions'] !== null) {
                 $attributes['deliveryOptions'] = \array_replace_recursive(
                     $pdkOrder->deliveryOptions->toArray(),
                     $attributes['deliveryOptions']
