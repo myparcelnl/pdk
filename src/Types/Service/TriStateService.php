@@ -105,7 +105,7 @@ class TriStateService implements TriStateServiceInterface
                 return self::DISABLED;
             }
 
-            if (self::INHERIT === $value || $value === '-1') {
+            if (self::INHERIT === (int) $value) {
                 continue;
             }
 
