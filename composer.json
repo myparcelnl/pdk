@@ -30,7 +30,7 @@
         "test": "composer run test:unit && composer run test:integration",
         "test:integration": "behat",
         "test:unit": "pest",
-        "test:unit:coverage": "php -dpcov.enabled=1 vendor/bin/pest --coverage-clover clover.xml",
+        "test:unit:coverage": "php -dmemory_limit=512M -dpcov.enabled=1 vendor/bin/pest --coverage-clover clover.xml",
         "test:unit:snapshot": "pest -d --update-snapshots"
     },
     "require-dev": {
