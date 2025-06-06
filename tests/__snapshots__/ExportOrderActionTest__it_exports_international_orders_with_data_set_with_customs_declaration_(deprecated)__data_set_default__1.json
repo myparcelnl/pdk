@@ -39,6 +39,7 @@
           "postal_code": "95014",
           "state": "CA",
           "street": "1 Infinite Loop",
+          "street_additional_info": "",
           "vat_number": "NL123456789B01"
         },
         "reference_identifier": "PDK-1"
