@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.2](https://github.com/myparcelnl/pdk/compare/v2.58.1...v2.58.2) (2025-06-06)
+
+
+### :bug: Bug Fixes
+
+* apply default origin country for ROW shipments ([#357](https://github.com/myparcelnl/pdk/issues/357)) ([ed2fdc6](https://github.com/myparcelnl/pdk/commit/ed2fdc6677fbe72120516816f595138340be5bdb))
+* ensure pickup location takes precedence over 'only recipient'  ([#359](https://github.com/myparcelnl/pdk/issues/359)) ([93d9f9c](https://github.com/myparcelnl/pdk/commit/93d9f9c0f8ab832f322b10ef2cf42ece73ba0c03))
+* hide same day delivery after cutoffTimeSameDay ([#356](https://github.com/myparcelnl/pdk/issues/356)) ([e4b71e9](https://github.com/myparcelnl/pdk/commit/e4b71e92ca40602fa6b838541f4243f07714e3db))
+
 ## [2.58.1](https://github.com/myparcelnl/pdk/compare/v2.58.0...v2.58.1) (2025-05-23)
 
 
