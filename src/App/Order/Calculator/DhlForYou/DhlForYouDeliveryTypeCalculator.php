@@ -13,7 +13,8 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * - Evening delivery is only allowed in the Netherlands.
- * - When evening delivery is enabled same-day delivery is not available
+ * - When evening delivery is enabled, same-day delivery is not available.
+ * - The 'only recipient' option is disabled when the 'pickup' delivery type is selected.
  */
 final class DhlForYouDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -34,18 +35,22 @@ final class DhlForYouDeliveryTypeCalculator extends AbstractPdkOrderOptionCalcul
 
     public function calculate(): void
     {
-        $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
+        $deliveryOptions = $this->order->deliveryOptions;
+        $cc              = $this->order->shippingAddress->cc;
 
-        if (! $this->countryService->isLocalCountry($this->order->shippingAddress->cc)) {
-            $this->order->deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
-
-            return;
+        switch ($deliveryOptions->deliveryType) {
+            case DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME:
+                $deliveryOptions->shipmentOptions->onlyRecipient = TriStateService::DISABLED;
+                break;
+            case DeliveryOptions::DELIVERY_TYPE_EVENING_NAME:
+                if (! $this->countryService->isLocalCountry($cc)) {
+                    $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
+                    break;
+                }
+                $deliveryOptions->shipmentOptions->sameDayDelivery = TriStateService::DISABLED;
+                break;
+            default:
+                break;
         }
-
-        if (DeliveryOptions::DELIVERY_TYPE_EVENING_NAME !== $this->order->deliveryOptions->deliveryType) {
-            return;
-        }
-
-        $shipmentOptions->sameDayDelivery = TriStateService::DISABLED;
     }
 }
