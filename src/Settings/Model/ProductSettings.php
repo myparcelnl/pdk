@@ -27,6 +27,7 @@ class ProductSettings extends AbstractSettingsModel
 {
     public const ID                       = 'product';
     public const COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
+    public const COUNTRY_OF_ORIGIN_NONE   = 'none';
     public const CUSTOMS_CODE             = 'customsCode';
     public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
     public const DROP_OFF_DELAY           = 'dropOffDelay';
