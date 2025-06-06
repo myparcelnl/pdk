@@ -145,6 +145,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             ->pluck('weekday')
             ->toArray();
 
+        // Always use Europe/Amsterdam timezone for cutoff checks, because cutoff times are meant as local shop time.
+        // This prevents bugs when the server runs in a different timezone (e.g. UTC).
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Amsterdam'));
+
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
             : $cart->shippingMethod->minimumDropOffDelay;
@@ -163,9 +167,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             [
                 'deliveryDaysWindow'   => $carrierSettings->deliveryDaysWindow,
                 'dropOffDelay'         => max($minimumDropOffDelay, $carrierSettings->dropOffDelay),
-                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false) && 0 === $minimumDropOffDelay,
+                'allowSameDayDelivery' => ($settings['allowSameDayDelivery'] ?? false)
+                    && 0 === $minimumDropOffDelay
+                    && $now->format('H:i') <= ($carrierSettings['cutoffTimeSameDay'] ?? '00:00'),
                 'cutoffTime'           => $dropOff->cutoffTime ?? null,
-                'cutoffTimeSameDay'    => $dropOff->sameDayCutoffTime ?? null,
+                'cutoffTimeSameDay'    => $carrierSettings['cutoffTimeSameDay'] ?? null,
                 'dropOffDays'          => $dropOffDays,
             ]
         );
@@ -193,7 +199,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 // For pickup price, ensure it doesn't exceed shipping costs
                 if ($key === CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP) {
                     $shippingCost = $this->currencyService->convertToEuros($cart->shipmentPrice);
-                    $subtotal = max(-$shippingCost, $value);
+                    $subtotal     = max(-$shippingCost, $value);
                 }
 
                 return $this->taxService->getShippingDisplayPrice((float) $subtotal);
