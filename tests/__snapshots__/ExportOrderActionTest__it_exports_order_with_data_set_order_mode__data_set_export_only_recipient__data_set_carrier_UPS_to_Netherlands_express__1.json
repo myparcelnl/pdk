@@ -11,8 +11,7 @@
           "number": "31",
           "person": "Felicia Parcel",
           "postal_code": "2132 JE",
-          "street": "Antareslaan",
-          "street_additional_info": ""
+          "street": "Antareslaan"
         },
         "order_date": "2030-01-01 12:00:00",
         "order_lines": [
@@ -65,7 +64,6 @@
             "person": "Felicia Parcel",
             "postal_code": "2132 JE",
             "street": "Antareslaan",
-            "street_additional_info": "",
             "vat_number": "NL123456789B01"
           }
         }
