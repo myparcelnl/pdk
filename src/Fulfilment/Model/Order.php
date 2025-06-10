@@ -112,11 +112,14 @@ class Order extends Model
                 'referenceIdentifier'         => $pdkOrder->referenceIdentifier,
                 'lines'                       => $pdkOrder->lines
                     ->map(function (PdkOrderLine $pdkOrderLine) {
-                        return new OrderLine(
-                            [
-                                'product' => Product::fromPdkProduct($pdkOrderLine->product),
-                            ] + $pdkOrderLine->toSnakeCaseArray()
-                        );
+                        $quantity = $pdkOrderLine->quantity > 0 ? $pdkOrderLine->quantity : 1;
+                        return new OrderLine([
+                            'product'        => Product::fromPdkProduct($pdkOrderLine->product),
+                            'quantity'       => $pdkOrderLine->quantity,
+                            'price'          => (int) round($pdkOrderLine->price / $quantity),
+                            'priceAfterVat'  => (int) round($pdkOrderLine->priceAfterVat / $quantity),
+                            'vat'            => (int) round($pdkOrderLine->vat / $quantity),
+                        ]);
                     })
                     ->all(),
                 'notes'                       => $pdkOrder->notes,
