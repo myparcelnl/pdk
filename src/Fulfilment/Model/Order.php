@@ -115,7 +115,7 @@ class Order extends Model
                         $quantity = $pdkOrderLine->quantity > 0 ? $pdkOrderLine->quantity : 1;
                         return new OrderLine([
                             'product'        => Product::fromPdkProduct($pdkOrderLine->product),
-                            'quantity'       => $pdkOrderLine->quantity,
+                            'quantity'       => $quantity,
                             'price'          => (int) round($pdkOrderLine->price / $quantity),
                             'priceAfterVat'  => (int) round($pdkOrderLine->priceAfterVat / $quantity),
                             'vat'            => (int) round($pdkOrderLine->vat / $quantity),
