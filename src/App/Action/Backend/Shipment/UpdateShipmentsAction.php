@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -70,7 +71,7 @@ class UpdateShipmentsAction extends AbstractOrderAction
 
             $this->addBarcodeNotes($shipments);
 
-            $this->updateOrderStatus($shipments);
+            $this->updateOrderStatus($shipments, $request->get('orderStatus', OrderSettings::STATUS_ON_LABEL_CREATE));
         }
 
         return new JsonResponse([
@@ -114,13 +115,17 @@ class UpdateShipmentsAction extends AbstractOrderAction
             });
     }
 
-    private function updateOrderStatus(ShipmentCollection $shipments): void
+    private function updateOrderStatus(ShipmentCollection $shipments, string $status): void
     {
         $shipments
-            ->each(function (Shipment $shipment) {
+            ->each(function (Shipment $shipment) use ($status) {
+                Logger::debug('Update status', [
+                    'orderId' => $shipment->orderId,
+                    'status'  => $status,
+                ]);
                 Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
                     'orderIds' => [$shipment->orderId],
-                    'setting'  => OrderSettings::STATUS_ON_LABEL_CREATE,
+                    'setting'  => $status,
                 ]);
             });
     }

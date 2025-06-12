@@ -69,8 +69,12 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
      */
     public function processWebhook(Request $request): void
     {
-        $requiredPath = parse_url($this->webhooksRepository->getHashedUrl(), PHP_URL_PATH);
-        $logContext   = ['request' => get_object_vars($request)];
+        $hashedUrl    = $this->webhooksRepository->getHashedUrl();
+        $requiredPath = parse_url($hashedUrl, PHP_URL_PATH);
+        if ($query = parse_url($hashedUrl, PHP_URL_QUERY)) {
+            $requiredPath .= '?' . $query;
+        }
+        $logContext = ['request' => get_object_vars($request)];
 
         if ($request->getRequestUri() !== $requiredPath) {
             Logger::error('Webhook received with invalid url', $logContext);
@@ -108,7 +112,6 @@ class PdkWebhookManager implements PdkWebhookManagerInterface
     protected function handleHook(HookInterface $hook, Request $request, array $logContext): void
     {
         $hook->handle($request);
-
         Logger::debug('Webhook processed', $logContext);
     }
 
