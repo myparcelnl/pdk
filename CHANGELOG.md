@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.4](https://github.com/myparcelnl/pdk/compare/v2.58.3...v2.58.4) (2025-06-12)
+
+
+### :bug: Bug Fixes
+
+* supply correct status setting in webhook ([#358](https://github.com/myparcelnl/pdk/issues/358)) ([d5c1495](https://github.com/myparcelnl/pdk/commit/d5c1495414244726a2737945584e5a26f676bd93))
+
 ## [2.58.3](https://github.com/myparcelnl/pdk/compare/v2.58.2...v2.58.3) (2025-06-10)
 
 
