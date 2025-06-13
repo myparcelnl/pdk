@@ -9,6 +9,9 @@ use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use function MyParcelNL\Pdk\Tests\factory;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -44,3 +47,39 @@ it('passes carrier to delivery options', function (string $carrierName) {
     $deliveryOptions = $shipment->deliveryOptions;
     expect($deliveryOptions ? $deliveryOptions->carrier->name : null)->toEqual($carrierName);
 })->with('carrierNames');
+
+it('encodes recipient street fields correctly', function () {
+    $trait = new class {
+        use EncodesRecipient;
+        public function publicEncodeRecipient($recipient) {
+            return $this->encodeRecipient($recipient);
+        }
+    };
+
+    // Test: long street, empty extra field
+    $recipient = factory(ContactDetails::class)
+        ->withStreet('Bldg. 3, #81, Lane 1159, East Kangqiao Rd.')
+        ->withStreetAdditionalInfo(null)
+        ->make();
+    $result = $trait->publicEncodeRecipient($recipient);
+    expect($result['street'])->toBe('Bldg. 3, #81, Lane 1159, East Kangqiao R')
+        ->and($result['street_additional_info'])->toBe('d.');
+
+    // Test: overlap between street and extra field
+    $recipient = factory(ContactDetails::class)
+        ->withStreet('Bldg. 3, #81, Lane 1159, East Kangqiao Rd.')
+        ->withStreetAdditionalInfo('East Kangqiao Rd.')
+        ->make();
+    $result = $trait->publicEncodeRecipient($recipient);
+    expect($result['street'])->not()->toContain('East Kangqiao Rd.')
+        ->and($result['street_additional_info'])->toBe('East Kangqiao Rd.');
+
+    // Test: extra field filled, no overlap
+    $recipient = factory(ContactDetails::class)
+        ->withStreet('Bldg. 3, #81, Lane 1159, East Kangqiao Rd.')
+        ->withStreetAdditionalInfo('Apt. 5B')
+        ->make();
+    $result = $trait->publicEncodeRecipient($recipient);
+    expect($result['street'])->toBe('Bldg. 3, #81, Lane 1159, East Kangqiao R')
+        ->and($result['street_additional_info'])->toBe('Apt. 5B');
+});
