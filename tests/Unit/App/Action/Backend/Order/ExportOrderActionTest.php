@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -12,6 +13,7 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -29,6 +31,7 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
@@ -41,7 +44,9 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -188,6 +193,104 @@ it('exports order', function (
     ->with('order mode toggle')
     ->with('carrier export settings')
     ->with('pdk orders domestic');
+
+it('merges partial payload with existing order', function (
+    bool                      $orderMode,
+    CarrierSettingsFactory    $carrierSettingsFactory,
+    PdkOrderCollectionFactory $orderFactory
+) {
+
+    $orders = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    $carriers = $orders
+        ->pluck('deliveryOptions.carrier.externalIdentifier')
+        ->toArray();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
+        ->withCarriers($carriers, $carrierSettingsFactory)
+        ->store();
+
+    MockApi::enqueue(
+        ...$orderMode
+        ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+        : [new ExamplePostShipmentsResponse()]
+    );
+
+    $date = new \DateTime('+1 day');
+    $partialDeliveryOptions = [
+        DeliveryOptions::DATE => $date
+    ];
+
+    /**
+     * @var DeliveryOptions $existingDeliveryOptions
+     */
+    $existingDeliveryOptions = $orders->pluck('deliveryOptions')->first();
+    $mergedDeliveryOptions = $existingDeliveryOptions
+        ->fill($partialDeliveryOptions)
+        ->toArrayWithoutNull();
+
+    expect($mergedDeliveryOptions[DeliveryOptions::DATE])->toBe($date->format(Pdk::get('defaultDateFormat')));
+
+    $requestWithPayload = new Request(
+        ['action' => PdkBackendActions::EXPORT_ORDERS, 'orderIds' => $orders->pluck('externalIdentifier')->toArray()],
+        [],
+        [],
+        [],
+        [],
+        [],
+        json_encode(
+            [
+            'data' => [
+                'orders' => [
+                    [
+                        'deliveryOptions' => $partialDeliveryOptions
+                    ],
+                ],
+            ],
+        ]
+        )
+    );
+
+    $response = Actions::execute($requestWithPayload);
+
+    $content = json_decode($response->getContent(), true);
+
+    $responseOrders    = $content['data']['orders'];
+    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+    $errors = Notifications::all()
+        ->filter(function (Notification $notification) {
+            return $notification->variant === Notification::VARIANT_ERROR;
+        });
+
+    expect($response)
+        ->toBeInstanceOf(Response::class)
+        ->and($responseOrders)
+        ->toHaveLength(count($orders))
+        // Check to make sure the carrier did not reset to the default - this is the only part that is easy to test due to not being affected by calculators
+        ->and($responseOrders[0]['deliveryOptions'][DeliveryOptions::CARRIER])
+        ->toBe($mergedDeliveryOptions[DeliveryOptions::CARRIER])
+        ->and($response->getStatusCode())
+        ->toBe(200)
+        // Expect no errors to have been added to notifications
+        ->and($errors->toArrayWithoutNull())
+        ->toBe([]);
+
+    if ($orderMode) {
+        expect($responseShipments)->each->toHaveLength(0);
+    } else {
+        expect($responseShipments)->each->toHaveLength(1)
+            ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+    }
+
+})
+    ->with('order mode toggle')
+    ->with('carrier export settings')
+    ->with('pdk orders domestic');
+;
 
 it('exports multicollo order', function (
     PdkOrderCollectionFactory $orderFactory,
