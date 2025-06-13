@@ -36,11 +36,6 @@ final class AccountFactory extends AbstractModelFactory
         return Account::class;
     }
 
-    public function onPlatformFlespakket(): self
-    {
-        return $this->withPlatformId(Platform::FLESPAKKET_ID);
-    }
-
     public function onPlatformMyParcel(): self
     {
         return $this->withPlatformId(Platform::MYPARCEL_ID);
