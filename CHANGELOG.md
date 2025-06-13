@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.5](https://github.com/myparcelnl/pdk/compare/v2.58.4...v2.58.5) (2025-06-13)
+
+
+### :bug: Bug Fixes
+
+* **pdk:** truncate address fields to max API length during export ([#361](https://github.com/myparcelnl/pdk/issues/361)) ([916f481](https://github.com/myparcelnl/pdk/commit/916f481f23fdbc5ab62ee6c17613d90c3a77db20))
+
 ## [2.58.4](https://github.com/myparcelnl/pdk/compare/v2.58.3...v2.58.4) (2025-06-12)
 
 
