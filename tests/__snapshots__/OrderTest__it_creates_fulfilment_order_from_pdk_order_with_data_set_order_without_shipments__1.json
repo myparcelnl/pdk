@@ -5,9 +5,9 @@
   "lines": [
     {
       "quantity": 10,
-      "price": 295,
-      "vat": 62,
-      "priceAfterVat": 357,
+      "price": 30,
+      "vat": 6,
+      "priceAfterVat": 36,
       "product": {
         "sku": "ABC123456",
         "ean": "1234567890123",
