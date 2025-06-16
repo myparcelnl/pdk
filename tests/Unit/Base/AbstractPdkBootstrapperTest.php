@@ -81,7 +81,6 @@ it('determines platform automatically', function (string $name, string $platform
 })->with([
     'myparcelnl'          => ['myparcelnl', Platform::MYPARCEL_NAME],
     'myparcelbe'          => ['myparcelbe', Platform::SENDMYPARCEL_NAME],
-    'flespakket'          => ['flespakket', Platform::FLESPAKKET_NAME],
     'unrecognized string' => ['bla', Platform::MYPARCEL_NAME],
 ]);
 
