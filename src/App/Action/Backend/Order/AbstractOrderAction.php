@@ -80,14 +80,16 @@ abstract class AbstractOrderAction implements ActionInterface
              Explicit unsets must be done by setting the value to null.
              This is currently implemented only for deliveryOptions, but could (should) be extended to other attributes in the future.
             */
-            if (array_key_exists('deliveryOptions', $attributes) && null !== $attributes['deliveryOptions']) {
-                $attributes['deliveryOptions'] = \array_replace_recursive(
-                    $pdkOrder->deliveryOptions->toArray(),
-                    $attributes['deliveryOptions']
-                );
-            } elseif (null === $attributes['deliveryOptions']) {
-                // If deliveryOptions is explicitly set to null, we should unset it in the PdkOrder.
-                $attributes['deliveryOptions'] = null;
+            if (array_key_exists('deliveryOptions', $attributes)) {
+                if (null !== $attributes['deliveryOptions']) {
+                    $attributes['deliveryOptions'] = \array_replace_recursive(
+                        $pdkOrder->deliveryOptions->toArray(),
+                        $attributes['deliveryOptions']
+                    );
+                } else {
+                    // If deliveryOptions is explicitly set to null, we should unset it in the PdkOrder.
+                    $attributes['deliveryOptions'] = null;
+                }
             }
             return $pdkOrder->fill($attributes);
         });
