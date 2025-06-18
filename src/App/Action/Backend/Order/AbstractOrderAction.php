@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractOrderAction implements ActionInterface
@@ -74,6 +75,22 @@ abstract class AbstractOrderAction implements ActionInterface
         $attributes = Utils::filterNull($body['data']['orders'][0] ?? []);
 
         return $orders->map(function (PdkOrder $pdkOrder) use ($attributes) {
+            /*
+             Merge nested attributes with existing data (just like unnested attributes will be).
+             Explicit unsets must be done by setting the value to null.
+             This is currently implemented only for deliveryOptions, but could (should) be extended to other attributes in the future.
+            */
+            if (array_key_exists('deliveryOptions', $attributes)) {
+                if (null !== $attributes['deliveryOptions']) {
+                    $attributes['deliveryOptions'] = \array_replace_recursive(
+                        $pdkOrder->deliveryOptions->toArray(),
+                        $attributes['deliveryOptions']
+                    );
+                } else {
+                    // If deliveryOptions is explicitly set to null, we should unset it in the PdkOrder.
+                    $attributes['deliveryOptions'] = null;
+                }
+            }
             return $pdkOrder->fill($attributes);
         });
     }
