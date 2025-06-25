@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.58.6](https://github.com/myparcelnl/pdk/compare/v2.58.5...v2.58.6) (2025-06-25)
+
+
+### :bug: Bug Fixes
+
+* **export:** fix an issue with missing delivery options when exporting ([#360](https://github.com/myparcelnl/pdk/issues/360)) ([eca4be9](https://github.com/myparcelnl/pdk/commit/eca4be9c3d5800845514c9c78c72fe7ca9de96d4))
+
 ## [2.58.5](https://github.com/myparcelnl/pdk/compare/v2.58.4...v2.58.5) (2025-06-13)
 
 
