@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
@@ -232,6 +233,12 @@ class ExportOrderAction extends AbstractOrderAction
                 }
 
                 $validatorErrors = $validator->getErrors();
+
+                Logger::error('Failed to export order', [
+                    'order'       => $order->externalIdentifier,
+                    'description' => $validator->getDescription(),
+                    'errors'      => $validatorErrors,
+                ]);
 
                 Notifications::error(
                     "Failed to export order $order->externalIdentifier",
