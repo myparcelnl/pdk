@@ -115,9 +115,10 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount)
     {
-        $allowedInsuranceAmounts = $this->order
-            ->getValidator()
-            ->getAllowedInsuranceAmounts();
+        $schema        = Pdk::get(CarrierSchema::class);
+        $carrierSchema = $schema->setCarrier($this->order->deliveryOptions->carrier);
+
+        $allowedInsuranceAmounts = $carrierSchema->getAllowedInsuranceAmounts();
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
         $maxInsuranceValue = $carrierSettings->getAttribute($insuranceUpToKey) ?? 0;
