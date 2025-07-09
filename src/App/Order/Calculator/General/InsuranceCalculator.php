@@ -11,7 +11,9 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
@@ -27,6 +29,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private $currencyService;
 
     /**
+     * @var \MyParcelNL\Pdk\Validation\Repository\SchemaRepository
+     */
+    private $schemaRepository;
+
+    /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
     public function __construct(PdkOrder $order)
@@ -35,6 +42,8 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 
         $this->countryService  = Pdk::get(CountryServiceInterface::class);
         $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
+        $this->schemaRepository = Pdk::get(SchemaRepository::class);
+
     }
 
     /**
@@ -115,10 +124,19 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount)
     {
-        $schema        = Pdk::get(CarrierSchema::class);
-        $carrierSchema = $schema->setCarrier($this->order->deliveryOptions->carrier);
+        // Get a schema resolved to this specific order's combination of carrier, country, package type and delivery type.
+        $orderSchema = $this->schemaRepository->getOrderValidationSchema(
+            $this->order->deliveryOptions->carrier->name ?? Platform::get('defaultCarrier'),
+            $this->order->shippingAddress->cc ?? null,
+            $this->order->deliveryOptions->packageType,
+            $this->order->deliveryOptions->deliveryType
+        );
 
-        $allowedInsuranceAmounts = $carrierSchema->getAllowedInsuranceAmounts();
+        // The key below is terrible, and is a placeholder until we can get this from the Capabilities API.
+        $allowedInsuranceAmounts = $this->schemaRepository->getValidOptions(
+            $orderSchema,
+            'properties.deliveryOptions.properties.shipmentOptions.properties.' . ShipmentOptions::INSURANCE
+        );
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
         $maxInsuranceValue = $carrierSettings->getAttribute($insuranceUpToKey) ?? 0;
