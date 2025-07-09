@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.59.0](https://github.com/myparcelnl/pdk/compare/v2.58.6...v2.59.0) (2025-07-09)
+
+
+### :sparkles: New Features
+
+* show api errors ([#353](https://github.com/myparcelnl/pdk/issues/353)) ([b511e85](https://github.com/myparcelnl/pdk/commit/b511e8580c984b84d2523227f8f97a47d444ed66))
+
 ## [2.58.6](https://github.com/myparcelnl/pdk/compare/v2.58.5...v2.58.6) (2025-06-25)
 
 
