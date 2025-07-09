@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use MyParcelNL\Pdk\Api\Exception\ApiException;
 
 class ExportOrderAction extends AbstractOrderAction
 {
@@ -143,17 +144,53 @@ class ExportOrderAction extends AbstractOrderAction
             return $orders;
         }
 
-        $concepts = $this->shipmentRepository->createConcepts($shipments);
+        try {
+            $concepts = $this->shipmentRepository->createConcepts($shipments);
 
-        if (Settings::get(OrderSettings::CONCEPT_SHIPMENTS, OrderSettings::ID)) {
-            $orders->updateShipments($concepts);
-        } else {
-            $this->shipmentRepository->fetchLabelLink($concepts, LabelSettings::FORMAT_A4);
+            if (Settings::get(OrderSettings::CONCEPT_SHIPMENTS, OrderSettings::ID)) {
+                $orders->updateShipments($concepts);
+            } else {
+                $this->shipmentRepository->fetchLabelLink($concepts, LabelSettings::FORMAT_A4);
 
-            $ids                  = $concepts->pluck('id');
-            $shipmentsWithBarcode = $this->shipmentRepository->getShipments($ids->toArray());
+                $ids                  = $concepts->pluck('id');
+                $shipmentsWithBarcode = $this->shipmentRepository->getShipments($ids->toArray());
 
-            $orders->updateShipments($shipmentsWithBarcode);
+                $orders->updateShipments($shipmentsWithBarcode);
+            }
+        } catch (ApiException $e) {
+            $errorMessages = [];
+
+            foreach ($e->getErrors() as $error) {
+                if (is_array($error)) {
+                    foreach ($error as $code => $details) {
+                        if (isset($details['human'])) {
+                            $errorMessages = array_merge($errorMessages, $details['human']);
+                        }
+                    }
+                }
+            }
+
+            if (empty($errorMessages)) {
+                $errorMessages = [$e->getMessage()];
+            }
+
+            Notifications::error(
+                'Could not create shipment',
+                $errorMessages,
+                Notification::CATEGORY_ACTION,
+                [
+                    'action'     => PdkBackendActions::EXPORT_ORDERS,
+                    'errors'     => $e->getErrors(),
+                    'request_id' => $e->getRequestId(),
+                    'orderIds'   => implode(
+                        ',',
+                        $orders->pluck('externalIdentifier')
+                            ->toArray()
+                    ),
+                ]
+            );
+
+            throw $e;
         }
 
         return $orders;
