@@ -2,7 +2,6 @@
 
 [![Latest version](https://img.shields.io/github/v/release/myparcelnl/pdk)](https://github.com/myparcelnl/pdk/releases/latest)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/myparcelnl/pdk)](https://packagist.org/packages/myparcelnl/pdk)
-[![Codacy grade](https://img.shields.io/codacy/grade/c0f99d91962d448287b438b8162fff51)](https://app.codacy.com/gh/myparcelnl/pdk/dashboard)
 [![Code coverage](https://img.shields.io/codecov/c/github/myparcelnl/pdk)](https://codecov.io/gh/myparcelnl/pdk)
 ![PHPStan](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmyparcelnl%2Fpdk%2Fmain%2Fphpstan.neon.dist&query=%24.parameters.level&label=PHPStan%20level&color=brightgreen)
 ![License](https://img.shields.io/github/license/myparcelnl/pdk)
