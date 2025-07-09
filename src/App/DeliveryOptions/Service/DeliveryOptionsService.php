@@ -274,13 +274,13 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
                         $packageTypeValidation = $this->schemaRepository->validateOption(
                             $schema,
-                            OrderPropertiesValidator::PACKAGE_TYPE_KEY,
+                            'properties.deliveryOptions.properties.packageType',
                             $packageType->name
                         );
 
                         $weightValidation = $this->schemaRepository->validateOption(
                             $schema,
-                            OrderPropertiesValidator::WEIGHT_KEY,
+                            'properties.physicalProperties.properties.weight',
                             $weight
                         );
 
