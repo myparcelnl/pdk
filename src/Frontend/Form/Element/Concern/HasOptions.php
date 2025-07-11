@@ -89,9 +89,12 @@ trait HasOptions
     {
         $associativeArray = Arr::isAssoc($array) ? $array : array_combine($array, $array);
 
-        $options = array_map(function (string $key, $value) use ($flags) {
+        $options = array_map(function (?string $key, $value) use ($flags) {
             $usePlainLabel = $flags & ElementBuilderWithOptionsInterface::USE_PLAIN_LABEL;
             $labelKey      = $usePlainLabel ? 'plainLabel' : 'label';
+
+            // Cast key to string to prevent issues with non-string array keys
+            $key = (string) $key;
 
             return [
                 $labelKey => $usePlainLabel ? $key : $this->createOptionLabel($key),
