@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.59.1](https://github.com/myparcelnl/pdk/compare/v2.59.0...v2.59.1) (2025-07-11)
+
+
+### :bug: Bug Fixes
+
+* fix unreachable settings page when order status is NULL ([#367](https://github.com/myparcelnl/pdk/issues/367)) ([9a16942](https://github.com/myparcelnl/pdk/commit/9a1694256023534241ba494ce3d60264387d3db3))
+
 ## [2.59.0](https://github.com/myparcelnl/pdk/compare/v2.58.6...v2.59.0) (2025-07-09)
 
 
