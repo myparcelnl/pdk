@@ -224,35 +224,6 @@ class ExportOrderAction extends AbstractOrderAction
             })
             ->map(static function (PdkOrder $order) use ($orderService) {
                 return $orderService->calculate($order);
-            })
-            ->filter(static function (PdkOrder $order) {
-                $validator = $order->getValidator();
-
-                if ($validator->validate()) {
-                    return true;
-                }
-
-                $validatorErrors = $validator->getErrors();
-
-                Logger::error('Failed to export order', [
-                    'order'       => $order->externalIdentifier,
-                    'description' => $validator->getDescription(),
-                    'errors'      => $validatorErrors,
-                ]);
-
-                Notifications::error(
-                    "Failed to export order $order->externalIdentifier",
-                    array_map(static function (array $error) {
-                        return sprintf('%s: %s', $error['property'], $error['message']);
-                    }, $validatorErrors),
-                    Notification::CATEGORY_ACTION,
-                    [
-                        'action'   => PdkBackendActions::EXPORT_ORDERS,
-                        'orderIds' => $order->externalIdentifier,
-                    ]
-                );
-
-                return false;
             });
     }
 
@@ -292,4 +263,3 @@ class ExportOrderAction extends AbstractOrderAction
         $this->pdkOrderRepository->updateMany($orders);
     }
 }
-

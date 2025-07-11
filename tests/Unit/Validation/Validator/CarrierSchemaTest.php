@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -10,6 +11,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
