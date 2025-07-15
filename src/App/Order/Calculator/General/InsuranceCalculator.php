@@ -33,6 +33,14 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private $schemaRepository;
 
+
+    /**
+     * Placeholder until we can get this from the Capabilities API.
+     * @deprecated This is a temporary solution and should be replaced with a proper implementation through the Capabilities API.
+     * @var string
+     */
+    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.'  . ShipmentOptions::INSURANCE;
+
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
@@ -132,10 +140,9 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             $this->order->deliveryOptions->deliveryType
         );
 
-        // The key below is terrible, and is a placeholder until we can get this from the Capabilities API.
         $allowedInsuranceAmounts = $this->schemaRepository->getValidOptions(
             $orderSchema,
-            'properties.deliveryOptions.properties.shipmentOptions.properties.' . ShipmentOptions::INSURANCE
+            self::INSURANCE_SCHEMA_PREFIX
         );
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
