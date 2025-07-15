@@ -50,6 +50,10 @@ class Carrier extends Model
     public const CARRIER_DHL_PARCEL_CONNECT_NAME = 'dhlparcelconnect';
     public const CARRIER_DHL_EUROPLUS_ID         = 11;
     public const CARRIER_DHL_EUROPLUS_NAME       = 'dhleuroplus';
+    public const CARRIER_UPS_STANDARD_ID         = 12;
+    public const CARRIER_UPS_STANDARD_NAME       = 'upsstandard';
+    public const CARRIER_UPS_EXPRESS_SAVER_ID    = 13;
+    public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'upsexpresssaver';
     /**
      * Names to ids
      */
@@ -65,6 +69,8 @@ class Carrier extends Model
         self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_ID,
         self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_ID,
         self::CARRIER_UPS_NAME                => self::CARRIER_UPS_ID,
+        self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_ID,
+        self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_ID,
     ];
     /**
      * Types

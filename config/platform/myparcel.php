@@ -272,24 +272,66 @@ return [
             ],
         ],
         [
-            'name'         => Carrier::CARRIER_UPS_NAME,
-            'capabilities' => [
+            'name'               => Carrier::CARRIER_UPS_STANDARD_NAME,
+            'capabilities'       => [
                 'packageTypes'    => [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                    DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
-                    'ageCheck'      => true,
-                    'onlyRecipient' => true,
-                    'return'        => true,
-                    'signature'     => true,
-                    'collect'       => true,
+                    'onlyRecipient'   => true,
+                    'ageCheck'        => true,
+                    'signature'       => true,
+                    'pickup'          => true,
+                    'insurance'       => [
+                        10000,  // 100 euro
+                        25000,  // 250 euro
+                        50000,  // 500 euro
+                        100000, // 1000 euro
+                        150000, // 1500 euro
+                        200000, // 2000 euro
+                        250000, // 2500 euro
+                        300000, // 3000 euro
+                        350000, // 3500 euro
+                        400000, // 4000 euro
+                        450000, // 4500 euro
+                        500000, // 5000 euro
+                    ],
                 ],
-                'features'        => [
-                    'labelDescriptionLength' => 45,
+            ],
+        ],
+        [
+            'name'               => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
+            'capabilities'       => [
+                'packageTypes'    => [
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                ],
+                'deliveryTypes'   => [
+                    DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                ],
+                'shipmentOptions' => [
+                    'onlyRecipient'   => true,
+                    'ageCheck'        => true,
+                    'signature'       => true,
+                    'pickup'          => true,
+                    'insurance'       => [
+                        10000,  // 100 euro
+                        25000,  // 250 euro
+                        50000,  // 500 euro
+                        100000, // 1000 euro
+                        150000, // 1500 euro
+                        200000, // 2000 euro
+                        250000, // 2500 euro
+                        300000, // 3000 euro
+                        350000, // 3500 euro
+                        400000, // 4000 euro
+                        450000, // 4500 euro
+                        500000, // 5000 euro
+                    ],
                 ],
             ],
         ],

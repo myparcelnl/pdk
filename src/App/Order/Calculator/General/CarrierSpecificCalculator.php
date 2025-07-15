@@ -27,6 +27,8 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
         Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME => DhlParcelConnectCalculator::class,
         Carrier::CARRIER_DPD_NAME                => DpdCalculator::class,
         Carrier::CARRIER_UPS_NAME                => UPSCalculator::class,
+        Carrier::CARRIER_UPS_STANDARD_NAME       => UPSCalculator::class,
+        Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME  => UPSCalculator::class,
         Carrier::CARRIER_BPOST_NAME              => BpostCalculator::class,
     ];
 

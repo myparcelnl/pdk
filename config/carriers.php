@@ -48,6 +48,16 @@ return [
         'human' => 'UPS',
     ],
     [
+        'id'    => Carrier::CARRIER_UPS_STANDARD_ID,
+        'name'  => Carrier::CARRIER_UPS_STANDARD_NAME,
+        'human' => 'UPS Standard',
+    ],
+    [
+        'id'    => Carrier::CARRIER_UPS_EXPRESS_SAVER_ID,
+        'name'  => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
+        'human' => 'UPS Express Saver',
+    ],
+    [
         'id'    => Carrier::CARRIER_DHL_FOR_YOU_ID,
         'name'  => Carrier::CARRIER_DHL_FOR_YOU_NAME,
         'human' => 'DHL For You',
