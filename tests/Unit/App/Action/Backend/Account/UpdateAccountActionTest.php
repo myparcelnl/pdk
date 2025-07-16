@@ -103,7 +103,8 @@ it('maps carriers correctly', function () {
         ->toBe([
             'cheapcargo',
             'bol.com',
-            'ups',
+            'upsstandard',
+            'upsexpresssaver',
             'dhlforyou',
             'postnl',
             'dhlparcelconnect',

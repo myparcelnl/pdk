@@ -8,13 +8,13 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
-/**
- * @deprecated Use UPSExpressSaverDeliveryTypeCalculator instead
- * This calculator was designed for the old UPS carrier and has limited country support.
- * The new UPS Express Saver supports express delivery for many more countries.
- */
-class UPSDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
+class UPSExpressSaverDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
 {
+    private const EXPRESS_SUPPORTED_COUNTRIES = [
+        CountryCodes::CC_NL,
+        CountryCodes::CC_BE,
+    ];
+
     /**
      * @inheritDoc
      */
@@ -25,7 +25,7 @@ class UPSDeliveryTypeCalculator extends AbstractPdkOrderOptionCalculator
         $isExpress = $deliveryOptions->deliveryType === DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME;
         if (
             $isExpress
-            && $this->order->shippingAddress->cc !== CountryCodes::CC_NL
+            && ! in_array($this->order->shippingAddress->cc, self::EXPRESS_SUPPORTED_COUNTRIES, true)
         ) {
             $deliveryOptions->deliveryType = DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME;
         }

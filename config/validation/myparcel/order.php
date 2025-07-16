@@ -349,6 +349,102 @@ return [
             ],
         ],
         [
+            'id'           => Carrier::CARRIER_UPS_STANDARD_ID,
+            'name'         => Carrier::CARRIER_UPS_STANDARD_NAME,
+            'human'        => 'UPS Standard',
+            'schema'       => 'order/ups/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryCodes::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryCodes::CC_BE,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryCodes::ZONE_EU,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryCodes::ZONE_ROW,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        [
+            'id'           => Carrier::CARRIER_UPS_EXPRESS_SAVER_ID,
+            'name'         => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
+            'human'        => 'UPS Express Saver',
+            'schema'       => 'order/ups/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryCodes::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryCodes::CC_BE,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryCodes::ZONE_EU,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'        => CountryCodes::ZONE_ROW,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/ups/base',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        [
             'id'           => Carrier::CARRIER_DPD_ID,
             'name'         => Carrier::CARRIER_DPD_NAME,
             'human'        => 'DPD',

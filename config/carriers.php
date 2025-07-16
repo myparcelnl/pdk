@@ -42,11 +42,7 @@ return [
         'name'  => Carrier::CARRIER_BOL_COM_NAME,
         'human' => 'Bol.com',
     ],
-    [
-        'id'    => Carrier::CARRIER_UPS_ID,
-        'name'  => Carrier::CARRIER_UPS_NAME,
-        'human' => 'UPS',
-    ],
+
     [
         'id'    => Carrier::CARRIER_UPS_STANDARD_ID,
         'name'  => Carrier::CARRIER_UPS_STANDARD_NAME,

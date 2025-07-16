@@ -6,19 +6,13 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\UPS;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractCarrierOptionsCalculator;
 
-/**
- * @deprecated Use UPSStandardCalculator or UPSExpressSaverCalculator instead
- * This calculator was designed for the old UPS carrier and is no longer suitable
- * for the new UPS Standard and UPS Express Saver carriers.
- */
-final class UPSCalculator extends AbstractCarrierOptionsCalculator
+final class UPSStandardCalculator extends AbstractCarrierOptionsCalculator
 {
     protected function getCalculators(): array
     {
         return [
             UPSCountryShipmentOptionsCalculator::class,
             UPSAgeCheckCalculator::class,
-            UPSDeliveryTypeCalculator::class,
         ];
     }
 }

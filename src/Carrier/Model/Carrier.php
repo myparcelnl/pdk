@@ -42,7 +42,13 @@ class Carrier extends Model
     public const CARRIER_DHL_NAME                = 'dhl';
     public const CARRIER_BOL_COM_ID              = 7;
     public const CARRIER_BOL_COM_NAME            = 'bol.com';
+    /**
+     * @deprecated Use CARRIER_UPS_STANDARD_ID or CARRIER_UPS_EXPRESS_SAVER_ID instead
+     */
     public const CARRIER_UPS_ID                  = 8;
+    /**
+     * @deprecated Use CARRIER_UPS_STANDARD_NAME or CARRIER_UPS_EXPRESS_SAVER_NAME instead
+     */
     public const CARRIER_UPS_NAME                = 'ups';
     public const CARRIER_DHL_FOR_YOU_ID          = 9;
     public const CARRIER_DHL_FOR_YOU_NAME        = 'dhlforyou';
@@ -68,7 +74,6 @@ class Carrier extends Model
         self::CARRIER_DPD_NAME                => self::CARRIER_DPD_ID,
         self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_ID,
         self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_ID,
-        self::CARRIER_UPS_NAME                => self::CARRIER_UPS_ID,
         self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_ID,
         self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_ID,
     ];

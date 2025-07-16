@@ -38,10 +38,22 @@ final class ExampleGetCarrierOptionsResponse extends ExampleJsonResponse
             ],
             [
                 'id'         => 7393,
-                'carrier_id' => 8,
+                'carrier_id' => 12,
                 'carrier'    => [
-                    'id'   => 8,
-                    'name' => 'ups',
+                    'id'   => 12,
+                    'name' => 'upsstandard',
+                ],
+                'enabled'    => 1,
+                'optional'   => 1,
+                'primary'    => 1,
+                'type'       => 'main',
+            ],
+            [
+                'id'         => 7394,
+                'carrier_id' => 13,
+                'carrier'    => [
+                    'id'   => 13,
+                    'name' => 'upsexpresssaver',
                 ],
                 'enabled'    => 1,
                 'optional'   => 1,

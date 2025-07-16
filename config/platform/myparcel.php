@@ -272,8 +272,8 @@ return [
             ],
         ],
         [
-            'name'               => Carrier::CARRIER_UPS_STANDARD_NAME,
-            'capabilities'       => [
+            'name'         => Carrier::CARRIER_UPS_STANDARD_NAME,
+            'capabilities' => [
                 'packageTypes'    => [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
@@ -282,11 +282,11 @@ return [
                     DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
-                    'onlyRecipient'   => true,
-                    'ageCheck'        => true,
-                    'signature'       => true,
-                    'pickup'          => true,
-                    'insurance'       => [
+                    'onlyRecipient' => true,
+                    'ageCheck'      => true,
+                    'signature'     => true,
+                    'pickup'        => true,
+                    'insurance'     => [
                         10000,  // 100 euro
                         25000,  // 250 euro
                         50000,  // 500 euro
@@ -304,21 +304,21 @@ return [
             ],
         ],
         [
-            'name'               => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
-            'capabilities'       => [
+            'name'         => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
+            'capabilities' => [
                 'packageTypes'    => [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
                 'deliveryTypes'   => [
-                    DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME,
                     DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
-                    'onlyRecipient'   => true,
-                    'ageCheck'        => true,
-                    'signature'       => true,
-                    'pickup'          => true,
-                    'insurance'       => [
+                    'onlyRecipient' => true,
+                    'ageCheck'      => true,
+                    'signature'     => true,
+                    'pickup'        => true,
+                    'insurance'     => [
                         10000,  // 100 euro
                         25000,  // 250 euro
                         50000,  // 500 euro
