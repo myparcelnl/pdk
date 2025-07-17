@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
+use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
@@ -38,6 +39,7 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
+use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsValidationErrorResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -347,8 +349,9 @@ it('exports multicollo order', function (
 })
     ->with('multicolloPdkOrders');
 
-it('adds notification if shipment export fails', function () {
-    MockApi::enqueue(new ExamplePostShipmentsResponse());
+it('adds api errors as notifications if shipment export fails', function () {
+    $errorResponse = new ExamplePostShipmentsValidationErrorResponse();
+    MockApi::enqueue($errorResponse);
 
     factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)->store();
     factory(PdkOrder::class)
@@ -360,32 +363,39 @@ it('adds notification if shipment export fails', function () {
         )
         ->store();
 
-    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => 'error']);
-
-    expect($response->getStatusCode())->toBe(200);
-
-    $notifications = Notifications::all()
-        ->toArrayWithoutNull();
-
-    $notification = Arr::first($notifications);
-
-    expect($notifications)
-        ->toHaveLength(1)
-        ->and($notification)
-        ->toHaveKeysAndValues([
-            'title'    => 'Failed to export order error',
-            'variant'  => Notification::VARIANT_ERROR,
-            'category' => Notification::CATEGORY_ACTION,
-            'timeout'  => false,
-            'tags'     => [
-                'action'   => PdkBackendActions::EXPORT_ORDERS,
-                'orderIds' => 'error',
-            ],
-        ])
-        ->and($notification['content'][0] ?? null)
-        ->toBe(
-            'deliveryOptions.deliveryType: Does not have a value in the enumeration ["standard","pickup",null]'
+    try {
+        $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => 'error']);
+        expect($response->getStatusCode())->toBe(400);
+    } catch (ApiException $e) {
+        $expectedErrorContent = $errorResponse->getContent();
+        expect($e->getMessage())->toBe(
+            'Request failed. Status code: ' . $expectedErrorContent['status_code'] . '. Message: Shipment validation error (request_id: ' . $expectedErrorContent['request_id'] . ')'
         );
+        $notifications = Notifications::all()
+            ->toArrayWithoutNull();
+
+        $notification = Arr::first($notifications);
+
+        expect($notifications)
+            ->toHaveLength(1)
+            ->and($notification)
+            ->toHaveKeysAndValues([
+                'title'    => 'Could not create shipment',
+                'content'  => [
+                    'data.shipments[0].options.return shipment option not supported',
+                ],
+                'variant'  => Notification::VARIANT_ERROR,
+                'category' => Notification::CATEGORY_ACTION,
+                'timeout'  => false,
+                'tags'     => [
+                    'action'   => PdkBackendActions::EXPORT_ORDERS,
+                    'orderIds' => 'error',
+                    'request_id' => $expectedErrorContent['request_id'],
+                    'errors' => $expectedErrorContent['errors']
+                ],
+            ]);
+    }
+
 });
 
 it('exports order and directly returns barcode if concept shipments is off', function () {

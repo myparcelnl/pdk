@@ -19,7 +19,6 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Validation\Validator\OrderValidator;
 
 /**
  * @property null|string                                                 $externalIdentifier
@@ -147,11 +146,6 @@ class PdkOrder extends Model
     ];
 
     /**
-     * @var null|\MyParcelNL\Pdk\Validation\Validator\OrderValidator
-     */
-    private $validator;
-
-    /**
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
@@ -223,19 +217,6 @@ class PdkOrder extends Model
         $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
 
         return $orderNoteRepository->getFromOrder($this);
-    }
-
-    /**
-     * @return \MyParcelNL\Pdk\Validation\Validator\OrderValidator
-     */
-    public function getValidator(): OrderValidator
-    {
-        if (! $this->validator) {
-            $this->validator = Pdk::get(OrderValidator::class);
-            $this->validator->setOrder($this);
-        }
-
-        return $this->validator;
     }
 
     /**
