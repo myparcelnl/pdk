@@ -87,7 +87,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_UPS_NAME)
+                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME)
                         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
                 )
                 ->toBelgium()
@@ -99,7 +99,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_UPS_NAME)
+                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME)
                         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
                 )
                 ->toTheNetherlands()
