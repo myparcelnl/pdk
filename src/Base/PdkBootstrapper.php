@@ -86,9 +86,6 @@ class PdkBootstrapper implements PdkBootstrapperInterface
             case Platform::SENDMYPARCEL_NAME:
                 return Platform::SENDMYPARCEL_NAME;
 
-            case Platform::FLESPAKKET_NAME:
-                return Platform::FLESPAKKET_NAME;
-
             default:
                 return Platform::MYPARCEL_NAME;
         }
