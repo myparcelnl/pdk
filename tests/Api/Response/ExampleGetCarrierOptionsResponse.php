@@ -37,18 +37,6 @@ final class ExampleGetCarrierOptionsResponse extends ExampleJsonResponse
                 'type'       => 'main',
             ],
             [
-                'id'         => 7393,
-                'carrier_id' => 8,
-                'carrier'    => [
-                    'id'   => 8,
-                    'name' => 'ups',
-                ],
-                'enabled'    => 1,
-                'optional'   => 1,
-                'primary'    => 1,
-                'type'       => 'main',
-            ],
-            [
                 'id'         => 8382,
                 'carrier_id' => 9,
                 'carrier'    => [
@@ -109,6 +97,30 @@ final class ExampleGetCarrierOptionsResponse extends ExampleJsonResponse
                 'primary'     => 0,
                 'type'        => 'custom',
                 'contract_id' => 677,
+            ],
+            [
+                'id'         => 7393,
+                'carrier_id' => 12,
+                'carrier'    => [
+                    'id'   => 12,
+                    'name' => 'upsstandard',
+                ],
+                'enabled'    => 1,
+                'optional'   => 1,
+                'primary'    => 1,
+                'type'       => 'main',
+            ],
+            [
+                'id'         => 7394,
+                'carrier_id' => 13,
+                'carrier'    => [
+                    'id'   => 13,
+                    'name' => 'upsexpresssaver',
+                ],
+                'enabled'    => 1,
+                'optional'   => 1,
+                'primary'    => 1,
+                'type'       => 'main',
             ],
         ];
     }
