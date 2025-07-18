@@ -73,7 +73,7 @@ it('fetches account with carrier configurations and options', function () {
         ->and($account->shops->all())
         ->toHaveLength(1)
         ->and($firstShop->carriers->all())
-        ->toHaveLength(8)
+        ->toHaveLength(9)
         ->and($firstShop->carrierConfigurations->all())
         ->toHaveLength(1);
 });
@@ -103,12 +103,13 @@ it('maps carriers correctly', function () {
         ->toBe([
             'cheapcargo',
             'bol.com',
-            'ups',
             'dhlforyou',
             'postnl',
             'dhlparcelconnect',
             'dhleuroplus',
             'dhlforyou:12424',
+            'upsstandard',
+            'upsexpresssaver',
         ]);
 });
 

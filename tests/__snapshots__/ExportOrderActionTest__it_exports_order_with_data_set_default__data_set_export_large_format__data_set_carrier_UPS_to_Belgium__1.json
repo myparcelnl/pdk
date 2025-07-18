@@ -1,30 +1,34 @@
 {
-  "data": {
-    "shipments": [
-      {
-        "carrier": 8,
-        "general_settings": {
-          "save_recipient_address": 0
-        },
-        "options": {
-          "package_type": 1,
-          "delivery_type": 2
-        },
-        "physical_properties": {
-          "weight": 0
-        },
-        "recipient": {
-          "cc": "BE",
-          "city": "Antwerpen",
-          "company": "MyParcel",
-          "number": "16",
-          "person": "Felicia Parcel",
-          "postal_code": "1000",
-          "street": "Adriaan Brouwerstraat",
-          "vat_number": "NL123456789B01"
-        },
-        "reference_identifier": "PDK-1"
-      }
-    ]
-  }
+    "data": {
+        "shipments": [
+            {
+                "carrier": 13,
+                "general_settings": {
+                    "save_recipient_address": 0
+                },
+                "options": {
+                    "package_type": 1,
+                    "delivery_type": 7,
+                    "insurance": {
+                        "amount": 10000,
+                        "currency": "EUR"
+                    }
+                },
+                "physical_properties": {
+                    "weight": 0
+                },
+                "recipient": {
+                    "cc": "BE",
+                    "city": "Antwerpen",
+                    "company": "MyParcel",
+                    "number": "16",
+                    "person": "Felicia Parcel",
+                    "postal_code": "1000",
+                    "street": "Adriaan Brouwerstraat",
+                    "vat_number": "NL123456789B01"
+                },
+                "reference_identifier": "PDK-1"
+            }
+        ]
+    }
 }
