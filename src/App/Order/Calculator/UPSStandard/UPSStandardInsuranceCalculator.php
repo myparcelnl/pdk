@@ -20,4 +20,4 @@ final class UPSStandardInsuranceCalculator extends AbstractPdkOrderOptionCalcula
             $shipmentOptions->insurance = 10000;
         }
     }
-} 
+}

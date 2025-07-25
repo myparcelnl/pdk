@@ -47,6 +47,11 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
                 }
             }
 
+            // Migrate deprecated UPS carrier name "ups" to UPS Standard
+            if (!$carrier && isset($input['name']) && $input['name'] === Carrier::CARRIER_UPS_NAME) {
+                $carrier = $collection->firstWhere('id', Carrier::CARRIER_UPS_STANDARD_ID);
+            }
+
             return $carrier;
         });
     }

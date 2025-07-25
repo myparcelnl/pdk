@@ -11,9 +11,7 @@ final class UPSStandardCalculator extends AbstractCarrierOptionsCalculator
     protected function getCalculators(): array
     {
         return [
-            UPSStandardCountryShipmentOptionsCalculator::class,
             UPSStandardAgeCheckCalculator::class,
-            UPSStandardDeliveryTypeCalculator::class,
             UPSStandardInsuranceCalculator::class,
         ];
     }
