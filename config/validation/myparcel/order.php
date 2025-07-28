@@ -419,5 +419,55 @@ return [
                 ],
             ],
         ],
+        [
+            'id'           => Carrier::CARRIER_GLS_ID,
+            'name'         => Carrier::CARRIER_GLS_NAME,
+            'human'        => 'GLS',
+            'schema'       => 'order/gls/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryCodes::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/gls/base',
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_EU,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'name'   => CountryCodes::ZONE_ROW,
+                    'schema' => [
+                        'properties' => [
+                            'deliveryOptions' => [
+                                'properties' => [
+                                    'packageType' => [
+                                        'enum' => [
+                                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 ];

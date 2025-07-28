@@ -70,6 +70,7 @@ it(
         $request         = MockApi::ensureLastRequest();
 
         $body = json_decode(
+
             $request->getBody()
                 ->getContents(),
             true
@@ -277,6 +278,37 @@ it(
                             factory(CarrierCapabilities::class)->withEverything()
                         )
                 )
+            );
+        },
+    ],
+    'GLS shipment'                                => [
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_GLS_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+            );
+        },
+    ],
+    'GLS shipment with pickup'                    => [
+        'input' => function () {
+            return factory(ShipmentCollection::class)->push(
+                factory(Shipment::class)
+                    ->withCarrier(
+                        factory(Carrier::class)
+                            ->withId(Carrier::CARRIER_GLS_ID)
+                            ->withCapabilities(
+                                factory(CarrierCapabilities::class)->withEverything()
+                            )
+                    )
+                    ->withDeliveryOptionsWithPickupLocationInTheNetherlands()
+                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
             );
         },
     ],

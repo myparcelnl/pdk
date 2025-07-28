@@ -62,4 +62,9 @@ return [
         'name'  => Carrier::CARRIER_DHL_EUROPLUS_NAME,
         'human' => 'DHL Europlus',
     ],
+    [
+        'id'    => Carrier::CARRIER_GLS_ID,
+        'name'  => Carrier::CARRIER_GLS_NAME,
+        'human' => 'GLS',
+    ],
 ];

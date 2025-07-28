@@ -401,7 +401,7 @@ it('adds api errors as notifications if shipment export fails', function () {
 it('exports order and directly returns barcode if concept shipments is off', function () {
     factory(Settings::class)
         ->withOrder(factory(OrderSettings::class)->withConceptShipments(false))
-        ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+        ->withCarrier(Carrier::CARRIER_GLS_NAME)
         ->store();
 
     $collection = factory(PdkOrderCollection::class, 1)

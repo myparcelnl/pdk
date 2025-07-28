@@ -1,0 +1,147 @@
+{
+  "description": "myparcel/order/gls/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType", "pickupLocation"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["pickup"]
+                },
+                "pickupLocation": {
+                  "properties": {
+                    "locationCode": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "deliveryType": {
+                  "enum": ["standard", null]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "minimum": 100,
+          "note": "GLS minimum weight 0.1kg = 100g. Empty weight defaults to 200g"
+        },
+        "dimensions": {
+          "properties": {
+            "length": {
+              "minimum": 100,
+              "maximum": 2000
+            },
+            "width": {
+              "minimum": 50,
+              "maximum": 800
+            },
+            "height": {
+              "minimum": 15,
+              "maximum": 600
+            }
+          }
+        }
+      }
+    },
+    "recipient": {
+      "properties": {
+        "cc": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "company": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "person": {
+          "type": "string", 
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "street": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "number": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 10
+        },
+        "numberSuffix": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 10
+        },
+        "postalCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8
+        },
+        "city": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "email": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 320
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 25
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["pickup", "standard", null]
+        },
+        "packageType": {
+          "enum": ["package", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "signature": {
+              "type": "boolean"
+            },
+            "saturdayDelivery": {
+              "type": "boolean"
+            },
+            "insurance": {
+              "enum": [10000]
+            },
+            "labelDescription": {
+              "maxLength": 45
+            }
+          }
+        }
+      }
+    }
+  }
+}

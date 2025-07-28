@@ -335,6 +335,14 @@ it('calculates insurance', function (array $input, int $result) {
             ],
             'result' => 400000,
         ],
+
+        sprintf('carrier %s', Carrier::CARRIER_GLS_NAME) => [
+            [
+                'orderPrice' => 10000,
+                'carrier'    => Carrier::CARRIER_GLS_NAME,
+            ],
+            'result' => 10000,
+        ],
     ]);
 
 it('calculates insurance for fixed insurance amount when insurance is disabled', function () {
@@ -342,7 +350,7 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
 
     factory(Settings::class)
         ->withCarrier(
-            Carrier::CARRIER_DPD_NAME,
+            Carrier::CARRIER_GLS_NAME,
             [
                 CarrierSettings::EXPORT_INSURANCE => false,
             ]
@@ -350,7 +358,7 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
         ->store();
 
     $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_DPD_NAME)
+        ->withName(Carrier::CARRIER_GLS_NAME)
         ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [52000]]))
         ->make();
 
