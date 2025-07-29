@@ -35,7 +35,7 @@ final class AccountFactory extends AbstractModelFactory
         parent::__construct();
 
         // make sure the platform id is set from the start, when supplied as argument to the factory
-        if (null !== $platformId) {
+        if ($platformId) {
             $this->withPlatformId($platformId);
             $this->store();
         }
