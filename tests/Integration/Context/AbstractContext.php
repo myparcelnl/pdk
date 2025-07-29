@@ -192,7 +192,7 @@ abstract class AbstractContext extends TestCase implements ContextInterface
      */
     protected function getValidApiKey(): string
     {
-        return getenv(sprintf('API_KEY_%s', strtoupper(Platform::getPlatform()))) ?: TestBootstrapper::API_KEY_VALID;
+        return getenv(sprintf('API_KEY_%s', strtoupper(Platform::getPropositionName()))) ?: TestBootstrapper::API_KEY_VALID;
     }
 
     /**
