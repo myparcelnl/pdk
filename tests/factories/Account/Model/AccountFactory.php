@@ -17,7 +17,6 @@ use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
-use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Account
@@ -31,14 +30,20 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class AccountFactory extends AbstractModelFactory
 {
+    public function __construct(?int $platformId = null)
+    {
+        parent::__construct();
+
+        // make sure the platform id is set from the start, when supplied as argument to the factory
+        if ($platformId) {
+            $this->withPlatformId($platformId);
+            $this->store();
+        }
+    }
+
     public function getModel(): string
     {
         return Account::class;
-    }
-
-    public function onPlatformFlespakket(): self
-    {
-        return $this->withPlatformId(Platform::FLESPAKKET_ID);
     }
 
     public function onPlatformMyParcel(): self
@@ -72,12 +77,7 @@ final class AccountFactory extends AbstractModelFactory
     protected function createDefault(): FactoryInterface
     {
         return $this
-            ->withId($this->getNextId())
-            ->onPlatformMyParcel()
-            ->withStatus(2)
-            ->withContactInfo(factory(ContactDetails::class))
-            ->withGeneralSettings(factory(AccountGeneralSettings::class))
-            ->withShops(factory(ShopCollection::class, 1));
+            ->withId($this->getNextId());
     }
 
     /**
