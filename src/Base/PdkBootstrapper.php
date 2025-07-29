@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base;
 
-use MyParcelNL\Pdk\Account\Platform;
-use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\PdkBootstrapperInterface;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
@@ -13,6 +11,8 @@ use function DI\value;
 
 class PdkBootstrapper implements PdkBootstrapperInterface
 {
+    public const PLUGIN_NAMESPACE = 'myparcel_joeri';
+
     /**
      * @var bool
      */
@@ -26,8 +26,6 @@ class PdkBootstrapper implements PdkBootstrapperInterface
     public function __construct() { }
 
     /**
-     * @param  string $name
-     * @param  string $title
      * @param  string $version
      * @param  string $path
      * @param  string $url
@@ -37,8 +35,6 @@ class PdkBootstrapper implements PdkBootstrapperInterface
      * @throws \Exception
      */
     final public static function boot(
-        string $name,
-        string $title,
         string $version,
         string $path,
         string $url,
@@ -48,55 +44,27 @@ class PdkBootstrapper implements PdkBootstrapperInterface
             PdkFactory::setMode($mode);
 
             self::$initialized = true;
-            self::$pdk         = (new static())->createPdkInstance($name, $title, $version, $path, $url);
+            self::$pdk = PdkFactory::create(
+                "$path/config/pdk.php",
+                [
+                    'appInfo'  => value(
+                        new AppInfo([
+                            'name'    => self::PLUGIN_NAMESPACE,
+                            'title'   => 'MyParcel',
+                            'version' => $version,
+                            'url'     => $url,
+                        ])
+                    ),
+                ],
+            );
         }
 
         return self::$pdk;
     }
 
     /**
-     * @param  string $name
-     * @param  string $title
-     * @param  string $version
-     * @param  string $path
-     * @param  string $url
+     * Not static because that cannot be overridden in child classes.
      *
-     * @return \MyParcelNL\Pdk\Base\Concern\PdkInterface
-     * @throws \Exception
-     */
-    protected function createPdkInstance(
-        string $name,
-        string $title,
-        string $version,
-        string $path,
-        string $url
-    ): PdkInterface {
-        return PdkFactory::create(...$this->getAllConfiguration($path, $name, $title, $version, $url));
-    }
-
-    /**
-     * @param  string $name
-     *
-     * @return string
-     */
-    protected function determinePlatform(string $name): string
-    {
-        switch ($name) {
-            case 'myparcelbe':
-            case Platform::SENDMYPARCEL_NAME:
-                return Platform::SENDMYPARCEL_NAME;
-
-            case Platform::FLESPAKKET_NAME:
-                return Platform::FLESPAKKET_NAME;
-
-            default:
-                return Platform::MYPARCEL_NAME;
-        }
-    }
-
-    /**
-     * @param  string $name
-     * @param  string $title
      * @param  string $version
      * @param  string $path
      * @param  string $url
@@ -105,54 +73,10 @@ class PdkBootstrapper implements PdkBootstrapperInterface
      * @codeCoverageIgnore
      */
     protected function getAdditionalConfig(
-        string $name,
-        string $title,
         string $version,
         string $path,
         string $url
     ): array {
         return [];
-    }
-
-    /**
-     * @param  string $path
-     * @param  string $name
-     * @param  string $title
-     * @param  string $version
-     * @param  string $url
-     *
-     * @return array
-     */
-    protected function getAllConfiguration(
-        string $path,
-        string $name,
-        string $title,
-        string $version,
-        string $url
-    ): array {
-        return [
-            implode('/', [$path, $this->getConfigPath()]),
-            [
-                'appInfo'  => value(
-                    new AppInfo([
-                        'name'    => $name,
-                        'title'   => $title,
-                        'version' => $version,
-                        'path'    => $path,
-                        'url'     => $url,
-                    ])
-                ),
-                'platform' => value($this->determinePlatform($name)),
-            ],
-            $this->getAdditionalConfig($name, $title, $version, $path, $url),
-        ];
-    }
-
-    /**
-     * @return string
-     */
-    protected function getConfigPath(): string
-    {
-        return 'config/pdk.php';
     }
 }
