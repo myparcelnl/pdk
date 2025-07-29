@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Base\Service\CountryCodes;
 
 /**
  * GLS business rules:
@@ -47,17 +48,14 @@ final class GlsShipmentOptionsCalculator extends AbstractPdkOrderOptionCalculato
         $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
         $countryCode = $this->order->shippingAddress->cc;
 
-        if (null === $countryCode) {
-            return;
-        }
 
-        if ($this->countryService->isLocalCountry($countryCode)) {
+        if (CountryCodes::CC_NL === $countryCode || null === $countryCode) {
             return; // signature default OFF in local country (NL)
         }
 
         // Enable signature for EU countries and Belgium specifically
         // (Belgium is in UNIQUE_COUNTRIES so isEu() returns false, but for shipping logic it's EU)
-        if ($this->countryService->isEu($countryCode) || 'BE' === $countryCode) {
+        if ($this->countryService->isEu($countryCode) || CountryCodes::CC_BE === $countryCode) {
             $shipmentOptions->signature = TriStateService::ENABLED;
         }
     }

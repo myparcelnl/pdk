@@ -350,7 +350,7 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
 
     factory(Settings::class)
         ->withCarrier(
-            Carrier::CARRIER_GLS_NAME,
+            Carrier::CARRIER_DPD_NAME,
             [
                 CarrierSettings::EXPORT_INSURANCE => false,
             ]
@@ -358,7 +358,7 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
         ->store();
 
     $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_GLS_NAME)
+        ->withName(Carrier::CARRIER_DPD_NAME)
         ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [52000]]))
         ->make();
 
