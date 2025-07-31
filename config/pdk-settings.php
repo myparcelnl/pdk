@@ -35,7 +35,7 @@ return [
                     CarrierSettings::ALLOW_SAME_DAY_DELIVERY                 => true,
                     CarrierSettings::ALLOW_SATURDAY_DELIVERY                 => true,
                     CarrierSettings::ALLOW_SIGNATURE                         => true,
-                    CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS             => true,
+                    CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS             => false,
                     CarrierSettings::CUTOFF_TIME                             => '17:00',
                     CarrierSettings::CUTOFF_TIME_SAME_DAY                    => '09:00',
                     CarrierSettings::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,

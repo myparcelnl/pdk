@@ -50,6 +50,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
         'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
         'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
+        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS,
         'priceCollect'                 => CarrierSettings::PRICE_COLLECT,
     ];
 

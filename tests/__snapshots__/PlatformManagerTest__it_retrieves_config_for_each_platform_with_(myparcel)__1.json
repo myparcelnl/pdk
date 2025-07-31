@@ -1,8 +1,8 @@
 {
   "name": "myparcel",
   "human": "MyParcel",
-  "backofficeUrl": "https://backoffice.myparcel.nl",
-  "supportUrl": "https://developer.myparcel.nl/contact",
+  "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
+  "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
   "localCountry": "NL",
   "defaultCarrier": "postnl",
   "defaultCarrierId": 1,
@@ -150,19 +150,30 @@
       }
     },
     {
-      "name": "ups",
+      "name": "upsstandard",
       "capabilities": {
         "packageTypes": ["package"],
-        "deliveryTypes": ["standard", "express"],
+        "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": {
-          "ageCheck": true,
           "onlyRecipient": true,
-          "return": true,
+          "ageCheck": true,
           "signature": true,
-          "collect": true
-        },
-        "features": {
-          "labelDescriptionLength": 45
+          "pickup": true,
+          "insurance": [10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        }
+      }
+    },
+    {
+      "name": "upsexpresssaver",
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["express", "pickup"],
+        "shipmentOptions": {
+          "onlyRecipient": true,
+          "ageCheck": true,
+          "signature": true,
+          "pickup": true,
+          "insurance": [10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
       }
     },

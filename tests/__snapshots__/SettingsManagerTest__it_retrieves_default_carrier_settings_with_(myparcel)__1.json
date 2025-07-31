@@ -68,7 +68,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -79,6 +78,7 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
@@ -169,7 +169,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -180,6 +179,7 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
@@ -270,7 +270,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -281,6 +280,7 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
@@ -302,7 +302,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "ups": {
+  "upsstandard": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -371,7 +371,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -382,6 +381,108 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
+    "exportReturn": false,
+    "exportReturnLargeFormat": false,
+    "exportReturnPackageType": "package",
+    "exportSignature": false,
+    "exportCollect": false,
+    "priceDeliveryTypeEvening": 0,
+    "priceDeliveryTypeMonday": 0,
+    "priceDeliveryTypeMorning": 0,
+    "priceDeliveryTypePickup": 0,
+    "priceDeliveryTypeSameDay": 0,
+    "priceDeliveryTypeSaturday": 0,
+    "priceDeliveryTypeStandard": 0,
+    "priceOnlyRecipient": 0,
+    "pricePackageTypeDigitalStamp": 0,
+    "pricePackageTypeMailbox": 0,
+    "priceSignature": 0,
+    "allowInternationalMailbox": false,
+    "priceInternationalMailbox": 0,
+    "priceCollect": 0,
+    "priceDeliveryTypeExpress": 0
+  },
+  "upsexpresssaver": {
+    "id": "carrier",
+    "allowDeliveryOptions": true,
+    "allowStandardDelivery": false,
+    "allowEveningDelivery": true,
+    "allowMondayDelivery": true,
+    "allowMorningDelivery": true,
+    "allowOnlyRecipient": true,
+    "allowPickupLocations": true,
+    "allowSameDayDelivery": true,
+    "allowSaturdayDelivery": true,
+    "allowSignature": true,
+    "allowDeliveryTypeExpress": false,
+    "cutoffTime": "17:00",
+    "cutoffTimeSameDay": "09:00",
+    "defaultPackageType": "package",
+    "deliveryDaysWindow": 7,
+    "deliveryOptionsEnabled": true,
+    "deliveryOptionsEnabledForBackorders": false,
+    "digitalStampDefaultWeight": 0,
+    "dropOffDelay": 0,
+    "dropOffPossibilities": {
+      "dropOffDays": [
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 1
+        },
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 2
+        },
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 3
+        },
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 4
+        },
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 5
+        },
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 6
+        },
+        {
+          "cutoffTime": "17:00:00",
+          "dispatch": true,
+          "sameDayCutoffTime": "09:00:00",
+          "weekday": 0
+        }
+      ],
+      "dropOffDaysDeviations": []
+    },
+    "exportAgeCheck": false,
+    "exportHideSender": false,
+    "exportInsurance": false,
+    "exportInsuranceFromAmount": 0,
+    "exportInsurancePricePercentage": 100,
+    "exportInsuranceUpTo": 0,
+    "exportInsuranceUpToEu": 0,
+    "exportInsuranceUpToRow": 0,
+    "exportInsuranceUpToUnique": 0,
+    "exportLargeFormat": false,
+    "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
@@ -472,7 +573,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -483,6 +583,7 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
@@ -573,7 +674,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -584,6 +684,7 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",
@@ -674,7 +775,6 @@
       "dropOffDaysDeviations": []
     },
     "exportAgeCheck": false,
-    "exportReceiptCode": false,
     "exportHideSender": false,
     "exportInsurance": false,
     "exportInsuranceFromAmount": 0,
@@ -685,6 +785,7 @@
     "exportInsuranceUpToUnique": 0,
     "exportLargeFormat": false,
     "exportOnlyRecipient": false,
+    "exportReceiptCode": false,
     "exportReturn": false,
     "exportReturnLargeFormat": false,
     "exportReturnPackageType": "package",

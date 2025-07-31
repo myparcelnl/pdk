@@ -73,7 +73,7 @@ it('fetches account with carrier configurations and options', function () {
         ->and($account->shops->all())
         ->toHaveLength(1)
         ->and($firstShop->carriers->all())
-        ->toHaveLength(8)
+        ->toHaveLength(9)
         ->and($firstShop->carrierConfigurations->all())
         ->toHaveLength(1);
 });
