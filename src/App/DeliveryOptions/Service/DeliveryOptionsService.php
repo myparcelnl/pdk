@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
@@ -48,6 +50,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
         'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
         'priceCollect'                 => CarrierSettings::PRICE_COLLECT,
+        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS,
     ];
 
     /**
@@ -86,7 +89,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
-     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService    $triStateService
+     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService             $triStateService
      */
     public function __construct(
         CountryServiceInterface  $countryService,
@@ -155,7 +158,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         // Always use Europe/Amsterdam timezone for cutoff checks, because cutoff times are meant as local shop time.
         // This prevents bugs when the server runs in a different timezone (e.g. UTC).
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Amsterdam'));
+        $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Amsterdam'));
 
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
             ? $carrierSettings['dropOffDelay']
@@ -246,7 +249,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         // Get the largest package type first.
         // This will ensure we do not show delivery options with a smaller package type than fits what is in the cart.
         foreach ($cart->shippingMethod->allowedPackageTypes->sortBySize() as $packageType) {
-
             // Skip package types that do not match any of the items in the cart
             if (! $cartPackageTypes->contains($packageType->name)) {
                 continue;
