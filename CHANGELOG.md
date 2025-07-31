@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.61.0](https://github.com/myparcelnl/pdk/compare/v2.60.1...v2.61.0) (2025-07-31)
+
+
+### :bug: Bug Fixes
+
+* small package price not saved after settings refresh in PDK plugin ([#374](https://github.com/myparcelnl/pdk/issues/374)) ([c06db90](https://github.com/myparcelnl/pdk/commit/c06db9032b447d9531b82eec6ecb1392a161af68))
+
+
+### :sparkles: New Features
+
+* replace UPS carrier 8 with carriers 12 and 13 ([#371](https://github.com/myparcelnl/pdk/issues/371)) ([5e3e2c6](https://github.com/myparcelnl/pdk/commit/5e3e2c65ce2d772ca7f62f43c4d992de78959969))
+
 ## [2.60.1](https://github.com/myparcelnl/pdk/compare/v2.60.0...v2.60.1) (2025-07-18)
 
 ## [2.60.0](https://github.com/myparcelnl/pdk/compare/v2.59.1...v2.60.0) (2025-07-17)
