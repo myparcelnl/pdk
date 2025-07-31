@@ -24,6 +24,7 @@
       "priceSignature": 0,
       "priceStandardDelivery": 0,
       "priceCollect": 0,
+      "priceExpressDelivery": 0,
       "deliveryDaysWindow": 7,
       "dropOffDelay": 1,
       "cutoffTime": null,
