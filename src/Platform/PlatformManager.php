@@ -41,6 +41,6 @@ class PlatformManager implements PlatformManagerInterface
      */
     public function getPlatform(): string
     {
-        return (string) Pdk::get('platform');
+        return 'myparcel'; // TODO JOERI find a way to get the platform runtime
     }
 }

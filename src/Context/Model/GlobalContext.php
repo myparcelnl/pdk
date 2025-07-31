@@ -71,7 +71,7 @@ class GlobalContext extends Model
         $this->attributes['baseUrl']   = $endpointActions->getBaseUrl();
         $this->attributes['endpoints'] = $endpointActions->toArray();
 
-        $platform = Platform::all();
+        $platform = Platform::all(); // TODO JOERI why do we need the platform already?
 
         $this->attributes['platform'] = array_intersect_key(
             $platform,
