@@ -37,7 +37,7 @@ jobs:
           # Strip the /app/ prefix from the coverage paths before uploading.
           sed -i 's/\/app\///g' clover.xml
 
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         continue-on-error: true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
