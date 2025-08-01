@@ -33,6 +33,10 @@ it('can be instantiated', function () {
         CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
         CheckoutSettings::ID
     );
+    $pickupLocationsStyle = Settings::get(
+        CheckoutSettings::PICKUP_LOCATIONS_STYLE,
+        CheckoutSettings::ID
+    );
 
     expect($config)
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
@@ -46,6 +50,7 @@ it('can be instantiated', function () {
             'locale'                     => 'nl-NL',
             'packageType'                => 'package',
             'pickupLocationsDefaultView' => $pickupLocationsDefaultView,
+            'pickupLocationsStyle'       => $pickupLocationsStyle,
             'platform'                   => 'myparcel',
             'showPriceSurcharge'         => false,
             'priceStandardDelivery'      => 0,

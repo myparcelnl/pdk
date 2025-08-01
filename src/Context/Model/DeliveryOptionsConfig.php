@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $locale
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
+ * @property string $pickupLocationsStyle
  * @property string $platform
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
@@ -36,6 +37,7 @@ class DeliveryOptionsConfig extends Model
         'locale'                     => null,
         'packageType'                => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView' => null,
+        'pickupLocationsStyle'       => null,
         'platform'                   => null,
         'priceStandardDelivery'      => 0,
         'showPriceSurcharge'         => false,
@@ -49,6 +51,7 @@ class DeliveryOptionsConfig extends Model
         'locale'                     => 'string',
         'packageType'                => 'string',
         'pickupLocationsDefaultView' => 'string',
+        'pickupLocationsStyle'       => 'string',
         'platform'                   => 'string',
         'priceStandardDelivery'      => 'float',
         'showPriceSurcharge'         => 'boolean',
@@ -68,6 +71,10 @@ class DeliveryOptionsConfig extends Model
         $this->showPriceSurcharge         = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
         $this->pickupLocationsDefaultView = Settings::get(
             CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
+            CheckoutSettings::ID
+        );
+        $this->pickupLocationsStyle       = Settings::get(
+            CheckoutSettings::PICKUP_LOCATIONS_STYLE,
             CheckoutSettings::ID
         );
 

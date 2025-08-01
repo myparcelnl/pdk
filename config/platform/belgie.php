@@ -19,6 +19,7 @@ return [
     'defaultSettings' => [
         CheckoutSettings::ID => [
             CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW => CheckoutSettings::PICKUP_LOCATIONS_VIEW_MAP,
+            CheckoutSettings::PICKUP_LOCATIONS_STYLE        => CheckoutSettings::PICKUP_LOCATIONS_STYLE_DEFAULT,
         ],
     ],
 
