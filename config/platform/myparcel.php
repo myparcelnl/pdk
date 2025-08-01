@@ -271,15 +271,16 @@ return [
                 ],
             ],
         ],
+
         [
-            'name'         => Carrier::CARRIER_UPS_NAME,
+            'name'         => Carrier::CARRIER_UPS_STANDARD_NAME,
             'capabilities' => [
                 'packageTypes'    => [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                    DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                 ],
                 'shipmentOptions' => [
                     'ageCheck'      => true,
@@ -287,12 +288,63 @@ return [
                     'return'        => true,
                     'signature'     => true,
                     'collect'       => true,
+                    'insurance'     => [
+                        10000,
+                        25000,
+                        50000,
+                        100000,
+                        150000,
+                        200000,
+                        250000,
+                        300000,
+                        350000,
+                        400000,
+                        450000,
+                        500000,
+                    ],
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,
                 ],
             ],
         ],
+        [
+            'name'         => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
+            'capabilities' => [
+                'packageTypes'    => [
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                ],
+                'deliveryTypes'   => [
+                    DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                ],
+                'shipmentOptions' => [
+                    'ageCheck'      => true,
+                    'onlyRecipient' => true,
+                    'return'        => true,
+                    'signature'     => true,
+                    'collect'       => true,
+                    'insurance'     => [
+                        10000,
+                        25000,
+                        50000,
+                        100000,
+                        150000,
+                        200000,
+                        250000,
+                        300000,
+                        350000,
+                        400000,
+                        450000,
+                        500000,
+                    ],
+                ],
+                'features'        => [
+                    'labelDescriptionLength' => 45,
+                ],
+            ],
+        ],
+
         [
             'name'         => Carrier::CARRIER_DPD_NAME,
             'capabilities' => [

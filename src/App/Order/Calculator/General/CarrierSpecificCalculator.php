@@ -12,7 +12,9 @@ use MyParcelNL\Pdk\App\Order\Calculator\DhlParcelConnect\DhlParcelConnectCalcula
 use MyParcelNL\Pdk\App\Order\Calculator\Dpd\DpdCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\Gls\GlsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\PostNl\PostNLCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\UPS\UPSCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\UPSStandard\UPSStandardCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\UPSExpressSaver\UPSExpressSaverCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\Bpost\BpostCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
@@ -27,7 +29,8 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
         Carrier::CARRIER_DHL_EUROPLUS_NAME       => DhlEuroplusCalculator::class,
         Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME => DhlParcelConnectCalculator::class,
         Carrier::CARRIER_DPD_NAME                => DpdCalculator::class,
-        Carrier::CARRIER_UPS_NAME                => UPSCalculator::class,
+        Carrier::CARRIER_UPS_STANDARD_NAME       => UPSStandardCalculator::class,
+        Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME  => UPSExpressSaverCalculator::class,
         Carrier::CARRIER_BPOST_NAME              => BpostCalculator::class,
         Carrier::CARRIER_GLS_NAME                => GlsCalculator::class,
     ];

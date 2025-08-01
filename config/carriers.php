@@ -42,11 +42,7 @@ return [
         'name'  => Carrier::CARRIER_BOL_COM_NAME,
         'human' => 'Bol.com',
     ],
-    [
-        'id'    => Carrier::CARRIER_UPS_ID,
-        'name'  => Carrier::CARRIER_UPS_NAME,
-        'human' => 'UPS',
-    ],
+
     [
         'id'    => Carrier::CARRIER_DHL_FOR_YOU_ID,
         'name'  => Carrier::CARRIER_DHL_FOR_YOU_NAME,
@@ -61,6 +57,16 @@ return [
         'id'    => Carrier::CARRIER_DHL_EUROPLUS_ID,
         'name'  => Carrier::CARRIER_DHL_EUROPLUS_NAME,
         'human' => 'DHL Europlus',
+    ],
+    [
+        'id'    => Carrier::CARRIER_UPS_STANDARD_ID,
+        'name'  => Carrier::CARRIER_UPS_STANDARD_NAME,
+        'human' => 'UPS Standard',
+    ],
+    [
+        'id'    => Carrier::CARRIER_UPS_EXPRESS_SAVER_ID,
+        'name'  => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
+        'human' => 'UPS Express Saver',
     ],
     [
         'id'    => Carrier::CARRIER_GLS_ID,

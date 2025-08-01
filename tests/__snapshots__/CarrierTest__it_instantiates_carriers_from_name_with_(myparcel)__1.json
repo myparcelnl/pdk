@@ -122,36 +122,6 @@
         }
     },
     {
-        "externalIdentifier": "ups",
-        "id": 8,
-        "name": "ups",
-        "human": "UPS",
-        "enabled": true,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "capabilities": {
-            "deliveryTypes": [
-                "standard",
-                "express"
-            ],
-            "features": {
-                "labelDescriptionLength": 45
-            },
-            "packageTypes": [
-                "package"
-            ],
-            "shipmentOptions": {
-                "ageCheck": true,
-                "onlyRecipient": true,
-                "return": true,
-                "signature": true,
-                "collect": true
-            }
-        }
-    },
-    {
         "externalIdentifier": "dhlforyou",
         "id": 9,
         "name": "dhlforyou",
@@ -322,6 +292,94 @@
                 "hideSender": true,
                 "insurance": [
                     0,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000
+                ]
+            }
+        }
+    },
+    {
+        "externalIdentifier": "upsstandard",
+        "id": 12,
+        "name": "upsstandard",
+        "human": "UPS Standard",
+        "enabled": true,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "standard",
+                "pickup"
+            ],
+            "features": {
+                "labelDescriptionLength": 45
+            },
+            "packageTypes": [
+                "package"
+            ],
+            "shipmentOptions": {
+                "ageCheck": true,
+                "onlyRecipient": true,
+                "return": true,
+                "signature": true,
+                "collect": true,
+                "insurance": [
+                    10000,
+                    25000,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000
+                ]
+            }
+        }
+    },
+    {
+        "externalIdentifier": "upsexpresssaver",
+        "id": 13,
+        "name": "upsexpresssaver",
+        "human": "UPS Express Saver",
+        "enabled": true,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "express",
+                "pickup"
+            ],
+            "features": {
+                "labelDescriptionLength": 45
+            },
+            "packageTypes": [
+                "package"
+            ],
+            "shipmentOptions": {
+                "ageCheck": true,
+                "onlyRecipient": true,
+                "return": true,
+                "signature": true,
+                "collect": true,
+                "insurance": [
+                    10000,
+                    25000,
                     50000,
                     100000,
                     150000,
