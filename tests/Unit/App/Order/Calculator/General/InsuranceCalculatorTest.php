@@ -335,6 +335,14 @@ it('calculates insurance', function (array $input, int $result) {
             ],
             'result' => 400000,
         ],
+
+        sprintf('carrier %s', Carrier::CARRIER_GLS_NAME) => [
+            [
+                'orderPrice' => 10000,
+                'carrier'    => Carrier::CARRIER_GLS_NAME,
+            ],
+            'result' => 10000,
+        ],
     ]);
 
 it('calculates insurance for fixed insurance amount when insurance is disabled', function () {

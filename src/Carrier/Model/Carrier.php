@@ -60,6 +60,9 @@ class Carrier extends Model
     public const CARRIER_UPS_STANDARD_NAME       = 'upsstandard';
     public const CARRIER_UPS_EXPRESS_SAVER_ID    = 13;
     public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'upsexpresssaver';
+    public const CARRIER_GLS_ID                  = 14;
+    public const CARRIER_GLS_NAME                = 'gls';
+
     /**
      * Names to ids
      */
@@ -74,6 +77,7 @@ class Carrier extends Model
         self::CARRIER_DPD_NAME                => self::CARRIER_DPD_ID,
         self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_ID,
         self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_ID,
+        self::CARRIER_GLS_NAME                => self::CARRIER_GLS_ID,
         self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_ID,
         self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_ID,
     ];

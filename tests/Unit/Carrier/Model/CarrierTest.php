@@ -53,8 +53,8 @@ it('generates external identifier', function (array $input, string $identifier) 
         ->toBe($identifier);
 })->with([
     'id' => [
-        'input'      => ['id' => Carrier::CARRIER_DPD_ID],
-        'identifier' => Carrier::CARRIER_DPD_NAME,
+        'input'      => ['id' => Carrier::CARRIER_POSTNL_ID],
+        'identifier' => Carrier::CARRIER_POSTNL_NAME,
     ],
 
     'name' => [
@@ -153,3 +153,15 @@ it('instantiates carrier from external identifier', function (string $identifier
     'subscription carrier' => [DHL_FOR_YOU_CUSTOM_IDENTIFIER],
     'default carrier'      => [Carrier::CARRIER_DHL_FOR_YOU_NAME],
 ]);
+
+
+it('creates a GLS carrier via id or name', function(){
+    $carrierById = new Carrier(['id' => Carrier::CARRIER_GLS_ID]);
+    $carrierByName = new Carrier(['name' => Carrier::CARRIER_GLS_NAME]);
+
+    expect($carrierById->id)->toBe(Carrier::CARRIER_GLS_ID)
+        ->and($carrierByName->id)->toBe(Carrier::CARRIER_GLS_ID)
+        ->and($carrierById->name)->toBe(Carrier::CARRIER_GLS_NAME)
+        ->and($carrierByName->name)->toBe(Carrier::CARRIER_GLS_NAME);
+
+});

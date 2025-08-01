@@ -68,4 +68,9 @@ return [
         'name'  => Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME,
         'human' => 'UPS Express Saver',
     ],
+    [
+        'id'    => Carrier::CARRIER_GLS_ID,
+        'name'  => Carrier::CARRIER_GLS_NAME,
+        'human' => 'GLS',
+    ],
 ];

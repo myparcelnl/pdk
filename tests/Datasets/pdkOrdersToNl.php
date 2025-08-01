@@ -105,4 +105,95 @@ dataset('pdk orders domestic', [
                 ->toTheNetherlands()
         );
     },
+
+    'carrier GLS to Netherlands' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                        )
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                // For Netherlands: signature is default OFF
+                                ->withSignature(TriStateService::DISABLED)
+                                ->withOnlyRecipient(TriStateService::ENABLED)
+                        )
+                )
+                ->toTheNetherlands()
+        );
+    },
+
+    'carrier GLS to Germany' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                        )
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                // For EU (Germany): signature will be auto-enabled by calculator
+                                ->withSignature(TriStateService::DISABLED)
+                        )
+                )
+                ->toGermany()
+        );
+    },
+
+    'carrier GLS with saturday delivery' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                        )
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                ->withSaturdayDelivery(TriStateService::ENABLED)
+                                ->withSignature(TriStateService::ENABLED)
+                        )
+                )
+                ->toTheNetherlands()
+        );
+    },
+
+    'carrier GLS with insurance' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                        )
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                ->withInsurance(TriStateService::ENABLED)
+                                ->withSignature(TriStateService::ENABLED)
+                        )
+                )
+                ->toTheNetherlands()
+        );
+    },
+
+    'carrier GLS custom contract' => function () {
+        return factory(PdkOrderCollection::class)->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier(
+                            sprintf('%s:5678', Carrier::CARRIER_GLS_NAME)
+                        )
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                ->withOnlyRecipient(TriStateService::ENABLED)
+                                ->withLargeFormat(TriStateService::ENABLED)
+                        )
+                )
+                ->toTheNetherlands()
+        );
+    },
 ]);
