@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tests\Unit\App\Order\Calculator\Gls;
 
 use MyParcelNL\Pdk\App\Order\Calculator\Gls\GlsCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\Gls\GlsInsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\Gls\GlsShipmentOptionsCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\Gls\GlsWeightCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -38,8 +40,10 @@ it('returns correct calculators array', function () {
     $calculators = $method->invoke($calculator);
     
     expect($calculators)->toBeArray()
-        ->toHaveCount(1)
-        ->toContain(GlsShipmentOptionsCalculator::class);
+        ->toHaveCount(3)
+        ->toContain(GlsShipmentOptionsCalculator::class)
+        ->toContain(GlsInsuranceCalculator::class)
+        ->toContain(GlsWeightCalculator::class);
 });
 
 it('calculates shipment options correctly', function () {

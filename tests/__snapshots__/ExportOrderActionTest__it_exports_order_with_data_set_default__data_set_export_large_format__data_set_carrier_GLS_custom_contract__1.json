@@ -16,7 +16,7 @@
                     }
                 },
                 "physical_properties": {
-                    "weight": 0
+                    "weight": 100
                 },
                 "recipient": {
                     "cc": "NL",

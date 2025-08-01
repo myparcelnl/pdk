@@ -53,7 +53,7 @@
                         "signature": 0
                     },
                     "physical_properties": {
-                        "weight": 0
+                        "weight": 100
                     },
                     "pickup": null,
                     "recipient": {

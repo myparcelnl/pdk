@@ -13,6 +13,8 @@ final class GlsCalculator extends AbstractCarrierOptionsCalculator
     {
         return [
             GlsShipmentOptionsCalculator::class,
+            GlsInsuranceCalculator::class,
+            GlsWeightCalculator::class,
         ];
     }
 
