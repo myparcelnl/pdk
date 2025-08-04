@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Service\CartCalculationService;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsFeesServiceInterface;
@@ -229,4 +230,6 @@ return [
      * Handles zipping files.
      */
     ZipServiceInterface::class                 => autowire(ZipService::class),
+
+    PropositionService::class            => autowire(),
 ];
