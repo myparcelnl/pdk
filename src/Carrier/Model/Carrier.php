@@ -28,41 +28,51 @@ use MyParcelNL\Pdk\Facade\Platform;
  */
 class Carrier extends Model
 {
-    public const CARRIER_POSTNL_ID               = 1;
-    public const CARRIER_POSTNL_NAME             = 'postnl';
-    public const CARRIER_BPOST_ID                = 2;
-    public const CARRIER_BPOST_NAME              = 'bpost';
-    public const CARRIER_CHEAP_CARGO_ID          = 3;
-    public const CARRIER_CHEAP_CARGO_NAME        = 'cheapcargo';
-    public const CARRIER_DPD_ID                  = 4;
-    public const CARRIER_DPD_NAME                = 'dpd';
-    public const CARRIER_INSTABOX_ID             = 5;
-    public const CARRIER_INSTABOX_NAME           = 'instabox';
-    public const CARRIER_DHL_ID                  = 6;
-    public const CARRIER_DHL_NAME                = 'dhl';
-    public const CARRIER_BOL_COM_ID              = 7;
-    public const CARRIER_BOL_COM_NAME            = 'bol.com';
+    public const CARRIER_POSTNL_ID                   = 1;
+    public const CARRIER_POSTNL_LEGACY_NAME          = 'postnl';
+    public const CARRIER_POSTNL_NAME                 = 'POSTNL';
+    public const CARRIER_BPOST_ID                    = 2;
+    public const CARRIER_BPOST_LEGACY_NAME           = 'bpost';
+    public const CARRIER_BPOST_NAME                  = 'BPOST';
+    public const CARRIER_CHEAP_CARGO_ID              = 3;
+    public const CARRIER_CHEAP_CARGO_LEGACY_NAME     = 'cheapcargo';
+    public const CARRIER_CHEAP_CARGO_NAME            = 'CHEAP_CARGO';
+    public const CARRIER_DPD_ID                      = 4;
+    public const CARRIER_DPD_LEGACY_NAME             = 'dpd';
+    public const CARRIER_DPD_NAME                    = 'DPD';
+    public const CARRIER_INSTABOX_ID                 = 5;
+    public const CARRIER_INSTABOX_LEGACY_NAME        = 'instabox';
+    public const CARRIER_INSTABOX_NAME               = 'INSTABOX';
+    public const CARRIER_DHL_ID                      = 6;
+    public const CARRIER_DHL_LEGACY_NAME             = 'dhl';
+    public const CARRIER_DHL_NAME                    = 'DHL';
+    public const CARRIER_BOL_COM_ID                  = 7;
+    public const CARRIER_BOL_COM_LEGACY_NAME         = 'bol.com';
+    public const CARRIER_BOL_COM_NAME                = 'BOL';
     /**
      * @deprecated Use CARRIER_UPS_STANDARD_ID or CARRIER_UPS_EXPRESS_SAVER_ID instead
      */
-    public const CARRIER_UPS_ID                  = 8;
+    public const CARRIER_UPS_ID                      = 8;
     /**
      * @deprecated Use CARRIER_UPS_STANDARD_NAME or CARRIER_UPS_EXPRESS_SAVER_NAME instead
      */
-    public const CARRIER_UPS_NAME                = 'ups';
-    public const CARRIER_DHL_FOR_YOU_ID          = 9;
-    public const CARRIER_DHL_FOR_YOU_NAME        = 'dhlforyou';
-    public const CARRIER_DHL_PARCEL_CONNECT_ID   = 10;
-    public const CARRIER_DHL_PARCEL_CONNECT_NAME = 'dhlparcelconnect';
-    public const CARRIER_DHL_EUROPLUS_ID         = 11;
-    public const CARRIER_DHL_EUROPLUS_NAME       = 'dhleuroplus';
+    public const CARRIER_UPS_LEGACY_NAME             = 'ups';
+    public const CARRIER_UPS_NAME                    = 'UPS_STANDARD';
+    public const CARRIER_DHL_FOR_YOU_ID              = 9;
+    public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
+    public const CARRIER_DHL_FOR_YOU_NAME            = 'DHL_FOR_YOU';
+    public const CARRIER_DHL_PARCEL_CONNECT_ID       = 10;
+    public const CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME = 'dhlparcelconnect';
+    public const CARRIER_DHL_PARCEL_CONNECT_NAME     = 'DHL_PARCEL_CONNECT';
+    public const CARRIER_DHL_EUROPLUS_ID             = 11;
+    public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
+    public const CARRIER_DHL_EUROPLUS_NAME           = 'DHL_EUROPLUS';
     public const CARRIER_UPS_STANDARD_ID         = 12;
     public const CARRIER_UPS_STANDARD_NAME       = 'upsstandard';
     public const CARRIER_UPS_EXPRESS_SAVER_ID    = 13;
     public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'upsexpresssaver';
     public const CARRIER_GLS_ID                  = 14;
     public const CARRIER_GLS_NAME                = 'gls';
-
     /**
      * Names to ids
      */
