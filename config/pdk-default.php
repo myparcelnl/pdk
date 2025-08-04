@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+
 use function DI\env;
 use function DI\factory;
 use function DI\value;
@@ -62,6 +63,7 @@ return [
 
     /**
      * Supported date formats.
+     * @todo get/set from proposition config (internationalization.dateFormats)
      */
     'dateFormats'            => factory(function () {
         return [
@@ -75,6 +77,7 @@ return [
 
     /**
      * The default time zone to use for date and time functions.
+     * @todo get/set from proposition config (internationalization.localTimeZone)
      */
     'defaultTimeZone'        => value('Europe/Amsterdam'),
 
@@ -124,6 +127,7 @@ return [
 
     /**
      * All carriers, merged with the root carrier definitions.
+     * @todo refactor to use the proposition config instead of the root carrier definitions.
      */
 
     'allCarriers' => factory(function (): CarrierCollection {
@@ -142,6 +146,7 @@ return [
 
     /**
      * Carriers filtered by those allowed in the current platform.
+     * @todo refactor to use the proposition config instead of the root carrier definitions.
      */
 
     'carriers'                         => factory(function (): CarrierCollection {
@@ -156,11 +161,13 @@ return [
 
     /**
      * Language to default to when no language is set.
+     * @todo refactor to use the proposition config instead of the hardcoded value.
      */
     'defaultLanguage'                  => value('en'),
 
     /**
      * Languages present in the translations directory after the build process.
+     * @todo refactor to use the proposition config instead of the hardcoded array.
      */
     'availableLanguages'               => value(['en', 'nl', 'fr']),
 
