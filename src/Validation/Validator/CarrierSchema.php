@@ -22,6 +22,10 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 
+/**
+ * @deprecated Replace with PropositionCarrierFeatures or the Carrier Capabilities service.
+ * @package MyParcelNL\Pdk\Validation\Validator
+ */
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {
     /**
