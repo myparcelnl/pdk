@@ -17,6 +17,22 @@ final class TestBootstrapper
 {
     public const API_KEY_VALID = 'valid-api-key';
 
+    public static function forPlatform(string $platform): void
+    {
+        $platformId = Platform::MYPARCEL_ID;
+        if (Platform::SENDMYPARCEL_NAME === $platform) {
+            $platformId = Platform::SENDMYPARCEL_ID;
+        }
+
+        self::hasApiKey();
+
+        factory(Account::class)
+            ->withStatus(2)
+            ->withPlatformId($platformId)
+            ->withShops()
+            ->store();
+    }
+
     /**
      * @param  string                                                                $apiKey
      * @param  int|ShopCollection|CollectionFactoryInterface|ModelFactoryInterface[] $shops

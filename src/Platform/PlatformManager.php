@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Platform;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 
@@ -15,7 +17,7 @@ class PlatformManager implements PlatformManagerInterface
      */
     public function all(): array
     {
-        return Config::get(sprintf('platform/%s', $this->getPlatform()));
+        return Config::get(sprintf('platform/%s', $this->getPropositionName()));
     }
 
     /**
@@ -25,7 +27,7 @@ class PlatformManager implements PlatformManagerInterface
      */
     public function get(string $key)
     {
-        return Config::get(sprintf('platform/%s.%s', $this->getPlatform(), $key));
+        return Config::get(sprintf('platform/%s.%s', $this->getPropositionName(), $key));
     }
 
     /**
@@ -39,8 +41,20 @@ class PlatformManager implements PlatformManagerInterface
     /**
      * @return string
      */
-    public function getPlatform(): string
+    public function getPropositionName(): string
     {
-        return 'myparcel'; // TODO JOERI find a way to get the platform runtime
+        $propositionName = Platform::MYPARCEL_NAME;
+var_dump(AccountSettings::getAccount());
+die('welfkwelkrw');
+        try {
+            if (3 === AccountSettings::getAccount()
+                    ->getPlatformId()) {
+                $propositionName = Platform::SENDMYPARCEL_NAME;
+            }
+        } catch (\Throwable $e) {
+            // If the account settings are not available, we default to myparcel.
+        }
+
+        return $propositionName;
     }
 }

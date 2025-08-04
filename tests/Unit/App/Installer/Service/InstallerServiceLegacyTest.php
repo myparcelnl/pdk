@@ -82,7 +82,7 @@ it('[legacy] performs a fresh install of the app, filling default values from pl
     expectSettingsToContainLegacy([
         /** From default settings */
         'checkout.deliveryOptionsHeader'      => 'default',
-        'checkout.pickupLocationsDefaultView' => 'map',
+        'checkout.pickupLocationsDefaultView' => 'list',
 
         /**
          * Expect 1.2.0 migration to not have run (as it's only in the upgrade migrations)

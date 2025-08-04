@@ -52,10 +52,18 @@ class PdkBootstrapper implements PdkBootstrapperInterface
                             'name'    => self::PLUGIN_NAMESPACE,
                             'title'   => 'MyParcel',
                             'version' => $version,
+                            'path'    => $path,
                             'url'     => $url,
                         ])
                     ),
                 ],
+                (new static())->getAdditionalConfig(
+                    self::PLUGIN_NAMESPACE,
+                    'MyParcel',
+                    $version,
+                    $path,
+                    $url
+                ),
             );
         }
 
@@ -65,6 +73,8 @@ class PdkBootstrapper implements PdkBootstrapperInterface
     /**
      * Not static because that cannot be overridden in child classes.
      *
+     * @param  string $name
+     * @param  string $title
      * @param  string $version
      * @param  string $path
      * @param  string $url
@@ -73,6 +83,8 @@ class PdkBootstrapper implements PdkBootstrapperInterface
      * @codeCoverageIgnore
      */
     protected function getAdditionalConfig(
+        string $name,
+        string $title,
         string $version,
         string $path,
         string $url

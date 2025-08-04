@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Factory\FactoryFactory;
 use ZipArchive;
 
@@ -41,7 +43,21 @@ function mockPdkProperty(string $property, $value): callable
 
 function mockPlatform(string $platform): callable
 {
-    return mockPdkProperty('platform', $platform);
+    // find out the platform id for the given platform name
+    $platformId = 1;
+    if (Platform::SENDMYPARCEL_NAME === $platform) {
+        $platformId = 3;
+    }
+
+    return static function() use ($platform) {
+        var_dump("Mocking platform with id: $platformId");
+        TestBootstrapper::forPlatform($platform);
+        // update Mocked AccountSettings with the platform id
+        Pdk::get('accountSettings')
+            ->setPlatformId($platformId)
+            ->store()
+            ->persist();
+    };
 }
 
 /**

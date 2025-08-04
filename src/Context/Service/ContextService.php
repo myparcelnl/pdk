@@ -43,20 +43,26 @@ class ContextService implements ContextServiceInterface
      */
     public function createContexts(array $contexts, array $data = []): ContextBag
     {
-        try {
-            $context = array_reduce($contexts, function (array $acc, string $id) use ($data) {
-                $acc[$id] = $this->resolveContext($id, $data);
+//            try { // todo JOERI
+//                $context = array_reduce($contexts, function (array $acc, string $id) use ($data) {
+//                    $acc[$id] = $this->resolveContext($id, $data);
+//
+//                    return $acc;
+//                }, []);
+//            } catch(\Throwable $e) {
+//                echo '<textarea style="margin-left:200px;width:90vw;background-color:#fcc;height:300px;">';
+//                var_dump($e->getMessage(), $e->getTrace());
+//                echo '</textarea>';
+//            }
+//            echo '<textarea style="margin-left:200px;width:90vw;background-color:#ffc;height:300px;">';
+//            var_dump($context);
+//            echo '</textarea>';
 
-                return $acc;
-            }, []);
-        } catch(\Throwable $e) {
-            echo '<textarea style="margin-left:200px;width:90vw;background-color:#fcc;height:300px;">';
-            var_dump($e->getMessage(), $e->getTrace());
-            echo '</textarea>';
-        }
-        echo '<textarea style="margin-left:200px;width:90vw;background-color:#ffc;height:300px;">';
-        var_dump($context);
-        echo '</textarea>';
+        $context = array_reduce($contexts, function (array $acc, string $id) use ($data) {
+            $acc[$id] = $this->resolveContext($id, $data);
+
+            return $acc;
+        }, []);
 
         return new ContextBag($context);
     }
