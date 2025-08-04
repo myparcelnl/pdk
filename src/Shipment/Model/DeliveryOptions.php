@@ -104,6 +104,18 @@ class DeliveryOptions extends Model
     ];
 
     /**
+     * @var string[]
+     * @deprecated Use DELIVERY_TYPES_NAMES instead
+     */
+    public const DELIVERY_TYPE_NAME_TO_LEGACY_MAP = [
+        self::DELIVERY_TYPE_MORNING_NAME  => self::DELIVERY_TYPE_MORNING_LEGACY_NAME,
+        self::DELIVERY_TYPE_STANDARD_NAME => self::DELIVERY_TYPE_STANDARD_LEGACY_NAME,
+        self::DELIVERY_TYPE_EVENING_NAME  => self::DELIVERY_TYPE_EVENING_LEGACY_NAME,
+        self::DELIVERY_TYPE_PICKUP_NAME   => self::DELIVERY_TYPE_PICKUP_LEGACY_NAME,
+        self::DELIVERY_TYPE_EXPRESS_NAME  => self::DELIVERY_TYPE_EXPRESS_LEGACY_NAME,
+    ];
+
+    /**
      * @var array
      */
     public const DELIVERY_TYPES_NAMES_IDS_MAP = [
@@ -193,6 +205,18 @@ class DeliveryOptions extends Model
         self::PACKAGE_TYPE_LETTER_LEGACY_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_LEGACY_NAME,
         self::PACKAGE_TYPE_PACKAGE_SMALL_LEGACY_NAME,
+    ];
+
+    /**
+     * @var string[]
+     * @deprecated Use PACKAGE_TYPES_NAMES instead
+     */
+    public const  PACKAGE_TYPE_NAME_TO_LEGACY_MAP = [
+        self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE_LEGACY_NAME,
+        self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX_LEGACY_NAME,
+        self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER_LEGACY_NAME,
+        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP_LEGACY_NAME,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL_LEGACY_NAME,
     ];
 
     public const  PACKAGE_TYPES_NAMES_IDS_MAP = [
