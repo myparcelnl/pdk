@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\src\Support\Str;
 
@@ -27,11 +28,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
      * @var \MyParcelNL\Pdk\Carrier\Model\Carrier
      */
     protected $carrier;
-
-    /**
-     * @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema
-     */
-    protected $carrierSchema;
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
@@ -50,12 +46,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
         $this->carrier         = $carrier;
-
-        /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
-        $schema = Pdk::get(CarrierSchema::class);
-        $schema->setCarrier($carrier);
-
-        $this->carrierSchema = $schema;
     }
 
     /**
@@ -131,7 +121,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInsuranceElement(string $name): InteractiveElement
     {
-        $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
+        $insuranceAmounts = $this->carrier->outboundFeatures['shipmentOptions'][ShipmentOptions::INSURANCE] ??
+            $this->carrier->capabilities['features']['shipmentOptions'][ShipmentOptions::INSURANCE_LEGACY] ??
+            [];
 
         $options = array_map(function (int $amount) {
             return $this->currencyService->format($amount);
@@ -149,6 +141,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInternationalMailboxFields(): array
     {
+        // @todo: Refactor to use CarrierFeatures or PropositionCarrierFeatures or Carrier model subclass
+
+        // Check if the carrier has the key "carrierSmallpackageContract" in outboundFeatures.metadata OR capabilities.features.
+        // If it's value is FEATURE_CUSTOM_CONTRACT_ONLY, only set it if carrier is custom.
+
         if (! AccountSettings::hasCarrierSmallPackageContract()
             || ! $this->carrierSchema->canHaveCarrierSmallPackageContract()) {
             return [];
@@ -332,9 +329,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                         ->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED)
                         ->and(CarrierSettings::ALLOW_DELIVERY_OPTIONS);
                 },
-
                 $this->getPackageTypeFields(),
-
                 new InteractiveElement(
                     CarrierSettings::DELIVERY_DAYS_WINDOW,
                     Components::INPUT_NUMBER,
@@ -345,28 +340,21 @@ class CarrierSettingsItemView extends AbstractSettingsView
                         ],
                     ]
                 ),
-
                 new InteractiveElement(CarrierSettings::DROP_OFF_DELAY, Components::INPUT_NUMBER),
-
                 new InteractiveElement(CarrierSettings::DROP_OFF_POSSIBILITIES, Components::INPUT_DROP_OFF),
-
                 new SettingsDivider($this->createGenericLabel('delivery_moments'), SettingsDivider::LEVEL_4),
-
                 $this->carrierSchema->canHaveStandardDelivery() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_STANDARD_DELIVERY,
                     CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD
                 ) : [],
-
                 $this->carrierSchema->canHaveMorningDelivery() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_MORNING_DELIVERY,
                     CarrierSettings::PRICE_DELIVERY_TYPE_MORNING
                 ) : [],
-
                 $this->carrierSchema->canHaveEveningDelivery() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_EVENING_DELIVERY,
                     CarrierSettings::PRICE_DELIVERY_TYPE_EVENING
                 ) : [],
-
                 $this->carrierSchema->canHaveSameDayDelivery() ? array_merge(
                     $this->createSettingWithPriceFields(
                         CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
@@ -376,29 +364,23 @@ class CarrierSettingsItemView extends AbstractSettingsView
                         new InteractiveElement(CarrierSettings::CUTOFF_TIME_SAME_DAY, Components::INPUT_TIME),
                     ]
                 ) : [],
-
                 $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_MONDAY_DELIVERY,
                     CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY
                 ),
-
                 $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_SATURDAY_DELIVERY,
                     CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY
                 ),
-
                 new SettingsDivider($this->createGenericLabel('shipment_options'), SettingsDivider::LEVEL_4),
-
                 $this->carrierSchema->canHaveSignature() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_SIGNATURE,
                     CarrierSettings::PRICE_SIGNATURE
                 ) : [],
-
                 $this->carrierSchema->canHaveOnlyRecipient() ? $this->createSettingWithPriceFields(
                     CarrierSettings::ALLOW_ONLY_RECIPIENT,
                     CarrierSettings::PRICE_ONLY_RECIPIENT
                 ) : [],
-
                 $this->carrierSchema->canHaveExpressDelivery() ?
                     $this->createSettingWithPriceFields(
                         CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
@@ -440,7 +422,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 function (FormOperationBuilder $builder) {
                     $builder->visibleWhen(CarrierSettings::EXPORT_INSURANCE);
                 },
-
                 new InteractiveElement(CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT, Components::INPUT_NUMBER),
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO),
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE),
