@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
@@ -126,37 +127,22 @@ return [
     'deliveryOptionsPositions' => value([]),
 
     /**
-     * All carriers, merged with the root carrier definitions.
-     * @todo refactor to use the proposition config instead of the root carrier definitions.
+     * All carriers allowed in the current proposition.
+     * @deprecated use PropositionService::getCarriers() instead.
+     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
      */
-
     'allCarriers' => factory(function (): CarrierCollection {
-        $platformCarriers = new Collection(Platform::get('carriers'));
-        $carriers         = new Collection(Config::get('carriers'));
-
-        $result = $carriers
-            ->map(function (array $carrier) use ($platformCarriers): array {
-                $carrierDefinition = $platformCarriers->firstWhere('name', $carrier['name']) ?? [];
-
-                return array_replace($carrier, $carrierDefinition);
-            });
-
-        return new CarrierCollection($result);
+        return Pdk::get(PropositionService::class)->getCarriers(true);
     }),
 
     /**
-     * Carriers filtered by those allowed in the current platform.
-     * @todo refactor to use the proposition config instead of the root carrier definitions.
+     * @deprecated use PropositionService::getCarriers() instead.
+     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
      */
-
-    'carriers'                         => factory(function (): CarrierCollection {
-        /** @var CarrierCollection $allCarriers */
-        $allCarriers      = Pdk::get('allCarriers');
-        $platformCarriers = new Collection(Platform::get('carriers'));
-
-        return $allCarriers
-            ->whereIn('name', $platformCarriers->pluck('name'))
-            ->values();
+    'carriers' => factory(function (): CarrierCollection {
+        /** @var CarrierCollection $carriers */
+        $carriers = Pdk::get('allCarriers');
+        return $carriers;
     }),
 
     /**

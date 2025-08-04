@@ -8,6 +8,9 @@ use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use RuntimeException;
 
 class PropositionService
 {
@@ -76,9 +79,12 @@ class PropositionService
 
     /**
      * Get the carriers from the proposition config as CarrierCollection.
+     * @param $legacyFormat Whether to return the carriers in the legacy format (lowercase) or the new format (SCREAMING_SNAKE_CASE).
+     *           Legacy = "postnl", "dhlparcelconnect", "bpost", etc.
+     *           New = "POSTNL", "DHL_PARCEL_CONNECT", "BPOST", etc.
      * @return CarrierCollection
      */
-    public function getCarriers(): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+    public function getCarriers($legacyFormat = false): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
     {
         $carrierModels = [];
         foreach ($this->getPropositionConfig()->contracts->available as $contract) {
@@ -86,10 +92,13 @@ class PropositionService
                 'name' => $contract['carrier']['name'],
                 'id' => $contract['carrier']['id'],
                 'contractId' => $contract['id'] ?? null,
-                'capabilities' => $contract['outboundFeatures'] ?? [],
-                'returnCapabilities' => $contract['inboundFeatures'] ?? [],
+                'outboundFeatures' => $contract['outboundFeatures'] ?? [],
+                'inboundFeatures' => $contract['inboundFeatures'] ?? [],
                 'features' => $contract['metadata'] ?? [],
             ];
+            if ($legacyFormat) {
+                $carrierData = $this->convertCarrierDataToLegacyFormat($carrierData);
+            }
             $carrierModels[] = new Carrier($carrierData);
         }
         return new CarrierCollection($carrierModels);
@@ -105,13 +114,21 @@ class PropositionService
     public function getDefaultCarrier($outbound = true): Carrier
     {
         if ($outbound) {
-            $defaultContractId = $this->getPropositionConfig()->contracts->outbound['default']['id'];
+            $defaultCarrierId = $this->getPropositionConfig()->contracts->outbound['default']['carrier']['id'];
         } else {
-            $defaultContractId = $this->getPropositionConfig()->contracts->inbound['default']['id'];
+            $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
-        return $this->getCarriers()->where('contractId', $defaultContractId)->first();
+        return $this->getCarriers(true)->where('id', $defaultCarrierId)->first();
     }
 
+    /**
+     * Map the proposition config to the platform config for backwards compatibility.
+     * This is used to provide the platform config to the frontend.
+     *
+     * @param PropositionConfig $propositionConfig
+     * @return array
+     * @throws RuntimeException
+     */
     public function mapToPlatformConfig(PropositionConfig $propositionConfig): array
     {
         // Map the proposition config to the platform config
@@ -124,7 +141,67 @@ class PropositionService
             'defaultCarrier' => $this->getDefaultCarrier()->name,
             'defaultCarrierId' => $this->getDefaultCarrier()->id,
             'defaultSettings' => [], // @todo no longer supported, remove in v3.0.0
-            'carriers' => $this->getCarriers()->toArray(),
+            'carriers' => $this->getCarriers(true)->toArray(),
         ];
+    }
+
+    /**
+     * Convert the carrier data to the legacy format.
+     * This is used to convert the carrier data to the legacy format for backwards compatibility.
+     *
+     * @param array $carrierData
+     * @return array
+     */
+    protected function convertCarrierDataToLegacyFormat(array $carrierData): array
+    {
+        $carrierData['name'] = Carrier::CARRIER_NAME_TO_LEGACY_MAP[$carrierData['name']] ?? $carrierData['name'];
+
+        $carrierData['capabilities']['deliveryTypes'] = \array_map(function (string $value) {
+            return DeliveryOptions::DELIVERY_TYPE_NAME_TO_LEGACY_MAP[$value];
+        }, $carrierData['outboundFeatures']['deliveryTypes'] ?? []);
+        $carrierData['capabilities']['packageTypes'] = \array_map(function (string $value) {
+            return DeliveryOptions::PACKAGE_TYPE_NAME_TO_LEGACY_MAP[$value];
+        }, $carrierData['outboundFeatures']['packageTypes'] ?? []);
+        $carrierData['capabilities']['shipmentOptions'] = \array_reduce(
+            $carrierData['outboundFeatures']['shipmentOptions'] ?? [],
+            function (array $acc, string $value) {
+                $legacyKey = ShipmentOptions::SHIPMENT_OPTION_NAME_TO_LEGACY_MAP[$value] ?? $value;
+                $acc[$legacyKey] = true;
+                if ($legacyKey === ShipmentOptions::INSURANCE_LEGACY) {
+                    $acc[ShipmentOptions::INSURANCE_LEGACY] = [0, 1000, 4000]; // Ensure legacy insurance is also set
+                }
+                return $acc;
+            },
+            []
+        );
+        $carrierData['capabilities']['features'] = $carrierData['outboundFeatures']['metadata'] ?? [];
+
+
+        $carrierData['returnCapabilities']['deliveryTypes'] = \array_map(function (string $value) {
+            return DeliveryOptions::DELIVERY_TYPE_NAME_TO_LEGACY_MAP[$value];
+        }, $carrierData['inboundFeatures']['deliveryTypes'] ?? []);
+        $carrierData['returnCapabilities']['packageTypes'] = \array_map(function (string $value) {
+            return DeliveryOptions::PACKAGE_TYPE_NAME_TO_LEGACY_MAP[$value];
+        }, $carrierData['inboundFeatures']['packageTypes'] ?? []);
+        $carrierData['returnCapabilities']['shipmentOptions'] = \array_reduce(
+            $carrierData['inboundFeatures']['shipmentOptions'] ?? [],
+            function (array $acc, string $value) {
+                $legacyKey = ShipmentOptions::SHIPMENT_OPTION_NAME_TO_LEGACY_MAP[$value] ?? $value;
+                $acc[$legacyKey] = true;
+
+                if ($legacyKey === ShipmentOptions::INSURANCE_LEGACY) {
+                    $acc[ShipmentOptions::INSURANCE_LEGACY] = [0, 1000, 4000]; // Ensure legacy insurance is also set
+                }
+
+                return $acc;
+            },
+            []
+        );
+
+        $carrierData['returnCapabilities']['features'] = $carrierData['inboundFeatures']['metadata'] ?? [];
+
+        unset($carrierData['outboundFeatures'], $carrierData['inboundFeatures']);
+
+        return $carrierData;
     }
 }
