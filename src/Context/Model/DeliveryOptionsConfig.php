@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $locale
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
+ * @property bool   $allowPickupLocationsViewSelection
  * @property string $platform
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
@@ -29,29 +30,31 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 class DeliveryOptionsConfig extends Model
 {
     public    $attributes = [
-        'allowRetry'                 => false,
-        'basePrice'                  => 0,
-        'carrierSettings'            => [],
-        'currency'                   => 'EUR',
-        'locale'                     => null,
-        'packageType'                => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        'pickupLocationsDefaultView' => null,
-        'platform'                   => null,
-        'priceStandardDelivery'      => 0,
-        'showPriceSurcharge'         => false,
+        'allowRetry'                     => false,
+        'basePrice'                      => 0,
+        'carrierSettings'                => [],
+        'currency'                       => 'EUR',
+        'locale'                         => null,
+        'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        'pickupLocationsDefaultView'     => null,
+        'allowPickupLocationsViewSelection' => true,
+        'platform'                       => null,
+        'priceStandardDelivery'          => 0,
+        'showPriceSurcharge'             => false,
     ];
 
     protected $casts      = [
-        'allowRetry'                 => 'boolean',
-        'basePrice'                  => 'float',
-        'carrierSettings'            => 'array',
-        'currency'                   => 'string',
-        'locale'                     => 'string',
-        'packageType'                => 'string',
-        'pickupLocationsDefaultView' => 'string',
-        'platform'                   => 'string',
-        'priceStandardDelivery'      => 'float',
-        'showPriceSurcharge'         => 'boolean',
+        'allowRetry'                     => 'boolean',
+        'basePrice'                      => 'float',
+        'carrierSettings'                => 'array',
+        'currency'                       => 'string',
+        'locale'                         => 'string',
+        'packageType'                    => 'string',
+        'pickupLocationsDefaultView'     => 'string',
+        'allowPickupLocationsViewSelection' => 'boolean',
+        'platform'                       => 'string',
+        'priceStandardDelivery'          => 'float',
+        'showPriceSurcharge'             => 'boolean',
     ];
 
     /**
@@ -68,6 +71,10 @@ class DeliveryOptionsConfig extends Model
         $this->showPriceSurcharge         = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
         $this->pickupLocationsDefaultView = Settings::get(
             CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
+            CheckoutSettings::ID
+        );
+        $this->allowPickupLocationsViewSelection = Settings::get(
+            CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
             CheckoutSettings::ID
         );
 

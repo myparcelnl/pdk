@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property string                                  $deliveryOptionsHeader
  * @property string                                  $deliveryOptionsPosition
  * @property string                                  $pickupLocationsDefaultView
+ * @property bool                                    $allowPickupLocationsViewSelection
  * @property string                                  $priceType
  * @property bool                                    $showDeliveryDay
  * @property bool                                    $useSeparateAddressFields
@@ -31,6 +32,7 @@ class CheckoutSettings extends AbstractSettingsModel
     public const DELIVERY_OPTIONS_HEADER                   = 'deliveryOptionsHeader';
     public const DELIVERY_OPTIONS_POSITION                 = 'deliveryOptionsPosition';
     public const PICKUP_LOCATIONS_DEFAULT_VIEW             = 'pickupLocationsDefaultView';
+    public const ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION     = 'allowPickupLocationsViewSelection';
     public const PRICE_TYPE                                = 'priceType';
     public const ENABLE_DELIVERY_OPTIONS                   = 'enableDeliveryOptions';
     public const ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK = 'enableDeliveryOptionsWhenNotInStock';
@@ -54,6 +56,7 @@ class CheckoutSettings extends AbstractSettingsModel
         self::DELIVERY_OPTIONS_HEADER                   => null,
         self::DELIVERY_OPTIONS_POSITION                 => null,
         self::PICKUP_LOCATIONS_DEFAULT_VIEW             => null,
+        self::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION     => true,
         self::PRICE_TYPE                                => self::DEFAULT_PRICE_TYPE,
         self::ENABLE_DELIVERY_OPTIONS                   => true,
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
@@ -68,6 +71,7 @@ class CheckoutSettings extends AbstractSettingsModel
         self::DELIVERY_OPTIONS_HEADER                   => 'string',
         self::DELIVERY_OPTIONS_POSITION                 => 'string',
         self::PICKUP_LOCATIONS_DEFAULT_VIEW             => 'string',
+        self::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION     => 'bool',
         self::PRICE_TYPE                                => 'string',
         self::ENABLE_DELIVERY_OPTIONS                   => 'bool',
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => 'bool',

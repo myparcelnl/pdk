@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @method $this withDeliveryOptionsHeader(string $deliveryOptionsHeader)
  * @method $this withDeliveryOptionsPosition(string $deliveryOptionsPosition)
  * @method $this withPickupLocationsDefaultView(string $pickupLocationsDefaultView)
+ * @method $this withAllowPickupLocationsViewSelection(bool $allowPickupLocationsViewSelection)
  * @method $this withPriceType(string $priceType)
  * @method $this withShowDeliveryDay(bool $showDeliveryDay)
  * @method $this withUseSeparateAddressFields(bool $useSeparateAddressFields)

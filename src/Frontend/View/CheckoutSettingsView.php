@@ -90,6 +90,10 @@ class CheckoutSettingsView extends AbstractSettingsView
                         ),
                     ]
                 ),
+                new InteractiveElement(
+                    CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
+                    Components::INPUT_TOGGLE
+                ),
                 new InteractiveElement(CheckoutSettings::SHOW_TAX_FIELDS, Components::INPUT_TOGGLE)
             ),
         ];
