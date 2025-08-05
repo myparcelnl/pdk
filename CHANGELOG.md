@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.62.0](https://github.com/myparcelnl/pdk/compare/v2.61.0...v2.62.0) (2025-08-05)
+
+
+### :sparkles: New Features
+
+* add GLS carrier support ([#373](https://github.com/myparcelnl/pdk/issues/373)) ([8557325](https://github.com/myparcelnl/pdk/commit/8557325d1c62918b52b7e2f02378398fac450bab))
+
 ## [2.61.0](https://github.com/myparcelnl/pdk/compare/v2.60.1...v2.61.0) (2025-07-31)
 
 
