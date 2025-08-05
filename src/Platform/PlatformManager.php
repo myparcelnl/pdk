@@ -36,6 +36,7 @@ class PlatformManager implements PlatformManagerInterface
     public function getCarriers(): CarrierCollection
     {
         return Pdk::get('carriers');
+        //return new CarrierCollection($this->get('carriers'));
     }
 
     /**
@@ -44,8 +45,8 @@ class PlatformManager implements PlatformManagerInterface
     public function getPropositionName(): string
     {
         $propositionName = Platform::MYPARCEL_NAME;
-var_dump(AccountSettings::getAccount());
-die('welfkwelkrw');
+//var_dump(AccountSettings::getAccount());
+//die('welfkwelkrw');
         try {
             if (3 === AccountSettings::getAccount()
                     ->getPlatformId()) {
