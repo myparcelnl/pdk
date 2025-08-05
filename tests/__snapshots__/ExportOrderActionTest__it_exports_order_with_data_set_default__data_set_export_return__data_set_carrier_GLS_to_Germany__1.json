@@ -1,0 +1,36 @@
+{
+    "data": {
+        "shipments": [
+            {
+                "carrier": 14,
+                "contract_id": 1234,
+                "general_settings": {
+                    "save_recipient_address": 0
+                },
+                "options": {
+                    "package_type": 1,
+                    "delivery_type": 2,
+                    "insurance": {
+                        "amount": 10000,
+                        "currency": "EUR"
+                    },
+                    "signature": 1
+                },
+                "physical_properties": {
+                    "weight": 100
+                },
+                "recipient": {
+                    "cc": "DE",
+                    "city": "Berlin",
+                    "company": "MyParcel",
+                    "number": "",
+                    "person": "Felicia Parcel",
+                    "postal_code": "10117",
+                    "street": "Musterstrasse 1",
+                    "vat_number": "NL123456789B01"
+                },
+                "reference_identifier": "PDK-1"
+            }
+        ]
+    }
+}

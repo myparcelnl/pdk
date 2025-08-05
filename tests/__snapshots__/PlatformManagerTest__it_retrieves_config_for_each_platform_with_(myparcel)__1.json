@@ -350,6 +350,29 @@
                     "needsCustomerInfo": true
                 }
             }
+        },
+        {
+            "name": "gls",
+            "capabilities": {
+                "packageTypes": [
+                    "package"
+                ],
+                "deliveryTypes": [
+                    "standard",
+                    "pickup"
+                ],
+                "shipmentOptions": {
+                    "signature": true,
+                    "saturdayDelivery": true,
+                    "insurance": [
+                        10000
+                    ]
+                },
+                "features": {
+                    "labelDescriptionLength": 45,
+                    "carrier": "featureCustomContractOnly"
+                }
+            }
         }
     ]
 }

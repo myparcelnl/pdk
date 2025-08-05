@@ -393,5 +393,36 @@
                 ]
             }
         }
+    },
+    {
+        "externalIdentifier": "gls",
+        "id": 14,
+        "name": "gls",
+        "human": "GLS",
+        "enabled": true,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main",
+        "capabilities": {
+            "deliveryTypes": [
+                "standard",
+                "pickup"
+            ],
+            "features": {
+                "labelDescriptionLength": 45,
+                "carrier": "featureCustomContractOnly"
+            },
+            "packageTypes": [
+                "package"
+            ],
+            "shipmentOptions": {
+                "signature": true,
+                "saturdayDelivery": true,
+                "insurance": [
+                    10000
+                ]
+            }
+        }
     }
 ]

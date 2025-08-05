@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\Bpost\BpostCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlEuroplus\DhlEuroplusCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlForYou\DhlForYouCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\DhlParcelConnect\DhlParcelConnectCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\Dpd\DpdCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\Gls\GlsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\PostNl\PostNLCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPSStandard\UPSStandardCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPSExpressSaver\UPSExpressSaverCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\Bpost\BpostCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
@@ -30,6 +31,7 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
         Carrier::CARRIER_UPS_STANDARD_NAME       => UPSStandardCalculator::class,
         Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME  => UPSExpressSaverCalculator::class,
         Carrier::CARRIER_BPOST_NAME              => BpostCalculator::class,
+        Carrier::CARRIER_GLS_NAME                => GlsCalculator::class,
     ];
 
     public function calculate(): void

@@ -368,6 +368,29 @@ return [
                 ],
             ],
         ],
+        [
+            'name'         => Carrier::CARRIER_GLS_NAME,
+            'capabilities' => [
+                'packageTypes'    => [
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                ],
+                'deliveryTypes'   => [
+                    DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+                ],
+                'shipmentOptions' => [
+                    'signature'        => true,
+                    'saturdayDelivery' => true,
+                    'insurance'        => [
+                        10000,
+                    ],
+                ],
+                'features'        => [
+                    'labelDescriptionLength' => 45,
+                    'carrier'                => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY,
+                ],
+            ],
+        ],
     ],
 ];
 
