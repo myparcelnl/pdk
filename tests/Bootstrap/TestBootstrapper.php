@@ -19,6 +19,8 @@ final class TestBootstrapper
 
     public static function forPlatform(string $platform): void
     {
+        MockPdkFactory::create(['platform' => $platform]);
+
         $platformId = Platform::MYPARCEL_ID;
         if (Platform::SENDMYPARCEL_NAME === $platform) {
             $platformId = Platform::SENDMYPARCEL_ID;

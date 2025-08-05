@@ -77,7 +77,7 @@ it('retrieves default settings', function (string $platform) {
 
 it('retrieves default carrier settings', function (string $platform) {
     TestBootstrapper::forPlatform($platform);
-    //MockPdkFactory::create(['platform' => $platform]);
+
     $carriers = (new Collection(Platform::getCarriers()))
         ->pluck('name')
         ->toArray();
