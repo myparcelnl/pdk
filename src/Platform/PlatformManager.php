@@ -47,7 +47,7 @@ class PlatformManager implements PlatformManagerInterface
 
         try {
             if (Platform::SENDMYPARCEL_ID === AccountSettings::getAccount()
-                    ->getPlatformId()) {
+                    ->getAttribute('platformId')) {
                 $propositionName = Platform::SENDMYPARCEL_NAME;
             }
         } catch (\Throwable $e) {
