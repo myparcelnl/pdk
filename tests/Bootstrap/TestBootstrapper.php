@@ -6,8 +6,10 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
@@ -19,7 +21,7 @@ final class TestBootstrapper
 
     public static function forPlatform(string $platform): void
     {
-        MockPdkFactory::create(['platform' => $platform]);
+        MockPdkFactory::create();
 
         $platformId = Platform::MYPARCEL_ID;
         if (Platform::SENDMYPARCEL_NAME === $platform) {
@@ -28,9 +30,7 @@ final class TestBootstrapper
 
         self::hasApiKey();
 
-        factory(Account::class)
-            ->withStatus(2)
-            ->withPlatformId($platformId)
+        factory(Account::class, $platformId)
             ->withShops()
             ->store();
     }
@@ -48,6 +48,8 @@ final class TestBootstrapper
         factory(Account::class)
             ->withStatus(2)
             ->withPlatformId(Platform::MYPARCEL_ID)
+            ->withContactInfo(factory(ContactDetails::class))
+            ->withGeneralSettings(factory(AccountGeneralSettings::class))
             ->withShops($shops)
             ->store();
     }

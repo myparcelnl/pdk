@@ -8,7 +8,6 @@ namespace MyParcelNL\Pdk\Platform;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -36,7 +35,7 @@ it('gets specific keys from platform data', function () {
 });
 
 it('gets carriers', function (string $platform) {
-    MockPdkFactory::create(['platform' => $platform]);
+    TestBootstrapper::forPlatform($platform);
 
     $carriers = PlatformFacade::getCarriers();
 

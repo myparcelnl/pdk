@@ -65,7 +65,6 @@ it('retrieves a specific setting by key and namespace', function () {
 
 it('retrieves default settings', function (string $platform) {
     TestBootstrapper::forPlatform($platform);
-    //MockPdkFactory::create(['platform' => $platform]);
 
     $defaults = Settings::getDefaults();
 
