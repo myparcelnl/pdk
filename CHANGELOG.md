@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.63.0](https://github.com/myparcelnl/pdk/compare/v2.62.0...v2.63.0) (2025-08-08)
+
+
+### :sparkles: New Features
+
+* add pickup locations display configuration ([#378](https://github.com/myparcelnl/pdk/issues/378)) ([5f95e2a](https://github.com/myparcelnl/pdk/commit/5f95e2a4ebe9780ae4c4f2b4c6dc18b8e8cd449d)), closes [#INT-1103](https://github.com/myparcelnl/pdk/issues/INT-1103) [#INT-1103](https://github.com/myparcelnl/pdk/issues/INT-1103)
+
 ## [2.62.0](https://github.com/myparcelnl/pdk/compare/v2.61.0...v2.62.0) (2025-08-05)
 
 
