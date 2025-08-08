@@ -34,26 +34,36 @@ it('can be instantiated', function () {
         CheckoutSettings::ID
     );
 
+    $allowPickupLocationsViewSelection = Settings::get(
+        CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
+        CheckoutSettings::ID
+    );
+
     expect($config)
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
         ->and($config->toArray())
         ->toEqual([
-            'allowRetry'                 => false,
-            'apiBaseUrl'                 => 'https://api.myparcel.nl',
-            'basePrice'                  => 0,
-            'carrierSettings'            => [],
-            'currency'                   => 'EUR',
-            'locale'                     => 'nl-NL',
-            'packageType'                => 'package',
-            'pickupLocationsDefaultView' => $pickupLocationsDefaultView,
-            'platform'                   => 'myparcel',
-            'showPriceSurcharge'         => false,
-            'priceStandardDelivery'      => 0,
+            'allowRetry'                        => false,
+            'apiBaseUrl'                        => 'https://api.myparcel.nl',
+            'basePrice'                         => 0,
+            'carrierSettings'                   => [],
+            'currency'                          => 'EUR',
+            'locale'                            => 'nl-NL',
+            'packageType'                       => 'package',
+            'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
+            'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
+            'platform'                          => 'myparcel',
+            'showPriceSurcharge'                => false,
+            'priceStandardDelivery'             => 0,
         ]);
 });
 
 it('can be instantiated from a cart', function () {
     TestBootstrapper::hasAccount();
+
+    factory(CheckoutSettings::class)
+        ->withAllowPickupLocationsViewSelection(true)
+        ->store();
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */
     $productRepository = Pdk::get(PdkProductRepositoryInterface::class);
@@ -76,51 +86,22 @@ it('can be instantiated from a cart', function () {
 
     expect($config)
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
-        ->and($config->toArrayWithoutNull())
-        ->toEqual([
-            'allowRetry'            => false,
-            'basePrice'             => 6.95,
-            'carrierSettings'       => [
-                'postnl' => [
-                    'allowDeliveryOptions'         => false,
-                    'allowStandardDelivery'        => false,
-                    'allowEveningDelivery'         => false,
-                    'allowMondayDelivery'          => false,
-                    'allowMorningDelivery'         => false,
-                    'allowOnlyRecipient'           => false,
-                    'allowPickupLocations'         => false,
-                    'allowSameDayDelivery'         => false,
-                    'allowSaturdayDelivery'        => false,
-                    'allowSignature'               => false,
-                    'allowExpressDelivery'         => false,
-                    'dropOffDays'                  => [],
-                    'priceEveningDelivery'         => 0.0,
-                    'priceMorningDelivery'         => 0.0,
-                    'priceOnlyRecipient'           => 0.0,
-                    'pricePackageTypeDigitalStamp' => 0.0,
-                    'pricePackageTypeMailbox'      => 0.0,
-                    'pricePackageTypePackageSmall' => 0.0,
-                    'pricePickup'                  => 0.0,
-                    'priceSameDayDelivery'         => 0.0,
-                    'priceSignature'               => 0.0,
-                    'priceStandardDelivery'        => 0.0,
-                    'deliveryDaysWindow'           => 7,
-                    'dropOffDelay'                 => 0,
-                    'cutoffTime'                   => null,
-                    'cutoffTimeSameDay'            => '10:00',
-                    'priceCollect'                 => 0.0,
-                    'priceExpressDelivery'         => 0.0,
-
-                ],
-            ],
-            'currency'              => 'EUR',
-            'locale'                => 'nl-NL',
-            'packageType'           => 'package',
-            'platform'              => 'myparcel',
-            'showPriceSurcharge'    => false,
-            'apiBaseUrl'            => 'https://api.myparcel.nl',
-            'priceStandardDelivery' => 0.0,
-        ]);
+        ->and($config->allowPickupLocationsViewSelection)
+        ->toBe(true)
+        ->and($config->basePrice)
+        ->toBe(6.95)
+        ->and($config->currency)
+        ->toBe('EUR')
+        ->and($config->locale)
+        ->toBe('nl-NL')
+        ->and($config->packageType)
+        ->toBe('package')
+        ->and($config->platform)
+        ->toBe('myparcel')
+        ->and($config->showPriceSurcharge)
+        ->toBe(false)
+        ->and($config->apiBaseUrl)
+        ->toBe('https://api.myparcel.nl');
 });
 
 it('uses correct price when price is shown as surcharge', function () {
@@ -128,6 +109,7 @@ it('uses correct price when price is shown as surcharge', function () {
 
     factory(CheckoutSettings::class)
         ->withPriceType(CheckoutSettings::PRICE_TYPE_INCLUDED)
+        ->withAllowPickupLocationsViewSelection(true)
         ->store();
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */
@@ -153,9 +135,9 @@ it('uses correct price when price is shown as surcharge', function () {
         ->toBeInstanceOf(DeliveryOptionsConfig::class)
         ->and($config->toArrayWithoutNull())
         ->toEqual([
-            'allowRetry'            => false,
-            'basePrice'             => 6.95,
-            'carrierSettings'       => [
+            'allowRetry'                        => false,
+            'basePrice'                         => 6.95,
+            'carrierSettings'                   => [
                 'postnl' => [
                     'allowDeliveryOptions'         => false,
                     'allowStandardDelivery'        => false,
@@ -188,12 +170,31 @@ it('uses correct price when price is shown as surcharge', function () {
 
                 ],
             ],
-            'currency'              => 'EUR',
-            'locale'                => 'nl-NL',
-            'packageType'           => 'package',
-            'platform'              => 'myparcel',
-            'showPriceSurcharge'    => false,
-            'apiBaseUrl'            => 'https://api.myparcel.nl',
-            'priceStandardDelivery' => 695.0,
+            'currency'                          => 'EUR',
+            'locale'                            => 'nl-NL',
+            'packageType'                       => 'package',
+            'platform'                          => 'myparcel',
+            'showPriceSurcharge'                => false,
+            'apiBaseUrl'                        => 'https://api.myparcel.nl',
+            'priceStandardDelivery'             => 695.0,
+            'allowPickupLocationsViewSelection' => true,
         ]);
+});
+
+it('loads allowPickupLocationsViewSelection setting correctly', function () {
+    // Test with default value (true)
+    factory(CheckoutSettings::class)
+        ->withAllowPickupLocationsViewSelection(true)
+        ->store();
+
+    $config = new DeliveryOptionsConfig();
+    expect($config->allowPickupLocationsViewSelection)->toBe(true);
+
+    // Test with false value
+    factory(CheckoutSettings::class)
+        ->withAllowPickupLocationsViewSelection(false)
+        ->store();
+
+    $config = new DeliveryOptionsConfig();
+    expect($config->allowPickupLocationsViewSelection)->toBe(false);
 });

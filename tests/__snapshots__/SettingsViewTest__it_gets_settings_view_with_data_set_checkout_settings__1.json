@@ -181,6 +181,23 @@
       "description": "settings_checkout_pickup_locations_default_view_description"
     },
     {
+      "name": "allowPickupLocationsViewSelection",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "enableDeliveryOptions"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "ToggleInput",
+      "label": "settings_checkout_allow_pickup_locations_view_selection",
+      "description": "settings_checkout_allow_pickup_locations_view_selection_description"
+    },
+    {
       "name": "showTaxFields",
       "$builders": [
         {
