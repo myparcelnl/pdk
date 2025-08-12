@@ -9,17 +9,27 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 
 class CarrierRepository extends Repository implements CarrierRepositoryInterface
 {
     private const ORDERED_CARRIER_GETTER = ['id', 'name'];
+
+    protected PropositionService $propositionService;
+
+    public function __construct(StorageInterface $storage, PropositionService $propositionService)
+    {
+        parent::__construct($storage);
+        $this->propositionService = $propositionService;
+    }
 
     /**
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function all(): CarrierCollection
     {
-        return Pdk::get('allCarriers');
+        return $this->propositionService->getCarriers();
     }
 
     /**
