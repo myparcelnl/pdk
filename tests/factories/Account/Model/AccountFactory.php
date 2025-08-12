@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -17,6 +18,8 @@ use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+
+use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Account

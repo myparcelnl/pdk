@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Proposition\Service;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -118,12 +119,12 @@ class PropositionService
         } else {
             $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
-        return $this->getCarriers(true)->where('id', $defaultCarrierId)->first();
+        return $this->getCarriers()->where('id', $defaultCarrierId)->first();
     }
 
     /**
      * Map the proposition config to the platform config for backwards compatibility.
-     * This is used to provide the platform config to the frontend.
+     * This maps to existing Platform config keys, but does not transform the values.
      *
      * @param PropositionConfig $propositionConfig
      * @return array
@@ -141,7 +142,7 @@ class PropositionService
             'defaultCarrier' => $this->getDefaultCarrier()->name,
             'defaultCarrierId' => $this->getDefaultCarrier()->id,
             'defaultSettings' => [], // @todo no longer supported, remove in v3.0.0
-            'carriers' => $this->getCarriers(true)->toArray(),
+            'carriers' => $this->getCarriers()->toArray(),
         ];
     }
 
@@ -190,7 +191,7 @@ class PropositionService
                 $acc[$legacyKey] = true;
 
                 if ($legacyKey === ShipmentOptions::INSURANCE_LEGACY) {
-                    $acc[ShipmentOptions::INSURANCE_LEGACY] = [0, 1000, 4000]; // Ensure legacy insurance is also set
+                    $acc[ShipmentOptions::INSURANCE_LEGACY] = [0, 1000, 4000]; // @todo Ensure legacy insurance is also set
                 }
 
                 return $acc;
@@ -203,5 +204,28 @@ class PropositionService
         unset($carrierData['outboundFeatures'], $carrierData['inboundFeatures']);
 
         return $carrierData;
+    }
+
+    /**
+     * Checks if a carrier has a specific metadata feature, including a check for custom-contract only features.
+     * @deprecated should use Carrier capabilities instead.
+     * @param  string $feature
+     *
+     * @return bool
+     */
+    protected function carrierHasMetadataFeature(Carrier $carrier, string $feature): bool
+    {
+        $feature = $carrier->outboundFeatures->metadata[$feature] ?? null;
+        // Also check legacy capabilities key
+        // @todo remove in next major
+        if ($feature === null) {
+            $feature = $carrier->capabilities->features[$feature] ?? null;
+        }
+
+        if (PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY === $feature) {
+            return $carrier->isCustom;
+        }
+
+        return (bool) $feature;
     }
 }

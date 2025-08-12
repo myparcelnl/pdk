@@ -273,7 +273,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     private function createSchema(): array
     {
         /** @noinspection PhpUnhandledExceptionInspection */
-        return $this->getCarrier()->capabilities->toArray();
+        return $this->getCarrier()->outboundFeatures->toArray();
     }
 
     /**
