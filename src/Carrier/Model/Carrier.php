@@ -71,11 +71,26 @@ class Carrier extends Model
     public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
     public const CARRIER_DHL_EUROPLUS_NAME           = 'DHL_EUROPLUS';
     public const CARRIER_UPS_STANDARD_ID         = 12;
-    public const CARRIER_UPS_STANDARD_NAME       = 'upsstandard';
+
+    /**
+     * @deprecated use CARRIER_UPS_STANDARD_NAME
+     */
+    public const CARRIER_UPS_STANDARD_LEGACY_NAME = 'upsstandard';
+    public const CARRIER_UPS_STANDARD_NAME       = 'UPS_STANDARD';
     public const CARRIER_UPS_EXPRESS_SAVER_ID    = 13;
-    public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'upsexpresssaver';
+
+    /**
+     * @deprecated use CARRIER_UPS_EXPRESS_SAVER_NAME
+     */
+    public const CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME = 'upsexpresssaver';
+    public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'UPS_EXPRESS_SAVER';
     public const CARRIER_GLS_ID                  = 14;
-    public const CARRIER_GLS_NAME                = 'gls';
+
+    /**
+     * @deprecated use CARRIER_GLS_NAME
+     */
+    public const CARRIER_GLS_LEGACY_NAME       = 'gls';
+    public const CARRIER_GLS_NAME                = 'GLS';
 
     /**
      * @deprecated use new carrier names directly
@@ -92,6 +107,9 @@ class Carrier extends Model
         self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_LEGACY_NAME,
         self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_LEGACY_NAME,
         self::CARRIER_UPS_NAME                => self::CARRIER_UPS_LEGACY_NAME,
+        self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
+        self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
+        self::CARRIER_GLS_NAME                => self::CARRIER_GLS_LEGACY_NAME,
     ];
 
     /**
@@ -153,8 +171,8 @@ class Carrier extends Model
         'type'               => self::TYPE_MAIN,
         'capabilities'       => null,
         'returnCapabilities' => null,
-        'inboundFeatures'    => PropositionCarrierFeatures::class,
-        'outboundFeatures'   => PropositionCarrierFeatures::class,
+        'inboundFeatures'    => null,
+        'outboundFeatures'   => null,
     ];
 
     protected $casts      = [

@@ -1,24 +1,26 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Carrier\Model;
+namespace MyParcelNL\Pdk\Proposition\Model;
 
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
 /**
- * @template T of CarrierCapabilities
- * @method CarrierCapabilities make()
+ * @template T of PropositionCarrierFeatures
+ * @method PropositionCarrierFeatures make()
  * @method $this withDeliveryTypes(array $deliveryTypes)
- * @method $this withFeatures(array $features)
+ * @method $this withMetadata(array $metadata)
  * @method $this withPackageTypes(array $packageTypes)
  * @method $this withShipmentOptions(array $shipmentOptions)
  */
-final class CarrierCapabilitiesFactory extends AbstractModelFactory
+final class PropositionCarrierFeaturesFactory extends AbstractModelFactory
 {
     public function fromCarrier(string $carrierName): self
     {
@@ -30,14 +32,14 @@ final class CarrierCapabilitiesFactory extends AbstractModelFactory
         }
 
         /** @noinspection PhpUnhandledExceptionInspection */
-        $capabilities = $foundCarrier->capabilities->toArrayWithoutNull();
+        $features = $foundCarrier->outboundFeatures->toArrayWithoutNull();
 
-        return $this->with($capabilities);
+        return $this->with($features);
     }
 
     public function getModel(): string
     {
-        return CarrierCapabilities::class;
+        return PropositionCarrierFeatures::class;
     }
 
     /**
@@ -51,9 +53,9 @@ final class CarrierCapabilitiesFactory extends AbstractModelFactory
     /**
      * @return $this
      */
-    public function withAllFeatures(): self
+    public function withAllMetadata(): self
     {
-        return $this->withFeatures([
+        return $this->withMetadata([
             'dropOffAtPostalPoint'   => true,
             'labelDescriptionLength' => 45,
             'multiCollo'             => true,
@@ -65,33 +67,16 @@ final class CarrierCapabilitiesFactory extends AbstractModelFactory
      */
     public function withAllOptions(): self
     {
-        return $this->withShipmentOptions(
-            array_fill_keys([
-                ShipmentOptions::AGE_CHECK,
-                ShipmentOptions::DIRECT_RETURN,
-                ShipmentOptions::HIDE_SENDER,
-                ShipmentOptions::LARGE_FORMAT,
-                ShipmentOptions::ONLY_RECIPIENT,
-                ShipmentOptions::SAME_DAY_DELIVERY,
-                ShipmentOptions::SIGNATURE,
-            ], true) + [
-                ShipmentOptions::INSURANCE => [
-                    0,
-                    10000,
-                    25000,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000,
-                ],
-            ]
-        );
+        return $this->withShipmentOptions([
+                PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_DIRECT_RETURN_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_HIDE_SENDER_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_SAME_DAY_DELIVERY_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME
+            ]);
     }
 
     /**
@@ -109,7 +94,7 @@ final class CarrierCapabilitiesFactory extends AbstractModelFactory
     {
         return $this
             ->withAllDeliveryTypes()
-            ->withAllFeatures()
+            ->withAllMetadata()
             ->withAllOptions()
             ->withAllPackageTypes();
     }

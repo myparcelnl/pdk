@@ -63,7 +63,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {
                 $isAllowed = $allowedCarriers->contains('name', $carrier->name);
 
-                return $isAllowed && $carrier->enabled && $carrier->capabilities;
+                return $isAllowed && $carrier->enabled && $carrier->outboundFeatures && $carrier->outboundFeatures->isNotEmpty();
             })
             ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
                 $aIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierA) {

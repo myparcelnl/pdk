@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,6 +12,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 dataset('pdk orders domestic', [
@@ -50,7 +52,6 @@ dataset('pdk orders domestic', [
                     'carrier'     => Carrier::CARRIER_POSTNL_NAME,
                     'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                 ]),
-
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
@@ -63,7 +64,6 @@ dataset('pdk orders domestic', [
                                 ->withSignature(TriStateService::ENABLED)
                         )
                 ),
-
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
@@ -73,9 +73,7 @@ dataset('pdk orders domestic', [
                                 ->withAgeCheck(TriStateService::ENABLED)
                                 ->withHideSender(TriStateService::ENABLED)
                                 ->withInsurance(TriStateService::ENABLED)
-                                ->withLargeFormat(TriStateService::ENABLED)
                                 ->withOnlyRecipient(TriStateService::ENABLED)
-                                ->withReturn(TriStateService::ENABLED)
                                 ->withSignature(TriStateService::ENABLED)
                         )
                 )

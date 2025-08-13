@@ -1,48 +1,48 @@
 {
-  "data": {
-    "shipments": [
-      {
-        "carrier": 1,
-        "customs_declaration": {
-          "contents": 3,
-          "items": [
+    "data": {
+        "shipments": [
             {
-              "amount": 3,
-              "classification": "123456",
-              "country": "DE",
-              "description": "hello",
-              "item_value": {
-                "amount": 1000,
-                "currency": "EUR"
-              },
-              "weight": 400
+                "carrier": 1,
+                "customs_declaration": {
+                    "contents": 3,
+                    "items": [
+                        {
+                            "amount": 3,
+                            "classification": "123456",
+                            "country": "DE",
+                            "description": "hello",
+                            "item_value": {
+                                "amount": 1000,
+                                "currency": "EUR"
+                            },
+                            "weight": 400
+                        }
+                    ],
+                    "weight": 3000
+                },
+                "general_settings": {
+                    "save_recipient_address": 0
+                },
+                "options": {
+                    "package_type": 1,
+                    "delivery_type": 2
+                },
+                "physical_properties": {
+                    "weight": 3000
+                },
+                "recipient": {
+                    "cc": "US",
+                    "city": "Cupertino",
+                    "company": "MyParcel",
+                    "number": "",
+                    "person": "Felicia Parcel",
+                    "postal_code": "95014",
+                    "state": "CA",
+                    "street": "1 Infinite Loop",
+                    "vat_number": "NL123456789B01"
+                },
+                "reference_identifier": "PDK-1"
             }
-          ],
-          "weight": 3000
-        },
-        "general_settings": {
-          "save_recipient_address": 0
-        },
-        "options": {
-          "package_type": 1,
-          "delivery_type": 2
-        },
-        "physical_properties": {
-          "weight": 3000
-        },
-        "recipient": {
-          "cc": "US",
-          "city": "Cupertino",
-          "company": "MyParcel",
-          "number": "",
-          "person": "Felicia Parcel",
-          "postal_code": "95014",
-          "state": "CA",
-          "street": "1 Infinite Loop",
-          "vat_number": "NL123456789B01"
-        },
-        "reference_identifier": "PDK-1"
-      }
-    ]
-  }
+        ]
+    }
 }

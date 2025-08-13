@@ -78,7 +78,14 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
     public const  ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
     public const  ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
+    public const  ALLOW_EXPRESS_DELIVERY                  = 'allowExpressDelivery';
+
+    /**
+     * @deprecated use ALLOW_PICKUP_DELIVERY instead
+     */
     public const  ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
+    public const  ALLOW_PICKUP_DELIVERY                   = 'allowPickupLocations';
+
     public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
     public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
     public const  ALLOW_SIGNATURE                         = 'allowSignature';
@@ -128,6 +135,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  PRICE_COLLECT                           = 'priceCollect';
     public const  PRICE_DELIVERY_TYPE_EXPRESS             = 'priceDeliveryTypeExpress';
 
+
     protected $attributes = [
         'id'               => self::ID,
         self::CARRIER_NAME => null,
@@ -138,6 +146,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_MONDAY_DELIVERY                   => false,
         self::ALLOW_MORNING_DELIVERY                  => false,
         self::ALLOW_ONLY_RECIPIENT                    => false,
+        self::ALLOW_EXPRESS_DELIVERY                  => false,
+        self::ALLOW_PICKUP_DELIVERY                   => false,
         self::ALLOW_PICKUP_LOCATIONS                  => false,
         self::ALLOW_SAME_DAY_DELIVERY                 => false,
         self::ALLOW_SATURDAY_DELIVERY                 => false,
@@ -196,7 +206,9 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_MONDAY_DELIVERY                   => 'bool',
         self::ALLOW_MORNING_DELIVERY                  => 'bool',
         self::ALLOW_ONLY_RECIPIENT                    => 'bool',
+        self::ALLOW_EXPRESS_DELIVERY                  => 'bool',
         self::ALLOW_PICKUP_LOCATIONS                  => 'bool',
+        self::ALLOW_PICKUP_DELIVERY                   => 'bool',
         self::ALLOW_SAME_DAY_DELIVERY                 => 'bool',
         self::ALLOW_SATURDAY_DELIVERY                 => 'bool',
         self::ALLOW_SIGNATURE                         => 'bool',

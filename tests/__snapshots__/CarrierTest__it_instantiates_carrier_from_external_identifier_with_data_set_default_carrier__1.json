@@ -1,47 +1,52 @@
 {
-  "externalIdentifier": "dhlforyou",
-  "id": 9,
-  "name": "dhlforyou",
-  "human": "DHL For You",
-  "enabled": true,
-  "isDefault": true,
-  "optional": false,
-  "primary": false,
-  "type": "main",
-  "capabilities": {
-    "deliveryTypes": ["standard", "pickup"],
-    "features": {
-      "labelDescriptionLength": 45
+    "externalIdentifier": "DHL_FOR_YOU",
+    "id": 9,
+    "name": "DHL_FOR_YOU",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+        "packageTypes": [
+            "PACKAGE"
+        ],
+        "deliveryTypes": [
+            "STANDARD_DELIVERY"
+        ],
+        "shipmentOptions": [
+            "SIGNATURE",
+            "RETURN",
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "LARGE_FORMAT"
+        ],
+        "metadata": {
+            "labelDescriptionLength": 45
+        }
     },
-    "packageTypes": ["package", "mailbox", "package_small"],
-    "shipmentOptions": {
-      "ageCheck": true,
-      "largeFormat": false,
-      "onlyRecipient": true,
-      "return": false,
-      "sameDayDelivery": true,
-      "signature": true,
-      "saturdayDelivery": true,
-      "hideSender": true,
-      "collect": false,
-      "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+    "outboundFeatures": {
+        "packageTypes": [
+            "PACKAGE",
+            "MAILBOX",
+            "SMALL"
+        ],
+        "deliveryTypes": [
+            "STANDARD_DELIVERY",
+            "PICKUP_DELIVERY"
+        ],
+        "shipmentOptions": [
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "SIGNATURE",
+            "SATURDAY_DELIVERY",
+            "HIDE_SENDER",
+            "INSURANCE"
+        ],
+        "metadata": {
+            "labelDescriptionLength": 45
+        }
     }
-  },
-  "returnCapabilities": {
-    "deliveryTypes": ["standard"],
-    "features": {
-      "labelDescriptionLength": 45
-    },
-    "packageTypes": ["package"],
-    "shipmentOptions": {
-      "signature": true,
-      "insurance": [0],
-      "return": true,
-      "ageCheck": true,
-      "onlyRecipient": true,
-      "sameDayDelivery": true,
-      "largeFormat": true,
-      "collect": false
-    }
-  }
 }
