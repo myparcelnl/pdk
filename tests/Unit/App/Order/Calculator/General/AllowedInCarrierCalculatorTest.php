@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,10 +12,13 @@ use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -24,10 +28,10 @@ usesShared(new UsesMockPdkInstance());
 it('disables options that are not allowed in carrier', function (OrderOptionDefinitionInterface $definition) {
     $reset = mockPdkProperty('orderCalculators', [AllowedInCarrierCalculator::class]);
 
-    $option = $definition->getShipmentOptionsKey();
+    $option = $definition->getPropositionKey();
 
     $fakeCarrier = factory(Carrier::class)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions([$option => true]));
+        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withShipmentOptions([$option]));
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
@@ -52,7 +56,7 @@ it('disables options that are not allowed in carrier', function (OrderOptionDefi
                 ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                 ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
             ],
-            [$option => TriStateService::ENABLED]
+            [Pdk::get(PropositionService::class)->shipmentOptionNameForDeliveryOptions($option) => TriStateService::ENABLED]
         )
     );
 

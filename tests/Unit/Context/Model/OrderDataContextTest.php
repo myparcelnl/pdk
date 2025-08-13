@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -18,6 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -43,7 +45,7 @@ function setup(): void
                 ->withExportSignature(true)
         )
         ->withCarrier(
-            'dhlforyou:12345',
+            'DHL_FOR_YOU:12345',
             factory(CarrierSettings::class)->withExportOnlyRecipient(true)
         )
         ->store();
@@ -66,7 +68,7 @@ it('exposes inherited options', function () {
         ->withLines([factory(PdkOrderLine::class)->withProduct('product-1')])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->withReturn(TriStateService::ENABLED))
         )
         ->make();
@@ -91,7 +93,7 @@ it('exposes inherited options', function () {
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
-            'postnl'          => [
+            'POSTNL'          => [
                 DeliveryOptions::LABEL_AMOUNT     => 1,
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -112,7 +114,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
                 ],
             ],
-            'dhlforyou:12345' => [
+            'DHL_FOR_YOU:12345' => [
                 DeliveryOptions::LABEL_AMOUNT     => 1,
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,

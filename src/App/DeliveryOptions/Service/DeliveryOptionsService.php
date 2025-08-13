@@ -131,7 +131,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         ];
 
         foreach ($carriers->all() as $carrier) {
-            $identifier                               = $carrier->externalIdentifier;
+            $identifier                               = strtolower($carrier->externalIdentifier); // @TODO use an actual mapping from the proposition config
             $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 

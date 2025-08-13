@@ -30,6 +30,13 @@ interface OrderOptionDefinitionInterface
     public function getShipmentOptionsKey(): ?string;
 
     /**
+     * Get the key that represents the option in the proposition.
+     *
+     * @return null|string
+     */
+    public function getPropositionKey(): ?string;
+
+    /**
      * Validates if the option is allowed for the current carrier.
      *
      * @param  \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $carrierSchema

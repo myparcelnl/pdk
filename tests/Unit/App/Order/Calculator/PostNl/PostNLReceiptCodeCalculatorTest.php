@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -10,10 +11,12 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -46,7 +49,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
                     factory(Carrier::class)
                         ->withName(Carrier::CARRIER_POSTNL_NAME)
                         ->withCapabilities(
-                            factory(CarrierCapabilities::class)
+                            factory(PropositionCarrierFeatures::class)
                                 ->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
                         )
                 )
@@ -155,7 +158,7 @@ it('sets insurance to 0 when no valid insurance amounts are available', function
     $carrier = factory(Carrier::class)
         ->withName(Carrier::CARRIER_POSTNL_NAME)
         ->withCapabilities(
-            factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [0]])
+            factory(PropositionCarrierFeatures::class)->withShipmentOptions(['insurance' => [0]])
         )
         ->make();
 

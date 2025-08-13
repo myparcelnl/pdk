@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -16,9 +17,11 @@ use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -38,7 +41,7 @@ it('calculates options', function (
 ) {
     $fakeCarrier = factory(Carrier::class)
         ->withName('fake')
-        ->withCapabilities(factory(CarrierCapabilities::class)->withAllOptions())
+        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withAllOptions())
         ->make();
 
     factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
