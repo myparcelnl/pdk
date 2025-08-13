@@ -29,7 +29,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class DeliveryOptionsConfig extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'allowRetry'                     => false,
         'basePrice'                      => 0,
         'carrierSettings'                => [],
@@ -64,7 +64,7 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Pdk::get('platform');
+        $this->platform   = Pdk::get('platform'); // @todo convert to old platform names
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 

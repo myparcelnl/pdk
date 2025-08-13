@@ -180,7 +180,8 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function getAllowedInsuranceAmounts(): array
     {
-        return $this->getShipmentOption(InsuranceDefinition::class) ?: [];
+        // @todo
+        return $this->hasShipmentOption(InsuranceDefinition::class) ? [0, 1000, 2000] : [];
     }
 
     public function getAllowedPackageTypes(): array
@@ -267,13 +268,14 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     private function canHave($definition): bool
     {
-        return (bool) $this->getShipmentOption($definition);
+        return $this->hasShipmentOption($definition);
     }
 
     private function createSchema(): array
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return $this->getCarrier()->outboundFeatures->toArray();
+        // Return the outbound features from the proposition config or a schema definition if present.
+        // @todo this is not the way as capabilities are relevant still. Split up schema/proposition config.
+        return $this->getCarrier()->outboundFeatures ? $this->getCarrier()->outboundFeatures->toArray() : [];
     }
 
     /**
@@ -283,7 +285,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     private function getFeature(string $feature)
     {
-        return $this->getFromSchema(sprintf('features.%s', $feature));
+        return $this->getFromSchema(sprintf('metadata.%s', $feature));
     }
 
     /**
@@ -301,11 +303,14 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      *
      * @return mixed
      */
-    private function getShipmentOption($definition)
+    private function hasShipmentOption($definition)
     {
         $resolvedDefinition = $this->resolveDefinition($definition);
 
-        return $this->getFromSchema(sprintf('shipmentOptions.%s', $resolvedDefinition->getShipmentOptionsKey()));
+        return in_array(
+            $resolvedDefinition->getPropositionKey(),
+            $this->getFromSchema('shipmentOptions') ?: [],
+        );
     }
 
     /**
