@@ -21,16 +21,14 @@ class PropositionContracts extends Model
     protected $attributes = [
         'available' => PropositionAvailableContractsCollection::class,
         'availableForCustomCredentials' => null,
-        'inbound' => ['default' => []], // @TODO type
-        'outbound' => ['default' => []], // @TODO type
+        'inbound' => ['default' => []],
+        'outbound' => ['default' => []],
     ];
 
     protected $casts = [
         'available' => PropositionAvailableContractsCollection::class,
         'availableForCustomCredentials' => 'array',
         'inbound' => 'array',
-// @TODO type
-
-        'outbound' => 'array',// @TODO type
+        'outbound' => 'array',
     ];
 }

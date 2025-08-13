@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -7,6 +8,7 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 dataset('multicolloPdkOrders', [
@@ -20,8 +22,8 @@ dataset('multicolloPdkOrders', [
                             ->withCarrier(
                                 factory(Carrier::class)
                                     ->withName(Carrier::CARRIER_POSTNL_NAME)
-                                    ->withCapabilities([
-                                        'features' => [
+                                    ->withOutboundFeatures([
+                                        'metadata' => [
                                             'multiCollo' => true,
                                         ],
                                     ])
@@ -42,8 +44,8 @@ dataset('multicolloPdkOrders', [
                             ->withCarrier(
                                 factory(Carrier::class)
                                     ->withName(Carrier::CARRIER_POSTNL_NAME)
-                                    ->withCapabilities([
-                                        'features' => [
+                                    ->withOutboundFeatures([
+                                        'metadata' => [
                                             'multiCollo' => false,
                                         ],
                                     ])

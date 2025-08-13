@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -14,10 +15,12 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -76,38 +79,40 @@ const DESTINATION_INTERNATIONAL_COUNTRIES = [
 
 usesShared(new UsesEachMockPdkInstance());
 
-it('calculates package type', function (
-    string $platform,
-    array  $options,
-    string $result
-) {
-    TestBootstrapper::forPlatform($platform);
+it(
+    'calculates package type',
+    function (
+        string $platform,
+        array  $options,
+        string $result
+    ) {
+        TestBootstrapper::forPlatform($platform);
 
-    mockPdkProperties([
-        'orderCalculators' => [PackageTypeCalculator::class],
-    ]);
+        mockPdkProperties([
+            'orderCalculators' => [PackageTypeCalculator::class],
+        ]);
 
-    $fakeCarrier = factory(Carrier::class)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withAllOptions());
+        $fakeCarrier = factory(Carrier::class)
+            ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withAllOptions());
 
-    $order = factory(PdkOrder::class)
-        ->withShippingAddress(
-            factory(ShippingAddress::class)->withCc($options['cc'] ?? Platform::get('localCountry'))
-        )
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withCarrier($fakeCarrier)
-                ->withPackageType($options['packageType'])
-                ->withAllShipmentOptions()
-        )
-        ->make();
+        $order = factory(PdkOrder::class)
+            ->withShippingAddress(
+                factory(ShippingAddress::class)->withCc($options['cc'] ?? Platform::get('localCountry'))
+            )
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)
+                    ->withCarrier($fakeCarrier)
+                    ->withPackageType($options['packageType'])
+                    ->withAllShipmentOptions()
+            )
+            ->make();
 
-    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
-    $service  = Pdk::get(PdkOrderOptionsService::class);
-    $newOrder = $service->calculate($order);
+        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+        $service  = Pdk::get(PdkOrderOptionsService::class);
+        $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->packageType)->toBe($result);
-}
+        expect($newOrder->deliveryOptions->packageType)->toBe($result);
+    }
 )
     ->with('platforms')
     ->with([
@@ -171,7 +176,7 @@ it('calculates international mailbox', function (
     $fakeCarrier = factory(Carrier::class)
         ->withExternalIdentifier($carrierExternalIdentifier)
         ->withCapabilities(
-            factory(CarrierCapabilities::class)->fromCarrier($carrierName)
+            factory(PropositionCarrierFeatures::class)->fromCarrier($carrierName)
         )
         ->make();
 

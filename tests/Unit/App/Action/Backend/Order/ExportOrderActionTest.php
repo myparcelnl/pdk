@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -32,7 +33,6 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
@@ -192,7 +192,7 @@ it('exports order', function (
             ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
     }
 })
-    ->with('order mode toggle')
+    ->with('order mode toggle') // data sets defined in "tests/Datasets"
     ->with('carrier export settings')
     ->with('pdk orders domestic');
 
@@ -633,12 +633,12 @@ it(
                                     factory(Carrier::class)
                                         ->fromPostNL()
                                         ->withContractId(123456)
-                                        ->withCapabilities(
-                                            factory(CarrierCapabilities::class)
-                                                ->withFeatures(
+                                        ->withOutboundFeatures(
+                                            factory(PropositionCarrierFeatures::class)
+                                                ->withMetadata(
                                                     ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
                                                 )
-                                                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME])
+                                                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME])
                                         )
                                 )
                                 ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
@@ -660,12 +660,12 @@ it(
                                     factory(Carrier::class)
                                         ->fromPostNL()
                                         ->withContractId(123456)
-                                        ->withCapabilities(
-                                            factory(CarrierCapabilities::class)
+                                        ->withOutboundFeatures(
+                                            factory(PropositionCarrierFeatures::class)
                                                 ->withFeatures(
                                                     ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
                                                 )
-                                                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME])
+                                                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME])
                                         )
                                 )
                                 ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
