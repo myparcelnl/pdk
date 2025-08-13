@@ -30,7 +30,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class DeliveryOptionsConfig extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'allowRetry'                     => false,
         'basePrice'                      => 0,
         'carrierSettings'                => [],

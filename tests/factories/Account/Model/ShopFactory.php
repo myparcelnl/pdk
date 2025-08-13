@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -14,8 +15,10 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
@@ -48,7 +51,7 @@ final class ShopFactory extends AbstractModelFactory
             factory(CarrierCollection::class)->push(
                 factory(Carrier::class)
                     ->withExternalIdentifier(PlatformFacade::get('defaultCarrier'))
-                    ->withCapabilities(factory(CarrierCapabilities::class)->withEverything())
+                    ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
             )
         );
     }

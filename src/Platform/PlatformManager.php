@@ -54,12 +54,13 @@ class PlatformManager implements PlatformManagerInterface
      */
     public function getCarriers(): CarrierCollection
     {
-        return $this->propositionService->getCarriers(true);
+        return $this->propositionService->getCarriers();
     }
 
     /**
      * @return string
-     * @deprecated
+     * @deprecated use PropositionService::getActivePropositionName() instead.
+     * @see PropositionService::getActivePropositionName()
      */
     public function getPropositionName(): string
     {

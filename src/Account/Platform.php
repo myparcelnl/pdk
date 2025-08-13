@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -10,7 +11,7 @@ class Platform
     public const FLESPAKKET_ID     = 2;
     public const FLESPAKKET_NAME   = 'flespakket';
     public const MYPARCEL_ID       = 1;
-    public const MYPARCEL_NAME     = 'myparcel';
+    public const MYPARCEL_NAME     = 'myparcel-nederland';
     public const SENDMYPARCEL_ID   = 3;
-    public const SENDMYPARCEL_NAME = 'belgie';
+    public const SENDMYPARCEL_NAME = 'myparcel-belgie';
 }
