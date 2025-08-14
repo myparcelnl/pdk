@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 
@@ -180,8 +181,18 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function getAllowedInsuranceAmounts(): array
     {
-        // @todo
-        return $this->hasShipmentOption(InsuranceDefinition::class) ? [0, 1000, 2000] : [];
+        $allowedAmounts = $this->getFeature('insuranceOptions');
+        $hasOption = $this->hasShipmentOption(InsuranceDefinition::class);
+        if (!$allowedAmounts && $hasOption) {
+            Logger::warning(
+                'Carrier schema does not have insurance options defined, but the carrier has the insurance option enabled.',
+                [
+                    'carrier' => $this->getCarrier()->externalIdentifier,
+                ]
+            );
+            return [0];
+        }
+        return $hasOption ? $allowedAmounts : [];
     }
 
     public function getAllowedPackageTypes(): array
