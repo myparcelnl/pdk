@@ -12,6 +12,8 @@ use MyParcelNL\Pdk\Api\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use RuntimeException;
 use Throwable;
 
@@ -94,9 +96,28 @@ abstract class AbstractApiService implements ApiServiceInterface
     /**
      * @return string
      */
-    public function getBaseUrl(): string
+        public function getBaseUrl(): string
     {
+        // First check if there's an acceptance URL stored in a file
+        $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        $fileAcceptanceUrl = file_exists($cacheFile) ? file_get_contents($cacheFile) : null;
+
+        if ($fileAcceptanceUrl) {
+            return $fileAcceptanceUrl;
+        }
+
         return $this->baseUrl ?? Pdk::get('apiUrl');
+    }
+
+    /**
+     * Check if currently connected to acceptance environment
+     *
+     * @return bool
+     */
+    public function isConnectedToAcceptance(): bool
+    {
+        $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        return file_exists($cacheFile);
     }
 
     /**
