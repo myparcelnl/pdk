@@ -194,69 +194,8 @@ class PropositionService
 
 
     /**
-     * @todo refactor this to be for js context output only
-     * Convert the carrier data to the legacy format.
-     * This is used to convert the carrier data to the legacy format for backwards compatibility.
-     *
-     * @param array $carrierData
-     * @return array
-     */
-    protected function convertCarrierDataToLegacyFormat(array $carrierData): array
-    {
-        // $carrierData['name'] = Carrier::CARRIER_NAME_TO_LEGACY_MAP[$carrierData['name']] ?? $carrierData['name'];
-
-        // $carrierData['capabilities']['deliveryTypes'] = \array_map(function (string $value) {
-        //     return DeliveryOptions::DELIVERY_TYPE_NAME_TO_LEGACY_MAP[$value];
-        // }, $carrierData['outboundFeatures']['deliveryTypes'] ?? []);
-        // $carrierData['capabilities']['packageTypes'] = \array_map(function (string $value) {
-        //     return DeliveryOptions::PACKAGE_TYPE_NAME_TO_LEGACY_MAP[$value];
-        // }, $carrierData['outboundFeatures']['packageTypes'] ?? []);
-        // $carrierData['capabilities']['shipmentOptions'] = \array_reduce(
-        //     $carrierData['outboundFeatures']['shipmentOptions'] ?? [],
-        //     function (array $acc, string $value) {
-        //         $legacyKey = ShipmentOptions::SHIPMENT_OPTION_NAME_TO_LEGACY_MAP[$value] ?? $value;
-        //         $acc[$legacyKey] = true;
-        //         if ($legacyKey === ShipmentOptions::INSURANCE_LEGACY) {
-        //             $acc[ShipmentOptions::INSURANCE_LEGACY] = [0, 1000, 4000]; // Ensure legacy insurance is also set
-        //         }
-        //         return $acc;
-        //     },
-        //     []
-        // );
-        // $carrierData['capabilities']['features'] = $carrierData['outboundFeatures']['metadata'] ?? [];
-
-
-        // $carrierData['returnCapabilities']['deliveryTypes'] = \array_map(function (string $value) {
-        //     return DeliveryOptions::DELIVERY_TYPE_NAME_TO_LEGACY_MAP[$value];
-        // }, $carrierData['inboundFeatures']['deliveryTypes'] ?? []);
-        // $carrierData['returnCapabilities']['packageTypes'] = \array_map(function (string $value) {
-        //     return DeliveryOptions::PACKAGE_TYPE_NAME_TO_LEGACY_MAP[$value];
-        // }, $carrierData['inboundFeatures']['packageTypes'] ?? []);
-        // $carrierData['returnCapabilities']['shipmentOptions'] = \array_reduce(
-        //     $carrierData['inboundFeatures']['shipmentOptions'] ?? [],
-        //     function (array $acc, string $value) {
-        //         $legacyKey = ShipmentOptions::SHIPMENT_OPTION_NAME_TO_LEGACY_MAP[$value] ?? $value;
-        //         $acc[$legacyKey] = true;
-
-        //         if ($legacyKey === ShipmentOptions::INSURANCE_LEGACY) {
-        //             $acc[ShipmentOptions::INSURANCE_LEGACY] = [0, 1000, 4000]; // @todo Ensure legacy insurance is also set
-        //         }
-
-        //         return $acc;
-        //     },
-        //     []
-        // );
-
-        // $carrierData['returnCapabilities']['features'] = $carrierData['inboundFeatures']['metadata'] ?? [];
-
-        // unset($carrierData['outboundFeatures'], $carrierData['inboundFeatures']);
-
-        return $carrierData;
-    }
-
-    /**
      * Checks if a carrier has a specific metadata feature, including a check for custom-contract only features.
-     * @deprecated should use Carrier capabilities instead.
+     * @deprecated should use Carrier schema instead.
      * @param  string $feature
      *
      * @return bool
