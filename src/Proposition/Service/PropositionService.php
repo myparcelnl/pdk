@@ -191,28 +191,4 @@ class PropositionService
     {
         return Str::camel(strtolower($shipmentOption));
     }
-
-
-    /**
-     * Checks if a carrier has a specific metadata feature, including a check for custom-contract only features.
-     * @deprecated should use Carrier schema instead.
-     * @param  string $feature
-     *
-     * @return bool
-     */
-    public function carrierHasMetadataFeature(Carrier $carrier, string $feature): bool
-    {
-        $feature = $carrier->outboundFeatures->metadata[$feature] ?? null;
-        // Also check legacy capabilities key
-        // @todo remove in next major
-        if ($feature === null) {
-            $feature = $carrier->capabilities->features[$feature] ?? null;
-        }
-
-        if (PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY === $feature) {
-            return $carrier->isCustom;
-        }
-
-        return (bool) $feature;
-    }
 }
