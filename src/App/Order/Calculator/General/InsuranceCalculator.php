@@ -65,12 +65,14 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
+     * Given the insurance amount, calculate the final insurance value.
      * @param  null|int $amount
      *
      * @return int
      */
     private function calculateInsurance(?int $amount): int
     {
+        // If no specific amount is given, return the lowest insurable amount for the carrier, or 0 if none is specified.
         if (null === $amount || TriStateService::DISABLED === $amount) {
             /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
             $schema        = Pdk::get(CarrierSchema::class);
@@ -82,6 +84,8 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         $carrierSettings   = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
         $enabledViaCarrier = TriStateService::INHERIT === $amount && $carrierSettings->exportInsurance;
 
+        // If the carrier has been configured by the customer to not export insurances,
+        // but an amount was specified, use the maximum possible amount for the carrier instead.
         if ($amount > TriStateService::ENABLED && ! $enabledViaCarrier) {
             return $this->getMaxInsurance($carrierSettings, $amount);
         }

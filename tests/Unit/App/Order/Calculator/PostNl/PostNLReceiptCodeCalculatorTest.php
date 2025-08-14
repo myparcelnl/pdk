@@ -9,9 +9,9 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\PostNl;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -48,9 +48,10 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
                 ->withCarrier(
                     factory(Carrier::class)
                         ->withName(Carrier::CARRIER_POSTNL_NAME)
-                        ->withCapabilities(
+                        ->withOutboundFeatures(
                             factory(PropositionCarrierFeatures::class)
-                                ->withShipmentOptions(['insurance' => [5000, 10000, 25000]])
+                                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+                                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [5000, 10000, 25000]])
                         )
                 )
                 ->withShipmentOptions(factory(ShipmentOptions::class)->with(array_replace($defaults, $input)))
@@ -157,8 +158,10 @@ it('sets insurance to 0 when no valid insurance amounts are available', function
 
     $carrier = factory(Carrier::class)
         ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withCapabilities(
-            factory(PropositionCarrierFeatures::class)->withShipmentOptions(['insurance' => [0]])
+        ->withOutboundFeatures(
+            factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0]])
         )
         ->make();
 
