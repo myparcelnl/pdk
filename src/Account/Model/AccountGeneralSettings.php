@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class AccountGeneralSettings extends Model
 {
     public $attributes = [
-        'isTest'                         => false,
+        'isTest'                         => null,
         'orderMode'                      => false,
         'hasCarrierContract'             => false,
         'hasCarrierSmallPackageContract' => false,
@@ -27,4 +27,16 @@ class AccountGeneralSettings extends Model
         'hasCarrierContract'             => 'bool',
         'hasCarrierSmallPackageContract' => 'bool',
     ];
+
+    /**
+     * Get the isTest value, determining it dynamically based on the API environment
+     *
+     * @return bool
+     */
+    public function getIsTestAttribute(): bool
+    {
+        // Check if we're connected to acceptance environment
+        $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        return file_exists($cacheFile);
+    }
 }
