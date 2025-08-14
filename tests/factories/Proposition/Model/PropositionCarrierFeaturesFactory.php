@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @template T of PropositionCarrierFeatures
  * @method PropositionCarrierFeatures make()
  * @method $this withDeliveryTypes(array $deliveryTypes)
- * @method $this withMetadata(array $metadata)
+ * @method $this       withMetadata(array $metadata)
  * @method $this withPackageTypes(array $packageTypes)
  * @method $this withShipmentOptions(array $shipmentOptions)
  */

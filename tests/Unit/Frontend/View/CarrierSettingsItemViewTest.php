@@ -14,6 +14,8 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeaturesFactory;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
+use MyParcelNL\Pdk\Proposition\Model\PropositionMetadata;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -180,7 +182,8 @@ it('shows settings based on capabilities', function (PropositionCarrierFeaturesF
     'shipment option: insurance' => [
         function () {
             return factory(PropositionCarrierFeatures::class)
-                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME]);
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0, 100, 1000, 10000]]);
         },
         [
             CarrierSettings::EXPORT_INSURANCE,
@@ -224,7 +227,7 @@ it(
     'package type: international-mailbox, contract on, custom carrier' => [
         function () {
             return factory(PropositionCarrierFeatures::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withMetadata(['carrierSmallpackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
                 ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => true,
@@ -235,7 +238,7 @@ it(
     'package type: international-mailbox, contract off, custom carrier' => [
         function () {
             return factory(PropositionCarrierFeatures::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withMetadata(['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
                 ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => false,
@@ -245,7 +248,7 @@ it(
     'package type: international-mailbox, contract on, normal carrier'  => [
         function () {
             return factory(PropositionCarrierFeatures::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withMetadata(['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
                 ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => true,
@@ -257,7 +260,7 @@ it(
     'package type: international-mailbox, contract off, normal carrier' => [
         function () {
             return factory(PropositionCarrierFeatures::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withMetadata(['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
                 ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => false,
