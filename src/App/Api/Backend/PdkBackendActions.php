@@ -33,4 +33,5 @@ final class PdkBackendActions
     public const FETCH_WEBHOOKS  = 'fetchWebhooks';
     // Debugging
     public const DOWNLOAD_LOGS = 'downloadLogs';
+    public const SWITCH_TO_ACCEPTANCE_API = 'switchToAcceptanceApi';
 }
