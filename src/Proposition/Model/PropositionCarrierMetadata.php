@@ -20,6 +20,16 @@ class PropositionCarrierMetadata extends Model
      */
     public const FEATURE_CUSTOM_CONTRACT_ONLY = 'FEATURE_CUSTOM_CONTRACT_ONLY';
 
+    /**
+     * The name of the option that defines the insurable amounts.
+     */
+    public const FEATURE_NAME_INSURANCE_OPTIONS = 'insuranceOptions';
+
+    /**
+     * Whether the carrier requires personal information from the customer.
+     */
+    public const FEATURE_NAME_NEEDS_CUSTOMER_INFO = 'needsCustomerInfo';
+
     protected $attributes = [
         'id' => null,
         'name' => null,

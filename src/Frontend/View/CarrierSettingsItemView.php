@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\src\Support\Str;
 
 /**
@@ -29,6 +30,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
      * @var \MyParcelNL\Pdk\Carrier\Model\Carrier
      */
     protected $carrier;
+
+    /**
+     * @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema
+     */
+    protected $carrierSchema;
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface
@@ -53,6 +59,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
         $this->carrier         = $carrier;
         $this->propositionService = Pdk::get(PropositionService::class);
+
+
+        /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
+        $schema = Pdk::get(CarrierSchema::class);
+        $schema->setCarrier($carrier);
+
+        $this->carrierSchema = $schema;
+
     }
 
     /**
@@ -128,7 +142,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInsuranceElement(string $name): InteractiveElement
     {
-        $hasInsurance = in_array(PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME, $this->carrier->outboundFeatures['shipmentOptions']);
+        $hasInsurance = $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME);
 
         if ($hasInsurance) {
             $insuranceAmounts = [0, 1000, 2000]; // @todo
@@ -151,7 +165,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function createInternationalMailboxFields(): array
     {
         if (! AccountSettings::hasCarrierSmallPackageContract()
-            || ! $this->propositionService->carrierHasMetadataFeature($this->carrier, 'carrierSmallpackageContract')) {
+            || ! $this->carrierSchema->hasMetadataFeature('carrierSmallpackageContract')) {
             return [];
         }
 
@@ -214,7 +228,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
              */
             new SettingsDivider($this->createGenericLabel('export')),
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME)
                 ? [
                 (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
                     ->builder(function (FormOperationBuilder $builder) {
@@ -235,41 +249,41 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
             $this->withOperation(
                 function (FormOperationBuilder $builder) {
-                    if (array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])) {
+                    if ($this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME)) {
                         return;
                     }
 
                     $builder->readOnlyWhen(CarrierSettings::EXPORT_AGE_CHECK);
                 },
-                array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+                $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME)
                     ? [new InteractiveElement(CarrierSettings::EXPORT_SIGNATURE, Components::INPUT_TOGGLE)]
                     : [],
-                array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+                $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME)
                     ? [new InteractiveElement(CarrierSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TOGGLE)]
                     : []
             ),
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_RECEIPT_CODE_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? []) ? [
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_RECEIPT_CODE_NAME) ? [
                 new InteractiveElement(CarrierSettings::EXPORT_RECEIPT_CODE, Components::INPUT_TOGGLE),
             ] : [],
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME)
                 ? [new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE)]
                 : [],
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_DIRECT_RETURN_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_DIRECT_RETURN_NAME)
                 ? [new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE)]
                 : [],
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_HIDE_SENDER_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_HIDE_SENDER_NAME)
                 ? [new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE)]
                 : [],
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME)
                 ? $this->getExportInsuranceFields()
                 : [],
 
-            array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_COLLECT_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])
+            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_COLLECT_NAME)
                 ? [new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
                 : [],
         ];
@@ -281,7 +295,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function getDefaultExportReturnsFields(): array
     {
         $hasPackageTypeOptions = !empty($this->carrier->outboundFeatures->packageTypes);
-        $canHaveLargeFormat    = array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? []);
+        $canHaveLargeFormat    = $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME);
 
         if (! $hasPackageTypeOptions && ! $canHaveLargeFormat) {
             return [];
@@ -377,7 +391,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getSameDayDeliverySettings(): array
     {
-        if (!array_key_exists(PropositionCarrierFeatures::DELIVERY_TYPE_SAME_DAY_NAME, $this->carrier->outboundFeatures['shipmentOptions'] ?? [])) {
+        if (!$this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::DELIVERY_TYPE_SAME_DAY_NAME)) {
             return [];
         }
 
@@ -442,10 +456,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function getShipmentOptionsSettings(): array
     {
         $settings = [];
-        $shipmentOptions = $this->carrier->outboundFeatures['shipmentOptions'] ?? [];
 
         // Signature option
-        if (array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME, $shipmentOptions)) {
+        if ($this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME)) {
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
@@ -456,7 +469,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         // Only recipient option
-        if (array_key_exists(PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME, $shipmentOptions)) {
+        if ($this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME)) {
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
@@ -474,7 +487,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getExportInsuranceFields(): array
     {
-        $insuranceAmounts = []; //@todo
+        $insuranceAmounts = $this->carrierSchema->getAllowedInsuranceAmounts();
 
         if (count($insuranceAmounts) <= 1) {
             return [];

@@ -23,6 +23,8 @@ use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
+use MyParcelNL\Pdk\Proposition\Model\PropositionMetadata;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -636,7 +638,7 @@ it(
                                         ->withOutboundFeatures(
                                             factory(PropositionCarrierFeatures::class)
                                                 ->withMetadata(
-                                                    ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
+                                                    ['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY]
                                                 )
                                                 ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME])
                                         )
@@ -663,7 +665,7 @@ it(
                                         ->withOutboundFeatures(
                                             factory(PropositionCarrierFeatures::class)
                                                 ->withFeatures(
-                                                    ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
+                                                    ['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY]
                                                 )
                                                 ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME])
                                         )
