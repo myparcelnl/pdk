@@ -23,8 +23,6 @@ use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
  * @property bool                     $optional
  * @property null|string              $label
  * @property null|string              $type
- * @property null|CarrierCapabilities $capabilities
- * @property null|CarrierCapabilities $returnCapabilities
  * @property PropositionCarrierFeatures $inboundFeatures
  * @property PropositionCarrierFeatures $outboundFeatures
  * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
@@ -169,8 +167,6 @@ class Carrier extends Model
         'optional'           => false,
         'primary'            => false,
         'type'               => self::TYPE_MAIN,
-        'capabilities'       => null,
-        'returnCapabilities' => null,
         'inboundFeatures'    => null,
         'outboundFeatures'   => null,
     ];
@@ -187,8 +183,6 @@ class Carrier extends Model
         'optional'           => 'bool',
         'primary'            => 'bool',
         'type'               => 'string',
-        'capabilities'       => CarrierCapabilities::class,
-        'returnCapabilities' => CarrierCapabilities::class,
         'inboundFeatures'    => PropositionCarrierFeatures::class,
         'outboundFeatures'   => PropositionCarrierFeatures::class,
     ];
