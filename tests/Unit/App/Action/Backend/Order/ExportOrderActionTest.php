@@ -694,14 +694,14 @@ it(
             'carrierHasInternationalMailboxAllowed' => true,
         ],
 
-        'ups' => [
+        'ups standard' => [
             function () {
                 return factory(PdkOrderCollection::class)->push(
                     factory(PdkOrder::class)
                         ->toTheUnitedStates()
                         ->withDeliveryOptions(
                             factory(DeliveryOptions::class)
-                                ->withCarrier(factory(Carrier::class)->fromUPS())
+                                ->withCarrier(factory(Carrier::class)->fromUpsStandard())
                         )
                 );
             },

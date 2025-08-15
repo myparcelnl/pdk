@@ -35,7 +35,7 @@ type ShipmentOption =
     | 'COLLECT'
     | 'COOLED_DELIVERY'
     | 'DROP_OFF_AT_POSTAL_POINT'
-    | 'EXTRA_ASSURANCE'
+    | 'INSURANCE'
     | 'HIDE_SENDER'
     | 'LARGE_FORMAT'
     | 'ONLY_RECIPIENT'

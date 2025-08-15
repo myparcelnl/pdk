@@ -85,11 +85,18 @@ final class CarrierFactory extends AbstractModelFactory
             ->fromCarrier(Carrier::CARRIER_POSTNL_NAME);
     }
 
-    public function fromUps(): self
+    public function fromUpsStandard(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_UPS_ID)
-            ->fromCarrier(Carrier::CARRIER_UPS_NAME);
+            ->withId(Carrier::CARRIER_UPS_STANDARD_ID)
+            ->fromCarrier(Carrier::CARRIER_UPS_STANDARD_NAME);
+    }
+
+    public function fromUpsExpressSaver(): self
+    {
+        return $this
+            ->withId(Carrier::CARRIER_UPS_EXPRESS_SAVER_ID)
+            ->fromCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME);
     }
 
     public function getModel(): string
