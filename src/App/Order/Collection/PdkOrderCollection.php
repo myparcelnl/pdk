@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items

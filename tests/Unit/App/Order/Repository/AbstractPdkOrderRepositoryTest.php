@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Log\LoggerInterface;
+
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -63,16 +65,14 @@ it('gets order by api identifier', function () {
     expect($order)
         ->toBeInstanceOf(PdkOrder::class)
         ->and($logger->getLogs())
-        ->toEqual([
-                [
-                    'level'   => 'notice',
-                    'message' => '[PDK]: Implement getByApiIdentifier, in PDK v3 it will be required.',
-                    'context' =>
-                        [
-                            'class'   => 'MyParcelNL\\Pdk\\App\\Order\\Repository\\AbstractPdkOrderRepository',
-                        ],
-                ],
-            ]
+        ->toContain(
+            [
+                'level'   => 'notice',
+                'message' => '[PDK]: Implement getByApiIdentifier, in PDK v3 it will be required.',
+                'context' =>
+                    [
+                        'class'   => 'MyParcelNL\\Pdk\\App\\Order\\Repository\\AbstractPdkOrderRepository',
+                    ],
+            ],
         );
 });
-

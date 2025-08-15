@@ -66,7 +66,7 @@
         "outboundFeatures": {
           "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP"],
           "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["AGE_CHECK", "LARGE_FORMAT", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "EXTRA_ASSURANCE"],
+          "shipmentOptions": ["AGE_CHECK", "LARGE_FORMAT", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "INSURANCE"],
           "metadata": {
             "labelDescriptionLength": 45,
             "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",

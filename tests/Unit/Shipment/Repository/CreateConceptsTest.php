@@ -95,7 +95,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -111,7 +111,7 @@ it(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
                             ->withContractId(1234)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -126,7 +126,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -147,7 +147,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -167,7 +167,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -186,7 +186,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -202,7 +202,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -217,7 +217,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -233,7 +233,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -249,7 +249,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -269,14 +269,14 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     ),
                 factory(Shipment::class)->withCarrier(
                     factory(Carrier::class)
                         ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
-                        ->withCapabilities(
+                        ->withOutboundFeatures(
                             factory(PropositionCarrierFeatures::class)->withEverything()
                         )
                 )
@@ -290,7 +290,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_GLS_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
@@ -305,7 +305,7 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_GLS_ID)
-                            ->withCapabilities(
+                            ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
