@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Proposition\Collection\PropositionWeightCategoriesCollection;
  *  therefore not all defined properties are relevant for the PDK and may not be applied.
  *
  * @property PropositionMetadata $proposition
- * @property array $applicationUrls
+ * @property array $applications
  * @property string $countryCode
  * @property array $subscriptions
  * @property array $internationalization
@@ -57,7 +57,7 @@ class PropositionConfig extends Model
 
     protected $attributes = [
         'proposition' => PropositionMetadata::class,
-        'applicationUrls' => null,
+        'applications' => null,
         'countryCode' => null,
         'subscriptions' => null,
         'internationalization' => PropositionI18nConfig::class,
@@ -102,7 +102,7 @@ class PropositionConfig extends Model
 
     protected $casts = [
         'proposition' => PropositionMetadata::class,
-        'applicationUrls' => 'array',
+        'applications' => 'array',
         'countryCode' => 'string', // Should be an enum of country codes, but this is not yet possible in PHP 7.4 (localCountry)
         'subscriptions' => 'array',
         'internationalization' => 'array',

@@ -27,16 +27,16 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
 const CARRIER_POSTNL      = [
-    'carrierExternalIdentifier' => 'postnl:123',
-    'carrierName'               => 'postnl',
+    'carrierExternalIdentifier' => 'POSTNL:123',
+    'carrierName'               => 'POSTNL',
 ];
 const CARRIER_DHL_FOR_YOU = [
-    'carrierExternalIdentifier' => 'dhlforyou:123',
-    'carrierName'               => 'dhlforyou',
+    'carrierExternalIdentifier' => 'DHL_FOR_YOU:123',
+    'carrierName'               => 'DHL_FOR_YOU',
 ];
 const CARRIER_DPD         = [
-    'carrierExternalIdentifier' => 'dpd',
-    'carrierName'               => 'dpd',
+    'carrierExternalIdentifier' => 'DPD:123',
+    'carrierName'               => 'DPD',
 ];
 const CARRIERS            = [
     CARRIER_POSTNL,
@@ -175,7 +175,7 @@ it('calculates international mailbox', function (
 
     $fakeCarrier = factory(Carrier::class)
         ->withExternalIdentifier($carrierExternalIdentifier)
-        ->withCapabilities(
+        ->withOutboundFeatures(
             factory(PropositionCarrierFeatures::class)->fromCarrier($carrierName)
         )
         ->make();
