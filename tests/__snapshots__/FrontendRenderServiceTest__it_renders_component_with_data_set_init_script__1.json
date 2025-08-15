@@ -207,10 +207,10 @@
     "language": "nl",
     "mode": "production",
     "platform": {
-      "name": "myparcel",
-      "human": "MyParcel",
+      "name": "myparcel-nederland",
+      "human": "MyParcel Nederland",
       "backofficeUrl": "https://backoffice.myparcel.nl",
-      "supportUrl": "https://developer.myparcel.nl/contact",
+      "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
       "defaultCarrier": "postnl",
       "defaultCarrierId": 1
@@ -274,13 +274,25 @@
               "primary": false,
               "type": "main",
               "capabilities": {
-                "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+                "deliveryTypes": [
+                  "morning",
+                  "standard",
+                  "evening",
+                  "pickup",
+                  "express"
+                ],
                 "features": {
                   "dropOffAtPostalPoint": true,
                   "labelDescriptionLength": 45,
                   "multiCollo": true
                 },
-                "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+                "packageTypes": [
+                  "package",
+                  "mailbox",
+                  "letter",
+                  "digital_stamp",
+                  "package_small"
+                ],
                 "shipmentOptions": {
                   "ageCheck": true,
                   "return": true,
@@ -290,20 +302,48 @@
                   "sameDayDelivery": true,
                   "signature": true,
                   "insurance": [
-                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                    0,
+                    10000,
+                    25000,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000
                   ]
                 }
               },
               "returnCapabilities": {
-                "deliveryTypes": ["standard"],
+                "deliveryTypes": [
+                  "standard"
+                ],
                 "features": {
                   "labelDescriptionLength": 45
                 },
-                "packageTypes": ["package"],
+                "packageTypes": [
+                  "package"
+                ],
                 "shipmentOptions": {
                   "signature": true,
                   "insurance": [
-                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                    0,
+                    10000,
+                    25000,
+                    50000,
+                    100000,
+                    150000,
+                    200000,
+                    250000,
+                    300000,
+                    350000,
+                    400000,
+                    450000,
+                    500000
                   ],
                   "return": true,
                   "ageCheck": true,
@@ -333,13 +373,25 @@
         "primary": false,
         "type": "main",
         "capabilities": {
-          "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+          "deliveryTypes": [
+            "morning",
+            "standard",
+            "evening",
+            "pickup",
+            "express"
+          ],
           "features": {
             "dropOffAtPostalPoint": true,
             "labelDescriptionLength": 45,
             "multiCollo": true
           },
-          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+          "packageTypes": [
+            "package",
+            "mailbox",
+            "letter",
+            "digital_stamp",
+            "package_small"
+          ],
           "shipmentOptions": {
             "ageCheck": true,
             "return": true,
@@ -349,20 +401,48 @@
             "sameDayDelivery": true,
             "signature": true,
             "insurance": [
-              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              0,
+              10000,
+              25000,
+              50000,
+              100000,
+              150000,
+              200000,
+              250000,
+              300000,
+              350000,
+              400000,
+              450000,
+              500000
             ]
           }
         },
         "returnCapabilities": {
-          "deliveryTypes": ["standard"],
+          "deliveryTypes": [
+            "standard"
+          ],
           "features": {
             "labelDescriptionLength": 45
           },
-          "packageTypes": ["package"],
+          "packageTypes": [
+            "package"
+          ],
           "shipmentOptions": {
             "signature": true,
             "insurance": [
-              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              0,
+              10000,
+              25000,
+              50000,
+              100000,
+              150000,
+              200000,
+              250000,
+              300000,
+              350000,
+              400000,
+              450000,
+              500000
             ],
             "return": true,
             "ageCheck": true,
@@ -403,7 +483,12 @@
         "id": "label",
         "format": "a4",
         "output": "open",
-        "position": [1, 2, 3, 4],
+        "position": [
+          1,
+          2,
+          3,
+          4
+        ],
         "directPrint": false,
         "printerGroupId": "",
         "prompt": false
@@ -518,13 +603,25 @@
           "primary": false,
           "type": "main",
           "capabilities": {
-            "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+            "deliveryTypes": [
+              "morning",
+              "standard",
+              "evening",
+              "pickup",
+              "express"
+            ],
             "features": {
               "dropOffAtPostalPoint": true,
               "labelDescriptionLength": 45,
               "multiCollo": true
             },
-            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+            "packageTypes": [
+              "package",
+              "mailbox",
+              "letter",
+              "digital_stamp",
+              "package_small"
+            ],
             "shipmentOptions": {
               "ageCheck": true,
               "return": true,
@@ -534,20 +631,48 @@
               "sameDayDelivery": true,
               "signature": true,
               "insurance": [
-                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                0,
+                10000,
+                25000,
+                50000,
+                100000,
+                150000,
+                200000,
+                250000,
+                300000,
+                350000,
+                400000,
+                450000,
+                500000
               ]
             }
           },
           "returnCapabilities": {
-            "deliveryTypes": ["standard"],
+            "deliveryTypes": [
+              "standard"
+            ],
             "features": {
               "labelDescriptionLength": 45
             },
-            "packageTypes": ["package"],
+            "packageTypes": [
+              "package"
+            ],
             "shipmentOptions": {
               "signature": true,
               "insurance": [
-                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                0,
+                10000,
+                25000,
+                50000,
+                100000,
+                150000,
+                200000,
+                250000,
+                300000,
+                350000,
+                400000,
+                450000,
+                500000
               ],
               "return": true,
               "ageCheck": true,

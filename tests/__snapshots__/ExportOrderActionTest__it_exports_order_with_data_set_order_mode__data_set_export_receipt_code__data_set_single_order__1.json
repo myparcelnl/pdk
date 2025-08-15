@@ -41,7 +41,7 @@
             "delivery_type": 2,
             "hide_sender": 0,
             "insurance": {
-              "amount": 10000,
+              "amount": 0,
               "currency": "EUR"
             },
             "label_description": "",

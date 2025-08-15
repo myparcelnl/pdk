@@ -27,7 +27,12 @@
     "id": "label",
     "format": "a4",
     "output": "open",
-    "position": [1, 2, 3, 4],
+    "position": [
+      1,
+      2,
+      3,
+      4
+    ],
     "directPrint": false,
     "printerGroupId": "",
     "prompt": false

@@ -5,54 +5,52 @@
         "externalIdentifier": "701",
         "deliveryOptions": {
           "carrier": {
-            "externalIdentifier": "postnl",
+            "externalIdentifier": "POSTNL",
             "id": 1,
-            "name": "postnl",
-            "human": "PostNL",
+            "name": "POSTNL",
             "enabled": true,
             "isDefault": true,
             "optional": false,
             "primary": false,
             "type": "main",
-            "capabilities": {
-              "deliveryTypes": ["morning", "standard", "evening", "pickup"],
-              "features": {
+            "inboundFeatures": {
+              "packageTypes": ["PACKAGE"],
+              "deliveryTypes": ["STANDARD_DELIVERY"],
+              "shipmentOptions": [
+                "SIGNATURE",
+                "RETURN",
+                "AGE_CHECK",
+                "ONLY_RECIPIENT",
+                "SAME_DAY_DELIVERY",
+                "LARGE_FORMAT",
+                "INSURANCE"
+              ],
+              "metadata": {
                 "labelDescriptionLength": 45,
-                "carrierSmallPackageContract": "featureCustomContractOnly",
-                "multiCollo": true
-              },
-              "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
-              "shipmentOptions": {
-                "ageCheck": true,
-                "largeFormat": true,
-                "onlyRecipient": true,
-                "return": true,
-                "sameDayDelivery": false,
-                "signature": true,
-                "receiptCode": true,
-                "collect": false,
-                "insurance": [
+                "insuranceSteps": [
                   0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
                 ]
               }
             },
-            "returnCapabilities": {
-              "deliveryTypes": ["standard"],
-              "features": {
-                "labelDescriptionLength": 45
-              },
-              "packageTypes": ["package"],
-              "shipmentOptions": {
-                "signature": true,
-                "insurance": [
+            "outboundFeatures": {
+              "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL"],
+              "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+              "shipmentOptions": [
+                "AGE_CHECK",
+                "LARGE_FORMAT",
+                "ONLY_RECIPIENT",
+                "RETURN",
+                "SIGNATURE",
+                "RECEIPT_CODE",
+                "INSURANCE"
+              ],
+              "metadata": {
+                "labelDescriptionLength": 45,
+                "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+                "multiCollo": true,
+                "insuranceSteps": [
                   0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                ],
-                "return": true,
-                "ageCheck": true,
-                "onlyRecipient": true,
-                "sameDayDelivery": false,
-                "largeFormat": true,
-                "collect": false
+                ]
               }
             }
           },
@@ -100,29 +98,49 @@
             "id": 100001,
             "referenceIdentifier": "1",
             "carrier": {
-              "externalIdentifier": "dhleuroplus",
+              "externalIdentifier": "DHL_EUROPLUS",
               "id": 11,
-              "name": "dhleuroplus",
-              "human": "DHL Europlus",
+              "name": "DHL_EUROPLUS",
               "enabled": true,
               "isDefault": true,
               "optional": false,
               "primary": false,
-              "type": "main"
+              "type": "main",
+              "inboundFeatures": [],
+              "outboundFeatures": {
+                "packageTypes": ["PACKAGE"],
+                "deliveryTypes": ["STANDARD_DELIVERY"],
+                "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+                "metadata": {
+                  "labelDescriptionLength": 45,
+                  "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+                }
+              }
             },
             "delayed": false,
             "delivered": false,
             "deliveryOptions": {
               "carrier": {
-                "externalIdentifier": "dhleuroplus",
+                "externalIdentifier": "DHL_EUROPLUS",
                 "id": 11,
-                "name": "dhleuroplus",
-                "human": "DHL Europlus",
+                "name": "DHL_EUROPLUS",
                 "enabled": true,
                 "isDefault": true,
                 "optional": false,
                 "primary": false,
-                "type": "main"
+                "type": "main",
+                "inboundFeatures": [],
+                "outboundFeatures": {
+                  "packageTypes": ["PACKAGE"],
+                  "deliveryTypes": ["STANDARD_DELIVERY"],
+                  "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+                  "metadata": {
+                    "labelDescriptionLength": 45,
+                    "insuranceOptions": [
+                      0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                    ]
+                  }
+                }
               },
               "labelAmount": 1,
               "shipmentOptions": {
@@ -155,29 +173,79 @@
             "id": 100002,
             "referenceIdentifier": "2",
             "carrier": {
-              "externalIdentifier": "postnl",
+              "externalIdentifier": "POSTNL",
               "id": 1,
-              "name": "postnl",
-              "human": "PostNL",
+              "name": "POSTNL",
               "enabled": true,
               "isDefault": true,
               "optional": false,
               "primary": false,
-              "type": "main"
+              "type": "main",
+              "inboundFeatures": {
+                "packageTypes": ["PACKAGE"],
+                "deliveryTypes": ["STANDARD_DELIVERY"],
+                "shipmentOptions": [
+                  "SIGNATURE",
+                  "RETURN",
+                  "AGE_CHECK",
+                  "ONLY_RECIPIENT",
+                  "SAME_DAY_DELIVERY",
+                  "LARGE_FORMAT",
+                  "INSURANCE"
+                ],
+                "metadata": {
+                  "labelDescriptionLength": 45,
+                  "insuranceSteps": [
+                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                  ]
+                }
+              },
+              "outboundFeatures": {
+                "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL"],
+                "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+                "shipmentOptions": [
+                  "AGE_CHECK",
+                  "LARGE_FORMAT",
+                  "ONLY_RECIPIENT",
+                  "RETURN",
+                  "SIGNATURE",
+                  "RECEIPT_CODE",
+                  "INSURANCE"
+                ],
+                "metadata": {
+                  "labelDescriptionLength": 45,
+                  "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+                  "multiCollo": true,
+                  "insuranceSteps": [
+                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                  ]
+                }
+              }
             },
             "delayed": false,
             "delivered": false,
             "deliveryOptions": {
               "carrier": {
-                "externalIdentifier": "dhleuroplus",
+                "externalIdentifier": "DHL_EUROPLUS",
                 "id": 11,
-                "name": "dhleuroplus",
-                "human": "DHL Europlus",
+                "name": "DHL_EUROPLUS",
                 "enabled": true,
                 "isDefault": true,
                 "optional": false,
                 "primary": false,
-                "type": "main"
+                "type": "main",
+                "inboundFeatures": [],
+                "outboundFeatures": {
+                  "packageTypes": ["PACKAGE"],
+                  "deliveryTypes": ["STANDARD_DELIVERY"],
+                  "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+                  "metadata": {
+                    "labelDescriptionLength": 45,
+                    "insuranceOptions": [
+                      0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+                    ]
+                  }
+                }
               },
               "labelAmount": 1,
               "shipmentOptions": {
@@ -295,54 +363,52 @@
         "externalIdentifier": "247",
         "deliveryOptions": {
           "carrier": {
-            "externalIdentifier": "postnl",
+            "externalIdentifier": "POSTNL",
             "id": 1,
-            "name": "postnl",
-            "human": "PostNL",
+            "name": "POSTNL",
             "enabled": true,
             "isDefault": true,
             "optional": false,
             "primary": false,
             "type": "main",
-            "capabilities": {
-              "deliveryTypes": ["morning", "standard", "evening", "pickup"],
-              "features": {
+            "inboundFeatures": {
+              "packageTypes": ["PACKAGE"],
+              "deliveryTypes": ["STANDARD_DELIVERY"],
+              "shipmentOptions": [
+                "SIGNATURE",
+                "RETURN",
+                "AGE_CHECK",
+                "ONLY_RECIPIENT",
+                "SAME_DAY_DELIVERY",
+                "LARGE_FORMAT",
+                "INSURANCE"
+              ],
+              "metadata": {
                 "labelDescriptionLength": 45,
-                "carrierSmallPackageContract": "featureCustomContractOnly",
-                "multiCollo": true
-              },
-              "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
-              "shipmentOptions": {
-                "ageCheck": true,
-                "largeFormat": true,
-                "onlyRecipient": true,
-                "return": true,
-                "sameDayDelivery": false,
-                "signature": true,
-                "receiptCode": true,
-                "collect": false,
-                "insurance": [
+                "insuranceSteps": [
                   0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
                 ]
               }
             },
-            "returnCapabilities": {
-              "deliveryTypes": ["standard"],
-              "features": {
-                "labelDescriptionLength": 45
-              },
-              "packageTypes": ["package"],
-              "shipmentOptions": {
-                "signature": true,
-                "insurance": [
+            "outboundFeatures": {
+              "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL"],
+              "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+              "shipmentOptions": [
+                "AGE_CHECK",
+                "LARGE_FORMAT",
+                "ONLY_RECIPIENT",
+                "RETURN",
+                "SIGNATURE",
+                "RECEIPT_CODE",
+                "INSURANCE"
+              ],
+              "metadata": {
+                "labelDescriptionLength": 45,
+                "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+                "multiCollo": true,
+                "insuranceSteps": [
                   0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                ],
-                "return": true,
-                "ageCheck": true,
-                "onlyRecipient": true,
-                "sameDayDelivery": false,
-                "largeFormat": true,
-                "collect": false
+                ]
               }
             }
           },
@@ -387,35 +453,57 @@
     "notifications": [
       {
         "category": "action",
-        "content": ["return_shipment_created_description"],
-        "tags": {
-          "action": "exportReturn",
-          "orderIds": "701,247"
-        },
-        "timeout": false,
-        "title": "return_shipment_created_title",
-        "variant": "success"
-      },
-      {
-        "category": "action",
-        "content": ["return_shipment_created_description"],
-        "tags": {
-          "action": "exportReturn",
-          "orderIds": "701,247"
-        },
-        "timeout": false,
-        "title": "return_shipment_created_title",
-        "variant": "success"
-      },
-      {
-        "category": "action",
-        "content": ["Return shipment exported with default carrier postnl"],
+        "content": ["Return shipment exported with default carrier POSTNL"],
         "tags": {
           "action": "exportReturn",
           "orderIds": "2"
         },
         "timeout": false,
-        "title": "DHL Europlus has no return capabilities",
+        "title": " has no return capabilities",
+        "variant": "warning"
+      },
+      {
+        "category": "action",
+        "content": ["return_shipment_created_description"],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "701,247"
+        },
+        "timeout": false,
+        "title": "return_shipment_created_title",
+        "variant": "success"
+      },
+      {
+        "category": "action",
+        "content": ["Return shipment exported with default carrier POSTNL"],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "2"
+        },
+        "timeout": false,
+        "title": " has no return capabilities",
+        "variant": "warning"
+      },
+      {
+        "category": "action",
+        "content": ["return_shipment_created_description"],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "701,247"
+        },
+        "timeout": false,
+        "title": "return_shipment_created_title",
+        "variant": "success"
+      },
+      {
+        "category": "action",
+        "content": ["Return shipment exported with default carrier POSTNL"],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "2"
+        },
+        "timeout": false,
+        "title": " has no return capabilities",
         "variant": "warning"
       },
       {

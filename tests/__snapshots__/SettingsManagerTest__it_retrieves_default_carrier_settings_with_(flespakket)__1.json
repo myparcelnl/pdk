@@ -7,6 +7,7 @@
     "allowMondayDelivery": true,
     "allowMorningDelivery": true,
     "allowOnlyRecipient": true,
+    "allowExpressDelivery": false,
     "allowPickupLocations": true,
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,
@@ -101,7 +102,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "postnl": {
+  "POSTNL": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -109,6 +110,7 @@
     "allowMondayDelivery": true,
     "allowMorningDelivery": true,
     "allowOnlyRecipient": true,
+    "allowExpressDelivery": false,
     "allowPickupLocations": true,
     "allowSameDayDelivery": true,
     "allowSaturdayDelivery": true,

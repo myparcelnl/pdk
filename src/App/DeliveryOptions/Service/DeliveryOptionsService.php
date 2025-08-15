@@ -34,7 +34,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
         'allowMorningDelivery'         => CarrierSettings::ALLOW_MORNING_DELIVERY,
         'allowOnlyRecipient'           => CarrierSettings::ALLOW_ONLY_RECIPIENT,
-        'allowPickupLocations'         => CarrierSettings::ALLOW_PICKUP_LOCATIONS,
+        'allowPickupLocations'         => CarrierSettings::ALLOW_PICKUP_DELIVERY,
         'allowSameDayDelivery'         => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
         'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
         'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,

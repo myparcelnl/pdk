@@ -1,63 +1,209 @@
 {
-  "proposition": {
-    "id": 2,
-    "key": "myparcel-belgie",
-    "name": "SendMyParcel",
-    "shortName": "SendMyParcel"
-  },
-  "applicationUrls": {
-    "backoffice": "https://backoffice.sendmyparcel.be",
-    "support": "https://developer.myparcel.nl/contact",
-    "consumerPortal": "https://www.sendmyparcel.be"
-  },
-  "countryCode": "BE",
-  "subscriptions": {
-    "analytics": {
-      "availableDashboards": ["shipments", "orders"]
+  "applications": {
+    "backoffice": {
+      "url": "https://backoffice.myparcel.nl",
+      "enabled": true
     },
-    "shippingRules": {
-      "countryCodes": ["BE", "NL", "DE", "FR", "LU"],
-      "regionCodes": ["EU"],
-      "maxAmount": 10
-    }
-  },
-  "internationalization": {
-    "language": "nl",
-    "supportedLanguages": ["nl", "fr", "en"],
-    "dateFormats": {
-      "nl": {
-        "short": "dd-MM-yyyy",
-        "long": "dd MMMM yyyy"
-      },
-      "fr": {
-        "short": "dd/MM/yyyy",
-        "long": "dd MMMM yyyy"
-      },
-      "en": {
-        "short": "MM/dd/yyyy",
-        "long": "MMMM dd, yyyy"
+    "webshop": {
+      "enabled": false
+    },
+    "developerPortal": {
+      "url": "https://developer.myparcel.nl",
+      "enabled": true
+    },
+    "corporate": {
+      "url": "https://www.sendmyparcel.be",
+      "enabled": true
+    },
+    "faq": {
+      "enabled": false
+    },
+    "consumerPortal": {
+      "enabled": true,
+      "url": "https://subdomain.sendmyparcel.me",
+      "internationalization": {
+        "language": "nl-BE",
+        "supportedLanguages": ["nl-BE", "en-GB", "de-DE", "fr-BE", "es-ES", "it-IT"],
+        "timezone": "Europe/Amsterdam",
+        "dateFormats": {
+          "long": "D MMMM YYYY",
+          "short": "DD-MM-YYYY",
+          "time": "HH:mm"
+        }
       }
     }
   },
-  "consumerPortal": {
-    "url": "https://www.sendmyparcel.be",
-    "internationalization": {
-      "language": "nl",
-      "supportedLanguages": ["nl", "fr", "en"],
-      "dateFormats": {
-        "nl": "dd-MM-yyyy",
-        "fr": "dd/MM/yyyy",
-        "en": "MM/dd/yyyy"
+  "assets": {
+    "logo": {
+      "medium": {
+        "url": "https://assets.sendmyparcel.be/skin/images/logo.svg"
+      },
+      "small": {
+        "url": "https://assets.sendmyparcel.be/skin/images/logo-icon.svg"
+      }
+    },
+    "url": "https://assets.sendmyparcel.be",
+    "exampleDocuments": {
+      "addresses": {
+        "csv": "https://assets.sendmyparcel.be/documentatie/voorbeelden/myparcel-address-example.csv"
+      },
+      "orders": {
+        "csv": "https://assets.sendmyparcel.be/documentatie/voorbeelden/myparcel-order-example.csv"
+      },
+      "products": {
+        "csv": "https://assets.sendmyparcel.be/documentatie/voorbeelden/myparcel-product-example.csv"
+      },
+      "shipments": {
+        "csv": "https://assets.sendmyparcel.be/documentatie/voorbeelden/myparcel-shipment-example.csv"
       }
     }
-  },
-  "retailLocations": {
-    "countries": ["BE"]
   },
   "billing": {
-    "invoiceDates": {
-      "weekly": "Monday",
-      "monthly": "1st"
+    "paymentProvider": "multisafepay",
+    "bankMandate": {
+      "flow": ["manual"],
+      "manualBanks": []
+    },
+    "newInvoiceDates": {
+      "monthly": "2024-06-01",
+      "weekly": "2024-05-13"
+    }
+  },
+  "browserExtension": {
+    "downloadUrl": {
+      "chrome": "https://chrome.google.com/webstore/detail/sendmyparcel-extension/lnlejgndglbdjmcmehfnljgdamnomnkp?authuser=0"
+    },
+    "supported": true
+  },
+  "centerOfCountry": {
+    "latitude": 50.640168,
+    "longitude": 4.666682,
+    "zoom": 8
+  },
+  "companyDetails": {
+    "address": {
+      "countryCode": "BE",
+      "company": "SendMyParcel",
+      "person": "",
+      "city": "Antwerpen",
+      "postalCode": "2000",
+      "street": "Adriaan Brouwerstraat",
+      "houseNumber": "16",
+      "phone": "03 808 18 20",
+      "email": "info@sendmyparcel.be"
+    },
+    "returnAddress": {
+      "countryCode": "BE",
+      "company": "SendMyParcel",
+      "person": "Afd. Retouren",
+      "postalCode": "",
+      "houseNumber": "",
+      "street": "",
+      "city": "",
+      "phone": "",
+      "email": "info@sendmyparcel.be"
+    },
+    "billing": {
+      "coc": "34 09 97 58"
+    },
+    "contact": {
+      "chat": {
+        "enabled": false
+      },
+      "phoneNumber": {
+        "enabled": true,
+        "openingHours": [
+          {
+            "name": "monday",
+            "closes": "17:00",
+            "opens": "09:00"
+          },
+          {
+            "name": "tuesday",
+            "closes": "17:00",
+            "opens": "09:00"
+          },
+          {
+            "name": "wednesday",
+            "closes": "17:00",
+            "opens": "09:00"
+          },
+          {
+            "name": "thursday",
+            "closes": "17:00",
+            "opens": "09:00"
+          },
+          {
+            "name": "friday",
+            "closes": "17:00",
+            "opens": "09:00"
+          },
+          {
+            "name": "saturday"
+          },
+          {
+            "name": "sunday"
+          }
+        ],
+        "plain": "0031233030315",
+        "text": "03 808 18 20"
+      },
+      "whatsapp": {
+        "enabled": false,
+        "openingHours": [],
+        "url": "https://api.whatsapp.com/send?phone=31233030315"
+      }
+    }
+  },
+  "content": {
+    "authenticators": {
+      "googleAuthenticatorAndroid": {
+        "name": "Google Authenticator (Android)",
+        "url": "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+      },
+      "googleAuthenticatorIos": {
+        "name": "Google Authenticator (iOS)",
+        "url": "https://apps.apple.com/us/app/google-authenticator/id388497605"
+      },
+      "microsoftAuthenticator": {
+        "name": "Microsoft Authenticator",
+        "url": "https://www.microsoft.com/security/mobile-authenticator-app"
+      },
+      "twilioAuthy": {
+        "name": "Twilio Authy",
+        "url": "https://authy.com/download/"
+      }
+    },
+    "manuals": {
+      "myContracts": {
+        "dhl": "https://developer.myparcel.nl/nl/backoffice/10.dhl-eigen-contracten-activeren.html",
+        "dpd": "https://developer.myparcel.nl/nl/backoffice/11.dpd-eigen-contracten-activeren.html",
+        "gls": "https://developer.myparcel.nl/nl/backoffice/13.gls-eigen-contracten-activeren.html",
+        "upsexpresssaver": "https://developer.myparcel.nl/nl/backoffice/12.ups-eigen-contracten-activeren.html",
+        "upsstandard": "https://developer.myparcel.nl/nl/backoffice/12.ups-eigen-contracten-activeren.html"
+      }
+    },
+    "directPrinting": {
+      "printApplicationDownloadUrls": {
+        "mac": "https://printing.assets.myparcel.nl/MyParcel-Print-Applicatie.dmg",
+        "windows": "https://printing.assets.myparcel.nl/MyParcel-Print-Applicatie.exe"
+      }
+    },
+    "externalIntegrationSupportUrls": {
+      "amazon": "https://developer.myparcel.nl/nl/documentatie/25.amazon.html",
+      "bol_dot_com": "https://myparcelnl.github.io/bol.com/",
+      "etsy": "https://developer.myparcel.nl/nl/documentatie/30.etsy.html",
+      "exact": "https://myparcelnl.github.io/exact-online/",
+      "wix": "https://developer.myparcel.nl/nl/documentatie/20.wix.html"
+    },
+    "finance": {
+      "carrierComparePriceUrl": "https://sendmyparcel.be/prijzen/",
+      "priceScalesPolicy": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001bviIAA&displayContent=true"
+    },
+    "returns": "https://www.myparcel.nl/blog/retourneren/jouw-retourservice-optimaal-inrichten-bij-myparcel",
+    "faq": {
+      "postalCode": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001cIcIAI&displayContent=true",
+      "directPrinting": "https://faq.myparcel.nl/topics?inputdiv=Functionaliteiten"
     }
   },
   "contracts": {
@@ -67,21 +213,19 @@
           "id": 1,
           "name": "POSTNL"
         },
+        "hasCutoffTime": true,
         "hasPostponedDelivery": true,
         "outboundFeatures": {
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["SIGNATURE", "ONLY_RECIPIENT", "LARGE_FORMAT", "EXTRA_ASSURANCE"],
+          "shipmentOptions": ["SIGNATURE", "ONLY_RECIPIENT", "LARGE_FORMAT", "INSURANCE"],
           "metadata": {
             "labelDescriptionLength": 45,
-            "multiCollo": true
+            "multiCollo": true,
+            "insuranceOptions": [
+              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
           }
-        },
-        "inboundFeatures": {
-          "packageTypes": [],
-          "deliveryTypes": [],
-          "shipmentOptions": [],
-          "metadata": {}
         }
       },
       {
@@ -89,14 +233,16 @@
           "id": 2,
           "name": "BPOST"
         },
+        "hasCutoffTime": true,
         "hasPostponedDelivery": true,
         "outboundFeatures": {
           "packageTypes": ["PACKAGE", "MAILBOX"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "EXTRA_ASSURANCE"],
+          "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "INSURANCE"],
           "metadata": {
             "labelDescriptionLength": 45,
-            "multiCollo": true
+            "multiCollo": true,
+            "insuranceOptions": [0, 50000, 250000, 500000]
           }
         }
       },
@@ -105,39 +251,59 @@
           "id": 4,
           "name": "DPD"
         },
+        "hasCutoffTime": true,
         "hasPostponedDelivery": true,
         "outboundFeatures": {
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["DROP_OFF_AT_POSTAL_POINT", "EXTRA_ASSURANCE"],
+          "shipmentOptions": ["INSURANCE"],
           "metadata": {
             "labelDescriptionLength": 45,
             "multiCollo": true,
-            "needsCustomerInfo": true
+            "needsCustomerInfo": true,
+            "dropOffAtPostalPoint": true,
+            "insuranceOptions": [52000]
           }
-        },
-        "inboundFeatures": {
-          "packageTypes": [],
-          "deliveryTypes": [],
-          "shipmentOptions": [],
-          "metadata": {}
         }
       }
     ],
     "availableForCustomCredentials": [
       {
         "carrier": {
+          "id": 2,
+          "name": "BPOST"
+        }
+      },
+      {
+        "carrier": {
           "id": 4,
-          "name": "DPD",
-          "carrier": "DPD"
+          "name": "DPD"
+        }
+      },
+      {
+        "carrier": {
+          "id": 7,
+          "name": "BOL"
         }
       }
     ],
     "inbound": {
-      "default": {
+      "BE": {
         "carrier": {
           "id": 2,
           "name": "BPOST"
+        }
+      },
+      "default": {
+        "carrier": {
+          "id": 4,
+          "name": "DPD"
+        }
+      },
+      "NL": {
+        "carrier": {
+          "id": 2,
+          "name": "POSTNL"
         }
       }
     },
@@ -148,212 +314,246 @@
           "name": "BPOST"
         }
       }
-    }
-  },
-  "paymentProvider": "mollie",
-  "companyDetails": {
-    "billing": {
-      "coc": "123456789"
     },
-    "contact": {
-      "phoneNumber": {
-        "plain": "+32 2 123 45 67",
-        "text": "+32 2 123 45 67",
-        "openingHours": {
-          "monday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "tuesday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "wednesday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "thursday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "friday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          }
-        }
-      },
-      "whatsapp": {
-        "url": "https://wa.me/32212345678",
-        "openingHours": {
-          "monday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "tuesday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "wednesday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "thursday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          },
-          "friday": {
-            "opens": "09:00",
-            "closes": "17:00"
-          }
-        }
-      }
-    },
-    "address": {
-      "street": "Rue de la Loi 200",
-      "postalCode": "1000"
-    }
+    "withCutoffTime": ["POSTNL", "DPD", "BPOST"],
+    "withPostponedDelivery": ["POSTNL", "DPD", "BPOST"]
   },
-  "centerOfCountry": {
-    "latitude": 50.8503,
-    "longitude": 4.3517,
-    "zoom": 8
+  "countryCode": "BE",
+  "deliveryOptions": {
+    "dropOffDays": [0, 1, 2, 3, 4, 5, 6],
+    "mondayDelivery": true
   },
-  "assets": {
-    "url": "https://assets.sendmyparcel.be",
-    "logo": {
-      "medium": {
-        "url": "https://assets.sendmyparcel.be/logos/sendmyparcel-medium.png"
-      },
-      "small": {
-        "url": "https://assets.sendmyparcel.be/logos/sendmyparcel-small.png"
-      }
-    }
-  },
-  "exampleDocuments": {
-    "products": {
-      "csv": "https://assets.sendmyparcel.be/examples/products.csv"
-    },
-    "orders": {
-      "csv": "https://assets.sendmyparcel.be/examples/orders.csv"
-    },
-    "shipments": {
-      "csv": "https://assets.sendmyparcel.be/examples/shipments.csv"
-    }
-  },
-  "easyReturnServiceCountryCodes": ["BE"],
-  "allowedReturnCountryCodes": ["BE", "NL", "DE", "FR", "LU"],
-  "rules": {
-    "country": {
-      "withRequiredPhoneNumber": [],
-      "withRecommendedPhoneNumber": ["BE"],
-      "withRequiredEmail": [],
-      "withAddressFinder": ["BE"]
-    },
-    "packageType": {
-      "withRequiredPhoneNumber": [],
-      "withRecommendedPhoneNumber": ["PACKAGE"],
-      "withRequiredEmail": [],
-      "withAddressFinder": ["PACKAGE", "MAILBOX"]
-    }
-  },
-  "enablePalletSupport": false,
-  "enablePrinterlessReturn": true,
-  "enableLogoOnLabel": true,
-  "enableShipmentEstimate": true,
-  "enableFeedbackModal": true,
-  "enableCompanyDetailsEdit": false,
+  "enableAcademy": false,
   "enableChamberOfCommerceSupport": false,
-  "enableVATSupport": true,
-  "enableMyParcelWebShop": false,
+  "enableCompanyDetailsEdit": false,
+  "enableFeedbackModal": false,
   "enableImportExport": false,
-  "requiresEmailRecipient": false,
+  "enableLogoOnLabel": false,
+  "enablePalletSupport": false,
+  "enablePrinterlessReturn": false,
+  "enableRetailLocations": false,
+  "enableShipmentEstimate": false,
+  "enableVATSupport": true,
+  "integrations": {
+    "available": [
+      {
+        "autoImport": false,
+        "name": "amazon"
+      },
+      {
+        "autoImport": true,
+        "name": "bol"
+      },
+      {
+        "autoImport": true,
+        "name": "etsy"
+      },
+      {
+        "autoImport": true,
+        "name": "wix"
+      }
+    ]
+  },
+  "internationalization": {
+    "dateFormats": {
+      "long": "D MMMM YYYY",
+      "short": "DD-MM-YYYY",
+      "time": "HH:mm"
+    },
+    "timezone": "Europe/Amsterdam",
+    "language": "nl-BE",
+    "supportedLanguages": ["nl-BE", "fr-BE"]
+  },
+  "proposition": {
+    "id": 3,
+    "key": "myparcel-belgie",
+    "name": "MyParcel België",
+    "shortName": "MyParcel"
+  },
+  "rules": {
+    "requiresEmailRecipient": true,
+    "country": {
+      "withAddressFinder": [
+        "AT",
+        "BE",
+        "CZ",
+        "DK",
+        "FI",
+        "FR",
+        "DE",
+        "IT",
+        "LU",
+        "NO",
+        "PL",
+        "SK",
+        "ES",
+        "SE",
+        "CH",
+        "US"
+      ],
+      "withRecommendedPhoneNumber": ["FR"],
+      "withRequiredPhoneNumber": ["FR"],
+      "withPossibleReturn": ["AT", "BE", "CZ", "FR", "DE", "DK", "EE", "FI", "LT", "LU", "LV", "PL", "SE", "SK", "NL"],
+      "withPartnerLinks": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "NO",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "SE",
+        "CH",
+        "GB"
+      ],
+      "withRequiredEmail": [],
+      "withRequiredCompany": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredHeight": [],
+      "withRequiredLength": [],
+      "withRequiredWidth": []
+    },
+    "carrier": {
+      "withRequiredEmail": ["DPD"],
+      "withRecommendedPhoneNumber": [],
+      "withRequiredPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredHeight": [],
+      "withRequiredLength": [],
+      "withRequiredWidth": []
+    }
+  },
+  "subscriptions": {
+    "analytics": {
+      "availableDashboards": [
+        "shipments",
+        "returns",
+        "webshops",
+        "transit-time",
+        "surcharges",
+        "cases",
+        "finance",
+        "shortcoming"
+      ]
+    },
+    "shippingRules": {
+      "countryCodes": ["BE", "NL"],
+      "maxAmount": 1,
+      "regionCodes": []
+    }
+  },
   "support": {
     "flow": "basic",
-    "availableTypes": ["technical", "general"],
-    "availableSubTypes": {
-      "technical": ["api", "integration"],
-      "general": ["shipping", "billing"]
-    }
-  },
-  "bankMandate": {
-    "flow": "manual",
-    "banks": ["KBC", "ING", "BNP Paribas Fortis"],
-    "showBankNumber": true
-  },
-  "integrations": {
-    "available": []
-  },
-  "content": {
-    "chromeExtensionUrl": "https://chrome.google.com/webstore/detail/sendmyparcel",
-    "directPrinting": {
-      "faqUrls": {
-        "nl": "https://www.sendmyparcel.be/nl/help/direct-printing",
-        "fr": "https://www.sendmyparcel.be/fr/help/direct-printing"
+    "availableTypes": [
+      {
+        "id": 1,
+        "inForm": true,
+        "name": "MyShipments",
+        "subTypes": ["not_delivered", "not_received_recipient", "missing_content", "damage", "return"]
       },
-      "printApplicationDownloadUrls": {
-        "windows": "https://assets.sendmyparcel.be/apps/windows/print-app.exe",
-        "mac": "https://assets.sendmyparcel.be/apps/mac/print-app.dmg"
-      }
-    },
-    "manuals": {
-      "myContracts": {
-        "dpd": "https://www.sendmyparcel.be/help/dpd-contract",
-        "dhl": "https://www.sendmyparcel.be/help/dhl-contract",
-        "upsstandard": "https://www.sendmyparcel.be/help/ups-standard-contract",
-        "upsexpresssaver": "https://www.sendmyparcel.be/help/ups-express-contract",
-        "gls": "https://www.sendmyparcel.be/help/gls-contract"
-      }
-    },
-    "finance": {
-      "carrierComparePriceUrl": "https://www.sendmyparcel.be/pricing/compare",
-      "priceScalesPolicy": "https://www.sendmyparcel.be/terms/pricing"
-    },
-    "returns": "https://www.sendmyparcel.be/help/returns",
-    "support": "https://developer.myparcel.nl/contact",
-    "integrations": {},
-    "authenticators": {},
-    "externalIntegrationSupportUrls": {
-      "amazon": "https://www.sendmyparcel.be/help/amazon",
-      "bol_dot_com": "https://www.sendmyparcel.be/help/bol",
-      "etsy": "https://www.sendmyparcel.be/help/etsy",
-      "exact": "https://www.sendmyparcel.be/help/exact",
-      "wix": "https://www.sendmyparcel.be/help/wix"
-    },
-    "myParcelWebShop": "https://www.sendmyparcel.be/webshop"
-  },
-  "abTesting": {
-    "script": ""
-  },
-  "weightCategories": {
-    "light": [
       {
-        "median": 250,
-        "min": 0,
-        "max": 500
-      }
-    ],
-    "medium": [
+        "id": 2,
+        "inForm": true,
+        "name": "System",
+        "subTypes": ["plugin_question", "plugin_help_needed", "shipment_export_help_needed", "other_system_question"]
+      },
       {
-        "median": 1500,
-        "min": 501,
-        "max": 2500
-      }
-    ],
-    "heavy": [
+        "id": 3,
+        "inForm": true,
+        "name": "ProductsAndPrices",
+        "subTypes": ["products", "rates"]
+      },
       {
-        "median": 7500,
-        "min": 2501,
-        "max": 12500
+        "id": 4,
+        "inForm": true,
+        "name": "MyInvoice",
+        "subTypes": ["invoice_change_details", "invoice_other_question"]
+      },
+      {
+        "id": 5,
+        "inForm": true,
+        "name": "Different"
       }
     ]
   },
   "tools": {
-    "googleTagManager": {
-      "id": "GTM-XXXXXXX",
-      "url": "https://www.googletagmanager.com"
-    },
     "appcues": {
-      "id": "123456"
+      "id": "80838",
+      "enableLaunchpad": false
+    },
+    "chat": {},
+    "googleTagManager": {
+      "id": "GTM-K9HRJVV",
+      "url": ""
+    },
+    "hotjar": {
+      "id": "598926",
+      "enableFeedbackModal": false
+    },
+    "oneTrust": {
+      "id": ""
     }
+  },
+  "weightCategories": {
+    "digitalStamp": [
+      {
+        "max": 20,
+        "median": 10,
+        "min": 0
+      },
+      {
+        "max": 50,
+        "median": 35,
+        "min": 20
+      },
+      {
+        "max": 350,
+        "median": 175,
+        "min": 50
+      },
+      {
+        "max": 2000,
+        "median": 1175,
+        "min": 350
+      }
+    ],
+    "smallPackage": [
+      {
+        "max": 250,
+        "median": 125,
+        "min": 0
+      },
+      {
+        "max": 500,
+        "median": 375,
+        "min": 250
+      },
+      {
+        "max": 1000,
+        "median": 750,
+        "min": 500
+      },
+      {
+        "max": 2000,
+        "median": 1500,
+        "min": 1000
+      }
+    ]
   }
 }

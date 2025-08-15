@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
@@ -218,6 +219,14 @@ class Carrier extends Model
             // Prevents the default carrier being returned if an unknown ID is provided
             if (!$carrierInput['id'] && !$carrierInput['name']) {
                 $carrierInput['name'] = Platform::get('defaultCarrier');
+                Logger::warning(
+                    'Carrier Name and ID not given, instantiating default Carrier model',
+                    [
+                        'id'   => $data['id'] ?? null,
+                        'name' => $data['name'] ?? null,
+                    ]
+                );
+
             }
             $found = $repository->get($carrierInput);
 
