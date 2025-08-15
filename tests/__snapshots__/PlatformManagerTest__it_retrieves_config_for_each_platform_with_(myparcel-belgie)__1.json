@@ -100,36 +100,6 @@
       }
     },
     {
-      "externalIdentifier": "BPOST",
-      "id": 2,
-      "name": "BPOST",
-      "human": null,
-      "contractId": null,
-      "enabled": true,
-      "isDefault": true,
-      "label": null,
-      "optional": false,
-      "primary": false,
-      "type": "main",
-      "inboundFeatures": null,
-      "outboundFeatures": null
-    },
-    {
-      "externalIdentifier": "DPD",
-      "id": 4,
-      "name": "DPD",
-      "human": null,
-      "contractId": null,
-      "enabled": true,
-      "isDefault": true,
-      "label": null,
-      "optional": false,
-      "primary": false,
-      "type": "main",
-      "inboundFeatures": null,
-      "outboundFeatures": null
-    },
-    {
       "externalIdentifier": "BOL",
       "id": 7,
       "name": "BOL",

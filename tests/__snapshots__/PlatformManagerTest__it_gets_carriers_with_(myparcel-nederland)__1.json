@@ -221,90 +221,9 @@
     }
   },
   {
-    "externalIdentifier": "GLS",
-    "id": 14,
-    "name": "GLS",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": [],
-    "outboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "INSURANCE"],
-      "metadata": {
-        "labelDescriptionLength": 45,
-        "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-        "insuranceOptions": [10000]
-      }
-    }
-  },
-  {
     "externalIdentifier": "BOL",
     "id": 7,
     "name": "BOL",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "DHL_FOR_YOU",
-    "id": 9,
-    "name": "DHL_FOR_YOU",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "DHL_PARCEL_CONNECT",
-    "id": 10,
-    "name": "DHL_PARCEL_CONNECT",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "DHL_EUROPLUS",
-    "id": 11,
-    "name": "DHL_EUROPLUS",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "DPD",
-    "id": 4,
-    "name": "DPD",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "UPS_STANDARD",
-    "id": 12,
-    "name": "UPS_STANDARD",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "UPS_EXPRESS_SAVER",
-    "id": 13,
-    "name": "UPS_EXPRESS_SAVER",
     "enabled": true,
     "isDefault": true,
     "optional": false,
