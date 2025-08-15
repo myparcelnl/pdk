@@ -30,14 +30,14 @@ class SwitchToProductionApiAction implements ActionInterface
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService
+     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface                 $apiService
      * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      */
     public function __construct(
-        ApiServiceInterface $apiService,
+        ApiServiceInterface            $apiService,
         PdkSettingsRepositoryInterface $settingsRepository
     ) {
-        $this->apiService = $apiService;
+        $this->apiService         = $apiService;
         $this->settingsRepository = $settingsRepository;
     }
 
@@ -54,7 +54,7 @@ class SwitchToProductionApiAction implements ActionInterface
             if (file_exists($cacheFile)) {
                 unlink($cacheFile);
             }
-            
+
             // Switch the base URL back to the production API for the current session
             $this->apiService->setBaseUrl('https://api.myparcel.nl');
 
@@ -70,9 +70,8 @@ class SwitchToProductionApiAction implements ActionInterface
                 Notification::CATEGORY_GENERAL
             );
 
-            // Roep UPDATE_ACCOUNT aan om de context opnieuw te laden, net zoals DeleteAccountAction
+            // Call UPDATE_ACCOUNT to reload the context, just like DeleteAccountAction
             return Actions::execute(PdkBackendActions::UPDATE_ACCOUNT);
-
         } catch (\Throwable $e) {
             Logger::error('Failed to switch API URL back to production environment', [
                 'error' => $e->getMessage(),
