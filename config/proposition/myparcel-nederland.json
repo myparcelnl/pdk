@@ -537,24 +537,6 @@
             ]
           }
         }
-      },
-      {
-        "carrier": {
-          "id": 14,
-          "name": "GLS"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": ["PACKAGE"],
-          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "INSURANCE"],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-            "insuranceOptions": [10000]
-          }
-        }
       }
     ],
     "availableForCustomCredentials": [
@@ -604,6 +586,18 @@
         "carrier": {
           "id": 14,
           "name": "GLS"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "INSURANCE"],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+            "insuranceOptions": [50000]
+          }
         }
       }
     ],

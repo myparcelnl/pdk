@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Repository;
 
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
@@ -49,6 +51,11 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
                 if (! isset($input[$key])) {
                     continue;
                 }
+                // Support legacy name lookups
+                if ($key === 'name') {
+                    $legacyMap = array_flip(Carrier::CARRIER_NAME_TO_LEGACY_MAP);
+                    $input[$key] = $legacyMap[$input[$key]] ?? $input[$key];
+                }
 
                 $carrier = $collection->firstWhere($key, $input[$key]);
 
@@ -60,6 +67,10 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
             // Migrate deprecated UPS carrier name "ups" to UPS Standard
             if (!$carrier && isset($input['name']) && $input['name'] === Carrier::CARRIER_UPS_NAME) {
                 $carrier = $collection->firstWhere('id', Carrier::CARRIER_UPS_STANDARD_ID);
+            }
+
+            if (!$carrier) {
+                Logger::warning(sprintf('Carrier %s not found', json_encode($input)));
             }
 
             return $carrier;

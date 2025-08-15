@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Proposition\Service;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Platform\PlatformManager;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
@@ -47,26 +49,51 @@ class PropositionService
      */
     public function fetchPropositionConfig(string $propositionName): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
-        // $assetsClient = new Client();
-        // Fetch the proposition config from a json file
-        // open config/propositions/{propositionName}.json
+        $url = null;
+        $filePath = null;
+        $configData = null;
+        switch ($propositionName) {
+            // @todo enable MyParcel / SendMyParcel URLs when this PR is merged:
+            // https://github.com/mypadev/assets/pull/25
 
-        /**
-         * @todo temporary testing code --- IGNORE ---
-         * This should be replaced with a proper implementation that fetches the config from assets.
-         */
-        $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
-        if (!file_exists($filePath)) {
-            throw new \RuntimeException(sprintf('Proposition config file not found: %s', $filePath));
+            // case Platform::MYPARCEL_NAME:
+            // case Platform::LEGACY_MYPARCEL_NAME:
+            //     // $url = 'https://assets.myparcel.nl/config/proposition.json';
+            //     break;
+            // case Platform::SENDMYPARCEL_NAME:
+            // case Platform::LEGACY_SENDMYPARCEL_NAME:
+            // $url = 'https://assets.sendmyparcel.be/config/proposition.json';
+            // break;
+            case Platform::FLESPAKKET_NAME:
+                // @todo: remove flespakket in next major version
+                Logger::deprecated('Flespakket platform is deprecated, please use MyParcel or SendMyParcel instead.');
+                break;
+            default:
+                $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
+                break;
         }
-        $configData = file_get_contents($filePath);
-        if ($configData === false) {
-            throw new \RuntimeException(sprintf('Failed to read proposition config file: %s', $filePath));
+
+        if ($url) {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->get($url);
+            if ($response->getStatusCode() !== 200) {
+                throw new \RuntimeException(sprintf('Failed to fetch proposition config from URL: %s', $url));
+            }
+            $configData = $response->getBody()->getContents();
         }
+
+        if ($filePath) {
+            if (!file_exists($filePath)) {
+                throw new \InvalidArgumentException(sprintf('Proposition config name %s does not exist', $propositionName));
+            }
+            $configData = file_get_contents($filePath);
+        }
+
         $configArray = json_decode($configData, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException(sprintf('Invalid JSON in proposition config file: %s', $filePath));
+            throw new \RuntimeException(sprintf('Invalid JSON in proposition config file: %s %s', $filePath, $url));
         }
+
         // Create a PropositionConfig instance from the array
         $propositionConfig = new PropositionConfig($configArray);
         return $propositionConfig;
@@ -80,7 +107,7 @@ class PropositionService
      *           New = "POSTNL", "DHL_PARCEL_CONNECT", "BPOST", etc.
      * @return CarrierCollection
      */
-    public function getCarriers($legacyFormat = false): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+    public function getCarriers(): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
     {
         $carrierModels = [];
         foreach ($this->getPropositionConfig()->contracts->available as $contract) {
@@ -91,22 +118,21 @@ class PropositionService
                 'outboundFeatures' => $contract['outboundFeatures'] ?? [],
                 'inboundFeatures' => $contract['inboundFeatures'] ?? [],
             ];
-            if ($legacyFormat) {
-                $carrierData = $this->convertCarrierDataToLegacyFormat($carrierData);
-            }
             $carrierModels[] = new Carrier($carrierData);
         }
 
         // Combine with carrier-specific own contracts
         foreach ($this->getPropositionConfig()->contracts->availableForCustomCredentials as $customContract) {
+            // Skip already-defined carriers
+            if (in_array($customContract['carrier']['id'], array_column($carrierModels, 'id'))) {
+                continue;
+            }
             $carrierData = [
                 'name' => $customContract['carrier']['name'],
                 'id' => $customContract['carrier']['id'],
                 'contractId' => $customContract['id'] ?? null,
+                'type' => Carrier::TYPE_CUSTOM
             ];
-            if ($legacyFormat) {
-                $carrierData = $this->convertCarrierDataToLegacyFormat($carrierData);
-            }
             $carrierModels[] = new Carrier($carrierData);
         }
         return new CarrierCollection($carrierModels);

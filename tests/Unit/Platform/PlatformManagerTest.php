@@ -25,9 +25,9 @@ it('gets specific keys from platform data', function () {
     TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
 
     expect(PlatformFacade::get('name'))
-        ->toBe('belgie')
+        ->toBe('myparcel-belgie')
         ->and(PlatformFacade::get('human'))
-        ->toBe('SendMyParcel')
+        ->toBe('MyParcel België')
         ->and(PlatformFacade::get('localCountry'))
         ->toBe('BE')
         ->and(PlatformFacade::get('defaultCarrier'))
