@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 /**
  * @property AppInfo                   $appInfo
@@ -27,7 +28,7 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
  */
 class GlobalContext extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'appInfo'      => null,
         'baseUrl'      => null,
         'bootstrapId'  => FrontendRenderService::BOOTSTRAP_CONTAINER_ID,
@@ -71,10 +72,11 @@ class GlobalContext extends Model
         $this->attributes['baseUrl']   = $endpointActions->getBaseUrl();
         $this->attributes['endpoints'] = $endpointActions->toArray();
 
-        $platform = Platform::all();
+        $propositionService = Pdk::get(PropositionService::class);
+        $proposition = $propositionService->getPropositionConfig();
 
         $this->attributes['platform'] = array_intersect_key(
-            $platform,
+            $propositionService->mapToPlatformConfig($proposition),
             array_flip([
                 'name',
                 'human',

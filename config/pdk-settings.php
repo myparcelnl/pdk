@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -11,6 +13,7 @@ use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function DI\factory;
 use function DI\value;
 
@@ -70,6 +73,7 @@ return [
                     CarrierSettings::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                     CarrierSettings::EXPORT_SIGNATURE                        => false,
                     CarrierSettings::PRICE_DELIVERY_TYPE_EVENING             => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS             => 0,
                     CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY              => 0,
                     CarrierSettings::PRICE_DELIVERY_TYPE_MORNING             => 0,
                     CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP              => 0,
@@ -98,10 +102,9 @@ return [
     'mergedDefaultSettings' => factory(function () {
         return array_replace_recursive(
             PdkFacade::get('builtInDefaultSettings') ?? [],
-            Platform::get('defaultSettings') ?? [],
             [
                 CustomsSettings::ID => [
-                    CustomsSettings::COUNTRY_OF_ORIGIN => Platform::get('localCountry'),
+                    CustomsSettings::COUNTRY_OF_ORIGIN => Pdk::get(PropositionService::class)->getPropositionConfig()->countryCode
                 ],
             ],
             PdkFacade::get('defaultSettings') ?? []

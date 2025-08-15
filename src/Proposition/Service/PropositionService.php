@@ -139,17 +139,16 @@ class PropositionService
      */
     public function mapToPlatformConfig(PropositionConfig $propositionConfig): array
     {
-        // Map the proposition config to the platform config
         return [
             'name' => $propositionConfig->proposition->key,
             'human' => $propositionConfig->proposition->name,
-            'backofficeUrl' => $propositionConfig->applicationUrls['backoffice'] ?? null,
-            'supportUrl' => $propositionConfig->applicationUrls['support'] ?? null,
+            'backofficeUrl' => $propositionConfig->applications['backoffice']['url'] ?? null,
+            'supportUrl' => $propositionConfig->applications['developerPortal']['url'] ?? null,
             'localCountry' => $propositionConfig->countryCode,
             'defaultCarrier' => $this->getDefaultCarrier()->name,
             'defaultCarrierId' => $this->getDefaultCarrier()->id,
             'defaultSettings' => [], // @todo no longer supported, remove in v3.0.0
-            'carriers' => $this->getCarriers()->toArray(),
+            'carriers' => $this->getCarriers()->toArray(), // @optional conversion?
         ];
     }
 
