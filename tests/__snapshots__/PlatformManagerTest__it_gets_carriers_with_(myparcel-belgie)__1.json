@@ -67,26 +67,6 @@
     }
   },
   {
-    "externalIdentifier": "BPOST",
-    "id": 2,
-    "name": "BPOST",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "DPD",
-    "id": 4,
-    "name": "DPD",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
     "externalIdentifier": "BOL",
     "id": 7,
     "name": "BOL",

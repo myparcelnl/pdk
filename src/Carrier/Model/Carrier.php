@@ -277,6 +277,9 @@ class Carrier extends Model
      */
     public function getTypeAttribute(): string
     {
+        if ($this->type) {
+            return $this->type;
+        }
         return $this->contractId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
     }
 

@@ -23,16 +23,16 @@ it('retrieves config for each platform', function (string $platform) {
 })->with('platforms');
 
 it('gets specific keys from platform data', function () {
-    MockPdkFactory::create(['platform' => Platform::FLESPAKKET_NAME]);
+    MockPdkFactory::create(['platform' => Platform::SENDMYPARCEL_NAME]);
 
     expect(PlatformFacade::get('name'))
-        ->toBe('flespakket')
+        ->toBe('myparcel-belgie')
         ->and(PlatformFacade::get('human'))
-        ->toBe('Flespakket')
+        ->toBe('MyParcel België')
         ->and(PlatformFacade::get('localCountry'))
-        ->toBe('NL')
+        ->toBe('BE')
         ->and(PlatformFacade::get('defaultCarrier'))
-        ->toBe('POSTNL')
+        ->toBe('BPOST')
         ->and(PlatformFacade::get('nonExistingKey'))
         ->toBeNull();
 });
