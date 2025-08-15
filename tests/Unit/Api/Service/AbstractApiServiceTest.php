@@ -100,3 +100,69 @@ it('creates log context with obfuscated authorization header', function () {
             'content-type'  => 'application/json',
         ]);
 });
+
+it('gets base url with acceptance cache file', function () {
+    // Create acceptance cache file
+    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
+    
+    try {
+        // Create a real instance of AbstractApiService for testing
+        $clientAdapter = mock(\MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface::class);
+        $api = new \MyParcelNL\Pdk\Api\Service\MyParcelApiService($clientAdapter);
+        
+        expect($api->getBaseUrl())->toBe('https://api.acceptance.myparcel.nl');
+    } finally {
+        // Clean up
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+    }
+});
+
+it('gets base url without acceptance cache file', function () {
+    // Ensure no cache file exists
+    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    if (file_exists($cacheFile)) {
+        unlink($cacheFile);
+    }
+    
+    // Create a real instance of AbstractApiService for testing
+    $clientAdapter = mock(\MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface::class);
+    $api = new \MyParcelNL\Pdk\Api\Service\MyParcelApiService($clientAdapter);
+    
+    expect($api->getBaseUrl())->toBe('https://api.myparcel.nl');
+});
+
+it('detects connection to acceptance environment when cache file exists', function () {
+    // Create acceptance cache file
+    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
+    
+    try {
+        // Create a real instance of AbstractApiService for testing
+        $clientAdapter = mock(\MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface::class);
+        $api = new \MyParcelNL\Pdk\Api\Service\MyParcelApiService($clientAdapter);
+        
+        expect($api->isConnectedToAcceptance())->toBeTrue();
+    } finally {
+        // Clean up
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+        }
+    }
+});
+
+it('detects connection to production environment when cache file does not exist', function () {
+    // Ensure no cache file exists
+    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    if (file_exists($cacheFile)) {
+        unlink($cacheFile);
+    }
+    
+    // Create a real instance of AbstractApiService for testing
+    $clientAdapter = mock(\MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface::class);
+    $api = new \MyParcelNL\Pdk\Api\Service\MyParcelApiService($clientAdapter);
+    
+    expect($api->isConnectedToAcceptance())->toBeFalse();
+});
