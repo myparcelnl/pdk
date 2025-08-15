@@ -67,50 +67,6 @@
     }
   },
   {
-    "externalIdentifier": "BPOST",
-    "id": 2,
-    "name": "BPOST",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": [],
-    "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-      "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "INSURANCE"],
-      "metadata": {
-        "labelDescriptionLength": 45,
-        "multiCollo": true,
-        "insuranceOptions": [0, 50000, 250000, 500000]
-      }
-    }
-  },
-  {
-    "externalIdentifier": "DPD",
-    "id": 4,
-    "name": "DPD",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": [],
-    "outboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-      "shipmentOptions": ["INSURANCE"],
-      "metadata": {
-        "labelDescriptionLength": 45,
-        "multiCollo": true,
-        "needsCustomerInfo": true,
-        "dropOffAtPostalPoint": true,
-        "insuranceOptions": [52000]
-      }
-    }
-  },
-  {
     "externalIdentifier": "BOL",
     "id": 7,
     "name": "BOL",
