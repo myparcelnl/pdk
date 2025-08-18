@@ -12,8 +12,6 @@ use MyParcelNL\Pdk\Api\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use RuntimeException;
 use Throwable;
 
@@ -60,7 +58,7 @@ abstract class AbstractApiService implements ApiServiceInterface
         ];
 
         $logContext = $this->createLogContext($uri, $method, $options);
-        $response = null;
+        $response   = null;
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
@@ -96,10 +94,10 @@ abstract class AbstractApiService implements ApiServiceInterface
     /**
      * @return string
      */
-        public function getBaseUrl(): string
+    public function getBaseUrl(): string
     {
         // First check if there's an acceptance URL stored in a file
-        $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        $cacheFile         = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
         $fileAcceptanceUrl = file_exists($cacheFile) ? file_get_contents($cacheFile) : null;
 
         if ($fileAcceptanceUrl) {
@@ -107,6 +105,14 @@ abstract class AbstractApiService implements ApiServiceInterface
         }
 
         return $this->baseUrl ?? Pdk::get('apiUrl');
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return [];
     }
 
     /**
@@ -121,15 +127,8 @@ abstract class AbstractApiService implements ApiServiceInterface
     }
 
     /**
-     * @return array
-     */
-    public function getHeaders(): array
-    {
-        return [];
-    }
-
-    /**
-     * @param string $baseUrl
+     * @param  string $baseUrl
+     *
      * @return ApiServiceInterface
      */
     public function setBaseUrl(string $baseUrl): ApiServiceInterface
@@ -140,6 +139,7 @@ abstract class AbstractApiService implements ApiServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
+     *
      * @return string
      */
     protected function buildUri(RequestInterface $request): string
@@ -149,7 +149,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             trim($request->getPath(), '/'),
         ]);
 
-        if (!empty($request->getQueryString())) {
+        if (! empty($request->getQueryString())) {
             $url .= "?{$request->getQueryString()}";
         }
 
@@ -160,6 +160,7 @@ abstract class AbstractApiService implements ApiServiceInterface
      * @param  string $uri
      * @param  string $method
      * @param  array  $options
+     *
      * @return array
      */
     private function createLogContext(string $uri, string $method, array $options): array
