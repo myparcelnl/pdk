@@ -12,6 +12,8 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 class Config implements ConfigInterface
 {
+    public const ACCEPTANCE_CACHE_FILE = '/pdk_acceptance_api_url.txt';
+
     private static $cache = [];
 
     /**
