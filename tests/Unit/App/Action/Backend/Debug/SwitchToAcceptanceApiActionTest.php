@@ -41,7 +41,9 @@ afterEach(function () {
 });
 
 it('switches to acceptance API successfully', function () {
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
     $apiService = mock(ApiServiceInterface::class);
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
     
     $apiService->shouldReceive('setBaseUrl')
@@ -60,13 +62,15 @@ it('switches to acceptance API successfully', function () {
     expect($response)->toBeInstanceOf(Response::class);
     
     // Check if cache file was created
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     expect(file_exists($cacheFile))->toBeTrue();
     expect(file_get_contents($cacheFile))->toBe('https://api.acceptance.myparcel.nl');
 });
 
 it('handles exceptions gracefully', function () {
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
     $apiService = mock(ApiServiceInterface::class);
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
     
     $apiService->shouldReceive('setBaseUrl')
@@ -87,7 +91,9 @@ it('handles exceptions gracefully', function () {
 });
 
 it('calls UPDATE_ACCOUNT action after successful switch', function () {
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
     $apiService = mock(ApiServiceInterface::class);
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
     
     $apiService->shouldReceive('setBaseUrl')
@@ -107,7 +113,9 @@ it('calls UPDATE_ACCOUNT action after successful switch', function () {
 });
 
 it('logs success message', function () {
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
     $apiService = mock(ApiServiceInterface::class);
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
     
     $apiService->shouldReceive('setBaseUrl')
@@ -127,7 +135,9 @@ it('logs success message', function () {
 });
 
 it('logs error message when exception occurs', function () {
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
     $apiService = mock(ApiServiceInterface::class);
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
     
     $apiService->shouldReceive('setBaseUrl')
@@ -144,7 +154,9 @@ it('logs error message when exception occurs', function () {
 });
 
 it('updates account settings with empty array', function () {
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
     $apiService = mock(ApiServiceInterface::class);
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
     
     $apiService->shouldReceive('setBaseUrl')

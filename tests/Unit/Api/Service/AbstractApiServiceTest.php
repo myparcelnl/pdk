@@ -103,7 +103,7 @@ it('creates log context with obfuscated authorization header', function () {
 
 it('gets base url with acceptance cache file', function () {
     // Create acceptance cache file
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
     
     try {
@@ -122,7 +122,7 @@ it('gets base url with acceptance cache file', function () {
 
 it('gets base url without acceptance cache file', function () {
     // Ensure no cache file exists
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     if (file_exists($cacheFile)) {
         unlink($cacheFile);
     }
@@ -136,7 +136,7 @@ it('gets base url without acceptance cache file', function () {
 
 it('detects connection to acceptance environment when cache file exists', function () {
     // Create acceptance cache file
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
     
     try {
@@ -155,7 +155,7 @@ it('detects connection to acceptance environment when cache file exists', functi
 
 it('detects connection to production environment when cache file does not exist', function () {
     // Ensure no cache file exists
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     if (file_exists($cacheFile)) {
         unlink($cacheFile);
     }
