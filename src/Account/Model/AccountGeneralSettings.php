@@ -36,7 +36,7 @@ class AccountGeneralSettings extends Model
     public function getIsTestAttribute(): bool
     {
         // Check if we're connected to acceptance environment
-        $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
         return file_exists($cacheFile);
     }
 }
