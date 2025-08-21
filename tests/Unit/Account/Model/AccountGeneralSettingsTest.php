@@ -11,7 +11,7 @@ usesShared(new UsesMockPdkInstance());
 
 beforeEach(function () {
     // Clean up any existing cache file
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     if (file_exists($cacheFile)) {
         unlink($cacheFile);
     }
@@ -19,7 +19,7 @@ beforeEach(function () {
 
 afterEach(function () {
     // Clean up cache file after each test
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     if (file_exists($cacheFile)) {
         unlink($cacheFile);
     }
@@ -27,7 +27,7 @@ afterEach(function () {
 
 it('returns true for isTest when connected to acceptance environment', function () {
     // Create acceptance cache file to simulate acceptance environment
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
     
     $settings = new AccountGeneralSettings();
@@ -37,7 +37,7 @@ it('returns true for isTest when connected to acceptance environment', function 
 
 it('returns false for isTest when connected to production environment', function () {
     // Ensure no cache file exists to simulate production environment
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
     if (file_exists($cacheFile)) {
         unlink($cacheFile);
     }

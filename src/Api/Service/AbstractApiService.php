@@ -97,7 +97,7 @@ abstract class AbstractApiService implements ApiServiceInterface
     public function getBaseUrl(): string
     {
         // First check if there's an acceptance URL stored in a file
-        $cacheFile         = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        $cacheFile         = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
         $fileAcceptanceUrl = file_exists($cacheFile) ? file_get_contents($cacheFile) : null;
 
         if ($fileAcceptanceUrl) {
@@ -122,7 +122,7 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     public function isConnectedToAcceptance(): bool
     {
-        $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+        $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
         return file_exists($cacheFile);
     }
 

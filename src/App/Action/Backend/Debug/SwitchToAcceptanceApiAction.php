@@ -52,7 +52,7 @@ class SwitchToAcceptanceApiAction implements ActionInterface
         try {
             // Store the acceptance API URL in a file for persistence
             $acceptanceUrl = 'https://api.acceptance.myparcel.nl';
-            $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+            $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
             file_put_contents($cacheFile, $acceptanceUrl);
 
             // Switch the base URL to the acceptance API for the current session
