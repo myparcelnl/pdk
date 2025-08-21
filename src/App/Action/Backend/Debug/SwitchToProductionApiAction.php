@@ -50,7 +50,7 @@ class SwitchToProductionApiAction implements ActionInterface
     {
         try {
             // Remove the acceptance API URL from the cache file
-            $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
+            $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
             if (file_exists($cacheFile)) {
                 unlink($cacheFile);
             }
