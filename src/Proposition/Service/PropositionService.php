@@ -19,6 +19,12 @@ use RuntimeException;
 class PropositionService
 {
     /**
+     * Static cache for proposition configs
+     * @var array<string, PropositionConfig>
+     */
+    private static $configCache = [];
+
+    /**
      * Get the active proposition name.
      * This is used to fetch the proposition config.
      *
@@ -37,9 +43,41 @@ class PropositionService
     public function getPropositionConfig(): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
         $propositionName = $this->getActivePropositionName();
-        // @todo basic static caching implementation
-        // @todo also add DB storage at some point
-        return $this->fetchPropositionConfig($propositionName);
+        
+        // Check if config is already cached
+        if (isset(self::$configCache[$propositionName])) {
+            Logger::debug('Proposition config loaded from cache', ['proposition' => $propositionName]);
+            return self::$configCache[$propositionName];
+        }
+        
+        // Fetch and cache the config
+        Logger::debug('Proposition config loaded from source', ['proposition' => $propositionName]);
+        $config = $this->fetchPropositionConfig($propositionName);
+        self::$configCache[$propositionName] = $config;
+        
+        return $config;
+    }
+
+    /**
+     * Get a specific proposition config by name with caching.
+     *
+     * @param string $propositionName
+     * @return \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
+     */
+    public function getPropositionConfigByName(string $propositionName): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
+    {
+        // Check if config is already cached
+        if (isset(self::$configCache[$propositionName])) {
+            Logger::debug('Proposition config loaded from cache', ['proposition' => $propositionName]);
+            return self::$configCache[$propositionName];
+        }
+        
+        // Fetch and cache the config
+        Logger::debug('Proposition config loaded from source', ['proposition' => $propositionName]);
+        $config = $this->fetchPropositionConfig($propositionName);
+        self::$configCache[$propositionName] = $config;
+        
+        return $config;
     }
 
     /**
@@ -84,14 +122,31 @@ class PropositionService
 
         if ($filePath) {
             if (!file_exists($filePath)) {
+                Logger::error('Proposition config file not found', [
+                    'proposition' => $propositionName,
+                    'filePath' => $filePath
+                ]);
                 throw new \InvalidArgumentException(sprintf('Proposition config name %s does not exist', $propositionName));
             }
             $configData = file_get_contents($filePath);
+            if ($configData === false) {
+                Logger::error('Failed to read proposition config file', [
+                    'proposition' => $propositionName,
+                    'filePath' => $filePath
+                ]);
+                throw new \RuntimeException(sprintf('Failed to read proposition config file: %s', $filePath));
+            }
         }
 
         $configArray = json_decode($configData, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException(sprintf('Invalid JSON in proposition config file: %s %s', $filePath, $url));
+            Logger::error('Invalid JSON in proposition config', [
+                'proposition' => $propositionName,
+                'filePath' => $filePath,
+                'url' => $url,
+                'jsonError' => json_last_error_msg()
+            ]);
+            throw new \RuntimeException(sprintf('Invalid JSON in proposition config file: %s %s - Error: %s', $filePath, $url, json_last_error_msg()));
         }
 
         // Create a PropositionConfig instance from the array
@@ -153,6 +208,149 @@ class PropositionService
             $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
         return $this->getCarriers()->where('id', $defaultCarrierId)->first();
+    }
+
+    /**
+     * Clear the proposition config cache.
+     * This is useful for testing or when configs need to be refreshed.
+     *
+     * @param string|null $propositionName If provided, only clear cache for this specific proposition
+     * @return void
+     */
+    public function clearCache(?string $propositionName = null): void
+    {
+        if ($propositionName) {
+            unset(self::$configCache[$propositionName]);
+            Logger::debug('Proposition config cache cleared for specific proposition', ['proposition' => $propositionName]);
+        } else {
+            self::$configCache = [];
+            Logger::debug('Proposition config cache cleared for all propositions');
+        }
+    }
+
+    /**
+     * Check if a proposition config is cached.
+     *
+     * @param string $propositionName
+     * @return bool
+     */
+    public function isCached(string $propositionName): bool
+    {
+        return isset(self::$configCache[$propositionName]);
+    }
+
+    /**
+     * Get the number of cached proposition configs.
+     *
+     * @return int
+     */
+    public function getCacheSize(): int
+    {
+        return count(self::$configCache);
+    }
+
+    /**
+     * Get cache statistics for monitoring.
+     *
+     * @return array
+     */
+    public function getCacheStats(): array
+    {
+        return [
+            'size' => count(self::$configCache),
+            'cached_propositions' => array_keys(self::$configCache),
+            'memory_usage' => memory_get_usage(true),
+        ];
+    }
+
+    /**
+     * Map new carrier name (SCREAMING_SNAKE_CASE) to legacy name (lowercase).
+     * This is used for backwards compatibility with existing settings.
+     *
+     * @param string $newCarrierName
+     * @return string
+     */
+    public function mapNewToLegacyCarrierName(string $newCarrierName): string
+    {
+        $mapping = [
+            'POSTNL' => 'postnl',
+            'BPOST' => 'bpost',
+            'CHEAP_CARGO' => 'cheapcargo',
+            'DPD' => 'dpd',
+            'INSTABOX' => 'instabox',
+            'DHL' => 'dhl',
+            'BOL' => 'bol.com',
+            'UPS_STANDARD' => 'upsstandard',
+            'UPS_EXPRESS_SAVER' => 'upsexpresssaver',
+            'DHL_FOR_YOU' => 'dhlforyou',
+            'DHL_PARCEL_CONNECT' => 'dhlparcelconnect',
+            'DHL_EUROPLUS' => 'dhleuroplus',
+            'GLS' => 'gls',
+        ];
+
+        return $mapping[$newCarrierName] ?? strtolower($newCarrierName);
+    }
+
+    /**
+     * Map legacy carrier name (lowercase) to new name (SCREAMING_SNAKE_CASE).
+     * This is used for forwards compatibility when reading settings.
+     *
+     * @param string $legacyCarrierName
+     * @return string
+     */
+    public function mapLegacyToNewCarrierName(string $legacyCarrierName): string
+    {
+        $mapping = [
+            'postnl' => 'POSTNL',
+            'bpost' => 'BPOST',
+            'cheapcargo' => 'CHEAP_CARGO',
+            'dpd' => 'DPD',
+            'instabox' => 'INSTABOX',
+            'dhl' => 'DHL',
+            'bol.com' => 'BOL',
+            'upsstandard' => 'UPS_STANDARD',
+            'upsexpresssaver' => 'UPS_EXPRESS_SAVER',
+            'dhlforyou' => 'DHL_FOR_YOU',
+            'dhlparcelconnect' => 'DHL_PARCEL_CONNECT',
+            'dhleuroplus' => 'DHL_EUROPLUS',
+            'gls' => 'GLS',
+        ];
+
+        return $mapping[$legacyCarrierName] ?? strtoupper($legacyCarrierName);
+    }
+
+    /**
+     * Get the legacy external identifier for a carrier.
+     * This combines the legacy carrier name with the contract ID if present.
+     *
+     * @param Carrier $carrier
+     * @return string
+     */
+    public function getLegacyExternalIdentifier(Carrier $carrier): string
+    {
+        $legacyName = $this->mapNewToLegacyCarrierName($carrier->name);
+        
+        if ($carrier->contractId) {
+            return $legacyName . ':' . $carrier->contractId;
+        }
+        
+        return $legacyName;
+    }
+
+    /**
+     * Get the new external identifier for a carrier.
+     * This combines the new carrier name with the contract ID if present.
+     *
+     * @param Carrier $carrier
+     * @return string
+     */
+    public function getNewExternalIdentifier(Carrier $carrier): string
+    {
+        if ($carrier->contractId) {
+            return $carrier->name . ':' . $carrier->contractId;
+        }
+        
+        return $carrier->name;
     }
 
     /**
