@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
-use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -65,7 +65,7 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Platform::PLATFORMS_TO_LEGACY_MAP[Pdk::get('platform')] ?? Pdk::get('platform');
+        // Get platform from proposition service for backwards compatibility\n        try {\n            $propositionService = Pdk::get(PropositionService::class);\n            $proposition = $propositionService->getPropositionConfig();\n            $platformConfig = $propositionService->mapToPlatformConfig($proposition);\n            $this->platform = $platformConfig['name'];\n        } catch (\Exception $e) {\n            // Fallback to direct platform value\n            $this->platform = Pdk::get('platform');\n        }
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 

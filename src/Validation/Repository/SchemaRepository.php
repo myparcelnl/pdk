@@ -10,7 +10,7 @@ use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 class SchemaRepository extends Repository
 {
@@ -52,7 +52,7 @@ class SchemaRepository extends Repository
             $this->getKey($carrier, $cc, $packageType, $deliveryType),
             function () use ($deliveryType, $packageType, $cc, $carrier) {
                 $schema         = Config::get('schema/order');
-                $platformSchema = Config::get(sprintf('validation/%s/order', Platform::get('name')));
+                $platformSchema = Config::get(sprintf('validation/%s/order', $this->getPlatformName()));
 
                 /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
                 $countryService = Pdk::get(CountryServiceInterface::class);
@@ -182,12 +182,30 @@ class SchemaRepository extends Repository
                 $nestedSchema = $this->mergeSchemas(
                     $nestedSchema,
                     is_string($foundAdditions['schema'])
-                        ? Config::get(sprintf('schema/%s/%s', Platform::get('name'), $foundAdditions['schema']))
+                        ? Config::get(sprintf('schema/%s/%s', $this->getPlatformName(), $foundAdditions['schema']))
                         : $foundAdditions['schema']
                 );
             }
         }
 
         return $nestedSchema;
+    }
+
+    /**
+     * Get platform name from proposition service.
+     *
+     * @return string
+     */
+    private function getPlatformName(): string
+    {
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
+            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+            return $platformConfig['name'] ?? 'myparcel-nederland';
+        } catch (\Exception $e) {
+            // Fallback to default platform name if proposition service is not available
+            return 'myparcel-nederland';
+        }
     }
 }

@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -27,11 +28,18 @@ class SettingsManager implements SettingsManagerInterface
     protected $repository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository
+     * @var \MyParcelNL\Pdk\Proposition\Service\PropositionService
      */
-    public function __construct(PdkSettingsRepositoryInterface $repository)
+    protected $propositionService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository
+     * @param  \MyParcelNL\Pdk\Proposition\Service\PropositionService $propositionService
+     */
+    public function __construct(PdkSettingsRepositoryInterface $repository, PropositionService $propositionService)
     {
         $this->repository = $repository;
+        $this->propositionService = $propositionService;
     }
 
     /**
@@ -87,14 +95,20 @@ class SettingsManager implements SettingsManagerInterface
         /** @var Collection $carrierSettings */
         $carrierSettings = $defaults->get(CarrierSettings::ID);
 
-        $keyedCarriers = Platform::getCarriers()
-            ->keyBy('name');
+        // Get carriers from proposition service and map to legacy names for settings compatibility
+        $carriers = $this->propositionService->getCarriers();
+        $legacyCarrierKeys = [];
+
+        foreach ($carriers as $carrier) {
+            $legacyKey = $this->propositionService->getLegacyExternalIdentifier($carrier);
+            $legacyCarrierKeys[$legacyKey] = $carrier;
+        }
 
         // add any keys that are not present yet from allowed carriers to $carrierSettings
-        (new Collection($keyedCarriers))->keys()
+        (new Collection($legacyCarrierKeys))->keys()
             ->diff($carrierSettings->keys())
-            ->each(function ($carrier) use ($carrierSettings) {
-                $carrierSettings->put($carrier, new Collection());
+            ->each(function ($legacyKey) use ($carrierSettings) {
+                $carrierSettings->put($legacyKey, new Collection());
             });
 
         /** @var Collection $globalDefaults */
@@ -111,5 +125,31 @@ class SettingsManager implements SettingsManagerInterface
             });
 
         $defaults->put(CarrierSettings::ID, $mergedCarrierSettings);
+    }
+
+    /**
+     * Get carrier settings with legacy name mapping for backwards compatibility.
+     *
+     * @param string $carrierName The new carrier name (SCREAMING_SNAKE_CASE)
+     * @return array|null
+     */
+    public function getCarrierSettings(string $carrierName): ?array
+    {
+        $legacyName = $this->propositionService->mapNewToLegacyCarrierName($carrierName);
+        return $this->get($legacyName, CarrierSettings::ID);
+    }
+
+    /**
+     * Set carrier settings with legacy name mapping for backwards compatibility.
+     *
+     * @param string $carrierName The new carrier name (SCREAMING_SNAKE_CASE)
+     * @param array $settings
+     * @return void
+     */
+    public function setCarrierSettings(string $carrierName, array $settings): void
+    {
+        $legacyName = $this->propositionService->mapNewToLegacyCarrierName($carrierName);
+        $key = sprintf('%s.%s', CarrierSettings::ID, $legacyName);
+        $this->repository->store(Pdk::get('createSettingsKey')($key), $settings);
     }
 }

@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 
 /**
@@ -218,7 +218,16 @@ class Carrier extends Model
             // If neither the id or name is provided, fallback to the default carrier
             // Prevents the default carrier being returned if an unknown ID is provided
             if (!$carrierInput['id'] && !$carrierInput['name']) {
-                $carrierInput['name'] = Platform::get('defaultCarrier');
+                try {
+                    $propositionService = Pdk::get(PropositionService::class);
+                    $proposition = $propositionService->getPropositionConfig();
+                    $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+                    $carrierInput['name'] = $platformConfig['defaultCarrier'];
+                } catch (\Exception $e) {
+                    // Fallback to a safe default if proposition service is not available
+                    $carrierInput['name'] = 'POSTNL';
+                }
+                
                 Logger::warning(
                     'Carrier Name and ID not given, instantiating default Carrier model',
                     [
@@ -277,8 +286,10 @@ class Carrier extends Model
      */
     public function getTypeAttribute(): string
     {
-        if ($this->type) {
-            return $this->type;
+        // Read raw attribute to avoid calling the accessor recursively
+        $explicitType = $this->attributes['type'] ?? null;
+        if ($explicitType) {
+            return $explicitType;
         }
         return $this->contractId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
     }
