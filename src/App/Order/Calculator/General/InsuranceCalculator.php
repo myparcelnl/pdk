@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -111,7 +111,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getInsuranceUpToKey(?string $cc): string
     {
-        $country = $cc ?? Platform::get('localCountry');
+        $country = $cc ?? $this->getLocalCountry();
 
         if ($this->countryService->isLocalCountry($country)) {
             return CarrierSettings::EXPORT_INSURANCE_UP_TO;
@@ -138,7 +138,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     {
         // Get a schema resolved to this specific order's combination of carrier, country, package type and delivery type.
         $orderSchema = $this->schemaRepository->getOrderValidationSchema(
-            $this->order->deliveryOptions->carrier->name ?? Platform::get('defaultCarrier'),
+            $this->order->deliveryOptions->carrier->name ?? $this->getDefaultCarrier(),
             $this->order->shippingAddress->cc ?? null,
             $this->order->deliveryOptions->packageType,
             $this->order->deliveryOptions->deliveryType
@@ -175,5 +175,41 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         }
 
         return $orderAmount;
+    }
+
+    /**
+     * Get local country from proposition config.
+     *
+     * @return string
+     */
+    private function getLocalCountry(): string
+    {
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
+            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+            return $platformConfig['localCountry'] ?? 'NL';
+        } catch (\Exception $e) {
+            // Fallback to NL if proposition service is not available
+            return 'NL';
+        }
+    }
+
+    /**
+     * Get default carrier from proposition config.
+     *
+     * @return string
+     */
+    private function getDefaultCarrier(): string
+    {
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
+            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+            return $platformConfig['defaultCarrier'] ?? 'POSTNL';
+        } catch (\Exception $e) {
+            // Fallback to POSTNL if proposition service is not available
+            return 'POSTNL';
+        }
     }
 }

@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
@@ -130,8 +131,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
+        $propositionService = Pdk::get(PropositionService::class);
+        
         foreach ($carriers->all() as $carrier) {
-            $identifier                               = Carrier::CARRIER_NAME_TO_LEGACY_MAP[$carrier->externalIdentifier] ?? strtolower($carrier->externalIdentifier);
+            $identifier = $propositionService->getLegacyExternalIdentifier($carrier);
             $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 

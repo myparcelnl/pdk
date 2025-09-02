@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 /**
@@ -266,8 +268,19 @@ class CarrierSettings extends AbstractSettingsModel
             $carrier = $carrier->externalIdentifier;
         }
 
+        // Try to get settings using the carrier identifier as-is (for backwards compatibility)
         /** @var null|\MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings */
         $settings = Settings::all()->carrier->get($carrier);
+
+        if (! $settings) {
+            // If not found, try mapping the carrier name to legacy format
+            $propositionService = Pdk::get(PropositionService::class);
+            $legacyIdentifier = $propositionService->mapNewToLegacyCarrierName($carrier);
+            
+            if ($legacyIdentifier !== $carrier) {
+                $settings = Settings::all()->carrier->get($legacyIdentifier);
+            }
+        }
 
         if (! $settings) {
             return new CarrierSettings();

@@ -9,7 +9,8 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Notifications;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -121,20 +122,38 @@ class PostReturnShipmentsRequest extends Request
     private function ensureReturnCapabilities(Shipment $shipment): Shipment
     {
         $carrierId = $shipment->carrier->id;
-        $carrier   = Platform::getCarriers()
-            ->firstWhere('id', $carrierId);
+        
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $carrier = $propositionService->getCarriers()
+                ->firstWhere('id', $carrierId);
 
-        if (! $carrier || ! $carrier->returnCapabilities) {
+            if (! $carrier || ! $carrier->returnCapabilities) {
+                $proposition = $propositionService->getPropositionConfig();
+                $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+                
+                Notifications::warning(
+                    "{$shipment->carrier->human} has no return capabilities",
+                    'Return shipment exported with default carrier ' . $platformConfig['defaultCarrier'],
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                $shipment->carrier = new Carrier(['carrierId' => $platformConfig['defaultCarrierId']]);
+            }
+        } catch (\Exception $e) {
+            // Fallback to default behavior if proposition service is not available
             Notifications::warning(
                 "{$shipment->carrier->human} has no return capabilities",
-                'Return shipment exported with default carrier ' . Platform::get('defaultCarrier'),
+                'Return shipment exported with default carrier (fallback)',
                 Notification::CATEGORY_ACTION,
                 [
                     'action'   => PdkBackendActions::EXPORT_RETURN,
                     'orderIds' => $shipment->referenceIdentifier,
                 ]
             );
-            $shipment->carrier = new Carrier(['carrierId' => Platform::get('defaultCarrierId')]);
         }
 
         return $shipment;
