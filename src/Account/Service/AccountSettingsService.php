@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
@@ -57,7 +57,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             return new CarrierCollection();
         }
 
-        $allowedCarriers = Platform::getCarriers();
+        $allowedCarriers = $this->getPropositionCarriers();
 
         return $shop->carriers
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {
@@ -160,5 +160,21 @@ class AccountSettingsService implements AccountSettingsServiceInterface
                 ->contains(function (Carrier $carrier) use ($carrierName) {
                     return $carrier->name === $carrierName;
                 });
+    }
+
+    /**
+     * Get carriers from proposition service.
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    private function getPropositionCarriers(): CarrierCollection
+    {
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            return $propositionService->getCarriers();
+        } catch (\Exception $e) {
+            // Fallback to empty collection if proposition service is not available
+            return new CarrierCollection();
+        }
     }
 }
