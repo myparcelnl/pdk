@@ -1,0 +1,241 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MyParcelNL\Pdk\Frontend\Service;
+
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+
+/**
+ * FrontendDataAdapter converts new proposition configuration data to the old format
+ * that JS-PDK and Delivery Options expect. This ensures backwards compatibility
+ * while the backend uses the new proposition configuration.
+ */
+class FrontendDataAdapter implements FrontendDataAdapterInterface
+{
+    /**
+     * @var \MyParcelNL\Pdk\Proposition\Service\PropositionService
+     */
+    private $propositionService;
+
+    public function __construct(PropositionService $propositionService)
+    {
+        $this->propositionService = $propositionService;
+    }
+
+    /**
+     * Get carriers in the old format that JS-PDK and Delivery Options expect.
+     * This converts the new proposition config carriers to the old carrier structure.
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    public function getLegacyCarriers(): CarrierCollection
+    {
+        $propositionCarriers = $this->propositionService->getCarriers();
+        $legacyCarriers = new CarrierCollection();
+
+        foreach ($propositionCarriers as $carrier) {
+            $legacyCarrier = $this->convertCarrierToLegacyFormat($carrier);
+            $legacyCarriers->push($legacyCarrier);
+        }
+
+        return $legacyCarriers;
+    }
+
+    /**
+     * Convert a new proposition carrier to the old legacy format.
+     *
+     * @param Carrier $carrier
+     * @return Carrier
+     */
+    private function convertCarrierToLegacyFormat(Carrier $carrier): Carrier
+    {
+        // Create legacy carrier data structure
+        $legacyData = [
+            'id' => $carrier->id,
+            'name' => $this->propositionService->mapNewToLegacyCarrierName($carrier->name),
+            'human' => $carrier->human ?? $carrier->name,
+            'externalIdentifier' => $this->propositionService->getLegacyExternalIdentifier($carrier),
+            'enabled' => $carrier->enabled ?? true,
+            'isDefault' => $carrier->isDefault ?? false,
+            'optional' => $carrier->optional ?? false,
+            'primary' => $carrier->primary ?? false,
+            'type' => $carrier->type ?? 'main',
+        ];
+
+        // Add legacy capabilities structure
+        if ($carrier->outboundFeatures) {
+            $legacyData['capabilities'] = $this->convertCapabilitiesToLegacyFormat($carrier->outboundFeatures);
+        }
+
+        // Add return capabilities
+        if ($carrier->inboundFeatures) {
+            $legacyData['returnCapabilities'] = $this->convertCapabilitiesToLegacyFormat($carrier->inboundFeatures);
+        }
+
+        return new Carrier($legacyData);
+    }
+
+    /**
+     * Convert new proposition capabilities to the old legacy format.
+     *
+     * @param mixed $features
+     * @return array
+     */
+    private function convertCapabilitiesToLegacyFormat($features): array
+    {
+        if (!$features) {
+            return [];
+        }
+
+        $legacyCapabilities = [];
+
+        // Convert package types
+        if (isset($features->packageTypes)) {
+            $legacyCapabilities['packageTypes'] = array_map(function ($packageType) {
+                return $this->propositionService->packageTypeNameForDeliveryOptions($packageType) ?? strtolower($packageType);
+            }, $features->packageTypes);
+        }
+
+        // Convert delivery types
+        if (isset($features->deliveryTypes)) {
+            $legacyCapabilities['deliveryTypes'] = array_map(function ($deliveryType) {
+                return $this->propositionService->deliveryTypeNameForDeliveryOptions($deliveryType) ?? strtolower($deliveryType);
+            }, $features->deliveryTypes);
+        }
+
+        // Convert shipment options - these should be boolean values or arrays for insurance
+        if (isset($features->shipmentOptions)) {
+            $legacyCapabilities['shipmentOptions'] = [];
+            foreach ($features->shipmentOptions as $option) {
+                $legacyOptionName = $this->propositionService->shipmentOptionNameForDeliveryOptions($option);
+                if ($legacyOptionName) {
+                    // Special handling for insurance which should be an array of values
+                    if ($legacyOptionName === 'insurance') {
+                        $legacyCapabilities['shipmentOptions'][$legacyOptionName] = [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000];
+                    } else {
+                        $legacyCapabilities['shipmentOptions'][$legacyOptionName] = true;
+                    }
+                }
+            }
+        }
+
+        // Convert metadata to features
+        if (isset($features->metadata)) {
+            $legacyCapabilities['features'] = $this->convertMetadataToLegacyFormat($features->metadata);
+        }
+
+        return $legacyCapabilities;
+    }
+
+    /**
+     * Convert new proposition metadata to the old legacy format.
+     *
+     * @param mixed $metadata
+     * @return array
+     */
+    private function convertMetadataToLegacyFormat($metadata): array
+    {
+        if (!$metadata) {
+            return [];
+        }
+
+        $legacyFeatures = [];
+
+        // Map common metadata fields
+        if (isset($metadata->labelDescriptionLength)) {
+            $legacyFeatures['labelDescriptionLength'] = $metadata->labelDescriptionLength;
+        }
+
+        if (isset($metadata->carrierSmallPackageContract)) {
+            $legacyFeatures['carrierSmallPackageContract'] = $metadata->carrierSmallPackageContract;
+        }
+
+        if (isset($metadata->multiCollo)) {
+            $legacyFeatures['multiCollo'] = $metadata->multiCollo;
+        }
+
+        if (isset($metadata->insuranceOptions)) {
+            $legacyFeatures['insuranceOptions'] = $metadata->insuranceOptions;
+        }
+
+        return $legacyFeatures;
+    }
+
+    /**
+     * Get package types in the old format.
+     *
+     * @return array
+     */
+    public function getLegacyPackageTypes(): array
+    {
+        $proposition = $this->propositionService->getPropositionConfig();
+        $packageTypes = [];
+
+        foreach ($proposition->contracts->available as $contract) {
+            if ($contract->outboundFeatures && isset($contract->outboundFeatures->packageTypes)) {
+                foreach ($contract->outboundFeatures->packageTypes as $packageType) {
+                    $legacyPackageType = $this->propositionService->packageTypeNameForDeliveryOptions($packageType);
+                    if ($legacyPackageType && !in_array($legacyPackageType, $packageTypes)) {
+                        $packageTypes[] = $legacyPackageType;
+                    }
+                }
+            }
+        }
+
+        return $packageTypes;
+    }
+
+    /**
+     * Get delivery types in the old format.
+     *
+     * @return array
+     */
+    public function getLegacyDeliveryTypes(): array
+    {
+        $proposition = $this->propositionService->getPropositionConfig();
+        $deliveryTypes = [];
+
+        foreach ($proposition->contracts->available as $contract) {
+            if ($contract->outboundFeatures && isset($contract->outboundFeatures->deliveryTypes)) {
+                foreach ($contract->outboundFeatures->deliveryTypes as $deliveryType) {
+                    $legacyDeliveryType = $this->propositionService->deliveryTypeNameForDeliveryOptions($deliveryType);
+                    if ($legacyDeliveryType && !in_array($legacyDeliveryType, $deliveryTypes)) {
+                        $deliveryTypes[] = $legacyDeliveryType;
+                    }
+                }
+            }
+        }
+
+        return $deliveryTypes;
+    }
+
+    /**
+     * Get shipment options in the old format.
+     *
+     * @return array
+     */
+    public function getLegacyShipmentOptions(): array
+    {
+        $proposition = $this->propositionService->getPropositionConfig();
+        $shipmentOptions = [];
+
+        foreach ($proposition->contracts->available as $contract) {
+            if ($contract->outboundFeatures && isset($contract->outboundFeatures->shipmentOptions)) {
+                foreach ($contract->outboundFeatures->shipmentOptions as $option) {
+                    $legacyOption = $this->propositionService->shipmentOptionNameForDeliveryOptions($option);
+                    if ($legacyOption && !in_array($legacyOption, $shipmentOptions)) {
+                        $shipmentOptions[] = $legacyOption;
+                    }
+                }
+            }
+        }
+
+        return $shipmentOptions;
+    }
+}
