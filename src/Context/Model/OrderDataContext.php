@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
@@ -85,7 +86,7 @@ class OrderDataContext extends PdkOrder
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
         $service = Pdk::get(PdkOrderOptionsServiceInterface::class);
 
-        $carriers = AccountSettings::getCarriers();
+        $carriers = FrontendData::getLegacyCarriers();
 
         return (new Collection($carriers))->mapWithKeys(function (Carrier $carrier) use ($service): array {
             $clonedOrder = new PdkOrder($this->only(['deliveryOptions', 'lines']));

@@ -157,7 +157,7 @@ class PropositionService
 
     /**
      * Get the carriers from the proposition config as CarrierCollection.
-     * @param $legacyFormat Whether to return the carriers in the legacy format (lowercase) or the new format (SCREAMING_SNAKE_CASE).
+     * @param bool $legacyFormat Whether to return the carriers in the legacy format (lowercase) or the new format (SCREAMING_SNAKE_CASE).
      *           Legacy = "postnl", "dhlparcelconnect", "bpost", etc.
      *           New = "POSTNL", "DHL_PARCEL_CONNECT", "BPOST", etc.
      * @return CarrierCollection
