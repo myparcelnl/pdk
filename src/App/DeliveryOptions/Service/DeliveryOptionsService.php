@@ -15,8 +15,10 @@ use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
@@ -85,27 +87,35 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $triStateService;
 
     /**
+     * @var \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface
+     */
+    private $frontendDataAdapter;
+
+    /**
      * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      * @param  \MyParcelNL\Pdk\Types\Service\TriStateService             $triStateService
+     * @param  \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface $frontendDataAdapter
      */
     public function __construct(
-        CountryServiceInterface  $countryService,
-        CurrencyServiceInterface $currencyService,
-        DropOffServiceInterface  $dropOffService,
-        TaxServiceInterface      $taxService,
-        SchemaRepository         $schemaRepository,
-        TriStateService          $triStateService
+        CountryServiceInterface     $countryService,
+        CurrencyServiceInterface    $currencyService,
+        DropOffServiceInterface     $dropOffService,
+        TaxServiceInterface         $taxService,
+        SchemaRepository            $schemaRepository,
+        TriStateService             $triStateService,
+        FrontendDataAdapterInterface $frontendDataAdapter
     ) {
-        $this->countryService   = $countryService;
-        $this->currencyService  = $currencyService;
-        $this->dropOffService   = $dropOffService;
-        $this->taxService       = $taxService;
-        $this->schemaRepository = $schemaRepository;
-        $this->triStateService  = $triStateService;
+        $this->countryService      = $countryService;
+        $this->currencyService     = $currencyService;
+        $this->dropOffService      = $dropOffService;
+        $this->taxService          = $taxService;
+        $this->schemaRepository    = $schemaRepository;
+        $this->triStateService     = $triStateService;
+        $this->frontendDataAdapter = $frontendDataAdapter;
     }
 
     /**
@@ -131,10 +141,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
-        $propositionService = Pdk::get(PropositionService::class);
+        // Use FrontendDataAdapter to get carriers in the old format for the frontend
+        $legacyCarriers = $this->frontendDataAdapter->getLegacyCarriers();
         
-        foreach ($carriers->all() as $carrier) {
-            $identifier = $propositionService->getLegacyExternalIdentifier($carrier);
+        foreach ($legacyCarriers->all() as $carrier) {
+            $identifier = $carrier->externalIdentifier;
             $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 
@@ -232,7 +243,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        $allCarriers     = AccountSettings::getCarriers();
+        $allCarriers     = $this->frontendDataAdapter->getLegacyCarriers();
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         // Get the package types from the cart
