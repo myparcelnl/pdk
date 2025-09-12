@@ -22,29 +22,20 @@
     },
     "consumerPortal": {
       "enabled": true,
-      "url": "https://subdomain.myparcel.me",
       "internationalization": {
-        "language": "nl-NL",
-        "supportedLanguages": ["nl-NL", "en-GB", "de-DE", "fr-FR", "es-ES", "it-IT"],
-        "timezone": "Europe/Amsterdam",
         "dateFormats": {
           "long": "D MMMM YYYY",
           "short": "DD-MM-YYYY",
           "time": "HH:mm"
-        }
-      }
+        },
+        "language": "nl-NL",
+        "supportedLanguages": ["nl-NL", "en-GB", "de-DE", "fr-FR", "es-ES", "it-IT"],
+        "timezone": "Europe/Amsterdam"
+      },
+      "url": "https://subdomain.myparcel.me"
     }
   },
   "assets": {
-    "logo": {
-      "medium": {
-        "url": "https://assets.myparcel.nl/skin/images/logo.svg"
-      },
-      "small": {
-        "url": "https://assets.myparcel.nl/skin/images/logo-icon.svg"
-      }
-    },
-    "url": "https://assets.myparcel.nl",
     "exampleDocuments": {
       "addresses": {
         "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-address-example.csv"
@@ -58,18 +49,27 @@
       "shipments": {
         "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-shipment-example.csv"
       }
-    }
+    },
+    "logo": {
+      "medium": {
+        "url": "https://assets.myparcel.nl/skin/images/logo.svg"
+      },
+      "small": {
+        "url": "https://assets.myparcel.nl/skin/images/logo-icon.svg"
+      }
+    },
+    "url": "https://assets.myparcel.nl"
   },
   "billing": {
-    "paymentProvider": "multisafepay",
     "bankMandate": {
       "flow": ["manual", "automatic"],
-      "manualBanks": ["bunq", "adyen", "revolute", "knab", "other"]
+      "manualBanks": ["bunq", "adyen", "revolut", "knab", "other"]
     },
     "newInvoiceDates": {
       "monthly": "2024-06-01",
       "weekly": "2024-05-13"
-    }
+    },
+    "paymentProvider": "multisafepay"
   },
   "browserExtension": {
     "downloadUrl": {
@@ -82,123 +82,17 @@
     "longitude": 5.6461,
     "zoom": 8
   },
-  "rules": {
-    "requiresEmailRecipient": false,
-    "country": {
-      "withAddressFinder": [
-        "AT",
-        "BE",
-        "CZ",
-        "DK",
-        "FI",
-        "FR",
-        "DE",
-        "IT",
-        "LU",
-        "NO",
-        "PL",
-        "SK",
-        "ES",
-        "SE",
-        "CH",
-        "US"
-      ],
-      "withBoxNumber": ["BE"],
-      "withRecommendedPhoneNumber": [],
-      "withRequiredEmail": ["NO"],
-      "withPossibleReturn": [
-        "AT",
-        "BE",
-        "BG",
-        "HR",
-        "CZ",
-        "EE",
-        "FI",
-        "FR",
-        "DE",
-        "GR",
-        "HU",
-        "IE",
-        "IT",
-        "LV",
-        "LT",
-        "LU",
-        "MT",
-        "NL",
-        "PT",
-        "RO",
-        "SK",
-        "SI",
-        "ES",
-        "GB"
-      ],
-      "withPartnerLinks": [
-        "AT",
-        "BE",
-        "BG",
-        "HR",
-        "CZ",
-        "DK",
-        "EE",
-        "FI",
-        "DE",
-        "GR",
-        "HU",
-        "IE",
-        "IT",
-        "LV",
-        "LT",
-        "LU",
-        "NO",
-        "PL",
-        "PT",
-        "RO",
-        "SK",
-        "SI",
-        "SE",
-        "CH",
-        "GB"
-      ],
-      "withRequiredPhoneNumber": [],
-      "withRequiredCompany": [],
-      "withRequiredLabelDescription": [],
-      "withRequiredHeight": [],
-      "withRequiredLength": [],
-      "withRequiredWidth": []
-    },
-    "carrier": {
-      "withRecommendedPhoneNumber": [],
-      "withRequiredEmail": ["UPS_STANDARD", "UPS_EXPRESS_SAVER", "DPD"],
-      "withRequiredPhoneNumber": ["UPS_STANDARD", "UPS_EXPRESS_SAVER"],
-      "withRequiredCompany": [],
-      "withRequiredLabelDescription": [],
-      "withRequiredHeight": [],
-      "withRequiredLength": [],
-      "withRequiredWidth": []
-    }
-  },
   "companyDetails": {
     "address": {
-      "countryCode": "NL",
+      "city": "Hoofddorp",
       "company": "MyParcel.nl",
-      "person": "",
-      "postalCode": "2132JE",
+      "countryCode": "NL",
+      "email": "info@myparcel.nl",
       "houseNumber": "31",
-      "street": "Antareslaan",
-      "city": "Hoofddorp",
+      "person": "",
       "phone": "023 303 1818",
-      "email": "info@myparcel.nl"
-    },
-    "returnAddress": {
-      "countryCode": "NL",
-      "company": "MyParcel.nl",
-      "person": "Afd. Retouren",
-      "postalCode": "2130AK",
-      "houseNumber": "442",
-      "street": "Postbus",
-      "city": "Hoofddorp",
-      "phone": "023 303 1818",
-      "email": "info@myparcel.nl"
+      "postalCode": "2132JE",
+      "street": "Antareslaan"
     },
     "billing": {
       "coc": "34 09 97 58"
@@ -207,33 +101,33 @@
       "phoneNumber": {
         "openingHours": [
           {
+            "closes": "18:30",
             "name": "monday",
-            "closes": "18:30",
             "opens": "08:00"
           },
           {
+            "closes": "18:30",
             "name": "tuesday",
-            "closes": "18:30",
             "opens": "08:00"
           },
           {
+            "closes": "18:30",
             "name": "wednesday",
-            "closes": "18:30",
             "opens": "08:00"
           },
           {
+            "closes": "18:30",
             "name": "thursday",
-            "closes": "18:30",
             "opens": "08:00"
           },
           {
+            "closes": "17:00",
             "name": "friday",
-            "closes": "17:00",
             "opens": "08:00"
           },
           {
-            "name": "saturday",
             "closes": "17:00",
+            "name": "saturday",
             "opens": "09:00"
           },
           {
@@ -246,33 +140,33 @@
       "whatsapp": {
         "openingHours": [
           {
+            "closes": "17:30",
             "name": "monday",
-            "closes": "17:30",
             "opens": "09:00"
           },
           {
+            "closes": "17:30",
             "name": "tuesday",
-            "closes": "17:30",
             "opens": "09:00"
           },
           {
+            "closes": "17:30",
             "name": "wednesday",
-            "closes": "17:30",
             "opens": "09:00"
           },
           {
+            "closes": "17:30",
             "name": "thursday",
-            "closes": "17:30",
             "opens": "09:00"
           },
           {
+            "closes": "17:00",
             "name": "friday",
-            "closes": "17:00",
             "opens": "09:00"
           },
           {
-            "name": "saturday",
             "closes": "17:00",
+            "name": "saturday",
             "opens": "09:00"
           },
           {
@@ -281,6 +175,17 @@
         ],
         "url": "https://api.whatsapp.com/send?phone=31233030315"
       }
+    },
+    "returnAddress": {
+      "city": "Hoofddorp",
+      "company": "MyParcel.nl",
+      "countryCode": "NL",
+      "email": "info@myparcel.nl",
+      "houseNumber": "442",
+      "person": "Afd. Retouren",
+      "phone": "023 303 1818",
+      "postalCode": "2130AK",
+      "street": "Postbus"
     }
   },
   "content": {
@@ -316,12 +221,16 @@
       "wix": "https://developer.myparcel.nl/nl/documentatie/20.wix.html"
     },
     "faq": {
+      "directPrinting": "https://faq.myparcel.nl/topics?inputdiv=Functionaliteiten",
       "postalCode": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001cIcIAI&displayContent=true",
-      "directPrinting": "https://faq.myparcel.nl/topics?inputdiv=Functionaliteiten"
+      "userManagement": {
+        "roleExplanationUrl": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000000aLFIAY&displayContent=true"
+      }
     },
     "finance": {
       "carrierComparePriceUrl": "https://myparcel.nl/tarieven/",
-      "priceScalesPolicy": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001bviIAA&displayContent=true"
+      "priceScalesPolicy": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001bviIAA&displayContent=true",
+      "tariffUrl": "https://tarief.douane.nl/ite-tariff-public/#/taric/nomenclature/sbn?d=I&l=nl&ql=nl"
     },
     "manuals": {
       "myContracts": {
@@ -414,8 +323,8 @@
           "id": 5,
           "name": "INSTABOX"
         },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true
+        "hasCutoffTime": false,
+        "hasPostponedDelivery": false
       },
       {
         "carrier": {
@@ -601,12 +510,14 @@
         }
       }
     ],
+    "enablePostNLCustomContract": true,
     "inbound": {
       "default": {
         "carrier": {
           "id": 1,
           "name": "POSTNL"
-        }
+        },
+        "id": 1
       }
     },
     "outbound": {
@@ -614,9 +525,14 @@
         "carrier": {
           "id": 1,
           "name": "POSTNL"
-        }
+        },
+        "id": 1
       }
     }
+  },
+  "collectTrip": {
+    "enabled": true,
+    "type": "internal"
   },
   "countryCode": "NL",
   "deliveryOptions": {
@@ -634,6 +550,9 @@
   "enableRetailLocations": true,
   "enableShipmentEstimate": true,
   "enableVATSupport": true,
+  "enableLocationFinder": true,
+  "enableFulfilment": true,
+  "enableOptionToHideMyParcelLogo": true,
   "integrations": {
     "available": [
       {
@@ -668,15 +587,110 @@
       "short": "DD-MM-YYYY",
       "time": "HH:mm"
     },
-    "timezone": "Europe/Amsterdam",
     "language": "nl-NL",
-    "supportedLanguages": ["nl-NL", "en-GB"]
+    "supportedLanguages": ["nl-NL", "en-GB"],
+    "timezone": "Europe/Amsterdam"
   },
   "proposition": {
     "id": 1,
     "key": "myparcel-nederland",
     "name": "MyParcel Nederland",
     "shortName": "MyParcel"
+  },
+  "rules": {
+    "carrier": {
+      "withRecommendedPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredEmail": ["UPS_STANDARD", "UPS_EXPRESS_SAVER", "DPD"],
+      "withRequiredHeight": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredLength": [],
+      "withRequiredPhoneNumber": ["UPS_STANDARD", "UPS_EXPRESS_SAVER"],
+      "withRequiredWidth": []
+    },
+    "country": {
+      "withAddressFinder": [
+        "AT",
+        "BE",
+        "CZ",
+        "DK",
+        "FI",
+        "FR",
+        "DE",
+        "IT",
+        "LU",
+        "NO",
+        "PL",
+        "SK",
+        "ES",
+        "SE",
+        "CH",
+        "US"
+      ],
+      "withBoxNumber": ["BE"],
+      "withPartnerLinks": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "NO",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "SE",
+        "CH",
+        "GB"
+      ],
+      "withPossibleReturn": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CZ",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "GB"
+      ],
+      "withRecommendedPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredEmail": ["NO"],
+      "withRequiredHeight": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredLength": [],
+      "withRequiredPhoneNumber": [],
+      "withRequiredWidth": []
+    },
+    "requiresEmailRecipient": false
   },
   "subscriptions": {
     "analytics": {
@@ -701,7 +715,6 @@
     "availableTypes": [
       {
         "id": 1,
-        "inForm": true,
         "name": "MyShipments",
         "subTypes": [
           "not_delivered",
@@ -710,63 +723,68 @@
           "damage",
           "return",
           "pallet_shipment_question"
-        ]
+        ],
+        "extraField": {
+          "name": "barcode",
+          "optional": false
+        }
       },
       {
         "id": 2,
-        "inForm": true,
         "name": "System",
-        "subTypes": ["plugin_question", "plugin_help_needed", "shipment_export_help_needed", "other_system_question"]
+        "subTypes": ["plugin_question", "plugin_help_needed", "shipment_export_help_needed", "other_system_question"],
+        "extraField": {
+          "name": "webshopSoftware",
+          "optional": true
+        }
       },
       {
         "id": 3,
-        "inForm": true,
         "name": "ProductsAndPrices",
         "subTypes": ["products", "rates", "packaging", "webshop_orders"]
       },
       {
         "id": 4,
-        "inForm": true,
         "name": "MyInvoice",
-        "subTypes": ["invoice_change_details", "invoice_other_question"]
-      },
-      {
-        "id": 5,
-        "inForm": true,
-        "name": "Different"
+        "subTypes": ["invoice_change_details", "invoice_other_question"],
+        "extraField": {
+          "name": "invoiceNumber",
+          "optional": true
+        }
       },
       {
         "id": 6,
-        "inForm": true,
         "name": "MyCollectTrip"
       },
       {
         "id": 7,
-        "inForm": true,
         "name": "Fulfilment"
       },
       {
-        "id": 8,
-        "inForm": false,
-        "name": "MyReturns"
+        "id": 5,
+        "name": "Different"
       }
     ],
     "flow": "advanced"
   },
   "tools": {
     "appcues": {
-      "id": "80838",
-      "enableLaunchpad": true
+      "enabled": true,
+      "enableLaunchpad": true,
+      "id": "80838"
     },
     "googleTagManager": {
+      "enabled": true,
       "id": "GTM-P5N4C5",
       "url": "https://sst.myparcel.nl/gtm.js"
     },
     "hotjar": {
-      "id": "598926",
-      "enableFeedbackModal": true
+      "enabled": true,
+      "enableFeedbackModal": true,
+      "id": "598926"
     },
     "oneTrust": {
+      "enabled": true,
       "id": "b1ddbed3-fb17-47c0-b165-1765146cbf5d"
     }
   },
