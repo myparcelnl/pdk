@@ -4,10 +4,10 @@
   "name": "DHL_FOR_YOU",
   "contractId": "23182",
   "enabled": true,
-  "isDefault": false,
+  "isDefault": true,
   "optional": false,
   "primary": false,
-  "type": "custom",
+  "type": "main",
   "inboundFeatures": {
     "packageTypes": ["PACKAGE"],
     "deliveryTypes": ["STANDARD_DELIVERY"],
@@ -17,7 +17,7 @@
     }
   },
   "outboundFeatures": {
-    "packageTypes": ["PACKAGE", "MAILBOX", "SMALL"],
+    "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
     "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
     "shipmentOptions": [
       "AGE_CHECK",
