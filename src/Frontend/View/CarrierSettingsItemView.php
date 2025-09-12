@@ -525,7 +525,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getFormattedCarrierName(): string
     {
-        return Str::snake(str_replace('.', '_', strtolower($this->carrier->name)));
+        $legacyName = Carrier::CARRIER_NAME_TO_LEGACY_MAP[$this->carrier->name] ?? $this->carrier->name;
+        return Str::snake(str_replace('.', '_', strtolower($legacyName)));
     }
 
     /**
