@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Platform\PlatformManager;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -43,18 +44,18 @@ class PropositionService
     public function getPropositionConfig(): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
         $propositionName = $this->getActivePropositionName();
-        
+
         // Check if config is already cached
         if (isset(self::$configCache[$propositionName])) {
             Logger::debug('Proposition config loaded from cache', ['proposition' => $propositionName]);
             return self::$configCache[$propositionName];
         }
-        
+
         // Fetch and cache the config
         Logger::debug('Proposition config loaded from source', ['proposition' => $propositionName]);
         $config = $this->fetchPropositionConfig($propositionName);
         self::$configCache[$propositionName] = $config;
-        
+
         return $config;
     }
 
@@ -71,12 +72,12 @@ class PropositionService
             Logger::debug('Proposition config loaded from cache', ['proposition' => $propositionName]);
             return self::$configCache[$propositionName];
         }
-        
+
         // Fetch and cache the config
         Logger::debug('Proposition config loaded from source', ['proposition' => $propositionName]);
         $config = $this->fetchPropositionConfig($propositionName);
         self::$configCache[$propositionName] = $config;
-        
+
         return $config;
     }
 
@@ -329,11 +330,11 @@ class PropositionService
     public function getLegacyExternalIdentifier(Carrier $carrier): string
     {
         $legacyName = $this->mapNewToLegacyCarrierName($carrier->name);
-        
+
         if ($carrier->contractId) {
             return $legacyName . ':' . $carrier->contractId;
         }
-        
+
         return $legacyName;
     }
 
@@ -349,7 +350,7 @@ class PropositionService
         if ($carrier->contractId) {
             return $carrier->name . ':' . $carrier->contractId;
         }
-        
+
         return $carrier->name;
     }
 
@@ -385,6 +386,10 @@ class PropositionService
     public function packageTypeNameForDeliveryOptions(string $packageType)
     {
         $supportedTypes = DeliveryOptions::PACKAGE_TYPES_NAMES;
+        // Specific conversion for SMALL_PACKAGE to package_small
+        if ($packageType === PropositionCarrierFeatures::PACKAGE_TYPE_PACKAGE_SMALL_NAME) {
+            return DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME;
+        }
         $converted = strtolower($packageType);
 
         return in_array($converted, $supportedTypes, true) ? $converted : false;

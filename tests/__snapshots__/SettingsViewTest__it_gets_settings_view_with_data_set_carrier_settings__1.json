@@ -6,7 +6,7 @@
   "elements": null,
   "children": [
     {
-      "id": "POSTNL",
+      "id": "postnl",
       "title": "carrier_postnl",
       "description": "settings_view_carrier_postnl_description",
       "elements": [
