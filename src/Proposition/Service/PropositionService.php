@@ -170,7 +170,6 @@ class PropositionService
             $carrierData = [
                 'name' => $contract['carrier']['name'],
                 'id' => $contract['carrier']['id'],
-                'contractId' => $contract['id'] ?? null,
                 'outboundFeatures' => $contract['outboundFeatures'] ?? [],
                 'inboundFeatures' => $contract['inboundFeatures'] ?? [],
             ];
@@ -186,7 +185,6 @@ class PropositionService
             $carrierData = [
                 'name' => $customContract['carrier']['name'],
                 'id' => $customContract['carrier']['id'],
-                'contractId' => $customContract['id'] ?? null,
                 'type' => Carrier::TYPE_CUSTOM
             ];
             $carrierModels[] = new Carrier($carrierData);

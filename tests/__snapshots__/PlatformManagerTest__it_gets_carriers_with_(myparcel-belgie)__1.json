@@ -65,15 +65,5 @@
         "insuranceOptions": [52000]
       }
     }
-  },
-  {
-    "externalIdentifier": "BOL",
-    "id": 7,
-    "name": "BOL",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
   }
 ]

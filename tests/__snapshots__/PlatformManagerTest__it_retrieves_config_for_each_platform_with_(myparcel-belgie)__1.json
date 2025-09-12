@@ -98,21 +98,6 @@
           "insuranceOptions": [52000]
         }
       }
-    },
-    {
-      "externalIdentifier": "BOL",
-      "id": 7,
-      "name": "BOL",
-      "human": null,
-      "contractId": null,
-      "enabled": true,
-      "isDefault": true,
-      "label": null,
-      "optional": false,
-      "primary": false,
-      "type": "main",
-      "inboundFeatures": null,
-      "outboundFeatures": null
     }
   ]
 }
