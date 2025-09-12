@@ -28,7 +28,7 @@
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL"],
+      "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
       "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
       "shipmentOptions": [
         "AGE_CHECK",
@@ -111,7 +111,7 @@
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL"],
+      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
       "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
       "shipmentOptions": [
         "AGE_CHECK",
@@ -225,19 +225,19 @@
     "id": 7,
     "name": "BOL",
     "enabled": true,
-    "isDefault": true,
+    "isDefault": false,
     "optional": false,
     "primary": false,
-    "type": "main"
+    "type": "custom"
   },
   {
     "externalIdentifier": "GLS",
     "id": 14,
     "name": "GLS",
     "enabled": true,
-    "isDefault": true,
+    "isDefault": false,
     "optional": false,
     "primary": false,
-    "type": "main"
+    "type": "custom"
   }
 ]
