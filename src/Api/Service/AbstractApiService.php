@@ -58,7 +58,7 @@ abstract class AbstractApiService implements ApiServiceInterface
         ];
 
         $logContext = $this->createLogContext($uri, $method, $options);
-        $response = null;
+        $response   = null;
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
@@ -96,6 +96,14 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     public function getBaseUrl(): string
     {
+        // First check if there's an acceptance URL stored in a file
+        $cacheFile         = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
+        $fileAcceptanceUrl = file_exists($cacheFile) ? file_get_contents($cacheFile) : null;
+
+        if ($fileAcceptanceUrl) {
+            return $fileAcceptanceUrl;
+        }
+
         return $this->baseUrl ?? Pdk::get('apiUrl');
     }
 
@@ -108,7 +116,19 @@ abstract class AbstractApiService implements ApiServiceInterface
     }
 
     /**
-     * @param string $baseUrl
+     * Check if currently connected to acceptance environment
+     *
+     * @return bool
+     */
+    public function isConnectedToAcceptance(): bool
+    {
+        $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
+        return file_exists($cacheFile);
+    }
+
+    /**
+     * @param  string $baseUrl
+     *
      * @return ApiServiceInterface
      */
     public function setBaseUrl(string $baseUrl): ApiServiceInterface
@@ -119,6 +139,7 @@ abstract class AbstractApiService implements ApiServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
+     *
      * @return string
      */
     protected function buildUri(RequestInterface $request): string
@@ -128,7 +149,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             trim($request->getPath(), '/'),
         ]);
 
-        if (!empty($request->getQueryString())) {
+        if (! empty($request->getQueryString())) {
             $url .= "?{$request->getQueryString()}";
         }
 
@@ -139,6 +160,7 @@ abstract class AbstractApiService implements ApiServiceInterface
      * @param  string $uri
      * @param  string $method
      * @param  array  $options
+     *
      * @return array
      */
     private function createLogContext(string $uri, string $method, array $options): array
