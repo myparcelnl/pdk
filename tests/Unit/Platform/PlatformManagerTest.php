@@ -31,7 +31,7 @@ it('gets specific keys from platform data', function () {
         ->and(PlatformFacade::get('localCountry'))
         ->toBe('BE')
         ->and(PlatformFacade::get('defaultCarrier'))
-        ->toBe('BPOST')
+        ->toBe('bpost')
         ->and(PlatformFacade::get('nonExistingKey'))
         ->toBeNull();
 });
