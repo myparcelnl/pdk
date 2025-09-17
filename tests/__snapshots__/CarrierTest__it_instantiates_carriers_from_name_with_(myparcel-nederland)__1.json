@@ -225,19 +225,19 @@
     "id": 7,
     "name": "BOL",
     "enabled": true,
-    "isDefault": false,
+    "isDefault": true,
     "optional": false,
     "primary": false,
-    "type": "custom"
+    "type": "main"
   },
   {
     "externalIdentifier": "GLS",
     "id": 14,
     "name": "GLS",
     "enabled": true,
-    "isDefault": false,
+    "isDefault": true,
     "optional": false,
     "primary": false,
-    "type": "custom"
+    "type": "main"
   }
 ]

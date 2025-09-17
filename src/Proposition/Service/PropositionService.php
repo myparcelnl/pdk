@@ -37,30 +37,18 @@ class PropositionService
     }
 
     /**
-     * Get the proposition config.
+     * Get the active proposition config.
      *
      * @return \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
      */
     public function getPropositionConfig(): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
         $propositionName = $this->getActivePropositionName();
-
-        // Check if config is already cached
-        if (isset(self::$configCache[$propositionName])) {
-            Logger::debug('Proposition config loaded from cache', ['proposition' => $propositionName]);
-            return self::$configCache[$propositionName];
-        }
-
-        // Fetch and cache the config
-        Logger::debug('Proposition config loaded from source', ['proposition' => $propositionName]);
-        $config = $this->fetchPropositionConfig($propositionName);
-        self::$configCache[$propositionName] = $config;
-
-        return $config;
+        return $this->getPropositionConfigByName($propositionName);
     }
 
     /**
-     * Get a specific proposition config by name with caching.
+     * Get a specific proposition config by name with static caching.
      *
      * @param string $propositionName
      * @return \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
@@ -69,7 +57,6 @@ class PropositionService
     {
         // Check if config is already cached
         if (isset(self::$configCache[$propositionName])) {
-            Logger::debug('Proposition config loaded from cache', ['proposition' => $propositionName]);
             return self::$configCache[$propositionName];
         }
 
@@ -271,22 +258,7 @@ class PropositionService
      */
     public function mapNewToLegacyCarrierName(string $newCarrierName): string
     {
-        $mapping = [
-            'POSTNL' => 'postnl',
-            'BPOST' => 'bpost',
-            'CHEAP_CARGO' => 'cheapcargo',
-            'DPD' => 'dpd',
-            'INSTABOX' => 'instabox',
-            'DHL' => 'dhl',
-            'BOL' => 'bol.com',
-            'UPS_STANDARD' => 'upsstandard',
-            'UPS_EXPRESS_SAVER' => 'upsexpresssaver',
-            'DHL_FOR_YOU' => 'dhlforyou',
-            'DHL_PARCEL_CONNECT' => 'dhlparcelconnect',
-            'DHL_EUROPLUS' => 'dhleuroplus',
-            'GLS' => 'gls',
-        ];
-
+        $mapping = Carrier::CARRIER_NAME_TO_LEGACY_MAP;
         return $mapping[$newCarrierName] ?? strtolower($newCarrierName);
     }
 
@@ -299,57 +271,8 @@ class PropositionService
      */
     public function mapLegacyToNewCarrierName(string $legacyCarrierName): string
     {
-        $mapping = [
-            'postnl' => 'POSTNL',
-            'bpost' => 'BPOST',
-            'cheapcargo' => 'CHEAP_CARGO',
-            'dpd' => 'DPD',
-            'instabox' => 'INSTABOX',
-            'dhl' => 'DHL',
-            'bol.com' => 'BOL',
-            'upsstandard' => 'UPS_STANDARD',
-            'upsexpresssaver' => 'UPS_EXPRESS_SAVER',
-            'dhlforyou' => 'DHL_FOR_YOU',
-            'dhlparcelconnect' => 'DHL_PARCEL_CONNECT',
-            'dhleuroplus' => 'DHL_EUROPLUS',
-            'gls' => 'GLS',
-        ];
-
+        $mapping = \array_flip(Carrier::CARRIER_NAME_TO_LEGACY_MAP);
         return $mapping[$legacyCarrierName] ?? strtoupper($legacyCarrierName);
-    }
-
-    /**
-     * Get the legacy external identifier for a carrier.
-     * This combines the legacy carrier name with the contract ID if present.
-     *
-     * @param Carrier $carrier
-     * @return string
-     */
-    public function getLegacyExternalIdentifier(Carrier $carrier): string
-    {
-        $legacyName = $this->mapNewToLegacyCarrierName($carrier->name);
-
-        if ($carrier->contractId) {
-            return $legacyName . ':' . $carrier->contractId;
-        }
-
-        return $legacyName;
-    }
-
-    /**
-     * Get the new external identifier for a carrier.
-     * This combines the new carrier name with the contract ID if present.
-     *
-     * @param Carrier $carrier
-     * @return string
-     */
-    public function getNewExternalIdentifier(Carrier $carrier): string
-    {
-        if ($carrier->contractId) {
-            return $carrier->name . ':' . $carrier->contractId;
-        }
-
-        return $carrier->name;
     }
 
     /**
