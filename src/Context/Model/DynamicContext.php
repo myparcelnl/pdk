@@ -24,7 +24,7 @@ use MyParcelNL\Pdk\Settings\Model\Settings;
  */
 class DynamicContext extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'account'          => null,
         'carriers'         => null,
         'pluginSettings'   => null,
@@ -57,7 +57,9 @@ class DynamicContext extends Model
         }
 
         $this->attributes['account']  = AccountSettings::getAccount();
-        $this->attributes['carriers'] = FrontendData::getLegacyCarriers();
+        $this->attributes['carriers'] = FrontendData::carrierCollectionToLegacyFormat(
+            AccountSettings::getCarriers()
+        );
         $this->attributes['shop']     = AccountSettings::getShop();
     }
 }

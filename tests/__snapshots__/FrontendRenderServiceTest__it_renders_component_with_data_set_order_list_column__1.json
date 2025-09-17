@@ -4,11 +4,14 @@
       "externalIdentifier": "P00924878",
       "deliveryOptions": {
         "carrier": {
-          "externalIdentifier": "POSTNL",
+          "externalIdentifier": "postnl",
           "id": 1,
-          "name": "POSTNL",
+          "name": "postnl",
+          "human": null,
+          "contractId": null,
           "enabled": true,
           "isDefault": true,
+          "label": null,
           "optional": false,
           "primary": false,
           "type": "main",
@@ -32,7 +35,7 @@
             }
           },
           "outboundFeatures": {
-            "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL"],
+            "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
             "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
             "shipmentOptions": [
               "AGE_CHECK",
@@ -51,10 +54,45 @@
                 0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
               ]
             }
+          },
+          "capabilities": {
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+            "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+            "shipmentOptions": {
+              "ageCheck": true,
+              "largeFormat": true,
+              "onlyRecipient": true,
+              "return": true,
+              "signature": true,
+              "receiptCode": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            },
+            "features": []
+          },
+          "returnCapabilities": {
+            "packageTypes": ["package"],
+            "deliveryTypes": ["standard"],
+            "shipmentOptions": {
+              "signature": true,
+              "return": true,
+              "ageCheck": true,
+              "onlyRecipient": true,
+              "sameDayDelivery": true,
+              "largeFormat": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            },
+            "features": []
           }
         },
+        "date": null,
         "labelAmount": 1,
+        "pickupLocation": null,
         "shipmentOptions": {
+          "labelDescription": null,
           "insurance": -1,
           "ageCheck": -1,
           "return": -1,
@@ -90,7 +128,7 @@
       "totalVat": 0,
       "totalPriceAfterVat": 0,
       "inheritedDeliveryOptions": {
-        "POSTNL": {
+        "postnl": {
           "labelAmount": 1,
           "shipmentOptions": {
             "insurance": 0,

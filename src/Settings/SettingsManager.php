@@ -100,15 +100,15 @@ class SettingsManager implements SettingsManagerInterface
         $legacyCarrierKeys = [];
 
         foreach ($carriers as $carrier) {
-            $legacyKey = $this->propositionService->getLegacyExternalIdentifier($carrier);
+            $legacyKey = $this->propositionService->mapNewToLegacyCarrierName($carrier->externalIdentifier);
             $legacyCarrierKeys[$legacyKey] = $carrier;
         }
 
         // add any keys that are not present yet from allowed carriers to $carrierSettings
         (new Collection($legacyCarrierKeys))->keys()
             ->diff($carrierSettings->keys())
-            ->each(function ($legacyKey) use ($carrierSettings) {
-                $carrierSettings->put($legacyKey, new Collection());
+            ->each(function ($carrier) use ($carrierSettings) {
+                $carrierSettings->put($carrier, new Collection());
             });
 
         /** @var Collection $globalDefaults */

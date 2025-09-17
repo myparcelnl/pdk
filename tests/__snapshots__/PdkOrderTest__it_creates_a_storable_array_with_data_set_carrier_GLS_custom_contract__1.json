@@ -3,7 +3,7 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "GLS:5678"
+        "externalIdentifier": "gls:5678"
       },
       "labelAmount": 1,
       "shipmentOptions": {

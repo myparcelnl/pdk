@@ -59,7 +59,9 @@
             0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
           ]
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "CHEAP_CARGO",
@@ -84,7 +86,9 @@
         "deliveryTypes": null,
         "shipmentOptions": null,
         "metadata": null
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "DPD",
@@ -112,7 +116,9 @@
           "labelDescriptionLength": 45,
           "needsCustomerInfo": true
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "INSTABOX",
@@ -137,7 +143,9 @@
         "deliveryTypes": null,
         "shipmentOptions": null,
         "metadata": null
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "DHL_FOR_YOU",
@@ -175,7 +183,9 @@
           "labelDescriptionLength": 45,
           "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "DHL_PARCEL_CONNECT",
@@ -206,7 +216,9 @@
           "labelDescriptionLength": 45,
           "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "DHL_EUROPLUS",
@@ -234,7 +246,9 @@
           "labelDescriptionLength": 45,
           "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "UPS_STANDARD",
@@ -264,7 +278,9 @@
             0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
           ]
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "UPS_EXPRESS_SAVER",
@@ -294,7 +310,9 @@
             10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
           ]
         }
-      }
+      },
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "BOL",
@@ -303,13 +321,15 @@
       "human": null,
       "contractId": null,
       "enabled": true,
-      "isDefault": false,
+      "isDefault": true,
       "label": null,
       "optional": false,
       "primary": false,
-      "type": "custom",
+      "type": "main",
       "inboundFeatures": null,
-      "outboundFeatures": null
+      "outboundFeatures": null,
+      "capabilities": null,
+      "returnCapabilities": null
     },
     {
       "externalIdentifier": "GLS",
@@ -318,13 +338,15 @@
       "human": null,
       "contractId": null,
       "enabled": true,
-      "isDefault": false,
+      "isDefault": true,
       "label": null,
       "optional": false,
       "primary": false,
-      "type": "custom",
+      "type": "main",
       "inboundFeatures": null,
-      "outboundFeatures": null
+      "outboundFeatures": null,
+      "capabilities": null,
+      "returnCapabilities": null
     }
   ]
 }

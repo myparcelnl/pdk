@@ -141,11 +141,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
-        // Use FrontendDataAdapter to get carriers in the old format for the frontend
-        $legacyCarriers = $this->frontendDataAdapter->getLegacyCarriers();
-        
-        foreach ($legacyCarriers->all() as $carrier) {
-            $identifier = $carrier->externalIdentifier;
+        foreach ($carriers as $carrier) {
+            $identifier = FrontendData::getLegacyIdentifier($carrier->externalIdentifier);
             $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 
@@ -160,9 +157,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function createCarrierSettings(Carrier $carrier, PdkCart $cart, string $packageType): array
     {
-        $carrierSettings = new CarrierSettings(
-            Settings::get(sprintf('%s.%s', CarrierSettings::ID, $carrier->externalIdentifier))
-        );
+        $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
         $dropOff           = $this->dropOffService->getForDate($carrierSettings);
         $dropOffCollection = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
@@ -243,7 +238,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        $allCarriers     = $this->frontendDataAdapter->getLegacyCarriers();
+        $allCarriers     = $this->frontendDataAdapter->carrierCollectionToLegacyFormat(
+            AccountSettings::getCarriers()
+        );
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         // Get the package types from the cart

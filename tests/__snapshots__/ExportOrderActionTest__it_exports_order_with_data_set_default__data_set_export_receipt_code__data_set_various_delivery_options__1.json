@@ -34,7 +34,6 @@
           "delivery_type": 3,
           "delivery_date": "2077-10-23 09:47:51",
           "only_recipient": 1,
-          "receipt_code": 1,
           "signature": 1
         },
         "physical_properties": {
@@ -61,6 +60,7 @@
           "delivery_type": 2,
           "age_check": 1,
           "hide_sender": 1,
+          "only_recipient": 1,
           "signature": 1
         },
         "physical_properties": {

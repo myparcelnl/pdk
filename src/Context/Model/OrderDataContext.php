@@ -54,7 +54,7 @@ class OrderDataContext extends PdkOrder
     }
 
     /**
-     * Remove deleted shipments from the array.
+     * Get the order data as an array.
      *
      * @param  null|int $flags
      *
@@ -66,13 +66,23 @@ class OrderDataContext extends PdkOrder
             return parent::toArray($flags);
         }
 
+        // Remove deleted shipments from the array.
         $clone = clone $this;
-
         $clone->shipments = $clone->shipments
             ->filterNotDeleted()
             ->values();
 
         return $clone->toArray($flags);
+    }
+
+    protected function getDeliveryOptionsAttribute(array $value): array
+    {
+        if (!$value || !$value['carrier']) {
+            return $value;
+        }
+        $value['carrier'] = FrontendData::convertCarrierToLegacyFormat(new Carrier($value['carrier']))->toArray();
+
+        return $value;
     }
 
     /**
@@ -86,11 +96,11 @@ class OrderDataContext extends PdkOrder
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
         $service = Pdk::get(PdkOrderOptionsServiceInterface::class);
 
-        $carriers = FrontendData::getLegacyCarriers();
+        $carriers = AccountSettings::getCarriers();
 
         return (new Collection($carriers))->mapWithKeys(function (Carrier $carrier) use ($service): array {
             $clonedOrder = new PdkOrder($this->only(['deliveryOptions', 'lines']));
-            $newCarrier  = new Carrier($carrier->except(['capabilities', 'returnCapabilities']));
+            $newCarrier  = new Carrier($carrier->except(['capabilities', 'returnCapabilities', 'inboundFeatures', 'outboundFeatures']));
 
             $clonedOrder->deliveryOptions->carrier = $newCarrier;
 
@@ -101,7 +111,7 @@ class OrderDataContext extends PdkOrder
 
             $calculatedOrder->deliveryOptions->offsetUnset('carrier');
 
-            return [$carrier->externalIdentifier => $calculatedOrder->deliveryOptions->toArrayWithoutNull()];
+            return [FrontendData::getLegacyIdentifier($carrier->externalIdentifier) => $calculatedOrder->deliveryOptions->toArrayWithoutNull()];
         });
     }
 }

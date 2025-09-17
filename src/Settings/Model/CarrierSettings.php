@@ -276,7 +276,7 @@ class CarrierSettings extends AbstractSettingsModel
             // If not found, try mapping the carrier name to legacy format
             $propositionService = Pdk::get(PropositionService::class);
             $legacyIdentifier = $propositionService->mapNewToLegacyCarrierName($carrier);
-            
+
             if ($legacyIdentifier !== $carrier) {
                 $settings = Settings::all()->carrier->get($legacyIdentifier);
             }
