@@ -114,22 +114,18 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
             $legacyCapabilities['shipmentOptions'] = [];
             foreach ($features->shipmentOptions as $option) {
                 $legacyOptionName = $this->propositionService->shipmentOptionNameForDeliveryOptions($option);
-                if ($legacyOptionName) {
-                    // Special handling for insurance which should be an array of values
-                    if ($legacyOptionName === 'insurance') {
-                        // @TODO replace with actual config (its in metadata)
-                        $legacyCapabilities['shipmentOptions'][$legacyOptionName] = [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000];
-                    } else {
-                        $legacyCapabilities['shipmentOptions'][$legacyOptionName] = true;
-                    }
+                if ($legacyOptionName !== 'insurance') {
+                    $legacyCapabilities['shipmentOptions'][$legacyOptionName] = true;
                 }
             }
         }
 
         // Convert metadata to features
-        if (isset($features->metadata)) {
-            $legacyCapabilities['features'] = $this->convertMetadataToLegacyFormat($features->metadata);
+        if (isset($features['metadata'])) {
+            $legacyCapabilities = \array_merge_recursive($legacyCapabilities, $this->convertMetadataToLegacyFormat($features['metadata']));
         }
+
+        // print_r($legacyCapabilities['shipmentOptions']);
 
         return $legacyCapabilities;
     }
@@ -137,35 +133,35 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
     /**
      * Convert new proposition metadata to the old legacy format.
      *
-     * @param mixed $metadata
+     * @param array $metadata
      * @return array
      */
-    private function convertMetadataToLegacyFormat($metadata): array
+    private function convertMetadataToLegacyFormat(array $metadata): array
     {
         if (!$metadata) {
             return [];
         }
 
-        $legacyFeatures = [];
+        $mapped = [];
 
         // Map common metadata fields
-        if (isset($metadata->labelDescriptionLength)) {
-            $legacyFeatures['labelDescriptionLength'] = $metadata->labelDescriptionLength;
+        if (isset($metadata['labelDescriptionLength'])) {
+            $mapped['features']['labelDescriptionLength'] = $metadata['labelDescriptionLength'];
         }
 
-        if (isset($metadata->carrierSmallPackageContract)) {
-            $legacyFeatures['carrierSmallPackageContract'] = $metadata->carrierSmallPackageContract;
+        if (isset($metadata['carrierSmallPackageContract'])) {
+            $mapped['features']['carrierSmallPackageContract'] = $metadata['carrierSmallPackageContract'];
         }
 
-        if (isset($metadata->multiCollo)) {
-            $legacyFeatures['multiCollo'] = $metadata->multiCollo;
+        if (isset($metadata['multiCollo'])) {
+            $mapped['features']['multiCollo'] = $metadata['multiCollo'];
         }
 
-        if (isset($metadata->insuranceOptions)) {
-            $legacyFeatures['insuranceOptions'] = $metadata->insuranceOptions;
+        if (isset($metadata['insuranceOptions'])) {
+            $mapped['shipmentOptions']['insurance'] = $metadata['insuranceOptions'];
         }
 
-        return $legacyFeatures;
+        return $mapped;
     }
 
     /**

@@ -405,24 +405,12 @@
             "largeFormat": true,
             "onlyRecipient": true,
             "sameDayDelivery": true,
-            "signature": true,
-            "insurance": [
-              0,
-              10000,
-              25000,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
+            "signature": true
           },
-          "features": []
+          "features": {
+            "labelDescriptionLength": 45,
+            "multiCollo": true
+          }
         },
         "returnCapabilities": {
           "deliveryTypes": [
@@ -472,7 +460,9 @@
               500000
             ]
           },
-          "features": []
+          "features": {
+            "labelDescriptionLength": 45
+          }
         }
       }
     ],
