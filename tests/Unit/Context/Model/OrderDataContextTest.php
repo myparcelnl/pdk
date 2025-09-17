@@ -68,7 +68,7 @@ it('exposes inherited options', function () {
         ->withLines([factory(PdkOrderLine::class)->withProduct('product-1')])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('POSTNLHALLO')
+                ->withCarrier('postnl')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->withReturn(TriStateService::ENABLED))
         )
         ->make();
