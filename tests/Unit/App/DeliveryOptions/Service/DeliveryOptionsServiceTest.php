@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
+use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
@@ -37,7 +38,7 @@ it(
         $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(Carrier::CARRIER_POSTNL_NAME))
             ->make();
 
-        $carrierSettingsFactory = factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        $carrierSettingsFactory = factory(CarrierSettings::class, FrontendData::getLegacyIdentifier($fakeCarrier->externalIdentifier))
             ->withDeliveryOptions();
 
         if ($carrierSettingsFactoryCb) {

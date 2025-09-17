@@ -34,17 +34,26 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
      *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
-    public function getLegacyCarriers(): CarrierCollection
+    public function carrierCollectionToLegacyFormat(CarrierCollection $carrierCollection): CarrierCollection
     {
-        $propositionCarriers = $this->propositionService->getCarriers();
         $legacyCarriers = new CarrierCollection();
 
-        foreach ($propositionCarriers as $carrier) {
+        foreach ($carrierCollection as $carrier) {
             $legacyCarrier = $this->convertCarrierToLegacyFormat($carrier);
             $legacyCarriers->push($legacyCarrier);
         }
 
         return $legacyCarriers;
+    }
+
+    public function getLegacyIdentifier(string $externalIdentifier): string
+    {
+        $parts = explode(':', $externalIdentifier);
+        // Convert only the carrier part, keep the rest as is.
+        if (count($parts) > 1) {
+            return $this->propositionService->mapNewToLegacyCarrierName($parts[0]) . ':' . implode(':', array_slice($parts, 1));
+        }
+        return $this->propositionService->mapNewToLegacyCarrierName($parts[0]);
     }
 
     /**
@@ -53,20 +62,11 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
      * @param Carrier $carrier
      * @return Carrier
      */
-    private function convertCarrierToLegacyFormat(Carrier $carrier): Carrier
+    public function convertCarrierToLegacyFormat(Carrier $carrier): Carrier
     {
-        // Create legacy carrier data structure
-        $legacyData = [
-            'id' => $carrier->id,
-            'name' => $this->propositionService->mapNewToLegacyCarrierName($carrier->name),
-            'human' => $carrier->human ?? $carrier->name,
-            'externalIdentifier' => $this->propositionService->getLegacyExternalIdentifier($carrier),
-            'enabled' => $carrier->enabled ?? true,
-            'isDefault' => $carrier->isDefault ?? false,
-            'optional' => $carrier->optional ?? false,
-            'primary' => $carrier->primary ?? false,
-            'type' => $carrier->type ?? 'main',
-        ];
+        // Retain new carrier attributes, only override what is needed for legacy support.
+        $legacyData = $carrier->getAttributes();
+        $legacyData['name'] = $this->propositionService->mapNewToLegacyCarrierName($carrier->name);
 
         // Add legacy capabilities structure
         if ($carrier->outboundFeatures) {
@@ -117,6 +117,7 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
                 if ($legacyOptionName) {
                     // Special handling for insurance which should be an array of values
                     if ($legacyOptionName === 'insurance') {
+                        // @TODO replace with actual config (its in metadata)
                         $legacyCapabilities['shipmentOptions'][$legacyOptionName] = [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000];
                     } else {
                         $legacyCapabilities['shipmentOptions'][$legacyOptionName] = true;

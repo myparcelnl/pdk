@@ -3,7 +3,7 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "POSTNL"
+        "externalIdentifier": "postnl"
       },
       "labelAmount": 1,
       "shipmentOptions": {

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -7,8 +8,10 @@ namespace MyParcelNL\Pdk\Settings;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
@@ -16,6 +19,7 @@ use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -79,6 +83,7 @@ it('retrieves default carrier settings', function (string $platform) {
 
     $carriers = (new Collection(Platform::getCarriers()))
         ->pluck('name')
+        ->map(fn (string $name) => Pdk::get(PropositionService::class)->mapNewToLegacyCarrierName($name))
         ->toArray();
 
     $defaults        = Settings::getDefaults();

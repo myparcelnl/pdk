@@ -24,7 +24,7 @@
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL"],
+      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
       "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
       "shipmentOptions": [
         "AGE_CHECK",
@@ -63,7 +63,7 @@
         }
       },
       "outboundFeatures": {
-        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL"],
+        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
         "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
         "shipmentOptions": [
           "AGE_CHECK",

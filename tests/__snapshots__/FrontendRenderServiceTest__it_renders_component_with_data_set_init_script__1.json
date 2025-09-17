@@ -212,7 +212,7 @@
       "backofficeUrl": "https://backoffice.myparcel.nl",
       "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
-      "defaultCarrier": "postnl",
+      "defaultCarrier": "POSTNL",
       "defaultCarrierId": 1
     },
     "translations": {
@@ -264,10 +264,9 @@
           "trackTrace": [],
           "carriers": [
             {
-              "externalIdentifier": "postnl",
+              "externalIdentifier": "POSTNL",
               "id": 1,
-              "name": "postnl",
-              "human": "PostNL",
+              "name": "POSTNL",
               "enabled": true,
               "isDefault": true,
               "optional": false,
@@ -366,7 +365,6 @@
         "externalIdentifier": "postnl",
         "id": 1,
         "name": "postnl",
-        "human": "PostNL",
         "enabled": true,
         "isDefault": true,
         "optional": false,
@@ -415,7 +413,8 @@
               450000,
               500000
             ]
-          }
+          },
+          "features": []
         },
         "returnCapabilities": {
           "deliveryTypes": [
@@ -447,10 +446,25 @@
             "return": true,
             "ageCheck": true,
             "onlyRecipient": true,
-            "sameDayDelivery": false,
+            "sameDayDelivery": true,
             "largeFormat": true,
-            "collect": false
-          }
+            "insurance": [
+              0,
+              10000,
+              25000,
+              50000,
+              100000,
+              150000,
+              200000,
+              250000,
+              300000,
+              350000,
+              400000,
+              450000,
+              500000
+            ]
+          },
+          "features": []
         }
       }
     ],
@@ -511,14 +525,15 @@
         "closedDays": []
       },
       "carrier": {
-        "postnl": {
-          "id": "postnl",
+        "POSTNL": {
+          "id": "POSTNL",
           "allowDeliveryOptions": false,
           "allowStandardDelivery": false,
           "allowEveningDelivery": false,
           "allowMondayDelivery": false,
           "allowMorningDelivery": false,
           "allowOnlyRecipient": false,
+          "allowExpressDelivery": false,
           "allowPickupLocations": false,
           "allowSameDayDelivery": false,
           "allowSaturdayDelivery": false,
@@ -593,10 +608,9 @@
       "trackTrace": [],
       "carriers": [
         {
-          "externalIdentifier": "postnl",
+          "externalIdentifier": "POSTNL",
           "id": 1,
-          "name": "postnl",
-          "human": "PostNL",
+          "name": "POSTNL",
           "enabled": true,
           "isDefault": true,
           "optional": false,

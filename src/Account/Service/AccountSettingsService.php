@@ -47,6 +47,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
+     * Return the carriers for the current shop, filtered by the carriers available in the proposition service.
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection

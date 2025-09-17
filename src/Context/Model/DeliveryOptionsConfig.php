@@ -69,7 +69,16 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Platform::PLATFORMS_TO_LEGACY_MAP[Platform::getPropositionName()] ?? Platform::getPropositionName();
+        // Get platform from proposition service for backwards compatibility
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
+            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+            $this->platform = $platformConfig['name'];
+        } catch (\Exception $e) {
+            // Fallback to direct platform value
+            $this->platform = Platform::getPropositionName();
+        }
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 
