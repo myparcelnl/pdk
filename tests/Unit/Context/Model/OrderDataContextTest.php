@@ -68,7 +68,7 @@ it('exposes inherited options', function () {
         ->withLines([factory(PdkOrderLine::class)->withProduct('product-1')])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('POSTNL')
+                ->withCarrier('POSTNLHALLO')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->withReturn(TriStateService::ENABLED))
         )
         ->make();
@@ -93,7 +93,7 @@ it('exposes inherited options', function () {
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
-            'POSTNL'          => [
+            'postnl'          => [
                 DeliveryOptions::LABEL_AMOUNT     => 1,
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -114,7 +114,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
                 ],
             ],
-            'DHL_FOR_YOU:12345' => [
+            'dhlforyou:12345' => [
                 DeliveryOptions::LABEL_AMOUNT     => 1,
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,

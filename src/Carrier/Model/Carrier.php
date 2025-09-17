@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
+use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
@@ -26,6 +27,8 @@ use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
  * @property null|string              $type
  * @property PropositionCarrierFeatures $inboundFeatures
  * @property PropositionCarrierFeatures $outboundFeatures
+ * @property CarrierCapabilities        $capabilities        // @deprecated use outboundFeatures instead
+ * @property CarrierCapabilities        $returnCapabilities  // @deprecated use inboundFeatures instead
  * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
  */
 class Carrier extends Model
@@ -170,6 +173,8 @@ class Carrier extends Model
         'type'               => self::TYPE_MAIN,
         'inboundFeatures'    => null,
         'outboundFeatures'   => null,
+        'capabilities'        => null, // @deprecated use outboundFeatures instead
+        'returnCapabilities'  => null, // @deprecated use inboundFeatures instead
     ];
 
     protected $casts      = [
@@ -186,6 +191,8 @@ class Carrier extends Model
         'type'               => 'string',
         'inboundFeatures'    => PropositionCarrierFeatures::class,
         'outboundFeatures'   => PropositionCarrierFeatures::class,
+        'capabilities'        => CarrierCapabilities::class, // @deprecated use outboundFeatures instead
+        'returnCapabilities'  => CarrierCapabilities::class, // @deprecated use inboundFeatures instead
     ];
 
     /**
@@ -196,6 +203,7 @@ class Carrier extends Model
     ];
 
     /**
+     * If carrier ID and/or name are given, look up an existing carrier configuration from the CarrierRepository and instantiate with that data.
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
@@ -218,16 +226,11 @@ class Carrier extends Model
             // If neither the id or name is provided, fallback to the default carrier
             // Prevents the default carrier being returned if an unknown ID is provided
             if (!$carrierInput['id'] && !$carrierInput['name']) {
-                try {
-                    $propositionService = Pdk::get(PropositionService::class);
-                    $proposition = $propositionService->getPropositionConfig();
-                    $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-                    $carrierInput['name'] = $platformConfig['defaultCarrier'];
-                } catch (\Exception $e) {
-                    // Fallback to a safe default if proposition service is not available
-                    $carrierInput['name'] = 'POSTNL';
-                }
-                
+                $propositionService = Pdk::get(PropositionService::class);
+                $proposition = $propositionService->getPropositionConfig();
+                $defaultCarrier = $propositionService->getDefaultCarrier($proposition);
+                $carrierInput['name'] = $defaultCarrier->name;
+
                 Logger::warning(
                     'Carrier Name and ID not given, instantiating default Carrier model',
                     [
@@ -235,7 +238,6 @@ class Carrier extends Model
                         'name' => $data['name'] ?? null,
                     ]
                 );
-
             }
             $found = $repository->get($carrierInput);
 
@@ -286,11 +288,6 @@ class Carrier extends Model
      */
     public function getTypeAttribute(): string
     {
-        // Read raw attribute to avoid calling the accessor recursively
-        $explicitType = $this->attributes['type'] ?? null;
-        if ($explicitType) {
-            return $explicitType;
-        }
         return $this->contractId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
     }
 
@@ -300,7 +297,7 @@ class Carrier extends Model
     public function toStorableArray(): array
     {
         return [
-            'externalIdentifier' => $this->externalIdentifier,
+            'externalIdentifier' => FrontendData::getLegacyIdentifier($this->externalIdentifier),
         ];
     }
 }

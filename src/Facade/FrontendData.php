@@ -9,7 +9,9 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
 
 /**
- * @method static CarrierCollection getLegacyCarriers()
+ * @method static CarrierCollection carrierCollectionToLegacyFormat()
+ * @method static Carrier convertCarrierToLegacyFormat(Carrier $carrier)
+ * @method static string getLegacyIdentifier(string $externalIdentifier)
  * @method static array getLegacyPackageTypes()
  * @method static array getLegacyDeliveryTypes()
  * @method static array getLegacyShipmentOptions()

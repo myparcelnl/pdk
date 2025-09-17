@@ -102,7 +102,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "POSTNL": {
+  "postnl": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -205,7 +205,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "CHEAP_CARGO": {
+  "cheapcargo": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -308,7 +308,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "DPD": {
+  "dpd": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -411,7 +411,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "INSTABOX": {
+  "instabox": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -514,7 +514,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "DHL_FOR_YOU": {
+  "dhlforyou": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -617,7 +617,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "DHL_PARCEL_CONNECT": {
+  "dhlparcelconnect": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -720,7 +720,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "DHL_EUROPLUS": {
+  "dhleuroplus": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -823,7 +823,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "UPS_STANDARD": {
+  "upsstandard": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -926,7 +926,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "UPS_EXPRESS_SAVER": {
+  "upsexpresssaver": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -1029,7 +1029,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "BOL": {
+  "bol.com": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,
@@ -1132,7 +1132,7 @@
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
-  "GLS": {
+  "gls": {
     "id": "carrier",
     "allowDeliveryOptions": true,
     "allowStandardDelivery": false,

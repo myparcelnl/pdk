@@ -3,7 +3,7 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "UPS_EXPRESS_SAVER"
+        "externalIdentifier": "upsexpresssaver"
       },
       "labelAmount": 1,
       "shipmentOptions": {
