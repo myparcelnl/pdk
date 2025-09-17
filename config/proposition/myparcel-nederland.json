@@ -295,14 +295,6 @@
       },
       {
         "carrier": {
-          "id": 3,
-          "name": "CHEAP_CARGO"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true
-      },
-      {
-        "carrier": {
           "id": 4,
           "name": "DPD"
         },
