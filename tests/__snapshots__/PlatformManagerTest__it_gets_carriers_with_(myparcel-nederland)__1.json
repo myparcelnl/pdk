@@ -50,18 +50,6 @@
     }
   },
   {
-    "externalIdentifier": "CHEAP_CARGO",
-    "id": 3,
-    "name": "CHEAP_CARGO",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": [],
-    "outboundFeatures": []
-  },
-  {
     "externalIdentifier": "DPD",
     "id": 4,
     "name": "DPD",
