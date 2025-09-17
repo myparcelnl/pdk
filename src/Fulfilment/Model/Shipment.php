@@ -56,15 +56,8 @@ class Shipment extends Model
     public function __construct(?array $data = null)
     {
         parent::__construct($data);
-        try {
-            $propositionService = Pdk::get(PropositionService::class);
-            $proposition = $propositionService->getPropositionConfig();
-            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-            $this->attributes['carrier'] = $this->attributes['carrier'] ?? $platformConfig['defaultCarrierId'];
-        } catch (\Exception $e) {
-            // Fallback to a safe default if proposition service is not available
-            $this->attributes['carrier'] = $this->attributes['carrier'] ?? 1; // POSTNL ID
-        }
+        $propositionService = Pdk::get(PropositionService::class);
+        $this->attributes['carrier'] = $this->attributes['carrier'] ?? $propositionService->getDefaultCarrier()->id;
     }
 
     /**

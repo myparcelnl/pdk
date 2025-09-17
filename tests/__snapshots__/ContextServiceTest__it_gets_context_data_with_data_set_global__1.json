@@ -212,7 +212,7 @@
       "backofficeUrl": "https://backoffice.myparcel.nl",
       "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
-      "defaultCarrier": "POSTNL",
+      "defaultCarrier": "postnl",
       "defaultCarrierId": 1
     },
     "translations": {

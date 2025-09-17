@@ -202,14 +202,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getDefaultCarrier(): string
     {
-        try {
-            $propositionService = Pdk::get(PropositionService::class);
-            $proposition = $propositionService->getPropositionConfig();
-            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-            return $platformConfig['defaultCarrier'] ?? 'POSTNL';
-        } catch (\Exception $e) {
-            // Fallback to POSTNL if proposition service is not available
-            return 'POSTNL';
-        }
+        return Pdk::get(PropositionService::class)->getDefaultCarrier()->name;
     }
 }
