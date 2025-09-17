@@ -158,6 +158,28 @@ class PropositionService
     }
 
     /**
+     * Get a specific carrier by its id from the proposition config.
+
+     * @param bool $outbound
+     * @return null|Carrier
+     */
+    public function getCarrierById(int $id): ?Carrier
+    {
+        return $this->getCarriers()->where('id', $id)->first();
+    }
+
+    /**
+     * Get a specific carrier by its machine-readable name from the proposition config.
+
+     * @param bool $outbound
+     * @return null|Carrier
+     */
+    public function getCarrierByName(string $name): ?Carrier
+    {
+        return $this->getCarriers()->where('name', $name)->first();
+    }
+
+    /**
      * Get the default carrier from the proposition config.
      * Returns the outbound carrier by default. Use $outbound = false to get the inbound (return shipments) carrier.
 

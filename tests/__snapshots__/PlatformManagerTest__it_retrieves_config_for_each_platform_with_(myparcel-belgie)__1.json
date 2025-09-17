@@ -47,7 +47,10 @@
           "largeFormat": true,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        }
       },
       "returnCapabilities": []
     },
@@ -85,9 +88,12 @@
         "shipmentOptions": {
           "saturdayDelivery": true,
           "signature": true,
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "insurance": [0, 50000, 250000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        }
       },
       "returnCapabilities": []
     },
@@ -125,9 +131,12 @@
         "packageTypes": ["package"],
         "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": {
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "insurance": [52000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        }
       },
       "returnCapabilities": []
     }
