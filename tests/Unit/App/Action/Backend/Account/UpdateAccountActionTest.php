@@ -103,7 +103,6 @@ it('maps carriers correctly', function () {
 
     expect($externalIdentifiers)
         ->toBe([
-            'CHEAP_CARGO',
             'BOL',
             'DHL_FOR_YOU',
             'POSTNL',
