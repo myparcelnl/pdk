@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Proposition\Service;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Platform\PlatformManager;
@@ -79,17 +80,6 @@ class PropositionService
         $filePath = null;
         $configData = null;
         switch ($propositionName) {
-            // @todo enable MyParcel / SendMyParcel URLs when this PR is merged:
-            // https://github.com/mypadev/assets/pull/25
-
-            // case Platform::MYPARCEL_NAME:
-            // case Platform::LEGACY_MYPARCEL_NAME:
-            //     // $url = 'https://assets.myparcel.nl/config/proposition.json';
-            //     break;
-            // case Platform::SENDMYPARCEL_NAME:
-            // case Platform::LEGACY_SENDMYPARCEL_NAME:
-            // $url = 'https://assets.sendmyparcel.be/config/proposition.json';
-            // break;
             case Platform::FLESPAKKET_NAME:
                 // @todo: remove flespakket in next major version
                 Logger::deprecated('Flespakket platform is deprecated, please use MyParcel or SendMyParcel instead.');
@@ -97,15 +87,6 @@ class PropositionService
             default:
                 $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
                 break;
-        }
-
-        if ($url) {
-            $client = new \GuzzleHttp\Client();
-            $response = $client->get($url);
-            if ($response->getStatusCode() !== 200) {
-                throw new \RuntimeException(sprintf('Failed to fetch proposition config from URL: %s', $url));
-            }
-            $configData = $response->getBody()->getContents();
         }
 
         if ($filePath) {
@@ -140,14 +121,11 @@ class PropositionService
         // Create a PropositionConfig instance from the array
         $propositionConfig = new PropositionConfig($configArray);
         return $propositionConfig;
-
     }
 
     /**
      * Get the carriers from the proposition config as CarrierCollection.
-     * @param bool $legacyFormat Whether to return the carriers in the legacy format (lowercase) or the new format (SCREAMING_SNAKE_CASE).
-     *           Legacy = "postnl", "dhlparcelconnect", "bpost", etc.
-     *           New = "POSTNL", "DHL_PARCEL_CONNECT", "BPOST", etc.
+     *
      * @return CarrierCollection
      */
     public function getCarriers(): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
@@ -291,10 +269,10 @@ class PropositionService
             'backofficeUrl' => $propositionConfig->applications['backoffice']['url'] ?? null,
             'supportUrl' => $propositionConfig->applications['developerPortal']['url'] ?? null,
             'localCountry' => $propositionConfig->countryCode,
-            'defaultCarrier' => $this->getDefaultCarrier()->name,
+            'defaultCarrier' => $this->mapNewToLegacyCarrierName($this->getDefaultCarrier()->name),
             'defaultCarrierId' => $this->getDefaultCarrier()->id,
             'defaultSettings' => [], // @todo no longer supported, remove in v3.0.0
-            'carriers' => $this->getCarriers()->toArray(), // @optional conversion?
+            'carriers' => FrontendData::carrierCollectionToLegacyFormat($this->getCarriers())->toArray(),
         ];
     }
 

@@ -122,26 +122,24 @@ class PostReturnShipmentsRequest extends Request
     private function ensureReturnCapabilities(Shipment $shipment): Shipment
     {
         $carrierId = $shipment->carrier->id;
-        
+
         try {
             $propositionService = Pdk::get(PropositionService::class);
             $carrier = $propositionService->getCarriers()
                 ->firstWhere('id', $carrierId);
 
             if (! $carrier || ! $carrier->returnCapabilities) {
-                $proposition = $propositionService->getPropositionConfig();
-                $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-                
+                $defaultCarrier = $propositionService->getDefaultCarrier();
                 Notifications::warning(
                     "{$shipment->carrier->human} has no return capabilities",
-                    'Return shipment exported with default carrier ' . $platformConfig['defaultCarrier'],
+                    'Return shipment exported with default carrier ' . $defaultCarrier->name,
                     Notification::CATEGORY_ACTION,
                     [
                         'action'   => PdkBackendActions::EXPORT_RETURN,
                         'orderIds' => $shipment->referenceIdentifier,
                     ]
                 );
-                $shipment->carrier = new Carrier(['carrierId' => $platformConfig['defaultCarrierId']]);
+                $shipment->carrier = new Carrier(['carrierId' => $defaultCarrier->id]);
             }
         } catch (\Exception $e) {
             // Fallback to default behavior if proposition service is not available
