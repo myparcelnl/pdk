@@ -131,7 +131,7 @@ class PostReturnShipmentsRequest extends Request
             if (! $carrier || ! $carrier->returnCapabilities) {
                 $defaultCarrier = $propositionService->getDefaultCarrier();
                 Notifications::warning(
-                    "{$shipment->carrier->human} has no return capabilities",
+                    "{$shipment->carrier->name} has no return capabilities",
                     'Return shipment exported with default carrier ' . $defaultCarrier->name,
                     Notification::CATEGORY_ACTION,
                     [
@@ -144,7 +144,7 @@ class PostReturnShipmentsRequest extends Request
         } catch (\Exception $e) {
             // Fallback to default behavior if proposition service is not available
             Notifications::warning(
-                "{$shipment->carrier->human} has no return capabilities",
+                "{$shipment->carrier->name} has no return capabilities",
                 'Return shipment exported with default carrier (fallback)',
                 Notification::CATEGORY_ACTION,
                 [
