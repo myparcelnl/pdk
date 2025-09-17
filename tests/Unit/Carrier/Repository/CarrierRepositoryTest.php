@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Repository;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPlatform;
@@ -15,9 +17,9 @@ use function MyParcelNL\Pdk\Tests\mockPlatform;
 usesShared(new UsesEachMockPdkInstance());
 
 it('migrates deprecated carrier name "ups" to UPS Standard', function () {
-    $reset = mockPlatform('myparcel');
+    $reset = mockPlatform(Platform::MYPARCEL_NAME);
 
-    $repository = new CarrierRepository(Pdk::get(StorageInterface::class));
+    $repository = Pdk::get(CarrierRepository::class);
     $carrier    = $repository->get(['name' => Carrier::CARRIER_UPS_NAME]);
 
     expect($carrier)->not->toBeNull();
@@ -28,9 +30,9 @@ it('migrates deprecated carrier name "ups" to UPS Standard', function () {
 });
 
 it('returns null for deprecated carrier 8 since it no longer exists', function () {
-    $reset = mockPlatform('myparcel');
+    $reset = mockPlatform(Platform::MYPARCEL_NAME);
 
-    $repository = new CarrierRepository(Pdk::get(StorageInterface::class));
+    $repository = Pdk::get(CarrierRepository::class);
     $carrier    = $repository->get(['id' => Carrier::CARRIER_UPS_ID]);
 
     expect($carrier)->toBeNull();
@@ -39,9 +41,9 @@ it('returns null for deprecated carrier 8 since it no longer exists', function (
 });
 
 it('does not migrate non-deprecated carriers', function () {
-    $reset = mockPlatform('myparcel');
+    $reset = mockPlatform(Platform::MYPARCEL_NAME);
 
-    $repository = new CarrierRepository(Pdk::get(StorageInterface::class));
+    $repository = Pdk::get(CarrierRepository::class);
     $carrier    = $repository->get(['id' => Carrier::CARRIER_POSTNL_ID]);
 
     expect($carrier->id)->toBe(Carrier::CARRIER_POSTNL_ID);
@@ -51,9 +53,9 @@ it('does not migrate non-deprecated carriers', function () {
 });
 
 it('returns null for unknown carrier', function () {
-    $reset = mockPlatform('myparcel');
+    $reset = mockPlatform(Platform::MYPARCEL_NAME);
 
-    $repository = new CarrierRepository(Pdk::get(StorageInterface::class));
+    $repository = Pdk::get(CarrierRepository::class);
     $carrier    = $repository->get(['id' => 999]);
 
     expect($carrier)->toBeNull();

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -17,6 +18,7 @@ use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
@@ -34,11 +36,6 @@ final class AccountFactory extends AbstractModelFactory
     public function getModel(): string
     {
         return Account::class;
-    }
-
-    public function onPlatformFlespakket(): self
-    {
-        return $this->withPlatformId(Platform::FLESPAKKET_ID);
     }
 
     public function onPlatformMyParcel(): self

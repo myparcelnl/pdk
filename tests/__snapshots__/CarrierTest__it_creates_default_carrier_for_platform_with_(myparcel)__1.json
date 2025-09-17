@@ -1,11 +1,59 @@
 {
-  "externalIdentifier": "postnl",
-  "id": 1,
-  "name": "postnl",
-  "human": "PostNL",
-  "enabled": true,
-  "isDefault": true,
-  "optional": false,
-  "primary": false,
-  "type": "main"
+    "externalIdentifier": "POSTNL",
+    "id": 1,
+    "name": "POSTNL",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+        "packageTypes": [
+            "PACKAGE"
+        ],
+        "deliveryTypes": [
+            "STANDARD_DELIVERY"
+        ],
+        "shipmentOptions": [
+            "SIGNATURE",
+            "RETURN",
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "LARGE_FORMAT",
+            "INSURANCE"
+        ],
+        "metadata": {
+            "labelDescriptionLength": 45
+        }
+    },
+    "outboundFeatures": {
+        "packageTypes": [
+            "PACKAGE",
+            "MAILBOX",
+            "LETTER",
+            "DIGITAL_STAMP",
+            "SMALL"
+        ],
+        "deliveryTypes": [
+            "MORNING_DELIVERY",
+            "STANDARD_DELIVERY",
+            "EVENING_DELIVERY",
+            "PICKUP_DELIVERY"
+        ],
+        "shipmentOptions": [
+            "AGE_CHECK",
+            "LARGE_FORMAT",
+            "ONLY_RECIPIENT",
+            "RETURN",
+            "SIGNATURE",
+            "RECEIPT_CODE",
+            "INSURANCE"
+        ],
+        "metadata": {
+            "labelDescriptionLength": 45,
+            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+            "multiCollo": true
+        }
+    }
 }

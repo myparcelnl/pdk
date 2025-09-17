@@ -1,0 +1,479 @@
+{
+  "name": "myparcel-nederland",
+  "human": "MyParcel Nederland",
+  "backofficeUrl": "https://backoffice.myparcel.nl",
+  "supportUrl": "https://developer.myparcel.nl",
+  "localCountry": "NL",
+  "defaultCarrier": "postnl",
+  "defaultCarrierId": 1,
+  "defaultSettings": [],
+  "carriers": [
+    {
+      "externalIdentifier": "postnl",
+      "id": 1,
+      "name": "postnl",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": [
+          "SIGNATURE",
+          "RETURN",
+          "AGE_CHECK",
+          "ONLY_RECIPIENT",
+          "SAME_DAY_DELIVERY",
+          "LARGE_FORMAT",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceSteps": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+        "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": [
+          "AGE_CHECK",
+          "LARGE_FORMAT",
+          "ONLY_RECIPIENT",
+          "RETURN",
+          "SIGNATURE",
+          "RECEIPT_CODE",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+          "multiCollo": true,
+          "insuranceOptions": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+        "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "largeFormat": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "receiptCode": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": {
+          "labelDescriptionLength": 45,
+          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+          "multiCollo": true
+        }
+      },
+      "returnCapabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "signature": true,
+          "return": true,
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "sameDayDelivery": true,
+          "largeFormat": true
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      }
+    },
+    {
+      "externalIdentifier": "cheapcargo",
+      "id": 3,
+      "name": "cheapcargo",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PALLET"],
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "capabilities": {
+        "packageTypes": [false]
+      },
+      "returnCapabilities": []
+    },
+    {
+      "externalIdentifier": "dpd",
+      "id": 4,
+      "name": "dpd",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": [],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "needsCustomerInfo": true
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package", "mailbox"],
+        "deliveryTypes": ["standard", "pickup"],
+        "shipmentOptions": [],
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "returnCapabilities": []
+    },
+    {
+      "externalIdentifier": "instabox",
+      "id": 5,
+      "name": "instabox",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "capabilities": [],
+      "returnCapabilities": []
+    },
+    {
+      "externalIdentifier": "dhlforyou",
+      "id": 9,
+      "name": "dhlforyou",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+        "metadata": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": [
+          "AGE_CHECK",
+          "ONLY_RECIPIENT",
+          "SAME_DAY_DELIVERY",
+          "SIGNATURE",
+          "SATURDAY_DELIVERY",
+          "HIDE_SENDER",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package", "mailbox", "package_small"],
+        "deliveryTypes": ["standard", "pickup"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "sameDayDelivery": true,
+          "signature": true,
+          "saturdayDelivery": true,
+          "hideSender": true,
+          "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "returnCapabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "signature": true,
+          "return": true,
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "sameDayDelivery": true,
+          "largeFormat": true
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      }
+    },
+    {
+      "externalIdentifier": "dhlparcelconnect",
+      "id": 10,
+      "name": "dhlparcelconnect",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": ["INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceOptions": [50000]
+        }
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": ["SIGNATURE", "INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard", "pickup"],
+        "shipmentOptions": {
+          "signature": true
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "returnCapabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "insurance": [50000]
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      }
+    },
+    {
+      "externalIdentifier": "dhleuroplus",
+      "id": 11,
+      "name": "dhleuroplus",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "signature": true,
+          "saturdayDelivery": true,
+          "hideSender": true,
+          "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "returnCapabilities": []
+    },
+    {
+      "externalIdentifier": "upsstandard",
+      "id": 12,
+      "name": "upsstandard",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT", "INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceOptions": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "collect": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "returnCapabilities": []
+    },
+    {
+      "externalIdentifier": "upsexpresssaver",
+      "id": 13,
+      "name": "upsexpresssaver",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["EXPRESS_DELIVERY"],
+        "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceOptions": [
+            10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["express"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "collect": true,
+          "insurance": [10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "returnCapabilities": []
+    },
+    {
+      "externalIdentifier": "bol.com",
+      "id": 7,
+      "name": "bol.com",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": null,
+      "outboundFeatures": null,
+      "capabilities": null,
+      "returnCapabilities": null
+    },
+    {
+      "externalIdentifier": "gls",
+      "id": 14,
+      "name": "gls",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": null,
+      "outboundFeatures": null,
+      "capabilities": null,
+      "returnCapabilities": null
+    }
+  ]
+}

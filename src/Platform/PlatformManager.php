@@ -4,40 +4,62 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Platform;
 
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 
+/**
+ * @deprecated Use PropositionService instead.
+ * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService
+ * @package MyParcelNL\Pdk\Platform
+ */
 class PlatformManager implements PlatformManagerInterface
 {
+    protected PropositionService $propositionService;
+
+    public function __construct(PropositionService $propositionService)
+    {
+        $this->propositionService = $propositionService;
+    }
     /**
      * @return array
      */
     public function all(): array
     {
-        return Config::get(sprintf('platform/%s', $this->getPlatform()));
+        return $this->propositionService->mapToPlatformConfig(
+            $this->propositionService->getPropositionConfig()
+        );
     }
 
     /**
      * @param  string $key
      *
      * @return mixed
-     */
+     * @deprecated This function will be removed in the future. You should use the PropositionService to get specific configuration values.
+     * @see PropositionService::getPropositionConfig()
+    */
     public function get(string $key)
     {
-        return Config::get(sprintf('platform/%s.%s', $this->getPlatform(), $key));
+        // @todo do mapping here
+        $config = $this->all();
+        return $config[$key] ?? null;
     }
 
     /**
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     * @deprecated Use PropositionService::getCarriers() instead.
+     * @see PropositionService::getCarriers()
      */
     public function getCarriers(): CarrierCollection
     {
-        return Pdk::get('carriers');
+        return $this->propositionService->getCarriers();
     }
 
     /**
      * @return string
+     * @deprecated use PropositionService::getActivePropositionName() instead.
+     * @see PropositionService::getActivePropositionName()
      */
     public function getPlatform(): string
     {

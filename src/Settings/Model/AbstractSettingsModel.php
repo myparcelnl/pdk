@@ -7,7 +7,8 @@ namespace MyParcelNL\Pdk\Settings\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 /**
  * Settings model.
@@ -60,7 +61,18 @@ abstract class AbstractSettingsModel extends Model
                 continue;
             }
 
-            $defaultValue = Platform::get(sprintf('settings.defaults.%s.%s', $this->id, $key));
+            // Get default value from proposition config if available
+            $defaultValue = null;
+            try {
+                $propositionService = Pdk::get(PropositionService::class);
+                $proposition = $propositionService->getPropositionConfig();
+                $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+                
+                $defaultValue = $platformConfig['defaultSettings'][$this->id][$key] ?? null;
+            } catch (\Exception $e) {
+                // Fallback to null if proposition config is not available
+                $defaultValue = null;
+            }
 
             if (null === $defaultValue) {
                 continue;

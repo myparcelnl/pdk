@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -10,6 +11,7 @@ use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
+
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 it('retrieves config for each platform', function (string $platform) {
@@ -21,16 +23,16 @@ it('retrieves config for each platform', function (string $platform) {
 })->with('platforms');
 
 it('gets specific keys from platform data', function () {
-    MockPdkFactory::create(['platform' => Platform::FLESPAKKET_NAME]);
+    MockPdkFactory::create(['platform' => Platform::SENDMYPARCEL_NAME]);
 
     expect(PlatformFacade::get('name'))
-        ->toBe('flespakket')
+        ->toBe('myparcel-belgie')
         ->and(PlatformFacade::get('human'))
-        ->toBe('Flespakket')
+        ->toBe('MyParcel België')
         ->and(PlatformFacade::get('localCountry'))
-        ->toBe('NL')
+        ->toBe('BE')
         ->and(PlatformFacade::get('defaultCarrier'))
-        ->toBe('postnl')
+        ->toBe('bpost')
         ->and(PlatformFacade::get('nonExistingKey'))
         ->toBeNull();
 });

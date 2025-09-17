@@ -1,376 +1,382 @@
 {
-    "name": "myparcel",
-    "human": "MyParcel",
+    "name": "myparcel-nederland",
+    "human": "MyParcel Nederland",
     "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
-    "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
+    "supportUrl": "https:\/\/developer.myparcel.nl",
     "localCountry": "NL",
-    "defaultCarrier": "postnl",
+    "defaultCarrier": "POSTNL",
     "defaultCarrierId": 1,
-    "defaultSettings": {
-        "checkout": {
-            "pickupLocationsDefaultView": "list"
-        }
-    },
+    "defaultSettings": [],
     "carriers": [
         {
-            "name": "postnl",
-            "capabilities": {
+            "externalIdentifier": "POSTNL",
+            "id": 1,
+            "name": "POSTNL",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
                 "packageTypes": [
-                    "package",
-                    "mailbox",
-                    "letter",
-                    "digital_stamp",
-                    "package_small"
+                    "PACKAGE"
                 ],
                 "deliveryTypes": [
-                    "morning",
-                    "standard",
-                    "evening",
-                    "pickup"
+                    "STANDARD_DELIVERY"
                 ],
-                "shipmentOptions": {
-                    "ageCheck": true,
-                    "largeFormat": true,
-                    "onlyRecipient": true,
-                    "return": true,
-                    "sameDayDelivery": false,
-                    "signature": true,
-                    "receiptCode": true,
-                    "collect": false,
-                    "insurance": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                },
-                "features": {
+                "shipmentOptions": [
+                    "SIGNATURE",
+                    "RETURN",
+                    "AGE_CHECK",
+                    "ONLY_RECIPIENT",
+                    "SAME_DAY_DELIVERY",
+                    "LARGE_FORMAT",
+                    "INSURANCE"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            },
+            "outboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE",
+                    "MAILBOX",
+                    "LETTER",
+                    "DIGITAL_STAMP",
+                    "SMALL"
+                ],
+                "deliveryTypes": [
+                    "MORNING_DELIVERY",
+                    "STANDARD_DELIVERY",
+                    "EVENING_DELIVERY",
+                    "PICKUP_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "AGE_CHECK",
+                    "LARGE_FORMAT",
+                    "ONLY_RECIPIENT",
+                    "RETURN",
+                    "SIGNATURE",
+                    "RECEIPT_CODE",
+                    "INSURANCE"
+                ],
+                "metadata": {
                     "labelDescriptionLength": 45,
-                    "carrierSmallPackageContract": "featureCustomContractOnly",
+                    "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
                     "multiCollo": true
                 }
+            }
+        },
+        {
+            "externalIdentifier": "CHEAP_CARGO",
+            "id": 3,
+            "name": "CHEAP_CARGO",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
             },
-            "returnCapabilities": {
-                "packageTypes": [
-                    "package"
-                ],
-                "deliveryTypes": [
-                    "standard"
-                ],
-                "shipmentOptions": {
-                    "signature": true,
-                    "insurance": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ],
-                    "return": true,
-                    "ageCheck": true,
-                    "onlyRecipient": true,
-                    "sameDayDelivery": false,
-                    "largeFormat": true,
-                    "collect": false
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
+            "outboundFeatures": {
+                "packageTypes": [],
+                "deliveryTypes": [],
+                "shipmentOptions": [],
+                "metadata": []
             }
         },
         {
-            "name": "dhlforyou",
-            "capabilities": {
-                "packageTypes": [
-                    "package",
-                    "mailbox",
-                    "package_small"
-                ],
-                "deliveryTypes": [
-                    "standard",
-                    "pickup"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": true,
-                    "largeFormat": false,
-                    "onlyRecipient": true,
-                    "return": false,
-                    "sameDayDelivery": true,
-                    "signature": true,
-                    "saturdayDelivery": true,
-                    "hideSender": true,
-                    "collect": false,
-                    "insurance": [
-                        0,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
+            "externalIdentifier": "DPD",
+            "id": 4,
+            "name": "DPD",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
             },
-            "returnCapabilities": {
+            "outboundFeatures": {
                 "packageTypes": [
-                    "package"
+                    "PACKAGE",
+                    "MAILBOX"
                 ],
                 "deliveryTypes": [
-                    "standard"
+                    "STANDARD_DELIVERY",
+                    "PICKUP_DELIVERY"
                 ],
-                "shipmentOptions": {
-                    "signature": true,
-                    "insurance": [
-                        0
-                    ],
-                    "return": true,
-                    "ageCheck": true,
-                    "onlyRecipient": true,
-                    "sameDayDelivery": true,
-                    "largeFormat": true,
-                    "collect": false
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
-            }
-        },
-        {
-            "name": "dhlparcelconnect",
-            "capabilities": {
-                "packageTypes": [
-                    "package"
-                ],
-                "deliveryTypes": [
-                    "standard",
-                    "pickup"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": false,
-                    "onlyRecipient": false,
-                    "return": false,
-                    "sameDayDelivery": false,
-                    "signature": true,
-                    "saturdayDelivery": false,
-                    "hideSender": false,
-                    "collect": false,
-                    "insurance": [
-                        0,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
-            },
-            "returnCapabilities": {
-                "packageTypes": [
-                    "package"
-                ],
-                "deliveryTypes": [
-                    "standard"
-                ],
-                "shipmentOptions": {
-                    "signature": false,
-                    "insurance": [
-                        50000
-                    ],
-                    "return": false,
-                    "ageCheck": false,
-                    "onlyRecipient": false,
-                    "sameDayDelivery": false,
-                    "largeFormat": false,
-                    "collect": false
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
-            }
-        },
-        {
-            "name": "dhleuroplus",
-            "capabilities": {
-                "packageTypes": [
-                    "package"
-                ],
-                "deliveryTypes": [
-                    "standard"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": false,
-                    "onlyRecipient": false,
-                    "return": false,
-                    "sameDayDelivery": false,
-                    "signature": true,
-                    "saturdayDelivery": true,
-                    "hideSender": true,
-                    "insurance": [
-                        0,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
-            }
-        },
-        {
-            "name": "upsstandard",
-            "capabilities": {
-                "packageTypes": [
-                    "package"
-                ],
-                "deliveryTypes": [
-                    "standard",
-                    "pickup"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": true,
-                    "onlyRecipient": true,
-                    "return": true,
-                    "signature": true,
-                    "collect": true,
-                    "insurance": [
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
-            }
-        },
-        {
-            "name": "upsexpresssaver",
-            "capabilities": {
-                "packageTypes": [
-                    "package"
-                ],
-                "deliveryTypes": [
-                    "express",
-                    "pickup"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": true,
-                    "onlyRecipient": true,
-                    "return": true,
-                    "signature": true,
-                    "collect": true,
-                    "insurance": [
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                },
-                "features": {
-                    "labelDescriptionLength": 45
-                }
-            }
-        },
-        {
-            "name": "dpd",
-            "capabilities": {
-                "packageTypes": [
-                    "package",
-                    "mailbox"
-                ],
-                "deliveryTypes": [
-                    "standard",
-                    "pickup"
-                ],
-                "shipmentOptions": {
-                    "ageCheck": false,
-                    "onlyRecipient": false,
-                    "return": false,
-                    "collect": false
-                },
-                "features": {
+                "shipmentOptions": [],
+                "metadata": {
                     "labelDescriptionLength": 45,
                     "needsCustomerInfo": true
                 }
             }
         },
         {
-            "name": "gls",
-            "capabilities": {
+            "externalIdentifier": "INSTABOX",
+            "id": 5,
+            "name": "INSTABOX",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
+            },
+            "outboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
+            }
+        },
+        {
+            "externalIdentifier": "DHL_FOR_YOU",
+            "id": 9,
+            "name": "DHL_FOR_YOU",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
                 "packageTypes": [
-                    "package"
+                    "PACKAGE"
                 ],
                 "deliveryTypes": [
-                    "standard",
-                    "pickup"
+                    "STANDARD_DELIVERY"
                 ],
-                "shipmentOptions": {
-                    "signature": true,
-                    "saturdayDelivery": true,
-                    "insurance": [
-                        10000
-                    ]
-                },
-                "features": {
-                    "labelDescriptionLength": 45,
-                    "carrier": "featureCustomContractOnly"
+                "shipmentOptions": [
+                    "SIGNATURE",
+                    "RETURN",
+                    "AGE_CHECK",
+                    "ONLY_RECIPIENT",
+                    "SAME_DAY_DELIVERY",
+                    "LARGE_FORMAT"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            },
+            "outboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE",
+                    "MAILBOX",
+                    "SMALL"
+                ],
+                "deliveryTypes": [
+                    "STANDARD_DELIVERY",
+                    "PICKUP_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "AGE_CHECK",
+                    "ONLY_RECIPIENT",
+                    "SAME_DAY_DELIVERY",
+                    "SIGNATURE",
+                    "SATURDAY_DELIVERY",
+                    "HIDE_SENDER",
+                    "INSURANCE"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            }
+        },
+        {
+            "externalIdentifier": "DHL_PARCEL_CONNECT",
+            "id": 10,
+            "name": "DHL_PARCEL_CONNECT",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE"
+                ],
+                "deliveryTypes": [
+                    "STANDARD_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "INSURANCE"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            },
+            "outboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE"
+                ],
+                "deliveryTypes": [
+                    "STANDARD_DELIVERY",
+                    "PICKUP_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "SIGNATURE",
+                    "INSURANCE"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            }
+        },
+        {
+            "externalIdentifier": "DHL_EUROPLUS",
+            "id": 11,
+            "name": "DHL_EUROPLUS",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
+            },
+            "outboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE"
+                ],
+                "deliveryTypes": [
+                    "STANDARD_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "SIGNATURE",
+                    "SATURDAY_DELIVERY",
+                    "HIDE_SENDER",
+                    "INSURANCE"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            }
+        },
+        {
+            "externalIdentifier": "UPS_STANDARD",
+            "id": 12,
+            "name": "UPS_STANDARD",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
+            },
+            "outboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE"
+                ],
+                "deliveryTypes": [
+                    "STANDARD_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "AGE_CHECK",
+                    "ONLY_RECIPIENT",
+                    "RETURN",
+                    "SIGNATURE",
+                    "COLLECT"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
+                }
+            }
+        },
+        {
+            "externalIdentifier": "UPS_EXPRESS_SAVER",
+            "id": 13,
+            "name": "UPS_EXPRESS_SAVER",
+            "human": null,
+            "contractId": null,
+            "enabled": true,
+            "isDefault": true,
+            "label": null,
+            "optional": false,
+            "primary": false,
+            "type": "main",
+            "capabilities": null,
+            "returnCapabilities": null,
+            "inboundFeatures": {
+                "packageTypes": null,
+                "deliveryTypes": null,
+                "shipmentOptions": null,
+                "metadata": null
+            },
+            "outboundFeatures": {
+                "packageTypes": [
+                    "PACKAGE"
+                ],
+                "deliveryTypes": [
+                    "EXPRESS_DELIVERY"
+                ],
+                "shipmentOptions": [
+                    "AGE_CHECK",
+                    "ONLY_RECIPIENT",
+                    "RETURN",
+                    "SIGNATURE",
+                    "COLLECT"
+                ],
+                "metadata": {
+                    "labelDescriptionLength": 45
                 }
             }
         }
