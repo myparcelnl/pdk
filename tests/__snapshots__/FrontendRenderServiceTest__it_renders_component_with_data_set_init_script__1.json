@@ -212,7 +212,7 @@
       "backofficeUrl": "https://backoffice.myparcel.nl",
       "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
-      "defaultCarrier": "POSTNL",
+      "defaultCarrier": "postnl",
       "defaultCarrierId": 1
     },
     "translations": {
@@ -525,8 +525,8 @@
         "closedDays": []
       },
       "carrier": {
-        "POSTNL": {
-          "id": "POSTNL",
+        "postnl": {
+          "id": "postnl",
           "allowDeliveryOptions": false,
           "allowStandardDelivery": false,
           "allowEveningDelivery": false,
