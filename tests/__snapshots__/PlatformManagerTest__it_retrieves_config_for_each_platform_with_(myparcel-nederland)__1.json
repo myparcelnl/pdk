@@ -55,7 +55,7 @@
           "labelDescriptionLength": 45,
           "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
           "multiCollo": true,
-          "insuranceSteps": [
+          "insuranceOptions": [
             0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
           ]
         }
@@ -72,7 +72,11 @@
           "receiptCode": true,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45,
+          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+          "multiCollo": true
+        }
       },
       "returnCapabilities": {
         "packageTypes": ["package"],
@@ -83,10 +87,11 @@
           "ageCheck": true,
           "onlyRecipient": true,
           "sameDayDelivery": true,
-          "largeFormat": true,
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "largeFormat": true
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       }
     },
     {
@@ -147,7 +152,9 @@
         "packageTypes": ["package", "mailbox"],
         "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": [],
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       },
       "returnCapabilities": []
     },
@@ -225,9 +232,11 @@
           "signature": true,
           "saturdayDelivery": true,
           "hideSender": true,
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       },
       "returnCapabilities": {
         "packageTypes": ["package"],
@@ -240,7 +249,9 @@
           "sameDayDelivery": true,
           "largeFormat": true
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       }
     },
     {
@@ -277,18 +288,21 @@
         "packageTypes": ["package"],
         "deliveryTypes": ["standard", "pickup"],
         "shipmentOptions": {
-          "signature": true,
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "signature": true
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       },
       "returnCapabilities": {
         "packageTypes": ["package"],
         "deliveryTypes": ["standard"],
         "shipmentOptions": {
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "insurance": [50000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       }
     },
     {
@@ -325,9 +339,11 @@
           "signature": true,
           "saturdayDelivery": true,
           "hideSender": true,
-          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       },
       "returnCapabilities": []
     },
@@ -371,7 +387,9 @@
           "collect": true,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       },
       "returnCapabilities": []
     },
@@ -412,9 +430,12 @@
           "onlyRecipient": true,
           "return": true,
           "signature": true,
-          "collect": true
+          "collect": true,
+          "insurance": [10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         },
-        "features": []
+        "features": {
+          "labelDescriptionLength": 45
+        }
       },
       "returnCapabilities": []
     },
