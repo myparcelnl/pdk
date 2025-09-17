@@ -459,7 +459,7 @@
           "orderIds": "2"
         },
         "timeout": false,
-        "title": " has no return capabilities",
+        "title": "POSTNL has no return capabilities",
         "variant": "warning"
       },
       {
@@ -481,7 +481,7 @@
           "orderIds": "2"
         },
         "timeout": false,
-        "title": " has no return capabilities",
+        "title": "POSTNL has no return capabilities",
         "variant": "warning"
       },
       {
@@ -503,7 +503,7 @@
           "orderIds": "2"
         },
         "timeout": false,
-        "title": " has no return capabilities",
+        "title": "DHL_EUROPLUS has no return capabilities",
         "variant": "warning"
       },
       {
