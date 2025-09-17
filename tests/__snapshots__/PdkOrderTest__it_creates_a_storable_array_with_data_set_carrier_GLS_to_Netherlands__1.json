@@ -3,7 +3,7 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "GLS:1234"
+        "externalIdentifier": "gls:1234"
       },
       "labelAmount": 1,
       "shipmentOptions": {

@@ -3,7 +3,7 @@
     "exported": false,
     "deliveryOptions": {
       "carrier": {
-        "externalIdentifier": "DHL_FOR_YOU:1234"
+        "externalIdentifier": "dhlforyou:1234"
       },
       "labelAmount": 1,
       "shipmentOptions": {

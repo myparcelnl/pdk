@@ -38,7 +38,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)->withCarrier(
-                        sprintf('%s:1234', Carrier::CARRIER_DHL_FOR_YOU_NAME)
+                        sprintf('%s:1234', Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME)
                     )
                 )
         );
@@ -49,7 +49,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withLines(factory(PdkOrderLineCollection::class, 1)->eachWith(['quantity' => 5]))
                 ->withDeliveryOptions([
-                    'carrier'     => Carrier::CARRIER_POSTNL_NAME,
+                    'carrier'     => Carrier::CARRIER_POSTNL_LEGACY_NAME,
                     'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                 ]),
             factory(PdkOrder::class)
@@ -67,7 +67,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME)
+                        ->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 ->withAgeCheck(TriStateService::ENABLED)
@@ -85,7 +85,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME)
+                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME)
                         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
                 )
                 ->toBelgium()
@@ -97,7 +97,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME)
+                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME)
                         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
                 )
                 ->toTheNetherlands()
@@ -110,7 +110,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
                         )
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
@@ -129,7 +129,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
                         )
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
@@ -147,7 +147,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
                         )
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
@@ -165,7 +165,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_NAME)
+                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
                         )
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
@@ -183,7 +183,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(
-                            sprintf('%s:5678', Carrier::CARRIER_GLS_NAME)
+                            sprintf('%s:5678', Carrier::CARRIER_GLS_LEGACY_NAME)
                         )
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)

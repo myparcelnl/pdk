@@ -4,11 +4,14 @@
       "externalIdentifier": "123",
       "deliveryOptions": {
         "carrier": {
-          "externalIdentifier": "POSTNL",
+          "externalIdentifier": "postnl",
           "id": 1,
-          "name": "POSTNL",
+          "name": "postnl",
+          "human": null,
+          "contractId": null,
           "enabled": true,
           "isDefault": true,
+          "label": null,
           "optional": false,
           "primary": false,
           "type": "main",
@@ -51,10 +54,45 @@
                 0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
               ]
             }
+          },
+          "capabilities": {
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+            "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+            "shipmentOptions": {
+              "ageCheck": true,
+              "largeFormat": true,
+              "onlyRecipient": true,
+              "return": true,
+              "signature": true,
+              "receiptCode": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            },
+            "features": []
+          },
+          "returnCapabilities": {
+            "packageTypes": ["package"],
+            "deliveryTypes": ["standard"],
+            "shipmentOptions": {
+              "signature": true,
+              "return": true,
+              "ageCheck": true,
+              "onlyRecipient": true,
+              "sameDayDelivery": true,
+              "largeFormat": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            },
+            "features": []
           }
         },
+        "date": null,
         "labelAmount": 1,
+        "pickupLocation": null,
         "shipmentOptions": {
+          "labelDescription": null,
           "insurance": -1,
           "ageCheck": -1,
           "return": -1,
@@ -91,186 +129,6 @@
       "totalPriceAfterVat": 0,
       "inheritedDeliveryOptions": {
         "postnl": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "cheapcargo": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dpd": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "instabox": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dhlforyou": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dhlparcelconnect": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dhleuroplus": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "upsstandard": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "upsexpresssaver": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "bol.com": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "gls": {
           "labelAmount": 1,
           "shipmentOptions": {
             "insurance": 0,
@@ -316,11 +174,14 @@
       "externalIdentifier": "124",
       "deliveryOptions": {
         "carrier": {
-          "externalIdentifier": "POSTNL",
+          "externalIdentifier": "postnl",
           "id": 1,
-          "name": "POSTNL",
+          "name": "postnl",
+          "human": null,
+          "contractId": null,
           "enabled": true,
           "isDefault": true,
+          "label": null,
           "optional": false,
           "primary": false,
           "type": "main",
@@ -363,10 +224,45 @@
                 0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
               ]
             }
+          },
+          "capabilities": {
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+            "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+            "shipmentOptions": {
+              "ageCheck": true,
+              "largeFormat": true,
+              "onlyRecipient": true,
+              "return": true,
+              "signature": true,
+              "receiptCode": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            },
+            "features": []
+          },
+          "returnCapabilities": {
+            "packageTypes": ["package"],
+            "deliveryTypes": ["standard"],
+            "shipmentOptions": {
+              "signature": true,
+              "return": true,
+              "ageCheck": true,
+              "onlyRecipient": true,
+              "sameDayDelivery": true,
+              "largeFormat": true,
+              "insurance": [
+                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+              ]
+            },
+            "features": []
           }
         },
+        "date": null,
         "labelAmount": 1,
+        "pickupLocation": null,
         "shipmentOptions": {
+          "labelDescription": null,
           "insurance": -1,
           "ageCheck": -1,
           "return": -1,
@@ -403,186 +299,6 @@
       "totalPriceAfterVat": 0,
       "inheritedDeliveryOptions": {
         "postnl": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "cheapcargo": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dpd": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "instabox": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dhlforyou": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dhlparcelconnect": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "dhleuroplus": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "upsstandard": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "upsexpresssaver": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "bol.com": {
-          "labelAmount": 1,
-          "shipmentOptions": {
-            "insurance": 0,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": 0,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": 0,
-            "sameDayDelivery": 0,
-            "signature": 0,
-            "tracked": 0,
-            "collect": 0
-          },
-          "deliveryType": "standard",
-          "packageType": "package"
-        },
-        "gls": {
           "labelAmount": 1,
           "shipmentOptions": {
             "insurance": 0,

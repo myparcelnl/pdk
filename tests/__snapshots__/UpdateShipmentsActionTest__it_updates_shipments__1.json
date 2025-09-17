@@ -9,13 +9,13 @@
         "externalIdentifier": "CV515676839NL",
         "barcode": "CV515676839NL",
         "carrier": {
-          "externalIdentifier": "POSTNL"
+          "externalIdentifier": "postnl"
         },
         "delayed": false,
         "delivered": false,
         "deliveryOptions": {
           "carrier": {
-            "externalIdentifier": "POSTNL"
+            "externalIdentifier": "postnl"
           },
           "labelAmount": 1,
           "shipmentOptions": {

@@ -4,10 +4,10 @@
   "name": "DHL_FOR_YOU",
   "contractId": "23182",
   "enabled": true,
-  "isDefault": true,
+  "isDefault": false,
   "optional": false,
   "primary": false,
-  "type": "main",
+  "type": "custom",
   "inboundFeatures": {
     "packageTypes": ["PACKAGE"],
     "deliveryTypes": ["STANDARD_DELIVERY"],
