@@ -4,14 +4,14 @@
   "backofficeUrl": "https://backoffice.myparcel.nl",
   "supportUrl": "https://developer.myparcel.nl",
   "localCountry": "NL",
-  "defaultCarrier": "POSTNL",
+  "defaultCarrier": "postnl",
   "defaultCarrierId": 1,
   "defaultSettings": [],
   "carriers": [
     {
-      "externalIdentifier": "POSTNL",
+      "externalIdentifier": "postnl",
       "id": 1,
-      "name": "POSTNL",
+      "name": "postnl",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -60,13 +60,39 @@
           ]
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+        "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "largeFormat": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "receiptCode": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      },
+      "returnCapabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "signature": true,
+          "return": true,
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "sameDayDelivery": true,
+          "largeFormat": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      }
     },
     {
-      "externalIdentifier": "CHEAP_CARGO",
+      "externalIdentifier": "cheapcargo",
       "id": 3,
-      "name": "CHEAP_CARGO",
+      "name": "cheapcargo",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -87,13 +113,13 @@
         "shipmentOptions": null,
         "metadata": null
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": [],
+      "returnCapabilities": []
     },
     {
-      "externalIdentifier": "DPD",
+      "externalIdentifier": "dpd",
       "id": 4,
-      "name": "DPD",
+      "name": "dpd",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -117,13 +143,18 @@
           "needsCustomerInfo": true
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package", "mailbox"],
+        "deliveryTypes": ["standard", "pickup"],
+        "shipmentOptions": [],
+        "features": []
+      },
+      "returnCapabilities": []
     },
     {
-      "externalIdentifier": "INSTABOX",
+      "externalIdentifier": "instabox",
       "id": 5,
-      "name": "INSTABOX",
+      "name": "instabox",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -144,13 +175,13 @@
         "shipmentOptions": null,
         "metadata": null
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": [],
+      "returnCapabilities": []
     },
     {
-      "externalIdentifier": "DHL_FOR_YOU",
+      "externalIdentifier": "dhlforyou",
       "id": 9,
-      "name": "DHL_FOR_YOU",
+      "name": "dhlforyou",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -184,13 +215,38 @@
           "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package", "mailbox", "package_small"],
+        "deliveryTypes": ["standard", "pickup"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "sameDayDelivery": true,
+          "signature": true,
+          "saturdayDelivery": true,
+          "hideSender": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      },
+      "returnCapabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "signature": true,
+          "return": true,
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "sameDayDelivery": true,
+          "largeFormat": true
+        },
+        "features": []
+      }
     },
     {
-      "externalIdentifier": "DHL_PARCEL_CONNECT",
+      "externalIdentifier": "dhlparcelconnect",
       "id": 10,
-      "name": "DHL_PARCEL_CONNECT",
+      "name": "dhlparcelconnect",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -217,13 +273,28 @@
           "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard", "pickup"],
+        "shipmentOptions": {
+          "signature": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      },
+      "returnCapabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      }
     },
     {
-      "externalIdentifier": "DHL_EUROPLUS",
+      "externalIdentifier": "dhleuroplus",
       "id": 11,
-      "name": "DHL_EUROPLUS",
+      "name": "dhleuroplus",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -247,13 +318,23 @@
           "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "signature": true,
+          "saturdayDelivery": true,
+          "hideSender": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      },
+      "returnCapabilities": []
     },
     {
-      "externalIdentifier": "UPS_STANDARD",
+      "externalIdentifier": "upsstandard",
       "id": 12,
-      "name": "UPS_STANDARD",
+      "name": "upsstandard",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -279,13 +360,25 @@
           ]
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "collect": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        },
+        "features": []
+      },
+      "returnCapabilities": []
     },
     {
-      "externalIdentifier": "UPS_EXPRESS_SAVER",
+      "externalIdentifier": "upsexpresssaver",
       "id": 13,
-      "name": "UPS_EXPRESS_SAVER",
+      "name": "upsexpresssaver",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -311,13 +404,24 @@
           ]
         }
       },
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["express"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "return": true,
+          "signature": true,
+          "collect": true
+        },
+        "features": []
+      },
+      "returnCapabilities": []
     },
     {
-      "externalIdentifier": "BOL",
+      "externalIdentifier": "bol.com",
       "id": 7,
-      "name": "BOL",
+      "name": "bol.com",
       "human": null,
       "contractId": null,
       "enabled": true,
@@ -332,9 +436,9 @@
       "returnCapabilities": null
     },
     {
-      "externalIdentifier": "GLS",
+      "externalIdentifier": "gls",
       "id": 14,
-      "name": "GLS",
+      "name": "gls",
       "human": null,
       "contractId": null,
       "enabled": true,

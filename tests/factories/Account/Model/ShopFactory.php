@@ -14,8 +14,10 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollectionFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 
@@ -47,10 +49,11 @@ final class ShopFactory extends AbstractModelFactory
 
     protected function createDefault(): FactoryInterface
     {
+        $propositionService = Pdk::get(PropositionService::class);
         return $this->withCarriers(
             factory(CarrierCollection::class)->push(
                 factory(Carrier::class)
-                    ->withExternalIdentifier(PlatformFacade::get('defaultCarrier'))
+                    ->withExternalIdentifier($propositionService->getDefaultCarrier()->externalIdentifier)
                     ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
             )
         );
