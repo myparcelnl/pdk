@@ -95,6 +95,35 @@
       }
     },
     {
+      "externalIdentifier": "cheapcargo",
+      "id": 3,
+      "name": "cheapcargo",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PALLET"],
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "capabilities": {
+        "packageTypes": [false]
+      },
+      "returnCapabilities": []
+    },
+    {
       "externalIdentifier": "dpd",
       "id": 4,
       "name": "dpd",

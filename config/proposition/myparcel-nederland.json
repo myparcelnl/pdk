@@ -295,6 +295,17 @@
       },
       {
         "carrier": {
+          "id": 3,
+          "name": "CHEAP_CARGO"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PALLET"]
+        }
+      },
+      {
+        "carrier": {
           "id": 4,
           "name": "DPD"
         },
