@@ -414,7 +414,10 @@
               500000
             ]
           },
-          "features": []
+          "features": {
+            "labelDescriptionLength": 45,
+            "multiCollo": true
+          }
         },
         "returnCapabilities": {
           "deliveryTypes": [
@@ -464,7 +467,9 @@
               500000
             ]
           },
-          "features": []
+          "features": {
+            "labelDescriptionLength": 45
+          }
         }
       }
     ],

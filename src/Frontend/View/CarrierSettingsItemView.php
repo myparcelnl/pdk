@@ -145,7 +145,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $hasInsurance = $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME);
 
         if ($hasInsurance) {
-            $insuranceAmounts = [0, 1000, 2000]; // @todo
+            $insuranceAmounts = $this->carrier->outboundFeatures['metadata']['insuranceOptions'] ?? [];
         }
 
         $options = array_map(function (int $amount) {
