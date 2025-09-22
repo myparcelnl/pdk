@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Debug;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
@@ -50,13 +51,13 @@ class SwitchToProductionApiAction implements ActionInterface
     {
         try {
             // Remove the acceptance API URL from the cache file
-            $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
+            $cacheFile = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
             if (file_exists($cacheFile)) {
                 unlink($cacheFile);
             }
 
             // Switch the base URL back to the production API for the current session
-            $this->apiService->setBaseUrl('https://api.myparcel.nl');
+            $this->apiService->setBaseUrl(Config::API_URL_PRODUCTION);
 
             // Remove the API key because production needs its own API key
             // Use the same method as DeleteAccountAction

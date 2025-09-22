@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Debug;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
+use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
@@ -17,6 +18,7 @@ use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class SwitchToAcceptanceApiAction implements ActionInterface
 {
@@ -31,14 +33,14 @@ class SwitchToAcceptanceApiAction implements ActionInterface
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService
+     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface                 $apiService
      * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
      */
     public function __construct(
-        ApiServiceInterface $apiService,
+        ApiServiceInterface            $apiService,
         PdkSettingsRepositoryInterface $settingsRepository
     ) {
-        $this->apiService = $apiService;
+        $this->apiService         = $apiService;
         $this->settingsRepository = $settingsRepository;
     }
 
@@ -51,12 +53,12 @@ class SwitchToAcceptanceApiAction implements ActionInterface
     {
         try {
             // Store the acceptance API URL in a file for persistence
-            $acceptanceUrl = 'https://api.acceptance.myparcel.nl';
-            $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
+            $acceptanceUrl = Config::API_URL_ACCEPTANCE;
+            $cacheFile     = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
             file_put_contents($cacheFile, $acceptanceUrl);
 
             // Switch the base URL to the acceptance API for the current session
-            $this->apiService->setBaseUrl('https://api.acceptance.myparcel.nl');
+            $this->apiService->setBaseUrl(Config::API_URL_ACCEPTANCE);
 
             // Remove the API key because acceptance needs its own API key
             // Use the same method as DeleteAccountAction
@@ -72,8 +74,7 @@ class SwitchToAcceptanceApiAction implements ActionInterface
 
             // Call UPDATE_ACCOUNT to reload the context, just like DeleteAccountAction
             return Actions::execute(PdkBackendActions::UPDATE_ACCOUNT);
-
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Logger::error('Failed to switch API URLs to acceptance environment', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
