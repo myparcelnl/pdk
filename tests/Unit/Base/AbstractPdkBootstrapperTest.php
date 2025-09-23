@@ -5,9 +5,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base;
 
+use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
+use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function DI\value;
+use function MyParcelNL\Pdk\Tests\factory;
+
+//use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
 
 afterAll(function () {
     Bootstrapper::reset();
@@ -87,3 +94,17 @@ it('can boot the PDK with additional config', function () {
         ->and($pdk->get('appInfoArray'))
         ->toMatchArray($appInfoInput);
 });
+
+it ('determines platform from account', function (int $platformId, string $platform) {
+    TestBootstrapper::forPlatform('myparcel');
+
+    factory(Account::class, $platformId)
+        ->withShops()
+        ->store();
+
+    expect(PlatformFacade::getPropositionName())->toBe($platform);
+})->with([
+    'myparcelnl'          => [Platform::MYPARCEL_ID, Platform::MYPARCEL_NAME],
+    'myparcelbe'          => [Platform::SENDMYPARCEL_ID, Platform::SENDMYPARCEL_NAME],
+    'unrecognized id' => [-100, Platform::MYPARCEL_NAME],
+]);
