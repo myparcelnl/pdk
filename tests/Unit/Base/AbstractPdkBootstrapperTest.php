@@ -14,8 +14,6 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\factory;
 
-//use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
-
 afterAll(function () {
     Bootstrapper::reset();
 });
