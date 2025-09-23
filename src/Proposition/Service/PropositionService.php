@@ -34,7 +34,7 @@ class PropositionService
      */
     public function getActivePropositionName(): string
     {
-        return Pdk::get(PlatformManager::class)->getPlatform();
+        return Pdk::get(PlatformManager::class)->getPropositionName();
     }
 
     /**
