@@ -367,8 +367,12 @@
           }
         },
         "capabilities": {
-          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
           "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+          "features": {
+            "labelDescriptionLength": 45,
+            "multiCollo": true
+          },
+          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
           "shipmentOptions": {
             "ageCheck": true,
             "return": true,
@@ -377,15 +381,14 @@
             "onlyRecipient": true,
             "sameDayDelivery": true,
             "signature": true
-          },
-          "features": {
-            "labelDescriptionLength": 45,
-            "multiCollo": true
           }
         },
         "returnCapabilities": {
-          "packageTypes": ["package"],
           "deliveryTypes": ["standard"],
+          "features": {
+            "labelDescriptionLength": 45
+          },
+          "packageTypes": ["package"],
           "shipmentOptions": {
             "signature": true,
             "return": true,
@@ -393,9 +396,6 @@
             "onlyRecipient": true,
             "sameDayDelivery": true,
             "largeFormat": true
-          },
-          "features": {
-            "labelDescriptionLength": 45
           }
         }
       }

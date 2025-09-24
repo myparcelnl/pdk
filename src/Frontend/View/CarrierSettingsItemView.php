@@ -146,6 +146,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         if ($hasInsurance) {
             $insuranceAmounts = $this->carrier->outboundFeatures['metadata']['insuranceOptions'] ?? [];
+        } else {
+            $insuranceAmounts = [];
         }
 
         $options = array_map(function (int $amount) {
@@ -420,7 +422,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $deliveryType = $this->propositionService->deliveryTypeNameForDeliveryOptions($deliveryType);
 
             // Ignore unsupported types
-            if ($deliveryType === false) {
+            if ($deliveryType === null) {
                 continue;
             }
 
