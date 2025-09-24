@@ -50,20 +50,6 @@
     }
   },
   {
-    "externalIdentifier": "CHEAP_CARGO",
-    "id": 3,
-    "name": "CHEAP_CARGO",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": [],
-    "outboundFeatures": {
-      "packageTypes": ["PALLET"]
-    }
-  },
-  {
     "externalIdentifier": "DPD",
     "id": 4,
     "name": "DPD",
@@ -82,18 +68,6 @@
         "needsCustomerInfo": true
       }
     }
-  },
-  {
-    "externalIdentifier": "INSTABOX",
-    "id": 5,
-    "name": "INSTABOX",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": [],
-    "outboundFeatures": []
   },
   {
     "externalIdentifier": "DHL_FOR_YOU",
@@ -221,25 +195,5 @@
         ]
       }
     }
-  },
-  {
-    "externalIdentifier": "BOL",
-    "id": 7,
-    "name": "BOL",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  {
-    "externalIdentifier": "GLS",
-    "id": 14,
-    "name": "GLS",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
   }
 ]

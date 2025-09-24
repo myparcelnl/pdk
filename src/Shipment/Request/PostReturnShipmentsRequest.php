@@ -125,8 +125,7 @@ class PostReturnShipmentsRequest extends Request
 
         try {
             $propositionService = Pdk::get(PropositionService::class);
-            $carrier = $propositionService->getCarriers()
-                ->firstWhere('id', $carrierId);
+            $carrier = $propositionService->getCarrierById($carrierId);
 
             if (! $carrier || ! $carrier->returnCapabilities) {
                 $defaultCarrier = $propositionService->getDefaultCarrier();

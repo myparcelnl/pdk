@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 final class TestBootstrapper
