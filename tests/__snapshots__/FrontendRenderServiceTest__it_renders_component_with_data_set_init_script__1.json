@@ -382,13 +382,22 @@
             "dropOffAtPostalPoint": true,
             "labelDescriptionLength": 45,
             "multiCollo": true
-          },
+          }
+        },
+        "capabilities": {
           "packageTypes": [
             "package",
             "mailbox",
             "letter",
             "digital_stamp",
             "package_small"
+          ],
+          "deliveryTypes": [
+            "morning",
+            "standard",
+            "evening",
+            "pickup",
+            "express"
           ],
           "shipmentOptions": {
             "ageCheck": true,
@@ -420,14 +429,11 @@
           }
         },
         "returnCapabilities": {
-          "deliveryTypes": [
-            "standard"
-          ],
-          "features": {
-            "labelDescriptionLength": 45
-          },
           "packageTypes": [
             "package"
+          ],
+          "deliveryTypes": [
+            "standard"
           ],
           "shipmentOptions": {
             "signature": true,

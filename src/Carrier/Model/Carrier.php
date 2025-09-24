@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 
 /**
  * @property string                   $externalIdentifier
@@ -25,8 +26,8 @@ use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
  * @property bool                     $optional
  * @property null|string              $label
  * @property null|string              $type
- * @property PropositionCarrierFeatures $inboundFeatures
- * @property PropositionCarrierFeatures $outboundFeatures
+ * @property PropositionCarrierFeatures|null  $inboundFeatures
+ * @property PropositionCarrierFeatures|null  $outboundFeatures
  * @property CarrierCapabilities        $capabilities        // @deprecated use outboundFeatures instead
  * @property CarrierCapabilities        $returnCapabilities  // @deprecated use inboundFeatures instead
  * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
@@ -62,7 +63,7 @@ class Carrier extends Model
      * @deprecated Use CARRIER_UPS_STANDARD_NAME or CARRIER_UPS_EXPRESS_SAVER_NAME instead
      */
     public const CARRIER_UPS_LEGACY_NAME             = 'ups';
-    public const CARRIER_UPS_NAME                    = 'UPS_STANDARD';
+    public const CARRIER_UPS_NAME                    = 'UPS';
     public const CARRIER_DHL_FOR_YOU_ID              = 9;
     public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
     public const CARRIER_DHL_FOR_YOU_NAME            = 'DHL_FOR_YOU';

@@ -39,20 +39,25 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        },
+        "packageTypes": ["package"],
         "shipmentOptions": {
           "signature": true,
           "onlyRecipient": true,
           "largeFormat": true,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45,
-          "multiCollo": true
         }
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "bpost",
@@ -83,19 +88,24 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package", "mailbox"],
         "deliveryTypes": ["standard", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        },
+        "packageTypes": ["package", "mailbox"],
         "shipmentOptions": {
           "saturdayDelivery": true,
           "signature": true,
           "insurance": [0, 50000, 250000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45,
-          "multiCollo": true
         }
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "dpd",
@@ -128,17 +138,22 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard", "pickup"],
-        "shipmentOptions": {
-          "insurance": [52000]
-        },
         "features": {
           "labelDescriptionLength": 45,
           "multiCollo": true
+        },
+        "packageTypes": ["package"],
+        "shipmentOptions": {
+          "insurance": [52000]
         }
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     }
   ]
 }

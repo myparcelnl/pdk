@@ -7,9 +7,10 @@ namespace MyParcelNL\Pdk\Facade;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
- * @method static CarrierCollection carrierCollectionToLegacyFormat()
+ * @method static CarrierCollection carrierCollectionToLegacyFormat(CarrierCollection $carriers)
  * @method static Carrier convertCarrierToLegacyFormat(Carrier $carrier)
  * @method static string getLegacyIdentifier(string $externalIdentifier)
  * @method static array getLegacyPackageTypes()
