@@ -158,11 +158,9 @@ class PropositionService
         // Filter out carriers without supported delivery types if requested by checking with packageTypeNameForDeliveryOptions
         if ($supportedDeliveryTypesOnly) {
             $carrierModels = array_values(array_filter($carrierModels, function (Carrier $carrier) {
-                $features = $carrier->outboundFeatures instanceof PropositionCarrierFeatures
-                    ? $carrier->outboundFeatures
-                    : new PropositionCarrierFeatures((array) $carrier->outboundFeatures);
+                $features = $carrier->outboundFeatures;
 
-                if (!$features->packageTypes || !is_array($features->packageTypes)) {
+                if (!$features->packageTypes) {
                     return false;
                 }
 
@@ -181,7 +179,7 @@ class PropositionService
     /**
      * Get a specific carrier by its id from the proposition config.
 
-     * @param bool $outbound
+     * @param int $id
      * @return null|Carrier
      */
     public function getCarrierById(int $id): ?Carrier
@@ -192,7 +190,7 @@ class PropositionService
     /**
      * Get a specific carrier by its machine-readable name from the proposition config.
 
-     * @param bool $outbound
+     * @param string $name
      * @return null|Carrier
      */
     public function getCarrierByName(string $name): ?Carrier
@@ -205,7 +203,7 @@ class PropositionService
      * Returns the outbound carrier by default. Use $outbound = false to get the inbound (return shipments) carrier.
 
      * @param bool $outbound
-     * @return null|Carrier
+     * @return Carrier
      */
     public function getDefaultCarrier($outbound = true): Carrier
     {
@@ -323,9 +321,9 @@ class PropositionService
      * Given SCREAMING_SNAKE_CASE package name, return the snake_case version for delivery options if defined in that class.
      *
      * @param string $packageType a package type definition from the Proposition config
-     * @return string|false a package type definition suitable for Shipments (delivery options) or false if not supported currently
+     * @return string|null a package type definition suitable for Shipments (delivery options) or null if not supported currently
      */
-    public function packageTypeNameForDeliveryOptions(string $packageType)
+    public function packageTypeNameForDeliveryOptions(string $packageType): ?string
     {
         $supportedTypes = DeliveryOptions::PACKAGE_TYPES_NAMES;
         // Specific conversion for SMALL_PACKAGE to package_small
@@ -334,21 +332,21 @@ class PropositionService
         }
         $converted = strtolower($packageType);
 
-        return in_array($converted, $supportedTypes, true) ? $converted : false;
+        return in_array($converted, $supportedTypes, true) ? $converted : null;
     }
 
     /**
      * Given SCREAMING_SNAKE_CASE delivery type name, return the snake_case version for delivery options if defined in that class.
      *
      * @param string $deliveryType a delivery type definition from the Proposition config
-     * @return string|false a delivery type definition suitable for Shipments (delivery options) or false if not supported currently
+     * @return string|null a delivery type definition suitable for Shipments (delivery options) or null if not supported currently
      */
-    public function deliveryTypeNameForDeliveryOptions(string $deliveryType)
+    public function deliveryTypeNameForDeliveryOptions(string $deliveryType): ?string
     {
         $supportedTypes = DeliveryOptions::DELIVERY_TYPES_NAMES;
         $converted = strtolower(str_replace('_DELIVERY', '', $deliveryType));
 
-        return in_array($converted, $supportedTypes, true) ? $converted : false;
+        return in_array($converted, $supportedTypes, true) ? $converted : null;
     }
 
     /**
@@ -357,7 +355,7 @@ class PropositionService
      * @param string $shipmentOption a shipment option definition from the Proposition config
      * @return string a shipment option definition suitable for Shipments (delivery options) or false if not supported currently
      */
-    public function shipmentOptionNameForDeliveryOptions(string $shipmentOption)
+    public function shipmentOptionNameForDeliveryOptions(string $shipmentOption): string
     {
         return Str::camel(strtolower($shipmentOption));
     }

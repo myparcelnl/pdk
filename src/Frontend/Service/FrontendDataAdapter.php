@@ -69,14 +69,10 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
         $legacyData['name'] = $this->propositionService->mapNewToLegacyCarrierName($carrier->name);
 
         // Add legacy capabilities structure
-        if ($carrier->outboundFeatures) {
-            $legacyData['capabilities'] = $this->convertCapabilitiesToLegacyFormat($carrier->outboundFeatures);
-        }
+        $legacyData['capabilities'] = $this->convertCapabilitiesToLegacyFormat($carrier->outboundFeatures);
 
         // Add return capabilities
-        if ($carrier->inboundFeatures) {
-            $legacyData['returnCapabilities'] = $this->convertCapabilitiesToLegacyFormat($carrier->inboundFeatures);
-        }
+        $legacyData['returnCapabilities'] = $this->convertCapabilitiesToLegacyFormat($carrier->inboundFeatures);
 
         return new Carrier($legacyData);
     }

@@ -390,6 +390,19 @@
             "dropOffAtPostalPoint": true,
             "labelDescriptionLength": 45,
             "multiCollo": true
+          }
+        },
+        "capabilities": {
+          "deliveryTypes": [
+            "morning",
+            "standard",
+            "evening",
+            "pickup",
+            "express"
+          ],
+          "features": {
+            "labelDescriptionLength": 45,
+            "multiCollo": true
           },
           "packageTypes": [
             "package",
@@ -406,21 +419,14 @@
             "onlyRecipient": true,
             "sameDayDelivery": true,
             "signature": true
-          },
-          "features": {
-            "labelDescriptionLength": 45,
-            "multiCollo": true
           }
         },
         "returnCapabilities": {
-          "deliveryTypes": [
-            "standard"
-          ],
-          "features": {
-            "labelDescriptionLength": 45
-          },
           "packageTypes": [
             "package"
+          ],
+          "deliveryTypes": [
+            "standard"
           ],
           "shipmentOptions": {
             "signature": true,
@@ -443,25 +449,7 @@
             "ageCheck": true,
             "onlyRecipient": true,
             "sameDayDelivery": true,
-            "largeFormat": true,
-            "insurance": [
-              0,
-              10000,
-              25000,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          },
-          "features": {
-            "labelDescriptionLength": 45
+            "largeFormat": true
           }
         }
       }
