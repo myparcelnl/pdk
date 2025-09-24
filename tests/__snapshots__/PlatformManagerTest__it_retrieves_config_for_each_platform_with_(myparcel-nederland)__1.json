@@ -61,8 +61,13 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
         "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45,
+          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+          "multiCollo": true
+        },
+        "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
         "shipmentOptions": {
           "ageCheck": true,
           "largeFormat": true,
@@ -71,16 +76,14 @@
           "signature": true,
           "receiptCode": true,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45,
-          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-          "multiCollo": true
         }
       },
       "returnCapabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard"],
+        "features": {
+          "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
         "shipmentOptions": {
           "signature": true,
           "return": true,
@@ -88,9 +91,6 @@
           "onlyRecipient": true,
           "sameDayDelivery": true,
           "largeFormat": true
-        },
-        "features": {
-          "labelDescriptionLength": 45
         }
       }
     },
@@ -119,9 +119,17 @@
         "metadata": null
       },
       "capabilities": {
-        "packageTypes": [false]
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": ["pallet"],
+        "shipmentOptions": []
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "dpd",
@@ -151,14 +159,19 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package", "mailbox"],
         "deliveryTypes": ["standard", "pickup"],
-        "shipmentOptions": [],
         "features": {
           "labelDescriptionLength": 45
-        }
+        },
+        "packageTypes": ["package", "mailbox"],
+        "shipmentOptions": []
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "instabox",
@@ -184,8 +197,18 @@
         "shipmentOptions": null,
         "metadata": null
       },
-      "capabilities": [],
-      "returnCapabilities": []
+      "capabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      },
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "dhlforyou",
@@ -225,8 +248,11 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package", "mailbox", "package_small"],
         "deliveryTypes": ["standard", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package", "mailbox", "package_small"],
         "shipmentOptions": {
           "ageCheck": true,
           "onlyRecipient": true,
@@ -235,14 +261,14 @@
           "saturdayDelivery": true,
           "hideSender": true,
           "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45
         }
       },
       "returnCapabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard"],
+        "features": {
+          "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
         "shipmentOptions": {
           "signature": true,
           "return": true,
@@ -250,9 +276,6 @@
           "onlyRecipient": true,
           "sameDayDelivery": true,
           "largeFormat": true
-        },
-        "features": {
-          "labelDescriptionLength": 45
         }
       }
     },
@@ -287,23 +310,23 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard", "pickup"],
-        "shipmentOptions": {
-          "signature": true
-        },
         "features": {
           "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
+        "shipmentOptions": {
+          "signature": true
         }
       },
       "returnCapabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard"],
-        "shipmentOptions": {
-          "insurance": [50000]
-        },
         "features": {
           "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
+        "shipmentOptions": {
+          "insurance": [50000]
         }
       }
     },
@@ -335,19 +358,24 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard"],
+        "features": {
+          "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
         "shipmentOptions": {
           "signature": true,
           "saturdayDelivery": true,
           "hideSender": true,
           "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45
         }
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "upsstandard",
@@ -379,8 +407,11 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["standard"],
+        "features": {
+          "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
         "shipmentOptions": {
           "ageCheck": true,
           "onlyRecipient": true,
@@ -388,12 +419,14 @@
           "signature": true,
           "collect": true,
           "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45
         }
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "upsexpresssaver",
@@ -425,8 +458,11 @@
         }
       },
       "capabilities": {
-        "packageTypes": ["package"],
         "deliveryTypes": ["express"],
+        "features": {
+          "labelDescriptionLength": 45
+        },
+        "packageTypes": ["package"],
         "shipmentOptions": {
           "ageCheck": true,
           "onlyRecipient": true,
@@ -434,12 +470,14 @@
           "signature": true,
           "collect": true,
           "insurance": [10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        },
-        "features": {
-          "labelDescriptionLength": 45
         }
       },
-      "returnCapabilities": []
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "bol.com",
@@ -455,8 +493,18 @@
       "type": "main",
       "inboundFeatures": null,
       "outboundFeatures": null,
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      },
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     },
     {
       "externalIdentifier": "gls",
@@ -472,8 +520,18 @@
       "type": "main",
       "inboundFeatures": null,
       "outboundFeatures": null,
-      "capabilities": null,
-      "returnCapabilities": null
+      "capabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      },
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
     }
   ]
 }
