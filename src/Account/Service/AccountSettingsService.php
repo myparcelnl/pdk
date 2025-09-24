@@ -164,7 +164,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * Get carriers from proposition service.
+     * Get supported carriers from proposition service.
      *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
@@ -172,7 +172,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         try {
             $propositionService = Pdk::get(PropositionService::class);
-            return $propositionService->getCarriers();
+            return $propositionService->getCarriers(true);
         } catch (\Exception $e) {
             // Fallback to empty collection if proposition service is not available
             return new CarrierCollection();

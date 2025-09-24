@@ -127,22 +127,21 @@ return [
     'deliveryOptionsPositions' => value([]),
 
     /**
-     * All carriers allowed in the current proposition.
+     * All carriers available in the proposition.
      * @deprecated use PropositionService::getCarriers() instead.
      * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
      */
     'allCarriers' => factory(function (): CarrierCollection {
-        return Pdk::get(PropositionService::class)->getCarriers(true);
+        return Pdk::get(PropositionService::class)->getCarriers();
     }),
 
     /**
-     * @deprecated use PropositionService::getCarriers() instead.
+     * All carriers available in the proposition that support available delivery types.
+     * @deprecated use PropositionService::getCarriers(true) instead.
      * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
      */
     'carriers' => factory(function (): CarrierCollection {
-        /** @var CarrierCollection $carriers */
-        $carriers = Pdk::get('allCarriers');
-        return $carriers;
+        return Pdk::get(PropositionService::class)->getCarriers(true);
     }),
 
     /**

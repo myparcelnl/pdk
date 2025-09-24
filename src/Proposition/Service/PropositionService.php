@@ -128,7 +128,7 @@ class PropositionService
      *
      * @return CarrierCollection
      */
-    public function getCarriers(): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+    public function getCarriers($supportedDeliveryTypesOnly = false): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
     {
         $carrierModels = [];
         foreach ($this->getPropositionConfig()->contracts->available as $contract) {
@@ -154,6 +154,27 @@ class PropositionService
             ];
             $carrierModels[] = new Carrier($carrierData);
         }
+
+        // Filter out carriers without supported delivery types if requested by checking with packageTypeNameForDeliveryOptions
+        if ($supportedDeliveryTypesOnly) {
+            $carrierModels = array_values(array_filter($carrierModels, function (Carrier $carrier) {
+                $features = $carrier->outboundFeatures instanceof PropositionCarrierFeatures
+                    ? $carrier->outboundFeatures
+                    : new PropositionCarrierFeatures((array) $carrier->outboundFeatures);
+
+                if (!$features->packageTypes || !is_array($features->packageTypes)) {
+                    return false;
+                }
+
+                foreach ($features->packageTypes as $packageType) {
+                    if ($this->packageTypeNameForDeliveryOptions($packageType)) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
+        }
+
         return new CarrierCollection($carrierModels);
     }
 
