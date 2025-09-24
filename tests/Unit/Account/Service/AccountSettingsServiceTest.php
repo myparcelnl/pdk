@@ -84,7 +84,7 @@ it('gets carriers in correct order', function () {
     /** @var AccountSettingsServiceInterface $service */
     $service = Pdk::get(AccountSettingsServiceInterface::class);
 
-    $carriers = $service->getCarriers();
+    $carriers = $service->getCarriers(true);
 
     expect(
         $carriers->pluck('externalIdentifier')

@@ -48,13 +48,14 @@ class PlatformManager implements PlatformManagerInterface
     }
 
     /**
+     * Returns proposition carriers, filtered by only carriers with one or more supported package types.
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     * @deprecated Use PropositionService::getCarriers() instead.
+     * @deprecated Use PropositionService::getCarriers(true) instead.
      * @see PropositionService::getCarriers()
      */
     public function getCarriers(): CarrierCollection
     {
-        return $this->propositionService->getCarriers();
+        return $this->propositionService->getCarriers(true);
     }
 
     /**
