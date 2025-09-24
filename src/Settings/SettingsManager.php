@@ -96,7 +96,7 @@ class SettingsManager implements SettingsManagerInterface
         $carrierSettings = $defaults->get(CarrierSettings::ID);
 
         // Get carriers from proposition service and map to legacy names for settings compatibility
-        $carriers = $this->propositionService->getCarriers();
+        $carriers = $this->propositionService->getCarriers(true);
         $legacyCarrierKeys = [];
 
         foreach ($carriers as $carrier) {
