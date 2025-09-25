@@ -392,7 +392,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
         );
 
         // Show pickup locations
-        if (in_array(PropositionCarrierFeatures::DELIVERY_TYPE_PICKUP_NAME, $this->carrier->outboundFeatures['deliveryTypes'])) {
+        if ($this->carrier->outboundFeatures['deliveryTypes'] &&
+            in_array(PropositionCarrierFeatures::DELIVERY_TYPE_PICKUP_NAME, $this->carrier->outboundFeatures['deliveryTypes'])) {
             $pickupDeliveryOptionsConfig[] = new SettingsDivider($this->createGenericLabel('delivery_options_pickup'), SettingsDivider::LEVEL_3);
             $pickupDeliveryOptionsConfig = array_merge(
                 $pickupDeliveryOptionsConfig,
