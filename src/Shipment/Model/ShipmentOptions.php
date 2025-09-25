@@ -32,9 +32,31 @@ class ShipmentOptions extends Model
     public const ONLY_RECIPIENT    = 'onlyRecipient';
     public const RECEIPT_CODE      = 'receiptCode';
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
+
+    public const SATURDAY_DELIVERY = 'saturdayDelivery';
+
+    public const MONDAY_DELIVERY   = 'mondayDelivery';
+
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
     public const COLLECT           = 'collect';
+
+    public const ALL_SHIPMENT_OPTIONS = [
+        self::LABEL_DESCRIPTION,
+        self::INSURANCE,
+        self::AGE_CHECK,
+        self::DIRECT_RETURN,
+        self::HIDE_SENDER,
+        self::LARGE_FORMAT,
+        self::ONLY_RECIPIENT,
+        self::RECEIPT_CODE,
+        self::SAME_DAY_DELIVERY,
+        self::SIGNATURE,
+        self::TRACKED,
+        self::COLLECT,
+        self::SATURDAY_DELIVERY,
+        self::MONDAY_DELIVERY
+    ];
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
@@ -49,6 +71,8 @@ class ShipmentOptions extends Model
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
         self::COLLECT           => TriStateService::INHERIT,
+        self::SATURDAY_DELIVERY => TriStateService::INHERIT,
+        self::MONDAY_DELIVERY   => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -64,5 +88,7 @@ class ShipmentOptions extends Model
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
         self::COLLECT           => TriStateService::TYPE_STRICT,
+        self::SATURDAY_DELIVERY => TriStateService::TYPE_STRICT,
+        self::MONDAY_DELIVERY   => TriStateService::TYPE_STRICT,
     ];
 }
