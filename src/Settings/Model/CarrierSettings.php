@@ -91,6 +91,10 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
     public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
     public const  ALLOW_SIGNATURE                         = 'allowSignature';
+
+    /**
+     * @deprecated use ALLOW_EXPRESS_DELIVERY instead
+     */
     public const  ALLOW_DELIVERY_TYPE_EXPRESS             = 'allowExpressDelivery';
     public const  CUTOFF_TIME                             = 'cutoffTime';
     public const  CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
@@ -153,7 +157,6 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_SAME_DAY_DELIVERY                 => false,
         self::ALLOW_SATURDAY_DELIVERY                 => false,
         self::ALLOW_SIGNATURE                         => false,
-        self::ALLOW_DELIVERY_TYPE_EXPRESS             => false,
         self::CUTOFF_TIME                             => '16:00',
         self::CUTOFF_TIME_SAME_DAY                    => '10:00',
         self::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -212,7 +215,6 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_SAME_DAY_DELIVERY                 => 'bool',
         self::ALLOW_SATURDAY_DELIVERY                 => 'bool',
         self::ALLOW_SIGNATURE                         => 'bool',
-        self::ALLOW_DELIVERY_TYPE_EXPRESS             => 'bool',
         self::CUTOFF_TIME                             => 'string',
         self::CUTOFF_TIME_SAME_DAY                    => 'string',
         self::DEFAULT_PACKAGE_TYPE                    => 'string',
