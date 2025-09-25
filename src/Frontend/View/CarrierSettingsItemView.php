@@ -346,8 +346,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
             new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE)
         );
 
-        // Delivery options configuration (when enabled)
-        $deliveryOptionsConfig = [
+        // At home delivery options configuration (when enabled)
+        $homeDeliveryOptionsConfig = [
             $this->getPackageTypeFields(),
             new InteractiveElement(
                 CarrierSettings::DELIVERY_DAYS_WINDOW,
@@ -364,33 +364,52 @@ class CarrierSettingsItemView extends AbstractSettingsView
         ];
 
         // Add delivery moments section
-        $deliveryOptionsConfig[] = new SettingsDivider($this->createGenericLabel('delivery_moments'), SettingsDivider::LEVEL_4);
+        $homeDeliveryOptionsConfig[] = new SettingsDivider($this->createGenericLabel('delivery_moments'), SettingsDivider::LEVEL_4);
 
         // Add same day delivery settings
-        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getSameDayDeliverySettings());
+        $homeDeliveryOptionsConfig = array_merge($homeDeliveryOptionsConfig, $this->getSameDayDeliverySettings());
 
         // Add saturday delivery settings
-        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getSaturdayDeliverySettings());
+        $homeDeliveryOptionsConfig = array_merge($homeDeliveryOptionsConfig, $this->getSaturdayDeliverySettings());
 
         // Add monday delivery settings
-        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getMondayDeliverySettings());
+        $homeDeliveryOptionsConfig = array_merge($homeDeliveryOptionsConfig, $this->getMondayDeliverySettings());
 
         // Add dynamic delivery type settings
-        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getDeliveryTypeSettings());
+        $homeDeliveryOptionsConfig = array_merge($homeDeliveryOptionsConfig, $this->getDeliveryTypeSettings());
 
         // Add shipment options section
-        $deliveryOptionsConfig[] = new SettingsDivider($this->createGenericLabel('shipment_options'), SettingsDivider::LEVEL_4);
-        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getShipmentOptionsSettings());
+        $homeDeliveryOptionsConfig[] = new SettingsDivider($this->createGenericLabel('shipment_options'), SettingsDivider::LEVEL_4);
+        $homeDeliveryOptionsConfig = array_merge($homeDeliveryOptionsConfig, $this->getShipmentOptionsSettings());
 
         // Wrap delivery options config with visibility conditions
         $elements[] = $this->withOperation(
             function (FormOperationBuilder $builder) {
-                $builder
-                    ->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED)
-                    ->and(CarrierSettings::ALLOW_DELIVERY_OPTIONS);
+                $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED)
+                ->and(CarrierSettings::ALLOW_DELIVERY_OPTIONS); // "allow home delivery" toggle
             },
-            ...$deliveryOptionsConfig
+            ...$homeDeliveryOptionsConfig
         );
+
+        // Show pickup locations
+        if (in_array(PropositionCarrierFeatures::DELIVERY_TYPE_PICKUP_NAME, $this->carrier->outboundFeatures['deliveryTypes'])) {
+            $pickupDeliveryOptionsConfig[] = new SettingsDivider($this->createGenericLabel('delivery_options_pickup'), SettingsDivider::LEVEL_3);
+            $pickupDeliveryOptionsConfig = array_merge(
+                $pickupDeliveryOptionsConfig,
+                $this->createSettingWithPriceFields(
+                    CarrierSettings::ALLOW_PICKUP_LOCATIONS,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP
+                )
+            );
+
+            // Wrap pickup options config with visibility conditions
+            $elements[] = $this->withOperation(
+                function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED);
+                },
+                ...$pickupDeliveryOptionsConfig
+            );
+        }
 
         return $elements;
     }
@@ -458,8 +477,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
             // Convert new delivery type names to the ones used for delivery options
             $deliveryType = $this->propositionService->deliveryTypeNameForDeliveryOptions($deliveryType);
 
-            // Ignore unsupported types
-            if ($deliveryType === null) {
+            // Ignore unsupported types and pickup (handled separately)
+            if ($deliveryType === null || $deliveryType === DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME) {
                 continue;
             }
 
@@ -470,20 +489,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     constant(CarrierSettings::class . "::PRICE_DELIVERY_TYPE_" . strtoupper($deliveryType))
                 )
             );
-
-            // Handle pickup-specific settings
-            if ($deliveryType === DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME) {
-                $settings[] = $this->withOperation(
-                    function (FormOperationBuilder $builder) {
-                        $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED);
-                    },
-                    new SettingsDivider($this->createGenericLabel('delivery_options_pickup'), SettingsDivider::LEVEL_3),
-                    ...$this->createSettingWithPriceFields(
-                        CarrierSettings::ALLOW_PICKUP_LOCATIONS,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP
-                    )
-                );
-            }
         }
 
         return $settings;
