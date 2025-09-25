@@ -44,7 +44,9 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
             },
 
             '/\[DELIVERY_DATE\]/' => function () {
-                return $this->order->deliveryOptions->date ? $this->order->deliveryOptions->date->format('Y-m-d') : '';
+                return $this->order->deliveryOptions->date
+                    ? $this->order->deliveryOptions->date->format('Y-m-d')
+                    : '';
             },
 
             '/\[PRODUCT_ID\]/' => static function () use ($createString) {
