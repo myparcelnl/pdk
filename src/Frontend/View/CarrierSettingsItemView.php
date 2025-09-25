@@ -249,9 +249,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
             ]
                 : [],
 
+            // Disable the signature / only recipient options when age check is enabled. With age check these are mandatory.
             $this->withOperation(
                 function (FormOperationBuilder $builder) {
-                    if ($this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME)) {
+                    if (!$this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME)) {
                         return;
                     }
 
