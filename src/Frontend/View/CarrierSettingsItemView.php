@@ -369,6 +369,12 @@ class CarrierSettingsItemView extends AbstractSettingsView
         // Add same day delivery settings
         $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getSameDayDeliverySettings());
 
+        // Add saturday delivery settings
+        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getSaturdayDeliverySettings());
+
+        // Add monday delivery settings
+        $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getMondayDeliverySettings());
+
         // Add dynamic delivery type settings
         $deliveryOptionsConfig = array_merge($deliveryOptionsConfig, $this->getDeliveryTypeSettings());
 
@@ -408,17 +414,47 @@ class CarrierSettingsItemView extends AbstractSettingsView
     }
 
     /**
-     * Get dynamic delivery type settings based on carrier capabilities
+     * Get saturday delivery setting based on carrier deliveryOptions config
+     */
+    private function getSaturdayDeliverySettings(): array
+    {
+        if (!$this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_SATURDAY_DELIVERY_NAME)) {
+            return [];
+        }
+
+        return $this->createSettingWithPriceFields(
+            CarrierSettings::ALLOW_SATURDAY_DELIVERY,
+            CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY
+        );
+    }
+
+    /**
+     * Get monday delivery setting based on carrier deliveryOptions config
+     */
+    private function getMondayDeliverySettings(): array
+    {
+        if (!$this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_MONDAY_DELIVERY_NAME)) {
+            return [];
+        }
+
+        return $this->createSettingWithPriceFields(
+            CarrierSettings::ALLOW_MONDAY_DELIVERY,
+            CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY
+        );
+    }
+
+    /**
+     * Get dynamic delivery type settings based on carrier delivery type config
      */
     private function getDeliveryTypeSettings(): array
     {
         $settings = [];
 
-        if (!$this->carrier->outboundFeatures->deliveryTypes) {
+        if (!$this->carrier->outboundFeatures['deliveryTypes']) {
             return $settings;
         }
 
-        foreach ($this->carrier->outboundFeatures->deliveryTypes as $deliveryType) {
+        foreach ($this->carrier->outboundFeatures['deliveryTypes'] as $deliveryType) {
             // Convert new delivery type names to the ones used for delivery options
             $deliveryType = $this->propositionService->deliveryTypeNameForDeliveryOptions($deliveryType);
 
