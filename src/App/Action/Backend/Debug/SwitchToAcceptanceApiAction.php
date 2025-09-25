@@ -52,22 +52,21 @@ class SwitchToAcceptanceApiAction implements ActionInterface
     public function handle(Request $request): Response
     {
         try {
-            // Store the acceptance API URL in a file for persistence
-            $acceptanceUrl = Config::API_URL_ACCEPTANCE;
-            $cacheFile     = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
-            file_put_contents($cacheFile, $acceptanceUrl);
-
             // Switch the base URL to the acceptance API for the current session
             $this->apiService->setBaseUrl(Config::API_URL_ACCEPTANCE);
 
-            // Remove the API key because acceptance needs its own API key
-            // Use the same method as DeleteAccountAction
-            $this->updateAccountSettings([]);
+            // Store the acceptance API URL in a file for persistence (backward compatibility)
+            $acceptanceUrl = Config::API_URL_ACCEPTANCE;
+            $cacheFile = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
+            file_put_contents($cacheFile, $acceptanceUrl);
 
-            Logger::info('API URLs successfully switched to acceptance environment and API key removed');
+            // Update account settings to store the environment preference
+            $this->updateAccountSettings(['environment' => 'acceptance']);
+
+            Logger::info('API URLs successfully switched to acceptance environment');
 
             Notifications::success(
-                'API URLs successfully switched to acceptance environment. API key has been removed - please enter your acceptance API key.',
+                'API URLs successfully switched to acceptance environment.',
                 [],
                 Notification::CATEGORY_GENERAL
             );
