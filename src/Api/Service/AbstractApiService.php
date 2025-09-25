@@ -96,15 +96,27 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     public function getBaseUrl(): string
     {
-        // First check if there's an acceptance URL stored in a file
-        $cacheFile         = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-        $fileAcceptanceUrl = file_exists($cacheFile) ? file_get_contents($cacheFile) : null;
-
-        if ($fileAcceptanceUrl) {
-            return $fileAcceptanceUrl;
+        // Check if there's a session-specific base URL set
+        if ($this->baseUrl) {
+            return $this->baseUrl;
         }
 
-        return $this->baseUrl ?? Pdk::get('apiUrl');
+        // Check if we're in acceptance mode via account settings
+        try {
+            $accountSettings = Pdk::get('accountSettings');
+            if ($accountSettings && $accountSettings->isAcceptance()) {
+                return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
+            }
+        } catch (\Throwable $e) {
+            // Fall back to cache file check for backward compatibility
+            $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
+            if (file_exists($cacheFile)) {
+                return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
+            }
+        }
+
+        // Fall back to default API URL from config
+        return Pdk::get('apiUrl');
     }
 
     /**
@@ -117,13 +129,15 @@ abstract class AbstractApiService implements ApiServiceInterface
 
     /**
      * Check if currently connected to acceptance environment
+     * This method is kept for backward compatibility but should be replaced
+     * with checking AccountGeneralSettings->isAcceptance()
      *
      * @return bool
      */
     public function isConnectedToAcceptance(): bool
     {
-        $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-        return file_exists($cacheFile);
+        // Check if the current base URL is the acceptance URL
+        return $this->getBaseUrl() === \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
     }
 
     /**
