@@ -1819,14 +1819,34 @@
             },
             {
               "name": "exportSignature",
-              "$builders": [],
+              "$builders": [
+                {
+                  "$readOnlyWhen": {
+                    "$if": [
+                      {
+                        "$target": "exportAgeCheck"
+                      }
+                    ]
+                  }
+                }
+              ],
               "$component": "ToggleInput",
               "label": "settings_carrier_export_signature",
               "description": "settings_carrier_export_signature_description"
             },
             {
               "name": "exportOnlyRecipient",
-              "$builders": [],
+              "$builders": [
+                {
+                  "$readOnlyWhen": {
+                    "$if": [
+                      {
+                        "$target": "exportAgeCheck"
+                      }
+                    ]
+                  }
+                }
+              ],
               "$component": "ToggleInput",
               "label": "settings_carrier_export_only_recipient",
               "description": "settings_carrier_export_only_recipient_description"
@@ -2320,142 +2340,6 @@
               "$component": "CurrencyInput",
               "label": "settings_carrier_price_delivery_type_evening",
               "description": "settings_carrier_price_delivery_type_evening_description"
-            },
-            {
-              "name": "allowPickupLocations",
-              "$builders": [
-                {
-                  "$visibleWhen": {
-                    "$if": [
-                      {
-                        "$and": [
-                          {
-                            "$target": "deliveryOptionsEnabled"
-                          },
-                          {
-                            "$target": "allowDeliveryOptions"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "$component": "ToggleInput",
-              "label": "settings_carrier_allow_pickup_locations",
-              "description": "settings_carrier_allow_pickup_locations_description"
-            },
-            {
-              "name": "priceDeliveryTypePickup",
-              "$builders": [
-                {
-                  "$visibleWhen": {
-                    "$if": [
-                      {
-                        "$target": "allowPickupLocations"
-                      },
-                      {
-                        "$and": [
-                          {
-                            "$target": "deliveryOptionsEnabled"
-                          },
-                          {
-                            "$target": "allowDeliveryOptions"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "$component": "CurrencyInput",
-              "label": "settings_carrier_price_delivery_type_pickup",
-              "description": "settings_carrier_price_delivery_type_pickup_description"
-            },
-            {
-              "$builders": [
-                {
-                  "$visibleWhen": {
-                    "$if": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$and": [
-                          {
-                            "$target": "deliveryOptionsEnabled"
-                          },
-                          {
-                            "$target": "allowDeliveryOptions"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "$component": "SettingsDivider",
-              "$wrapper": false,
-              "content": "settings_carrier_delivery_options_pickup_description",
-              "heading": "settings_carrier_delivery_options_pickup_title",
-              "level": 3
-            },
-            {
-              "name": "allowPickupLocations",
-              "$builders": [
-                {
-                  "$visibleWhen": {
-                    "$if": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$and": [
-                          {
-                            "$target": "deliveryOptionsEnabled"
-                          },
-                          {
-                            "$target": "allowDeliveryOptions"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "$component": "ToggleInput",
-              "label": "settings_carrier_allow_pickup_locations",
-              "description": "settings_carrier_allow_pickup_locations_description"
-            },
-            {
-              "name": "priceDeliveryTypePickup",
-              "$builders": [
-                {
-                  "$visibleWhen": {
-                    "$if": [
-                      {
-                        "$target": "allowPickupLocations"
-                      },
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$and": [
-                          {
-                            "$target": "deliveryOptionsEnabled"
-                          },
-                          {
-                            "$target": "allowDeliveryOptions"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "$component": "CurrencyInput",
-              "label": "settings_carrier_price_delivery_type_pickup",
-              "description": "settings_carrier_price_delivery_type_pickup_description"
             },
             {
               "name": "allowExpressDelivery",

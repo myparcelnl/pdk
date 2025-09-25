@@ -549,7 +549,6 @@
           "allowSameDayDelivery": false,
           "allowSaturdayDelivery": false,
           "allowSignature": false,
-          "allowDeliveryTypeExpress": false,
           "cutoffTime": "16:00",
           "cutoffTimeSameDay": "10:00",
           "defaultPackageType": "package",
