@@ -145,6 +145,27 @@ it('can return legacy carrier names', function () {
     expect($name)->toBe('dhlforyou');
 });
 
+it('can convert legacy carrier names to new format', function () {
+    TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
+
+    $propositionService = new PropositionService();
+
+    $name = $propositionService->mapLegacyToNewCarrierName('dhlforyou');
+
+    expect($name)->toBe('DHL_FOR_YOU');
+});
+
+it('gets a carrier by name', function () {
+    TestBootstrapper::forPlatform(Platform::MYPARCEL_NAME);
+
+    $propositionService = new PropositionService();
+
+    $carrier = $propositionService->getCarrierByName(Carrier::CARRIER_UPS_STANDARD_NAME);
+
+    expect($carrier)->toBeInstanceOf(Carrier::class);
+    expect($carrier->name)->toBe(Carrier::CARRIER_UPS_STANDARD_NAME);
+});
+
 it('can filter out carriers with unsupported package types', function () {
     TestBootstrapper::forPlatform(Platform::MYPARCEL_NAME);
 
