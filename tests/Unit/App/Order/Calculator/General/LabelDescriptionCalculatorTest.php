@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator;
 
+use DateTimeImmutable;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
@@ -25,7 +26,10 @@ function createOrder($labelDescription): PdkOrder
 {
     return factory(PdkOrder::class)
         ->withReferenceIdentifier('123')
-        ->withDeliveryOptions(['shipmentOptions' => ['labelDescription' => $labelDescription]])
+        ->withDeliveryOptions([
+            'date'            => new DateTimeImmutable('2025-09-27'),
+            'shipmentOptions' => ['labelDescription' => $labelDescription],
+        ])
         ->withLines([
             factory(PdkOrderLine::class)
                 ->withQuantity(2)
@@ -95,6 +99,10 @@ it('formats label description from order', function ($labelDescription, $output)
         'label description PRODUCT_QTY'           => [
             'input'  => 'PRODUCT_QTY: [PRODUCT_QTY]',
             'output' => 'PRODUCT_QTY: 5',
+        ],
+        'label description DELIVERY_DATE'         => [
+            'input'  => 'DELIVERY_DATE: [DELIVERY_DATE]',
+            'output' => 'DELIVERY_DATE: 2025-09-27',
         ],
         'multiple label description placeholders' => [
             'input'  => '[CUSTOMER_NOTE] | [ORDER_ID] | [PRODUCT_ID] | [PRODUCT_NAME] | [PRODUCT_SKU] | [PRODUCT_EAN] | [PRODUCT_QTY]',
