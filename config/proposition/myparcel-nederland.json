@@ -421,7 +421,7 @@
         "hasPostponedDelivery": true,
         "outboundFeatures": {
           "packageTypes": ["PACKAGE"],
-          "deliveryTypes": ["STANDARD_DELIVERY"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT", "INSURANCE"],
           "metadata": {
             "labelDescriptionLength": 45,
@@ -440,7 +440,7 @@
         "hasPostponedDelivery": true,
         "outboundFeatures": {
           "packageTypes": ["PACKAGE"],
-          "deliveryTypes": ["EXPRESS_DELIVERY"],
+          "deliveryTypes": ["EXPRESS_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT"],
           "metadata": {
             "labelDescriptionLength": 45,
