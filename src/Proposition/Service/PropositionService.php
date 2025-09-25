@@ -244,30 +244,6 @@ class PropositionService
     }
 
     /**
-     * Get the number of cached proposition configs.
-     *
-     * @return int
-     */
-    public function getCacheSize(): int
-    {
-        return count(self::$configCache);
-    }
-
-    /**
-     * Get cache statistics for monitoring.
-     *
-     * @return array
-     */
-    public function getCacheStats(): array
-    {
-        return [
-            'size' => count(self::$configCache),
-            'cached_propositions' => array_keys(self::$configCache),
-            'memory_usage' => memory_get_usage(true),
-        ];
-    }
-
-    /**
      * Map new carrier name (SCREAMING_SNAKE_CASE) to legacy name (lowercase).
      * This is used for backwards compatibility with existing settings.
      *

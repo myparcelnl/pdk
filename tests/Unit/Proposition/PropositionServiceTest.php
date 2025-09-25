@@ -77,6 +77,53 @@ it('only fetches the config once per request', function () {
     expect($config1)->toBe($config2)->and($config1)->toBeInstanceOf(PropositionConfig::class);
 });
 
+it('clears specific proposition caches', function () {
+    TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
+
+    $propositionService = new PropositionService();
+    $propositionService->clearCache();
+
+    $logger = Pdk::get(PdkLoggerInterface::class);
+
+    $config1 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+
+    // Check debug log
+    $lastLog = Arr::last($logger->getLogs());
+    $logCount = count($logger->getLogs());
+
+    expect($lastLog['level'])
+        ->toBe(LogLevel::DEBUG)
+        ->and($lastLog['message'])
+        ->toBe('[PDK]: Proposition config loaded from source.');
+
+    // Verify fetched from cache
+    $config2 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+    expect($propositionService->isCached(Platform::SENDMYPARCEL_NAME))->toBeTrue();
+    $logCount2 = count($logger->getLogs());
+
+    expect($logCount2)->toBe($logCount);
+    expect($config1)->toBe($config2)->and($config1)->toBeInstanceOf(PropositionConfig::class);
+
+    // Clear only the SendMyParcel proposition cache
+    $propositionService->clearCache(Platform::SENDMYPARCEL_NAME);
+    expect($propositionService->isCached(Platform::SENDMYPARCEL_NAME))->toBeFalse();
+
+    $config3 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+    $logCount3 = count($logger->getLogs());
+
+    // New log entry should be added
+    expect($logCount3)->toBeGreaterThan($logCount2);
+
+    $lastLog = Arr::last($logger->getLogs());
+    expect($lastLog['level'])
+        ->toBe(LogLevel::DEBUG)
+        ->and($lastLog['message'])
+        ->toBe('[PDK]: Proposition config loaded from source.');
+
+    expect($config3)->toBeInstanceOf(PropositionConfig::class);
+    expect($config3)->not->toBe($config1)->and($config3)->not->toBe($config2);
+});
+
 
 it('returns carriers', function () {
     TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
