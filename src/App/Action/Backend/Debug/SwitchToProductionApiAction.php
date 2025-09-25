@@ -50,23 +50,22 @@ class SwitchToProductionApiAction implements ActionInterface
     public function handle(Request $request): Response
     {
         try {
-            // Remove the acceptance API URL from the cache file
+            // Switch the base URL back to the production API for the current session
+            $this->apiService->setBaseUrl(Config::API_URL_PRODUCTION);
+
+            // Remove the acceptance API URL from the cache file (backward compatibility)
             $cacheFile = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
             if (file_exists($cacheFile)) {
                 unlink($cacheFile);
             }
 
-            // Switch the base URL back to the production API for the current session
-            $this->apiService->setBaseUrl(Config::API_URL_PRODUCTION);
+            // Update account settings to store the environment preference
+            $this->updateAccountSettings(['environment' => 'production']);
 
-            // Remove the API key because production needs its own API key
-            // Use the same method as DeleteAccountAction
-            $this->updateAccountSettings([]);
-
-            Logger::info('API URL successfully switched back to production environment and API key removed');
+            Logger::info('API URL successfully switched back to production environment');
 
             Notifications::success(
-                'API URL successfully switched back to production environment. API key has been removed - please enter your production API key.',
+                'API URL successfully switched back to production environment.',
                 [],
                 Notification::CATEGORY_GENERAL
             );

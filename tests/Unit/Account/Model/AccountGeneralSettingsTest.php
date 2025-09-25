@@ -9,53 +9,48 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-beforeEach(function () {
-    // Clean up any existing cache file
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-});
-
-afterEach(function () {
-    // Clean up cache file after each test
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-});
-
-it('returns true for isTest when connected to acceptance environment', function () {
-    // Create acceptance cache file to simulate acceptance environment
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
-    
+it('returns true for isTest when in acceptance environment', function () {
     $settings = new AccountGeneralSettings();
+    $settings->setEnvironment('acceptance');
     
     expect($settings->isTest)->toBeTrue();
 });
 
-it('returns false for isTest when connected to production environment', function () {
-    // Ensure no cache file exists to simulate production environment
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-    
+it('returns false for isTest when in production environment', function () {
     $settings = new AccountGeneralSettings();
+    $settings->setEnvironment('production');
     
     expect($settings->isTest)->toBeFalse();
+});
+
+it('returns correct environment values', function () {
+    $settings = new AccountGeneralSettings();
+    
+    // Test default environment
+    expect($settings->getEnvironment())->toBe('production');
+    
+    // Test setting acceptance environment
+    $settings->setEnvironment('acceptance');
+    expect($settings->getEnvironment())->toBe('acceptance');
+    expect($settings->isAcceptance())->toBeTrue();
+    expect($settings->isProduction())->toBeFalse();
+    
+    // Test setting production environment
+    $settings->setEnvironment('production');
+    expect($settings->getEnvironment())->toBe('production');
+    expect($settings->isAcceptance())->toBeFalse();
+    expect($settings->isProduction())->toBeTrue();
 });
 
 it('has correct default attributes', function () {
     $settings = new AccountGeneralSettings();
     
     expect($settings->attributes)->toBeArray()
-        ->and($settings->attributes)->toHaveKey('isTest')
+        ->and($settings->attributes)->toHaveKey('environment')
         ->and($settings->attributes)->toHaveKey('orderMode')
         ->and($settings->attributes)->toHaveKey('hasCarrierContract')
         ->and($settings->attributes)->toHaveKey('hasCarrierSmallPackageContract')
-        ->and($settings->attributes['isTest'])->toBeNull()
+        ->and($settings->attributes['environment'])->toBe('production')
         ->and($settings->attributes['orderMode'])->toBeFalse()
         ->and($settings->attributes['hasCarrierContract'])->toBeFalse()
         ->and($settings->attributes['hasCarrierSmallPackageContract'])->toBeFalse();
@@ -65,11 +60,11 @@ it('has correct casts', function () {
     $settings = new AccountGeneralSettings();
     
     expect($settings->casts)->toBeArray()
-        ->and($settings->casts)->toHaveKey('isTest')
+        ->and($settings->casts)->toHaveKey('environment')
         ->and($settings->casts)->toHaveKey('orderMode')
         ->and($settings->casts)->toHaveKey('hasCarrierContract')
         ->and($settings->casts)->toHaveKey('hasCarrierSmallPackageContract')
-        ->and($settings->casts['isTest'])->toBe('bool')
+        ->and($settings->casts['environment'])->toBe('string')
         ->and($settings->casts['orderMode'])->toBe('bool')
         ->and($settings->casts['hasCarrierContract'])->toBe('bool')
         ->and($settings->casts['hasCarrierSmallPackageContract'])->toBe('bool');
