@@ -89,16 +89,14 @@ class PropositionService
                 break;
         }
 
-        if ($filePath) {
-            if (!file_exists($filePath)) {
-                Logger::error('Proposition config file not found', [
-                    'proposition' => $propositionName,
-                    'filePath' => $filePath
-                ]);
-                throw new \InvalidArgumentException(sprintf('Proposition config name %s does not exist', $propositionName));
-            }
-            $configData = file_get_contents($filePath);
+        if (!file_exists($filePath)) {
+            Logger::error('Proposition config file not found', [
+                'proposition' => $propositionName,
+                'filePath' => $filePath
+            ]);
+            throw new \InvalidArgumentException(sprintf('Proposition config name %s does not exist', $propositionName));
         }
+        $configData = file_get_contents($filePath);
 
         if (!$configData) {
             Logger::error('Failed to read proposition config file', [
