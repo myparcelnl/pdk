@@ -62,7 +62,7 @@ class PropositionService
         }
 
         // Fetch and cache the config
-        Logger::debug('Proposition config loaded from source', ['proposition' => $propositionName]);
+        Logger::debug('Proposition config loaded from source.', ['proposition' => $propositionName]);
         $config = $this->fetchPropositionConfig($propositionName);
         self::$configCache[$propositionName] = $config;
 
@@ -82,8 +82,8 @@ class PropositionService
         switch ($propositionName) {
             case Platform::FLESPAKKET_NAME:
                 // @todo: remove flespakket in next major version
-                Logger::deprecated('Flespakket platform is deprecated, please use MyParcel or SendMyParcel instead.');
-                break;
+                Logger::deprecated('Flespakket platform is deprecated.');
+                // no break
             default:
                 $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
                 break;
@@ -98,13 +98,14 @@ class PropositionService
                 throw new \InvalidArgumentException(sprintf('Proposition config name %s does not exist', $propositionName));
             }
             $configData = file_get_contents($filePath);
-            if ($configData === false) {
-                Logger::error('Failed to read proposition config file', [
-                    'proposition' => $propositionName,
-                    'filePath' => $filePath
-                ]);
-                throw new \RuntimeException(sprintf('Failed to read proposition config file: %s', $filePath));
-            }
+        }
+
+        if (!$configData) {
+            Logger::error('Failed to read proposition config file', [
+                'proposition' => $propositionName,
+                'filePath' => $filePath
+            ]);
+            throw new \RuntimeException(sprintf('Failed to read proposition config file: %s', $filePath));
         }
 
         $configArray = json_decode($configData, true);
