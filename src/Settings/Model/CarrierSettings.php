@@ -91,7 +91,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
     public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
     public const  ALLOW_SIGNATURE                         = 'allowSignature';
-    public const  ALLOW_DELIVERY_TYPE_EXPRESS             = 'allowDeliveryTypeExpress';
+    public const  ALLOW_DELIVERY_TYPE_EXPRESS             = 'allowExpressDelivery';
     public const  CUTOFF_TIME                             = 'cutoffTime';
     public const  CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
     public const  DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
