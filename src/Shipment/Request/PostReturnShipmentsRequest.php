@@ -123,34 +123,21 @@ class PostReturnShipmentsRequest extends Request
     {
         $carrierId = $shipment->carrier->id;
 
-        try {
-            $propositionService = Pdk::get(PropositionService::class);
-            $carrier = $propositionService->getCarrierById($carrierId);
+        $propositionService = Pdk::get(PropositionService::class);
+        $carrier = $propositionService->getCarrierById($carrierId);
 
-            if (! $carrier || ! $carrier->returnCapabilities) {
-                $defaultCarrier = $propositionService->getDefaultCarrier();
-                Notifications::warning(
-                    "{$shipment->carrier->name} has no return capabilities",
-                    'Return shipment exported with default carrier ' . $defaultCarrier->name,
-                    Notification::CATEGORY_ACTION,
-                    [
-                        'action'   => PdkBackendActions::EXPORT_RETURN,
-                        'orderIds' => $shipment->referenceIdentifier,
-                    ]
-                );
-                $shipment->carrier = new Carrier(['carrierId' => $defaultCarrier->id]);
-            }
-        } catch (\Exception $e) {
-            // Fallback to default behavior if proposition service is not available
+        if (! $carrier || ! $carrier->returnCapabilities) {
+            $defaultCarrier = $propositionService->getDefaultCarrier();
             Notifications::warning(
                 "{$shipment->carrier->name} has no return capabilities",
-                'Return shipment exported with default carrier (fallback)',
+                'Return shipment exported with default carrier ' . $defaultCarrier->name,
                 Notification::CATEGORY_ACTION,
                 [
                     'action'   => PdkBackendActions::EXPORT_RETURN,
                     'orderIds' => $shipment->referenceIdentifier,
                 ]
             );
+            $shipment->carrier = new Carrier(['carrierId' => $defaultCarrier->id]);
         }
 
         return $shipment;
