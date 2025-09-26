@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.63.2](https://github.com/myparcelnl/pdk/compare/v2.63.1...v2.63.2) (2025-09-26)
+
+
+### :bug: Bug Fixes
+
+* allow the use of delivery_date in label description ([#383](https://github.com/myparcelnl/pdk/issues/383)) ([2a61689](https://github.com/myparcelnl/pdk/commit/2a61689bbc9e0b49cea97ceab48fccd3f59b2776))
+
 ## [2.63.1](https://github.com/myparcelnl/pdk/compare/v2.63.0...v2.63.1) (2025-09-16)
 
 ## [2.63.0](https://github.com/myparcelnl/pdk/compare/v2.62.0...v2.63.0) (2025-08-08)
