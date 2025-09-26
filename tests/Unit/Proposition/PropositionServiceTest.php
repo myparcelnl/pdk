@@ -51,6 +51,28 @@ it('throws exception for unknown proposition', function () {
     $propositionService->getPropositionConfigByName('unknown_proposition_name');
 })->throws(\InvalidArgumentException::class, 'Proposition config name unknown_proposition_name does not exist');
 
+
+it('handles empty files', function () {
+    TestBootstrapper::forPlatform(Platform::MYPARCEL_NAME);
+
+    $logger = Pdk::get(PdkLoggerInterface::class);
+
+    $propositionService = new PropositionService();
+
+    $propositionService->processConfigData('empty', 'mock-path', '');
+})->throws(\RuntimeException::class, 'Proposition config file: mock-path appears to be empty');
+
+
+it('handles invalid json', function () {
+    TestBootstrapper::forPlatform(Platform::MYPARCEL_NAME);
+
+    $logger = Pdk::get(PdkLoggerInterface::class);
+
+    $propositionService = new PropositionService();
+
+    $propositionService->processConfigData('invalid_json', 'mock-path', '{ invalid json }');
+})->throws(\RuntimeException::class, 'Invalid JSON in proposition config file: mock-path - Error: Syntax error');
+
 it('only fetches the config once per request', function () {
     TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
 
