@@ -46,37 +46,4 @@ abstract class AbstractSettingsModel extends Model
     {
         return Arr::except(parent::toStorableArray(), 'id');
     }
-
-    /**
-     * Set default values for settings that have a default of null, if present in platform configuration.
-     *
-     * @return void
-     */
-    protected function setPlatformDefaults(): void
-    {
-        foreach ($this->getAttributes() as $key => $value) {
-            if (null !== $value) {
-                continue;
-            }
-
-            // Get default value from proposition config if available
-            $defaultValue = null;
-            try {
-                $propositionService = Pdk::get(PropositionService::class);
-                $proposition = $propositionService->getPropositionConfig();
-                $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-
-                $defaultValue = $platformConfig['defaultSettings'][$this->id][$key] ?? null;
-            } catch (\Exception $e) {
-                // Fallback to null if proposition config is not available
-                $defaultValue = null;
-            }
-
-            if (null === $defaultValue) {
-                continue;
-            }
-
-            $this->setAttribute($key, $defaultValue);
-        }
-    }
 }
