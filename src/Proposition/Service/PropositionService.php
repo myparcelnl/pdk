@@ -76,7 +76,6 @@ class PropositionService
      */
     public function fetchPropositionConfig(string $propositionName): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
-        $url = null;
         $filePath = null;
         $configData = null;
         switch ($propositionName) {
@@ -98,28 +97,32 @@ class PropositionService
         }
         $configData = file_get_contents($filePath);
 
-        if (!$configData) {
+        return $this->processConfigData($propositionName, $filePath, $configData);
+    }
+
+    public function processConfigData(string $propositionName, string $filePath, ?string $jsonData): PropositionConfig
+    {
+        if (!$jsonData) {
             Logger::error('Failed to read proposition config file', [
                 'proposition' => $propositionName,
                 'filePath' => $filePath
             ]);
-            throw new \RuntimeException(sprintf('Failed to read proposition config file: %s', $filePath));
+            throw new \RuntimeException(sprintf('Proposition config file: %s appears to be empty', $filePath));
         }
 
-        $configArray = json_decode($configData, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        try {
+            $configArray = json_decode($jsonData, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
             Logger::error('Invalid JSON in proposition config', [
                 'proposition' => $propositionName,
                 'filePath' => $filePath,
-                'url' => $url,
-                'jsonError' => json_last_error_msg()
+                'jsonError' => $e->getMessage()
             ]);
-            throw new \RuntimeException(sprintf('Invalid JSON in proposition config file: %s %s - Error: %s', $filePath, $url, json_last_error_msg()));
+            throw new \RuntimeException(sprintf('Invalid JSON in proposition config file: %s - Error: %s', $filePath, $e->getMessage()));
         }
 
         // Create a PropositionConfig instance from the array
-        $propositionConfig = new PropositionConfig($configArray);
-        return $propositionConfig;
+        return new PropositionConfig($configArray);
     }
 
     /**
