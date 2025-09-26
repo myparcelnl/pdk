@@ -126,30 +126,4 @@ class SettingsManager implements SettingsManagerInterface
 
         $defaults->put(CarrierSettings::ID, $mergedCarrierSettings);
     }
-
-    /**
-     * Get carrier settings with legacy name mapping for backwards compatibility.
-     *
-     * @param string $carrierName The new carrier name (SCREAMING_SNAKE_CASE)
-     * @return array|null
-     */
-    public function getCarrierSettings(string $carrierName): ?array
-    {
-        $legacyName = $this->propositionService->mapNewToLegacyCarrierName($carrierName);
-        return $this->get($legacyName, CarrierSettings::ID);
-    }
-
-    /**
-     * Set carrier settings with legacy name mapping for backwards compatibility.
-     *
-     * @param string $carrierName The new carrier name (SCREAMING_SNAKE_CASE)
-     * @param array $settings
-     * @return void
-     */
-    public function setCarrierSettings(string $carrierName, array $settings): void
-    {
-        $legacyName = $this->propositionService->mapNewToLegacyCarrierName($carrierName);
-        $key = sprintf('%s.%s', CarrierSettings::ID, $legacyName);
-        $this->repository->store(Pdk::get('createSettingsKey')($key), $settings);
-    }
 }
