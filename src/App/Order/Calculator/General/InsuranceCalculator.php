@@ -111,7 +111,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getInsuranceUpToKey(?string $cc): string
     {
-        $country = $cc ?? $this->getLocalCountry();
+        if ($cc) {
+            $country = $cc;
+        } else {
+            $country = Pdk::get(PropositionService::class)->getPropositionConfig()->countryCode;
+        }
 
         if ($this->countryService->isLocalCountry($country)) {
             return CarrierSettings::EXPORT_INSURANCE_UP_TO;
@@ -136,9 +140,12 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount)
     {
+
+        $defaultCarrier =  Pdk::get(PropositionService::class)->getDefaultCarrier()->name;
+
         // Get a schema resolved to this specific order's combination of carrier, country, package type and delivery type.
         $orderSchema = $this->schemaRepository->getOrderValidationSchema(
-            $this->order->deliveryOptions->carrier->name ?? $this->getDefaultCarrier(),
+            $this->order->deliveryOptions->carrier->name ?? $defaultCarrier,
             $this->order->shippingAddress->cc ?? null,
             $this->order->deliveryOptions->packageType,
             $this->order->deliveryOptions->deliveryType
@@ -175,33 +182,5 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         }
 
         return $orderAmount;
-    }
-
-    /**
-     * Get local country from proposition config.
-     *
-     * @return string
-     */
-    private function getLocalCountry(): string
-    {
-        try {
-            $propositionService = Pdk::get(PropositionService::class);
-            $proposition = $propositionService->getPropositionConfig();
-            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-            return $platformConfig['localCountry'] ?? 'NL';
-        } catch (\Exception $e) {
-            // Fallback to NL if proposition service is not available
-            return 'NL';
-        }
-    }
-
-    /**
-     * Get default carrier from proposition config.
-     *
-     * @return string
-     */
-    private function getDefaultCarrier(): string
-    {
-        return Pdk::get(PropositionService::class)->getDefaultCarrier()->name;
     }
 }
