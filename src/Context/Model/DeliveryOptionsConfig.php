@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -29,7 +31,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class DeliveryOptionsConfig extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'allowRetry'                     => false,
         'basePrice'                      => 0,
         'carrierSettings'                => [],
@@ -64,7 +66,16 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Pdk::get('platform');
+        // Get platform from proposition service for backwards compatibility
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
+            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+            $this->platform = $platformConfig['name'];
+        } catch (\Exception $e) {
+            // Fallback to direct platform value
+            $this->platform = Platform::getPropositionName();
+        }
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 

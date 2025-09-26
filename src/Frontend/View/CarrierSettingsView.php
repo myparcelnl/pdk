@@ -7,6 +7,9 @@ namespace MyParcelNL\Pdk\Frontend\View;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\FrontendData;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 
 /**
@@ -29,9 +32,10 @@ class CarrierSettingsView extends AbstractSettingsView
     {
         $array = [];
 
-        $this->carriers->each(static function (Carrier $carrier) use (&$array) {
+        $this->carriers->each(function (Carrier $carrier) use (&$array) {
             $view    = new CarrierSettingsItemView($carrier);
-            $array[] = ['id' => $carrier->externalIdentifier] + $view->toArray();
+            $legacyId = FrontendData::getLegacyIdentifier($carrier->externalIdentifier);
+            $array[] = ['id' => $legacyId] + $view->toArray();
         });
 
         return new Collection($array);

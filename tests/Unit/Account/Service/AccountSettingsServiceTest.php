@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -13,6 +14,7 @@ use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -82,7 +84,7 @@ it('gets carriers in correct order', function () {
     /** @var AccountSettingsServiceInterface $service */
     $service = Pdk::get(AccountSettingsServiceInterface::class);
 
-    $carriers = $service->getCarriers();
+    $carriers = $service->getCarriers(true);
 
     expect(
         $carriers->pluck('externalIdentifier')
@@ -149,4 +151,3 @@ it('checks account small package contract', function () {
 
     expect($result)->toBeFalse();
 });
-

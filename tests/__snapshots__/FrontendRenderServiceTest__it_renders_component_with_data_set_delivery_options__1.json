@@ -8,10 +8,10 @@
       "locale": "nl-NL",
       "packageType": "package",
       "allowPickupLocationsViewSelection": true,
-      "platform": "myparcel",
+      "platform": "myparcel-nederland",
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
-      "apiBaseUrl": "https:\/\/api.myparcel.nl"
+      "apiBaseUrl": "https://api.myparcel.nl"
     },
     "strings": {
       "morning": "Ochtend"

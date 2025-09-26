@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -16,6 +17,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockLegacyMigrationService;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Log\LoggerInterface;
+
 use function DI\factory;
 use function DI\get;
 use function DI\value;
@@ -64,7 +66,7 @@ function expectSettingsToContainLegacy(array $values): void
     expect(Arr::dot($settings->toArray()))->toHaveKeysAndValues($values);
 }
 
-it('[legacy] performs a fresh install of the app, filling default values from platform and config', function () {
+it('[legacy] performs a fresh install of the app, filling default values from config', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
@@ -82,7 +84,6 @@ it('[legacy] performs a fresh install of the app, filling default values from pl
     expectSettingsToContainLegacy([
         /** From default settings */
         'checkout.deliveryOptionsHeader'      => 'default',
-        'checkout.pickupLocationsDefaultView' => 'map',
 
         /**
          * Expect 1.2.0 migration to not have run (as it's only in the upgrade migrations)
