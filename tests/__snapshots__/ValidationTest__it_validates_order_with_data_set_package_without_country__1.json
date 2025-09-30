@@ -1,7 +1,0 @@
-{
-  "0.property": "shippingAddress.cc",
-  "0.pointer": "/shippingAddress/cc",
-  "0.message": "The property cc is required",
-  "0.constraint": "required",
-  "0.context": 1
-}
