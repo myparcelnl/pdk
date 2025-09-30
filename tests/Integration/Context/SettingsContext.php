@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function MyParcelNL\Pdk\Tests\factory;
-use function MyParcelNL\Pdk\Tests\mockPlatform;
 
 /**
  * This context is for tests that use the settings repository.
@@ -44,17 +43,9 @@ final class SettingsContext extends AbstractContext
             // Wipe the settings repository.
             $this->settingsRepository->reset();
         });
-    }
 
-    /**
-     * @Given I am a platform :platform user
-     */
-    public function IAmAPlatformUser(string $platform): void
-    {
-        $resetPlatform = mockPlatform($platform);
-
-        $this->onAfterScenario(function () use ($resetPlatform) {
-            $resetPlatform();
+        $this->onBeforeScenario(function () {
+            TestBootstrapper::hasApiKey();
         });
     }
 
