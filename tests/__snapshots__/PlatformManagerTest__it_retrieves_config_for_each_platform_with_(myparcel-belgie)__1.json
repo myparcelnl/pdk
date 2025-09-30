@@ -1,12 +1,11 @@
 {
-  "name": "myparcel-belgie",
+  "name": "sendmyparcel",
   "human": "MyParcel Belgi\u00eb",
   "backofficeUrl": "https://backoffice.myparcel.nl",
   "supportUrl": "https://developer.myparcel.nl",
   "localCountry": "BE",
   "defaultCarrier": "bpost",
   "defaultCarrierId": 2,
-  "defaultSettings": [],
   "carriers": [
     {
       "externalIdentifier": "postnl",

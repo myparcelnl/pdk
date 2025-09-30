@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -55,7 +56,7 @@ it('can be instantiated', function () {
             'packageType'                       => 'package',
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
-            'platform'                          => 'myparcel-nederland',
+            'platform'                          => Platform::LEGACY_MYPARCEL_NAME,
             'showPriceSurcharge'                => false,
             'priceStandardDelivery'             => \floatval(0),
             'closedDays'                        => null,
@@ -101,7 +102,7 @@ it('can be instantiated from a cart', function () {
         ->and($config->packageType)
         ->toBe('package')
         ->and($config->platform)
-        ->toBe('myparcel-nederland')
+        ->toBe(Platform::LEGACY_MYPARCEL_NAME)
         ->and($config->showPriceSurcharge)
         ->toBe(false)
         ->and($config->apiBaseUrl)
@@ -177,7 +178,7 @@ it('uses correct price when price is shown as surcharge', function () {
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
-            'platform'                          => 'myparcel-nederland',
+            'platform'                          => Platform::LEGACY_MYPARCEL_NAME,
             'showPriceSurcharge'                => false,
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
             'priceStandardDelivery'             => 695.0,

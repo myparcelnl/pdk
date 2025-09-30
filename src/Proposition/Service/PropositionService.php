@@ -267,7 +267,7 @@ class PropositionService
 
     /**
      * Map the proposition config to the platform config for backwards compatibility.
-     * This maps to existing Platform config keys, but does not transform the values.
+     * This maps to existing Platform config keys, and transforms existing data where needed.
      *
      * @param PropositionConfig $propositionConfig
      * @return array
@@ -276,14 +276,13 @@ class PropositionService
     public function mapToPlatformConfig(PropositionConfig $propositionConfig): array
     {
         return [
-            'name' => $propositionConfig->proposition->key,
+            'name' => Platform::PLATFORMS_TO_LEGACY_MAP[$propositionConfig->proposition->key] ?? $propositionConfig->proposition->key,
             'human' => $propositionConfig->proposition->name,
             'backofficeUrl' => $propositionConfig->applications['backoffice']['url'] ?? null,
             'supportUrl' => $propositionConfig->applications['developerPortal']['url'] ?? null,
             'localCountry' => $propositionConfig->countryCode,
             'defaultCarrier' => $this->mapNewToLegacyCarrierName($this->getDefaultCarrier()->name),
             'defaultCarrierId' => $this->getDefaultCarrier()->id,
-            'defaultSettings' => [], // @todo no longer supported, remove in v3.0.0
             'carriers' => FrontendData::carrierCollectionToLegacyFormat($this->getCarriers())->toArray(),
         ];
     }
