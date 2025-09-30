@@ -78,15 +78,8 @@ class PropositionService
     {
         $filePath = null;
         $configData = null;
-        switch ($propositionName) {
-            case Platform::FLESPAKKET_NAME:
-                // @todo: remove flespakket in next major version
-                Logger::deprecated('Flespakket platform is deprecated.');
-                // no break
-            default:
-                $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
-                break;
-        }
+        $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
+
 
         if (!file_exists($filePath)) {
             Logger::error('Proposition config file not found', [
