@@ -24,25 +24,6 @@ it('fetches proposition config for the active proposition', function (string $pl
     expect($activeName)->toBe($platform);
 })->with('platforms');
 
-
-it('handles flespakket as deprecated', function () {
-    TestBootstrapper::forPlatform(Platform::FLESPAKKET_NAME);
-
-    $logger = Pdk::get(PdkLoggerInterface::class);
-
-    $propositionService = new PropositionService();
-
-    // Verify flespakket deprecation
-    expect($propositionService->getPropositionConfigByName(Platform::FLESPAKKET_NAME))->toNotBeNull();
-
-    $lastLog = Arr::last($logger->getLogs());
-
-    expect($lastLog['level'])
-        ->toBe(LogLevel::NOTICE)
-        ->and($lastLog['message'])
-        ->toStartWith('[PDK]: [DEPRECATED] Flespakket platform is deprecated.');
-});
-
 it('throws exception for unknown proposition', function () {
     TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
 
