@@ -169,19 +169,6 @@ it('maps carriers correctly with custom postnl contract', function () {
             'primary'    => 1,
             'type'       => 'main',
         ],
-        [
-            'id'         => 11244,
-            'label'      => 'postnl_flespakket_on_myparcel',
-            'carrier_id' => 1,
-            'carrier'    => [
-                'id'   => 1,
-                'name' => 'postnl',
-            ],
-            'enabled'    => 0,
-            'optional'   => 1,
-            'primary'    => 1,
-            'type'       => 'main',
-        ],
     ]);
 
     $firstShop = AccountSettings::getAccount()->shops->first();
@@ -226,19 +213,6 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
             ],
             'enabled'    => 1,
             'optional'   => 0,
-            'primary'    => 1,
-            'type'       => 'main',
-        ],
-        [
-            'id'         => 1,
-            'label'      => 'postnl_flespakket_on_myparcel',
-            'carrier_id' => 1,
-            'carrier'    => [
-                'id'   => 1,
-                'name' => 'postnl',
-            ],
-            'enabled'    => 0,
-            'optional'   => 1,
             'primary'    => 1,
             'type'       => 'main',
         ],
