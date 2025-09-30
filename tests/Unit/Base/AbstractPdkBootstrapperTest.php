@@ -5,10 +5,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base;
 
+use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
+use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function DI\value;
+use function MyParcelNL\Pdk\Tests\factory;
 
 afterAll(function () {
     Bootstrapper::reset();
@@ -46,8 +50,6 @@ class Bootstrapper extends PdkBootstrapper
 
 it('can boot the PDK with app info', function () {
     $appInfoInput = [
-        'name'    => 'myparcelnl-test',
-        'title'   => 'MyParcel',
         'version' => '1.0.0',
         'path'    => __DIR__ . '/../../..',
         'url'     => 'https://example.com',
@@ -62,35 +64,22 @@ it('can boot the PDK with app info', function () {
     expect($appInfo)
         ->toBeInstanceOf(AppInfo::class)
         ->and($appInfo->toArray())
-        ->toEqual($appInfoInput);
+        ->toMatchArray($appInfoInput);
 });
 
 it('only boots the instance once', function () {
-    // Not resetting the bootstrapper here, so the second boot should return the same instance.
-    $pdk = Bootstrapper::boot('other-name', 'MyParcel', '1.0.0', __DIR__ . '/../../..', 'https://example.com');
-
-    expect($pdk->getAppInfo()->name)->toBe('myparcelnl-test');
-});
-
-it('determines platform automatically', function (string $name, string $platform) {
     Bootstrapper::reset();
+    Bootstrapper::boot('1.0.0', __DIR__ . '/../../..', 'https://example.com');
+    // Not resetting the bootstrapper here, so the second boot should return the same instance.
+    $pdk = Bootstrapper::boot('9.9.9', __DIR__ . '/../../..', 'https://example.com');
 
-    $pdk = Bootstrapper::boot($name, 'MyParcel', '1.0.0', __DIR__ . '/../../..', 'https://example.com');
-
-    expect($pdk->get('platform'))->toBe($platform);
-})->with([
-    'myparcelnl'          => ['myparcelnl', Platform::MYPARCEL_NAME],
-    'myparcelbe'          => ['myparcelbe', Platform::SENDMYPARCEL_NAME],
-    'flespakket'          => ['flespakket', Platform::FLESPAKKET_NAME],
-    'unrecognized string' => ['bla', Platform::MYPARCEL_NAME],
-]);
+    expect($pdk->getAppInfo()->version)->toBe('1.0.0');
+});
 
 it('can boot the PDK with additional config', function () {
     Bootstrapper::reset();
 
     $appInfoInput = [
-        'name'    => 'app-name',
-        'title'   => 'MyApp',
         'version' => '1.2.3',
         'path'    => '/path/to/app',
         'url'     => 'https://example.com',
@@ -101,5 +90,19 @@ it('can boot the PDK with additional config', function () {
     expect($pdk->get('arbitraryValue'))
         ->toBe('arbitraryValue')
         ->and($pdk->get('appInfoArray'))
-        ->toEqual($appInfoInput);
+        ->toMatchArray($appInfoInput);
 });
+
+it ('determines platform from account', function (int $platformId, string $platform) {
+    TestBootstrapper::forPlatform('myparcel');
+
+    factory(Account::class, $platformId)
+        ->withShops()
+        ->store();
+
+    expect(PlatformFacade::getPropositionName())->toBe($platform);
+})->with([
+    'myparcelnl'          => [Platform::MYPARCEL_ID, Platform::MYPARCEL_NAME],
+    'myparcelbe'          => [Platform::SENDMYPARCEL_ID, Platform::SENDMYPARCEL_NAME],
+    'unrecognized id' => [-100, Platform::MYPARCEL_NAME],
+]);

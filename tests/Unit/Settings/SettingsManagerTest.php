@@ -13,8 +13,8 @@ use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings as SettingsModel;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -64,7 +64,7 @@ it('retrieves a specific setting by key and namespace', function () {
 });
 
 it('retrieves default settings', function (string $platform) {
-    MockPdkFactory::create(['platform' => $platform]);
+    TestBootstrapper::forPlatform($platform);
 
     $defaults = Settings::getDefaults();
 
@@ -75,7 +75,8 @@ it('retrieves default settings', function (string $platform) {
 })->with('platforms');
 
 it('retrieves default carrier settings', function (string $platform) {
-    MockPdkFactory::create(['platform' => $platform]);
+    TestBootstrapper::forPlatform($platform);
+
     $carriers = (new Collection(Platform::getCarriers()))
         ->pluck('name')
         ->toArray();

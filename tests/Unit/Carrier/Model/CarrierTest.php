@@ -10,10 +10,9 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Sdk\src\Support\Collection;
-
-use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -22,27 +21,23 @@ const DHL_FOR_YOU_CUSTOM_IDENTIFIER = Carrier::CARRIER_DHL_FOR_YOU_NAME . ':' . 
 usesShared(new UsesEachMockPdkInstance());
 
 it('creates default carrier for platform', function (string $platform) {
-    $reset = mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
 
     $carrier = new Carrier();
 
     assertMatchesJsonSnapshot(
         json_encode($carrier->except(['capabilities', 'returnCapabilities'], Arrayable::SKIP_NULL))
     );
-
-    $reset();
 })->with('platforms');
 
 
 it('does not return a carrier for an unknown ID', function (string $platform) {
-    $reset = mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
 
     $carrier = new Carrier(['id' => 1337]);
 
     expect($carrier->name)
         ->toBeNull();
-
-    $reset();
 })->with('platforms');
 
 
@@ -134,7 +129,7 @@ it('generates the same data with either name or id', function (array $values, ar
     ]);
 
 it('instantiates carriers from name', function (string $platform) {
-    $reset = mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
 
     $carriers    = new Collection(Platform::getCarriers());
     $newCarriers = $carriers->map(function (Carrier $carrier) {
@@ -142,7 +137,6 @@ it('instantiates carriers from name', function (string $platform) {
     });
 
     assertMatchesJsonSnapshot(json_encode($newCarriers->toArrayWithoutNull()));
-    $reset();
 })->with('platforms');
 
 it('instantiates carrier from external identifier', function (string $identifier) {
