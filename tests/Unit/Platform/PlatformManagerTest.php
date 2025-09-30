@@ -25,7 +25,7 @@ it('gets specific keys from platform data', function () {
     TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
 
     expect(PlatformFacade::get('name'))
-        ->toBe('myparcel-belgie')
+        ->toBe(Platform::LEGACY_SENDMYPARCEL_NAME)
         ->and(PlatformFacade::get('human'))
         ->toBe('MyParcel België')
         ->and(PlatformFacade::get('localCountry'))

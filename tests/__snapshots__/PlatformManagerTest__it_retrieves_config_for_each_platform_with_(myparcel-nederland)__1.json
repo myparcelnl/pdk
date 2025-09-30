@@ -1,12 +1,11 @@
 {
-  "name": "myparcel-nederland",
+  "name": "myparcel",
   "human": "MyParcel Nederland",
   "backofficeUrl": "https://backoffice.myparcel.nl",
   "supportUrl": "https://developer.myparcel.nl",
   "localCountry": "NL",
   "defaultCarrier": "postnl",
   "defaultCarrierId": 1,
-  "defaultSettings": [],
   "carriers": [
     {
       "externalIdentifier": "postnl",
