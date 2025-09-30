@@ -21,5 +21,5 @@ interface PlatformManagerInterface
     /**
      * @return string
      */
-    public function getPlatform(): string;
+    public function getPropositionName(): string;
 }

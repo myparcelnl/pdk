@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
@@ -20,7 +19,6 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        'platform' => value(Platform::SENDMYPARCEL_NAME),
         'appInfo'  => factory(function (): AppInfo {
             return new AppInfo([
                 'name'    => 'test',
@@ -71,7 +69,7 @@ it('performs a fresh install of the app, filling default values from platform an
     expectSettingsToContain([
         /** From default settings */
         'checkout.deliveryOptionsHeader'      => 'default',
-        'checkout.pickupLocationsDefaultView' => 'map',
+        'checkout.pickupLocationsDefaultView' => 'list',
 
         /**
          * Expect installation migration to have run
