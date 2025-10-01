@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
@@ -119,6 +120,61 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
+     * Creates a carrier configuration for the delivery options.
+     * Note that some of these properties will be deprecated and should be replaced by interactions with the capabilities API.
+     * (e.g. packageTypes, features, shipmentOptionsPerPackageType)
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    public function createPropositionConfig(): array
+    {
+        $config = ['carriers' => []];
+        $carriers = Pdk::get(PropositionService::class)
+            ->getCarriers(true);
+
+        /**
+         * @var FrontendDataAdapterInterface $adapter
+         */
+        $adapter = Pdk::get(FrontendDataAdapterInterface::class);
+
+        // @TODO this data should be based on calls by the DO to the capabilities API
+        $config['carriers'] = array_map(function ($carrier) use ($adapter) {
+            $legacyCarrier = $adapter->convertCarrierToLegacyFormat($carrier);
+
+            return [
+                "name"      => $legacyCarrier->name,
+                "active"    => true,
+                "subscription" => -1, // This does not seem to be actually used in the DO?
+                "packageTypes" => $legacyCarrier->capabilities->packageTypes,
+                'deliveryTypes' => $legacyCarrier->capabilities->deliveryTypes,
+                'deliveryCountries' => ['NL'],// @TODO: add to proposition config for now
+                "pickupCountries" => [], // @TODO add to proposition contracts[].outbound
+                "smallPackagePickupCountries" => [], // This is a redundant setting, in the DO, the deliveryCountries always equal smallPackagePickupCountries if small package is included in packageTypes
+                "fakeDelivery" => false, // Whether to allow DO to create a fake delivery (no API calls made) for this carrier
+                "shipmentOptionsPerPackageType" => [ // TODO: map all package types to all shipment options for now, the DO actually doesn't have different options per package type right now
+                    "package" => [
+                        "only_recipient",
+                        "signature"
+                    ],
+                    "package_small" => [
+                        "only_recipient",
+                        "signature"
+                    ]
+                ],
+                // "features" => $legacyCarrier->capabilities->features, // @fixme features must be an array of delivery options features
+                // ex. ["deliveryDaysWindow",
+                //         "dropOffDays",
+                //         "dropOffDelay",
+                //         "pickupMapAllowLoadMore"
+                // ]
+                "addressFields" => []// ?
+            ];
+        }, $carriers->all());
+        return $config;
+    }
+
+    /**
+     * Create the delivery options config including all carrier-specific feature toggles based on the cart.
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
      * @return array
@@ -151,6 +207,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
+     * Create the settings for a specific carrier based on the cart.
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *

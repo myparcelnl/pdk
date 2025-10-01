@@ -121,7 +121,6 @@ class PropositionService
         // Emulate an eventual API call that gets the proposition by ID
         $filePath = __DIR__ . '/../../../config/proposition/proposition-' . $propositionId . '.json';
 
-
         if (!file_exists($filePath)) {
             Logger::error('Proposition config file not found', [
                 'proposition' => $propositionId,
@@ -308,7 +307,7 @@ class PropositionService
 
     /**
      * Map the proposition config to the platform config for backwards compatibility.
-     * This maps to existing Platform config keys, and transforms existing data where needed.
+     * This maps to existing Platform config keys, but does not transform the values.
      *
      * @param PropositionConfig $propositionConfig
      * @return array
