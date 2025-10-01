@@ -35,13 +35,19 @@ class AccountGeneralSettings extends Model
      */
     public function getEnvironment(): string
     {
-        // Check if we're connected to acceptance environment via cache file (backward compatibility)
-        $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-        if (file_exists($cacheFile)) {
-            return 'acceptance';
+        // Check if we're connected to acceptance environment via database
+        try {
+            $settingsRepository = \MyParcelNL\Pdk\Facade\Pdk::get(\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface::class);
+            $accountSettings = $settingsRepository->all()->account;
+            
+            if ($accountSettings && $accountSettings->environment) {
+                return $accountSettings->environment;
+            }
+        } catch (\Throwable $e) {
+            // Fall back to default behavior if settings can't be loaded
         }
 
-        return $this->environment ?? 'production';
+        return $this->environment ?? \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_PRODUCTION;
     }
 
     /**
@@ -64,7 +70,7 @@ class AccountGeneralSettings extends Model
      */
     public function getIsTestAttribute(): bool
     {
-        return $this->getEnvironment() !== 'production';
+        return $this->getEnvironment() !== \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_PRODUCTION;
     }
 
     /**
@@ -74,7 +80,7 @@ class AccountGeneralSettings extends Model
      */
     public function isAcceptance(): bool
     {
-        return $this->getEnvironment() === 'acceptance';
+        return $this->getEnvironment() === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE;
     }
 
     /**
@@ -84,6 +90,6 @@ class AccountGeneralSettings extends Model
      */
     public function isProduction(): bool
     {
-        return $this->getEnvironment() === 'production';
+        return $this->getEnvironment() === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_PRODUCTION;
     }
 }
