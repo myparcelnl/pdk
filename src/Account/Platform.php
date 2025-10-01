@@ -13,7 +13,7 @@ class Platform
     public const LEGACY_MYPARCEL_NAME = 'myparcel';
     public const SENDMYPARCEL_ID   = 3;
     public const SENDMYPARCEL_NAME = 'myparcel-belgie';
-    public const LEGACY_SENDMYPARCEL_NAME = 'sendmyparcel';
+    public const LEGACY_SENDMYPARCEL_NAME = 'belgie';
 
     public const PLATFORMS_TO_LEGACY_MAP = [
         self::MYPARCEL_NAME   => self::LEGACY_MYPARCEL_NAME,
