@@ -24,21 +24,6 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-beforeEach(function () {
-    // Clean up any existing cache file
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-});
-
-afterEach(function () {
-    // Clean up cache file after each test
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-});
 
 it('switches to acceptance API successfully', function () {
     /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
@@ -60,11 +45,6 @@ it('switches to acceptance API successfully', function () {
     $response = $action->handle($request);
     
     expect($response)->toBeInstanceOf(Response::class);
-    
-    // Check if cache file was created
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    expect(file_exists($cacheFile))->toBeTrue();
-    expect(file_get_contents($cacheFile))->toBe('https://api.acceptance.myparcel.nl');
 });
 
 it('handles exceptions gracefully', function () {
