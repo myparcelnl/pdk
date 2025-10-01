@@ -1,0 +1,12 @@
+{
+  "description": "belgie/order/postnl/nl_package",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        }
+      }
+    }
+  }
+}
