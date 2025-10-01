@@ -104,17 +104,11 @@ class UpdateAccountAction implements ActionInterface
     {
         // Get existing account settings to preserve them
         $existingSettings = $this->pdkSettingsRepository->all()->account;
-
-        if ($existingSettings) {
-            // Create a new instance with existing data and merge new settings
-            $existingData = $existingSettings->toArray();
-            $mergedData = array_merge($existingData, $settings);
-            $accountSettings = new AccountSettings($mergedData);
-        } else {
-            // If no existing settings and no new settings, create empty settings
-            // If there are new settings, use them
-            $accountSettings = new AccountSettings($settings);
-        }
+        
+        // Always merge with existing settings
+        $existingData = $existingSettings->toArray();
+        $mergedData = array_merge($existingData, $settings);
+        $accountSettings = new AccountSettings($mergedData);
 
         $this->pdkSettingsRepository->storeSettings($accountSettings);
 
