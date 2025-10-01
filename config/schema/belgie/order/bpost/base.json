@@ -1,0 +1,115 @@
+{
+  "description": "belgie/order/bpost/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["standard", "pickup", null]
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["date"],
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "pattern": "^(20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12]\\d|3[01]) ([01]\\d|2[0123]):([012345]\\d):([012345]\\d)$"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "shipmentOptions": {
+                  "required": ["insurance"],
+                  "properties": {
+                    "insurance": {
+                      "enum": [50000, 250000, 500000]
+                    },
+                    "signature": {
+                      "enum": [1]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "shipmentOptions": {
+                  "properties": {
+                    "insurance": {
+                      "enum": [0, null]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "minimum": 1,
+          "maximum": 30000
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
+        "packageType": {
+          "enum": ["package", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "ageCheck": {
+              "enum": [0]
+            },
+            "largeFormat": {
+              "enum": [0]
+            },
+            "labelDescription": {
+              "maxLength": 30
+            },
+            "onlyRecipient": {
+              "enum": [0]
+            },
+            "sameDayDelivery": {
+              "enum": [0]
+            },
+            "return": {
+              "enum": [0]
+            }
+          }
+        }
+      }
+    }
+  }
+}
