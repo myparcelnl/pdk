@@ -53,14 +53,8 @@ class SwitchToProductionApiAction implements ActionInterface
             // Switch the base URL back to the production API for the current session
             $this->apiService->setBaseUrl(Config::API_URL_PRODUCTION);
 
-            // Remove the acceptance API URL from the cache file (backward compatibility)
-            $cacheFile = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
-            if (file_exists($cacheFile)) {
-                unlink($cacheFile);
-            }
-
-            // Update account settings to store the environment preference
-            $this->updateAccountSettings(['environment' => 'production']);
+            // Store the environment preference in database (no cache files)
+            $this->updateAccountSettings(['environment' => Config::ENVIRONMENT_PRODUCTION]);
 
             Logger::info('API URL successfully switched back to production environment');
 
@@ -77,12 +71,6 @@ class SwitchToProductionApiAction implements ActionInterface
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
-            Notifications::error(
-                'Failed to switch API URL back to production environment',
-                [],
-                Notification::CATEGORY_GENERAL
-            );
 
             return new JsonResponse([
                 'success' => false,
