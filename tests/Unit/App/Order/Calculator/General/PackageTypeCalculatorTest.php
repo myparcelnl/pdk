@@ -41,31 +41,17 @@ const CARRIERS            = [
     CARRIER_DPD,
 ];
 
-const ACCOUNT_FLAG_ON_CARRIER_SETTING_ON = [
-    'accountHasCarrierSmallPackageContract' => true,
+const CARRIER_SETTING_ON = [
     'carrierHasInternationalMailboxAllowed' => true,
 ];
 
-const ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF = [
-    'accountHasCarrierSmallPackageContract' => true,
-    'carrierHasInternationalMailboxAllowed' => false,
-];
-
-const ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON = [
-    'accountHasCarrierSmallPackageContract' => false,
-    'carrierHasInternationalMailboxAllowed' => true,
-];
-
-const ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF = [
-    'accountHasCarrierSmallPackageContract' => false,
+const CARRIER_SETTING_OFF = [
     'carrierHasInternationalMailboxAllowed' => false,
 ];
 
 const CONFIG = [
-    ACCOUNT_FLAG_ON_CARRIER_SETTING_ON,
-    ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF,
-    ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON,
-    ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF,
+    CARRIER_SETTING_ON,
+    CARRIER_SETTING_OFF,
 ];
 
 const DESTINATION_INTERNATIONAL_COUNTRIES = [
@@ -159,7 +145,6 @@ it('calculates international mailbox', function (
     $country,
     $carrierExternalIdentifier,
     $carrierName,
-    $accountHasCarrierSmallPackageContract,
     $carrierHasInternationalMailboxAllowed
 ) {
     TestBootstrapper::forPlatform($platform);
@@ -192,7 +177,6 @@ it('calculates international mailbox', function (
         ->make();
 
     factory(AccountGeneralSettings::class)
-        ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
         ->store();
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
