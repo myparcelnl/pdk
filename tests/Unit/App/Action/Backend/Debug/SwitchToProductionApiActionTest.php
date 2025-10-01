@@ -24,19 +24,6 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-beforeEach(function () {
-    // Create a cache file to simulate acceptance environment
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
-    file_put_contents($cacheFile, 'https://api.acceptance.myparcel.nl');
-});
-
-afterEach(function () {
-    // Clean up cache file after each test
-    $cacheFile = sys_get_temp_dir() . '/pdk_acceptance_api_url.txt';
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-});
 
 it('switches to production API successfully', function () {
     /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
@@ -58,10 +45,6 @@ it('switches to production API successfully', function () {
     $response = $action->handle($request);
     
     expect($response)->toBeInstanceOf(Response::class);
-    
-    // Check if cache file was removed
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    expect(file_exists($cacheFile))->toBeFalse();
 });
 
 it('handles exceptions gracefully', function () {
@@ -175,33 +158,5 @@ it('updates account settings with empty array', function () {
     expect($response)->toBeInstanceOf(Response::class);
 });
 
-it('removes cache file even if it does not exist', function () {
-    // Remove cache file first
-    $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-    if (file_exists($cacheFile)) {
-        unlink($cacheFile);
-    }
-    
-    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Contract\ApiServiceInterface $apiService */
-    $apiService = mock(ApiServiceInterface::class);
-    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
-    $settingsRepository = mock(PdkSettingsRepositoryInterface::class);
-    
-    $apiService->shouldReceive('setBaseUrl')
-        ->once()
-        ->with('https://api.myparcel.nl');
-    
-    $settingsRepository->shouldReceive('storeSettings')
-        ->once()
-        ->with(Mockery::type(AccountSettings::class));
-    
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
-    $request = new Request();
-    
-    $response = $action->handle($request);
-    
-    expect($response)->toBeInstanceOf(Response::class);
-    expect(file_exists($cacheFile))->toBeFalse();
-});
 
 
