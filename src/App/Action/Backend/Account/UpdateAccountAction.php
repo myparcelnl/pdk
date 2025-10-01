@@ -69,9 +69,7 @@ class UpdateAccountAction implements ActionInterface
         $body     = json_decode($request->getContent(), true);
         $settings = $body['data']['account_settings'] ?? [];
 
-        $accountSettings = empty($settings)
-            ? $this->getAccountSettings()
-            : $this->updateAccountSettings($settings);
+        $accountSettings = $this->updateAccountSettings($settings);
 
         $this->updateAndSaveAccount($accountSettings);
 
@@ -96,20 +94,6 @@ class UpdateAccountAction implements ActionInterface
         $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
     }
 
-    /**
-     * @return \MyParcelNL\Pdk\Settings\Model\AccountSettings
-     */
-    protected function getAccountSettings(): AccountSettings
-    {
-        /** @var null|AccountSettings $accountSettings */
-        $accountSettings = $this->pdkSettingsRepository->all()->account;
-
-        if (! $accountSettings) {
-            throw new RuntimeException('Account settings not found');
-        }
-
-        return $accountSettings;
-    }
 
     /**
      * @param  array $settings
@@ -118,7 +102,19 @@ class UpdateAccountAction implements ActionInterface
      */
     protected function updateAccountSettings(array $settings): AccountSettings
     {
-        $accountSettings = new AccountSettings($settings);
+        // Get existing account settings to preserve them
+        $existingSettings = $this->pdkSettingsRepository->all()->account;
+
+        if ($existingSettings) {
+            // Create a new instance with existing data and merge new settings
+            $existingData = $existingSettings->toArray();
+            $mergedData = array_merge($existingData, $settings);
+            $accountSettings = new AccountSettings($mergedData);
+        } else {
+            // If no existing settings and no new settings, create empty settings
+            // If there are new settings, use them
+            $accountSettings = new AccountSettings($settings);
+        }
 
         $this->pdkSettingsRepository->storeSettings($accountSettings);
 

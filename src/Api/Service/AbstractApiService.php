@@ -101,18 +101,25 @@ abstract class AbstractApiService implements ApiServiceInterface
             return $this->baseUrl;
         }
 
-        // Check if we're in acceptance mode via account settings
+        // Check if we're in acceptance mode via database
         try {
-            $accountSettings = Pdk::get('accountSettings');
-            if ($accountSettings && $accountSettings->isAcceptance()) {
+            $settingsRepository = Pdk::get(\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface::class);
+            $accountSettings = $settingsRepository->all()->account;
+            
+            Logger::info('AbstractApiService - getBaseUrl environment check', [
+                'hasAccountSettings' => $accountSettings ? 'yes' : 'no',
+                'environment' => $accountSettings ? $accountSettings->environment : 'null',
+                'isAcceptance' => $accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE ? 'yes' : 'no'
+            ]);
+            
+            if ($accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE) {
+                Logger::info('AbstractApiService - Using acceptance API URL');
                 return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
             }
         } catch (\Throwable $e) {
-            // Fall back to cache file check for backward compatibility
-            $cacheFile = sys_get_temp_dir() . \MyParcelNL\Pdk\Base\Config::ACCEPTANCE_CACHE_FILE;
-            if (file_exists($cacheFile)) {
-                return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
-            }
+            Logger::error('AbstractApiService - Error checking environment', [
+                'error' => $e->getMessage()
+            ]);
         }
 
         // Fall back to default API URL from config
@@ -127,18 +134,6 @@ abstract class AbstractApiService implements ApiServiceInterface
         return [];
     }
 
-    /**
-     * Check if currently connected to acceptance environment
-     * This method is kept for backward compatibility but should be replaced
-     * with checking AccountGeneralSettings->isAcceptance()
-     *
-     * @return bool
-     */
-    public function isConnectedToAcceptance(): bool
-    {
-        // Check if the current base URL is the acceptance URL
-        return $this->getBaseUrl() === \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
-    }
 
     /**
      * @param  string $baseUrl

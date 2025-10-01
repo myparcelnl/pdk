@@ -55,15 +55,12 @@ class SwitchToAcceptanceApiAction implements ActionInterface
             // Switch the base URL to the acceptance API for the current session
             $this->apiService->setBaseUrl(Config::API_URL_ACCEPTANCE);
 
-            // Store the acceptance API URL in a file for persistence (backward compatibility)
-            $acceptanceUrl = Config::API_URL_ACCEPTANCE;
-            $cacheFile = sys_get_temp_dir() . Config::ACCEPTANCE_CACHE_FILE;
-            file_put_contents($cacheFile, $acceptanceUrl);
+            // Store the environment preference in database (no cache files)
+            $accountSettings = $this->updateAccountSettings(['environment' => Config::ENVIRONMENT_ACCEPTANCE]);
 
-            // Update account settings to store the environment preference
-            $this->updateAccountSettings(['environment' => 'acceptance']);
-
-            Logger::info('API URLs successfully switched to acceptance environment');
+            Logger::info('API URLs successfully switched to acceptance environment', [
+                'storedEnvironment' => $accountSettings->environment
+            ]);
 
             Notifications::success(
                 'API URLs successfully switched to acceptance environment.',
@@ -78,12 +75,6 @@ class SwitchToAcceptanceApiAction implements ActionInterface
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
-            Notifications::error(
-                'Failed to switch API URLs to acceptance environment',
-                [],
-                Notification::CATEGORY_GENERAL
-            );
 
             return new JsonResponse([
                 'success' => false,
