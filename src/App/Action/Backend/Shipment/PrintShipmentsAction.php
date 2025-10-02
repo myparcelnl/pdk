@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Backend\Order\AbstractOrderAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
@@ -44,11 +45,13 @@ class PrintShipmentsAction extends AbstractOrderAction
     {
         $format    = strtoupper($this->getLabelOption($request, LabelSettings::FORMAT, LabelSettings::DEFAULT_FORMAT));
         $output    = $this->getLabelOption($request, LabelSettings::OUTPUT, LabelSettings::DEFAULT_OUTPUT);
-        // todo INT-768, until the frontend bulk export works we ignore the request for now
-//        $positions = Utils::toArray(
-//            $this->getLabelOption($request, LabelSettings::POSITION, LabelSettings::DEFAULT_POSITION)
-//        );
-        $positions = Settings::get(LabelSettings::POSITION, LabelSettings::ID, LabelSettings::DEFAULT_POSITION);
+        $positions = Utils::toArray(
+            $this->getLabelOption($request, LabelSettings::POSITION, LabelSettings::DEFAULT_POSITION)
+        );
+        // todo INT-768, until the frontend bulk export works we fix the info we got from the request
+        if (1 === count($positions) && is_string($positions[0])) {
+            $positions = explode(',', $positions[0]);
+        }
 
         $orderIds    = $this->getOrderIds($request);
         $orders      = $this->pdkOrderRepository->getMany($orderIds);
