@@ -121,8 +121,6 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
             $legacyCapabilities = \array_merge_recursive($legacyCapabilities, $this->convertMetadataToLegacyFormat($features['metadata']));
         }
 
-        // print_r($legacyCapabilities['shipmentOptions']);
-
         return $legacyCapabilities;
     }
 

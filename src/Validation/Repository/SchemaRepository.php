@@ -192,20 +192,15 @@ class SchemaRepository extends Repository
     }
 
     /**
-     * Get platform name from proposition service.
+     * Get (legacy) platform name from proposition service as schemas are still named after platforms.
      *
      * @return string
      */
     private function getPlatformName(): string
     {
-        try {
-            $propositionService = Pdk::get(PropositionService::class);
-            $proposition = $propositionService->getPropositionConfig();
-            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-            return $platformConfig['name'] ?? 'myparcel-nederland';
-        } catch (\Exception $e) {
-            // Fallback to default platform name if proposition service is not available
-            return 'myparcel-nederland';
-        }
+        $propositionService = Pdk::get(PropositionService::class);
+        $proposition = $propositionService->getPropositionConfig();
+        $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+        return $platformConfig['name'];
     }
 }

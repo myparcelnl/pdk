@@ -27,7 +27,7 @@ class PropositionCarrierFeatures extends Model
     public const  PACKAGE_TYPE_UNFRANKED_NAME      = 'UNFRANKED';
     public const  PACKAGE_TYPE_DIGITAL_STAMP_NAME  = 'DIGITAL_STAMP';
     public const  PACKAGE_TYPE_PACKAGE_SMALL_NAME  = 'SMALL_PACKAGE';
-    public const  PACKAGE_TYPE_PALLET_NAME        = 'PALLET';
+    public const  PACKAGE_TYPE_PALLET_NAME         = 'PALLET';
     public const  PACKAGE_TYPE_LETTER_NAME         = 'LETTER';
 
     public const PACKAGE_TYPES = [

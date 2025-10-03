@@ -55,7 +55,7 @@ class ShipmentOptions extends Model
         self::TRACKED,
         self::COLLECT,
         self::SATURDAY_DELIVERY,
-        self::MONDAY_DELIVERY
+        self::MONDAY_DELIVERY,
     ];
 
     protected $attributes = [
@@ -70,7 +70,7 @@ class ShipmentOptions extends Model
         self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
-        self::COLLECT           => TriStateService::INHERIT
+        self::COLLECT           => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -85,6 +85,6 @@ class ShipmentOptions extends Model
         self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
-        self::COLLECT           => TriStateService::TYPE_STRICT
+        self::COLLECT           => TriStateService::TYPE_STRICT,
     ];
 }
