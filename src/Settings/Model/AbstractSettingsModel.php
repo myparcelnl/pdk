@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\Settings\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 /**
  * Settings model.

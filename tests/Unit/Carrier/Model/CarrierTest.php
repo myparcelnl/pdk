@@ -9,10 +9,14 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Account\Platform as AccountPlatform;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Sdk\src\Support\Collection;
+
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
@@ -88,6 +92,10 @@ it('determines type based on contract id', function (array $input, string $type)
 ]);
 
 it('generates the same data with either name or id', function (array $values, array $keys) {
+
+    // Instantiate a platform with expected carriers included
+    TestBootstrapper::forPlatform(AccountPlatform::MYPARCEL_NAME);
+
     $carrierA = new Carrier(Arr::only($values, $keys[0]));
     $carrierB = new Carrier(Arr::only($values, $keys[1]));
 
@@ -140,6 +148,8 @@ it('instantiates carriers from name', function (string $platform) {
 })->with('platforms');
 
 it('instantiates carrier from external identifier', function (string $identifier) {
+    // This should run on proposition ID 1
+    expect(Pdk::get(PropositionService::class)->getActivePropositionId())->toBe(1);
     $carrier = new Carrier(['externalIdentifier' => $identifier]);
 
     assertMatchesJsonSnapshot(json_encode($carrier->toArrayWithoutNull()));
@@ -149,7 +159,9 @@ it('instantiates carrier from external identifier', function (string $identifier
 ]);
 
 
-it('creates a GLS carrier via id or name', function(){
+it('creates a GLS carrier via id or name', function () {
+    // Instantiate a platform with GLS included
+    TestBootstrapper::forPlatform(AccountPlatform::MYPARCEL_NAME);
     $carrierById = new Carrier(['id' => Carrier::CARRIER_GLS_ID]);
     $carrierByName = new Carrier(['name' => Carrier::CARRIER_GLS_NAME]);
 

@@ -1,0 +1,158 @@
+{
+  "name": "belgie",
+  "human": "MyParcel Belgi\u00eb",
+  "backofficeUrl": "https://backoffice.myparcel.nl",
+  "supportUrl": "https://developer.myparcel.nl",
+  "localCountry": "BE",
+  "defaultCarrier": "bpost",
+  "defaultCarrierId": 2,
+  "carriers": [
+    {
+      "externalIdentifier": "postnl",
+      "id": 1,
+      "name": "postnl",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": ["SIGNATURE", "ONLY_RECIPIENT", "LARGE_FORMAT", "INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true,
+          "insuranceOptions": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "capabilities": {
+        "deliveryTypes": ["standard", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        },
+        "packageTypes": ["package"],
+        "shipmentOptions": {
+          "signature": true,
+          "onlyRecipient": true,
+          "largeFormat": true,
+          "insurance": [0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        }
+      },
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
+    },
+    {
+      "externalIdentifier": "bpost",
+      "id": 2,
+      "name": "bpost",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true,
+          "insuranceOptions": [0, 50000, 250000, 500000]
+        }
+      },
+      "capabilities": {
+        "deliveryTypes": ["standard", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        },
+        "packageTypes": ["package", "mailbox"],
+        "shipmentOptions": {
+          "saturdayDelivery": true,
+          "signature": true,
+          "insurance": [0, 50000, 250000, 500000]
+        }
+      },
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
+    },
+    {
+      "externalIdentifier": "dpd",
+      "id": 4,
+      "name": "dpd",
+      "human": null,
+      "contractId": null,
+      "enabled": true,
+      "isDefault": true,
+      "label": null,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": null,
+        "deliveryTypes": null,
+        "shipmentOptions": null,
+        "metadata": null
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": ["INSURANCE"],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true,
+          "needsCustomerInfo": true,
+          "dropOffAtPostalPoint": true,
+          "insuranceOptions": [52000]
+        }
+      },
+      "capabilities": {
+        "deliveryTypes": ["standard", "pickup"],
+        "features": {
+          "labelDescriptionLength": 45,
+          "multiCollo": true
+        },
+        "packageTypes": ["package"],
+        "shipmentOptions": {
+          "insurance": [52000]
+        }
+      },
+      "returnCapabilities": {
+        "deliveryTypes": [],
+        "features": [],
+        "packageTypes": [],
+        "shipmentOptions": []
+      }
+    }
+  ]
+}

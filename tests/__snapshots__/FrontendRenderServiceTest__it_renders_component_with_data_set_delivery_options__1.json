@@ -11,7 +11,7 @@
       "platform": "myparcel",
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
-      "apiBaseUrl": "https:\/\/api.myparcel.nl"
+      "apiBaseUrl": "https://api.myparcel.nl"
     },
     "strings": {
       "morning": "Ochtend"
