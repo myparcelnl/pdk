@@ -213,6 +213,23 @@
       "$component": "ToggleInput",
       "label": "settings_checkout_show_tax_fields",
       "description": "settings_checkout_show_tax_fields_description"
+    },
+    {
+      "name": "closedDays",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "enableDeliveryOptions"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "MultiDateInput",
+      "label": "settings_checkout_closed_days",
+      "description": "settings_checkout_closed_days_description"
     }
   ],
   "children": null

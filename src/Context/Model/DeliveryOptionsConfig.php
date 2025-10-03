@@ -26,6 +26,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $platform
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
+ * @property array  $closedDays
  */
 class DeliveryOptionsConfig extends Model
 {
@@ -41,6 +42,7 @@ class DeliveryOptionsConfig extends Model
         'platform'                       => null,
         'priceStandardDelivery'          => 0,
         'showPriceSurcharge'             => false,
+        'closedDays'                     => [],
     ];
 
     protected $casts      = [
@@ -55,6 +57,7 @@ class DeliveryOptionsConfig extends Model
         'platform'                       => 'string',
         'priceStandardDelivery'          => 'float',
         'showPriceSurcharge'             => 'boolean',
+        'closedDays'                     => 'array',
     ];
 
     /**
@@ -77,6 +80,7 @@ class DeliveryOptionsConfig extends Model
             CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
             CheckoutSettings::ID
         );
+        $this->closedDays = Settings::get(CheckoutSettings::CLOSED_DAYS, CheckoutSettings::ID);
 
         parent::__construct($data);
     }
