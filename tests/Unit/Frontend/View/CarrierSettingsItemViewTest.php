@@ -241,7 +241,7 @@ it(
         },
         'accountHasCarrierSmallPackageContract' => false,
         'externalIdentifier'                    => 'postnl:12345',
-        'shouldHaveInternationalMailbox'        => false,
+        'shouldHaveInternationalMailbox'        => true,
     ],
     'package type: international-mailbox, contract on, normal carrier'  => [
         function () {
@@ -251,7 +251,7 @@ it(
         },
         'accountHasCarrierSmallPackageContract' => true,
         'externalIdentifier'                    => 'postnl',
-        'shouldHaveInternationalMailbox'        => false,
+        'shouldHaveInternationalMailbox'        => true,
 
     ],
 
@@ -263,7 +263,7 @@ it(
         },
         'accountHasCarrierSmallPackageContract' => false,
         'externalIdentifier'                    => 'postnl',
-        'shouldHaveInternationalMailbox'        => false,
+        'shouldHaveInternationalMailbox'        => true,
 
     ],
 ]);
