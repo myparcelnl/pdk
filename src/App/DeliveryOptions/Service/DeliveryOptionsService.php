@@ -137,7 +137,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
          */
         $adapter = Pdk::get(FrontendDataAdapterInterface::class);
 
-        // @TODO this data should be based on calls by the DO to the capabilities API
+        // @TODO: this data should be based on calls by the DO to the capabilities API through a proxy in the PDK
         $config['carriers'] = array_map(function ($carrier) use ($adapter) {
             $legacyCarrier = $adapter->convertCarrierToLegacyFormat($carrier);
 
@@ -147,27 +147,20 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 "subscription" => -1, // This does not seem to be actually used in the DO?
                 "packageTypes" => $legacyCarrier->capabilities->packageTypes,
                 'deliveryTypes' => $legacyCarrier->capabilities->deliveryTypes,
-                'deliveryCountries' => ['NL'],// @TODO: add to proposition config for now
-                "pickupCountries" => [], // @TODO add to proposition contracts[].outbound
-                "smallPackagePickupCountries" => [], // This is a redundant setting, in the DO, the deliveryCountries always equal smallPackagePickupCountries if small package is included in packageTypes
-                "fakeDelivery" => false, // Whether to allow DO to create a fake delivery (no API calls made) for this carrier
-                "shipmentOptionsPerPackageType" => [ // TODO: map all package types to all shipment options for now, the DO actually doesn't have different options per package type right now
-                    "package" => [
-                        "only_recipient",
-                        "signature"
-                    ],
-                    "package_small" => [
-                        "only_recipient",
-                        "signature"
-                    ]
-                ],
-                // "features" => $legacyCarrier->capabilities->features, // @fixme features must be an array of delivery options features
-                // ex. ["deliveryDaysWindow",
-                //         "dropOffDays",
-                //         "dropOffDelay",
-                //         "pickupMapAllowLoadMore"
-                // ]
-                "addressFields" => []// ?
+                'deliveryCountries' => $carrier->outboundFeatures->deliveryCountries ?? [],
+                "pickupCountries" => $carrier->outboundFeatures->pickupCountries ?? [],
+                // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
+                "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures['deliveryCountries'] ?? []) : [],
+                "fakeDelivery" => $carrier->outboundFeatures->deliveryOptions['allowFakeDelivery'] ?? false,
+                "shipmentOptionsPerPackageType" => \array_map(function ($packageType) use ($legacyCarrier) {
+                    $snakeCaseKeys = array_map(function ($key) {
+                        return Str::snake($key);
+                    }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions));
+                    return [$packageType => $snakeCaseKeys ?? []];
+                }, $legacyCarrier->capabilities->packageTypes),
+                "features" => $carrier->outboundFeatures->deliveryOptions['availableFeatures'],
+                "addressFields" => $carrier->outboundFeatures->deliveryOptions['addressFields'],
+                "unsupportedParameters" =>  $carrier->outboundFeatures->deliveryOptions['unsupportedParameters']
             ];
         }, $carriers->all());
         return $config;

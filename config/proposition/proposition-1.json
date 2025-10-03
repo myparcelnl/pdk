@@ -293,6 +293,12 @@
               0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
             ]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+          "allowFakeDelivery": true
         }
       },
       {
@@ -306,6 +312,12 @@
           "packageTypes": ["PALLET"],
           "deliveryCountries": [],
           "pickupCountries": []
+        },
+        "deliveryOptions": {
+          "addressFields": [],
+          "unsupportedParameters": [],
+          "availableFeatures": [],
+          "allowFakeDelivery": false
         }
       },
       {
@@ -371,6 +383,12 @@
             "labelDescriptionLength": 45,
             "needsCustomerInfo": true
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
         }
       },
       {
@@ -383,6 +401,12 @@
         "outboundFeatures": {
           "deliveryCountries": [],
           "pickupCountries": []
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": null,
+          "allowFakeDelivery": false
         }
       },
       {
@@ -425,6 +449,12 @@
           "metadata": {
             "labelDescriptionLength": 45
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["city", "postalCode"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
         }
       },
       {
@@ -493,6 +523,12 @@
             "labelDescriptionLength": 45,
             "insuranceOptions": [50000]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": [],
+          "allowFakeDelivery": false
         }
       },
       {
@@ -539,6 +575,12 @@
             "labelDescriptionLength": 45,
             "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": [],
+          "allowFakeDelivery": false
         }
       },
       {
@@ -611,6 +653,12 @@
               0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
             ]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": null,
+          "allowFakeDelivery": false
         }
       },
       {
@@ -683,6 +731,12 @@
               10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
             ]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": ["package_type"],
+          "availableFeatures": null,
+          "allowFakeDelivery": false
         }
       }
     ],
@@ -740,13 +794,65 @@
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "INSURANCE"],
-          "deliveryCountries": [],
-          "pickupCountries": [],
+          "deliveryCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BE",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "HU",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "SK",
+            "SI",
+            "ES",
+            "GB"
+          ],
           "metadata": {
             "labelDescriptionLength": 45,
             "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
             "insuranceOptions": [50000]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
         }
       }
     ],
