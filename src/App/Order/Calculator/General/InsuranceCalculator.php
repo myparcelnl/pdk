@@ -140,12 +140,9 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount)
     {
-
-        $defaultCarrier =  Pdk::get(PropositionService::class)->getDefaultCarrier()->name;
-
         // Get a schema resolved to this specific order's combination of carrier, country, package type and delivery type.
         $orderSchema = $this->schemaRepository->getOrderValidationSchema(
-            $this->order->deliveryOptions->carrier->name ?? $defaultCarrier,
+            $this->order->deliveryOptions->carrier->name ?? Pdk::get(PropositionService::class)->getDefaultCarrier()->name,
             $this->order->shippingAddress->cc ?? null,
             $this->order->deliveryOptions->packageType,
             $this->order->deliveryOptions->deliveryType

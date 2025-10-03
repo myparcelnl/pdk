@@ -170,12 +170,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
      */
     private function getPropositionCarriers(): CarrierCollection
     {
-        try {
-            $propositionService = Pdk::get(PropositionService::class);
-            return $propositionService->getCarriers(true);
-        } catch (\Exception $e) {
-            // Fallback to empty collection if proposition service is not available
-            return new CarrierCollection();
-        }
+        $propositionService = Pdk::get(PropositionService::class);
+        return $propositionService->getCarriers(true);
     }
 }

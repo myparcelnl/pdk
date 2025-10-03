@@ -20,8 +20,8 @@ use Psr\Log\LogLevel;
 it('fetches proposition config for the active proposition', function (string $platform) {
     TestBootstrapper::forPlatform($platform);
     $propositionService = new PropositionService();
-    $activeName             = $propositionService->getActivePropositionName();
-    expect($activeName)->toBe($platform);
+    $propositionName = $propositionService->getPropositionConfig()->proposition->key;
+    expect($propositionName)->toBe($platform);
 })->with('platforms');
 
 it('throws exception for unknown proposition', function () {
@@ -29,8 +29,8 @@ it('throws exception for unknown proposition', function () {
 
     $propositionService = new PropositionService();
 
-    $propositionService->getPropositionConfigByName('unknown_proposition_name');
-})->throws(\InvalidArgumentException::class, 'Proposition config name unknown_proposition_name does not exist');
+    $propositionService->getPropositionConfigById(9999);
+})->throws(\InvalidArgumentException::class, 'Proposition config ID 9999 does not exist');
 
 
 it('handles empty files', function () {
@@ -40,7 +40,7 @@ it('handles empty files', function () {
 
     $propositionService = new PropositionService();
 
-    $propositionService->processConfigData('empty', 'mock-path', '');
+    $propositionService->processConfigData(1337, 'mock-path', '');
 })->throws(\RuntimeException::class, 'Proposition config file: mock-path appears to be empty');
 
 
@@ -51,7 +51,7 @@ it('handles invalid json', function () {
 
     $propositionService = new PropositionService();
 
-    $propositionService->processConfigData('invalid_json', 'mock-path', '{ invalid json }');
+    $propositionService->processConfigData(1223, 'mock-path', '{ invalid json }');
 })->throws(\RuntimeException::class, 'Invalid JSON in proposition config file: mock-path - Error: Syntax error');
 
 it('only fetches the config once per request', function () {
@@ -62,7 +62,7 @@ it('only fetches the config once per request', function () {
 
     $logger = Pdk::get(PdkLoggerInterface::class);
 
-    $config1 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+    $config1 = $propositionService->getPropositionConfigById(Platform::SENDMYPARCEL_ID);
 
     // Check debug log
     $lastLog = Arr::last($logger->getLogs());
@@ -73,7 +73,7 @@ it('only fetches the config once per request', function () {
         ->and($lastLog['message'])
         ->toBe('[PDK]: Proposition config loaded from source.');
 
-    $config2 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+    $config2 = $propositionService->getPropositionConfigById(Platform::SENDMYPARCEL_ID);
     $logCount2 = count($logger->getLogs());
 
     expect($logCount2)->toBe($logCount);
@@ -88,7 +88,7 @@ it('clears specific proposition caches', function () {
 
     $logger = Pdk::get(PdkLoggerInterface::class);
 
-    $config1 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+    $config1 = $propositionService->getPropositionConfigById(Platform::SENDMYPARCEL_ID);
 
     // Check debug log
     $lastLog = Arr::last($logger->getLogs());
@@ -100,18 +100,18 @@ it('clears specific proposition caches', function () {
         ->toBe('[PDK]: Proposition config loaded from source.');
 
     // Verify fetched from cache
-    $config2 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
-    expect($propositionService->isCached(Platform::SENDMYPARCEL_NAME))->toBeTrue();
+    $config2 = $propositionService->getPropositionConfigById(Platform::SENDMYPARCEL_ID);
+    expect($propositionService->isCached(Platform::SENDMYPARCEL_ID))->toBeTrue();
     $logCount2 = count($logger->getLogs());
 
     expect($logCount2)->toBe($logCount);
     expect($config1)->toBe($config2)->and($config1)->toBeInstanceOf(PropositionConfig::class);
 
     // Clear only the SendMyParcel proposition cache
-    $propositionService->clearCache(Platform::SENDMYPARCEL_NAME);
-    expect($propositionService->isCached(Platform::SENDMYPARCEL_NAME))->toBeFalse();
+    $propositionService->clearCache(Platform::SENDMYPARCEL_ID);
+    expect($propositionService->isCached(Platform::SENDMYPARCEL_ID))->toBeFalse();
 
-    $config3 = $propositionService->getPropositionConfigByName(Platform::SENDMYPARCEL_NAME);
+    $config3 = $propositionService->getPropositionConfigById(Platform::SENDMYPARCEL_ID);
     $logCount3 = count($logger->getLogs());
 
     // New log entry should be added

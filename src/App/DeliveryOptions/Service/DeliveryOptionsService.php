@@ -142,6 +142,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         ];
 
         foreach ($carriers as $carrier) {
+            // Use the legacy identifier for the delivery options, as that endpoint does not yet support the new identifiers.
             $identifier = FrontendData::getLegacyIdentifier($carrier->externalIdentifier);
             $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }

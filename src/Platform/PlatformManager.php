@@ -57,25 +57,4 @@ class PlatformManager implements PlatformManagerInterface
     {
         return $this->propositionService->getCarriers(true);
     }
-
-    /**
-     * @return string
-     * @deprecated use PropositionService::getActivePropositionName() instead.
-     * @see PropositionService::getActivePropositionName()
-     */
-    public function getPropositionName(): string
-    {
-        $propositionName = Platform::MYPARCEL_NAME;
-
-        try {
-            $account = AccountSettings::getAccount();
-            if ($account && Platform::SENDMYPARCEL_ID === $account->getAttribute('platformId')) {
-                $propositionName = Platform::SENDMYPARCEL_NAME;
-            }
-        } catch (\Throwable $e) {
-            // If the account settings are not available, we default to myparcel.
-        }
-
-        return $propositionName;
-    }
 }

@@ -7,12 +7,10 @@ namespace MyParcelNL\Pdk\Proposition\Service;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Platform\PlatformManager;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -20,21 +18,63 @@ use RuntimeException;
 
 class PropositionService
 {
+    public const FALLBACK_PROPOSITION_ID = 1; // Default proposition ID if none is set
+
+    /**
+     * Active proposition ID.
+     * @var int|null
+     */
+    private static $activePropositionId = null;
+
     /**
      * Static cache for proposition configs
-     * @var array<string, PropositionConfig>
+     * @var array<int, PropositionConfig>
      */
     private static $configCache = [];
 
     /**
-     * Get the active proposition name.
+     * Get the active proposition ID.
      * This is used to fetch the proposition config.
      *
-     * @return string
+     * @return int
      */
-    public function getActivePropositionName(): string
+    public function getActivePropositionId(): int
     {
-        return Pdk::get(PlatformManager::class)->getPropositionName();
+        if (self::$activePropositionId !== null) {
+            return self::$activePropositionId;
+        }
+
+        $account = AccountSettings::getAccount();
+        if ($account && $account->getAttribute('platformId')) {
+            $this->setActivePropositionId($account->getAttribute('platformId'));
+            if (self::$activePropositionId !== null) {
+                return self::$activePropositionId;
+            }
+        }
+        // @TODO: Defaults to a fallback ID, this should be refactored in the future so that parts of the PDK can work without an active proposition set.
+        return static::FALLBACK_PROPOSITION_ID;
+    }
+
+    /**
+    * Set the active proposition ID.
+    * This overrides the ID fetched from the account and is useful for testing.
+     * @param int $propositionId
+     * @return void
+     */
+    public function setActivePropositionId(int $propositionId): void
+    {
+        self::$activePropositionId = $propositionId;
+    }
+
+    /**
+     * Reset the active proposition ID.
+     * This is useful for testing or when the active proposition changes.
+     *
+     * @return void
+     */
+    public function clearActivePropositionId(): void
+    {
+        self::$activePropositionId = null;
     }
 
     /**
@@ -44,60 +84,61 @@ class PropositionService
      */
     public function getPropositionConfig(): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
-        $propositionName = $this->getActivePropositionName();
-        return $this->getPropositionConfigByName($propositionName);
+        $propositionId = $this->getActivePropositionId();
+        return $this->getPropositionConfigById($propositionId);
     }
 
     /**
-     * Get a specific proposition config by name with static caching.
+     * Get a specific proposition config by ID with static caching.
      *
-     * @param string $propositionName
+     * @param int $propositionId
      * @return \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
      */
-    public function getPropositionConfigByName(string $propositionName): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
+    public function getPropositionConfigById(int $propositionId): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
         // Check if config is already cached
-        if (isset(self::$configCache[$propositionName])) {
-            return self::$configCache[$propositionName];
+        if (isset(self::$configCache[$propositionId])) {
+            return self::$configCache[$propositionId];
         }
 
         // Fetch and cache the config
-        Logger::debug('Proposition config loaded from source.', ['proposition' => $propositionName]);
-        $config = $this->fetchPropositionConfig($propositionName);
-        self::$configCache[$propositionName] = $config;
+        Logger::debug('Proposition config loaded from source.', ['proposition' => $propositionId]);
+        $config = $this->fetchPropositionConfig($propositionId);
+        self::$configCache[$propositionId] = $config;
 
         return $config;
     }
 
     /**
-     * Fetch the proposition config based on the platform name.
-     * @param string $propositionName
+     * Fetch the proposition config based on the platform/proposition id.
+     * @param int $propositionId
      * @return PropositionConfig
      */
-    public function fetchPropositionConfig(string $propositionName): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
+    public function fetchPropositionConfig(int $propositionId): \MyParcelNL\Pdk\Proposition\Model\PropositionConfig
     {
         $filePath = null;
         $configData = null;
-        $filePath = __DIR__ . '/../../../config/proposition/' . $propositionName . '.json';
+        // Emulate an eventual API call that gets the proposition by ID
+        $filePath = __DIR__ . '/../../../config/proposition/proposition-' . $propositionId . '.json';
 
 
         if (!file_exists($filePath)) {
             Logger::error('Proposition config file not found', [
-                'proposition' => $propositionName,
+                'proposition' => $propositionId,
                 'filePath' => $filePath
             ]);
-            throw new \InvalidArgumentException(sprintf('Proposition config name %s does not exist', $propositionName));
+            throw new \InvalidArgumentException(sprintf('Proposition config ID %d does not exist', $propositionId));
         }
         $configData = file_get_contents($filePath);
 
-        return $this->processConfigData($propositionName, $filePath, $configData);
+        return $this->processConfigData($propositionId, $filePath, $configData);
     }
 
-    public function processConfigData(string $propositionName, string $filePath, ?string $jsonData): PropositionConfig
+    public function processConfigData(int $propositionId, string $filePath, ?string $jsonData): PropositionConfig
     {
         if (!$jsonData) {
             Logger::error('Failed to read proposition config file', [
-                'proposition' => $propositionName,
+                'proposition' => $propositionId,
                 'filePath' => $filePath
             ]);
             throw new \RuntimeException(sprintf('Proposition config file: %s appears to be empty', $filePath));
@@ -107,7 +148,7 @@ class PropositionService
             $configArray = json_decode($jsonData, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             Logger::error('Invalid JSON in proposition config', [
-                'proposition' => $propositionName,
+                'proposition' => $propositionId,
                 'filePath' => $filePath,
                 'jsonError' => $e->getMessage()
             ]);
@@ -214,14 +255,14 @@ class PropositionService
      * Clear the proposition config cache.
      * This is useful for testing or when configs need to be refreshed.
      *
-     * @param string|null $propositionName If provided, only clear cache for this specific proposition
+     * @param int|null $propositionId If provided, only clear cache for this specific proposition
      * @return void
      */
-    public function clearCache(?string $propositionName = null): void
+    public function clearCache(?int $propositionId = null): void
     {
-        if ($propositionName) {
-            unset(self::$configCache[$propositionName]);
-            Logger::debug('Proposition config cache cleared for specific proposition', ['proposition' => $propositionName]);
+        if ($propositionId) {
+            unset(self::$configCache[$propositionId]);
+            Logger::debug('Proposition config cache cleared for specific proposition', ['proposition' => $propositionId]);
         } else {
             self::$configCache = [];
             Logger::debug('Proposition config cache cleared for all propositions');
@@ -231,12 +272,12 @@ class PropositionService
     /**
      * Check if a proposition config is cached.
      *
-     * @param string $propositionName
+     * @param int $propositionId
      * @return bool
      */
-    public function isCached(string $propositionName): bool
+    public function isCached(int $propositionId): bool
     {
-        return isset(self::$configCache[$propositionName]);
+        return isset(self::$configCache[$propositionId]);
     }
 
     /**
