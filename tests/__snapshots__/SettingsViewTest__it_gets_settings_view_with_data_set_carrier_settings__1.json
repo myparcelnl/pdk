@@ -624,6 +624,57 @@
           "description": "settings_carrier_price_package_type_mailbox_description"
         },
         {
+          "name": "allowInternationalMailbox",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_allow_international_mailbox",
+          "description": "settings_carrier_allow_international_mailbox_description"
+        },
+        {
+          "name": "priceInternationalMailbox",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "allowInternationalMailbox"
+                  },
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "CurrencyInput",
+          "label": "settings_carrier_price_international_mailbox",
+          "description": "settings_carrier_price_international_mailbox_description"
+        },
+        {
           "name": "pricePackageTypeDigitalStamp",
           "$builders": [
             {

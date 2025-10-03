@@ -16,10 +16,10 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
-use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
@@ -41,31 +41,17 @@ const CARRIERS            = [
     CARRIER_DPD,
 ];
 
-const ACCOUNT_FLAG_ON_CARRIER_SETTING_ON = [
-    'accountHasCarrierSmallPackageContract' => true,
+const CARRIER_SETTING_ON = [
     'carrierHasInternationalMailboxAllowed' => true,
 ];
 
-const ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF = [
-    'accountHasCarrierSmallPackageContract' => true,
-    'carrierHasInternationalMailboxAllowed' => false,
-];
-
-const ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON = [
-    'accountHasCarrierSmallPackageContract' => false,
-    'carrierHasInternationalMailboxAllowed' => true,
-];
-
-const ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF = [
-    'accountHasCarrierSmallPackageContract' => false,
+const CARRIER_SETTING_OFF = [
     'carrierHasInternationalMailboxAllowed' => false,
 ];
 
 const CONFIG = [
-    ACCOUNT_FLAG_ON_CARRIER_SETTING_ON,
-    ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF,
-    ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON,
-    ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF,
+    CARRIER_SETTING_ON,
+    CARRIER_SETTING_OFF,
 ];
 
 const DESTINATION_INTERNATIONAL_COUNTRIES = [
@@ -81,7 +67,8 @@ it('calculates package type', function (
     array  $options,
     string $result
 ) {
-    mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
+
     mockPdkProperties([
         'orderCalculators' => [PackageTypeCalculator::class],
     ]);
@@ -158,10 +145,10 @@ it('calculates international mailbox', function (
     $country,
     $carrierExternalIdentifier,
     $carrierName,
-    $accountHasCarrierSmallPackageContract,
     $carrierHasInternationalMailboxAllowed
 ) {
-    mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
+
     mockPdkProperties([
         'orderCalculators' => [PackageTypeCalculator::class],
     ]);
@@ -190,7 +177,6 @@ it('calculates international mailbox', function (
         ->make();
 
     factory(AccountGeneralSettings::class)
-        ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
         ->store();
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */

@@ -149,11 +149,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInternationalMailboxFields(): array
     {
-        if (! AccountSettings::hasCarrierSmallPackageContract()
-            || ! $this->carrierSchema->canHaveCarrierSmallPackageContract()) {
-            return [];
-        }
-
         return $this->createSettingWithPriceFields(
             CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
             CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
