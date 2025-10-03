@@ -30,6 +30,9 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
  * @property PropositionCarrierFeatures|null  $outboundFeatures
  * @property CarrierCapabilities        $capabilities        // @deprecated use outboundFeatures instead
  * @property CarrierCapabilities        $returnCapabilities  // @deprecated use inboundFeatures instead
+ * @property null|array                 $deliveryCountries
+ * @property null|array                 $pickupCountries
+ *
  * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
  */
 class Carrier extends Model
