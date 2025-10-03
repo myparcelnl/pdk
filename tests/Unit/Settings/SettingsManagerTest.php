@@ -26,6 +26,11 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 uses()->group('frontend', 'settings');
 
+\beforeEach(function () {
+    // Reset active proposition ID between tests.
+    Pdk::get(PropositionService::class)->clearActivePropositionId();
+});
+
 usesShared(
     new UsesMockPdkInstance([
         PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([

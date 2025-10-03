@@ -478,7 +478,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             // Convert new delivery type names to the ones used for delivery options
             $deliveryType = $this->propositionService->deliveryTypeNameForDeliveryOptions($deliveryType);
 
-            // Ignore unsupported types and pickup (handled separately)
+            // Ignore unsupported types and pickup (pickup is handled in a separate section in getDeliveryOptionsFields())
             if ($deliveryType === null || $deliveryType === DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME) {
                 continue;
             }

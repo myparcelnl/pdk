@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 class PropositionCarrierMetadata extends Model
 {
     /**
-     * Used to indicate that the feature is only available for custom contracts.
+     * Feature value used to indicate that the feature is only available for custom contracts.
      */
     public const FEATURE_CUSTOM_CONTRACT_ONLY = 'FEATURE_CUSTOM_CONTRACT_ONLY';
 

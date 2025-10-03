@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -9,7 +10,7 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 
 beforeEach(function () {
-    TestBootstrapper::forPlatform(\MyParcelNL\Pdk\Account\Platform::MYPARCEL_NAME);
+    TestBootstrapper::forPlatform(Platform::MYPARCEL_NAME);
 });
 
 it('returns legacy package types', function () {
