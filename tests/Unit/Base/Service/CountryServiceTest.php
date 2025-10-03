@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Account\Platform;
-use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -76,19 +76,13 @@ it('can check if a country is an unique zone', function (string $country, bool $
 ]);
 
 it('can check if a country is the local country', function (string $platform, string $country, bool $isLocal) {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
-    $pdk = Pdk::get(PdkInterface::class);
-
-    $previousPlatform = $pdk->get('platform');
-    $pdk->set('platform', $platform);
+    TestBootstrapper::forPlatform($platform);
 
     /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $service */
     $service = Pdk::get(CountryServiceInterface::class);
     $result  = $service->isLocalCountry($country);
 
     expect($result)->toBe($isLocal);
-
-    $pdk->set('platform', $previousPlatform);
 })->with([
     'myparcelnl, check NL' => [
         'platform' => Platform::MYPARCEL_NAME,

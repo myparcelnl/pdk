@@ -12,6 +12,16 @@ use MyParcelNL\Sdk\src\Support\Str;
 
 class Config implements ConfigInterface
 {
+    public const ACCEPTANCE_CACHE_FILE = '/pdk_acceptance_api_url.txt';
+
+    // Environment constants
+    public const ENVIRONMENT_PRODUCTION = 'production';
+    public const ENVIRONMENT_ACCEPTANCE = 'acceptance';
+
+    // API URLs
+    public const API_URL_PRODUCTION = 'https://api.myparcel.nl';
+    public const API_URL_ACCEPTANCE = 'https://api.acceptance.myparcel.nl';
+
     private static $cache = [];
 
     /**

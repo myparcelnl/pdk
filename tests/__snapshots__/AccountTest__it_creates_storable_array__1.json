@@ -12,7 +12,7 @@
     "company": "MyParcel"
   },
   "generalSettings": {
-    "isTest": false,
+    "environment": "production",
     "orderMode": false,
     "hasCarrierContract": false,
     "hasCarrierSmallPackageContract": false

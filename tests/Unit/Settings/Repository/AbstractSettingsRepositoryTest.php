@@ -95,5 +95,6 @@ it('gets a settings group through the settings facade', function () {
             'id'                           => AccountSettings::ID,
             AccountSettings::API_KEY       => '1234567890',
             AccountSettings::API_KEY_VALID => true,
+            AccountSettings::ENVIRONMENT   => null,
         ]);
 });

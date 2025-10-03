@@ -3,9 +3,9 @@ name: 'Publish new version 🚀'
 on:
   workflow_dispatch:
 
-  schedule:
-    # every day at 16:00
-    - cron: '0 16 * * *'
+#  schedule:
+#    # every day at 16:00
+#    - cron: '0 16 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
