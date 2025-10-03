@@ -47,6 +47,7 @@ class CheckoutSettings extends AbstractSettingsModel
     public const SHOW_TAX_FIELDS     = 'showTaxFields';
     /** Address widget */
     public const ENABLE_ADDRESS_WIDGET = 'enableAddressWidget';
+    public const CLOSED_DAYS          = 'closedDays';
 
     protected $attributes = [
         'id' => self::ID,
@@ -62,7 +63,8 @@ class CheckoutSettings extends AbstractSettingsModel
         self::ENABLE_DELIVERY_OPTIONS_WHEN_NOT_IN_STOCK => true,
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
         self::SHOW_TAX_FIELDS                           => true,
-        self::ENABLE_ADDRESS_WIDGET                     => false
+        self::ENABLE_ADDRESS_WIDGET                     => false,
+        self::CLOSED_DAYS                               => []
     ];
 
     protected $casts      = [
@@ -78,5 +80,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::USE_SEPARATE_ADDRESS_FIELDS               => 'bool',
         self::SHOW_TAX_FIELDS                           => 'bool',
         self::ENABLE_ADDRESS_WIDGET                     => 'bool',
+        self::CLOSED_DAYS                               => 'array',
     ];
 }
