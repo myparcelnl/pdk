@@ -10,8 +10,10 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+
 use function DI\env;
 use function DI\factory;
 use function DI\value;
@@ -62,6 +64,7 @@ return [
 
     /**
      * Supported date formats.
+     * @todo get/set from proposition config (internationalization.dateFormats)
      */
     'dateFormats'            => factory(function () {
         return [
@@ -75,6 +78,7 @@ return [
 
     /**
      * The default time zone to use for date and time functions.
+     * @todo get/set from proposition config (internationalization.localTimeZone)
      */
     'defaultTimeZone'        => value('Europe/Amsterdam'),
 
@@ -123,44 +127,32 @@ return [
     'deliveryOptionsPositions' => value([]),
 
     /**
-     * All carriers, merged with the root carrier definitions.
+     * All carriers available in the proposition.
+     * @deprecated use PropositionService::getCarriers() instead.
+     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
      */
-
     'allCarriers' => factory(function (): CarrierCollection {
-        $platformCarriers = new Collection(Platform::get('carriers'));
-        $carriers         = new Collection(Config::get('carriers'));
-
-        $result = $carriers
-            ->map(function (array $carrier) use ($platformCarriers): array {
-                $carrierDefinition = $platformCarriers->firstWhere('name', $carrier['name']) ?? [];
-
-                return array_replace($carrier, $carrierDefinition);
-            });
-
-        return new CarrierCollection($result);
+        return Pdk::get(PropositionService::class)->getCarriers();
     }),
 
     /**
-     * Carriers filtered by those allowed in the current platform.
+     * All carriers available in the proposition that support available delivery types.
+     * @deprecated use PropositionService::getCarriers(true) instead.
+     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
      */
-
-    'carriers'                         => factory(function (): CarrierCollection {
-        /** @var CarrierCollection $allCarriers */
-        $allCarriers      = Pdk::get('allCarriers');
-        $platformCarriers = new Collection(Platform::get('carriers'));
-
-        return $allCarriers
-            ->whereIn('name', $platformCarriers->pluck('name'))
-            ->values();
+    'carriers' => factory(function (): CarrierCollection {
+        return Pdk::get(PropositionService::class)->getCarriers(true);
     }),
 
     /**
      * Language to default to when no language is set.
+     * @todo refactor to use the proposition config instead of the hardcoded value.
      */
     'defaultLanguage'                  => value('en'),
 
     /**
      * Languages present in the translations directory after the build process.
+     * @todo refactor to use the proposition config instead of the hardcoded array.
      */
     'availableLanguages'               => value(['en', 'nl', 'fr']),
 

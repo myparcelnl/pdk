@@ -6,15 +6,54 @@
   "externalIdentifier": "CV515676839NL",
   "barcode": "CV515676839NL",
   "carrier": {
-    "externalIdentifier": "postnl",
+    "externalIdentifier": "POSTNL",
     "id": 1,
-    "name": "postnl",
-    "human": "PostNL",
+    "name": "POSTNL",
     "enabled": true,
     "isDefault": true,
     "optional": false,
     "primary": false,
-    "type": "main"
+    "type": "main",
+    "inboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "RETURN",
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "LARGE_FORMAT",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceSteps": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    },
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+      "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "LARGE_FORMAT",
+        "ONLY_RECIPIENT",
+        "RETURN",
+        "SIGNATURE",
+        "RECEIPT_CODE",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+        "multiCollo": true,
+        "insuranceOptions": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    }
   },
   "customsDeclaration": {
     "contents": 1,
@@ -38,15 +77,54 @@
   "delivered": false,
   "deliveryOptions": {
     "carrier": {
-      "externalIdentifier": "postnl",
+      "externalIdentifier": "POSTNL",
       "id": 1,
-      "name": "postnl",
-      "human": "PostNL",
+      "name": "POSTNL",
       "enabled": true,
       "isDefault": true,
       "optional": false,
       "primary": false,
-      "type": "main"
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": [
+          "SIGNATURE",
+          "RETURN",
+          "AGE_CHECK",
+          "ONLY_RECIPIENT",
+          "SAME_DAY_DELIVERY",
+          "LARGE_FORMAT",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceSteps": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+        "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+        "shipmentOptions": [
+          "AGE_CHECK",
+          "LARGE_FORMAT",
+          "ONLY_RECIPIENT",
+          "RETURN",
+          "SIGNATURE",
+          "RECEIPT_CODE",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+          "multiCollo": true,
+          "insuranceOptions": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      }
     },
     "labelAmount": 1,
     "shipmentOptions": {
