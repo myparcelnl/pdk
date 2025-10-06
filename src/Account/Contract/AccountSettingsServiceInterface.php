@@ -46,4 +46,16 @@ interface AccountSettingsServiceInterface
      * @return bool
      */
     public function usesOrderMode(): bool;
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function hasCarrierSmallPackageContract(): bool;
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
+    public function hasCarrierMailboxContract(): bool;
 }

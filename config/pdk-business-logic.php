@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomsDeclarationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\InternationalMailboxTrackedCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
@@ -87,6 +88,7 @@ return [
             TriStateOptionCalculator::class,
             AllowedInCarrierCalculator::class,
             PackageTypeShipmentOptionsCalculator::class,
+            InternationalMailboxTrackedCalculator::class,
             LabelDescriptionCalculator::class,
             InsuranceCalculator::class,
             CarrierSpecificCalculator::class,
