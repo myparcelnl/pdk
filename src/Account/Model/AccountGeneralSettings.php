@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property bool $orderMode
  * @property bool $hasCarrierContract
  * @property bool $hasCarrierSmallPackageContract
- * @property bool $hasCarrierMailboxContract
  */
 class AccountGeneralSettings extends Model
 {
@@ -20,7 +19,6 @@ class AccountGeneralSettings extends Model
         'orderMode'                      => false,
         'hasCarrierContract'             => false,
         'hasCarrierSmallPackageContract' => false,
-        'hasCarrierMailboxContract'      => false,
     ];
 
     public $casts      = [
@@ -28,6 +26,5 @@ class AccountGeneralSettings extends Model
         'orderMode'                      => 'bool',
         'hasCarrierContract'             => 'bool',
         'hasCarrierSmallPackageContract' => 'bool',
-        'hasCarrierMailboxContract'      => 'bool',
     ];
 }

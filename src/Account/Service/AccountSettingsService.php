@@ -111,17 +111,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function hasCarrierMailboxContract(): bool
-    {
-        $account = $this->getAccount();
-
-        return $account ? $account->generalSettings->hasCarrierMailboxContract : false;
-    }
-
-    /**
      * @param  string $feature
      *
      * @return bool

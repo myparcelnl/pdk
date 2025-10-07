@@ -40,22 +40,16 @@ interface AccountSettingsServiceInterface
      * @return bool
      * @noinspection PhpUnused
      */
-    public function hasTaxFields(): bool;
-
-    /**
-     * @return bool
-     */
-    public function usesOrderMode(): bool;
-
-    /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
     public function hasCarrierSmallPackageContract(): bool;
 
     /**
      * @return bool
      * @noinspection PhpUnused
      */
-    public function hasCarrierMailboxContract(): bool;
+    public function hasTaxFields(): bool;
+
+    /**
+     * @return bool
+     */
+    public function usesOrderMode(): bool;
 }
