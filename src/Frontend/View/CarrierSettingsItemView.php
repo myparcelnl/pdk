@@ -154,9 +154,12 @@ class CarrierSettingsItemView extends AbstractSettingsView
             CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
         );
 
-        // Add tracked toggle for carriers with custom mailbox contract
+        // Add tracked toggle for carriers with custom mailbox contract, only visible when international mailbox is enabled
         if ($this->carrierSchema->canHaveTracked() && AccountSettings::hasCarrierSmallPackageContract()) {
-            $fields[] = new InteractiveElement(CarrierSettings::EXPORT_TRACKED, Components::INPUT_TOGGLE);
+            $fields[] = (new InteractiveElement(CarrierSettings::EXPORT_TRACKED, Components::INPUT_TOGGLE))
+                ->builder(function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX);
+                });
         }
 
         return $fields;
