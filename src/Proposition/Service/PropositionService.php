@@ -196,7 +196,7 @@ class PropositionService
             $carrierModels = array_values(array_filter($carrierModels, function (Carrier $carrier) {
                 $features = $carrier->outboundFeatures;
 
-                if (!$features->packageTypes) {
+                if (!$features || !$features->packageTypes) {
                     return false;
                 }
 
