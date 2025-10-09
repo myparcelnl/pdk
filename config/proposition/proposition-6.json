@@ -123,7 +123,7 @@
         "outboundFeatures": {
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["SIGNATURE", "INSURANCE", "COLLECT", "CASH_ON_DELIVERY"],
+          "shipmentOptions": ["SIGNATURE", "INSURANCE", "CASH_ON_DELIVERY"],
           "deliveryCountries": [
             "AT",
             "BE",
