@@ -99,6 +99,13 @@ class Carrier extends Model
     public const CARRIER_GLS_NAME                = 'GLS';
 
     /**
+     * @deprecated use CARRIER_GLS_NAME
+     */
+    public const CARRIER_BRT_LEGACY_NAME       = 'brt';
+    public const CARRIER_BRT_NAME                = 'BRT';
+    public const CARRIER_BRT_ID                  = 15;
+
+    /**
      * @deprecated use new carrier names directly
      */
     public const CARRIER_NAME_TO_LEGACY_MAP = [
@@ -116,6 +123,7 @@ class Carrier extends Model
         self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
         self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
         self::CARRIER_GLS_NAME                => self::CARRIER_GLS_LEGACY_NAME,
+        self::CARRIER_BRT_NAME                => self::CARRIER_BRT_LEGACY_NAME
     ];
 
     /**
@@ -135,24 +143,6 @@ class Carrier extends Model
         self::CARRIER_GLS_NAME                => self::CARRIER_GLS_ID,
         self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_ID,
         self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_ID,
-    ];
-
-    /**
-     * @deprecated use CARRIER_NAME_ID_MAP instead.
-     * @see CARRIER_NAME_ID_MAP
-     */
-    public const CARRIER_LEGACY_NAME_ID_MAP = [
-        self::CARRIER_BOL_COM_LEGACY_NAME    => self::CARRIER_BOL_COM_ID,
-        self::CARRIER_BPOST_LEGACY_NAME              => self::CARRIER_BPOST_ID,
-        self::CARRIER_CHEAP_CARGO_LEGACY_NAME        => self::CARRIER_CHEAP_CARGO_ID,
-        self::CARRIER_DHL_EUROPLUS_LEGACY_NAME       => self::CARRIER_DHL_EUROPLUS_ID,
-        self::CARRIER_DHL_FOR_YOU_LEGACY_NAME        => self::CARRIER_DHL_FOR_YOU_ID,
-        self::CARRIER_DHL_LEGACY_NAME                => self::CARRIER_DHL_ID,
-        self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => self::CARRIER_DHL_PARCEL_CONNECT_ID,
-        self::CARRIER_DPD_LEGACY_NAME                => self::CARRIER_DPD_ID,
-        self::CARRIER_INSTABOX_LEGACY_NAME           => self::CARRIER_INSTABOX_ID,
-        self::CARRIER_POSTNL_LEGACY_NAME             => self::CARRIER_POSTNL_ID,
-        self::CARRIER_UPS_LEGACY_NAME                => self::CARRIER_UPS_ID,
     ];
 
     /**
