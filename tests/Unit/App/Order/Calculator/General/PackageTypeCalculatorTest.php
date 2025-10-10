@@ -16,10 +16,10 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
-use function MyParcelNL\Pdk\Tests\mockPlatform;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
@@ -81,7 +81,8 @@ it('calculates package type', function (
     array  $options,
     string $result
 ) {
-    mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
+
     mockPdkProperties([
         'orderCalculators' => [PackageTypeCalculator::class],
     ]);
@@ -161,7 +162,8 @@ it('calculates international mailbox', function (
     $accountHasCarrierSmallPackageContract,
     $carrierHasInternationalMailboxAllowed
 ) {
-    mockPlatform($platform);
+    TestBootstrapper::forPlatform($platform);
+
     mockPdkProperties([
         'orderCalculators' => [PackageTypeCalculator::class],
     ]);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
@@ -41,7 +40,6 @@ use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Psr\Log\LoggerInterface;
 use function DI\factory;
 use function DI\get;
-use function DI\value;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -73,8 +71,6 @@ class MockPdkConfig
                     'url'     => 'APP_URL',
                 ]);
             }),
-
-            'platform' => value(Platform::MYPARCEL_NAME),
 
             ApiServiceInterface::class                  => get(MockApiService::class),
             AuditServiceInterface::class                => get(AuditService::class),
