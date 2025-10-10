@@ -1,52 +1,52 @@
 {
-  "data": {
-    "shipments": [
-      {
-        "carrier": 1,
-        "general_settings": {
-          "save_recipient_address": 0
-        },
-        "options": {
-          "package_type": 1,
-          "delivery_type": 2
-        },
-        "physical_properties": {
-          "weight": 0
-        },
-        "recipient": {
-          "cc": "NL",
-          "city": "Hoofddorp",
-          "company": "MyParcel",
-          "number": "31",
-          "person": "Felicia Parcel",
-          "postal_code": "2132 JE",
-          "street": "Antareslaan"
-        },
-        "reference_identifier": "PDK-1"
-      },
-      {
-        "carrier": 1,
-        "general_settings": {
-          "save_recipient_address": 0
-        },
-        "options": {
-          "package_type": 1,
-          "delivery_type": 2
-        },
-        "physical_properties": {
-          "weight": 0
-        },
-        "recipient": {
-          "cc": "NL",
-          "city": "Hoofddorp",
-          "company": "MyParcel",
-          "number": "31",
-          "person": "Felicia Parcel",
-          "postal_code": "2132 JE",
-          "street": "Antareslaan"
-        },
-        "reference_identifier": "PDK-1"
-      }
-    ]
-  }
+    "data": {
+        "shipments": [
+            {
+                "carrier": 1,
+                "general_settings": {
+                    "save_recipient_address": 0
+                },
+                "options": {
+                    "package_type": 1,
+                    "delivery_type": 2
+                },
+                "physical_properties": {
+                    "weight": 0
+                },
+                "recipient": {
+                    "cc": "NL",
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "number": "31",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE",
+                    "street": "Antareslaan"
+                },
+                "reference_identifier": "PDK-1"
+            },
+            {
+                "carrier": 1,
+                "general_settings": {
+                    "save_recipient_address": 0
+                },
+                "options": {
+                    "package_type": 1,
+                    "delivery_type": 2
+                },
+                "physical_properties": {
+                    "weight": 0
+                },
+                "recipient": {
+                    "cc": "NL",
+                    "city": "Hoofddorp",
+                    "company": "MyParcel",
+                    "number": "31",
+                    "person": "Felicia Parcel",
+                    "postal_code": "2132 JE",
+                    "street": "Antareslaan"
+                },
+                "reference_identifier": "PDK-1"
+            }
+        ]
+    }
 }

@@ -1,0 +1,514 @@
+{
+  "applications": {
+    "backoffice": {
+      "enabled": true,
+      "url": "https://backoffice.myparcel.nl"
+    },
+    "consumerPortal": {
+      "enabled": true,
+      "internationalization": {
+        "dateFormats": {
+          "long": "D MMMM YYYY",
+          "short": "DD-MM-YYYY",
+          "time": "HH:mm"
+        },
+        "language": "nl-BE",
+        "supportedLanguages": ["nl-BE", "en-GB", "de-DE", "fr-BE", "es-ES", "it-IT"],
+        "timezone": "Europe/Amsterdam"
+      },
+      "url": "https://subdomain.myparcel.me"
+    },
+    "corporate": {
+      "enabled": false
+    },
+    "developerPortal": {
+      "enabled": false
+    },
+    "faq": {
+      "enabled": false
+    },
+    "webshop": {
+      "enabled": false
+    }
+  },
+  "assets": {
+    "exampleDocuments": {
+      "addresses": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-address-example.csv"
+      },
+      "orders": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-order-example.csv"
+      },
+      "products": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-product-example.csv"
+      },
+      "shipments": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-shipment-example.csv"
+      }
+    },
+    "logo": {
+      "medium": {
+        "url": "https://assets.myparcel.nl/skin/images/logo.svg"
+      },
+      "small": {
+        "url": "https://assets.myparcel.nl/skin/images/logo-icon.svg"
+      }
+    },
+    "url": "https://assets.myparcel.it"
+  },
+  "billing": {
+    "bankMandate": {
+      "flow": ["none"],
+      "manualBanks": []
+    },
+    "newInvoiceDates": {
+      "monthly": "2024-06-01",
+      "weekly": "2024-05-13"
+    },
+    "paymentProvider": "multisafepay"
+  },
+  "browserExtension": {
+    "enabled": false
+  },
+  "centerOfCountry": {
+    "latitude": 41.29246,
+    "longitude": 12.5736108,
+    "zoom": 8
+  },
+  "companyDetails": {
+    "address": {
+      "city": "",
+      "company": "",
+      "countryCode": "IT",
+      "email": "info@myparcel.com",
+      "houseNumber": "",
+      "person": "",
+      "phone": "",
+      "postalCode": "",
+      "street": ""
+    },
+    "billing": {
+      "coc": ""
+    },
+    "contact": {
+      "phoneNumber": {
+        "enabled": false
+      },
+      "whatsapp": {
+        "enabled": false
+      }
+    },
+    "returnAddress": {
+      "city": "",
+      "company": "",
+      "countryCode": "IT",
+      "email": "info@myparcel.com",
+      "houseNumber": "",
+      "person": "",
+      "phone": "",
+      "postalCode": "",
+      "street": ""
+    }
+  },
+  "contracts": {
+    "enablePostNLCustomContract": false,
+    "available": [
+      {
+        "carrier": {
+          "id": 15,
+          "name": "BRT"
+        },
+        "hasCutoffTime": false,
+        "hasPostponedDelivery": false,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": ["SIGNATURE", "INSURANCE", "CASH_ON_DELIVERY"],
+          "deliveryCountries": ["IT"],
+          "pickupCountries": ["IT"],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "multiCollo": false,
+            "insuranceOptions": [0, 25000, 50000, 100000, 150000, 200000, 250000]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": [],
+          "unsupportedParameters": [],
+          "availableFeatures": [],
+          "allowFakeDelivery": true
+        }
+      }
+    ],
+    "availableForCustomCredentials": [
+      {
+        "carrier": {
+          "id": 15,
+          "name": "BRT"
+        },
+        "configurationParameters": [
+          "username",
+          "password",
+          "api_key",
+          "options.customerNumber",
+          "options.departureDepot"
+        ]
+      }
+    ],
+    "inbound": {
+      "default": {
+        "carrier": {
+          "id": 15,
+          "name": "BRT"
+        }
+      }
+    },
+    "outbound": {
+      "default": {
+        "carrier": {
+          "id": 15,
+          "name": "BRT"
+        }
+      }
+    }
+  },
+  "collectTrip": {
+    "enabled": false
+  },
+  "countryCode": "IT",
+  "content": {
+    "authenticators": {
+      "googleAuthenticatorAndroid": {
+        "name": "Google Authenticator (Android)",
+        "url": "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+      },
+      "googleAuthenticatorIos": {
+        "name": "Google Authenticator (iOS)",
+        "url": "https://apps.apple.com/us/app/google-authenticator/id388497605"
+      },
+      "microsoftAuthenticator": {
+        "name": "Microsoft Authenticator",
+        "url": "https://www.microsoft.com/security/mobile-authenticator-app"
+      },
+      "twilioAuthy": {
+        "name": "Twilio Authy",
+        "url": "https://authy.com/download/"
+      }
+    },
+    "directPrinting": {
+      "printApplicationDownloadUrls": {
+        "mac": "https://printing.assets.myparcel.nl/MyParcel-Print-Applicatie.dmg",
+        "windows": "https://printing.assets.myparcel.nl/MyParcel-Print-Applicatie.exe"
+      }
+    },
+    "externalIntegrationSupportUrls": {
+      "amazon": "https://developer.myparcel.nl/nl/documentatie/25.amazon.html",
+      "bol_dot_com": "https://myparcelnl.github.io/bol.com/",
+      "etsy": "https://developer.myparcel.nl/nl/documentatie/30.etsy.html",
+      "exact": "https://myparcelnl.github.io/exact-online/",
+      "wix": "https://developer.myparcel.nl/nl/documentatie/20.wix.html"
+    },
+    "faq": {
+      "directPrinting": "https://faq.myparcel.nl/topics?inputdiv=Functionaliteiten",
+      "postalCode": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001cIcIAI&displayContent=true",
+      "userManagement": {
+        "roleExplanationUrl": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000000aLFIAY&displayContent=true"
+      }
+    },
+    "finance": {
+      "carrierComparePriceUrl": "https://sendmyparcel.be/prijzen/",
+      "priceScalesPolicy": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001bviIAA&displayContent=true",
+      "tariffUrl": "https://tarief.douane.nl/ite-tariff-public/#/taric/nomenclature/sbn?d=I&l=nl&ql=nl"
+    },
+    "manuals": {
+      "myContracts": {
+        "dhl": "https://developer.myparcel.nl/nl/backoffice/10.dhl-eigen-contracten-activeren.html",
+        "dpd": "https://developer.myparcel.nl/nl/backoffice/11.dpd-eigen-contracten-activeren.html",
+        "gls": "https://developer.myparcel.nl/nl/backoffice/13.gls-eigen-contracten-activeren.html",
+        "trunkrs": "https://developer.myparcel.nl/nl/backoffice/14.trunkrs-eigen-contracten-activeren.html",
+        "upsexpresssaver": "https://developer.myparcel.nl/nl/backoffice/12.ups-eigen-contracten-activeren.html",
+        "upsstandard": "https://developer.myparcel.nl/nl/backoffice/12.ups-eigen-contracten-activeren.html"
+      }
+    },
+    "returns": "https://www.myparcel.nl/blog/retourneren/jouw-retourservice-optimaal-inrichten-bij-myparcel",
+    "orders": {
+      "volumetricWeightLink": {
+        "UPS": "https://faq.myparcel.nl/en-US/article?knowledgeId=ka1Qv000000BnVFIA0&displayContent=true",
+        "POSTNL": "https://faq.myparcel.nl/en-US/article?knowledgeId=ka1Qv0000001q4bIAA&displayContent=true"
+      }
+    }
+  },
+  "deliveryOptions": {
+    "dropOffDays": [0, 1, 2, 3, 4, 5, 6],
+    "mondayDelivery": true
+  },
+  "enableAcademy": false,
+  "enableFulfilment": false,
+  "enableLocationFinder": false,
+  "enableChamberOfCommerceSupport": true,
+  "enableCompanyDetailsEdit": false,
+  "enableImportExport": false,
+  "enableLogoOnLabel": false,
+  "enableOptionToHideMyParcelLogo": false,
+  "enablePalletSupport": false,
+  "enablePrinterlessReturn": false,
+  "enableRetailLocations": false,
+  "enableShipmentEstimate": true,
+  "enableVATSupport": true,
+  "enableCollectAddress": false,
+  "enableReturnContributions": ["PACKAGE"],
+  "integrations": {
+    "available": [
+      {
+        "autoImport": false,
+        "name": "amazon"
+      }
+    ]
+  },
+  "internationalization": {
+    "dateFormats": {
+      "long": "D MMMM YYYY",
+      "short": "DD-MM-YYYY",
+      "time": "HH:mm"
+    },
+    "language": "it-IT",
+    "supportedLanguages": ["it-IT", "en-GB"],
+    "timezone": "Europe/Rome"
+  },
+  "proposition": {
+    "id": 6,
+    "key": "myparcel-italie",
+    "name": "MyParcel Italia",
+    "shortName": "MyParcel"
+  },
+  "orders": {
+    "filters": {
+      "carriers": [],
+      "packageTypes": [],
+      "regionCodes": []
+    }
+  },
+  "rules": {
+    "carrier": {
+      "withRecommendedPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredEmail": [],
+      "withRequiredHeight": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredLength": [],
+      "withRequiredPhoneNumber": [],
+      "withRequiredWidth": [],
+      "withRequiredWeight": []
+    },
+    "country": {
+      "withAddressFinder": [
+        "AT",
+        "BE",
+        "CZ",
+        "DK",
+        "FI",
+        "FR",
+        "DE",
+        "IT",
+        "LU",
+        "NO",
+        "PL",
+        "SK",
+        "ES",
+        "SE",
+        "CH",
+        "US"
+      ],
+      "withPartnerLinks": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "NO",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "SE",
+        "CH",
+        "GB"
+      ],
+      "withPossibleReturn": ["IT"],
+      "withRecommendedPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredEmail": [],
+      "withRequiredHeight": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredLength": [],
+      "withRequiredPhoneNumber": [],
+      "withRequiredWidth": []
+    },
+    "requiresEmailRecipient": false
+  },
+  "subscriptions": {
+    "bundle": {
+      "enabled": false
+    },
+    "myAnalytics": {
+      "enabled": true,
+      "availableDashboards": [
+        "shipments",
+        "returns",
+        "webshops",
+        "transit-time",
+        "surcharges",
+        "cases",
+        "finance",
+        "shortcoming"
+      ]
+    },
+    "myContracts": {
+      "enabled": false
+    },
+    "myOrders": {
+      "enabled": false
+    },
+    "myScanAndPrint": {
+      "enabled": false
+    },
+    "myReturns": {
+      "enabled": false
+    },
+    "shippingRules": {
+      "countryCodes": ["IT"],
+      "maxAmount": 1,
+      "regionCodes": []
+    }
+  },
+  "support": {
+    "availableTypes": [
+      {
+        "extraField": {
+          "name": "barcode",
+          "optional": false
+        },
+        "id": 1,
+        "name": "MyShipments",
+        "subTypes": ["not_delivered", "not_received_recipient", "missing_content", "damage", "return"]
+      },
+      {
+        "extraField": {
+          "name": "webshopSoftware",
+          "optional": true
+        },
+        "id": 2,
+        "name": "System",
+        "subTypes": ["plugin_question", "plugin_help_needed", "shipment_export_help_needed", "other_system_question"]
+      },
+      {
+        "id": 3,
+        "name": "ProductsAndPrices",
+        "subTypes": ["products", "rates"]
+      },
+      {
+        "extraField": {
+          "name": "invoiceNumber",
+          "optional": true
+        },
+        "id": 4,
+        "name": "MyInvoice",
+        "subTypes": ["invoice_change_details", "invoice_other_question"]
+      },
+      {
+        "id": 5,
+        "name": "Different"
+      }
+    ],
+    "flow": "basic"
+  },
+  "tools": {
+    "salesforce": {
+      "enabled": false
+    },
+    "appcues": {
+      "enabled": true,
+      "enableLaunchpad": false,
+      "id": "80838"
+    },
+    "googleTagManager": {
+      "enabled": false,
+      "id": "",
+      "url": ""
+    },
+    "hotjar": {
+      "enabled": false,
+      "enableFeedbackModal": false,
+      "id": ""
+    },
+    "oneTrust": {
+      "enabled": false,
+      "id": ""
+    }
+  },
+  "weightCategories": {
+    "digitalStamp": [
+      {
+        "max": 20,
+        "median": 10,
+        "min": 0
+      },
+      {
+        "max": 50,
+        "median": 35,
+        "min": 20
+      },
+      {
+        "max": 350,
+        "median": 175,
+        "min": 50
+      },
+      {
+        "max": 2000,
+        "median": 1175,
+        "min": 350
+      }
+    ],
+    "smallPackage": [
+      {
+        "max": 250,
+        "median": 125,
+        "min": 0
+      },
+      {
+        "max": 500,
+        "median": 375,
+        "min": 250
+      },
+      {
+        "max": 1000,
+        "median": 750,
+        "min": 500
+      },
+      {
+        "max": 2000,
+        "median": 1500,
+        "min": 1000
+      }
+    ]
+  },
+  "companyContactSettings": {
+    "additionalProperties": [],
+    "requiredProperties": []
+  },
+  "exportSettings": {
+    "availableFields": ["eori", "voec"]
+  }
+}

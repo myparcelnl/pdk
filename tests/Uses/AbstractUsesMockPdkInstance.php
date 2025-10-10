@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Uses;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Pdk as PdkInstance;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 
 abstract class AbstractUsesMockPdkInstance implements BaseMock
@@ -36,5 +37,7 @@ abstract class AbstractUsesMockPdkInstance implements BaseMock
     {
         PdkFactory::setMode(PdkInstance::MODE_PRODUCTION);
         PdkFactory::create(MockPdkConfig::create($this->config));
+        // Ensure each test starts without a preset proposition ID
+        Pdk::get(PropositionService::class)->clearActivePropositionId();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,10 +12,12 @@ use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -30,7 +33,7 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
 
     $fakeCarrier = factory(Carrier::class)
         ->fromPostNL()
-        ->withCapabilities(['features' => ['needsCustomerInfo' => $needsCustomerInfo]]);
+        ->withOutboundFeatures(['metadata' => [PropositionCarrierMetadata::FEATURE_NAME_NEEDS_CUSTOMER_INFO => $needsCustomerInfo]]);
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($fakeCarrier))

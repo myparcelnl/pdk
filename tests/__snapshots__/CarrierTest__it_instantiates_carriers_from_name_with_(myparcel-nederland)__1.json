@@ -1,0 +1,199 @@
+[
+  {
+    "externalIdentifier": "POSTNL",
+    "id": 1,
+    "name": "POSTNL",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "RETURN",
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "LARGE_FORMAT",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceSteps": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    },
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+      "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "LARGE_FORMAT",
+        "ONLY_RECIPIENT",
+        "RETURN",
+        "SIGNATURE",
+        "RECEIPT_CODE",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+        "multiCollo": true,
+        "insuranceOptions": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    }
+  },
+  {
+    "externalIdentifier": "DPD",
+    "id": 4,
+    "name": "DPD",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": [],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "needsCustomerInfo": true
+      }
+    }
+  },
+  {
+    "externalIdentifier": "DHL_FOR_YOU",
+    "id": 9,
+    "name": "DHL_FOR_YOU",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+      "metadata": {
+        "labelDescriptionLength": 45
+      }
+    },
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "SIGNATURE",
+        "SATURDAY_DELIVERY",
+        "HIDE_SENDER",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    }
+  },
+  {
+    "externalIdentifier": "DHL_PARCEL_CONNECT",
+    "id": 10,
+    "name": "DHL_PARCEL_CONNECT",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": ["INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceOptions": [50000]
+      }
+    },
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": ["SIGNATURE", "INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    }
+  },
+  {
+    "externalIdentifier": "DHL_EUROPLUS",
+    "id": 11,
+    "name": "DHL_EUROPLUS",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    }
+  },
+  {
+    "externalIdentifier": "UPS_STANDARD",
+    "id": 12,
+    "name": "UPS_STANDARD",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT", "INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceOptions": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    }
+  },
+  {
+    "externalIdentifier": "UPS_EXPRESS_SAVER",
+    "id": 13,
+    "name": "UPS_EXPRESS_SAVER",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["EXPRESS_DELIVERY", "PICKUP_DELIVERY"],
+      "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceOptions": [
+          10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    }
+  }
+]

@@ -13,9 +13,11 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Collection\FormElementCollection;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\src\Support\Str;
+
 use function array_map;
 
 /**
@@ -171,11 +173,12 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function createPackageTypeOptions(array $packageTypes = DeliveryOptions::PACKAGE_TYPES_NAMES): array
     {
+        $propositionService = Pdk::get(PropositionService::class);
         return $this->toSelectOptions(
             array_combine(
                 array_values($packageTypes),
-                array_map(static function ($packageType) {
-                    return sprintf('package_type_%s', $packageType);
+                array_map(static function ($packageType) use ($propositionService) {
+                    return sprintf('package_type_%s', $propositionService->packageTypeNameForDeliveryOptions($packageType) ?? $packageType);
                 }, $packageTypes)
             ),
             self::SELECT_INCLUDE_OPTION_DEFAULT

@@ -39,11 +39,6 @@ function mockPdkProperty(string $property, $value): callable
     return mockPdkProperties([$property => $value]);
 }
 
-function mockPlatform(string $platform): callable
-{
-    return mockPdkProperty('platform', $platform);
-}
-
 /**
  * @param  class-string<\MyParcelNL\Pdk\Base\Model\Model|\MyParcelNL\Pdk\Base\Support\Collection> $class
  * @param  mixed                                                                                  ...$args

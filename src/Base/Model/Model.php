@@ -89,10 +89,10 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function __call(string $method, array $parameters)
     {
-        $trimmed   = str_replace(['get', 'set', 'Attribute'], '', $method);
-        $attribute = Str::camel($trimmed);
+        $attribute   = str_replace(['get', 'set', 'Attribute'], '', $method);
 
         if (Str::contains($method, 'get')) {
+            $attribute = Str::camel($attribute);
             return $this->getAttribute($attribute);
         }
 

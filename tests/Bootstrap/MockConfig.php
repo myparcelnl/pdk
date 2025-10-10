@@ -25,10 +25,6 @@ final class MockConfig extends Config
     public function __construct(FileSystemInterface $fileSystem, array $data = [])
     {
         parent::__construct($fileSystem);
-
-        $carriers = $this->getFromRealConfig('carriers');
-
-        $this->config = array_replace_recursive(['carriers' => $carriers], $data);
     }
 
     /**
