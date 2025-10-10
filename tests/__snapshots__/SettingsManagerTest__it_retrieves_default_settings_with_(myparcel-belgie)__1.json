@@ -47,6 +47,7 @@
     "enableDeliveryOptionsWhenNotInStock": true,
     "useSeparateAddressFields": false,
     "showTaxFields": true,
-    "enableAddressWidget": false
+    "enableAddressWidget": false,
+    "closedDays": []
   }
 }
