@@ -169,6 +169,7 @@ class Carrier extends Model
         'outboundFeatures'   => null,
         'capabilities'        => null, // @deprecated use outboundFeatures instead
         'returnCapabilities'  => null, // @deprecated use inboundFeatures instead
+        'deliveryOptions'     => null,
     ];
 
     protected $casts      = [
@@ -187,6 +188,7 @@ class Carrier extends Model
         'outboundFeatures'   => PropositionCarrierFeatures::class,
         'capabilities'        => CarrierCapabilities::class, // @deprecated use outboundFeatures instead
         'returnCapabilities'  => CarrierCapabilities::class, // @deprecated use inboundFeatures instead
+        'deliveryOptions'     => 'array',
     ];
 
     /**

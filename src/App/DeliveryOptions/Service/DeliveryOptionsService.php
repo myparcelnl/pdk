@@ -151,16 +151,16 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 "pickupCountries" => $carrier->outboundFeatures->pickupCountries ?? [],
                 // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
                 "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures['deliveryCountries'] ?? []) : [],
-                "fakeDelivery" => $carrier->outboundFeatures->deliveryOptions['allowFakeDelivery'] ?? false,
+                "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
                 "shipmentOptionsPerPackageType" => \array_map(function ($packageType) use ($legacyCarrier) {
                     $snakeCaseKeys = array_map(function ($key) {
                         return Str::snake($key);
                     }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions));
                     return [$packageType => $snakeCaseKeys ?? []];
                 }, $legacyCarrier->capabilities->packageTypes),
-                "features" => $carrier->outboundFeatures->deliveryOptions['availableFeatures'],
-                "addressFields" => $carrier->outboundFeatures->deliveryOptions['addressFields'],
-                "unsupportedParameters" =>  $carrier->outboundFeatures->deliveryOptions['unsupportedParameters']
+                "features" => $carrier->deliveryOptions['availableFeatures'] ?? [],
+                "addressFields" => $carrier->deliveryOptions['addressFields'] ?? [],
+                "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? []
             ];
         }, $carriers->all());
         return $config;
