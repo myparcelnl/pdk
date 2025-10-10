@@ -172,6 +172,7 @@ class PropositionService
                 'id' => $contract['carrier']['id'],
                 'outboundFeatures' => $contract['outboundFeatures'] ?? [],
                 'inboundFeatures' => $contract['inboundFeatures'] ?? [],
+                'deliveryOptions' => $contract['deliveryOptions'] ?? [],
             ];
             $carrierModels[] = new Carrier($carrierData);
         }
