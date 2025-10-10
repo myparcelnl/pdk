@@ -32,20 +32,7 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
             ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
-            ShipmentOptions::TRACKED           => $this->calculateTracked(),
         ]);
     }
 
-    /**
-     * @return int
-     */
-    private function calculateTracked(): int
-    {
-        $isPackageSmall = DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME === $this->order->deliveryOptions->packageType;
-        $isNotNl        = CountryCodes::CC_NL !== $this->order->shippingAddress->cc;
-
-        return $isPackageSmall && $isNotNl
-            ? TriStateService::ENABLED
-            : TriStateService::DISABLED;
-    }
 }
