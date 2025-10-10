@@ -1,0 +1,1183 @@
+{
+  "applications": {
+    "backoffice": {
+      "url": "https://backoffice.myparcel.nl",
+      "enabled": true
+    },
+    "webshop": {
+      "url": "https://www.myparcel.nl/webshop?forceSilentLoginCheck=true",
+      "enabled": true
+    },
+    "developerPortal": {
+      "url": "https://developer.myparcel.nl",
+      "enabled": true
+    },
+    "corporate": {
+      "url": "https://www.myparcel.nl",
+      "enabled": true
+    },
+    "faq": {
+      "url": "https://faq.myparcel.nl",
+      "enabled": true
+    },
+    "consumerPortal": {
+      "enabled": true,
+      "internationalization": {
+        "dateFormats": {
+          "long": "D MMMM YYYY",
+          "short": "DD-MM-YYYY",
+          "time": "HH:mm"
+        },
+        "language": "nl-NL",
+        "supportedLanguages": ["nl-NL", "en-GB", "de-DE", "fr-FR", "es-ES", "it-IT"],
+        "timezone": "Europe/Amsterdam"
+      },
+      "url": "https://subdomain.myparcel.me"
+    }
+  },
+  "assets": {
+    "exampleDocuments": {
+      "addresses": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-address-example.csv"
+      },
+      "orders": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-order-example.csv"
+      },
+      "products": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-product-example.csv"
+      },
+      "shipments": {
+        "csv": "https://assets.myparcel.nl/documentatie/voorbeelden/myparcel-shipment-example.csv"
+      }
+    },
+    "logo": {
+      "medium": {
+        "url": "https://assets.myparcel.nl/skin/images/logo.svg"
+      },
+      "small": {
+        "url": "https://assets.myparcel.nl/skin/images/logo-icon.svg"
+      }
+    },
+    "url": "https://assets.myparcel.nl"
+  },
+  "billing": {
+    "bankMandate": {
+      "flow": ["manual", "automatic"],
+      "manualBanks": ["bunq", "adyen", "revolut", "knab", "other"]
+    },
+    "newInvoiceDates": {
+      "monthly": "2024-06-01",
+      "weekly": "2024-05-13"
+    },
+    "paymentProvider": "multisafepay"
+  },
+  "browserExtension": {
+    "downloadUrl": {
+      "chrome": "https://chrome.google.com/webstore/detail/myparcel-extension/ncomggonlkegodkmolbbepaebmoikbph?authuser=0"
+    },
+    "supported": true
+  },
+  "centerOfCountry": {
+    "latitude": 52.1008,
+    "longitude": 5.6461,
+    "zoom": 8
+  },
+  "companyDetails": {
+    "address": {
+      "city": "Hoofddorp",
+      "company": "MyParcel.nl",
+      "countryCode": "NL",
+      "email": "info@myparcel.nl",
+      "houseNumber": "31",
+      "person": "",
+      "phone": "023 303 1818",
+      "postalCode": "2132JE",
+      "street": "Antareslaan"
+    },
+    "billing": {
+      "coc": "34 09 97 58"
+    },
+    "contact": {
+      "phoneNumber": {
+        "openingHours": [
+          {
+            "closes": "18:30",
+            "name": "monday",
+            "opens": "08:00"
+          },
+          {
+            "closes": "18:30",
+            "name": "tuesday",
+            "opens": "08:00"
+          },
+          {
+            "closes": "18:30",
+            "name": "wednesday",
+            "opens": "08:00"
+          },
+          {
+            "closes": "18:30",
+            "name": "thursday",
+            "opens": "08:00"
+          },
+          {
+            "closes": "17:00",
+            "name": "friday",
+            "opens": "08:00"
+          },
+          {
+            "closes": "17:00",
+            "name": "saturday",
+            "opens": "09:00"
+          },
+          {
+            "name": "sunday"
+          }
+        ],
+        "plain": "0031233030315",
+        "text": "023 30 30 315"
+      },
+      "whatsapp": {
+        "openingHours": [
+          {
+            "closes": "17:30",
+            "name": "monday",
+            "opens": "09:00"
+          },
+          {
+            "closes": "17:30",
+            "name": "tuesday",
+            "opens": "09:00"
+          },
+          {
+            "closes": "17:30",
+            "name": "wednesday",
+            "opens": "09:00"
+          },
+          {
+            "closes": "17:30",
+            "name": "thursday",
+            "opens": "09:00"
+          },
+          {
+            "closes": "17:00",
+            "name": "friday",
+            "opens": "09:00"
+          },
+          {
+            "closes": "17:00",
+            "name": "saturday",
+            "opens": "09:00"
+          },
+          {
+            "name": "sunday"
+          }
+        ],
+        "url": "https://api.whatsapp.com/send?phone=31233030315"
+      }
+    },
+    "returnAddress": {
+      "city": "Hoofddorp",
+      "company": "MyParcel.nl",
+      "countryCode": "NL",
+      "email": "info@myparcel.nl",
+      "houseNumber": "442",
+      "person": "Afd. Retouren",
+      "phone": "023 303 1818",
+      "postalCode": "2130AK",
+      "street": "Postbus"
+    }
+  },
+  "content": {
+    "authenticators": {
+      "googleAuthenticatorAndroid": {
+        "name": "Google Authenticator (Android)",
+        "url": "https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+      },
+      "googleAuthenticatorIos": {
+        "name": "Google Authenticator (iOS)",
+        "url": "https://apps.apple.com/us/app/google-authenticator/id388497605"
+      },
+      "microsoftAuthenticator": {
+        "name": "Microsoft Authenticator",
+        "url": "https://www.microsoft.com/security/mobile-authenticator-app"
+      },
+      "twilioAuthy": {
+        "name": "Twilio Authy",
+        "url": "https://authy.com/download/"
+      }
+    },
+    "directPrinting": {
+      "printApplicationDownloadUrls": {
+        "mac": "https://printing.assets.myparcel.nl/MyParcel-Print-Applicatie.dmg",
+        "windows": "https://printing.assets.myparcel.nl/MyParcel-Print-Applicatie.exe"
+      }
+    },
+    "externalIntegrationSupportUrls": {
+      "amazon": "https://developer.myparcel.nl/nl/documentatie/25.amazon.html",
+      "bol_dot_com": "https://myparcelnl.github.io/bol.com/",
+      "etsy": "https://developer.myparcel.nl/nl/documentatie/30.etsy.html",
+      "exact": "https://myparcelnl.github.io/exact-online/",
+      "wix": "https://developer.myparcel.nl/nl/documentatie/20.wix.html"
+    },
+    "faq": {
+      "directPrinting": "https://faq.myparcel.nl/topics?inputdiv=Functionaliteiten",
+      "postalCode": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001cIcIAI&displayContent=true",
+      "userManagement": {
+        "roleExplanationUrl": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000000aLFIAY&displayContent=true"
+      }
+    },
+    "finance": {
+      "carrierComparePriceUrl": "https://myparcel.nl/tarieven/",
+      "priceScalesPolicy": "https://faq.myparcel.nl/article?knowledgeId=ka1Qv0000001bviIAA&displayContent=true",
+      "tariffUrl": "https://tarief.douane.nl/ite-tariff-public/#/taric/nomenclature/sbn?d=I&l=nl&ql=nl"
+    },
+    "manuals": {
+      "myContracts": {
+        "dhl": "https://developer.myparcel.nl/nl/backoffice/10.dhl-eigen-contracten-activeren.html",
+        "dpd": "https://developer.myparcel.nl/nl/backoffice/11.dpd-eigen-contracten-activeren.html",
+        "gls": "https://developer.myparcel.nl/nl/backoffice/13.gls-eigen-contracten-activeren.html",
+        "upsexpresssaver": "https://developer.myparcel.nl/nl/backoffice/12.ups-eigen-contracten-activeren.html",
+        "upsstandard": "https://developer.myparcel.nl/nl/backoffice/12.ups-eigen-contracten-activeren.html"
+      }
+    },
+    "returns": "https://www.myparcel.nl/blog/retourneren/jouw-retourservice-optimaal-inrichten-bij-myparcel"
+  },
+  "contracts": {
+    "available": [
+      {
+        "carrier": {
+          "id": 1,
+          "name": "POSTNL"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+          "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": [
+            "AGE_CHECK",
+            "LARGE_FORMAT",
+            "ONLY_RECIPIENT",
+            "RETURN",
+            "SIGNATURE",
+            "RECEIPT_CODE",
+            "INSURANCE"
+          ],
+          "deliveryCountries": ["NL", "BE"],
+          "pickupCountries": ["NL", "BE", "DK", "SE", "DE"],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+            "multiCollo": true,
+            "insuranceOptions": [
+              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
+          }
+        },
+        "inboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY"],
+          "shipmentOptions": [
+            "SIGNATURE",
+            "RETURN",
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "LARGE_FORMAT",
+            "INSURANCE"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceSteps": [
+              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+          "allowFakeDelivery": true
+        }
+      },
+      {
+        "carrier": {
+          "id": 3,
+          "name": "CHEAP_CARGO"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PALLET"],
+          "deliveryCountries": [],
+          "pickupCountries": []
+        },
+        "deliveryOptions": {
+          "addressFields": [],
+          "unsupportedParameters": [],
+          "availableFeatures": [],
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 4,
+          "name": "DPD"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE", "MAILBOX"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": [],
+          "deliveryCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BE",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "HU",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "SK",
+            "SI",
+            "ES",
+            "GB"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "needsCustomerInfo": true
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 5,
+          "name": "INSTABOX"
+        },
+        "hasCutoffTime": false,
+        "hasPostponedDelivery": false,
+        "outboundFeatures": {
+          "deliveryCountries": [],
+          "pickupCountries": []
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": null,
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 9,
+          "name": "DHL_FOR_YOU"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": [
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "SIGNATURE",
+            "SATURDAY_DELIVERY",
+            "HIDE_SENDER",
+            "INSURANCE"
+          ],
+          "deliveryCountries": ["NL", "BE"],
+          "pickupCountries": ["NL", "BE"],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          }
+        },
+        "inboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY"],
+          "shipmentOptions": [
+            "SIGNATURE",
+            "RETURN",
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "LARGE_FORMAT"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": ["city", "postalCode"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 10,
+          "name": "DHL_PARCEL_CONNECT"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": ["SIGNATURE", "INSURANCE"],
+          "deliveryCountries": [
+            "AT",
+            "BG",
+            "HR",
+            "CZ",
+            "EE",
+            "FI",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LT",
+            "LU",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BG",
+            "HR",
+            "CZ",
+            "DK",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IT",
+            "LU",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          }
+        },
+        "inboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY"],
+          "shipmentOptions": ["INSURANCE"],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceOptions": [50000]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": [],
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 11,
+          "name": "DHL_EUROPLUS"
+        },
+        "hasCutoffTime": false,
+        "hasPostponedDelivery": false,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY"],
+          "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+          "deliveryCountries": [
+            "BE",
+            "BG",
+            "DK",
+            "DE",
+            "EE",
+            "FI",
+            "FR",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "HR",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "AT",
+            "PL",
+            "PT",
+            "RO",
+            "SI",
+            "SK",
+            "ES",
+            "CZ",
+            "SE",
+            "GB"
+          ],
+          "pickupCountries": [],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": [],
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 12,
+          "name": "UPS_STANDARD"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT", "INSURANCE"],
+          "deliveryCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "DE",
+            "EE",
+            "FI",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "HR",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SI",
+            "SK",
+            "ES",
+            "CZ"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "HR",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE",
+            "GB"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceOptions": [
+              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": null,
+          "allowFakeDelivery": false
+        }
+      },
+      {
+        "carrier": {
+          "id": 13,
+          "name": "UPS_EXPRESS_SAVER"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["EXPRESS_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT"],
+          "deliveryCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "DE",
+            "EE",
+            "FI",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "HR",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SI",
+            "SK",
+            "ES",
+            "CZ"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "HR",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE",
+            "GB"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceOptions": [
+              10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": ["package_type"],
+          "availableFeatures": null,
+          "allowFakeDelivery": false
+        }
+      }
+    ],
+    "availableForCustomCredentials": [
+      {
+        "carrier": {
+          "id": 7,
+          "name": "BOL"
+        }
+      },
+      {
+        "carrier": {
+          "id": 9,
+          "name": "DHL_FOR_YOU"
+        }
+      },
+      {
+        "carrier": {
+          "id": 10,
+          "name": "DHL_PARCEL_CONNECT"
+        }
+      },
+      {
+        "carrier": {
+          "id": 11,
+          "name": "DHL_EUROPLUS"
+        }
+      },
+      {
+        "carrier": {
+          "id": 4,
+          "name": "DPD"
+        }
+      },
+      {
+        "carrier": {
+          "id": 12,
+          "name": "UPS_STANDARD"
+        }
+      },
+      {
+        "carrier": {
+          "id": 13,
+          "name": "UPS_EXPRESS_SAVER"
+        }
+      },
+      {
+        "carrier": {
+          "id": 14,
+          "name": "GLS"
+        },
+        "hasCutoffTime": true,
+        "hasPostponedDelivery": true,
+        "outboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+          "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "INSURANCE"],
+          "deliveryCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BE",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "HU",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "SK",
+            "SI",
+            "ES",
+            "GB"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+            "insuranceOptions": [50000]
+          }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
+        }
+      }
+    ],
+    "enablePostNLCustomContract": true,
+    "inbound": {
+      "default": {
+        "carrier": {
+          "id": 1,
+          "name": "POSTNL"
+        },
+        "id": 1
+      }
+    },
+    "outbound": {
+      "default": {
+        "carrier": {
+          "id": 1,
+          "name": "POSTNL"
+        },
+        "id": 1
+      }
+    }
+  },
+  "collectTrip": {
+    "enabled": true,
+    "type": "internal"
+  },
+  "countryCode": "NL",
+  "deliveryOptions": {
+    "dropOffDays": [0, 1, 2, 3, 4, 5, 6],
+    "mondayDelivery": true
+  },
+  "enableAcademy": true,
+  "enableChamberOfCommerceSupport": true,
+  "enableCompanyDetailsEdit": true,
+  "enableFeedbackModal": true,
+  "enableImportExport": true,
+  "enableLogoOnLabel": true,
+  "enablePalletSupport": true,
+  "enablePrinterlessReturn": true,
+  "enableRetailLocations": true,
+  "enableShipmentEstimate": true,
+  "enableVATSupport": true,
+  "enableLocationFinder": true,
+  "enableFulfilment": true,
+  "enableOptionToHideMyParcelLogo": true,
+  "integrations": {
+    "available": [
+      {
+        "autoImport": true,
+        "name": "amazon"
+      },
+      {
+        "autoImport": true,
+        "name": "bol"
+      },
+      {
+        "autoImport": true,
+        "name": "etsy"
+      },
+      {
+        "autoImport": false,
+        "name": "exact"
+      },
+      {
+        "autoImport": false,
+        "name": "exact-de"
+      },
+      {
+        "autoImport": true,
+        "name": "wix"
+      }
+    ]
+  },
+  "internationalization": {
+    "dateFormats": {
+      "long": "D MMMM YYYY",
+      "short": "DD-MM-YYYY",
+      "time": "HH:mm"
+    },
+    "language": "nl-NL",
+    "supportedLanguages": ["nl-NL", "en-GB"],
+    "timezone": "Europe/Amsterdam"
+  },
+  "proposition": {
+    "id": 1,
+    "key": "myparcel-nederland",
+    "name": "MyParcel Nederland",
+    "shortName": "MyParcel"
+  },
+  "rules": {
+    "carrier": {
+      "withRecommendedPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredEmail": ["UPS_STANDARD", "UPS_EXPRESS_SAVER", "DPD"],
+      "withRequiredHeight": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredLength": [],
+      "withRequiredPhoneNumber": ["UPS_STANDARD", "UPS_EXPRESS_SAVER"],
+      "withRequiredWidth": []
+    },
+    "country": {
+      "withAddressFinder": [
+        "AT",
+        "BE",
+        "CZ",
+        "DK",
+        "FI",
+        "FR",
+        "DE",
+        "IT",
+        "LU",
+        "NO",
+        "PL",
+        "SK",
+        "ES",
+        "SE",
+        "CH",
+        "US"
+      ],
+      "withBoxNumber": ["BE"],
+      "withPartnerLinks": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "NO",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "SE",
+        "CH",
+        "GB"
+      ],
+      "withPossibleReturn": [
+        "AT",
+        "BE",
+        "BG",
+        "HR",
+        "CZ",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "GB"
+      ],
+      "withRecommendedPhoneNumber": [],
+      "withRequiredCompany": [],
+      "withRequiredEmail": ["NO"],
+      "withRequiredHeight": [],
+      "withRequiredLabelDescription": [],
+      "withRequiredLength": [],
+      "withRequiredPhoneNumber": [],
+      "withRequiredWidth": []
+    },
+    "requiresEmailRecipient": false
+  },
+  "subscriptions": {
+    "analytics": {
+      "availableDashboards": [
+        "shipments",
+        "returns",
+        "webshops",
+        "transit-time",
+        "surcharges",
+        "cases",
+        "finance",
+        "shortcoming"
+      ]
+    },
+    "shippingRules": {
+      "countryCodes": ["NL", "BE"],
+      "maxAmount": 1,
+      "regionCodes": ["EU", "ROW"]
+    }
+  },
+  "support": {
+    "availableTypes": [
+      {
+        "id": 1,
+        "name": "MyShipments",
+        "subTypes": [
+          "not_delivered",
+          "not_received_recipient",
+          "missing_content",
+          "damage",
+          "return",
+          "pallet_shipment_question"
+        ],
+        "extraField": {
+          "name": "barcode",
+          "optional": false
+        }
+      },
+      {
+        "id": 2,
+        "name": "System",
+        "subTypes": ["plugin_question", "plugin_help_needed", "shipment_export_help_needed", "other_system_question"],
+        "extraField": {
+          "name": "webshopSoftware",
+          "optional": true
+        }
+      },
+      {
+        "id": 3,
+        "name": "ProductsAndPrices",
+        "subTypes": ["products", "rates", "packaging", "webshop_orders"]
+      },
+      {
+        "id": 4,
+        "name": "MyInvoice",
+        "subTypes": ["invoice_change_details", "invoice_other_question"],
+        "extraField": {
+          "name": "invoiceNumber",
+          "optional": true
+        }
+      },
+      {
+        "id": 6,
+        "name": "MyCollectTrip"
+      },
+      {
+        "id": 7,
+        "name": "Fulfilment"
+      },
+      {
+        "id": 5,
+        "name": "Different"
+      }
+    ],
+    "flow": "advanced"
+  },
+  "tools": {
+    "appcues": {
+      "enabled": true,
+      "enableLaunchpad": true,
+      "id": "80838"
+    },
+    "googleTagManager": {
+      "enabled": true,
+      "id": "GTM-P5N4C5",
+      "url": "https://sst.myparcel.nl/gtm.js"
+    },
+    "hotjar": {
+      "enabled": true,
+      "enableFeedbackModal": true,
+      "id": "598926"
+    },
+    "oneTrust": {
+      "enabled": true,
+      "id": "b1ddbed3-fb17-47c0-b165-1765146cbf5d"
+    }
+  },
+  "weightCategories": {
+    "digitalStamp": [
+      {
+        "max": 20,
+        "median": 10,
+        "min": 0
+      },
+      {
+        "max": 50,
+        "median": 35,
+        "min": 20
+      },
+      {
+        "max": 350,
+        "median": 175,
+        "min": 50
+      },
+      {
+        "max": 2000,
+        "median": 1175,
+        "min": 350
+      }
+    ],
+    "smallPackage": [
+      {
+        "max": 250,
+        "median": 125,
+        "min": 0
+      },
+      {
+        "max": 500,
+        "median": 375,
+        "min": 250
+      },
+      {
+        "max": 1000,
+        "median": 750,
+        "min": 500
+      },
+      {
+        "max": 2000,
+        "median": 1500,
+        "min": 1000
+      }
+    ]
+  }
+}

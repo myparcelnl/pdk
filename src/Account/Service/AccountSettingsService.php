@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
@@ -47,6 +47,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
+     * Return the carriers for the current shop, filtered by the carriers available in the proposition service.
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection
@@ -57,13 +58,13 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             return new CarrierCollection();
         }
 
-        $allowedCarriers = Platform::getCarriers();
+        $allowedCarriers = $this->getPropositionCarriers();
 
         return $shop->carriers
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {
                 $isAllowed = $allowedCarriers->contains('name', $carrier->name);
 
-                return $isAllowed && $carrier->enabled && $carrier->capabilities;
+                return $isAllowed && $carrier->enabled && !empty($carrier->outboundFeatures->toArray());
             })
             ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
                 $aIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierA) {
@@ -160,5 +161,16 @@ class AccountSettingsService implements AccountSettingsServiceInterface
                 ->contains(function (Carrier $carrier) use ($carrierName) {
                     return $carrier->name === $carrierName;
                 });
+    }
+
+    /**
+     * Get supported carriers from proposition service.
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    private function getPropositionCarriers(): CarrierCollection
+    {
+        $propositionService = Pdk::get(PropositionService::class);
+        return $propositionService->getCarriers(true);
     }
 }

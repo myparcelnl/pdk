@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -25,6 +26,11 @@ final class ReceiptCodeDefinition implements OrderOptionDefinitionInterface
     public function getShipmentOptionsKey(): ?string
     {
         return ShipmentOptions::RECEIPT_CODE;
+    }
+
+    public function getPropositionKey(): ?string
+    {
+        return PropositionCarrierFeatures::SHIPMENT_OPTION_RECEIPT_CODE_NAME;
     }
 
     public function validate(CarrierSchema $carrierSchema): bool
