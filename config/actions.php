@@ -6,6 +6,8 @@ use MyParcelNL\Pdk\App\Action\Backend\Account\DeleteAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateAccountAction;
 use MyParcelNL\Pdk\App\Action\Backend\Account\UpdateSubscriptionFeaturesAction;
 use MyParcelNL\Pdk\App\Action\Backend\Debug\DownloadLogsAction;
+use MyParcelNL\Pdk\App\Action\Backend\Debug\SwitchToAcceptanceApiAction;
+use MyParcelNL\Pdk\App\Action\Backend\Debug\SwitchToProductionApiAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\ExportOrderAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\FetchOrdersAction;
 use MyParcelNL\Pdk\App\Action\Backend\Order\PostOrderNotesAction;
@@ -33,6 +35,8 @@ use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateSubscriptionFeaturesEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Context\FetchContextEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Debug\DownloadLogsEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Debug\SwitchToAcceptanceApiEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Debug\SwitchToProductionApiEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\ExportOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\FetchOrdersEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Orders\PostOrderNotesEndpointRequest;
@@ -241,6 +245,22 @@ return [
         PdkBackendActions::DOWNLOAD_LOGS           => [
             'request' => DownloadLogsEndpointRequest::class,
             'action'  => DownloadLogsAction::class,
+        ],
+
+        /**
+         * Switch to acceptance API
+         */
+        PdkBackendActions::SWITCH_TO_ACCEPTANCE_API => [
+            'request' => SwitchToAcceptanceApiEndpointRequest::class,
+            'action'  => SwitchToAcceptanceApiAction::class,
+        ],
+
+        /**
+         * Switch to production API
+         */
+        PdkBackendActions::SWITCH_TO_PRODUCTION_API => [
+            'request' => SwitchToProductionApiEndpointRequest::class,
+            'action'  => SwitchToProductionApiAction::class,
         ],
 
     ],

@@ -4,7 +4,7 @@
       "name": "pest",
       "title": "Pest",
       "version": "1.0.0",
-      "path": "/app/.tmp/",
+      "path": "\/app\/.tmp\/",
       "url": "APP_URL"
     },
     "baseUrl": "BACKEND_URL",
@@ -184,11 +184,31 @@
       },
       "downloadLogs": {
         "headers": {
-          "Accept": "application/zip"
+          "Accept": "application\/zip"
         },
         "method": "POST",
         "parameters": {
           "action": "downloadLogs"
+        },
+        "path": ""
+      },
+      "switchToAcceptanceApi": {
+        "headers": {
+          "Accept": "application\/json"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "switchToAcceptanceApi"
+        },
+        "path": ""
+      },
+      "switchToProductionApi": {
+        "headers": {
+          "Accept": "application\/json"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "switchToProductionApi"
         },
         "path": ""
       },
@@ -209,8 +229,8 @@
     "platform": {
       "name": "myparcel",
       "human": "MyParcel",
-      "backofficeUrl": "https://backoffice.myparcel.nl",
-      "supportUrl": "https://developer.myparcel.nl/contact",
+      "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
+      "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
       "localCountry": "NL",
       "defaultCarrier": "postnl",
       "defaultCarrierId": 1

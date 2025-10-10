@@ -192,6 +192,26 @@
         },
         "path": ""
       },
+      "switchToAcceptanceApi": {
+        "headers": {
+          "Accept": "application\/json"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "switchToAcceptanceApi"
+        },
+        "path": ""
+      },
+      "switchToProductionApi": {
+        "headers": {
+          "Accept": "application\/json"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "switchToProductionApi"
+        },
+        "path": ""
+      },
       "fetchContext": {
         "headers": [],
         "method": "GET",
@@ -237,7 +257,7 @@
         "company": "MyParcel"
       },
       "generalSettings": {
-        "isTest": false,
+        "environment": "production",
         "orderMode": false,
         "hasCarrierContract": false,
         "hasCarrierSmallPackageContract": false
