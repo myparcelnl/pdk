@@ -40,6 +40,12 @@ interface AccountSettingsServiceInterface
      * @return bool
      * @noinspection PhpUnused
      */
+    public function hasCarrierSmallPackageContract(): bool;
+
+    /**
+     * @return bool
+     * @noinspection PhpUnused
+     */
     public function hasTaxFields(): bool;
 
     /**

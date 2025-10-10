@@ -467,6 +467,7 @@
           "exportReturnLargeFormat": false,
           "exportReturnPackageType": "package",
           "exportSignature": false,
+          "exportTracked": false,
           "exportCollect": false,
           "priceDeliveryTypeEvening": 0,
           "priceDeliveryTypeMonday": 0,

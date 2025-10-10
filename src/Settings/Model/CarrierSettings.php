@@ -40,6 +40,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool                 $exportReturn
  * @property bool                 $exportReturnLargeFormat
  * @property bool                 $exportSignature
+ * @property bool                 $exportTracked
  * @property int                  $exportInsuranceFromAmount
  * @property int                  $exportInsurancePricePercentage
  * @property int                  $exportInsuranceUpTo
@@ -168,6 +169,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_RETURN_LARGE_FORMAT              => false,
         self::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         self::EXPORT_SIGNATURE                        => false,
+        self::EXPORT_TRACKED                          => false,
         self::EXPORT_COLLECT                          => false,
         self::PRICE_DELIVERY_TYPE_EVENING             => 0,
         self::PRICE_DELIVERY_TYPE_MONDAY              => 0,
@@ -226,6 +228,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_RETURN_LARGE_FORMAT              => 'bool',
         self::EXPORT_RETURN_PACKAGE_TYPE              => 'string',
         self::EXPORT_SIGNATURE                        => 'bool',
+        self::EXPORT_TRACKED                          => 'bool',
         self::EXPORT_COLLECT                          => 'bool',
         self::PRICE_DELIVERY_TYPE_EVENING             => 'float',
         self::PRICE_DELIVERY_TYPE_MONDAY              => 'float',

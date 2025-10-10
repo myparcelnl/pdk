@@ -49,6 +49,7 @@ return [
                     'signature'       => true,
                     'receiptCode'     => true,
                     'collect'         => false,
+                    'tracked'         => true,
                     'insurance'       => [
                         0,
                         10000,

@@ -110,6 +110,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $account ? $account->generalSettings->hasCarrierSmallPackageContract : false;
     }
 
+
     /**
      * @param  string $feature
      *
