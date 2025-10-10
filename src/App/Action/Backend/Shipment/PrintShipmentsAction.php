@@ -48,6 +48,10 @@ class PrintShipmentsAction extends AbstractOrderAction
         $positions = Utils::toArray(
             $this->getLabelOption($request, LabelSettings::POSITION, LabelSettings::DEFAULT_POSITION)
         );
+        // todo INT-768, until the frontend bulk export works we fix the info we got from the request
+        if (1 === count($positions) && is_string($positions[0])) {
+            $positions = explode(',', $positions[0]);
+        }
 
         $orderIds    = $this->getOrderIds($request);
         $orders      = $this->pdkOrderRepository->getMany($orderIds);

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.63.3](https://github.com/myparcelnl/pdk/compare/v2.63.2...v2.63.3) (2025-10-07)
+
+
+### :bug: Bug Fixes
+
+* print more than one label on first a4 in bulk ([#385](https://github.com/myparcelnl/pdk/issues/385)) ([ea5c82d](https://github.com/myparcelnl/pdk/commit/ea5c82dd44c1528ddedf33dd72a489fc96776cbd))
+
 ## [2.63.2](https://github.com/myparcelnl/pdk/compare/v2.63.1...v2.63.2) (2025-09-26)
 
 
