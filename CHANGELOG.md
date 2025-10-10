@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.64.0](https://github.com/myparcelnl/pdk/compare/v2.63.3...v2.64.0) (2025-10-10)
+
+
+### :sparkles: New Features
+
+* **pdk:** add option to list closed days for shop ([#386](https://github.com/myparcelnl/pdk/issues/386)) ([e269e9c](https://github.com/myparcelnl/pdk/commit/e269e9c6e992e35451af371b4f1f8715f06ff11c))
+
 ## [2.63.3](https://github.com/myparcelnl/pdk/compare/v2.63.2...v2.63.3) (2025-10-07)
 
 
