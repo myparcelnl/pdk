@@ -27,7 +27,7 @@ function createOrder($labelDescription): PdkOrder
     return factory(PdkOrder::class)
         ->withReferenceIdentifier('123')
         ->withDeliveryOptions([
-            'date'            => new DateTimeImmutable('2070-09-27'),
+            'date'            => new DateTimeImmutable('tomorrow'),
             'shipmentOptions' => ['labelDescription' => $labelDescription],
         ])
         ->withLines([
@@ -102,7 +102,7 @@ it('formats label description from order', function ($labelDescription, $output)
         ],
         'label description DELIVERY_DATE'         => [
             'input'  => 'DELIVERY_DATE: [DELIVERY_DATE]',
-            'output' => 'DELIVERY_DATE: 2070-09-27',
+            'output' => 'DELIVERY_DATE: ' . (new DateTimeImmutable('tomorrow'))->format('Y-m-d'),
         ],
         'multiple label description placeholders' => [
             'input'  => '[CUSTOMER_NOTE] | [ORDER_ID] | [PRODUCT_ID] | [PRODUCT_NAME] | [PRODUCT_SKU] | [PRODUCT_EAN] | [PRODUCT_QTY]',

@@ -26,4 +26,5 @@ final class Components
     public const INPUT_TIME             = 'TimeInput';
     public const INPUT_TOGGLE           = 'ToggleInput';
     public const INPUT_TRI_STATE        = 'TriStateInput';
+    public const INPUT_MULTI_DATE      = 'MultiDateInput';
 }

@@ -55,6 +55,7 @@ it('can be instantiated', function () {
             'platform'                          => 'myparcel',
             'showPriceSurcharge'                => false,
             'priceStandardDelivery'             => 0,
+            'closedDays'                        => null,
         ]);
 });
 
@@ -178,6 +179,7 @@ it('uses correct price when price is shown as surcharge', function () {
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
             'priceStandardDelivery'             => 695.0,
             'allowPickupLocationsViewSelection' => true,
+            'closedDays'                        => []
         ]);
 });
 
