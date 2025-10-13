@@ -141,10 +141,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $config['carriers'] = array_map(function ($carrier) use ($adapter) {
             $legacyCarrier = $adapter->convertCarrierToLegacyFormat($carrier);
 
-            return [
+            return array_filter([
                 "name"      => $legacyCarrier->name,
                 "active"    => true,
-                "subscription" => -1, // This does not seem to be actually used in the DO?
+                "subscription" => TriStateService::INHERIT, // This does not seem to be actually used in the DO?
                 "packageTypes" => $legacyCarrier->capabilities->packageTypes,
                 'deliveryTypes' => $legacyCarrier->capabilities->deliveryTypes,
                 'deliveryCountries' => $carrier->outboundFeatures->deliveryCountries ?? [],
@@ -160,10 +160,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     $result[$packageType] = $snakeCaseKeys ?? [];
                     return $result;
                 }, []),
-                "features" => $carrier->deliveryOptions['availableFeatures'] ?? [],
-                "addressFields" => $carrier->deliveryOptions['addressFields'] ?? [],
-                "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? []
-            ];
+                "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
+                "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
+                "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? null
+            ]);
         }, $carriers->all());
         return $config;
     }

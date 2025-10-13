@@ -124,8 +124,8 @@
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["SIGNATURE", "INSURANCE", "CASH_ON_DELIVERY"],
-          "deliveryCountries": ["IT"],
-          "pickupCountries": ["IT"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
           "metadata": {
             "labelDescriptionLength": 45,
             "multiCollo": false,
