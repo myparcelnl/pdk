@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Request\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
@@ -72,20 +73,28 @@ class GlobalContext extends Model
         $this->attributes['baseUrl']   = $endpointActions->getBaseUrl();
         $this->attributes['endpoints'] = $endpointActions->toArray();
 
-        $propositionService = Pdk::get(PropositionService::class);
-        $proposition = $propositionService->getPropositionConfig();
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
 
-        $this->attributes['platform'] = array_intersect_key(
-            $propositionService->mapToPlatformConfig($proposition),
-            array_flip([
-                'name',
-                'human',
-                'backofficeUrl',
-                'supportUrl',
-                'localCountry',
-                'defaultCarrier',
-                'defaultCarrierId',
-            ])
-        );
+            $this->attributes['platform'] = array_intersect_key(
+                $propositionService->mapToPlatformConfig($proposition),
+                array_flip([
+                    'name',
+                    'human',
+                    'backofficeUrl',
+                    'supportUrl',
+                    'localCountry',
+                    'defaultCarrier',
+                    'defaultCarrierId',
+                ])
+            );
+        } catch (\Throwable $throwable) {
+            // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.
+            Logger::alert(
+                'Could not load proposition data: ' . $throwable->getMessage(),
+                ['exception' => $throwable]
+            );
+        }
     }
 }

@@ -6,12 +6,15 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\CarrierSettingsView;
 use MyParcelNL\Pdk\Frontend\View\CheckoutSettingsView;
 use MyParcelNL\Pdk\Frontend\View\CustomsSettingsView;
 use MyParcelNL\Pdk\Frontend\View\LabelSettingsView;
 use MyParcelNL\Pdk\Frontend\View\OrderSettingsView;
+use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
@@ -43,6 +46,18 @@ class PluginSettingsViewContext implements Arrayable
     public function __construct()
     {
         if (! AccountSettings::getAccount()) {
+            return;
+        }
+
+        // Do not show settings if there is no active proposition
+        try {
+            Pdk::get(PropositionService::class)->getPropositionConfig();
+        } catch (\InvalidArgumentException $e) {
+            Notifications::error(
+                'Proposition not found',
+                sprintf('Proposition with ID %d was not found, please contact support.', Pdk::get(PropositionService::class)->getActivePropositionId()),
+                Notification::CATEGORY_GENERAL
+            );
             return;
         }
 

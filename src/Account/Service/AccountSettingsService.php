@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
@@ -58,7 +59,12 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             return new CarrierCollection();
         }
 
-        $allowedCarriers = $this->getPropositionCarriers();
+        try {
+            $allowedCarriers = $this->getPropositionCarriers();
+        } catch (\InvalidArgumentException $e) {
+            Logger::error('Could not fetch carriers from proposition service: ' . $e->getMessage());
+            return new CarrierCollection();
+        }
 
         return $shop->carriers
             ->filter(function (Carrier $carrier) use ($allowedCarriers) {
