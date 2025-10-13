@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -23,8 +24,10 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -66,7 +69,7 @@ it('snapshots all definitions', function () use ($definitions) {
 
 it('can validate', function () use ($definitions) {
     $fakeCarrier = factory(Carrier::class)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withEverything())
+        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
         ->make();
 
     $carrierSchema = Pdk::get(CarrierSchema::class);

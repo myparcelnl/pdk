@@ -1,5 +1,227 @@
 {
   "checkout": {
+    "platformConfig": {
+      "carriers": [
+        {
+          "name": "postnl",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+          "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": [
+                "age_check",
+                "large_format",
+                "only_recipient",
+                "return",
+                "signature",
+                "receipt_code",
+                "insurance"
+              ]
+            },
+            {
+              "mailbox": [
+                "age_check",
+                "large_format",
+                "only_recipient",
+                "return",
+                "signature",
+                "receipt_code",
+                "insurance"
+              ]
+            },
+            {
+              "letter": [
+                "age_check",
+                "large_format",
+                "only_recipient",
+                "return",
+                "signature",
+                "receipt_code",
+                "insurance"
+              ]
+            },
+            {
+              "digital_stamp": [
+                "age_check",
+                "large_format",
+                "only_recipient",
+                "return",
+                "signature",
+                "receipt_code",
+                "insurance"
+              ]
+            },
+            {
+              "package_small": [
+                "age_check",
+                "large_format",
+                "only_recipient",
+                "return",
+                "signature",
+                "receipt_code",
+                "insurance"
+              ]
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        },
+        {
+          "name": "dpd",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package", "mailbox"],
+          "deliveryTypes": ["standard", "pickup"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": []
+            },
+            {
+              "mailbox": []
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        },
+        {
+          "name": "dhlforyou",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package", "mailbox", "package_small"],
+          "deliveryTypes": ["standard", "pickup"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": [
+                "age_check",
+                "only_recipient",
+                "same_day_delivery",
+                "signature",
+                "saturday_delivery",
+                "hide_sender",
+                "insurance"
+              ]
+            },
+            {
+              "mailbox": [
+                "age_check",
+                "only_recipient",
+                "same_day_delivery",
+                "signature",
+                "saturday_delivery",
+                "hide_sender",
+                "insurance"
+              ]
+            },
+            {
+              "package_small": [
+                "age_check",
+                "only_recipient",
+                "same_day_delivery",
+                "signature",
+                "saturday_delivery",
+                "hide_sender",
+                "insurance"
+              ]
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        },
+        {
+          "name": "dhlparcelconnect",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard", "pickup"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": ["signature"]
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        },
+        {
+          "name": "dhleuroplus",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": ["signature", "saturday_delivery", "hide_sender", "insurance"]
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        },
+        {
+          "name": "upsstandard",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard", "pickup"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": ["age_check", "only_recipient", "return", "signature", "collect", "insurance"]
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        },
+        {
+          "name": "upsexpresssaver",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package"],
+          "deliveryTypes": ["express", "pickup"],
+          "deliveryCountries": [],
+          "pickupCountries": [],
+          "smallPackagePickupCountries": [],
+          "fakeDelivery": false,
+          "shipmentOptionsPerPackageType": [
+            {
+              "package": ["age_check", "only_recipient", "return", "signature", "collect", "insurance"]
+            }
+          ],
+          "features": null,
+          "addressFields": null,
+          "unsupportedParameters": null
+        }
+      ]
+    },
     "strings": {
       "morning": "Ochtend"
     },
