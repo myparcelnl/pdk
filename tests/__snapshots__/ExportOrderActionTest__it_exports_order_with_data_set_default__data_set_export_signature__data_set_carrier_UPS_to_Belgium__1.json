@@ -9,6 +9,10 @@
         "options": {
           "package_type": 1,
           "delivery_type": 7,
+          "insurance": {
+            "amount": 10000,
+            "currency": "EUR"
+          },
           "signature": 1
         },
         "physical_properties": {

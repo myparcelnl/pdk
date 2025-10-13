@@ -9,10 +9,15 @@
         },
         "options": {
           "package_type": 1,
-          "delivery_type": 2
+          "delivery_type": 2,
+          "insurance": {
+            "amount": 10000,
+            "currency": "EUR"
+          },
+          "signature": 1
         },
         "physical_properties": {
-          "weight": 0
+          "weight": 100
         },
         "recipient": {
           "cc": "DE",
