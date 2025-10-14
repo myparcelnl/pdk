@@ -25,6 +25,9 @@
             },
             "signature": {
               "enum": [0]
+            },
+            "tracked": {
+              "enum": [0, 1]
             }
           }
         }

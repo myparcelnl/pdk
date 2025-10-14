@@ -149,15 +149,20 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInternationalMailboxFields(): array
     {
-        if (! AccountSettings::hasCarrierSmallPackageContract()
-            || ! $this->carrierSchema->canHaveCarrierSmallPackageContract()) {
-            return [];
-        }
-
-        return $this->createSettingWithPriceFields(
+        $fields = $this->createSettingWithPriceFields(
             CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
             CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
         );
+
+        // Add tracked toggle for carriers with custom mailbox contract, only visible when international mailbox is enabled
+        if ($this->carrierSchema->canHaveTracked() && AccountSettings::hasCarrierSmallPackageContract()) {
+            $fields[] = (new InteractiveElement(CarrierSettings::EXPORT_TRACKED, Components::INPUT_TOGGLE))
+                ->builder(function (FormOperationBuilder $builder) {
+                    $builder->visibleWhen(CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX);
+                });
+        }
+
+        return $fields;
     }
 
     /**
@@ -267,7 +272,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $this->carrierSchema->canHaveInsurance() ? $this->getExportInsuranceFields() : [],
 
             $this->carrierSchema->canHaveCollect()
-                ? [new interactiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
+                ? [new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
                 : [],
         ];
     }
