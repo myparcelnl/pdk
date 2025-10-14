@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.65.0](https://github.com/myparcelnl/pdk/compare/v2.64.0...v2.65.0) (2025-10-14)
+
+
+### :bug: Bug Fixes
+
+* allow international mailbox ([#389](https://github.com/myparcelnl/pdk/issues/389)) ([ea1540e](https://github.com/myparcelnl/pdk/commit/ea1540efd1466b356735c0540896ed1335aaf04b))
+
+
+### :sparkles: New Features
+
+* add acceptance api ([#382](https://github.com/myparcelnl/pdk/issues/382)) ([1db4278](https://github.com/myparcelnl/pdk/commit/1db4278caf31e5c295555c7744a6587a0b503eb4))
+
 ## [2.64.0](https://github.com/myparcelnl/pdk/compare/v2.63.3...v2.64.0) (2025-10-10)
 
 
