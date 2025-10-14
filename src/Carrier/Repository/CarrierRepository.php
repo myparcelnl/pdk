@@ -31,7 +31,12 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
      */
     public function all(): CarrierCollection
     {
-        return $this->propositionService->getCarriers();
+        try {
+            return $this->propositionService->getCarriers();
+        } catch (InvalidArgumentException $e) {
+            // Silently fail, errors are already logged elsewhere - we just don't know the carriers here
+            return new CarrierCollection();
+        }
     }
 
     /**

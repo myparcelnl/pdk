@@ -10,8 +10,10 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
+use MyParcelNL\Pdk\Settings\Model\AccountSettings as ModelAccountSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\src\Support\Str;
 use RuntimeException;
@@ -53,6 +55,15 @@ class PropositionService
         }
         // @TODO: Defaults to a fallback ID, this should be refactored in the future so that parts of the PDK can work without an active proposition set.
         return static::FALLBACK_PROPOSITION_ID;
+    }
+
+    /**
+     * Whether or not a proposition has been set.
+     * @return bool
+     */
+    public function hasActivePropositionId(): bool
+    {
+        return self::$activePropositionId !== null;
     }
 
     /**

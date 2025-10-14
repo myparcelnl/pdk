@@ -227,18 +227,22 @@ class Carrier extends Model
             // If neither the id or name is provided, fallback to the default carrier
             // Prevents the default carrier being returned if an unknown ID is provided
             if (!$carrierInput['id'] && !$carrierInput['name']) {
-                $propositionService = Pdk::get(PropositionService::class);
-                $proposition = $propositionService->getPropositionConfig();
-                $defaultCarrier = $propositionService->getDefaultCarrier($proposition);
-                $carrierInput['name'] = $defaultCarrier->name;
+                try {
+                    $propositionService = Pdk::get(PropositionService::class);
+                    $proposition = $propositionService->getPropositionConfig();
+                    $defaultCarrier = $propositionService->getDefaultCarrier($proposition);
+                    $carrierInput['name'] = $defaultCarrier->name;
 
-                Logger::warning(
-                    'Carrier Name and ID not given, instantiating default Carrier model',
-                    [
-                        'id'   => $data['id'] ?? null,
-                        'name' => $data['name'] ?? null,
-                    ]
-                );
+                    Logger::warning(
+                        'Carrier Name and ID not given, instantiating default Carrier model',
+                        [
+                            'id'   => $data['id'] ?? null,
+                            'name' => $data['name'] ?? null,
+                        ]
+                    );
+                } catch (\Exception $e) {
+                    Logger::error('Failed to get default carrier', ['exception' => $e]);
+                }
             }
             $found = $repository->get($carrierInput);
 
