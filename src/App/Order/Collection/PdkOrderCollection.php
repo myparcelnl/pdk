@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -78,7 +79,7 @@ class PdkOrderCollection extends Collection
 
             if (!$schema->hasReturnCapabilities()) {
                 Notifications::warning(
-                    "{$shipment->carrier->human} has no return capabilities",
+                    "{$shipment->carrier->name} has no return capabilities",
                     "Skipping return shipment for carrier without return capabilities",
                     Notification::CATEGORY_ACTION,
                     [
