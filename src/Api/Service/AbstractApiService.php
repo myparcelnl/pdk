@@ -58,7 +58,7 @@ abstract class AbstractApiService implements ApiServiceInterface
         ];
 
         $logContext = $this->createLogContext($uri, $method, $options);
-        $response = null;
+        $response   = null;
 
         try {
             $response = $this->clientAdapter->doRequest($method, $uri, $options);
@@ -96,7 +96,34 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     public function getBaseUrl(): string
     {
-        return $this->baseUrl ?? Pdk::get('apiUrl');
+        // Check if there's a session-specific base URL set
+        if ($this->baseUrl) {
+            return $this->baseUrl;
+        }
+
+        // Check if we're in acceptance mode via database
+        try {
+            $settingsRepository = Pdk::get(\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface::class);
+            $accountSettings = $settingsRepository->all()->account;
+            
+            Logger::info('AbstractApiService - getBaseUrl environment check', [
+                'hasAccountSettings' => $accountSettings ? 'yes' : 'no',
+                'environment' => $accountSettings ? $accountSettings->environment : 'null',
+                'isAcceptance' => $accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE ? 'yes' : 'no'
+            ]);
+            
+            if ($accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE) {
+                Logger::info('AbstractApiService - Using acceptance API URL');
+                return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
+            }
+        } catch (\Throwable $e) {
+            Logger::error('AbstractApiService - Error checking environment', [
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        // Fall back to default API URL from config
+        return Pdk::get('apiUrl');
     }
 
     /**
@@ -107,8 +134,10 @@ abstract class AbstractApiService implements ApiServiceInterface
         return [];
     }
 
+
     /**
-     * @param string $baseUrl
+     * @param  string $baseUrl
+     *
      * @return ApiServiceInterface
      */
     public function setBaseUrl(string $baseUrl): ApiServiceInterface
@@ -119,6 +148,7 @@ abstract class AbstractApiService implements ApiServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\Api\Request\RequestInterface $request
+     *
      * @return string
      */
     protected function buildUri(RequestInterface $request): string
@@ -128,7 +158,7 @@ abstract class AbstractApiService implements ApiServiceInterface
             trim($request->getPath(), '/'),
         ]);
 
-        if (!empty($request->getQueryString())) {
+        if (! empty($request->getQueryString())) {
             $url .= "?{$request->getQueryString()}";
         }
 
@@ -139,6 +169,7 @@ abstract class AbstractApiService implements ApiServiceInterface
      * @param  string $uri
      * @param  string $method
      * @param  array  $options
+     *
      * @return array
      */
     private function createLogContext(string $uri, string $method, array $options): array
