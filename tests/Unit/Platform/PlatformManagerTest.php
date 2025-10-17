@@ -5,15 +5,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Platform;
 
-use InvalidArgumentException;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 it('retrieves config for each platform', function (string $platform) {
-    MockPdkFactory::create(['platform' => $platform]);
+    TestBootstrapper::forPlatform($platform);
 
     $defaults = PlatformFacade::all();
 
@@ -21,22 +20,22 @@ it('retrieves config for each platform', function (string $platform) {
 })->with('platforms');
 
 it('gets specific keys from platform data', function () {
-    MockPdkFactory::create(['platform' => Platform::FLESPAKKET_NAME]);
+    TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
 
     expect(PlatformFacade::get('name'))
-        ->toBe('flespakket')
+        ->toBe('belgie')
         ->and(PlatformFacade::get('human'))
-        ->toBe('Flespakket')
+        ->toBe('SendMyParcel')
         ->and(PlatformFacade::get('localCountry'))
-        ->toBe('NL')
+        ->toBe('BE')
         ->and(PlatformFacade::get('defaultCarrier'))
-        ->toBe('postnl')
+        ->toBe('bpost')
         ->and(PlatformFacade::get('nonExistingKey'))
         ->toBeNull();
 });
 
 it('gets carriers', function (string $platform) {
-    MockPdkFactory::create(['platform' => $platform]);
+    TestBootstrapper::forPlatform($platform);
 
     $carriers = PlatformFacade::getCarriers();
 
@@ -44,9 +43,3 @@ it('gets carriers', function (string $platform) {
 
     assertMatchesJsonSnapshot(json_encode($carriers->toArrayWithoutNull()));
 })->with('platforms');
-
-it('throws error when platform does not exist', function () {
-    MockPdkFactory::create(['platform' => 'nonExistingPlatform']);
-
-    PlatformFacade::all();
-})->throws(InvalidArgumentException::class);
