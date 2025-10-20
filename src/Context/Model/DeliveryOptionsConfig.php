@@ -32,33 +32,35 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 class DeliveryOptionsConfig extends Model
 {
     public    $attributes = [
-        'allowRetry'                     => false,
-        'basePrice'                      => 0,
-        'carrierSettings'                => [],
-        'currency'                       => 'EUR',
-        'locale'                         => null,
-        'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        'pickupLocationsDefaultView'     => null,
+        'allowRetry'                        => false,
+        'basePrice'                         => 0,
+        'carrierSettings'                   => [],
+        'currency'                          => 'EUR',
+        'locale'                            => null,
+        'packageType'                       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        'pickupLocationsDefaultView'        => null,
         'allowPickupLocationsViewSelection' => true,
-        'platform'                       => null,
-        'priceStandardDelivery'          => 0,
-        'showPriceSurcharge'             => false,
-        'closedDays'                     => [],
+        'platform'                          => null,
+        'priceStandardDelivery'             => 0,
+        'showPriceSurcharge'                => false,
+        'closedDays'                        => [],
+        'excludeParcelLockers'              => false,
     ];
 
     protected $casts      = [
-        'allowRetry'                     => 'boolean',
-        'basePrice'                      => 'float',
-        'carrierSettings'                => 'array',
-        'currency'                       => 'string',
-        'locale'                         => 'string',
-        'packageType'                    => 'string',
-        'pickupLocationsDefaultView'     => 'string',
+        'allowRetry'                        => 'boolean',
+        'basePrice'                         => 'float',
+        'carrierSettings'                   => 'array',
+        'currency'                          => 'string',
+        'locale'                            => 'string',
+        'packageType'                       => 'string',
+        'pickupLocationsDefaultView'        => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
-        'platform'                       => 'string',
-        'priceStandardDelivery'          => 'float',
-        'showPriceSurcharge'             => 'boolean',
-        'closedDays'                     => 'array',
+        'platform'                          => 'string',
+        'priceStandardDelivery'             => 'float',
+        'showPriceSurcharge'                => 'boolean',
+        'closedDays'                        => 'array',
+        'excludeParcelLockers'              => 'boolean',
     ];
 
     /**
@@ -72,8 +74,8 @@ class DeliveryOptionsConfig extends Model
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 
-        $this->showPriceSurcharge         = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
-        $this->pickupLocationsDefaultView = Settings::get(
+        $this->showPriceSurcharge                = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
+        $this->pickupLocationsDefaultView        = Settings::get(
             CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
             CheckoutSettings::ID
         );
@@ -81,8 +83,11 @@ class DeliveryOptionsConfig extends Model
             CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
             CheckoutSettings::ID
         );
-        $this->closedDays = Settings::get(CheckoutSettings::CLOSED_DAYS, CheckoutSettings::ID);
-        $this->excludeParcelLockers = Settings::get(CheckoutSettings::EXCLUDE_PARCEL_LOCKERS, CheckoutSettings::ID);
+        $this->closedDays                        = Settings::get(CheckoutSettings::CLOSED_DAYS, CheckoutSettings::ID);
+        $this->excludeParcelLockers              = Settings::get(
+            CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
+            CheckoutSettings::ID
+        );
 
         parent::__construct($data);
     }
