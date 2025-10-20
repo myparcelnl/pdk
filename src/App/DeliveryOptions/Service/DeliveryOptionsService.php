@@ -51,6 +51,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
         'priceCollect'                 => CarrierSettings::PRICE_COLLECT,
         'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS,
+        'excludeParcelLockers'         => CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
     ];
 
     /**

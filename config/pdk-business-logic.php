@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
@@ -79,6 +80,7 @@ return [
             new TrackedDefinition(),
             new ReceiptCodeDefinition(),
             new CollectDefinition(),
+            new ExcludeParcelLockersDefinition(),
         ];
     }),
 
