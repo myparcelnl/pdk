@@ -1760,6 +1760,23 @@
           "$component": "MultiDateInput",
           "label": "settings_checkout_closed_days",
           "description": "settings_checkout_closed_days_description"
+        },
+        {
+          "name": "excludeParcelLockers",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "enableDeliveryOptions"
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_checkout_exclude_parcel_lockers",
+          "description": "settings_checkout_exclude_parcel_lockers_description"
         }
       ],
       "children": null

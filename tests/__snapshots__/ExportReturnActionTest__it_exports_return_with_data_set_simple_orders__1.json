@@ -69,7 +69,8 @@
             "sameDayDelivery": -1,
             "signature": -1,
             "tracked": -1,
-            "collect": -1
+            "collect": -1,
+            "excludeParcelLockers": -1
           },
           "deliveryType": "standard",
           "packageType": "package"
@@ -137,7 +138,8 @@
                 "sameDayDelivery": -1,
                 "signature": -1,
                 "tracked": -1,
-                "collect": -1
+                "collect": -1,
+                "excludeParcelLockers": -1
               },
               "deliveryType": "standard",
               "packageType": "package"
@@ -192,7 +194,8 @@
                 "sameDayDelivery": -1,
                 "signature": 1,
                 "tracked": -1,
-                "collect": -1
+                "collect": -1,
+                "excludeParcelLockers": -1
               },
               "deliveryType": "morning",
               "packageType": "package"
@@ -256,7 +259,8 @@
                 "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
-                "packageType": -1
+                "packageType": -1,
+                "excludeParcelLockers": -1
               },
               "mergedSettings": {
                 "id": "product",
@@ -274,7 +278,8 @@
                 "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
-                "packageType": -1
+                "packageType": -1,
+                "excludeParcelLockers": -1
               }
             }
           }
@@ -360,7 +365,8 @@
             "sameDayDelivery": -1,
             "signature": -1,
             "tracked": -1,
-            "collect": -1
+            "collect": -1,
+            "excludeParcelLockers": -1
           },
           "deliveryType": "evening",
           "packageType": "package"
@@ -426,7 +432,8 @@
                 "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
-                "packageType": -1
+                "packageType": -1,
+                "excludeParcelLockers": -1
               },
               "mergedSettings": {
                 "id": "product",
@@ -444,7 +451,8 @@
                 "exportTracked": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
-                "packageType": -1
+                "packageType": -1,
+                "excludeParcelLockers": -1
               }
             }
           }
