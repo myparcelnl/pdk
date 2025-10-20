@@ -20,6 +20,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
  * @property int<-1|0|1>         $collect
+ * @property int<-1|0|1>         $excludeParcelLockers
  */
 class ShipmentOptions extends Model
 {
@@ -35,6 +36,7 @@ class ShipmentOptions extends Model
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
     public const COLLECT           = 'collect';
+    public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
@@ -49,6 +51,7 @@ class ShipmentOptions extends Model
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
         self::COLLECT           => TriStateService::INHERIT,
+        self::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -64,5 +67,6 @@ class ShipmentOptions extends Model
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
         self::COLLECT           => TriStateService::TYPE_STRICT,
+        self::EXCLUDE_PARCEL_LOCKERS => TriStateService::TYPE_STRICT,
     ];
 }

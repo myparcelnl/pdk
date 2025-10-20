@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property bool                                    $showDeliveryDay
  * @property bool                                    $useSeparateAddressFields
  * @property bool                                    $enableAddressWidget
+ * @property bool                                    $excludeParcelLockers
  */
 class CheckoutSettings extends AbstractSettingsModel
 {
@@ -47,7 +48,9 @@ class CheckoutSettings extends AbstractSettingsModel
     public const SHOW_TAX_FIELDS     = 'showTaxFields';
     /** Address widget */
     public const ENABLE_ADDRESS_WIDGET = 'enableAddressWidget';
-    public const CLOSED_DAYS          = 'closedDays';
+    public const CLOSED_DAYS           = 'closedDays';
+    /** Parcel lockers */
+    public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
 
     protected $attributes = [
         'id' => self::ID,
@@ -64,7 +67,8 @@ class CheckoutSettings extends AbstractSettingsModel
         self::USE_SEPARATE_ADDRESS_FIELDS               => false,
         self::SHOW_TAX_FIELDS                           => true,
         self::ENABLE_ADDRESS_WIDGET                     => false,
-        self::CLOSED_DAYS                               => []
+        self::CLOSED_DAYS                               => [],
+        self::EXCLUDE_PARCEL_LOCKERS                    => false,
     ];
 
     protected $casts      = [
@@ -81,5 +85,6 @@ class CheckoutSettings extends AbstractSettingsModel
         self::SHOW_TAX_FIELDS                           => 'bool',
         self::ENABLE_ADDRESS_WIDGET                     => 'bool',
         self::CLOSED_DAYS                               => 'array',
+        self::EXCLUDE_PARCEL_LOCKERS                    => 'bool',
     ];
 }

@@ -27,6 +27,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
  * @property array  $closedDays
+ * @property bool   $excludeParcelLockers
  */
 class DeliveryOptionsConfig extends Model
 {
@@ -81,6 +82,7 @@ class DeliveryOptionsConfig extends Model
             CheckoutSettings::ID
         );
         $this->closedDays = Settings::get(CheckoutSettings::CLOSED_DAYS, CheckoutSettings::ID);
+        $this->excludeParcelLockers = Settings::get(CheckoutSettings::EXCLUDE_PARCEL_LOCKERS, CheckoutSettings::ID);
 
         parent::__construct($data);
     }
