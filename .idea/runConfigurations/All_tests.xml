@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All tests" type="CompoundRunConfigurationType">
-    <toRun name="All integration tests" type="PhpBehatConfigurationType" />
-    <toRun name="All unit tests" type="PestRunConfigurationType" />
-    <method v="2" />
-  </configuration>
-</component>

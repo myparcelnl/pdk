@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="true" type="PhpBehatConfigurationType">
-    <BehatRunner scenario="" scope="Yml" />
-    <CommandLine workingDirectory="$PROJECT_DIR$" />
-    <method v="2" />
-  </configuration>
-</component>
