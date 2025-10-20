@@ -169,7 +169,7 @@ it('uses correct price when price is shown as surcharge', function () {
                     'cutoffTimeSameDay'            => '10:00',
                     'priceCollect'                 => 1.4595,
                     'priceExpressDelivery'         => 1.4595,
-
+                    'excludeParcelLockers'         => false,
                 ],
             ],
             'currency'                          => 'EUR',
