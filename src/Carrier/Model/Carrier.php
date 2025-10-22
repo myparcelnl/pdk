@@ -35,24 +35,45 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 class Carrier extends Model
 {
     public const CARRIER_POSTNL_ID                   = 1;
+    /**
+     * @deprecated use CARRIER_POSTNL_NAME
+     */
     public const CARRIER_POSTNL_LEGACY_NAME          = 'postnl';
     public const CARRIER_POSTNL_NAME                 = 'POSTNL';
     public const CARRIER_BPOST_ID                    = 2;
+    /**
+     * @deprecated use CARRIER_BPOST_NAME
+     */
     public const CARRIER_BPOST_LEGACY_NAME           = 'bpost';
     public const CARRIER_BPOST_NAME                  = 'BPOST';
     public const CARRIER_CHEAP_CARGO_ID              = 3;
+    /**
+     * @deprecated use CARRIER_CHEAP_CARGO_NAME
+     */
     public const CARRIER_CHEAP_CARGO_LEGACY_NAME     = 'cheapcargo';
     public const CARRIER_CHEAP_CARGO_NAME            = 'CHEAP_CARGO';
     public const CARRIER_DPD_ID                      = 4;
+    /**
+     * @deprecated use CARRIER_DPD_NAME
+     */
     public const CARRIER_DPD_LEGACY_NAME             = 'dpd';
     public const CARRIER_DPD_NAME                    = 'DPD';
     public const CARRIER_INSTABOX_ID                 = 5;
+    /**
+     * @deprecated use CARRIER_INSTABOX_NAME
+     */
     public const CARRIER_INSTABOX_LEGACY_NAME        = 'instabox';
     public const CARRIER_INSTABOX_NAME               = 'INSTABOX';
     public const CARRIER_DHL_ID                      = 6;
+    /**
+     * @deprecated use CARRIER_DHL_NAME
+     */
     public const CARRIER_DHL_LEGACY_NAME             = 'dhl';
     public const CARRIER_DHL_NAME                    = 'DHL';
     public const CARRIER_BOL_COM_ID                  = 7;
+    /**
+     * @deprecated use CARRIER_BOL_COM_NAME
+     */
     public const CARRIER_BOL_COM_LEGACY_NAME         = 'bol.com';
     public const CARRIER_BOL_COM_NAME                = 'BOL';
     /**
@@ -65,12 +86,21 @@ class Carrier extends Model
     public const CARRIER_UPS_LEGACY_NAME             = 'ups';
     public const CARRIER_UPS_NAME                    = 'UPS';
     public const CARRIER_DHL_FOR_YOU_ID              = 9;
+    /**
+     * @deprecated use CARRIER_DHL_FOR_YOU_NAME
+     */
     public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
     public const CARRIER_DHL_FOR_YOU_NAME            = 'DHL_FOR_YOU';
     public const CARRIER_DHL_PARCEL_CONNECT_ID       = 10;
+    /**
+     * @deprecated use CARRIER_DHL_PARCEL_CONNECT_NAME
+     */
     public const CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME = 'dhlparcelconnect';
     public const CARRIER_DHL_PARCEL_CONNECT_NAME     = 'DHL_PARCEL_CONNECT';
     public const CARRIER_DHL_EUROPLUS_ID             = 11;
+    /**
+     * @deprecated use CARRIER_DHL_EUROPLUS_NAME
+     */
     public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
     public const CARRIER_DHL_EUROPLUS_NAME           = 'DHL_EUROPLUS';
     public const CARRIER_UPS_STANDARD_ID         = 12;
