@@ -318,7 +318,65 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         return [
             new SettingsDivider($this->createGenericLabel('delivery_options')),
-            new InteractiveElement(CarrierSettings::DELIVERY_OPTIONS_ENABLED, Components::INPUT_TOGGLE),
+            (new InteractiveElement(CarrierSettings::DELIVERY_OPTIONS_ENABLED, Components::INPUT_TOGGLE))
+                ->builder(function (FormOperationBuilder $builder) {
+                    $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_DELIVERY_OPTIONS)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_STANDARD_DELIVERY)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_MORNING_DELIVERY)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_EVENING_DELIVERY)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_SAME_DAY_DELIVERY)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_MONDAY_DELIVERY)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_SATURDAY_DELIVERY)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_SIGNATURE)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_ONLY_RECIPIENT)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_PICKUP_LOCATIONS)
+                            ->if->eq(false);
+
+                        $afterUpdate
+                            ->setValue(false)
+                            ->on(CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS)
+                            ->if->eq(false);
+                    });
+                }),
 
             /**
              * Home delivery

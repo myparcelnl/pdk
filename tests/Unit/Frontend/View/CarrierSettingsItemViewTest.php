@@ -267,3 +267,22 @@ it(
 
     ],
 ]);
+
+it('adds afterUpdate logic to delivery options enabled toggle', function () {
+    $carrier = factory(Carrier::class)->make();
+    $view = new CarrierSettingsItemView($carrier);
+    
+    $elements = $view->toArray();
+    
+    // Debug: let's see the structure
+    $deliveryOptionsFound = false;
+    foreach ($elements['elements'] as $element) {
+        if (isset($element['name']) && $element['name'] === CarrierSettings::DELIVERY_OPTIONS_ENABLED) {
+            $deliveryOptionsFound = true;
+            expect($element)->toHaveKey('$builders');
+            break;
+        }
+    }
+    
+    expect($deliveryOptionsFound)->toBeTrue();
+});
