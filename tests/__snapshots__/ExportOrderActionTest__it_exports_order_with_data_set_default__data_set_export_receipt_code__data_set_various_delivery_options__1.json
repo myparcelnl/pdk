@@ -32,7 +32,9 @@
         "options": {
           "package_type": 1,
           "delivery_type": 3,
-          "delivery_date": "2077-10-23 09:47:51"
+          "delivery_date": "2077-10-23 09:47:51",
+          "only_recipient": 1,
+          "signature": 1
         },
         "physical_properties": {
           "weight": 0

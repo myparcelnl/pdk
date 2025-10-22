@@ -26,7 +26,11 @@
         },
         "options": {
           "package_type": 1,
-          "delivery_type": 2
+          "delivery_type": 2,
+          "insurance": {
+            "amount": 10000,
+            "currency": "EUR"
+          }
         },
         "physical_properties": {
           "weight": 1
