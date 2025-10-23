@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Settings;
 use InvalidArgumentException;
 use MyParcelNL\Pdk\Api\Response\JsonResponse;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
+use MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
@@ -21,11 +22,20 @@ class UpdatePluginSettingsAction implements ActionInterface
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
+     * @var \MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService
      */
-    public function __construct(PdkSettingsRepositoryInterface $settingsRepository)
-    {
+    private $deliveryOptionsResetService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
+     * @param  \MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService          $deliveryOptionsResetService
+     */
+    public function __construct(
+        PdkSettingsRepositoryInterface $settingsRepository,
+        DeliveryOptionsResetService $deliveryOptionsResetService
+    ) {
         $this->settingsRepository = $settingsRepository;
+        $this->deliveryOptionsResetService = $deliveryOptionsResetService;
     }
 
     /**
@@ -76,18 +86,7 @@ class UpdatePluginSettingsAction implements ActionInterface
 
             // Check if DELIVERY_OPTIONS_ENABLED is being disabled
             if ($carrierSettings->deliveryOptionsEnabled === false) {
-                // Reset all underlying delivery options settings to false
-                $carrierSettings->allowDeliveryOptions = false;
-                $carrierSettings->allowStandardDelivery = false;
-                $carrierSettings->allowMorningDelivery = false;
-                $carrierSettings->allowEveningDelivery = false;
-                $carrierSettings->allowSameDayDelivery = false;
-                $carrierSettings->allowMondayDelivery = false;
-                $carrierSettings->allowSaturdayDelivery = false;
-                $carrierSettings->allowSignature = false;
-                $carrierSettings->allowOnlyRecipient = false;
-                $carrierSettings->allowPickupLocations = false;
-                $carrierSettings->allowDeliveryTypeExpress = false;
+                $this->deliveryOptionsResetService->resetDeliveryOptions($carrierSettings);
             }
         }
     }
