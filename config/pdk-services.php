@@ -23,6 +23,7 @@ use MyParcelNL\Pdk\App\Installer\Service\InstallerService;
 use MyParcelNL\Pdk\App\Installer\Service\MigrationService;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
+use MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\PdkWebhookManager;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
@@ -219,6 +220,11 @@ return [
      * Handles order options calculation.
      */
     PdkOrderOptionsServiceInterface::class     => autowire(PdkOrderOptionsService::class),
+
+    /**
+     * Handles resetting delivery options when delivery options are disabled.
+     */
+    DeliveryOptionsResetService::class         => autowire(DeliveryOptionsResetService::class),
 
     /**
      * Handles executing webhooks.

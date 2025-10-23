@@ -486,6 +486,122 @@
         },
         {
           "name": "deliveryOptionsEnabled",
+          "$builders": [
+            {
+              "$afterUpdate": [
+                {
+                  "$setValue": {
+                    "$target": "allowDeliveryOptions",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowStandardDelivery",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowMorningDelivery",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowEveningDelivery",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowSameDayDelivery",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowMondayDelivery",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowSaturdayDelivery",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowSignature",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowOnlyRecipient",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowPickupLocations",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "$setValue": {
+                    "$target": "allowDeliveryTypeExpress",
+                    "$if": [
+                      {
+                        "$eq": false
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
           "$component": "ToggleInput",
           "label": "settings_carrier_delivery_options_enabled",
           "description": "settings_carrier_delivery_options_enabled_description"
