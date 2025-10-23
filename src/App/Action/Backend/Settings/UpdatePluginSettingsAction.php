@@ -75,7 +75,7 @@ class UpdatePluginSettingsAction implements ActionInterface
      */
     private function resetDeliveryOptionsWhenDisabled(Settings $settings): void
     {
-        if (! $settings->carrier) {
+        if ($settings->carrier === null) {
             return;
         }
 
