@@ -92,7 +92,7 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
 
         $accountSettings = $this->settingsRepository->all()->account;
 
-        return $accountSettings->apiKey === $apiKey && ! $accountSettings->apiKeyValid;
+        return $accountSettings->apiKey !== $apiKey;
     }
 
     /**
