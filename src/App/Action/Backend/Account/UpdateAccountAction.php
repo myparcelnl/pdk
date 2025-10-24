@@ -70,6 +70,7 @@ class UpdateAccountAction implements ActionInterface
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Throwable
      */
     public function handle(Request $request): Response
     {
