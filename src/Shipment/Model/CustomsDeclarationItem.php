@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
@@ -63,7 +63,7 @@ class CustomsDeclarationItem extends Model
         $country = $triStateService->resolveString(
             $productSettings->countryOfOrigin,
             Settings::get(CustomsSettings::COUNTRY_OF_ORIGIN, CustomsSettings::ID),
-            Platform::get('localCountry')
+            self::getLocalCountry()
         );
 
         return new static(
@@ -79,5 +79,23 @@ class CustomsDeclarationItem extends Model
                 ],
             ])
         );
+    }
+
+    /**
+     * Get local country from proposition config.
+     *
+     * @return string
+     */
+    private static function getLocalCountry(): string
+    {
+        try {
+            $propositionService = Pdk::get(PropositionService::class);
+            $proposition = $propositionService->getPropositionConfig();
+            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
+            return $platformConfig['localCountry'] ?? 'NL';
+        } catch (\Exception $e) {
+            // Fallback to NL if proposition service is not available
+            return 'NL';
+        }
     }
 }

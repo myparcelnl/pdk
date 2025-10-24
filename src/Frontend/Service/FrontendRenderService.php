@@ -272,12 +272,12 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     ): string {
         try {
             $context = $this->contextService->createContexts($contexts, $contextArguments);
-
             return strtr($template, $templateParameters + ['__CONTEXT__' => $this->encodeContext($context)]);
         } catch (Throwable $e) {
             Logger::error(
                 $e->getMessage(),
-                array_merge([
+                array_merge(
+                    [
                     'trace' => $e->getTrace(),
                 ],
                     compact(
@@ -285,7 +285,8 @@ class FrontendRenderService implements FrontendRenderServiceInterface
                         'contexts',
                         'templateParameters',
                         'contextArguments'
-                    ))
+                    )
+                )
             );
 
             return '';

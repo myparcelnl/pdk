@@ -25,6 +25,11 @@ final class FitInMailboxDefinition implements OrderOptionDefinitionInterface
         return null;
     }
 
+    public function getPropositionKey(): ?string
+    {
+        return null;
+    }
+
     public function validate(CarrierSchema $carrierSchema): bool
     {
         return $carrierSchema->canBeMailbox();

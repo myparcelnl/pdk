@@ -112,7 +112,7 @@
               "currency": "EUR"
             },
             "label_description": "",
-            "large_format": 1,
+            "large_format": 0,
             "only_recipient": 1,
             "package_type": 1,
             "return": 0,

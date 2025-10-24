@@ -25,6 +25,11 @@ final class CustomsCodeDefinition implements OrderOptionDefinitionInterface
         return null;
     }
 
+    public function getPropositionKey(): ?string
+    {
+        return null;
+    }
+
     public function validate(CarrierSchema $carrierSchema): bool
     {
         return true;

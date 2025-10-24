@@ -16,6 +16,8 @@ use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -373,7 +375,13 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
 
     $carrier = factory(Carrier::class)
         ->withName(Carrier::CARRIER_DPD_NAME)
-        ->withCapabilities(factory(CarrierCapabilities::class)->withShipmentOptions(['insurance' => [52000]]))
+        ->withOutboundFeatures(
+            factory(PropositionCarrierFeatures::class)
+            ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+            ->withMetadata([
+                PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [52000],
+            ])
+        )
         ->make();
 
     $order = factory(PdkOrder::class)

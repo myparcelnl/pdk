@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,12 +12,14 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
+use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -35,7 +38,7 @@ it(
         $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(Carrier::CARRIER_POSTNL_NAME))
             ->make();
 
-        $carrierSettingsFactory = factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+        $carrierSettingsFactory = factory(CarrierSettings::class, FrontendData::getLegacyIdentifier($fakeCarrier->externalIdentifier))
             ->withDeliveryOptions();
 
         if ($carrierSettingsFactoryCb) {
@@ -58,7 +61,7 @@ it(
 )->with([
     'simple' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -83,7 +86,7 @@ it(
 
     'only virtual products' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'product' => [
@@ -96,7 +99,7 @@ it(
 
     'mailbox package' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -114,7 +117,7 @@ it(
 
     'mailbox package that is too heavy for mailbox' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 5,
@@ -132,7 +135,7 @@ it(
 
     'mailbox package with fit in mailbox' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -151,7 +154,7 @@ it(
 
     'digital stamp' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -169,7 +172,7 @@ it(
 
     'letter' => [
         'cart' => [
-            'carrier' => ['name' => 'postnl'],
+            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -185,9 +188,9 @@ it(
         ],
     ],
 
-    'international mailbox that becomes package for non-custom postnl' => [
+    'international mailbox that becomes package for non-custom POSTNL' => [
         'cart' => [
-            'carrier'        => ['name' => 'postnl'],
+            'carrier'        => ['name' => 'POSTNL'],
             'shippingMethod' => [
                 'shippingAddress' => ['cc' => 'FR'],
             ],
@@ -206,10 +209,10 @@ it(
         ],
     ],
 
-    'custom postnl: eu mailbox package' => [
+    'custom POSTNL: eu mailbox package' => [
         'cart'                   => [
             'carrier'        => [
-                'externalIdentifier' => 'postnl:123',
+                'externalIdentifier' => 'POSTNL:123',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'FR'],
@@ -230,7 +233,7 @@ it(
             ],
         ],
         'carrierFactory'         => function () {
-            return factory(Carrier::class)->withExternalIdentifier('postnl:123');
+            return factory(Carrier::class)->withExternalIdentifier('POSTNL:123');
         },
         'carrierSettingsFactory' => function () {
             return function (CarrierSettingsFactory $factory) {
@@ -241,10 +244,10 @@ it(
         },
     ],
 
-    'custom postnl: be mailbox package' => [
+    'custom POSTNL: be mailbox package' => [
         'cart'                   => [
             'carrier'        => [
-                'externalIdentifier' => 'postnl:123',
+                'externalIdentifier' => 'POSTNL:123',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'BE'],
@@ -265,7 +268,7 @@ it(
             ],
         ],
         'carrierFactory'         => function () {
-            return factory(Carrier::class)->withExternalIdentifier('postnl:123');
+            return factory(Carrier::class)->withExternalIdentifier('POSTNL:123');
         },
         'carrierSettingsFactory' => function () {
             return function (CarrierSettingsFactory $factory) {
@@ -276,10 +279,10 @@ it(
         },
     ],
 
-    'custom postnl: row mailbox package' => [
+    'custom POSTNL: row mailbox package' => [
         'cart'                   => [
             'carrier'        => [
-                'externalIdentifier' => 'postnl:123',
+                'externalIdentifier' => 'POSTNL:123',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'KH'],
@@ -300,7 +303,7 @@ it(
             ],
         ],
         'carrierFactory'         => function () {
-            return factory(Carrier::class)->withExternalIdentifier('postnl:123');
+            return factory(Carrier::class)->withExternalIdentifier('POSTNL:123');
         },
         'carrierSettingsFactory' => function () {
             return function (CarrierSettingsFactory $factory) {
@@ -311,4 +314,3 @@ it(
         },
     ],
 ]);
-

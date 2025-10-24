@@ -35,12 +35,34 @@ class ShipmentOptions extends Model
     public const ONLY_RECIPIENT    = 'onlyRecipient';
     public const RECEIPT_CODE      = 'receiptCode';
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
+
+    public const SATURDAY_DELIVERY = 'saturdayDelivery';
+
+    public const MONDAY_DELIVERY   = 'mondayDelivery';
+
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
     public const COLLECT           = 'collect';
     public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
     public const FRESH_FOOD        = 'freshFood';
     public const FROZEN            = 'frozen';
+
+    public const ALL_SHIPMENT_OPTIONS = [
+        self::LABEL_DESCRIPTION,
+        self::INSURANCE,
+        self::AGE_CHECK,
+        self::DIRECT_RETURN,
+        self::HIDE_SENDER,
+        self::LARGE_FORMAT,
+        self::ONLY_RECIPIENT,
+        self::RECEIPT_CODE,
+        self::SAME_DAY_DELIVERY,
+        self::SIGNATURE,
+        self::TRACKED,
+        self::COLLECT,
+        self::SATURDAY_DELIVERY,
+        self::MONDAY_DELIVERY,
+    ];
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,

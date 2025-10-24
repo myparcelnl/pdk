@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -13,6 +14,7 @@ use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Log\LoggerInterface;
+
 use function DI\factory;
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -51,7 +53,7 @@ function expectSettingsToContain(array $values): void
     expect(Arr::dot($settings->toArray()))->toHaveKeysAndValues($values);
 }
 
-it('performs a fresh install of the app, filling default values from platform and config', function () {
+it('performs a fresh install of the app, filling default values from config', function () {
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
     $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
@@ -69,7 +71,6 @@ it('performs a fresh install of the app, filling default values from platform an
     expectSettingsToContain([
         /** From default settings */
         'checkout.deliveryOptionsHeader'      => 'default',
-        'checkout.pickupLocationsDefaultView' => 'list',
 
         /**
          * Expect installation migration to have run

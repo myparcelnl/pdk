@@ -1,18 +1,20 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Carrier
  * @method Carrier make()
- * @method $this withCapabilities(array|CarrierCapabilities|CarrierCapabilitiesFactory $capabilities)
  * @method $this withEnabled(bool $enabled)
  * @method $this withExternalIdentifier(string $externalIdentifier)
  * @method $this withHuman(string $human)
@@ -22,7 +24,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withName(string $name)
  * @method $this withOptional(bool $optional)
  * @method $this withPrimary(bool $primary)
- * @method $this withReturnCapabilities(array|CarrierCapabilities|CarrierCapabilitiesFactory $returnCapabilities)
  * @method $this withContractId(int $contractId)
  * @method $this withType(string $type)
  */
@@ -45,8 +46,8 @@ final class CarrierFactory extends AbstractModelFactory
         return $this
             ->withName($name)
             ->withHuman($name)
-            ->withCapabilities(factory(CarrierCapabilities::class)->fromCarrier($name))
-            ->withReturnCapabilities(factory(CarrierCapabilities::class)->fromCarrier($name));
+            ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->fromCarrier($name))
+            ->withInboundFeatures(factory(PropositionCarrierFeatures::class)->fromCarrier($name));
     }
 
     public function fromDhlEuroplus(): self
@@ -84,11 +85,18 @@ final class CarrierFactory extends AbstractModelFactory
             ->fromCarrier(Carrier::CARRIER_POSTNL_NAME);
     }
 
-    public function fromUps(): self
+    public function fromUpsStandard(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_UPS_ID)
-            ->fromCarrier(Carrier::CARRIER_UPS_NAME);
+            ->withId(Carrier::CARRIER_UPS_STANDARD_ID)
+            ->fromCarrier(Carrier::CARRIER_UPS_STANDARD_NAME);
+    }
+
+    public function fromUpsExpressSaver(): self
+    {
+        return $this
+            ->withId(Carrier::CARRIER_UPS_EXPRESS_SAVER_ID)
+            ->fromCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME);
     }
 
     public function getModel(): string
@@ -101,6 +109,6 @@ final class CarrierFactory extends AbstractModelFactory
         return $this
             ->withName(Carrier::CARRIER_POSTNL_NAME)
             ->withEnabled(true)
-            ->withCapabilities(factory(CarrierCapabilities::class));
+            ->withOutboundFeatures(factory(PropositionCarrierFeatures::class));
     }
 }
