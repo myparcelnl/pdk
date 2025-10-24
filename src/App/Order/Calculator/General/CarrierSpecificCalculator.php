@@ -16,9 +16,12 @@ use MyParcelNL\Pdk\App\Order\Calculator\UPSStandard\UPSStandardCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPSExpressSaver\UPSExpressSaverCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
+    // ...existing code...
     /**
      * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
@@ -36,7 +39,7 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 
     public function calculate(): void
     {
-        $carrierName = $this->order->deliveryOptions->carrier->name;
+        $carrierName = Pdk::get(PropositionService::class)->mapLegacyToNewCarrierName($this->order->deliveryOptions->carrier->name);
         $calculator  = self::CARRIER_CALCULATOR_MAP[$carrierName] ?? null;
 
         if (! $calculator) {

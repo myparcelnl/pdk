@@ -40,7 +40,7 @@
       "carrierConfigurations": [],
       "carriers": [
         {
-          "externalIdentifier": "postnl",
+          "externalIdentifier": "POSTNL",
           "enabled": true,
           "optional": false,
           "primary": false,

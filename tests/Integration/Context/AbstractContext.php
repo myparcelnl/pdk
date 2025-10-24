@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;
 use MyParcelNL\Pdk\Tests\Integration\Context\Concern\ResolvesModels;
@@ -192,7 +193,11 @@ abstract class AbstractContext extends TestCase implements ContextInterface
      */
     protected function getValidApiKey(): string
     {
-        return getenv(sprintf('API_KEY_%s', strtoupper(Platform::getPropositionName()))) ?: TestBootstrapper::API_KEY_VALID;
+        $propositionName = Pdk::get(PropositionService::class)->getPropositionConfig()->name;
+        if (! $propositionName) {
+            return TestBootstrapper::API_KEY_VALID;
+        }
+        return getenv(sprintf('API_KEY_%s', strtoupper($propositionName))) ?: TestBootstrapper::API_KEY_VALID;
     }
 
     /**

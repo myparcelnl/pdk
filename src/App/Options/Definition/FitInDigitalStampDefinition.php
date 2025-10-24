@@ -25,6 +25,11 @@ final class FitInDigitalStampDefinition implements OrderOptionDefinitionInterfac
         return null;
     }
 
+    public function getPropositionKey(): ?string
+    {
+        return null;
+    }
+
     public function validate(CarrierSchema $carrierSchema): bool
     {
         return $carrierSchema->canBeDigitalStamp();

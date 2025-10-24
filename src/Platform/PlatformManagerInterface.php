@@ -17,9 +17,4 @@ interface PlatformManagerInterface
      * @return mixed
      */
     public function get(string $key);
-
-    /**
-     * @return string
-     */
-    public function getPropositionName(): string;
 }
