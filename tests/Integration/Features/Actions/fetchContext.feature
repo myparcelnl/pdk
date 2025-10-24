@@ -15,4 +15,4 @@ Feature: As a user I want to retrieve context for use with the frontend
     Given an invalid API key is set
     When I do a GET request to action "fetchContext" with parameters "context=dynamic"
     Then I expect the response code to be 401
-    And I expect the API key to be marked as invalid
+    And I expect error code "3000" in the response

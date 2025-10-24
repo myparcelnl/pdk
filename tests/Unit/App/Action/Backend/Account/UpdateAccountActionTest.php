@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleAclResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
@@ -192,6 +193,13 @@ it('maps carriers correctly with custom postnl contract', function () {
     // If multiple PostNL carriers are present, the custom contract should be used.
     expect($externalIdentifiers)->toBe(['postnl:23991']);
 });
+
+it('updates validity of api key', function(?string $apiKey, bool $expectedValidity) {
+    executeUpdateAccount(['apiKey' => $apiKey]);
+
+    $account = Settings::all()->account;
+    expect($account->apiKeyValid)->toBe($expectedValidity);
+})->with([null, false], ['', false], ['valid-api-key', true]);
 
 it('maps carriers correctly with multiple non-contract postnl entries', function () {
     executeUpdateAccount(['apiKey' => 'test-api-key'], null, [
