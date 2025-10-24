@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -9,6 +10,7 @@ use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
+
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 it('retrieves config for each platform', function (string $platform) {
@@ -23,9 +25,9 @@ it('gets specific keys from platform data', function () {
     TestBootstrapper::forPlatform(Platform::SENDMYPARCEL_NAME);
 
     expect(PlatformFacade::get('name'))
-        ->toBe('belgie')
+        ->toBe(Platform::LEGACY_SENDMYPARCEL_NAME)
         ->and(PlatformFacade::get('human'))
-        ->toBe('SendMyParcel')
+        ->toBe('MyParcel België')
         ->and(PlatformFacade::get('localCountry'))
         ->toBe('BE')
         ->and(PlatformFacade::get('defaultCarrier'))
