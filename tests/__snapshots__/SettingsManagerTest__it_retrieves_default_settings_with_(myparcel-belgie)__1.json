@@ -48,7 +48,6 @@
     "useSeparateAddressFields": false,
     "showTaxFields": true,
     "enableAddressWidget": false,
-    "closedDays": [],
-    "excludeParcelLockers": false
+    "closedDays": []
   }
 }
