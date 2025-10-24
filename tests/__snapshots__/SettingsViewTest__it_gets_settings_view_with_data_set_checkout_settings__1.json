@@ -1,253 +1,253 @@
 {
-  "id": "checkout",
-  "title": "settings_view_checkout_title",
-  "titleSuffix": null,
-  "description": "settings_view_checkout_description",
-  "elements": [
-    {
-      "name": "useSeparateAddressFields",
-      "$component": "ToggleInput",
-      "label": "settings_checkout_use_separate_address_fields",
-      "description": "settings_checkout_use_separate_address_fields_description"
-    },
-    {
-      "name": "enableAddressWidget",
-      "$component": "ToggleInput",
-      "label": "settings_checkout_enable_address_widget",
-      "description": "settings_checkout_enable_address_widget_description"
-    },
-    {
-      "$component": "SettingsDivider",
-      "$wrapper": false,
-      "content": "settings_checkout_delivery_options_description",
-      "heading": "settings_checkout_delivery_options_title",
-      "level": 2
-    },
-    {
-      "name": "enableDeliveryOptions",
-      "$component": "ToggleInput",
-      "label": "settings_checkout_enable_delivery_options",
-      "description": "settings_checkout_enable_delivery_options_description"
-    },
-    {
-      "name": "enableDeliveryOptionsWhenNotInStock",
-      "$builders": [
+    "id": "checkout",
+    "title": "settings_view_checkout_title",
+    "titleSuffix": null,
+    "description": "settings_view_checkout_description",
+    "elements": [
         {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "ToggleInput",
-      "label": "settings_checkout_enable_delivery_options_when_not_in_stock",
-      "description": "settings_checkout_enable_delivery_options_when_not_in_stock_description"
-    },
-    {
-      "name": "deliveryOptionsPosition",
-      "$builders": [
-        {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "SelectInput",
-      "options": [],
-      "label": "settings_checkout_delivery_options_position",
-      "description": "settings_checkout_delivery_options_position_description"
-    },
-    {
-      "name": "allowedShippingMethods",
-      "$builders": [
-        {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "ShippingMethodsInput",
-      "options": [
-        {
-          "value": "shipping:1",
-          "plainLabel": "Shipping 1"
+            "name": "useSeparateAddressFields",
+            "$component": "ToggleInput",
+            "label": "settings_checkout_use_separate_address_fields",
+            "description": "settings_checkout_use_separate_address_fields_description"
         },
         {
-          "value": "shipping:3",
-          "plainLabel": "Shipping 3",
-          "description": "My description"
-        }
-      ],
-      "label": "settings_checkout_allowed_shipping_methods",
-      "description": "settings_checkout_allowed_shipping_methods_description"
-    },
-    {
-      "name": "priceType",
-      "$builders": [
-        {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "SelectInput",
-      "options": [
-        {
-          "value": "included",
-          "label": "settings_checkout_price_type_option_included"
+            "name": "enableAddressWidget",
+            "$component": "ToggleInput",
+            "label": "settings_checkout_enable_address_widget",
+            "description": "settings_checkout_enable_address_widget_description"
         },
         {
-          "value": "excluded",
-          "label": "settings_checkout_price_type_option_excluded"
-        }
-      ],
-      "label": "settings_checkout_price_type",
-      "description": "settings_checkout_price_type_description"
-    },
-    {
-      "name": "deliveryOptionsHeader",
-      "$builders": [
-        {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "TextInput",
-      "label": "settings_checkout_delivery_options_header",
-      "description": "settings_checkout_delivery_options_header_description"
-    },
-    {
-      "name": "deliveryOptionsCustomCss",
-      "$builders": [
-        {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "CodeEditor",
-      "label": "settings_checkout_delivery_options_custom_css",
-      "description": "settings_checkout_delivery_options_custom_css_description"
-    },
-    {
-      "name": "pickupLocationsDefaultView",
-      "$builders": [
-        {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "SelectInput",
-      "options": [
-        {
-          "value": "list",
-          "label": "settings_checkout_pickup_locations_default_view_option_list"
+            "$component": "SettingsDivider",
+            "$wrapper": false,
+            "content": "settings_checkout_delivery_options_description",
+            "heading": "settings_checkout_delivery_options_title",
+            "level": 2
         },
         {
-          "value": "map",
-          "label": "settings_checkout_pickup_locations_default_view_option_map"
-        }
-      ],
-      "label": "settings_checkout_pickup_locations_default_view",
-      "description": "settings_checkout_pickup_locations_default_view_description"
-    },
-    {
-      "name": "allowPickupLocationsViewSelection",
-      "$builders": [
+            "name": "enableDeliveryOptions",
+            "$component": "ToggleInput",
+            "label": "settings_checkout_enable_delivery_options",
+            "description": "settings_checkout_enable_delivery_options_description"
+        },
         {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "ToggleInput",
-      "label": "settings_checkout_allow_pickup_locations_view_selection",
-      "description": "settings_checkout_allow_pickup_locations_view_selection_description"
-    },
-    {
-      "name": "showTaxFields",
-      "$builders": [
+            "name": "enableDeliveryOptionsWhenNotInStock",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "ToggleInput",
+            "label": "settings_checkout_enable_delivery_options_when_not_in_stock",
+            "description": "settings_checkout_enable_delivery_options_when_not_in_stock_description"
+        },
         {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "ToggleInput",
-      "label": "settings_checkout_show_tax_fields",
-      "description": "settings_checkout_show_tax_fields_description"
-    },
-    {
-      "name": "closedDays",
-      "$builders": [
+            "name": "deliveryOptionsPosition",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "SelectInput",
+            "options": [],
+            "label": "settings_checkout_delivery_options_position",
+            "description": "settings_checkout_delivery_options_position_description"
+        },
         {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
-        }
-      ],
-      "$component": "MultiDateInput",
-      "label": "settings_checkout_closed_days",
-      "description": "settings_checkout_closed_days_description"
-    },
-    {
-      "name": "excludeParcelLockers",
-      "$builders": [
+            "name": "allowedShippingMethods",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "ShippingMethodsInput",
+            "options": [
+                {
+                    "value": "shipping:1",
+                    "plainLabel": "Shipping 1"
+                },
+                {
+                    "value": "shipping:3",
+                    "plainLabel": "Shipping 3",
+                    "description": "My description"
+                }
+            ],
+            "label": "settings_checkout_allowed_shipping_methods",
+            "description": "settings_checkout_allowed_shipping_methods_description"
+        },
         {
-          "$visibleWhen": {
-            "$if": [
-              {
-                "$target": "enableDeliveryOptions"
-              }
-            ]
-          }
+            "name": "priceType",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "SelectInput",
+            "options": [
+                {
+                    "value": "included",
+                    "label": "settings_checkout_price_type_option_included"
+                },
+                {
+                    "value": "excluded",
+                    "label": "settings_checkout_price_type_option_excluded"
+                }
+            ],
+            "label": "settings_checkout_price_type",
+            "description": "settings_checkout_price_type_description"
+        },
+        {
+            "name": "deliveryOptionsHeader",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "TextInput",
+            "label": "settings_checkout_delivery_options_header",
+            "description": "settings_checkout_delivery_options_header_description"
+        },
+        {
+            "name": "deliveryOptionsCustomCss",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "CodeEditor",
+            "label": "settings_checkout_delivery_options_custom_css",
+            "description": "settings_checkout_delivery_options_custom_css_description"
+        },
+        {
+            "name": "pickupLocationsDefaultView",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "SelectInput",
+            "options": [
+                {
+                    "value": "list",
+                    "label": "settings_checkout_pickup_locations_default_view_option_list"
+                },
+                {
+                    "value": "map",
+                    "label": "settings_checkout_pickup_locations_default_view_option_map"
+                }
+            ],
+            "label": "settings_checkout_pickup_locations_default_view",
+            "description": "settings_checkout_pickup_locations_default_view_description"
+        },
+        {
+            "name": "allowPickupLocationsViewSelection",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "ToggleInput",
+            "label": "settings_checkout_allow_pickup_locations_view_selection",
+            "description": "settings_checkout_allow_pickup_locations_view_selection_description"
+        },
+        {
+            "name": "showTaxFields",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "ToggleInput",
+            "label": "settings_checkout_show_tax_fields",
+            "description": "settings_checkout_show_tax_fields_description"
+        },
+        {
+            "name": "closedDays",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "MultiDateInput",
+            "label": "settings_checkout_closed_days",
+            "description": "settings_checkout_closed_days_description"
+        },
+        {
+            "name": "excludeParcelLockers",
+            "$builders": [
+                {
+                    "$visibleWhen": {
+                        "$if": [
+                            {
+                                "$target": "enableDeliveryOptions"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "$component": "ToggleInput",
+            "label": "settings_checkout_exclude_parcel_lockers",
+            "description": "settings_checkout_exclude_parcel_lockers_description"
         }
-      ],
-      "$component": "ToggleInput",
-      "label": "settings_checkout_exclude_parcel_lockers",
-      "description": "settings_checkout_exclude_parcel_lockers_description"
-    }
-  ],
-  "children": null
+    ],
+    "children": null
 }

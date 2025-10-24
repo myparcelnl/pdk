@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Sdk\src\Support\Str;
@@ -153,14 +154,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
                 "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures->deliveryCountries ?? []) : [],
                 "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
-                "shipmentOptionsPerPackageType" => \array_reduce($legacyCarrier->capabilities->packageTypes, function ($result, $packageType) use ($legacyCarrier) {
-                    $snakeCaseKeys = array_map(function ($key) {
-                        return Str::snake($key);
-                    }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions));
-
-                    $result[$packageType] = $snakeCaseKeys ?? [];
-                    return $result;
-                }, []),
+                // Map shipment options to package type package as a fallback, if the proposition config does not have a "shipmentOptionsPerPackageType" property within the deliveryOptions.
+                "shipmentOptionsPerPackageType" =>
+                    array_key_exists('shipmentOptionsPerPackageType', $carrier->deliveryOptions) ?
+                        $carrier->deliveryOptions['shipmentOptionsPerPackageType'] :
+                        [
+                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => array_map(function ($key) {
+                                return Str::snake($key);
+                            }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions)) ?? []
+                        ],
                 "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
                 "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
                 "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? null

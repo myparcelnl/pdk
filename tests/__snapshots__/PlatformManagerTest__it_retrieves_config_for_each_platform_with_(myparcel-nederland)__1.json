@@ -188,6 +188,21 @@
                     "dropOffDelay",
                     "pickupMapAllowLoadMore"
                 ],
+                "shipmentOptionsPerPackageType": {
+                    "package": [
+                        "only_recipient",
+                        "signature"
+                    ],
+                    "mailbox": [
+                        "priority_delivery"
+                    ],
+                    "letter": [],
+                    "digital_stamp": [],
+                    "package_small": [
+                        "only_recipient",
+                        "signature"
+                    ]
+                },
                 "allowFakeDelivery": true
             }
         },

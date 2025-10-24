@@ -1,5 +1,6 @@
 <?php
 
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -326,7 +327,7 @@ it('creates platform settings from propositions', function () {
     $platformSettings = $deliveryOptionsService->createPropositionConfig();
 
     expect($platformSettings)->toHaveKey('carriers');
-    print_r($platformSettings['carriers'][0]);
+
     expect($platformSettings['carriers'][0])->toMatchArray([
         'name' => 'postnl',
         "packageTypes" => ['package', 'mailbox', 'letter', 'digital_stamp', 'package_small'],
@@ -336,11 +337,11 @@ it('creates platform settings from propositions', function () {
         "smallPackagePickupCountries" => ['NL', 'BE'],
         "fakeDelivery" => true,
         "shipmentOptionsPerPackageType" => [
-            "package" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "mailbox" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "letter" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "digital_stamp" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "package_small" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance']
+            "package" => ['only_recipient', 'signature'],
+            "mailbox" => ['priority_delivery'],
+            "letter" => [],
+            "digital_stamp" => [],
+            "package_small" => ['only_recipient', 'signature'],
         ],
         "features" => ['deliveryDaysWindow', 'dropOffDays', 'dropOffDelay', 'pickupMapAllowLoadMore'],
         "addressFields" => ['postalCode', 'street', 'city']
