@@ -228,9 +228,9 @@
     "mode": "production",
     "platform": {
       "name": "myparcel",
-      "human": "MyParcel",
+      "human": "MyParcel Nederland",
       "backofficeUrl": "https://backoffice.myparcel.nl",
-      "supportUrl": "https://developer.myparcel.nl/contact",
+      "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
       "defaultCarrier": "postnl",
       "defaultCarrierId": 1
@@ -284,53 +284,50 @@
           "trackTrace": [],
           "carriers": [
             {
-              "externalIdentifier": "postnl",
+              "externalIdentifier": "POSTNL",
               "id": 1,
-              "name": "postnl",
-              "human": "PostNL",
+              "name": "POSTNL",
               "enabled": true,
               "isDefault": true,
               "optional": false,
               "primary": false,
               "type": "main",
-              "capabilities": {
-                "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
-                "features": {
-                  "dropOffAtPostalPoint": true,
+              "inboundFeatures": {
+                "packageTypes": ["PACKAGE"],
+                "deliveryTypes": ["STANDARD_DELIVERY"],
+                "shipmentOptions": [
+                  "SIGNATURE",
+                  "RETURN",
+                  "AGE_CHECK",
+                  "ONLY_RECIPIENT",
+                  "SAME_DAY_DELIVERY",
+                  "LARGE_FORMAT",
+                  "INSURANCE"
+                ],
+                "metadata": {
                   "labelDescriptionLength": 45,
-                  "multiCollo": true
-                },
-                "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
-                "shipmentOptions": {
-                  "ageCheck": true,
-                  "return": true,
-                  "hideSender": true,
-                  "largeFormat": true,
-                  "onlyRecipient": true,
-                  "sameDayDelivery": true,
-                  "signature": true,
-                  "insurance": [
+                  "insuranceSteps": [
                     0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
                   ]
                 }
               },
-              "returnCapabilities": {
-                "deliveryTypes": ["standard"],
-                "features": {
-                  "labelDescriptionLength": 45
-                },
-                "packageTypes": ["package"],
-                "shipmentOptions": {
-                  "signature": true,
-                  "insurance": [
-                    0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-                  ],
-                  "return": true,
-                  "ageCheck": true,
-                  "onlyRecipient": true,
-                  "sameDayDelivery": false,
-                  "largeFormat": true,
-                  "collect": false
+              "outboundFeatures": {
+                "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+                "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+                "shipmentOptions": [
+                  "AGE_CHECK",
+                  "RETURN",
+                  "HIDE_SENDER",
+                  "LARGE_FORMAT",
+                  "ONLY_RECIPIENT",
+                  "SAME_DAY_DELIVERY",
+                  "SIGNATURE",
+                  "INSURANCE"
+                ],
+                "metadata": {
+                  "dropOffAtPostalPoint": true,
+                  "labelDescriptionLength": 45,
+                  "multiCollo": true
                 }
               }
             }
@@ -346,16 +343,52 @@
         "externalIdentifier": "postnl",
         "id": 1,
         "name": "postnl",
-        "human": "PostNL",
         "enabled": true,
         "isDefault": true,
         "optional": false,
         "primary": false,
         "type": "main",
+        "inboundFeatures": {
+          "packageTypes": ["PACKAGE"],
+          "deliveryTypes": ["STANDARD_DELIVERY"],
+          "shipmentOptions": [
+            "SIGNATURE",
+            "RETURN",
+            "AGE_CHECK",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "LARGE_FORMAT",
+            "INSURANCE"
+          ],
+          "metadata": {
+            "labelDescriptionLength": 45,
+            "insuranceSteps": [
+              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+            ]
+          }
+        },
+        "outboundFeatures": {
+          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+          "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+          "shipmentOptions": [
+            "AGE_CHECK",
+            "RETURN",
+            "HIDE_SENDER",
+            "LARGE_FORMAT",
+            "ONLY_RECIPIENT",
+            "SAME_DAY_DELIVERY",
+            "SIGNATURE",
+            "INSURANCE"
+          ],
+          "metadata": {
+            "dropOffAtPostalPoint": true,
+            "labelDescriptionLength": 45,
+            "multiCollo": true
+          }
+        },
         "capabilities": {
           "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
           "features": {
-            "dropOffAtPostalPoint": true,
             "labelDescriptionLength": 45,
             "multiCollo": true
           },
@@ -367,10 +400,7 @@
             "largeFormat": true,
             "onlyRecipient": true,
             "sameDayDelivery": true,
-            "signature": true,
-            "insurance": [
-              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-            ]
+            "signature": true
           }
         },
         "returnCapabilities": {
@@ -381,15 +411,11 @@
           "packageTypes": ["package"],
           "shipmentOptions": {
             "signature": true,
-            "insurance": [
-              0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-            ],
             "return": true,
             "ageCheck": true,
             "onlyRecipient": true,
-            "sameDayDelivery": false,
-            "largeFormat": true,
-            "collect": false
+            "sameDayDelivery": true,
+            "largeFormat": true
           }
         }
       }
@@ -454,11 +480,11 @@
           "allowMondayDelivery": false,
           "allowMorningDelivery": false,
           "allowOnlyRecipient": false,
+          "allowExpressDelivery": false,
           "allowPickupLocations": false,
           "allowSameDayDelivery": false,
           "allowSaturdayDelivery": false,
           "allowSignature": false,
-          "allowDeliveryTypeExpress": false,
           "cutoffTime": "16:00",
           "cutoffTimeSameDay": "10:00",
           "defaultPackageType": "package",
@@ -529,53 +555,50 @@
       "trackTrace": [],
       "carriers": [
         {
-          "externalIdentifier": "postnl",
+          "externalIdentifier": "POSTNL",
           "id": 1,
-          "name": "postnl",
-          "human": "PostNL",
+          "name": "POSTNL",
           "enabled": true,
           "isDefault": true,
           "optional": false,
           "primary": false,
           "type": "main",
-          "capabilities": {
-            "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
-            "features": {
-              "dropOffAtPostalPoint": true,
+          "inboundFeatures": {
+            "packageTypes": ["PACKAGE"],
+            "deliveryTypes": ["STANDARD_DELIVERY"],
+            "shipmentOptions": [
+              "SIGNATURE",
+              "RETURN",
+              "AGE_CHECK",
+              "ONLY_RECIPIENT",
+              "SAME_DAY_DELIVERY",
+              "LARGE_FORMAT",
+              "INSURANCE"
+            ],
+            "metadata": {
               "labelDescriptionLength": 45,
-              "multiCollo": true
-            },
-            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
-            "shipmentOptions": {
-              "ageCheck": true,
-              "return": true,
-              "hideSender": true,
-              "largeFormat": true,
-              "onlyRecipient": true,
-              "sameDayDelivery": true,
-              "signature": true,
-              "insurance": [
+              "insuranceSteps": [
                 0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
               ]
             }
           },
-          "returnCapabilities": {
-            "deliveryTypes": ["standard"],
-            "features": {
-              "labelDescriptionLength": 45
-            },
-            "packageTypes": ["package"],
-            "shipmentOptions": {
-              "signature": true,
-              "insurance": [
-                0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
-              ],
-              "return": true,
-              "ageCheck": true,
-              "onlyRecipient": true,
-              "sameDayDelivery": false,
-              "largeFormat": true,
-              "collect": false
+          "outboundFeatures": {
+            "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+            "deliveryTypes": ["morning", "standard", "evening", "pickup", "express"],
+            "shipmentOptions": [
+              "AGE_CHECK",
+              "RETURN",
+              "HIDE_SENDER",
+              "LARGE_FORMAT",
+              "ONLY_RECIPIENT",
+              "SAME_DAY_DELIVERY",
+              "SIGNATURE",
+              "INSURANCE"
+            ],
+            "metadata": {
+              "dropOffAtPostalPoint": true,
+              "labelDescriptionLength": 45,
+              "multiCollo": true
             }
           }
         }

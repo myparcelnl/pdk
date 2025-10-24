@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,6 +12,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -21,6 +23,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
@@ -70,7 +73,6 @@ it(
         $request         = MockApi::ensureLastRequest();
 
         $body = json_decode(
-
             $request->getBody()
                 ->getContents(),
             true
@@ -93,8 +95,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
@@ -109,8 +111,8 @@ it(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
                             ->withContractId(1234)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
@@ -124,8 +126,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(
@@ -145,8 +147,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(
@@ -165,8 +167,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withDeliveryOptions(
@@ -184,8 +186,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
@@ -200,8 +202,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(['cc' => CountryCodes::CC_CA] + DEFAULT_INPUT_RECIPIENT)
@@ -215,8 +217,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(['cc' => CountryCodes::CC_US] + DEFAULT_INPUT_RECIPIENT)
@@ -231,8 +233,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT)
@@ -247,8 +249,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withDeliveryOptions(
@@ -267,15 +269,15 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     ),
                 factory(Shipment::class)->withCarrier(
                     factory(Carrier::class)
                         ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
-                        ->withCapabilities(
-                            factory(CarrierCapabilities::class)->withEverything()
+                        ->withOutboundFeatures(
+                            factory(PropositionCarrierFeatures::class)->withEverything()
                         )
                 )
             );
@@ -288,8 +290,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_GLS_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
@@ -303,8 +305,8 @@ it(
                     ->withCarrier(
                         factory(Carrier::class)
                             ->withId(Carrier::CARRIER_GLS_ID)
-                            ->withCapabilities(
-                                factory(CarrierCapabilities::class)->withEverything()
+                            ->withOutboundFeatures(
+                                factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     )
                     ->withDeliveryOptionsWithPickupLocationInTheNetherlands()
@@ -413,4 +415,3 @@ it('direct prints', function ($input, $printerGroupId, $accept) {
         'accept'         => 'application/vnd.shipment_label+json+print;printer-group-id=yakon-kaviaar-bliep',
     ],
 ]);
-

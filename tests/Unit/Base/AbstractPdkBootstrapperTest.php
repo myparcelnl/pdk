@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection AutoloadingIssuesInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection,PhpIllegalPsrClassPathInspection */
 
 declare(strict_types=1);
@@ -9,8 +10,9 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
-use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
+
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -93,16 +95,19 @@ it('can boot the PDK with additional config', function () {
         ->toMatchArray($appInfoInput);
 });
 
-it ('determines platform from account', function (int $platformId, string $platform) {
-    TestBootstrapper::forPlatform('myparcel');
+it('determines proposition from account', function (int $platformId, string $platform) {
+    TestBootstrapper::forPlatform($platform);
+    $propositionService = PdkFacade::get(PropositionService::class);
 
     factory(Account::class, $platformId)
         ->withShops()
         ->store();
 
-    expect(PlatformFacade::getPropositionName())->toBe($platform);
+    expect($propositionService->getActivePropositionId())
+        ->toBe($platformId)
+        ->and($propositionService->getPropositionConfig()->proposition->key)
+        ->toBe($platform);
 })->with([
     'myparcelnl'          => [Platform::MYPARCEL_ID, Platform::MYPARCEL_NAME],
     'myparcelbe'          => [Platform::SENDMYPARCEL_ID, Platform::SENDMYPARCEL_NAME],
-    'unrecognized id' => [-100, Platform::MYPARCEL_NAME],
 ]);

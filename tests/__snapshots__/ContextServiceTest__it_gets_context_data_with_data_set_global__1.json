@@ -228,9 +228,9 @@
     "mode": "production",
     "platform": {
       "name": "myparcel",
-      "human": "MyParcel",
-      "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
-      "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
+      "human": "MyParcel Nederland",
+      "backofficeUrl": "https://backoffice.myparcel.nl",
+      "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
       "defaultCarrier": "postnl",
       "defaultCarrierId": 1

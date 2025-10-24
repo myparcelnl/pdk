@@ -1,18 +1,22 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -45,16 +49,16 @@ it('can be instantiated', function () {
         ->toEqual([
             'allowRetry'                        => false,
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
-            'basePrice'                         => 0,
-            'carrierSettings'                   => [],
+            'basePrice'                         => \floatval(0),
+            'carrierSettings'                   =>  [],
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
-            'platform'                          => 'myparcel',
+            'platform'                          => Platform::LEGACY_MYPARCEL_NAME,
             'showPriceSurcharge'                => false,
-            'priceStandardDelivery'             => 0,
+            'priceStandardDelivery'             => \floatval(0),
             'closedDays'                        => null,
         ]);
 });
@@ -98,7 +102,7 @@ it('can be instantiated from a cart', function () {
         ->and($config->packageType)
         ->toBe('package')
         ->and($config->platform)
-        ->toBe('myparcel')
+        ->toBe(Platform::LEGACY_MYPARCEL_NAME)
         ->and($config->showPriceSurcharge)
         ->toBe(false)
         ->and($config->apiBaseUrl)
@@ -174,7 +178,7 @@ it('uses correct price when price is shown as surcharge', function () {
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
-            'platform'                          => 'myparcel',
+            'platform'                          => Platform::LEGACY_MYPARCEL_NAME,
             'showPriceSurcharge'                => false,
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
             'priceStandardDelivery'             => 695.0,

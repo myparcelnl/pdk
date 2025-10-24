@@ -10,11 +10,9 @@ Feature: As a user I want to be able to update my account settings
       | data.context.0.dynamic.account                     | ARRAY,FILLED   |
       | data.context.0.dynamic.account.shops               | ARRAY,LENGTH:1 |
       | data.context.0.dynamic.carriers                    | ARRAY,LENGTH:7 |
-      | data.context.0.dynamic.carriers.0.human            | PostNL         |
       | data.context.0.dynamic.carriers.0.id               | 1              |
       | data.context.0.dynamic.carriers.0.name             | postnl         |
       | data.context.0.dynamic.carriers.0.type             | main           |
-      | data.context.0.dynamic.carriers.3.human            | DHL Parcel Connect |
       | data.context.0.dynamic.carriers.3.id               | 10              |
       | data.context.0.dynamic.carriers.3.name             | dhlparcelconnect |
       | data.context.0.dynamic.carriers.3.type             | main           |

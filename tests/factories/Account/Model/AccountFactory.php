@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -17,6 +18,8 @@ use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+
+use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Account
@@ -37,8 +40,13 @@ final class AccountFactory extends AbstractModelFactory
         // make sure the platform id is set from the start, when supplied as argument to the factory
         if (null !== $platformId) {
             $this->withPlatformId($platformId);
-            $this->store();
+        } else {
+            // Ensure there is a platform ID set, otherwise testsuite will run into issues attempting to
+            // fetch account data before a platform is set.
+            $this->onPlatformMyParcel();
         }
+        $this->store();
+
     }
 
     public function getModel(): string

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -6,6 +7,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\FrontendData;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
@@ -92,7 +95,7 @@ final class CarrierSettingsFactory extends AbstractSettingsModelFactory
      */
     public function withId(string $id): self
     {
-        return $this->with(['id' => $id]);
+        return $this->with(['id' => FrontendData::getLegacyIdentifier($id)]);
     }
 
     protected function save(Model $model): void

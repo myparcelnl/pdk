@@ -1,0 +1,53 @@
+{
+  "account": {
+    "id": "account",
+    "apiKeyValid": true
+  },
+  "order": {
+    "id": "order",
+    "barcodeInNote": false,
+    "conceptShipments": true,
+    "emptyDigitalStampWeight": 0,
+    "emptyMailboxWeight": 0,
+    "emptyParcelWeight": 0,
+    "emptyPackageSmallWeight": 0,
+    "orderMode": false,
+    "processDirectly": "-1",
+    "saveCustomerAddress": false,
+    "sendNotificationAfter": -1,
+    "sendReturnEmail": false,
+    "shareCustomerInformation": false,
+    "statusOnLabelCreate": -1,
+    "statusWhenDelivered": -1,
+    "statusWhenLabelScanned": -1,
+    "trackTraceInAccount": false,
+    "trackTraceInEmail": false
+  },
+  "label": {
+    "id": "label",
+    "format": "a4",
+    "output": "open",
+    "position": [1, 2, 3, 4],
+    "directPrint": false,
+    "printerGroupId": "",
+    "prompt": false
+  },
+  "customs": {
+    "id": "customs",
+    "countryOfOrigin": "NL",
+    "customsCode": "000000",
+    "packageContents": "1"
+  },
+  "checkout": {
+    "id": "checkout",
+    "allowedShippingMethods": [],
+    "allowPickupLocationsViewSelection": true,
+    "priceType": "included",
+    "enableDeliveryOptions": true,
+    "enableDeliveryOptionsWhenNotInStock": true,
+    "useSeparateAddressFields": false,
+    "showTaxFields": true,
+    "enableAddressWidget": false,
+    "closedDays": []
+  }
+}

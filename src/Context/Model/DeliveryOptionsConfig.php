@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -31,7 +32,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class DeliveryOptionsConfig extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'allowRetry'                     => false,
         'basePrice'                      => 0,
         'carrierSettings'                => [],
@@ -68,7 +69,10 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Platform::getPropositionName();
+        // Get platform from proposition service for backwards compatibility
+        $propositionService = Pdk::get(PropositionService::class);
+        $platformConfig = $propositionService->mapToPlatformConfig($propositionService->getPropositionConfig());
+        $this->platform = $platformConfig['name'];
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 

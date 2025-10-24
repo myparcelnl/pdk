@@ -104,335 +104,6 @@
           "description": "settings_carrier_export_hide_sender_description"
         },
         {
-          "name": "exportInsurance",
-          "$component": "ToggleInput",
-          "label": "settings_carrier_export_insurance",
-          "description": "settings_carrier_export_insurance_description"
-        },
-        {
-          "name": "exportInsuranceFromAmount",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "exportInsurance"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "NumberInput",
-          "label": "settings_carrier_export_insurance_from_amount",
-          "description": "settings_carrier_export_insurance_from_amount_description"
-        },
-        {
-          "name": "exportInsuranceUpTo",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "exportInsurance"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "SelectInput",
-          "options": [
-            {
-              "value": 0,
-              "plainLabel": "\u20ac 0,00"
-            },
-            {
-              "value": 10000,
-              "plainLabel": "\u20ac 100,00"
-            },
-            {
-              "value": 25000,
-              "plainLabel": "\u20ac 250,00"
-            },
-            {
-              "value": 50000,
-              "plainLabel": "\u20ac 500,00"
-            },
-            {
-              "value": 100000,
-              "plainLabel": "\u20ac 1.000,00"
-            },
-            {
-              "value": 150000,
-              "plainLabel": "\u20ac 1.500,00"
-            },
-            {
-              "value": 200000,
-              "plainLabel": "\u20ac 2.000,00"
-            },
-            {
-              "value": 250000,
-              "plainLabel": "\u20ac 2.500,00"
-            },
-            {
-              "value": 300000,
-              "plainLabel": "\u20ac 3.000,00"
-            },
-            {
-              "value": 350000,
-              "plainLabel": "\u20ac 3.500,00"
-            },
-            {
-              "value": 400000,
-              "plainLabel": "\u20ac 4.000,00"
-            },
-            {
-              "value": 450000,
-              "plainLabel": "\u20ac 4.500,00"
-            },
-            {
-              "value": 500000,
-              "plainLabel": "\u20ac 5.000,00"
-            }
-          ],
-          "label": "settings_carrier_export_insurance_up_to",
-          "description": "settings_carrier_export_insurance_up_to_description"
-        },
-        {
-          "name": "exportInsuranceUpToUnique",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "exportInsurance"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "SelectInput",
-          "options": [
-            {
-              "value": 0,
-              "plainLabel": "\u20ac 0,00"
-            },
-            {
-              "value": 10000,
-              "plainLabel": "\u20ac 100,00"
-            },
-            {
-              "value": 25000,
-              "plainLabel": "\u20ac 250,00"
-            },
-            {
-              "value": 50000,
-              "plainLabel": "\u20ac 500,00"
-            },
-            {
-              "value": 100000,
-              "plainLabel": "\u20ac 1.000,00"
-            },
-            {
-              "value": 150000,
-              "plainLabel": "\u20ac 1.500,00"
-            },
-            {
-              "value": 200000,
-              "plainLabel": "\u20ac 2.000,00"
-            },
-            {
-              "value": 250000,
-              "plainLabel": "\u20ac 2.500,00"
-            },
-            {
-              "value": 300000,
-              "plainLabel": "\u20ac 3.000,00"
-            },
-            {
-              "value": 350000,
-              "plainLabel": "\u20ac 3.500,00"
-            },
-            {
-              "value": 400000,
-              "plainLabel": "\u20ac 4.000,00"
-            },
-            {
-              "value": 450000,
-              "plainLabel": "\u20ac 4.500,00"
-            },
-            {
-              "value": 500000,
-              "plainLabel": "\u20ac 5.000,00"
-            }
-          ],
-          "label": "settings_carrier_export_insurance_up_to_unique",
-          "description": "settings_carrier_export_insurance_up_to_unique_description"
-        },
-        {
-          "name": "exportInsuranceUpToEu",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "exportInsurance"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "SelectInput",
-          "options": [
-            {
-              "value": 0,
-              "plainLabel": "\u20ac 0,00"
-            },
-            {
-              "value": 10000,
-              "plainLabel": "\u20ac 100,00"
-            },
-            {
-              "value": 25000,
-              "plainLabel": "\u20ac 250,00"
-            },
-            {
-              "value": 50000,
-              "plainLabel": "\u20ac 500,00"
-            },
-            {
-              "value": 100000,
-              "plainLabel": "\u20ac 1.000,00"
-            },
-            {
-              "value": 150000,
-              "plainLabel": "\u20ac 1.500,00"
-            },
-            {
-              "value": 200000,
-              "plainLabel": "\u20ac 2.000,00"
-            },
-            {
-              "value": 250000,
-              "plainLabel": "\u20ac 2.500,00"
-            },
-            {
-              "value": 300000,
-              "plainLabel": "\u20ac 3.000,00"
-            },
-            {
-              "value": 350000,
-              "plainLabel": "\u20ac 3.500,00"
-            },
-            {
-              "value": 400000,
-              "plainLabel": "\u20ac 4.000,00"
-            },
-            {
-              "value": 450000,
-              "plainLabel": "\u20ac 4.500,00"
-            },
-            {
-              "value": 500000,
-              "plainLabel": "\u20ac 5.000,00"
-            }
-          ],
-          "label": "settings_carrier_export_insurance_up_to_eu",
-          "description": "settings_carrier_export_insurance_up_to_eu_description"
-        },
-        {
-          "name": "exportInsuranceUpToRow",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "exportInsurance"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "SelectInput",
-          "options": [
-            {
-              "value": 0,
-              "plainLabel": "\u20ac 0,00"
-            },
-            {
-              "value": 10000,
-              "plainLabel": "\u20ac 100,00"
-            },
-            {
-              "value": 25000,
-              "plainLabel": "\u20ac 250,00"
-            },
-            {
-              "value": 50000,
-              "plainLabel": "\u20ac 500,00"
-            },
-            {
-              "value": 100000,
-              "plainLabel": "\u20ac 1.000,00"
-            },
-            {
-              "value": 150000,
-              "plainLabel": "\u20ac 1.500,00"
-            },
-            {
-              "value": 200000,
-              "plainLabel": "\u20ac 2.000,00"
-            },
-            {
-              "value": 250000,
-              "plainLabel": "\u20ac 2.500,00"
-            },
-            {
-              "value": 300000,
-              "plainLabel": "\u20ac 3.000,00"
-            },
-            {
-              "value": 350000,
-              "plainLabel": "\u20ac 3.500,00"
-            },
-            {
-              "value": 400000,
-              "plainLabel": "\u20ac 4.000,00"
-            },
-            {
-              "value": 450000,
-              "plainLabel": "\u20ac 4.500,00"
-            },
-            {
-              "value": 500000,
-              "plainLabel": "\u20ac 5.000,00"
-            }
-          ],
-          "label": "settings_carrier_export_insurance_up_to_row",
-          "description": "settings_carrier_export_insurance_up_to_row_description"
-        },
-        {
-          "name": "exportInsurancePricePercentage",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "exportInsurance"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "NumberInput",
-          "$attributes": {
-            "min": 0,
-            "step": 1,
-            "max": 100
-          },
-          "label": "settings_carrier_export_insurance_price_percentage",
-          "description": "settings_carrier_export_insurance_price_percentage_description"
-        },
-        {
           "$component": "SettingsDivider",
           "$wrapper": false,
           "content": "settings_carrier_export_returns_description",
@@ -576,129 +247,6 @@
           "description": "settings_carrier_default_package_type_description"
         },
         {
-          "name": "pricePackageTypePackageSmall",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_package_type_package_small",
-          "description": "settings_carrier_price_package_type_package_small_description"
-        },
-        {
-          "name": "pricePackageTypeMailbox",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_package_type_mailbox",
-          "description": "settings_carrier_price_package_type_mailbox_description"
-        },
-        {
-          "name": "allowInternationalMailbox",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_international_mailbox",
-          "description": "settings_carrier_allow_international_mailbox_description"
-        },
-        {
-          "name": "priceInternationalMailbox",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowInternationalMailbox"
-                  },
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_international_mailbox",
-          "description": "settings_carrier_price_international_mailbox_description"
-        },
-        {
-          "name": "pricePackageTypeDigitalStamp",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_package_type_digital_stamp",
-          "description": "settings_carrier_price_package_type_digital_stamp_description"
-        },
-        {
           "name": "deliveryDaysWindow",
           "$builders": [
             {
@@ -800,159 +348,6 @@
           "level": 4
         },
         {
-          "name": "allowStandardDelivery",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_standard_delivery",
-          "description": "settings_carrier_allow_standard_delivery_description"
-        },
-        {
-          "name": "priceDeliveryTypeStandard",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowStandardDelivery"
-                  },
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_standard",
-          "description": "settings_carrier_price_delivery_type_standard_description"
-        },
-        {
-          "name": "allowMorningDelivery",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_morning_delivery",
-          "description": "settings_carrier_allow_morning_delivery_description"
-        },
-        {
-          "name": "priceDeliveryTypeMorning",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowMorningDelivery"
-                  },
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_morning",
-          "description": "settings_carrier_price_delivery_type_morning_description"
-        },
-        {
-          "name": "allowEveningDelivery",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_evening_delivery",
-          "description": "settings_carrier_allow_evening_delivery_description"
-        },
-        {
-          "name": "priceDeliveryTypeEvening",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowEveningDelivery"
-                  },
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_evening",
-          "description": "settings_carrier_price_delivery_type_evening_description"
-        },
-        {
           "name": "allowSameDayDelivery",
           "$builders": [
             {
@@ -1028,7 +423,7 @@
           "description": "settings_carrier_cutoff_time_same_day_description"
         },
         {
-          "name": "allowMondayDelivery",
+          "name": "allowMorningDelivery",
           "$builders": [
             {
               "$visibleWhen": {
@@ -1048,17 +443,17 @@
             }
           ],
           "$component": "ToggleInput",
-          "label": "settings_carrier_allow_monday_delivery",
-          "description": "settings_carrier_allow_monday_delivery_description"
+          "label": "settings_carrier_allow_morning_delivery",
+          "description": "settings_carrier_allow_morning_delivery_description"
         },
         {
-          "name": "priceDeliveryTypeMonday",
+          "name": "priceDeliveryTypeMorning",
           "$builders": [
             {
               "$visibleWhen": {
                 "$if": [
                   {
-                    "$target": "allowMondayDelivery"
+                    "$target": "allowMorningDelivery"
                   },
                   {
                     "$and": [
@@ -1075,11 +470,11 @@
             }
           ],
           "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_monday",
-          "description": "settings_carrier_price_delivery_type_monday_description"
+          "label": "settings_carrier_price_delivery_type_morning",
+          "description": "settings_carrier_price_delivery_type_morning_description"
         },
         {
-          "name": "allowSaturdayDelivery",
+          "name": "allowStandardDelivery",
           "$builders": [
             {
               "$visibleWhen": {
@@ -1099,17 +494,17 @@
             }
           ],
           "$component": "ToggleInput",
-          "label": "settings_carrier_allow_saturday_delivery",
-          "description": "settings_carrier_allow_saturday_delivery_description"
+          "label": "settings_carrier_allow_standard_delivery",
+          "description": "settings_carrier_allow_standard_delivery_description"
         },
         {
-          "name": "priceDeliveryTypeSaturday",
+          "name": "priceDeliveryTypeStandard",
           "$builders": [
             {
               "$visibleWhen": {
                 "$if": [
                   {
-                    "$target": "allowSaturdayDelivery"
+                    "$target": "allowStandardDelivery"
                   },
                   {
                     "$and": [
@@ -1126,8 +521,110 @@
             }
           ],
           "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_saturday",
-          "description": "settings_carrier_price_delivery_type_saturday_description"
+          "label": "settings_carrier_price_delivery_type_standard",
+          "description": "settings_carrier_price_delivery_type_standard_description"
+        },
+        {
+          "name": "allowEveningDelivery",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_allow_evening_delivery",
+          "description": "settings_carrier_allow_evening_delivery_description"
+        },
+        {
+          "name": "priceDeliveryTypeEvening",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "allowEveningDelivery"
+                  },
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "CurrencyInput",
+          "label": "settings_carrier_price_delivery_type_evening",
+          "description": "settings_carrier_price_delivery_type_evening_description"
+        },
+        {
+          "name": "allowExpressDelivery",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "ToggleInput",
+          "label": "settings_carrier_allow_express_delivery",
+          "description": "settings_carrier_allow_express_delivery_description"
+        },
+        {
+          "name": "priceDeliveryTypeExpress",
+          "$builders": [
+            {
+              "$visibleWhen": {
+                "$if": [
+                  {
+                    "$target": "allowExpressDelivery"
+                  },
+                  {
+                    "$and": [
+                      {
+                        "$target": "deliveryOptionsEnabled"
+                      },
+                      {
+                        "$target": "allowDeliveryOptions"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "$component": "CurrencyInput",
+          "label": "settings_carrier_price_delivery_type_express",
+          "description": "settings_carrier_price_delivery_type_express_description"
         },
         {
           "$builders": [
@@ -1255,112 +752,6 @@
           "$component": "CurrencyInput",
           "label": "settings_carrier_price_only_recipient",
           "description": "settings_carrier_price_only_recipient_description"
-        },
-        {
-          "name": "allowDeliveryTypeExpress",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_delivery_type_express",
-          "description": "settings_carrier_allow_delivery_type_express_description"
-        },
-        {
-          "name": "priceDeliveryTypeExpress",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowDeliveryTypeExpress"
-                  },
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_express",
-          "description": "settings_carrier_price_delivery_type_express_description"
-        },
-        {
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "deliveryOptionsEnabled"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "SettingsDivider",
-          "$wrapper": false,
-          "content": "settings_carrier_delivery_options_pickup_description",
-          "heading": "settings_carrier_delivery_options_pickup_title",
-          "level": 3
-        },
-        {
-          "name": "allowPickupLocations",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "deliveryOptionsEnabled"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_pickup_locations",
-          "description": "settings_carrier_allow_pickup_locations_description"
-        },
-        {
-          "name": "priceDeliveryTypePickup",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowPickupLocations"
-                  },
-                  {
-                    "$target": "deliveryOptionsEnabled"
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_delivery_type_pickup",
-          "description": "settings_carrier_price_delivery_type_pickup_description"
         }
       ]
     }

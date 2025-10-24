@@ -71,7 +71,10 @@
       "hasDeliveryOptions": true,
       "hiddenInputName": "pest_checkout_data",
       "checkoutAddressHiddenInputName": "pest_checkout_address",
-      "countriesWithSeparateAddressFields": ["NL", "BE"],
+      "countriesWithSeparateAddressFields": [
+        "NL",
+        "BE"
+      ],
       "carriersWithTaxFields": [],
       "hasAddressWidget": false
     },
