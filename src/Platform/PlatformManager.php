@@ -43,4 +43,13 @@ class PlatformManager implements PlatformManagerInterface
     {
         return (string) Pdk::get('platform');
     }
+
+    /**
+     * @return string
+     * @deprecated Use getPropositionName() from PropositionManager via Proposition facade instead
+     */
+    public function getPropositionName(): string
+    {
+        return $this->getPlatform();
+    }
 }
