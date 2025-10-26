@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Proposition;
 use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 
 /**
@@ -22,7 +23,8 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
  * @property string                    $eventPong
  * @property string                    $language
  * @property string                    $mode
- * @property array                     $platform
+ * @property array                     $proposition      (NEW - preferred)
+ * @property array                     $platform         (LEGACY - deprecated but supported)
  * @property array{string, string}     $translations
  */
 class GlobalContext extends Model
@@ -36,7 +38,8 @@ class GlobalContext extends Model
         'eventPong'    => FrontendRenderService::BOOTSTRAP_RENDER_EVENT_PONG,
         'language'     => null,
         'mode'         => null,
-        'platform'     => [],
+        'proposition'  => [],
+        'platform'     => [],  // LEGACY
         'translations' => [],
     ];
 
@@ -49,7 +52,8 @@ class GlobalContext extends Model
         'eventPong'    => 'string',
         'language'     => 'string',
         'mode'         => 'string',
-        'platform'     => 'array',
+        'proposition'  => 'array',
+        'platform'     => 'array',  // LEGACY
         'translations' => 'array',
     ];
 
@@ -71,10 +75,10 @@ class GlobalContext extends Model
         $this->attributes['baseUrl']   = $endpointActions->getBaseUrl();
         $this->attributes['endpoints'] = $endpointActions->toArray();
 
-        $platform = Platform::all();
+        $propositionData = Proposition::all();
 
-        $this->attributes['platform'] = array_intersect_key(
-            $platform,
+        $filteredData = array_intersect_key(
+            $propositionData,
             array_flip([
                 'name',
                 'human',
@@ -85,5 +89,10 @@ class GlobalContext extends Model
                 'defaultCarrierId',
             ])
         );
+
+        $this->attributes['proposition'] = $filteredData;
+
+        // LEGACY: Also set platform for backward compatibility
+        $this->attributes['platform'] = $filteredData;
     }
 }
