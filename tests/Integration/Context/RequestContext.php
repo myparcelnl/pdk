@@ -32,6 +32,25 @@ final class RequestContext extends AbstractContext
     }
 
     /**
+     * @Then I expect error code :code in the response
+     */
+    public function IExpectErrorCodeInTheResponse(string $code): void
+    {
+        $this->IExpectTheResponseToBeSuccessful();
+        $body = $this->getDecodedBody();
+        self::assertArrayHasKey('errors', $body, self::withLogs('Response does not contain errors.'));
+        $errors = $body['errors'] ?? [];
+        $found  = false;
+        foreach ($errors as $error) {
+            if ((string) ($error['code'] ?? '') === $code) {
+                $found = true;
+                break;
+            }
+        }
+        self::assertTrue($found, self::withLogs("Error code '$code' not found in response."));
+    }
+
+    /**
      * @Then I expect the response body to contain:
      */
     public function IExpectTheResponseBodyToContain(TableNode $node): void
