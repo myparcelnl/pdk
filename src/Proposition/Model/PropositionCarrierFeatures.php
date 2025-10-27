@@ -101,6 +101,8 @@ class PropositionCarrierFeatures extends Model
     protected $attributes = [
         'packageTypes' => null,
         'deliveryTypes' => null,
+        'deliveryCountries' => null,
+        'pickupCountries' => null,
         'shipmentOptions' => null,
         'metadata' => null
     ];
@@ -111,6 +113,8 @@ class PropositionCarrierFeatures extends Model
     protected $casts = [
         'packageTypes' => 'array',
         'deliveryTypes' => 'array',
+        'deliveryCountries' => 'array',
+        'pickupCountries' => 'array',
         'shipmentOptions' => 'array',
         'metadata' => 'array'
     ];
