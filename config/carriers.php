@@ -73,4 +73,9 @@ return [
         'name'  => Carrier::CARRIER_GLS_NAME,
         'human' => 'GLS',
     ],
+    [
+        'id'    => Carrier::CARRIER_TRUNKRS_ID,
+        'name'  => Carrier::CARRIER_TRUNKRS_NAME,
+        'human' => 'Trunkrs',
+    ],
 ];
