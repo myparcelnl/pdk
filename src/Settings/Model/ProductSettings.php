@@ -39,6 +39,8 @@ class ProductSettings extends AbstractSettingsModel
     public const EXPORT_RETURN            = 'exportReturn';
     public const EXPORT_SIGNATURE         = 'exportSignature';
     public const EXPORT_TRACKED           = 'exportTracked';
+    public const EXPORT_FOOD              = 'exportFood';
+    public const EXPORT_FROZEN_FOOD       = 'exportFrozenFood';
     public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
     public const FIT_IN_MAILBOX           = 'fitInMailbox';
     public const PACKAGE_TYPE             = 'packageType';
@@ -58,6 +60,8 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_RETURN            => TriStateService::INHERIT,
         self::EXPORT_SIGNATURE         => TriStateService::INHERIT,
         self::EXPORT_TRACKED           => TriStateService::INHERIT,
+        self::EXPORT_FOOD              => TriStateService::INHERIT,
+        self::EXPORT_FROZEN_FOOD       => TriStateService::INHERIT,
         self::FIT_IN_DIGITAL_STAMP     => TriStateService::INHERIT,
         self::FIT_IN_MAILBOX           => TriStateService::INHERIT,
         self::PACKAGE_TYPE             => TriStateService::INHERIT,
@@ -76,6 +80,8 @@ class ProductSettings extends AbstractSettingsModel
         self::EXPORT_RETURN            => TriStateService::TYPE_STRICT,
         self::EXPORT_SIGNATURE         => TriStateService::TYPE_STRICT,
         self::EXPORT_TRACKED           => TriStateService::TYPE_STRICT,
+        self::EXPORT_FOOD              => TriStateService::TYPE_STRICT,
+        self::EXPORT_FROZEN_FOOD       => TriStateService::TYPE_STRICT,
         self::FIT_IN_DIGITAL_STAMP     => 'int',
         self::FIT_IN_MAILBOX           => 'int',
         self::PACKAGE_TYPE             => TriStateService::TYPE_COERCED,
