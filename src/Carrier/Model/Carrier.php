@@ -30,6 +30,9 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
  * @property PropositionCarrierFeatures|null  $outboundFeatures
  * @property CarrierCapabilities        $capabilities        // @deprecated use outboundFeatures instead
  * @property CarrierCapabilities        $returnCapabilities  // @deprecated use inboundFeatures instead
+ * @property null|array                 $deliveryCountries
+ * @property null|array                 $pickupCountries
+ *
  * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
  */
 class Carrier extends Model
@@ -126,6 +129,13 @@ class Carrier extends Model
     public const CARRIER_GLS_NAME                = 'GLS';
 
     /**
+     * @deprecated use CARRIER_BRT_NAME
+     */
+    public const CARRIER_BRT_LEGACY_NAME       = 'brt';
+    public const CARRIER_BRT_NAME                = 'BRT';
+    public const CARRIER_BRT_ID                  = 15;
+
+    /**
      * @deprecated use new carrier names directly
      */
     public const CARRIER_NAME_TO_LEGACY_MAP = [
@@ -143,6 +153,7 @@ class Carrier extends Model
         self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
         self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
         self::CARRIER_GLS_NAME                => self::CARRIER_GLS_LEGACY_NAME,
+        self::CARRIER_BRT_NAME                => self::CARRIER_BRT_LEGACY_NAME
     ];
 
     /**
