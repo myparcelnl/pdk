@@ -223,6 +223,8 @@
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["SIGNATURE", "ONLY_RECIPIENT", "LARGE_FORMAT", "INSURANCE"],
+          "deliveryCountries": ["BE", "NL"],
+          "pickupCountries": ["BE", "NL"],
           "metadata": {
             "labelDescriptionLength": 45,
             "multiCollo": true,
@@ -230,6 +232,12 @@
               0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
             ]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": null,
+          "unsupportedParameters": null,
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": true
         }
       },
       {
@@ -243,11 +251,19 @@
           "packageTypes": ["PACKAGE", "MAILBOX"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "INSURANCE"],
+          "deliveryCountries": ["NL", "BE"],
+          "pickupCountries": ["NL", "BE"],
           "metadata": {
             "labelDescriptionLength": 45,
             "multiCollo": true,
             "insuranceOptions": [0, 50000, 250000, 500000]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": ["package_type"],
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": true
         }
       },
       {
@@ -261,6 +277,54 @@
           "packageTypes": ["PACKAGE"],
           "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
           "shipmentOptions": ["INSURANCE"],
+          "deliveryCountries": [
+            "AT",
+            "BE",
+            "BG",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "GR",
+            "HU",
+            "IE",
+            "IT",
+            "LV",
+            "LI",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SK",
+            "SI",
+            "ES",
+            "SE"
+          ],
+          "pickupCountries": [
+            "AT",
+            "BE",
+            "CZ",
+            "DK",
+            "EE",
+            "FI",
+            "FR",
+            "DE",
+            "HU",
+            "LV",
+            "LT",
+            "LU",
+            "NL",
+            "PL",
+            "PT",
+            "SK",
+            "SI",
+            "ES",
+            "GB"
+          ],
           "metadata": {
             "labelDescriptionLength": 45,
             "multiCollo": true,
@@ -268,6 +332,12 @@
             "dropOffAtPostalPoint": true,
             "insuranceOptions": [52000]
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": null,
+          "availableFeatures": ["dropOffDays", "dropOffDelay"],
+          "allowFakeDelivery": false
         }
       }
     ],

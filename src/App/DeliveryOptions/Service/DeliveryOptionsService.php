@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
@@ -119,6 +120,56 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
+     * Creates a carrier configuration for the delivery options.
+     * Note that some of these properties will be deprecated and should be replaced by interactions with the capabilities API.
+     * (e.g. packageTypes, features, shipmentOptionsPerPackageType)
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    public function createPropositionConfig(): array
+    {
+        $config = ['carriers' => []];
+        $carriers = Pdk::get(PropositionService::class)
+            ->getCarriers(true);
+
+        /**
+         * @var FrontendDataAdapterInterface $adapter
+         */
+        $adapter = Pdk::get(FrontendDataAdapterInterface::class);
+
+        // @TODO: this data should be based on calls by the DO to the capabilities API through a proxy in the PDK
+        $config['carriers'] = array_map(function ($carrier) use ($adapter) {
+            $legacyCarrier = $adapter->convertCarrierToLegacyFormat($carrier);
+
+            return array_filter([
+                "name"      => $legacyCarrier->name,
+                "active"    => true,
+                "subscription" => TriStateService::INHERIT, // This does not seem to be actually used in the DO?
+                "packageTypes" => $legacyCarrier->capabilities->packageTypes,
+                'deliveryTypes' => $legacyCarrier->capabilities->deliveryTypes,
+                'deliveryCountries' => $carrier->outboundFeatures->deliveryCountries ?? [],
+                "pickupCountries" => $carrier->outboundFeatures->pickupCountries ?? [],
+                // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
+                "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures['deliveryCountries'] ?? []) : [],
+                "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
+                "shipmentOptionsPerPackageType" => \array_reduce($legacyCarrier->capabilities->packageTypes, function ($result, $packageType) use ($legacyCarrier) {
+                    $snakeCaseKeys = array_map(function ($key) {
+                        return Str::snake($key);
+                    }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions));
+
+                    $result[$packageType] = $snakeCaseKeys ?? [];
+                    return $result;
+                }, []),
+                "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
+                "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
+                "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? null
+            ]);
+        }, $carriers->all());
+        return $config;
+    }
+
+    /**
+     * Create the delivery options config including all carrier-specific feature toggles based on the cart.
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
      * @return array
@@ -151,6 +202,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
+     * Create the settings for a specific carrier based on the cart.
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
