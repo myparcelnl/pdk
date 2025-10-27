@@ -399,7 +399,7 @@ return [
                     DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
                 'deliveryTypes'   => [
-                    DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                 ],
                 'shipmentOptions' => [
                     'ageCheck'      => true,
@@ -407,6 +407,7 @@ return [
                     'receiptCode'   => true,
                     'food'          => true,
                     'frozenFood'    => true,
+                    'signature'     => true,
                 ],
                 'features'        => [
                     'labelDescriptionLength' => 45,

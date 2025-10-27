@@ -92,6 +92,9 @@
             "frozenFood": {
               "type": "boolean"
             },
+            "signature": {
+              "type": "boolean"
+            },
             "labelDescription": {
               "maxLength": 45
             }
