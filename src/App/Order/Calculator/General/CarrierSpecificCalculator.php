@@ -22,7 +22,6 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
-    // ...existing code...
     /**
      * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
