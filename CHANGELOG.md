@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.65.1](https://github.com/myparcelnl/pdk/compare/v2.65.0...v2.65.1) (2025-10-27)
+
+
+### :bug: Bug Fixes
+
+* allow filling in api key ([#393](https://github.com/myparcelnl/pdk/issues/393)) ([726104e](https://github.com/myparcelnl/pdk/commit/726104eca053779b71e6204cec7b20587efaf7d4))
+
 ## [2.65.0](https://github.com/myparcelnl/pdk/compare/v2.64.0...v2.65.0) (2025-10-14)
 
 
