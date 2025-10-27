@@ -14,6 +14,7 @@ class PropositionAvailableContract extends Model
         'hasPostponedDelivery' => null,
         'inboundFeatures' => PropositionCarrierFeatures::class,
         'outboundFeatures' => PropositionCarrierFeatures::class,
+        'deliveryOptions' => []
     ];
 
     protected $casts = [
@@ -22,5 +23,6 @@ class PropositionAvailableContract extends Model
         'hasPostponedDelivery' => 'bool',
         'inboundFeatures' => PropositionCarrierFeatures::class,
         'outboundFeatures' => PropositionCarrierFeatures::class,
+        'deliveryOptions' => 'array',
     ];
 }
