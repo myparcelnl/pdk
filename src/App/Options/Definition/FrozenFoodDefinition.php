@@ -24,7 +24,7 @@ final class FrozenFoodDefinition implements OrderOptionDefinitionInterface
 
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::FROZEN_FOOD;
+        return ShipmentOptions::FROZEN;
     }
 
     public function validate(CarrierSchema $carrierSchema): bool
