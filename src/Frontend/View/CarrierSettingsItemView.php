@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -39,6 +40,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private $currencyService;
 
     /**
+     * @var \MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService
+     */
+    private $deliveryOptionsResetService;
+
+    /**
      * @var array
      */
     private $elements = [];
@@ -49,6 +55,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     public function __construct(Carrier $carrier)
     {
         $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
+        $this->deliveryOptionsResetService = Pdk::get(DeliveryOptionsResetService::class);
         $this->carrier         = $carrier;
 
         /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
@@ -318,7 +325,17 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         return [
             new SettingsDivider($this->createGenericLabel('delivery_options')),
-            new InteractiveElement(CarrierSettings::DELIVERY_OPTIONS_ENABLED, Components::INPUT_TOGGLE),
+            (new InteractiveElement(CarrierSettings::DELIVERY_OPTIONS_ENABLED, Components::INPUT_TOGGLE))
+                ->builder(function (FormOperationBuilder $builder) {
+                    $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
+                        foreach ($this->deliveryOptionsResetService->getDeliveryOptionSettings() as $setting) {
+                            $afterUpdate
+                                ->setValue(false)
+                                ->on($setting)
+                                ->if->eq(false);
+                        }
+                    });
+                }),
 
             /**
              * Home delivery
