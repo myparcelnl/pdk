@@ -20,8 +20,8 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
  * @property int<-1|0|1>         $collect
- * @property int<-1|0|1>         $food
- * @property int<-1|0|1>         $frozenFood
+ * @property int<-1|0|1>         $FreshFood
+ * @property int<-1|0|1>         $Frozen
  */
 class ShipmentOptions extends Model
 {
@@ -37,8 +37,8 @@ class ShipmentOptions extends Model
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
     public const COLLECT           = 'collect';
-    public const FOOD              = 'food';
-    public const FROZEN_FOOD       = 'frozenFood';
+    public const FRESH_FOOD        = 'FreshFood';
+    public const FROZEN            = 'Frozen';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
@@ -53,8 +53,8 @@ class ShipmentOptions extends Model
         self::SIGNATURE         => TriStateService::INHERIT,
         self::TRACKED           => TriStateService::INHERIT,
         self::COLLECT           => TriStateService::INHERIT,
-        self::FOOD              => TriStateService::INHERIT,
-        self::FROZEN_FOOD       => TriStateService::INHERIT,
+        self::FRESH_FOOD        => TriStateService::INHERIT,
+        self::FROZEN            => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -70,7 +70,7 @@ class ShipmentOptions extends Model
         self::SIGNATURE         => TriStateService::TYPE_STRICT,
         self::TRACKED           => TriStateService::TYPE_STRICT,
         self::COLLECT           => TriStateService::TYPE_STRICT,
-        self::FOOD              => TriStateService::TYPE_STRICT,
-        self::FROZEN_FOOD       => TriStateService::TYPE_STRICT,
+        self::FRESH_FOOD        => TriStateService::TYPE_STRICT,
+        self::FROZEN            => TriStateService::TYPE_STRICT,
     ];
 }

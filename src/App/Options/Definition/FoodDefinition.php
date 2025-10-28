@@ -24,7 +24,7 @@ final class FoodDefinition implements OrderOptionDefinitionInterface
 
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::FOOD;
+        return ShipmentOptions::FRESH_FOOD;
     }
 
     public function validate(CarrierSchema $carrierSchema): bool

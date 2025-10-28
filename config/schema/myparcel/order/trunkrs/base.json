@@ -86,10 +86,10 @@
             "receiptCode": {
               "type": "boolean"
             },
-            "food": {
+            "FreshFood": {
               "type": "boolean"
             },
-            "frozenFood": {
+            "Frozen": {
               "type": "boolean"
             },
             "signature": {
