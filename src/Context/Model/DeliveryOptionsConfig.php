@@ -102,6 +102,13 @@ class DeliveryOptionsConfig extends Model
         /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
-        return new self($service->createAllCarrierSettings($cart));
+        $config = new self($service->createAllCarrierSettings($cart));
+        
+        // Override excludeParcelLockers based on cart calculation
+        if (isset($cart->shippingMethod->excludeParcelLockers)) {
+            $config->excludeParcelLockers = $cart->shippingMethod->excludeParcelLockers;
+        }
+
+        return $config;
     }
 }

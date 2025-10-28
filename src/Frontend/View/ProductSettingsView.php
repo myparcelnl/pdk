@@ -62,6 +62,7 @@ class ProductSettingsView extends AbstractSettingsView
                 ]
             ),
             new InteractiveElement(ProductSettings::DISABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
+            new InteractiveElement(ProductSettings::EXCLUDE_PARCEL_LOCKERS, Components::INPUT_TRI_STATE),
 
             /**
              * Customs options.
@@ -93,7 +94,6 @@ class ProductSettingsView extends AbstractSettingsView
             new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRI_STATE),
             new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRI_STATE),
             new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXCLUDE_PARCEL_LOCKERS, Components::INPUT_TRI_STATE),
         ];
     }
 
