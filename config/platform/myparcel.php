@@ -400,6 +400,7 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                    DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
                 ],
                 'shipmentOptions' => [
                     'ageCheck'      => true,
@@ -407,6 +408,7 @@ return [
                     'receiptCode'   => true,
                     'food'          => true,
                     'frozenFood'    => true,
+                    'sameDayDelivery' => true,
                     'signature'     => true,
                 ],
                 'features'        => [
