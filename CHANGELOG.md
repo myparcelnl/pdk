@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.65.2](https://github.com/myparcelnl/pdk/compare/v2.65.1...v2.65.2) (2025-10-28)
+
+
+### :bug: Bug Fixes
+
+* **pdk:** disable settings when delivery options is not shown ([#392](https://github.com/myparcelnl/pdk/issues/392)) ([02fa1f9](https://github.com/myparcelnl/pdk/commit/02fa1f92d702dc97857e181eefe6af34e738e590))
+
 ## [2.65.1](https://github.com/myparcelnl/pdk/compare/v2.65.0...v2.65.1) (2025-10-27)
 
 
