@@ -11,7 +11,7 @@ final class TrunkrsCalculator extends AbstractCarrierOptionsCalculator
     protected function getCalculators(): array
     {
         return [
-            
+            TrunkrsShipmentOptionsCalculator::class,
         ];
     }
 }
