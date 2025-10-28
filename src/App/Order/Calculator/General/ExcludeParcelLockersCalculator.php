@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -26,20 +27,29 @@ final class ExcludeParcelLockersCalculator extends AbstractPdkOrderOptionCalcula
             false
         );
 
-        // Check if any product in the order has 18+ classification
+        // Check if any product in the order has 18+ classification (product level)
         $has18PlusProduct = $this->order->lines->contains(function ($orderLine) {
             $productSettings = $orderLine->product->mergedSettings;
             return TriStateService::ENABLED === $productSettings->exportAgeCheck;
         });
 
-        // Check if any product explicitly excludes parcel lockers
+        // Check if any product explicitly excludes parcel lockers (product level)
         $productExcludesParcelLockers = $this->order->lines->contains(function ($orderLine) {
             $productSettings = $orderLine->product->mergedSettings;
             return TriStateService::ENABLED === $productSettings->excludeParcelLockers;
         });
 
+        // Check if 18+ is enabled on carrier level for any carrier in the order
+        $has18PlusCarrier = $this->order->lines->contains(function ($orderLine) {
+            return Settings::get(
+                CarrierSettings::EXPORT_AGE_CHECK,
+                CarrierSettings::ID . '.' . $orderLine->product->carrier->id,
+                false
+            );
+        });
+
         // Set excludeParcelLockers to ENABLED if any condition is met
-        if ($generalExcludeParcelLockers || $has18PlusProduct || $productExcludesParcelLockers) {
+        if ($generalExcludeParcelLockers || $has18PlusProduct || $productExcludesParcelLockers || $has18PlusCarrier) {
             $shipmentOptions->excludeParcelLockers = TriStateService::ENABLED;
         }
     }
