@@ -57,6 +57,17 @@
                 "EVENING_DELIVERY",
                 "PICKUP_DELIVERY"
             ],
+            "deliveryCountries": [
+                "NL",
+                "BE"
+            ],
+            "pickupCountries": [
+                "NL",
+                "BE",
+                "DK",
+                "SE",
+                "DE"
+            ],
             "shipmentOptions": [
                 "AGE_CHECK",
                 "LARGE_FORMAT",
@@ -87,6 +98,20 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "postalCode",
+                "street",
+                "city"
+            ],
+            "availableFeatures": [
+                "deliveryDaysWindow",
+                "dropOffDays",
+                "dropOffDelay",
+                "pickupMapAllowLoadMore"
+            ],
+            "allowFakeDelivery": true
         }
     },
     {
@@ -108,11 +133,71 @@
                 "STANDARD_DELIVERY",
                 "PICKUP_DELIVERY"
             ],
+            "deliveryCountries": [
+                "AT",
+                "BE",
+                "BG",
+                "CZ",
+                "DK",
+                "EE",
+                "FI",
+                "FR",
+                "DE",
+                "GR",
+                "HU",
+                "IE",
+                "IT",
+                "LV",
+                "LI",
+                "LT",
+                "LU",
+                "NL",
+                "PL",
+                "PT",
+                "RO",
+                "SK",
+                "SI",
+                "ES",
+                "SE"
+            ],
+            "pickupCountries": [
+                "AT",
+                "BE",
+                "CZ",
+                "DK",
+                "EE",
+                "FI",
+                "FR",
+                "DE",
+                "HU",
+                "LV",
+                "LT",
+                "LU",
+                "NL",
+                "PL",
+                "PT",
+                "SK",
+                "SI",
+                "ES",
+                "GB"
+            ],
             "shipmentOptions": [],
             "metadata": {
                 "labelDescriptionLength": 45,
                 "needsCustomerInfo": true
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "postalCode",
+                "street",
+                "city"
+            ],
+            "availableFeatures": [
+                "dropOffDays",
+                "dropOffDelay"
+            ],
+            "allowFakeDelivery": false
         }
     },
     {
@@ -153,6 +238,14 @@
                 "STANDARD_DELIVERY",
                 "PICKUP_DELIVERY"
             ],
+            "deliveryCountries": [
+                "NL",
+                "BE"
+            ],
+            "pickupCountries": [
+                "NL",
+                "BE"
+            ],
             "shipmentOptions": [
                 "AGE_CHECK",
                 "ONLY_RECIPIENT",
@@ -178,6 +271,18 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "city",
+                "postalCode"
+            ],
+            "availableFeatures": [
+                "deliveryDaysWindow",
+                "dropOffDays",
+                "dropOffDelay"
+            ],
+            "allowFakeDelivery": false
         }
     },
     {
@@ -214,6 +319,48 @@
                 "STANDARD_DELIVERY",
                 "PICKUP_DELIVERY"
             ],
+            "deliveryCountries": [
+                "AT",
+                "BG",
+                "HR",
+                "CZ",
+                "EE",
+                "FI",
+                "DE",
+                "GR",
+                "HU",
+                "IE",
+                "IT",
+                "LV",
+                "LT",
+                "LU",
+                "PL",
+                "PT",
+                "RO",
+                "SK",
+                "SI",
+                "ES"
+            ],
+            "pickupCountries": [
+                "AT",
+                "BG",
+                "HR",
+                "CZ",
+                "DK",
+                "FR",
+                "DE",
+                "GR",
+                "HU",
+                "IT",
+                "LU",
+                "PL",
+                "PT",
+                "RO",
+                "SK",
+                "SI",
+                "ES",
+                "SE"
+            ],
             "shipmentOptions": [
                 "SIGNATURE",
                 "INSURANCE"
@@ -234,6 +381,10 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "availableFeatures": [],
+            "allowFakeDelivery": false
         }
     },
     {
@@ -275,6 +426,10 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "availableFeatures": [],
+            "allowFakeDelivery": false
         }
     },
     {
@@ -321,6 +476,14 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "postalCode",
+                "street",
+                "city"
+            ],
+            "allowFakeDelivery": false
         }
     },
     {
@@ -365,6 +528,17 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "postalCode",
+                "street",
+                "city"
+            ],
+            "unsupportedParameters": [
+                "package_type"
+            ],
+            "allowFakeDelivery": false
         }
     }
 ]

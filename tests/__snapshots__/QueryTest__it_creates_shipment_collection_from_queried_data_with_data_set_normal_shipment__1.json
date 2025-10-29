@@ -63,6 +63,17 @@
                 "EVENING_DELIVERY",
                 "PICKUP_DELIVERY"
             ],
+            "deliveryCountries": [
+                "NL",
+                "BE"
+            ],
+            "pickupCountries": [
+                "NL",
+                "BE",
+                "DK",
+                "SE",
+                "DE"
+            ],
             "shipmentOptions": [
                 "AGE_CHECK",
                 "LARGE_FORMAT",
@@ -93,6 +104,20 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "postalCode",
+                "street",
+                "city"
+            ],
+            "availableFeatures": [
+                "deliveryDaysWindow",
+                "dropOffDays",
+                "dropOffDelay",
+                "pickupMapAllowLoadMore"
+            ],
+            "allowFakeDelivery": true
         }
     },
     "customsDeclaration": {
@@ -174,6 +199,17 @@
                     "EVENING_DELIVERY",
                     "PICKUP_DELIVERY"
                 ],
+                "deliveryCountries": [
+                    "NL",
+                    "BE"
+                ],
+                "pickupCountries": [
+                    "NL",
+                    "BE",
+                    "DK",
+                    "SE",
+                    "DE"
+                ],
                 "shipmentOptions": [
                     "AGE_CHECK",
                     "LARGE_FORMAT",
@@ -204,6 +240,20 @@
                         500000
                     ]
                 }
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "postalCode",
+                    "street",
+                    "city"
+                ],
+                "availableFeatures": [
+                    "deliveryDaysWindow",
+                    "dropOffDays",
+                    "dropOffDelay",
+                    "pickupMapAllowLoadMore"
+                ],
+                "allowFakeDelivery": true
             }
         },
         "labelAmount": 1,
