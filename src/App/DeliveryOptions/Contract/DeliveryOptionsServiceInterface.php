@@ -12,4 +12,10 @@ interface DeliveryOptionsServiceInterface
      * Creates an array with the packageType and carrierSettings key of the delivery options config.
      */
     public function createAllCarrierSettings(PdkCart $cart): array;
+
+    /**
+     * Creates an array with the delivery options platformSettings config based on the active proposition.
+     * @return array
+     */
+    public function createPropositionConfig(): array;
 }
