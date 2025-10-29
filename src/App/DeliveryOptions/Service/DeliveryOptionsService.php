@@ -150,7 +150,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 'deliveryCountries' => $carrier->outboundFeatures->deliveryCountries ?? [],
                 "pickupCountries" => $carrier->outboundFeatures->pickupCountries ?? [],
                 // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
-                "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures['deliveryCountries'] ?? []) : [],
+                "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures->deliveryCountries ?? []) : [],
                 "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
                 "shipmentOptionsPerPackageType" => \array_reduce($legacyCarrier->capabilities->packageTypes, function ($result, $packageType) use ($legacyCarrier) {
                     $snakeCaseKeys = array_map(function ($key) {
