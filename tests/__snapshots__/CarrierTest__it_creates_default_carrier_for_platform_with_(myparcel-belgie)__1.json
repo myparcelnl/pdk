@@ -11,11 +11,19 @@
   "outboundFeatures": {
     "packageTypes": ["PACKAGE", "MAILBOX"],
     "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+    "deliveryCountries": ["NL", "BE"],
+    "pickupCountries": ["NL", "BE"],
     "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "INSURANCE"],
     "metadata": {
       "labelDescriptionLength": 45,
       "multiCollo": true,
       "insuranceOptions": [0, 50000, 250000, 500000]
     }
+  },
+  "deliveryOptions": {
+    "addressFields": ["postalCode", "street", "city"],
+    "unsupportedParameters": ["package_type"],
+    "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+    "allowFakeDelivery": true
   }
 }

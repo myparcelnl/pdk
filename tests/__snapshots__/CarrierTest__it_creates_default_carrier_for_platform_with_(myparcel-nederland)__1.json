@@ -27,6 +27,8 @@
   "outboundFeatures": {
     "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
     "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+    "deliveryCountries": ["NL", "BE"],
+    "pickupCountries": ["NL", "BE", "DK", "SE", "DE"],
     "shipmentOptions": [
       "AGE_CHECK",
       "LARGE_FORMAT",
@@ -45,5 +47,10 @@
         0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
       ]
     }
+  },
+  "deliveryOptions": {
+    "addressFields": ["postalCode", "street", "city"],
+    "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+    "allowFakeDelivery": true
   }
 }
