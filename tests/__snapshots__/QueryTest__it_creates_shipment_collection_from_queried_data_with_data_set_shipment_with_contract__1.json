@@ -26,6 +26,8 @@
     "outboundFeatures": {
       "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
       "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "deliveryCountries": ["NL", "BE"],
+      "pickupCountries": ["NL", "BE"],
       "shipmentOptions": [
         "AGE_CHECK",
         "ONLY_RECIPIENT",
@@ -39,6 +41,11 @@
         "labelDescriptionLength": 45,
         "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
       }
+    },
+    "deliveryOptions": {
+      "addressFields": ["city", "postalCode"],
+      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+      "allowFakeDelivery": false
     }
   },
   "delayed": false,
@@ -65,6 +72,8 @@
       "outboundFeatures": {
         "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
         "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+        "deliveryCountries": ["NL", "BE"],
+        "pickupCountries": ["NL", "BE"],
         "shipmentOptions": [
           "AGE_CHECK",
           "ONLY_RECIPIENT",
@@ -78,6 +87,11 @@
           "labelDescriptionLength": 45,
           "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
         }
+      },
+      "deliveryOptions": {
+        "addressFields": ["city", "postalCode"],
+        "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+        "allowFakeDelivery": false
       }
     },
     "labelAmount": 1,
