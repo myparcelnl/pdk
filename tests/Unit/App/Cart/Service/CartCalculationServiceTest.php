@@ -123,8 +123,8 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
 ];
 
 const SHIPPING_ADDRESS_NL = [
-    'street'   => 'Straatnaam 2',
-    'number'   => 'Appartement B',
+    'street'     => 'Straatnaam 2',
+    'number'     => 'Appartement B',
     'cc'         => CountryCodes::CC_NL,
     'city'       => 'Stad',
     'postalCode' => '1000 BB',
@@ -133,7 +133,7 @@ const SHIPPING_ADDRESS_NL = [
 ];
 
 const SHIPPING_ADDRESS_EU = [
-    'street'   => 'Straatnaam 2',
+    'street'     => 'Straatnaam 2',
     'cc'         => CountryCodes::CC_FR,
     'city'       => 'Paris',
     'postalCode' => '1000 BB',
@@ -141,14 +141,14 @@ const SHIPPING_ADDRESS_EU = [
     'state'      => 'CP',
 ];
 const SHIPPING_ADDRESS_BE = [
-    'street'   => '16',
-    'number'   => 'Appartement B',
+    'street'       => '16',
+    'number'       => 'Appartement B',
     'numberSuffix' => 'Appartement B',
-    'cc'         => CountryCodes::CC_BE,
-    'city'       => 'Antwerpen',
-    'postalCode' => '1000',
-    'region'     => 'Antwerpen',
-    'state'      => 'Current',
+    'cc'           => CountryCodes::CC_BE,
+    'city'         => 'Antwerpen',
+    'postalCode'   => '1000',
+    'region'       => 'Antwerpen',
+    'state'        => 'Current',
 ];
 
 uses()->group('checkout');
@@ -279,16 +279,17 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
-            'isEnabled'           => true,
-            'allowedPackageTypes' => [
+            'isEnabled'            => true,
+            'allowedPackageTypes'  => [
                 [
                     'name' => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                     'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 ],
             ],
-            'hasDeliveryOptions'  => true,
-            'minimumDropOffDelay' => TriStateService::INHERIT,
-            'shippingAddress'     => SHIPPING_ADDRESS_NL,
+            'hasDeliveryOptions'   => true,
+            'minimumDropOffDelay'  => TriStateService::INHERIT,
+            'shippingAddress'      => SHIPPING_ADDRESS_NL,
+            'excludeParcelLockers' => false,
         ],
     ],
 
@@ -313,16 +314,17 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
-            'isEnabled'           => true,
-            'hasDeliveryOptions'  => true,
-            'minimumDropOffDelay' => 2,
-            'allowedPackageTypes' => [
+            'isEnabled'            => true,
+            'hasDeliveryOptions'   => true,
+            'minimumDropOffDelay'  => 2,
+            'allowedPackageTypes'  => [
                 [
                     'name' => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                     'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
                 ],
             ],
-            'shippingAddress'     => SHIPPING_ADDRESS_NL,
+            'shippingAddress'      => SHIPPING_ADDRESS_NL,
+            'excludeParcelLockers' => false,
         ],
     ],
 
@@ -339,10 +341,11 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             ],
         ],
         'result' => [
-            'isEnabled'           => true,
-            'hasDeliveryOptions'  => false,
-            'allowedPackageTypes' => [],
-            'shippingAddress'     => SHIPPING_ADDRESS_NL,
+            'isEnabled'            => true,
+            'hasDeliveryOptions'   => false,
+            'allowedPackageTypes'  => [],
+            'shippingAddress'      => SHIPPING_ADDRESS_NL,
+            'excludeParcelLockers' => false,
         ],
     ],
 ]);
