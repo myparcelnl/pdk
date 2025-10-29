@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -33,6 +34,7 @@ use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
@@ -224,19 +226,31 @@ it('merges partial payload with existing order', function (
     );
 
     $date = new \DateTime('+1 day');
-    $partialDeliveryOptions = [
-        DeliveryOptions::DATE => $date
-    ];
 
     /**
      * @var DeliveryOptions $existingDeliveryOptions
      */
     $existingDeliveryOptions = $orders->pluck('deliveryOptions')->first();
+    $partialDeliveryOptions = [
+        DeliveryOptions::DATE => $date
+    ];
     $mergedDeliveryOptions = $existingDeliveryOptions
         ->fill($partialDeliveryOptions)
         ->toArrayWithoutNull();
 
     expect($mergedDeliveryOptions[DeliveryOptions::DATE])->toBe($date->format(Pdk::get('defaultDateFormat')));
+
+    /**
+     * @var PdkPhysicalProperties $existingPhysicalProperties
+     */
+    $existingPhysicalProperties = $orders->pluck('physicalProperties')->first();
+    $partialPhysicalProperties  = [
+        'manualWeight' => 500,
+    ];
+    $mergedPhysicalProperties = $existingPhysicalProperties
+        ->fill($partialPhysicalProperties);
+
+    expect($mergedPhysicalProperties['manualWeight'])->toBe($partialPhysicalProperties['manualWeight']);
 
     $requestWithPayload = new Request(
         ['action' => PdkBackendActions::EXPORT_ORDERS, 'orderIds' => $orders->pluck('externalIdentifier')->toArray()],
@@ -250,7 +264,8 @@ it('merges partial payload with existing order', function (
             'data' => [
                 'orders' => [
                     [
-                        'deliveryOptions' => $partialDeliveryOptions
+                        'deliveryOptions' => $partialDeliveryOptions,
+                        'physicalProperties' => $partialPhysicalProperties
                     ],
                 ],
             ],
@@ -277,6 +292,8 @@ it('merges partial payload with existing order', function (
         // Check to make sure the carrier did not reset to the default - this is the only part that is easy to test due to not being affected by calculators
         ->and($responseOrders[0]['deliveryOptions'][DeliveryOptions::CARRIER])
         ->toBe($mergedDeliveryOptions[DeliveryOptions::CARRIER])
+        ->and($responseOrders[0]['physicalProperties'][DeliveryOptions::CARRIER])
+        ->toBe($mergedPhysicalProperties[DeliveryOptions::CARRIER])
         ->and($response->getStatusCode())
         ->toBe(200)
         // Expect no errors to have been added to notifications
