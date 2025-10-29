@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
@@ -314,3 +315,34 @@ it(
         },
     ],
 ]);
+
+it('creates platform settings from propositions', function () {
+    $deliveryOptionsService = Pdk::get(DeliveryOptionsServiceInterface::class);
+    $propositionService = Pdk::get(PropositionService::class);
+    // We're testing with an unmocked proposition here, as the config is local at this point.
+    $propositionService->setActivePropositionId(1);
+
+    $config = $propositionService->getPropositionConfig();
+    $platformSettings = $deliveryOptionsService->createPropositionConfig();
+
+    expect($platformSettings)->toHaveKey('carriers');
+    print_r($platformSettings['carriers'][0]);
+    expect($platformSettings['carriers'][0])->toMatchArray([
+        'name' => 'postnl',
+        "packageTypes" => ['package', 'mailbox', 'letter', 'digital_stamp', 'package_small'],
+        'deliveryTypes' => ['morning', 'standard', 'evening', 'pickup'],
+        'deliveryCountries' => ['NL', 'BE'],
+        "pickupCountries" => ['NL', 'BE', 'DK', 'SE', 'DE'],
+        "smallPackagePickupCountries" => ['NL', 'BE'],
+        "fakeDelivery" => true,
+        "shipmentOptionsPerPackageType" => [
+            "package" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
+            "mailbox" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
+            "letter" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
+            "digital_stamp" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
+            "package_small" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance']
+        ],
+        "features" => ['deliveryDaysWindow', 'dropOffDays', 'dropOffDelay', 'pickupMapAllowLoadMore'],
+        "addressFields" => ['postalCode', 'street', 'city']
+    ]);
+});
