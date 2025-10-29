@@ -44,6 +44,14 @@
                 "STANDARD_DELIVERY",
                 "PICKUP_DELIVERY"
             ],
+            "deliveryCountries": [
+                "NL",
+                "BE"
+            ],
+            "pickupCountries": [
+                "NL",
+                "BE"
+            ],
             "shipmentOptions": [
                 "AGE_CHECK",
                 "ONLY_RECIPIENT",
@@ -69,6 +77,18 @@
                     500000
                 ]
             }
+        },
+        "deliveryOptions": {
+            "addressFields": [
+                "city",
+                "postalCode"
+            ],
+            "availableFeatures": [
+                "deliveryDaysWindow",
+                "dropOffDays",
+                "dropOffDelay"
+            ],
+            "allowFakeDelivery": false
         }
     },
     "delayed": false,
@@ -113,6 +133,14 @@
                     "STANDARD_DELIVERY",
                     "PICKUP_DELIVERY"
                 ],
+                "deliveryCountries": [
+                    "NL",
+                    "BE"
+                ],
+                "pickupCountries": [
+                    "NL",
+                    "BE"
+                ],
                 "shipmentOptions": [
                     "AGE_CHECK",
                     "ONLY_RECIPIENT",
@@ -138,6 +166,18 @@
                         500000
                     ]
                 }
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "city",
+                    "postalCode"
+                ],
+                "availableFeatures": [
+                    "deliveryDaysWindow",
+                    "dropOffDays",
+                    "dropOffDelay"
+                ],
+                "allowFakeDelivery": false
             }
         },
         "labelAmount": 1,

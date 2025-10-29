@@ -329,6 +329,11 @@
                   "labelDescriptionLength": 45,
                   "multiCollo": true
                 }
+              },
+              "deliveryOptions": {
+                "addressFields": ["postalCode", "street", "city"],
+                "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+                "allowFakeDelivery": true
               }
             }
           ],
@@ -417,6 +422,11 @@
             "sameDayDelivery": true,
             "largeFormat": true
           }
+        },
+        "deliveryOptions": {
+          "addressFields": ["postalCode", "street", "city"],
+          "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+          "allowFakeDelivery": true
         }
       }
     ],
@@ -603,6 +613,11 @@
               "labelDescriptionLength": 45,
               "multiCollo": true
             }
+          },
+          "deliveryOptions": {
+            "addressFields": ["postalCode", "street", "city"],
+            "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+            "allowFakeDelivery": true
           }
         }
       ],

@@ -62,7 +62,6 @@ class CheckoutContext extends Model
         return new self([
 
             'config'   => DeliveryOptionsConfig::fromCart($cart),
-        ,
             'settings' => [
                 'hasDeliveryOptions' => $cart->shippingMethod->hasDeliveryOptions,
             ],

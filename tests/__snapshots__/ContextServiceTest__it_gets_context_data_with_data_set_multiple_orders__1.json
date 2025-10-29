@@ -22,6 +22,8 @@
                         "deliveryTypes": [
                             "STANDARD_DELIVERY"
                         ],
+                        "deliveryCountries": null,
+                        "pickupCountries": null,
                         "shipmentOptions": [
                             "SIGNATURE",
                             "RETURN",
@@ -63,6 +65,17 @@
                             "STANDARD_DELIVERY",
                             "EVENING_DELIVERY",
                             "PICKUP_DELIVERY"
+                        ],
+                        "deliveryCountries": [
+                            "NL",
+                            "BE"
+                        ],
+                        "pickupCountries": [
+                            "NL",
+                            "BE",
+                            "DK",
+                            "SE",
+                            "DE"
                         ],
                         "shipmentOptions": [
                             "AGE_CHECK",
@@ -157,6 +170,21 @@
                             "sameDayDelivery": true,
                             "largeFormat": true
                         }
+                    },
+                    "deliveryOptions": {
+                        "addressFields": [
+                            "postalCode",
+                            "street",
+                            "city"
+                        ],
+                        "unsupportedParameters": null,
+                        "availableFeatures": [
+                            "deliveryDaysWindow",
+                            "dropOffDays",
+                            "dropOffDelay",
+                            "pickupMapAllowLoadMore"
+                        ],
+                        "allowFakeDelivery": true
                     }
                 },
                 "date": null,
@@ -269,6 +297,8 @@
                         "deliveryTypes": [
                             "STANDARD_DELIVERY"
                         ],
+                        "deliveryCountries": null,
+                        "pickupCountries": null,
                         "shipmentOptions": [
                             "SIGNATURE",
                             "RETURN",
@@ -310,6 +340,17 @@
                             "STANDARD_DELIVERY",
                             "EVENING_DELIVERY",
                             "PICKUP_DELIVERY"
+                        ],
+                        "deliveryCountries": [
+                            "NL",
+                            "BE"
+                        ],
+                        "pickupCountries": [
+                            "NL",
+                            "BE",
+                            "DK",
+                            "SE",
+                            "DE"
                         ],
                         "shipmentOptions": [
                             "AGE_CHECK",
@@ -404,6 +445,21 @@
                             "sameDayDelivery": true,
                             "largeFormat": true
                         }
+                    },
+                    "deliveryOptions": {
+                        "addressFields": [
+                            "postalCode",
+                            "street",
+                            "city"
+                        ],
+                        "unsupportedParameters": null,
+                        "availableFeatures": [
+                            "deliveryDaysWindow",
+                            "dropOffDays",
+                            "dropOffDelay",
+                            "pickupMapAllowLoadMore"
+                        ],
+                        "allowFakeDelivery": true
                     }
                 },
                 "date": null,

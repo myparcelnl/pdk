@@ -160,7 +160,7 @@ class Carrier extends Model
         self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
         self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
         self::CARRIER_GLS_NAME                => self::CARRIER_GLS_LEGACY_NAME,
-        self::CARRIER_BRT_NAME                => self::CARRIER_BRT_LEGACY_NAME
+        self::CARRIER_BRT_NAME                => self::CARRIER_BRT_LEGACY_NAME,
         self::CARRIER_TRUNKRS_NAME            => self::CARRIER_TRUNKRS_LEGACY_NAME,
     ];
 

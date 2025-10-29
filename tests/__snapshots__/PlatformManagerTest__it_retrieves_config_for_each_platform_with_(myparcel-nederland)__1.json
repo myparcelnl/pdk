@@ -26,6 +26,8 @@
                 "deliveryTypes": [
                     "STANDARD_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "SIGNATURE",
                     "RETURN",
@@ -67,6 +69,17 @@
                     "STANDARD_DELIVERY",
                     "EVENING_DELIVERY",
                     "PICKUP_DELIVERY"
+                ],
+                "deliveryCountries": [
+                    "NL",
+                    "BE"
+                ],
+                "pickupCountries": [
+                    "NL",
+                    "BE",
+                    "DK",
+                    "SE",
+                    "DE"
                 ],
                 "shipmentOptions": [
                     "AGE_CHECK",
@@ -161,6 +174,21 @@
                     "sameDayDelivery": true,
                     "largeFormat": true
                 }
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "postalCode",
+                    "street",
+                    "city"
+                ],
+                "unsupportedParameters": null,
+                "availableFeatures": [
+                    "deliveryDaysWindow",
+                    "dropOffDays",
+                    "dropOffDelay",
+                    "pickupMapAllowLoadMore"
+                ],
+                "allowFakeDelivery": true
             }
         },
         {
@@ -178,6 +206,8 @@
             "inboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -186,6 +216,8 @@
                     "PALLET"
                 ],
                 "deliveryTypes": null,
+                "deliveryCountries": [],
+                "pickupCountries": [],
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -202,6 +234,12 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
+            },
+            "deliveryOptions": {
+                "addressFields": [],
+                "unsupportedParameters": [],
+                "availableFeatures": [],
+                "allowFakeDelivery": false
             }
         },
         {
@@ -219,6 +257,8 @@
             "inboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -230,6 +270,54 @@
                 "deliveryTypes": [
                     "STANDARD_DELIVERY",
                     "PICKUP_DELIVERY"
+                ],
+                "deliveryCountries": [
+                    "AT",
+                    "BE",
+                    "BG",
+                    "CZ",
+                    "DK",
+                    "EE",
+                    "FI",
+                    "FR",
+                    "DE",
+                    "GR",
+                    "HU",
+                    "IE",
+                    "IT",
+                    "LV",
+                    "LI",
+                    "LT",
+                    "LU",
+                    "NL",
+                    "PL",
+                    "PT",
+                    "RO",
+                    "SK",
+                    "SI",
+                    "ES",
+                    "SE"
+                ],
+                "pickupCountries": [
+                    "AT",
+                    "BE",
+                    "CZ",
+                    "DK",
+                    "EE",
+                    "FI",
+                    "FR",
+                    "DE",
+                    "HU",
+                    "LV",
+                    "LT",
+                    "LU",
+                    "NL",
+                    "PL",
+                    "PT",
+                    "SK",
+                    "SI",
+                    "ES",
+                    "GB"
                 ],
                 "shipmentOptions": [],
                 "metadata": {
@@ -256,6 +344,19 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "postalCode",
+                    "street",
+                    "city"
+                ],
+                "unsupportedParameters": null,
+                "availableFeatures": [
+                    "dropOffDays",
+                    "dropOffDelay"
+                ],
+                "allowFakeDelivery": false
             }
         },
         {
@@ -273,12 +374,16 @@
             "inboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": null,
                 "metadata": null
             },
             "outboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": [],
+                "pickupCountries": [],
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -293,6 +398,12 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
+            },
+            "deliveryOptions": {
+                "addressFields": null,
+                "unsupportedParameters": null,
+                "availableFeatures": null,
+                "allowFakeDelivery": false
             }
         },
         {
@@ -314,6 +425,8 @@
                 "deliveryTypes": [
                     "STANDARD_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "SIGNATURE",
                     "RETURN",
@@ -335,6 +448,14 @@
                 "deliveryTypes": [
                     "STANDARD_DELIVERY",
                     "PICKUP_DELIVERY"
+                ],
+                "deliveryCountries": [
+                    "NL",
+                    "BE"
+                ],
+                "pickupCountries": [
+                    "NL",
+                    "BE"
                 ],
                 "shipmentOptions": [
                     "AGE_CHECK",
@@ -415,6 +536,19 @@
                     "sameDayDelivery": true,
                     "largeFormat": true
                 }
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "city",
+                    "postalCode"
+                ],
+                "unsupportedParameters": null,
+                "availableFeatures": [
+                    "deliveryDaysWindow",
+                    "dropOffDays",
+                    "dropOffDelay"
+                ],
+                "allowFakeDelivery": false
             }
         },
         {
@@ -436,6 +570,8 @@
                 "deliveryTypes": [
                     "STANDARD_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "INSURANCE"
                 ],
@@ -454,6 +590,8 @@
                     "STANDARD_DELIVERY",
                     "PICKUP_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "SIGNATURE",
                     "INSURANCE"
@@ -505,6 +643,12 @@
                         50000
                     ]
                 }
+            },
+            "deliveryOptions": {
+                "addressFields": null,
+                "unsupportedParameters": null,
+                "availableFeatures": [],
+                "allowFakeDelivery": false
             }
         },
         {
@@ -522,6 +666,8 @@
             "inboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -532,6 +678,8 @@
                 "deliveryTypes": [
                     "STANDARD_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "SIGNATURE",
                     "SATURDAY_DELIVERY",
@@ -589,6 +737,12 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
+            },
+            "deliveryOptions": {
+                "addressFields": null,
+                "unsupportedParameters": null,
+                "availableFeatures": [],
+                "allowFakeDelivery": false
             }
         },
         {
@@ -606,6 +760,8 @@
             "inboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -617,6 +773,8 @@
                     "STANDARD_DELIVERY",
                     "PICKUP_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "AGE_CHECK",
                     "ONLY_RECIPIENT",
@@ -683,6 +841,16 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "postalCode",
+                    "street",
+                    "city"
+                ],
+                "unsupportedParameters": null,
+                "availableFeatures": null,
+                "allowFakeDelivery": false
             }
         },
         {
@@ -700,6 +868,8 @@
             "inboundFeatures": {
                 "packageTypes": null,
                 "deliveryTypes": null,
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": null,
                 "metadata": null
             },
@@ -711,6 +881,8 @@
                     "EXPRESS_DELIVERY",
                     "PICKUP_DELIVERY"
                 ],
+                "deliveryCountries": null,
+                "pickupCountries": null,
                 "shipmentOptions": [
                     "AGE_CHECK",
                     "ONLY_RECIPIENT",
@@ -774,6 +946,18 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
+            },
+            "deliveryOptions": {
+                "addressFields": [
+                    "postalCode",
+                    "street",
+                    "city"
+                ],
+                "unsupportedParameters": [
+                    "package_type"
+                ],
+                "availableFeatures": null,
+                "allowFakeDelivery": false
             }
         },
         {
@@ -801,7 +985,8 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
-            }
+            },
+            "deliveryOptions": null
         },
         {
             "externalIdentifier": "gls",
@@ -828,7 +1013,8 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
-            }
+            },
+            "deliveryOptions": null
         },
         {
             "externalIdentifier": "trunkrs",
@@ -855,7 +1041,8 @@
                 "features": [],
                 "packageTypes": [],
                 "shipmentOptions": []
-            }
+            },
+            "deliveryOptions": null
         }
     ]
 }
