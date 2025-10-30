@@ -218,6 +218,26 @@
           "carrier": "featureCustomContractOnly"
         }
       }
+    },
+    {
+      "name": "trunkrs",
+      "capabilities": {
+        "packageTypes": ["package"],
+        "deliveryTypes": ["standard", "evening"],
+        "shipmentOptions": {
+          "ageCheck": true,
+          "onlyRecipient": true,
+          "receiptCode": true,
+          "FreshFood": true,
+          "Frozen": true,
+          "sameDayDelivery": true,
+          "signature": true
+        },
+        "features": {
+          "labelDescriptionLength": 45,
+          "carrier": "featureCustomContractOnly"
+        }
+      }
     }
   ]
 }

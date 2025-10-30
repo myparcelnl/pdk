@@ -70,7 +70,8 @@
             "signature": -1,
             "tracked": -1,
             "collect": -1,
-            "excludeParcelLockers": -1
+            "freshFood": -1,
+            "frozen": -1
           },
           "deliveryType": "standard",
           "packageType": "package"
@@ -139,7 +140,8 @@
                 "signature": -1,
                 "tracked": -1,
                 "collect": -1,
-                "excludeParcelLockers": -1
+                "freshFood": -1,
+                "frozen": -1
               },
               "deliveryType": "standard",
               "packageType": "package"
@@ -195,7 +197,8 @@
                 "signature": -1,
                 "tracked": -1,
                 "collect": -1,
-                "excludeParcelLockers": -1
+                "freshFood": -1,
+                "frozen": -1
               },
               "deliveryType": "standard",
               "packageType": "package"
@@ -257,10 +260,11 @@
                 "exportReturn": -1,
                 "exportSignature": -1,
                 "exportTracked": -1,
+                "exportFood": -1,
+                "exportFrozenFood": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
-                "packageType": -1,
-                "excludeParcelLockers": -1
+                "packageType": -1
               },
               "mergedSettings": {
                 "id": "product",
@@ -276,10 +280,11 @@
                 "exportReturn": -1,
                 "exportSignature": -1,
                 "exportTracked": -1,
+                "exportFood": -1,
+                "exportFrozenFood": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
-                "packageType": -1,
-                "excludeParcelLockers": -1
+                "packageType": -1
               }
             }
           }
@@ -366,7 +371,8 @@
             "signature": -1,
             "tracked": -1,
             "collect": -1,
-            "excludeParcelLockers": -1
+            "freshFood": -1,
+            "frozen": -1
           },
           "deliveryType": "standard",
           "packageType": "package"

@@ -43,7 +43,8 @@
       "signature": 0,
       "tracked": -1,
       "collect": 0,
-      "excludeParcelLockers": -1
+      "freshFood": -1,
+      "frozen": -1
     },
     "deliveryType": "standard",
     "packageType": "package"
