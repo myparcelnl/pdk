@@ -13,8 +13,8 @@
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
       "closedDays": [],
-      "apiBaseUrl": "https://api.myparcel.nl",
-      "excludeParcelLockers": false
+      "excludeParcelLockers": false,
+      "apiBaseUrl": "https://api.myparcel.nl"
     },
     "strings": {
       "morning": "Ochtend"
@@ -60,15 +60,15 @@
             "responseProperty": null
           }
         }
-      }
+      },
+      "allowedShippingMethods": [],
+      "hasDeliveryOptions": true,
+      "hiddenInputName": "pest_checkout_data",
+      "checkoutAddressHiddenInputName": "pest_checkout_address",
+      "countriesWithSeparateAddressFields": ["NL", "BE"],
+      "carriersWithTaxFields": [],
+      "hasAddressWidget": false
     },
-    "allowedShippingMethods": [],
-    "hasDeliveryOptions": true,
-    "hiddenInputName": "pest_checkout_data",
-    "checkoutAddressHiddenInputName": "pest_checkout_address",
-    "countriesWithSeparateAddressFields": ["NL", "BE"],
-    "carriersWithTaxFields": [],
-    "hasAddressWidget": false
-  },
-  "endpoints": []
+    "endpoints": []
+  }
 }
