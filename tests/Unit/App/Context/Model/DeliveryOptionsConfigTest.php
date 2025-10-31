@@ -45,17 +45,16 @@ it('can be instantiated', function () {
         ->toEqual([
             'allowRetry'                        => false,
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
-            'basePrice'                         => 0.0,
+            'basePrice'                         => 0,
             'carrierSettings'                   => [],
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
-            'proposition'                       => 'myparcel',
             'platform'                          => 'myparcel',
             'showPriceSurcharge'                => false,
-            'priceStandardDelivery'             => 0.0,
+            'priceStandardDelivery'             => 0,
             'closedDays'                        => null,
         ]);
 });
@@ -175,7 +174,6 @@ it('uses correct price when price is shown as surcharge', function () {
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
-            'proposition'                       => 'myparcel',
             'platform'                          => 'myparcel',
             'showPriceSurcharge'                => false,
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
