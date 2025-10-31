@@ -1,81 +1,84 @@
 {
-  "checkout": {
-    "config": {
-      "allowRetry": false,
-      "basePrice": 0,
-      "carrierSettings": [],
-      "currency": "EUR",
-      "locale": "nl-NL",
-      "packageType": "package",
-      "allowPickupLocationsViewSelection": true,
-      "platform": "myparcel",
-      "priceStandardDelivery": 0,
-      "showPriceSurcharge": false,
-      "closedDays": [],
-      "apiBaseUrl": "https://api.myparcel.nl",
-      "excludeParcelLockers": false
-    },
-    "strings": {
-      "morning": "Ochtend"
-    },
-    "settings": {
-      "actions": {
-        "baseUrl": "FRONTEND_URL",
-        "endpoints": {
-          "fetchCheckoutContext": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "fetchCheckoutContext"
+    "checkout": {
+        "config": {
+            "allowRetry": false,
+            "basePrice": 0,
+            "carrierSettings": [],
+            "currency": "EUR",
+            "locale": "nl-NL",
+            "packageType": "package",
+            "allowPickupLocationsViewSelection": true,
+            "proposition": "myparcel",
+            "platform": "myparcel",
+            "priceStandardDelivery": 0,
+            "showPriceSurcharge": false,
+            "closedDays": [],
+            "apiBaseUrl": "https:\/\/api.myparcel.nl"
+        },
+        "strings": {
+            "morning": "Ochtend"
+        },
+        "settings": {
+            "actions": {
+                "baseUrl": "FRONTEND_URL",
+                "endpoints": {
+                    "fetchCheckoutContext": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "fetchCheckoutContext"
+                        },
+                        "path": "",
+                        "property": "context",
+                        "responseProperty": null
+                    },
+                    "proxyAddressList": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "proxyAddressList"
+                        },
+                        "path": "",
+                        "property": "addresses",
+                        "responseProperty": null
+                    },
+                    "proxyAddressValidate": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "proxyAddressValidate"
+                        },
+                        "path": "",
+                        "property": "validate",
+                        "responseProperty": null
+                    },
+                    "fetchContext": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "fetchContext"
+                        },
+                        "path": "",
+                        "property": "context",
+                        "responseProperty": null
+                    }
+                }
             },
-            "path": "",
-            "property": "context",
-            "responseProperty": null
-          },
-          "proxyAddressList": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyAddressList"
-            },
-            "path": "",
-            "property": "addresses",
-            "responseProperty": null
-          },
-          "proxyAddressValidate": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyAddressValidate"
-            },
-            "path": "",
-            "property": "validate",
-            "responseProperty": null
-          },
-          "fetchContext": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "fetchContext"
-            },
-            "path": "",
-            "property": "context",
-            "responseProperty": null
-          }
-        }
-      },
-      "allowedShippingMethods": [],
-      "hasDeliveryOptions": true,
-      "hiddenInputName": "pest_checkout_data",
-      "checkoutAddressHiddenInputName": "pest_checkout_address",
-      "countriesWithSeparateAddressFields": ["NL", "BE"],
-      "carriersWithTaxFields": [],
-      "hasAddressWidget": false
-    },
-    "endpoints": []
-  }
+            "allowedShippingMethods": [],
+            "hasDeliveryOptions": true,
+            "hiddenInputName": "pest_checkout_data",
+            "checkoutAddressHiddenInputName": "pest_checkout_address",
+            "countriesWithSeparateAddressFields": [
+                "NL",
+                "BE"
+            ],
+            "carriersWithTaxFields": [],
+            "hasAddressWidget": false
+        },
+        "endpoints": []
+    }
 }
