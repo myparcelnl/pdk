@@ -8,12 +8,13 @@
       "locale": "nl-NL",
       "packageType": "package",
       "allowPickupLocationsViewSelection": true,
+      "proposition": "myparcel",
       "platform": "myparcel",
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
       "closedDays": [],
-      "apiBaseUrl": "https://api.myparcel.nl",
-      "excludeParcelLockers": false
+      "excludeParcelLockers": false,
+      "apiBaseUrl": "https://api.myparcel.nl"
     },
     "strings": {
       "morning": "Ochtend"
@@ -26,9 +27,7 @@
             "body": null,
             "headers": [],
             "method": "GET",
-            "parameters": {
-              "action": "fetchCheckoutContext"
-            },
+            "parameters": { "action": "fetchCheckoutContext" },
             "path": "",
             "property": "context",
             "responseProperty": null
@@ -37,9 +36,7 @@
             "body": null,
             "headers": [],
             "method": "GET",
-            "parameters": {
-              "action": "proxyAddressList"
-            },
+            "parameters": { "action": "proxyAddressList" },
             "path": "",
             "property": "addresses",
             "responseProperty": null
@@ -48,9 +45,7 @@
             "body": null,
             "headers": [],
             "method": "GET",
-            "parameters": {
-              "action": "proxyAddressValidate"
-            },
+            "parameters": { "action": "proxyAddressValidate" },
             "path": "",
             "property": "validate",
             "responseProperty": null
@@ -59,9 +54,7 @@
             "body": null,
             "headers": [],
             "method": "GET",
-            "parameters": {
-              "action": "fetchContext"
-            },
+            "parameters": { "action": "fetchContext" },
             "path": "",
             "property": "context",
             "responseProperty": null
