@@ -13,6 +13,8 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -95,6 +97,7 @@ class CartCalculationService implements CartCalculationServiceInterface
 
         $shippingMethod                     = $cart->shippingMethod;
         $shippingMethod->hasDeliveryOptions = $hasDeliveryOptions;
+        $shippingMethod->excludeParcelLockers = $this->shouldExcludeParcelLockers($cart);
 
         if ($hasDeliveryOptions) {
             $shippingMethod->minimumDropOffDelay = $cart->lines->max('product.settings.dropOffDelay');
@@ -115,6 +118,50 @@ class CartCalculationService implements CartCalculationServiceInterface
         $anyItemIsDeliverable    = $cart->lines->isDeliverable();
 
         return $anyItemIsDeliverable && ! $deliveryOptionsDisabled;
+    }
+
+    /**
+     * Check if parcel lockers should be excluded for this cart.
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     *
+     * @return bool
+     */
+    protected function shouldExcludeParcelLockers(PdkCart $cart): bool
+    {
+        // Check if parcel lockers should be excluded based on general setting
+        $generalExcludeParcelLockers = Settings::get(
+            CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
+            CheckoutSettings::ID,
+            false
+        );
+
+        // Check if any product in the cart has 18+ classification (product level)
+        $has18PlusProduct = $cart->lines->contains(function ($line) {
+            $productSettings = $line->product->mergedSettings;
+            return TriStateService::ENABLED === $productSettings->exportAgeCheck;
+        });
+
+        // Check if any product explicitly excludes parcel lockers (product level)
+        $productExcludesParcelLockers = $cart->lines->contains(function ($line) {
+            $productSettings = $line->product->mergedSettings;
+            return TriStateService::ENABLED === $productSettings->excludeParcelLockers;
+        });
+
+        // Check if 18+ is enabled on carrier level for any carrier in the cart
+        $has18PlusCarrier = $cart->lines->contains(function ($line) {
+            if (!$line->product->carrier || !$line->product->carrier->id) {
+                return false;
+            }
+            
+            return Settings::get(
+                CarrierSettings::EXPORT_AGE_CHECK,
+                CarrierSettings::ID . '.' . $line->product->carrier->id,
+                false
+            );
+        });
+
+        return $generalExcludeParcelLockers || $has18PlusProduct || $productExcludesParcelLockers || $has18PlusCarrier;
     }
 
     /**

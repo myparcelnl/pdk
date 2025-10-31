@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int            $fitInDigitalStamp
  * @property int            $fitInMailbox
  * @property int<-1>|string $packageType
+ * @property int<-1|0|1>    $excludeParcelLockers
  */
 class ProductSettings extends AbstractSettingsModel
 {
@@ -42,6 +43,7 @@ class ProductSettings extends AbstractSettingsModel
     public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
     public const FIT_IN_MAILBOX           = 'fitInMailbox';
     public const PACKAGE_TYPE             = 'packageType';
+    public const EXCLUDE_PARCEL_LOCKERS   = 'excludeParcelLockers';
 
     protected $attributes = [
         'id' => self::ID,
@@ -61,6 +63,7 @@ class ProductSettings extends AbstractSettingsModel
         self::FIT_IN_DIGITAL_STAMP     => TriStateService::INHERIT,
         self::FIT_IN_MAILBOX           => TriStateService::INHERIT,
         self::PACKAGE_TYPE             => TriStateService::INHERIT,
+        self::EXCLUDE_PARCEL_LOCKERS   => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -79,5 +82,6 @@ class ProductSettings extends AbstractSettingsModel
         self::FIT_IN_DIGITAL_STAMP     => 'int',
         self::FIT_IN_MAILBOX           => 'int',
         self::PACKAGE_TYPE             => TriStateService::TYPE_COERCED,
+        self::EXCLUDE_PARCEL_LOCKERS   => TriStateService::TYPE_STRICT,
     ];
 }

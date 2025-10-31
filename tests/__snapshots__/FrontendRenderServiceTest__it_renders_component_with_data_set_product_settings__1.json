@@ -22,7 +22,8 @@
         "exportTracked": -1,
         "fitInDigitalStamp": -1,
         "fitInMailbox": -1,
-        "packageType": -1
+        "packageType": -1,
+        "excludeParcelLockers": -1
       },
       "mergedSettings": {
         "id": "product",
@@ -40,7 +41,8 @@
         "exportTracked": -1,
         "fitInDigitalStamp": -1,
         "fitInMailbox": -1,
-        "packageType": -1
+        "packageType": -1,
+        "excludeParcelLockers": -1
       }
     }
   ],
@@ -118,6 +120,12 @@
           "$component": "ToggleInput",
           "label": "settings_product_disable_delivery_options",
           "description": "settings_product_disable_delivery_options_description"
+        },
+        {
+          "name": "excludeParcelLockers",
+          "$component": "TriStateInput",
+          "label": "settings_product_exclude_parcel_lockers",
+          "description": "settings_product_exclude_parcel_lockers_description"
         },
         {
           "$component": "SettingsDivider",

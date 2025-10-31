@@ -45,17 +45,18 @@ it('instantiates default delivery options', function () {
 it('instantiates shipment options', function () {
     $deliveryOptions = new DeliveryOptions([
         'shipmentOptions' => [
-            'insurance'        => 5000,
-            'labelDescription' => 'hello',
-            'ageCheck'         => true,
-            'hideSender'       => true,
-            'largeFormat'      => true,
-            'onlyRecipient'    => true,
-            'return'           => true,
-            'sameDayDelivery'  => true,
-            'signature'        => true,
-            'receiptCode'      => true,
-            'collect'          => true,
+            'insurance'            => 5000,
+            'labelDescription'     => 'hello',
+            'ageCheck'             => true,
+            'hideSender'           => true,
+            'largeFormat'          => true,
+            'onlyRecipient'        => true,
+            'return'               => true,
+            'sameDayDelivery'      => true,
+            'signature'            => true,
+            'receiptCode'          => true,
+            'collect'              => true,
+            'excludeParcelLockers' => false,
         ],
     ]);
 
@@ -63,16 +64,17 @@ it('instantiates shipment options', function () {
         ->toEqual([
             'insurance'        => 5000,
             'labelDescription' => 'hello',
-            'ageCheck'         => true,
-            'hideSender'       => true,
-            'largeFormat'      => true,
-            'onlyRecipient'    => true,
-            'return'           => true,
-            'sameDayDelivery'  => true,
-            'signature'        => true,
-            'tracked'          => true,
-            'receiptCode'      => true,
-            'collect'          => true,
+            'ageCheck'         => TriStateService::ENABLED,
+            'hideSender'       => TriStateService::ENABLED,
+            'largeFormat'      => TriStateService::ENABLED,
+            'onlyRecipient'    => TriStateService::ENABLED,
+            'return'           => TriStateService::ENABLED,
+            'sameDayDelivery'  => TriStateService::ENABLED,
+            'signature'        => TriStateService::ENABLED,
+            'tracked'          => TriStateService::INHERIT,
+            'receiptCode'      => TriStateService::ENABLED,
+            'collect'          => TriStateService::ENABLED,
+            'excludeParcelLockers' => TriStateService::DISABLED,
         ]);
 });
 

@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
  * @property int                   $minimumDropOffDelay
  * @property PackageTypeCollection $allowedPackageTypes
  * @property Address               $shippingAddress
+ * @property bool                  $excludeParcelLockers
  */
 class PdkShippingMethod extends Model
 {
@@ -29,6 +30,7 @@ class PdkShippingMethod extends Model
         'isEnabled'           => true,
         'minimumDropOffDelay' => null,
         'shippingAddress'     => Address::class,
+        'excludeParcelLockers' => false,
     ];
 
     protected $casts      = [
@@ -40,6 +42,7 @@ class PdkShippingMethod extends Model
         'isEnabled'           => 'bool',
         'minimumDropOffDelay' => 'int',
         'shippingAddress'     => Address::class,
+        'excludeParcelLockers' => 'bool',
     ];
 
     protected $deprecated = [
