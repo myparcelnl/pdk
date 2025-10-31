@@ -41,6 +41,10 @@ final class ExcludeParcelLockersCalculator extends AbstractPdkOrderOptionCalcula
 
         // Check if 18+ is enabled on carrier level for any carrier in the order
         $has18PlusCarrier = $this->order->lines->contains(function ($orderLine) {
+            if (!$orderLine->product->carrier || !$orderLine->product->carrier->id) {
+                return false;
+            }
+            
             return Settings::get(
                 CarrierSettings::EXPORT_AGE_CHECK,
                 CarrierSettings::ID . '.' . $orderLine->product->carrier->id,
