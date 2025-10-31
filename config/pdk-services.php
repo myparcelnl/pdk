@@ -54,6 +54,8 @@ use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
 use MyParcelNL\Pdk\Platform\PlatformManager;
 use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
+use MyParcelNL\Pdk\Proposition\PropositionManager;
+use MyParcelNL\Pdk\Proposition\PropositionManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -163,9 +165,16 @@ return [
     NotificationServiceInterface::class        => autowire(NotificationService::class),
 
     /**
-     * Handles platform specific logic.
+     * Handles platform specific logic. (LEGACY - deprecated)
+     *
+     * @deprecated Use PropositionManagerInterface instead
      */
     PlatformManagerInterface::class            => autowire(PlatformManager::class),
+
+    /**
+     * Handles proposition specific logic. (NEW - preferred)
+     */
+    PropositionManagerInterface::class         => autowire(PropositionManager::class),
 
     /**
      * Handles CDN urls.
