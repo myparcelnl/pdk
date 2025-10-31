@@ -291,8 +291,8 @@
         "ageCheck": true,
         "onlyRecipient": true,
         "receiptCode": true,
-        "FreshFood": true,
-        "Frozen": true,
+        "freshFood": true,
+        "frozen": true,
         "sameDayDelivery": true,
         "signature": true
       }
