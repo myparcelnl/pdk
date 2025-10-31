@@ -281,6 +281,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $this->carrierSchema->canHaveCollect()
                 ? [new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
                 : [],
+
+            $this->carrierSchema->canHaveFood()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_FOOD, Components::INPUT_TOGGLE)]
+                : [],
+
+            $this->carrierSchema->canHaveFrozenFood()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_FROZEN_FOOD, Components::INPUT_TOGGLE)]
+                : [],
         ];
     }
 

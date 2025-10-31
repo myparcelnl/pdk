@@ -13,6 +13,8 @@ use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FrozenFoodDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
@@ -79,6 +81,8 @@ return [
             new TrackedDefinition(),
             new ReceiptCodeDefinition(),
             new CollectDefinition(),
+            new FoodDefinition(),
+            new FrozenFoodDefinition(),
         ];
     }),
 

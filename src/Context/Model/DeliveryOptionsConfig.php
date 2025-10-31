@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Proposition;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -23,7 +24,8 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
- * @property string $platform
+ * @property string $proposition    (NEW - preferred)
+ * @property string $platform       (LEGACY - deprecated but supported)
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
  * @property array  $closedDays
@@ -39,6 +41,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView'     => null,
         'allowPickupLocationsViewSelection' => true,
+        'proposition'                    => null,
         'platform'                       => null,
         'priceStandardDelivery'          => 0,
         'showPriceSurcharge'             => false,
@@ -54,6 +57,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                    => 'string',
         'pickupLocationsDefaultView'     => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
+        'proposition'                    => 'string',
         'platform'                       => 'string',
         'priceStandardDelivery'          => 'float',
         'showPriceSurcharge'             => 'boolean',
@@ -67,7 +71,11 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Pdk::get('platform');
+        $propositionName = Proposition::getPropositionName();
+        $this->proposition = $propositionName;
+
+        // LEGACY: Also set platform for backward compatibility
+        $this->platform = $propositionName;
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 

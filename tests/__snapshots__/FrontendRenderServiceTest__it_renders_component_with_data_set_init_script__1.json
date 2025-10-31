@@ -194,7 +194,7 @@
       },
       "switchToAcceptanceApi": {
         "headers": {
-          "Accept": "application\/json"
+          "Accept": "application/json"
         },
         "method": "POST",
         "parameters": {
@@ -204,7 +204,7 @@
       },
       "switchToProductionApi": {
         "headers": {
-          "Accept": "application\/json"
+          "Accept": "application/json"
         },
         "method": "POST",
         "parameters": {
@@ -226,6 +226,15 @@
     "eventPong": "myparcel_pdk_pong",
     "language": "nl",
     "mode": "production",
+    "proposition": {
+      "name": "myparcel",
+      "human": "MyParcel",
+      "backofficeUrl": "https://backoffice.myparcel.nl",
+      "supportUrl": "https://developer.myparcel.nl/contact",
+      "localCountry": "NL",
+      "defaultCarrier": "postnl",
+      "defaultCarrierId": 1
+    },
     "platform": {
       "name": "myparcel",
       "human": "MyParcel",
@@ -489,6 +498,8 @@
           "exportSignature": false,
           "exportTracked": false,
           "exportCollect": false,
+          "exportFood": false,
+          "exportFrozenFood": false,
           "priceDeliveryTypeEvening": 0,
           "priceDeliveryTypeMonday": 0,
           "priceDeliveryTypeMorning": 0,

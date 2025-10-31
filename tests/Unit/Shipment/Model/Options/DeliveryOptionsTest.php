@@ -63,16 +63,18 @@ it('instantiates shipment options', function () {
         ->toEqual([
             'insurance'        => 5000,
             'labelDescription' => 'hello',
-            'ageCheck'         => true,
-            'hideSender'       => true,
-            'largeFormat'      => true,
-            'onlyRecipient'    => true,
-            'return'           => true,
-            'sameDayDelivery'  => true,
-            'signature'        => true,
-            'tracked'          => true,
-            'receiptCode'      => true,
-            'collect'          => true,
+            'ageCheck'         => 1,
+            'hideSender'       => 1,
+            'largeFormat'      => 1,
+            'onlyRecipient'    => 1,
+            'return'           => 1,
+            'sameDayDelivery'  => 1,
+            'signature'        => 1,
+            'tracked'          => -1,
+            'receiptCode'      => 1,
+            'collect'          => 1,
+            'freshFood'        => -1,
+            'frozen'           => -1,
         ]);
 });
 
