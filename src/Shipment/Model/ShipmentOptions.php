@@ -20,8 +20,8 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
  * @property int<-1|0|1>         $collect
- * @property int<-1|0|1>         $FreshFood
- * @property int<-1|0|1>         $Frozen
+ * @property int<-1|0|1>         $freshFood
+ * @property int<-1|0|1>         $frozen
  */
 class ShipmentOptions extends Model
 {
@@ -37,8 +37,8 @@ class ShipmentOptions extends Model
     public const SIGNATURE         = 'signature';
     public const TRACKED           = 'tracked';
     public const COLLECT           = 'collect';
-    public const FRESH_FOOD        = 'FreshFood';
-    public const FROZEN            = 'Frozen';
+    public const FRESH_FOOD        = 'freshFood';
+    public const FROZEN            = 'frozen';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
