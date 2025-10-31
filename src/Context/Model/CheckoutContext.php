@@ -55,7 +55,12 @@ class CheckoutContext extends Model
      */
     public static function fromCart(PdkCart $cart): self
     {
-        return new self(['config' => DeliveryOptionsConfig::fromCart($cart)]);
+        return new self([
+            'config'   => DeliveryOptionsConfig::fromCart($cart),
+            'settings' => [
+                'hasDeliveryOptions' => $cart->shippingMethod->hasDeliveryOptions,
+            ],
+        ]);
     }
 
     /**
@@ -79,7 +84,7 @@ class CheckoutContext extends Model
     {
         $settings = $this->getAttributeValue('settings');
 
-        return array_merge($settings, [
+        return array_merge([
             /** General */
             'actions'                            => $this->getActions(),
 
@@ -108,7 +113,7 @@ class CheckoutContext extends Model
                 CheckoutSettings::ENABLE_ADDRESS_WIDGET,
                 CheckoutSettings::ID
             ),
-        ]);
+        ], $settings);
     }
 
     /**
