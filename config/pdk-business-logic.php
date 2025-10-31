@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
@@ -24,6 +25,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\ExcludeParcelLockersCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function DI\factory;
@@ -79,6 +81,7 @@ return [
             new TrackedDefinition(),
             new ReceiptCodeDefinition(),
             new CollectDefinition(),
+            new ExcludeParcelLockersDefinition(),
         ];
     }),
 
@@ -95,6 +98,7 @@ return [
             WeightCalculator::class,
             CustomerInformationCalculator::class,
             CustomsDeclarationCalculator::class,
+            ExcludeParcelLockersCalculator::class,
         ];
     }),
 

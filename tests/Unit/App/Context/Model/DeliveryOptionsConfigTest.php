@@ -56,6 +56,7 @@ it('can be instantiated', function () {
             'showPriceSurcharge'                => false,
             'priceStandardDelivery'             => 0,
             'closedDays'                        => null,
+            'excludeParcelLockers'              => false,
         ]);
 });
 
@@ -168,7 +169,7 @@ it('uses correct price when price is shown as surcharge', function () {
                     'cutoffTimeSameDay'            => '10:00',
                     'priceCollect'                 => 1.4595,
                     'priceExpressDelivery'         => 1.4595,
-
+                    'excludeParcelLockers'         => false,
                 ],
             ],
             'currency'                          => 'EUR',
@@ -179,7 +180,8 @@ it('uses correct price when price is shown as surcharge', function () {
             'apiBaseUrl'                        => 'https://api.myparcel.nl',
             'priceStandardDelivery'             => 695.0,
             'allowPickupLocationsViewSelection' => true,
-            'closedDays'                        => []
+            'closedDays'                        => [],
+            'excludeParcelLockers'              => false,
         ]);
 });
 

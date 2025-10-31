@@ -91,11 +91,11 @@ class CheckoutSettingsView extends AbstractSettingsView
                     ]
                 ),
                 new InteractiveElement(
-                    CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
-                    Components::INPUT_TOGGLE
+                    CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION, Components::INPUT_TOGGLE
                 ),
                 new InteractiveElement(CheckoutSettings::SHOW_TAX_FIELDS, Components::INPUT_TOGGLE),
-                new InteractiveElement(CheckoutSettings::CLOSED_DAYS, Components::INPUT_MULTI_DATE)
+                new InteractiveElement(CheckoutSettings::CLOSED_DAYS, Components::INPUT_MULTI_DATE),
+                new InteractiveElement(CheckoutSettings::EXCLUDE_PARCEL_LOCKERS, Components::INPUT_TOGGLE)
             ),
         ];
     }

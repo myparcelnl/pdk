@@ -25,6 +25,7 @@
       "priceStandardDelivery": 0,
       "priceCollect": 0,
       "priceExpressDelivery": 0,
+      "excludeParcelLockers": null,
       "deliveryDaysWindow": 7,
       "dropOffDelay": 1,
       "cutoffTime": null,

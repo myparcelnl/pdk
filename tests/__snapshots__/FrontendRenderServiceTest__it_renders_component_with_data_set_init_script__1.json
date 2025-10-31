@@ -194,7 +194,7 @@
       },
       "switchToAcceptanceApi": {
         "headers": {
-          "Accept": "application\/json"
+          "Accept": "application/json"
         },
         "method": "POST",
         "parameters": {
@@ -204,7 +204,7 @@
       },
       "switchToProductionApi": {
         "headers": {
-          "Accept": "application\/json"
+          "Accept": "application/json"
         },
         "method": "POST",
         "parameters": {
@@ -443,7 +443,8 @@
         "useSeparateAddressFields": false,
         "showTaxFields": true,
         "enableAddressWidget": false,
-        "closedDays": []
+        "closedDays": [],
+        "excludeParcelLockers": false
       },
       "carrier": {
         "postnl": {

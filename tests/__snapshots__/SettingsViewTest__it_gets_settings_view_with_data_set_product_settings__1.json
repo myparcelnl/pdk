@@ -74,6 +74,12 @@
       "description": "settings_product_disable_delivery_options_description"
     },
     {
+      "name": "excludeParcelLockers",
+      "$component": "TriStateInput",
+      "label": "settings_product_exclude_parcel_lockers",
+      "description": "settings_product_exclude_parcel_lockers_description"
+    },
+    {
       "$component": "SettingsDivider",
       "$wrapper": false,
       "content": "settings_product_customs_options_description",

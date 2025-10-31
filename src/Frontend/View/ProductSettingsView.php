@@ -62,6 +62,7 @@ class ProductSettingsView extends AbstractSettingsView
                 ]
             ),
             new InteractiveElement(ProductSettings::DISABLE_DELIVERY_OPTIONS, Components::INPUT_TOGGLE),
+            new InteractiveElement(ProductSettings::EXCLUDE_PARCEL_LOCKERS, Components::INPUT_TRI_STATE),
 
             /**
              * Customs options.
