@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.66.0](https://github.com/myparcelnl/pdk/compare/v2.65.2...v2.66.0) (2025-10-31)
+
+
+### :sparkles: New Features
+
+* **pdk:** add feature exclude parcel lockers ([#391](https://github.com/myparcelnl/pdk/issues/391)) ([01450f0](https://github.com/myparcelnl/pdk/commit/01450f0b361652df423c33ac6f5d2631644726a0))
+
 ## [2.65.2](https://github.com/myparcelnl/pdk/compare/v2.65.1...v2.65.2) (2025-10-28)
 
 
