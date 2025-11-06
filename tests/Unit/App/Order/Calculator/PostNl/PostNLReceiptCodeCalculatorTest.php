@@ -36,6 +36,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
         ShipmentOptions::TRACKED           => TriStateService::INHERIT,
         ShipmentOptions::COLLECT           => TriStateService::INHERIT,
+        ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
         ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
         ShipmentOptions::FROZEN            => TriStateService::INHERIT,
     ];

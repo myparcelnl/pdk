@@ -56,6 +56,7 @@ it('instantiates shipment options', function () {
             'signature'        => true,
             'receiptCode'      => true,
             'collect'          => true,
+            'excludeParcelLockers' => false,
         ],
     ]);
 
@@ -63,18 +64,19 @@ it('instantiates shipment options', function () {
         ->toEqual([
             'insurance'        => 5000,
             'labelDescription' => 'hello',
-            'ageCheck'         => 1,
-            'hideSender'       => 1,
-            'largeFormat'      => 1,
-            'onlyRecipient'    => 1,
-            'return'           => 1,
-            'sameDayDelivery'  => 1,
-            'signature'        => 1,
-            'tracked'          => -1,
-            'receiptCode'      => 1,
-            'collect'          => 1,
-            'freshFood'        => -1,
-            'frozen'           => -1,
+            'ageCheck'         => TriStateService::ENABLED,
+            'hideSender'       => TriStateService::ENABLED,
+            'largeFormat'      => TriStateService::ENABLED,
+            'onlyRecipient'    => TriStateService::ENABLED,
+            'return'           => TriStateService::ENABLED,
+            'sameDayDelivery'  => TriStateService::ENABLED,
+            'signature'        => TriStateService::ENABLED,
+            'tracked'          => TriStateService::INHERIT,
+            'receiptCode'      => TriStateService::ENABLED,
+            'collect'          => TriStateService::ENABLED,
+            'excludeParcelLockers' => TriStateService::DISABLED,
+            'freshFood'        => TriStateService::INHERIT,
+            'frozen'           => TriStateService::INHERIT,
         ]);
 });
 

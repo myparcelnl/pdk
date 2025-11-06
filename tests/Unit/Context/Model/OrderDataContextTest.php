@@ -88,6 +88,7 @@ it('exposes inherited options', function () {
             ShipmentOptions::TRACKED           => TriStateService::INHERIT,
             ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
             ShipmentOptions::COLLECT           => TriStateService::INHERIT,
+            ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
             ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
             ShipmentOptions::FROZEN            => TriStateService::INHERIT,
         ])
@@ -112,6 +113,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::TRACKED           => TriStateService::DISABLED,
                     ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
+                    ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
                     ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
                     ShipmentOptions::FROZEN            => TriStateService::DISABLED,
                 ],
@@ -134,6 +136,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::TRACKED           => TriStateService::DISABLED,
                     ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
+                    ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
                     ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
                     ShipmentOptions::FROZEN            => TriStateService::DISABLED,
                 ],
