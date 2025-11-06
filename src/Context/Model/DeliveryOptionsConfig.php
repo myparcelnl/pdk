@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Proposition;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -24,44 +23,44 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
- * @property string $proposition    (NEW - preferred)
- * @property string $platform       (LEGACY - deprecated but supported)
+ * @property string $platform
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
  * @property array  $closedDays
+ * @property bool   $excludeParcelLockers
  */
 class DeliveryOptionsConfig extends Model
 {
     public    $attributes = [
-        'allowRetry'                     => false,
-        'basePrice'                      => 0,
-        'carrierSettings'                => [],
-        'currency'                       => 'EUR',
-        'locale'                         => null,
-        'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        'pickupLocationsDefaultView'     => null,
+        'allowRetry'                        => false,
+        'basePrice'                         => 0,
+        'carrierSettings'                   => [],
+        'currency'                          => 'EUR',
+        'locale'                            => null,
+        'packageType'                       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        'pickupLocationsDefaultView'        => null,
         'allowPickupLocationsViewSelection' => true,
-        'proposition'                    => null,
-        'platform'                       => null,
-        'priceStandardDelivery'          => 0,
-        'showPriceSurcharge'             => false,
-        'closedDays'                     => [],
+        'platform'                          => null,
+        'priceStandardDelivery'             => 0,
+        'showPriceSurcharge'                => false,
+        'closedDays'                        => [],
+        'excludeParcelLockers'              => false,
     ];
 
     protected $casts      = [
-        'allowRetry'                     => 'boolean',
-        'basePrice'                      => 'float',
-        'carrierSettings'                => 'array',
-        'currency'                       => 'string',
-        'locale'                         => 'string',
-        'packageType'                    => 'string',
-        'pickupLocationsDefaultView'     => 'string',
+        'allowRetry'                        => 'boolean',
+        'basePrice'                         => 'float',
+        'carrierSettings'                   => 'array',
+        'currency'                          => 'string',
+        'locale'                            => 'string',
+        'packageType'                       => 'string',
+        'pickupLocationsDefaultView'        => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
-        'proposition'                    => 'string',
-        'platform'                       => 'string',
-        'priceStandardDelivery'          => 'float',
-        'showPriceSurcharge'             => 'boolean',
-        'closedDays'                     => 'array',
+        'platform'                          => 'string',
+        'priceStandardDelivery'             => 'float',
+        'showPriceSurcharge'                => 'boolean',
+        'closedDays'                        => 'array',
+        'excludeParcelLockers'              => 'boolean',
     ];
 
     /**
@@ -71,16 +70,12 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $propositionName = Proposition::getPropositionName();
-        $this->proposition = $propositionName;
-
-        // LEGACY: Also set platform for backward compatibility
-        $this->platform = $propositionName;
+        $this->platform   = Pdk::get('platform');
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 
-        $this->showPriceSurcharge         = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
-        $this->pickupLocationsDefaultView = Settings::get(
+        $this->showPriceSurcharge                = CheckoutSettings::PRICE_TYPE_EXCLUDED === $priceType;
+        $this->pickupLocationsDefaultView        = Settings::get(
             CheckoutSettings::PICKUP_LOCATIONS_DEFAULT_VIEW,
             CheckoutSettings::ID
         );
@@ -88,7 +83,11 @@ class DeliveryOptionsConfig extends Model
             CheckoutSettings::ALLOW_PICKUP_LOCATIONS_VIEW_SELECTION,
             CheckoutSettings::ID
         );
-        $this->closedDays = Settings::get(CheckoutSettings::CLOSED_DAYS, CheckoutSettings::ID);
+        $this->closedDays                        = Settings::get(CheckoutSettings::CLOSED_DAYS, CheckoutSettings::ID);
+        $this->excludeParcelLockers              = Settings::get(
+            CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
+            CheckoutSettings::ID
+        );
 
         parent::__construct($data);
     }
@@ -103,6 +102,13 @@ class DeliveryOptionsConfig extends Model
         /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
-        return new self($service->createAllCarrierSettings($cart));
+        $config = new self($service->createAllCarrierSettings($cart));
+        
+        // Override excludeParcelLockers based on cart calculation
+        if (isset($cart->shippingMethod->excludeParcelLockers)) {
+            $config->excludeParcelLockers = $cart->shippingMethod->excludeParcelLockers;
+        }
+
+        return $config;
     }
 }

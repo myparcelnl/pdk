@@ -1,254 +1,245 @@
 {
-    "global": {
-        "appInfo": {
-            "name": "pest",
-            "title": "Pest",
-            "version": "1.0.0",
-            "path": "\/app\/.tmp\/",
-            "url": "APP_URL"
+  "global": {
+    "appInfo": {
+      "name": "pest",
+      "title": "Pest",
+      "version": "1.0.0",
+      "path": "\/app\/.tmp\/",
+      "url": "APP_URL"
+    },
+    "baseUrl": "BACKEND_URL",
+    "bootstrapId": "myparcel-pdk-boot",
+    "endpoints": {
+      "deleteAccount": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "deleteAccount"
         },
-        "baseUrl": "BACKEND_URL",
-        "bootstrapId": "myparcel-pdk-boot",
-        "endpoints": {
-            "deleteAccount": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "deleteAccount"
-                },
-                "path": "",
-                "responseProperty": "context"
-            },
-            "updateAccount": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "updateAccount"
-                },
-                "path": "",
-                "property": "account_settings",
-                "responseProperty": "context"
-            },
-            "updateSubscriptionFeatures": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "updateSubscriptionFeatures"
-                },
-                "path": "",
-                "responseProperty": "data"
-            },
-            "synchronizeOrders": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "synchronizeOrders"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "exportOrders": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "exportOrders"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "postOrderNotes": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "postOrderNotes"
-                },
-                "path": "",
-                "property": "orderNotes"
-            },
-            "fetchOrders": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "fetchOrders"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "printOrders": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "printOrders"
-                },
-                "path": "",
-                "property": "pdfs"
-            },
-            "updateOrders": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "updateOrders"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "updateOrderStatus": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "updateOrderStatus"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "updateShipments": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "updateShipments"
-                },
-                "path": "",
-                "property": "shipments"
-            },
-            "deleteShipments": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "deleteShipments"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "printShipments": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "printShipments"
-                },
-                "path": "",
-                "property": "pdfs"
-            },
-            "updatePluginSettings": {
-                "headers": [],
-                "method": "PUT",
-                "parameters": {
-                    "action": "updatePluginSettings"
-                },
-                "path": "",
-                "property": "plugin_settings"
-            },
-            "updateProductSettings": {
-                "headers": [],
-                "method": "PUT",
-                "parameters": {
-                    "action": "updateProductSettings"
-                },
-                "path": "",
-                "property": "product_settings"
-            },
-            "exportReturn": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "exportReturn"
-                },
-                "path": "",
-                "property": "orders"
-            },
-            "createWebhooks": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "createWebhooks"
-                },
-                "path": "",
-                "property": "webhooks"
-            },
-            "deleteWebhooks": {
-                "headers": [],
-                "method": "POST",
-                "parameters": {
-                    "action": "deleteWebhooks"
-                },
-                "path": "",
-                "property": "webhooks"
-            },
-            "fetchWebhooks": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "fetchWebhooks"
-                },
-                "path": "",
-                "property": "webhooks"
-            },
-            "downloadLogs": {
-                "headers": {
-                    "Accept": "application\/zip"
-                },
-                "method": "POST",
-                "parameters": {
-                    "action": "downloadLogs"
-                },
-                "path": ""
-            },
-            "switchToAcceptanceApi": {
-                "headers": {
-                    "Accept": "application\/json"
-                },
-                "method": "POST",
-                "parameters": {
-                    "action": "switchToAcceptanceApi"
-                },
-                "path": ""
-            },
-            "switchToProductionApi": {
-                "headers": {
-                    "Accept": "application\/json"
-                },
-                "method": "POST",
-                "parameters": {
-                    "action": "switchToProductionApi"
-                },
-                "path": ""
-            },
-            "fetchContext": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "fetchContext"
-                },
-                "path": "",
-                "property": "context"
-            }
+        "path": "",
+        "responseProperty": "context"
+      },
+      "updateAccount": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "updateAccount"
         },
-        "eventPing": "myparcel_pdk_ping",
-        "eventPong": "myparcel_pdk_pong",
-        "language": "nl",
-        "mode": "production",
-        "proposition": {
-            "name": "myparcel",
-            "human": "MyParcel",
-            "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
-            "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
-            "localCountry": "NL",
-            "defaultCarrier": "postnl",
-            "defaultCarrierId": 1
+        "path": "",
+        "property": "account_settings",
+        "responseProperty": "context"
+      },
+      "updateSubscriptionFeatures": {
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "updateSubscriptionFeatures"
         },
-        "platform": {
-            "name": "myparcel",
-            "human": "MyParcel",
-            "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
-            "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
-            "localCountry": "NL",
-            "defaultCarrier": "postnl",
-            "defaultCarrierId": 1
+        "path": "",
+        "responseProperty": "data"
+      },
+      "synchronizeOrders": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "synchronizeOrders"
         },
-        "translations": {
-            "apple_tree": "Appelboom",
-            "delivery_options": "Delivery options",
-            "delivery_options_morning": "Ochtend",
-            "some_delivery_options_broccoli": "Broccoli"
-        }
+        "path": "",
+        "property": "orders"
+      },
+      "exportOrders": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "exportOrders"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "postOrderNotes": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "postOrderNotes"
+        },
+        "path": "",
+        "property": "orderNotes"
+      },
+      "fetchOrders": {
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "fetchOrders"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "printOrders": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "printOrders"
+        },
+        "path": "",
+        "property": "pdfs"
+      },
+      "updateOrders": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "updateOrders"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "updateOrderStatus": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "updateOrderStatus"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "updateShipments": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "updateShipments"
+        },
+        "path": "",
+        "property": "shipments"
+      },
+      "deleteShipments": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "deleteShipments"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "printShipments": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "printShipments"
+        },
+        "path": "",
+        "property": "pdfs"
+      },
+      "updatePluginSettings": {
+        "headers": [],
+        "method": "PUT",
+        "parameters": {
+          "action": "updatePluginSettings"
+        },
+        "path": "",
+        "property": "plugin_settings"
+      },
+      "updateProductSettings": {
+        "headers": [],
+        "method": "PUT",
+        "parameters": {
+          "action": "updateProductSettings"
+        },
+        "path": "",
+        "property": "product_settings"
+      },
+      "exportReturn": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "exportReturn"
+        },
+        "path": "",
+        "property": "orders"
+      },
+      "createWebhooks": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "createWebhooks"
+        },
+        "path": "",
+        "property": "webhooks"
+      },
+      "deleteWebhooks": {
+        "headers": [],
+        "method": "POST",
+        "parameters": {
+          "action": "deleteWebhooks"
+        },
+        "path": "",
+        "property": "webhooks"
+      },
+      "fetchWebhooks": {
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "fetchWebhooks"
+        },
+        "path": "",
+        "property": "webhooks"
+      },
+      "downloadLogs": {
+        "headers": {
+          "Accept": "application\/zip"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "downloadLogs"
+        },
+        "path": ""
+      },
+      "switchToAcceptanceApi": {
+        "headers": {
+          "Accept": "application\/json"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "switchToAcceptanceApi"
+        },
+        "path": ""
+      },
+      "switchToProductionApi": {
+        "headers": {
+          "Accept": "application\/json"
+        },
+        "method": "POST",
+        "parameters": {
+          "action": "switchToProductionApi"
+        },
+        "path": ""
+      },
+      "fetchContext": {
+        "headers": [],
+        "method": "GET",
+        "parameters": {
+          "action": "fetchContext"
+        },
+        "path": "",
+        "property": "context"
+      }
+    },
+    "eventPing": "myparcel_pdk_ping",
+    "eventPong": "myparcel_pdk_pong",
+    "language": "nl",
+    "mode": "production",
+    "platform": {
+      "name": "myparcel",
+      "human": "MyParcel",
+      "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
+      "supportUrl": "https:\/\/developer.myparcel.nl\/contact",
+      "localCountry": "NL",
+      "defaultCarrier": "postnl",
+      "defaultCarrierId": 1
+    },
+    "translations": {
+      "apple_tree": "Appelboom",
+      "delivery_options": "Delivery options",
+      "delivery_options_morning": "Ochtend",
+      "some_delivery_options_broccoli": "Broccoli"
     }
+  }
 }
