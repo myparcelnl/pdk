@@ -109,6 +109,7 @@
                         "signature": -1,
                         "tracked": -1,
                         "collect": -1,
+                        "excludeParcelLockers": -1,
                         "freshFood": -1,
                         "frozen": -1
                     },
@@ -179,6 +180,7 @@
                                 "signature": -1,
                                 "tracked": -1,
                                 "collect": -1,
+                                "excludeParcelLockers": -1,
                                 "freshFood": -1,
                                 "frozen": -1
                             },
@@ -236,6 +238,7 @@
                                 "signature": 1,
                                 "tracked": -1,
                                 "collect": -1,
+                                "excludeParcelLockers": -1,
                                 "freshFood": -1,
                                 "frozen": -1
                             },
@@ -451,6 +454,7 @@
                         "signature": -1,
                         "tracked": -1,
                         "collect": -1,
+                        "excludeParcelLockers": -1,
                         "freshFood": -1,
                         "frozen": -1
                     },
