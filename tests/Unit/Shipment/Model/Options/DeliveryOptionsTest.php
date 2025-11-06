@@ -45,17 +45,17 @@ it('instantiates default delivery options', function () {
 it('instantiates shipment options', function () {
     $deliveryOptions = new DeliveryOptions([
         'shipmentOptions' => [
-            'insurance'        => 5000,
-            'labelDescription' => 'hello',
-            'ageCheck'         => true,
-            'hideSender'       => true,
-            'largeFormat'      => true,
-            'onlyRecipient'    => true,
-            'return'           => true,
-            'sameDayDelivery'  => true,
-            'signature'        => true,
-            'receiptCode'      => true,
-            'collect'          => true,
+            'insurance'            => 5000,
+            'labelDescription'     => 'hello',
+            'ageCheck'             => true,
+            'hideSender'           => true,
+            'largeFormat'          => true,
+            'onlyRecipient'        => true,
+            'return'               => true,
+            'sameDayDelivery'      => true,
+            'signature'            => true,
+            'receiptCode'          => true,
+            'collect'              => true,
             'excludeParcelLockers' => false,
         ],
     ]);
