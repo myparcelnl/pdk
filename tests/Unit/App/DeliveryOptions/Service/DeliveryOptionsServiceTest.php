@@ -337,11 +337,11 @@ it('creates platform settings from propositions', function () {
         "smallPackagePickupCountries" => ['NL', 'BE'],
         "fakeDelivery" => true,
         "shipmentOptionsPerPackageType" => [
-            "package" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "mailbox" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "letter" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "digital_stamp" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance'],
-            "package_small" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'insurance']
+            "package" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'tracked', 'insurance'],
+            "mailbox" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'tracked', 'insurance'],
+            "letter" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'tracked', 'insurance'],
+            "digital_stamp" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'tracked', 'insurance'],
+            "package_small" => ['age_check', 'large_format', 'only_recipient', 'return', 'signature', 'receipt_code', 'tracked', 'insurance']
         ],
         "features" => ['deliveryDaysWindow', 'dropOffDays', 'dropOffDelay', 'pickupMapAllowLoadMore'],
         "addressFields" => ['postalCode', 'street', 'city']
