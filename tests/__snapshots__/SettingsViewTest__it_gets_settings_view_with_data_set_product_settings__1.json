@@ -1155,16 +1155,16 @@
       "description": "settings_product_export_return_description"
     },
     {
-      "name": "exportFood",
+      "name": "exportFreshFood",
       "$component": "TriStateInput",
-      "label": "settings_product_export_food",
-      "description": "settings_product_export_food_description"
+      "label": "settings_product_export_fresh_food",
+      "description": "settings_product_export_fresh_food_description"
     },
     {
-      "name": "exportFrozenFood",
+      "name": "exportFrozen",
       "$component": "TriStateInput",
-      "label": "settings_product_export_frozen_food",
-      "description": "settings_product_export_frozen_food_description"
+      "label": "settings_product_export_frozen",
+      "description": "settings_product_export_frozen_description"
     }
   ],
   "children": null
