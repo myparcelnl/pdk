@@ -17,8 +17,8 @@ use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FoodDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FrozenFoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -96,6 +96,16 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME);
     }
 
+    public function canHaveFreshFood(): bool
+    {
+        return $this->canHave(FreshFoodDefinition::class);
+    }
+
+    public function canHaveFrozen(): bool
+    {
+        return $this->canHave(FrozenDefinition::class);
+    }
+
     /**
      * @return bool
      */
@@ -164,16 +174,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveTracked(): bool
     {
         return $this->canHave(TrackedDefinition::class);
-    }
-
-    public function canHaveFood(): bool
-    {
-        return $this->canHave(FoodDefinition::class);
-    }
-
-    public function canHaveFrozenFood(): bool
-    {
-        return $this->canHave(FrozenFoodDefinition::class);
     }
 
     public function canHaveWeight(?int $weight): bool

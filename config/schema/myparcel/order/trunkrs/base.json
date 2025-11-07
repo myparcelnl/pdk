@@ -70,7 +70,7 @@
     "deliveryOptions": {
       "properties": {
         "deliveryType": {
-          "enum": ["evening", null]
+          "enum": ["standard", null]
         },
         "packageType": {
           "enum": ["package", null]
@@ -86,10 +86,10 @@
             "receiptCode": {
               "type": "boolean"
             },
-            "freshFood": {
+            "FreshFood": {
               "type": "boolean"
             },
-            "frozen": {
+            "Frozen": {
               "type": "boolean"
             },
             "signature": {

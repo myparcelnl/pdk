@@ -400,7 +400,6 @@ return [
                 ],
                 'deliveryTypes'   => [
                     DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                    DeliveryOptions::DELIVERY_TYPE_EVENING_NAME,
                 ],
                 'shipmentOptions' => [
                     'ageCheck'        => true,

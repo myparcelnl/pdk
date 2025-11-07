@@ -6,8 +6,8 @@ use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FoodDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FrozenFoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
@@ -84,8 +84,8 @@ return [
             new ReceiptCodeDefinition(),
             new CollectDefinition(),
             new ExcludeParcelLockersDefinition(),
-            new FoodDefinition(),
-            new FrozenFoodDefinition(),
+            new FreshFoodDefinition(),
+            new FrozenDefinition(),
         ];
     }),
 

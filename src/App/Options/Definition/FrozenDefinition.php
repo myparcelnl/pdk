@@ -10,16 +10,16 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
-final class FrozenFoodDefinition implements OrderOptionDefinitionInterface
+final class FrozenDefinition implements OrderOptionDefinitionInterface
 {
     public function getCarrierSettingsKey(): ?string
     {
-        return CarrierSettings::EXPORT_FROZEN_FOOD;
+        return CarrierSettings::EXPORT_FROZEN;
     }
 
     public function getProductSettingsKey(): ?string
     {
-        return ProductSettings::EXPORT_FROZEN_FOOD;
+        return ProductSettings::EXPORT_FROZEN;
     }
 
     public function getShipmentOptionsKey(): ?string
@@ -29,6 +29,6 @@ final class FrozenFoodDefinition implements OrderOptionDefinitionInterface
 
     public function validate(CarrierSchema $carrierSchema): bool
     {
-        return $carrierSchema->canHaveFrozenFood();
+        return $carrierSchema->canHaveFrozen();
     }
 }

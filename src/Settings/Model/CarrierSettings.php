@@ -112,8 +112,8 @@ class CarrierSettings extends AbstractSettingsModel
     public const  EXPORT_SIGNATURE                        = 'exportSignature';
     public const  EXPORT_TRACKED                          = 'exportTracked';
     public const  EXPORT_COLLECT                          = 'exportCollect';
-    public const  EXPORT_FOOD                             = 'exportFood';
-    public const  EXPORT_FROZEN_FOOD                      = 'exportFrozenFood';
+    public const  EXPORT_FRESH_FOOD                       = 'exportFreshFood';
+    public const  EXPORT_FROZEN                           = 'exportFrozen';
     public const  PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
     public const  PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
     public const  PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
@@ -173,8 +173,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_SIGNATURE                        => false,
         self::EXPORT_TRACKED                          => false,
         self::EXPORT_COLLECT                          => false,
-        self::EXPORT_FOOD                             => false,
-        self::EXPORT_FROZEN_FOOD                      => false,
+        self::EXPORT_FRESH_FOOD                       => false,
+        self::EXPORT_FROZEN                           => false,
         self::PRICE_DELIVERY_TYPE_EVENING             => 0,
         self::PRICE_DELIVERY_TYPE_MONDAY              => 0,
         self::PRICE_DELIVERY_TYPE_MORNING             => 0,
@@ -234,8 +234,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_SIGNATURE                        => 'bool',
         self::EXPORT_TRACKED                          => 'bool',
         self::EXPORT_COLLECT                          => 'bool',
-        self::EXPORT_FOOD                             => 'bool',
-        self::EXPORT_FROZEN_FOOD                      => 'bool',
+        self::EXPORT_FRESH_FOOD                       => 'bool',
+        self::EXPORT_FROZEN                           => 'bool',
         self::PRICE_DELIVERY_TYPE_EVENING             => 'float',
         self::PRICE_DELIVERY_TYPE_MONDAY              => 'float',
         self::PRICE_DELIVERY_TYPE_MORNING             => 'float',

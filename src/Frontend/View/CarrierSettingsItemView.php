@@ -54,9 +54,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     public function __construct(Carrier $carrier)
     {
-        $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
+        $this->currencyService             = Pdk::get(CurrencyServiceInterface::class);
         $this->deliveryOptionsResetService = Pdk::get(DeliveryOptionsResetService::class);
-        $this->carrier         = $carrier;
+        $this->carrier                     = $carrier;
 
         /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
         $schema = Pdk::get(CarrierSchema::class);
@@ -282,12 +282,12 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 ? [new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
                 : [],
 
-            $this->carrierSchema->canHaveFood()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_FOOD, Components::INPUT_TOGGLE)]
+            $this->carrierSchema->canHaveFreshFood()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_FRESH_FOOD, Components::INPUT_TOGGLE)]
                 : [],
 
-            $this->carrierSchema->canHaveFrozenFood()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_FROZEN_FOOD, Components::INPUT_TOGGLE)]
+            $this->carrierSchema->canHaveFrozen()
+                ? [new InteractiveElement(CarrierSettings::EXPORT_FROZEN, Components::INPUT_TOGGLE)]
                 : [],
         ];
     }
@@ -481,9 +481,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
                     Components::INPUT_NUMBER,
                     [
                         '$attributes' => [
-                            'min' => Pdk::get('insurancePercentageMin'),
+                            'min'  => Pdk::get('insurancePercentageMin'),
                             'step' => Pdk::get('insurancePercentageStep'),
-                            'max' => Pdk::get('insurancePercentageMax'),
+                            'max'  => Pdk::get('insurancePercentageMax'),
                         ],
                     ]
                 )

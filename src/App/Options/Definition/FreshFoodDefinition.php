@@ -10,16 +10,16 @@ use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
-final class FoodDefinition implements OrderOptionDefinitionInterface
+final class FreshFoodDefinition implements OrderOptionDefinitionInterface
 {
     public function getCarrierSettingsKey(): ?string
     {
-        return CarrierSettings::EXPORT_FOOD;
+        return CarrierSettings::EXPORT_FRESH_FOOD;
     }
 
     public function getProductSettingsKey(): ?string
     {
-        return ProductSettings::EXPORT_FOOD;
+        return ProductSettings::EXPORT_FRESH_FOOD;
     }
 
     public function getShipmentOptionsKey(): ?string
@@ -29,6 +29,6 @@ final class FoodDefinition implements OrderOptionDefinitionInterface
 
     public function validate(CarrierSchema $carrierSchema): bool
     {
-        return $carrierSchema->canHaveFood();
+        return $carrierSchema->canHaveFreshFood();
     }
 }
