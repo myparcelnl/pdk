@@ -59,10 +59,11 @@ class PostOrderNotesAction extends AbstractOrderAction
 
         $orders
             ->filter(function (PdkOrder $order) {
-                return $order->apiIdentifier && $order->notes->isNotEmpty();
+                return $order->apiIdentifier && $order->notes->where('apiIdentifier', '==', null)
+                        ->toFulfilmentCollection()->isNotEmpty();
             })
             ->each(function (PdkOrder $order) {
-                // todo: if there are no notes, do not send a request
+                // todo: combine the ->where statements to a single call
                 $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
                     $order->notes->where('apiIdentifier', '==', null)
