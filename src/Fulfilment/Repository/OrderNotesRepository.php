@@ -20,6 +20,10 @@ class OrderNotesRepository extends ApiRepository
      */
     public function postOrderNotes(string $uuid, OrderNoteCollection $orderNotes): OrderNoteCollection
     {
+        if($orderNotes->isEmpty()) {
+            // todo remove or handle well
+            die('empty order notes');
+        }
         /** @var PostOrderNotesResponse $response */
         $response = $this->api->doRequest(
             new PostOrderNotesRequest($uuid, $orderNotes),
