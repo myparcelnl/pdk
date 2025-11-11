@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Model\ContextBag;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
@@ -273,12 +272,12 @@ class FrontendRenderService implements FrontendRenderServiceInterface
     ): string {
         try {
             $context = $this->contextService->createContexts($contexts, $contextArguments);
-
             return strtr($template, $templateParameters + ['__CONTEXT__' => $this->encodeContext($context)]);
         } catch (Throwable $e) {
             Logger::error(
                 $e->getMessage(),
-                array_merge([
+                array_merge(
+                    [
                     'trace' => $e->getTrace(),
                 ],
                     compact(
@@ -286,7 +285,8 @@ class FrontendRenderService implements FrontendRenderServiceInterface
                         'contexts',
                         'templateParameters',
                         'contextArguments'
-                    ))
+                    )
+                )
             );
 
             return '';
@@ -298,31 +298,8 @@ class FrontendRenderService implements FrontendRenderServiceInterface
      *
      * @return bool
      */
-    protected function requiresAccount(string $component): bool
-    {
-        switch ($component) {
-            case self::COMPONENT_INIT_SCRIPT:
-            case self::COMPONENT_MODALS:
-            case self::COMPONENT_NOTIFICATIONS:
-            case self::COMPONENT_PLUGIN_SETTINGS:
-                return false;
-
-            default:
-                return true;
-        }
-    }
-
-    /**
-     * @param  string $component
-     *
-     * @return bool
-     */
     protected function shouldRender(string $component): bool
     {
-        if ($this->requiresAccount($component) && ! AccountSettings::getAccount()) {
-            return false;
-        }
-
         switch ($component) {
             case self::COMPONENT_CHILD_PRODUCT_SETTINGS:
                 return $this->viewService->isChildProductPage();

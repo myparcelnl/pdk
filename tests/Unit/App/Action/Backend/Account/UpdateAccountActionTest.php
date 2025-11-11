@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection NullPointerExceptionInspection,PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -22,6 +23,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance(), new UsesApiMock());
@@ -102,15 +104,15 @@ it('maps carriers correctly', function () {
 
     expect($externalIdentifiers)
         ->toBe([
-            'cheapcargo',
-            'bol.com',
-            'dhlforyou',
-            'postnl',
-            'dhlparcelconnect',
-            'dhleuroplus',
-            'dhlforyou:12424',
-            'upsstandard',
-            'upsexpresssaver',
+            'CHEAP_CARGO',
+            'BOL',
+            'DHL_FOR_YOU',
+            'POSTNL',
+            'DHL_PARCEL_CONNECT',
+            'DHL_EUROPLUS',
+            'DHL_FOR_YOU:12424',
+            'UPS_STANDARD',
+            'UPS_EXPRESS_SAVER',
         ]);
 });
 
@@ -123,7 +125,7 @@ it('maps carriers correctly with custom postnl contract', function () {
             'carrier_id' => 1,
             'carrier'    => [
                 'id'   => 1,
-                'name' => 'postnl',
+                'name' => 'POSTNL',
             ],
             'enabled'    => 1,
             'optional'   => 1,
@@ -135,7 +137,7 @@ it('maps carriers correctly with custom postnl contract', function () {
             'carrier_id'  => 1,
             'carrier'     => [
                 'id'   => 1,
-                'name' => 'postnl',
+                'name' => 'POSTNL',
             ],
             'enabled'     => 1,
             'optional'    => 1,
@@ -149,7 +151,7 @@ it('maps carriers correctly with custom postnl contract', function () {
             'carrier_id' => 1,
             'carrier'    => [
                 'id'   => 1,
-                'name' => 'postnl',
+                'name' => 'POSTNL',
             ],
             'enabled'    => 0,
             'optional'   => 1,
@@ -162,23 +164,10 @@ it('maps carriers correctly with custom postnl contract', function () {
             'carrier_id' => 1,
             'carrier'    => [
                 'id'   => 1,
-                'name' => 'postnl',
+                'name' => 'POSTNL',
             ],
             'enabled'    => 1,
             'optional'   => 0,
-            'primary'    => 1,
-            'type'       => 'main',
-        ],
-        [
-            'id'         => 11244,
-            'label'      => 'postnl_flespakket_on_myparcel',
-            'carrier_id' => 1,
-            'carrier'    => [
-                'id'   => 1,
-                'name' => 'postnl',
-            ],
-            'enabled'    => 0,
-            'optional'   => 1,
             'primary'    => 1,
             'type'       => 'main',
         ],
@@ -191,7 +180,7 @@ it('maps carriers correctly with custom postnl contract', function () {
         ->all();
 
     // If multiple PostNL carriers are present, the custom contract should be used.
-    expect($externalIdentifiers)->toBe(['postnl:23991']);
+    expect($externalIdentifiers)->toBe(['POSTNL:23991']);
 });
 
 it('updates validity of api key', function(?string $apiKey, bool $expectedValidity) {
@@ -209,7 +198,7 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
             'carrier_id' => 1,
             'carrier'    => [
                 'id'   => 1,
-                'name' => 'postnl',
+                'name' => 'POSTNL',
             ],
             'enabled'    => 1,
             'optional'   => 1,
@@ -222,23 +211,10 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
             'carrier_id' => 1,
             'carrier'    => [
                 'id'   => 1,
-                'name' => 'postnl',
+                'name' => 'POSTNL',
             ],
             'enabled'    => 1,
             'optional'   => 0,
-            'primary'    => 1,
-            'type'       => 'main',
-        ],
-        [
-            'id'         => 1,
-            'label'      => 'postnl_flespakket_on_myparcel',
-            'carrier_id' => 1,
-            'carrier'    => [
-                'id'   => 1,
-                'name' => 'postnl',
-            ],
-            'enabled'    => 0,
-            'optional'   => 1,
             'primary'    => 1,
             'type'       => 'main',
         ],
@@ -248,7 +224,7 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
             'carrier_id'  => 9,
             'carrier'     => [
                 'id'   => 9,
-                'name' => 'dhlforyou',
+                'name' => 'DHL_FOR_YOU',
             ],
             'enabled'     => 1,
             'optional'    => 1,
@@ -265,5 +241,5 @@ it('maps carriers correctly with multiple non-contract postnl entries', function
         ->all();
 
     // If multiple PostNL carriers are present, but no custom contract, only the first one should be kept.
-    expect($externalIdentifiers)->toBe(['dhlforyou:12424', 'postnl']);
+    expect($externalIdentifiers)->toBe(['DHL_FOR_YOU:12424', 'POSTNL']);
 });

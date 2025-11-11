@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Service\CartCalculationService;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsFeesServiceInterface;
@@ -46,8 +47,10 @@ use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Service\ContextService;
+use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
+use MyParcelNL\Pdk\Frontend\Service\FrontendDataAdapter;
 use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Frontend\Service\ScriptService;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
@@ -235,4 +238,12 @@ return [
      * Handles zipping files.
      */
     ZipServiceInterface::class                 => autowire(ZipService::class),
+
+    /**
+     * Converts new proposition configuration data to the old format
+     * that JS-PDK and Delivery Options expect.
+     */
+    FrontendDataAdapterInterface::class        => autowire(FrontendDataAdapter::class),
+
+    PropositionService::class            => autowire(),
 ];

@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -22,6 +23,9 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
+use MyParcelNL\Pdk\Proposition\Model\PropositionMetadata;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -30,9 +34,9 @@ use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkV2Response;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
@@ -192,7 +196,7 @@ it('exports order', function (
             ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
     }
 })
-    ->with('order mode toggle')
+    ->with('order mode toggle') // data sets defined in "tests/Datasets"
     ->with('carrier export settings')
     ->with('pdk orders domestic');
 
@@ -222,19 +226,31 @@ it('merges partial payload with existing order', function (
     );
 
     $date = new \DateTime('+1 day');
-    $partialDeliveryOptions = [
-        DeliveryOptions::DATE => $date
-    ];
 
     /**
      * @var DeliveryOptions $existingDeliveryOptions
      */
     $existingDeliveryOptions = $orders->pluck('deliveryOptions')->first();
+    $partialDeliveryOptions = [
+        DeliveryOptions::DATE => $date
+    ];
     $mergedDeliveryOptions = $existingDeliveryOptions
         ->fill($partialDeliveryOptions)
         ->toArrayWithoutNull();
 
     expect($mergedDeliveryOptions[DeliveryOptions::DATE])->toBe($date->format(Pdk::get('defaultDateFormat')));
+
+    /**
+     * @var PdkPhysicalProperties $existingPhysicalProperties
+     */
+    $existingPhysicalProperties = $orders->pluck('physicalProperties')->first();
+    $partialPhysicalProperties  = [
+        'manualWeight' => 500,
+    ];
+    $mergedPhysicalProperties = $existingPhysicalProperties
+        ->fill($partialPhysicalProperties);
+
+    expect($mergedPhysicalProperties['manualWeight'])->toBe($partialPhysicalProperties['manualWeight']);
 
     $requestWithPayload = new Request(
         ['action' => PdkBackendActions::EXPORT_ORDERS, 'orderIds' => $orders->pluck('externalIdentifier')->toArray()],
@@ -248,7 +264,8 @@ it('merges partial payload with existing order', function (
             'data' => [
                 'orders' => [
                     [
-                        'deliveryOptions' => $partialDeliveryOptions
+                        'deliveryOptions' => $partialDeliveryOptions,
+                        'physicalProperties' => $partialPhysicalProperties
                     ],
                 ],
             ],
@@ -275,6 +292,8 @@ it('merges partial payload with existing order', function (
         // Check to make sure the carrier did not reset to the default - this is the only part that is easy to test due to not being affected by calculators
         ->and($responseOrders[0]['deliveryOptions'][DeliveryOptions::CARRIER])
         ->toBe($mergedDeliveryOptions[DeliveryOptions::CARRIER])
+        ->and($responseOrders[0]['physicalProperties'][DeliveryOptions::CARRIER])
+        ->toBe($mergedPhysicalProperties[DeliveryOptions::CARRIER])
         ->and($response->getStatusCode())
         ->toBe(200)
         // Expect no errors to have been added to notifications
@@ -633,12 +652,12 @@ it(
                                     factory(Carrier::class)
                                         ->fromPostNL()
                                         ->withContractId(123456)
-                                        ->withCapabilities(
-                                            factory(CarrierCapabilities::class)
-                                                ->withFeatures(
-                                                    ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
+                                        ->withOutboundFeatures(
+                                            factory(PropositionCarrierFeatures::class)
+                                                ->withMetadata(
+                                                    ['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY]
                                                 )
-                                                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME])
+                                                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME])
                                         )
                                 )
                                 ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
@@ -660,12 +679,12 @@ it(
                                     factory(Carrier::class)
                                         ->fromPostNL()
                                         ->withContractId(123456)
-                                        ->withCapabilities(
-                                            factory(CarrierCapabilities::class)
+                                        ->withOutboundFeatures(
+                                            factory(PropositionCarrierFeatures::class)
                                                 ->withFeatures(
-                                                    ['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY]
+                                                    ['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY]
                                                 )
-                                                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME])
+                                                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME])
                                         )
                                 )
                                 ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
@@ -692,14 +711,14 @@ it(
             'carrierHasInternationalMailboxAllowed' => true,
         ],
 
-        'ups' => [
+        'ups standard' => [
             function () {
                 return factory(PdkOrderCollection::class)->push(
                     factory(PdkOrder::class)
                         ->toTheUnitedStates()
                         ->withDeliveryOptions(
                             factory(DeliveryOptions::class)
-                                ->withCarrier(factory(Carrier::class)->fromUPS())
+                                ->withCarrier(factory(Carrier::class)->fromUpsStandard())
                         )
                 );
             },

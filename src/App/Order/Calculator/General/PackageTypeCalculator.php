@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
@@ -31,6 +32,10 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
         $this->countryService = Pdk::get(CountryServiceInterface::class);
     }
 
+    /**
+     * Sets the package type to the default "package" if the selected package type is not allowed.
+     * @return void
+     */
     public function calculate(): void
     {
         // All package types are allowed when shipping within the local country.
@@ -64,7 +69,7 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function isInternationalMailbox(Carrier $carrier): bool
     {
-        $carrierSettings = Settings::all()->carrier->get($carrier->externalIdentifier);
+        $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
         $isMailbox         = $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
         $isNotLocal        = ! $this->countryService->isLocalCountry($this->order->shippingAddress->cc);

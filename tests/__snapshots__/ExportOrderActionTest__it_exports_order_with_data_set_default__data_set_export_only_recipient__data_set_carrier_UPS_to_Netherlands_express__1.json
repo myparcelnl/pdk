@@ -1,35 +1,35 @@
 {
-    "data": {
-        "shipments": [
-            {
-                "carrier": 13,
-                "general_settings": {
-                    "save_recipient_address": 0
-                },
-                "options": {
-                    "package_type": 1,
-                    "delivery_type": 7,
-                    "insurance": {
-                        "amount": 10000,
-                        "currency": "EUR"
-                    },
-                    "only_recipient": 1
-                },
-                "physical_properties": {
-                    "weight": 0
-                },
-                "recipient": {
-                    "cc": "NL",
-                    "city": "Hoofddorp",
-                    "company": "MyParcel",
-                    "number": "31",
-                    "person": "Felicia Parcel",
-                    "postal_code": "2132 JE",
-                    "street": "Antareslaan",
-                    "vat_number": "NL123456789B01"
-                },
-                "reference_identifier": "PDK-1"
-            }
-        ]
-    }
+  "data": {
+    "shipments": [
+      {
+        "carrier": 13,
+        "general_settings": {
+          "save_recipient_address": 0
+        },
+        "options": {
+          "package_type": 1,
+          "delivery_type": 7,
+          "insurance": {
+            "amount": 10000,
+            "currency": "EUR"
+          },
+          "only_recipient": 1
+        },
+        "physical_properties": {
+          "weight": 0
+        },
+        "recipient": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "company": "MyParcel",
+          "number": "31",
+          "person": "Felicia Parcel",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan",
+          "vat_number": "NL123456789B01"
+        },
+        "reference_identifier": "PDK-1"
+      }
+    ]
+  }
 }

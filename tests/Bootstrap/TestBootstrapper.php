@@ -6,16 +6,39 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
 use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
+use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\ModelFactoryInterface;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 final class TestBootstrapper
 {
     public const API_KEY_VALID = 'valid-api-key';
+
+    public static function forPlatform(string $platform): void
+    {
+        MockPdkFactory::create();
+
+        Pdk::get(PropositionService::class)->clearActivePropositionId();
+
+        $platformId = Platform::MYPARCEL_ID;
+        if (Platform::SENDMYPARCEL_NAME === $platform) {
+            $platformId = Platform::SENDMYPARCEL_ID;
+        }
+
+        self::hasApiKey();
+
+        factory(Account::class, $platformId)
+            ->withShops()
+            ->store();
+    }
 
     /**
      * @param  string                                                                $apiKey
@@ -27,9 +50,10 @@ final class TestBootstrapper
     {
         self::hasApiKey($apiKey);
 
-        factory(Account::class)
+        factory(Account::class, Platform::MYPARCEL_ID)
             ->withStatus(2)
-            ->withPlatformId(Platform::MYPARCEL_ID)
+            ->withContactInfo(factory(ContactDetails::class))
+            ->withGeneralSettings(factory(AccountGeneralSettings::class))
             ->withShops($shops)
             ->store();
     }
