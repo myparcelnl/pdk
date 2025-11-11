@@ -61,7 +61,6 @@ it('resets delivery options when disabled', function () {
                         'allowSignature'           => true,
                         'allowOnlyRecipient'       => true,
                         'allowPickupLocations'     => true,
-                        'allowDeliveryTypeExpress' => true,
                     ],
                 ],
             ],
@@ -90,6 +89,5 @@ it('resets delivery options when disabled', function () {
             'allowSignature'           => false,
             'allowOnlyRecipient'       => false,
             'allowPickupLocations'     => false,
-            'allowDeliveryTypeExpress' => false,
         ]);
 });

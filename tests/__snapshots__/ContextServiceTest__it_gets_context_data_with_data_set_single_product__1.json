@@ -23,7 +23,8 @@
         "exportTracked": -1,
         "fitInDigitalStamp": -1,
         "fitInMailbox": -1,
-        "packageType": -1
+        "packageType": -1,
+        "excludeParcelLockers": -1
       },
       "mergedSettings": {
         "id": "product",
@@ -41,7 +42,8 @@
         "exportTracked": -1,
         "fitInDigitalStamp": -1,
         "fitInMailbox": -1,
-        "packageType": -1
+        "packageType": -1,
+        "excludeParcelLockers": -1
       }
     }
   ]

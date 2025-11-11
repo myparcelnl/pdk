@@ -12,6 +12,7 @@
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
       "closedDays": [],
+      "excludeParcelLockers": false,
       "apiBaseUrl": "https://api.myparcel.nl"
     },
     "platformConfig": {

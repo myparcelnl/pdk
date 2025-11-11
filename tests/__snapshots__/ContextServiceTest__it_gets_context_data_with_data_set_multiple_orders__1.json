@@ -118,7 +118,8 @@
           "sameDayDelivery": -1,
           "signature": -1,
           "tracked": -1,
-          "collect": -1
+          "collect": -1,
+          "excludeParcelLockers": -1
         },
         "deliveryType": "standard",
         "packageType": "package"
@@ -156,7 +157,8 @@
             "sameDayDelivery": 0,
             "signature": 0,
             "tracked": 0,
-            "collect": 0
+            "collect": 0,
+            "excludeParcelLockers": 0
           },
           "deliveryType": "standard",
           "packageType": "package"
@@ -303,7 +305,8 @@
           "sameDayDelivery": -1,
           "signature": -1,
           "tracked": -1,
-          "collect": -1
+          "collect": -1,
+          "excludeParcelLockers": -1
         },
         "deliveryType": "standard",
         "packageType": "package"
@@ -341,7 +344,8 @@
             "sameDayDelivery": 0,
             "signature": 0,
             "tracked": 0,
-            "collect": 0
+            "collect": 0,
+            "excludeParcelLockers": 0
           },
           "deliveryType": "standard",
           "packageType": "package"
