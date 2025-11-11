@@ -11,6 +11,11 @@ use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 final class ExcludeParcelLockersDefinition implements OrderOptionDefinitionInterface
 {
+    public function getPropositionKey(): ?string
+    {
+        return null;
+    }
+
     public function getCarrierSettingsKey(): ?string
     {
         return null;
