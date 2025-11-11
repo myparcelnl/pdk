@@ -20,6 +20,8 @@
         "exportReturn": -1,
         "exportSignature": -1,
         "exportTracked": -1,
+        "exportFreshFood": -1,
+        "exportFrozen": -1,
         "fitInDigitalStamp": -1,
         "fitInMailbox": -1,
         "packageType": -1,
@@ -39,6 +41,8 @@
         "exportReturn": -1,
         "exportSignature": -1,
         "exportTracked": -1,
+        "exportFreshFood": -1,
+        "exportFrozen": -1,
         "fitInDigitalStamp": -1,
         "fitInMailbox": -1,
         "packageType": -1,
@@ -1201,6 +1205,18 @@
           "$component": "TriStateInput",
           "label": "settings_product_export_return",
           "description": "settings_product_export_return_description"
+        },
+        {
+          "name": "exportFreshFood",
+          "$component": "TriStateInput",
+          "label": "settings_product_export_fresh_food",
+          "description": "settings_product_export_fresh_food_description"
+        },
+        {
+          "name": "exportFrozen",
+          "$component": "TriStateInput",
+          "label": "settings_product_export_frozen",
+          "description": "settings_product_export_frozen_description"
         }
       ]
     }

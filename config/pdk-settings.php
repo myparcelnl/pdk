@@ -69,6 +69,8 @@ return [
                     CarrierSettings::EXPORT_RETURN_LARGE_FORMAT              => false,
                     CarrierSettings::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                     CarrierSettings::EXPORT_SIGNATURE                        => false,
+                    CarrierSettings::EXPORT_FROZEN                           => false,
+                    CarrierSettings::EXPORT_FRESH_FOOD                       => false,
                     CarrierSettings::PRICE_DELIVERY_TYPE_EVENING             => 0,
                     CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY              => 0,
                     CarrierSettings::PRICE_DELIVERY_TYPE_MORNING             => 0,

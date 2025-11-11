@@ -223,7 +223,7 @@
       "name": "trunkrs",
       "capabilities": {
         "packageTypes": ["package"],
-        "deliveryTypes": ["standard"],
+        "deliveryTypes": ["standard", "evening"],
         "shipmentOptions": {
           "ageCheck": true,
           "onlyRecipient": true,

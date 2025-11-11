@@ -392,6 +392,30 @@ return [
                 ],
             ],
         ],
+        [
+            'name'         => Carrier::CARRIER_TRUNKRS_NAME,
+            'capabilities' => [
+                'packageTypes'    => [
+                    DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                ],
+                'deliveryTypes'   => [
+                    DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
+                ],
+                'shipmentOptions' => [
+                    'ageCheck'        => true,
+                    'onlyRecipient'   => true,
+                    'receiptCode'     => true,
+                    'freshFood'       => true,
+                    'frozen'          => true,
+                    'sameDayDelivery' => true,
+                    'signature'       => true,
+                ],
+                'features'        => [
+                    'labelDescriptionLength' => 45,
+                    'carrier'                => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY,
+                ],
+            ],
+        ],
     ],
 ];
 

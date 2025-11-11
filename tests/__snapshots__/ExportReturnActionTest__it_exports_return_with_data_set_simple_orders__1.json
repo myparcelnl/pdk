@@ -70,7 +70,9 @@
             "signature": -1,
             "tracked": -1,
             "collect": -1,
-            "excludeParcelLockers": -1
+            "excludeParcelLockers": -1,
+            "freshFood": -1,
+            "frozen": -1
           },
           "deliveryType": "standard",
           "packageType": "package"
@@ -139,7 +141,9 @@
                 "signature": -1,
                 "tracked": -1,
                 "collect": -1,
-                "excludeParcelLockers": -1
+                "excludeParcelLockers": -1,
+                "freshFood": -1,
+                "frozen": -1
               },
               "deliveryType": "standard",
               "packageType": "package"
@@ -195,7 +199,9 @@
                 "signature": 1,
                 "tracked": -1,
                 "collect": -1,
-                "excludeParcelLockers": -1
+                "excludeParcelLockers": -1,
+                "freshFood": -1,
+                "frozen": -1
               },
               "deliveryType": "morning",
               "packageType": "package"
@@ -257,6 +263,8 @@
                 "exportReturn": -1,
                 "exportSignature": -1,
                 "exportTracked": -1,
+                "exportFreshFood": -1,
+                "exportFrozen": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1,
@@ -276,6 +284,8 @@
                 "exportReturn": -1,
                 "exportSignature": -1,
                 "exportTracked": -1,
+                "exportFreshFood": -1,
+                "exportFrozen": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1,
@@ -366,7 +376,9 @@
             "signature": -1,
             "tracked": -1,
             "collect": -1,
-            "excludeParcelLockers": -1
+            "excludeParcelLockers": -1,
+            "freshFood": -1,
+            "frozen": -1
           },
           "deliveryType": "evening",
           "packageType": "package"
@@ -430,6 +442,8 @@
                 "exportReturn": -1,
                 "exportSignature": -1,
                 "exportTracked": -1,
+                "exportFreshFood": -1,
+                "exportFrozen": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1,
@@ -449,6 +463,8 @@
                 "exportReturn": -1,
                 "exportSignature": -1,
                 "exportTracked": -1,
+                "exportFreshFood": -1,
+                "exportFrozen": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1,

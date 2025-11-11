@@ -193,6 +193,20 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
             CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE,
         ],
     ],
+    'shipment option: fresh food' => [
+        function () {
+            return factory(CarrierCapabilities::class)
+                ->withShipmentOptions([ShipmentOptions::FRESH_FOOD => true]);
+        },
+        [CarrierSettings::EXPORT_FRESH_FOOD],
+    ],
+    'shipment option: frozen' => [
+        function () {
+            return factory(CarrierCapabilities::class)
+                ->withShipmentOptions([ShipmentOptions::FROZEN => true]);
+        },
+        [CarrierSettings::EXPORT_FROZEN],
+    ],
 ]);
 
 it(
