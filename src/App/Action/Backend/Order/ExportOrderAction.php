@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
@@ -25,7 +26,6 @@ use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use MyParcelNL\Pdk\Api\Exception\ApiException;
 
 class ExportOrderAction extends AbstractOrderAction
 {
@@ -67,6 +67,15 @@ class ExportOrderAction extends AbstractOrderAction
     {
         $originalOrders = $this->updateOrders($request);
         $validOrders    = $this->validateOrders($originalOrders, $request);
+
+        if (0 === $validOrders->count()) {
+            Logger::info('No orders to export.');
+
+            return Actions::execute(PdkBackendActions::FETCH_ORDERS, [
+                'orderIds' => $this->getOrderIds($request),
+            ]);
+        }
+
         $exportedOrders = $this->export($validOrders, $request);
         $isAutomatic    = self::TYPE_AUTOMATIC === $request->get('actionType');
 
