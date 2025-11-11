@@ -63,7 +63,6 @@ class PostOrderNotesAction extends AbstractOrderAction
                         ->toFulfilmentCollection()->isNotEmpty();
             })
             ->each(function (PdkOrder $order) {
-                // todo: combine the ->where statements to a single call
                 $notes = $this->orderNotesRepository->postOrderNotes(
                     $order->apiIdentifier,
                     $order->notes->where('apiIdentifier', '==', null)
