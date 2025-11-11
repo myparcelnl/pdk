@@ -39,9 +39,9 @@ interface PdkOrderNoteRepositoryInterface
     public function update(PdkOrderNote $note): void;
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $note
+     * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $notes
      *
      * @return void
      */
-    public function updateMany(PdkOrderNoteCollection $note): void;
+    public function updateMany(PdkOrderNoteCollection $notes): void;
 }
