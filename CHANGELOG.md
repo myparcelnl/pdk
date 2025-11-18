@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.67.0](https://github.com/myparcelnl/pdk/compare/v2.66.0...v2.67.0) (2025-11-18)
+
+
+### :sparkles: New Features
+
+* add trunkrs integration ([#395](https://github.com/myparcelnl/pdk/issues/395)) ([adec131](https://github.com/myparcelnl/pdk/commit/adec131e763af8e907b0e3811235618bd68d9a71)), closes [#394](https://github.com/myparcelnl/pdk/issues/394) [#394](https://github.com/myparcelnl/pdk/issues/394)
+
 ## [2.66.0](https://github.com/myparcelnl/pdk/compare/v2.65.2...v2.66.0) (2025-10-31)
 
 
