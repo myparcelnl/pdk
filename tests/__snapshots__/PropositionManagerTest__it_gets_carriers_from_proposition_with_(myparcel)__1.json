@@ -281,7 +281,7 @@
     "primary": false,
     "type": "main",
     "capabilities": {
-      "deliveryTypes": ["standard"],
+      "deliveryTypes": ["standard", "evening"],
       "features": {
         "labelDescriptionLength": 45,
         "carrier": "featureCustomContractOnly"

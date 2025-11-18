@@ -469,5 +469,23 @@ return [
                 ],
             ],
         ],
+        [
+            'id'           => Carrier::CARRIER_TRUNKRS_ID,
+            'name'         => Carrier::CARRIER_TRUNKRS_NAME,
+            'human'        => 'Trunkrs',
+            'schema'       => 'order/trunkrs/base',
+            'shippingZone' => [
+                [
+                    'name'        => CountryCodes::CC_NL,
+                    'packageType' => [
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                            'schema' => 'order/trunkrs/base',
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
 ];

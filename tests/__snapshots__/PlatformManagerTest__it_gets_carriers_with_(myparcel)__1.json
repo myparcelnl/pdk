@@ -269,5 +269,33 @@
         "insurance": [10000]
       }
     }
+  },
+  {
+    "externalIdentifier": "trunkrs",
+    "id": 16,
+    "name": "trunkrs",
+    "human": "Trunkrs",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "capabilities": {
+      "deliveryTypes": ["standard"],
+      "features": {
+        "labelDescriptionLength": 45,
+        "carrier": "featureCustomContractOnly"
+      },
+      "packageTypes": ["package"],
+      "shipmentOptions": {
+        "ageCheck": true,
+        "onlyRecipient": true,
+        "receiptCode": true,
+        "freshFood": true,
+        "frozen": true,
+        "sameDayDelivery": true,
+        "signature": true
+      }
+    }
   }
 ]

@@ -1,100 +1,102 @@
 {
-  "multiCollo": false,
-  "id": 136464938,
-  "shopId": 93683,
-  "referenceIdentifier": "",
-  "externalIdentifier": "3SMYPA056396924",
-  "barcode": "3SMYPA056396924",
-  "carrier": {
-    "externalIdentifier": "postnl",
-    "id": 1,
-    "name": "postnl",
-    "human": "PostNL",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main"
-  },
-  "delayed": false,
-  "delivered": false,
-  "deliveryOptions": {
+    "multiCollo": false,
+    "id": 136464938,
+    "shopId": 93683,
+    "referenceIdentifier": "",
+    "externalIdentifier": "3SMYPA056396924",
+    "barcode": "3SMYPA056396924",
     "carrier": {
-      "externalIdentifier": "postnl",
-      "id": 1,
-      "name": "postnl",
-      "human": "PostNL",
-      "enabled": true,
-      "isDefault": true,
-      "optional": false,
-      "primary": false,
-      "type": "main"
+        "externalIdentifier": "postnl",
+        "id": 1,
+        "name": "postnl",
+        "human": "PostNL",
+        "enabled": true,
+        "isDefault": true,
+        "optional": false,
+        "primary": false,
+        "type": "main"
     },
-    "labelAmount": 1,
-    "pickupLocation": {
-      "locationCode": "216107",
-      "locationName": "Wolswijk thodn Intertoys Boskoop",
-      "retailNetworkId": "PNPNL-01",
-      "cc": "NL",
-      "city": "BOSKOOP",
-      "number": "7",
-      "postalCode": "2771GS",
-      "street": "Kerkstraat"
+    "delayed": false,
+    "delivered": false,
+    "deliveryOptions": {
+        "carrier": {
+            "externalIdentifier": "postnl",
+            "id": 1,
+            "name": "postnl",
+            "human": "PostNL",
+            "enabled": true,
+            "isDefault": true,
+            "optional": false,
+            "primary": false,
+            "type": "main"
+        },
+        "labelAmount": 1,
+        "pickupLocation": {
+            "locationCode": "216107",
+            "locationName": "Wolswijk thodn Intertoys Boskoop",
+            "retailNetworkId": "PNPNL-01",
+            "cc": "NL",
+            "city": "BOSKOOP",
+            "number": "7",
+            "postalCode": "2771GS",
+            "street": "Kerkstraat"
+        },
+        "shipmentOptions": {
+            "labelDescription": "",
+            "insurance": 0,
+            "ageCheck": 0,
+            "return": 0,
+            "hideSender": -1,
+            "largeFormat": 0,
+            "onlyRecipient": 0,
+            "receiptCode": -1,
+            "sameDayDelivery": 0,
+            "signature": 1,
+            "tracked": -1,
+            "collect": 0,
+            "excludeParcelLockers": -1,
+            "freshFood": -1,
+            "frozen": -1
+        },
+        "deliveryType": "pickup",
+        "packageType": "package"
     },
-    "shipmentOptions": {
-      "labelDescription": "",
-      "insurance": 0,
-      "ageCheck": 0,
-      "return": 0,
-      "hideSender": -1,
-      "largeFormat": 0,
-      "onlyRecipient": 0,
-      "receiptCode": -1,
-      "sameDayDelivery": 0,
-      "signature": 1,
-      "tracked": -1,
-      "collect": 0,
-      "excludeParcelLockers": -1
+    "hidden": false,
+    "isReturn": false,
+    "partnerTrackTraces": [],
+    "physicalProperties": {
+        "weight": 1000
     },
-    "deliveryType": "pickup",
-    "packageType": "package"
-  },
-  "hidden": false,
-  "isReturn": false,
-  "partnerTrackTraces": [],
-  "physicalProperties": {
-    "weight": 1000
-  },
-  "price": {
-    "amount": 625,
-    "currency": "EUR"
-  },
-  "recipient": {
-    "cc": "NL",
-    "city": "Boskoop",
-    "number": "25",
-    "numberSuffix": "a",
-    "postalCode": "2771AX",
-    "street": "Azalealaan",
-    "email": "mooieplanten@kweker.nl",
-    "phone": "0613124565",
-    "person": "Piet Boomkweker"
-  },
-  "sender": {
-    "cc": "NL",
-    "city": "Hoofddorp",
-    "number": "31",
-    "postalCode": "2132JE",
-    "street": "Antareslaan",
-    "email": "mrparcel@myparcel.nl",
-    "phone": "0606607834",
-    "person": "Mister Parcel",
-    "company": "MyParcel"
-  },
-  "shipmentType": 1,
-  "status": 2,
-  "created": "2022-07-12 17:28:27",
-  "createdBy": 82444,
-  "modified": "2022-07-12 17:28:28",
-  "modifiedBy": 82444
+    "price": {
+        "amount": 625,
+        "currency": "EUR"
+    },
+    "recipient": {
+        "cc": "NL",
+        "city": "Boskoop",
+        "number": "25",
+        "numberSuffix": "a",
+        "postalCode": "2771AX",
+        "street": "Azalealaan",
+        "email": "mooieplanten@kweker.nl",
+        "phone": "0613124565",
+        "person": "Piet Boomkweker"
+    },
+    "sender": {
+        "cc": "NL",
+        "city": "Hoofddorp",
+        "number": "31",
+        "postalCode": "2132JE",
+        "street": "Antareslaan",
+        "email": "mrparcel@myparcel.nl",
+        "phone": "0606607834",
+        "person": "Mister Parcel",
+        "company": "MyParcel"
+    },
+    "shipmentType": 1,
+    "status": 2,
+    "created": "2022-07-12 17:28:27",
+    "createdBy": 82444,
+    "modified": "2022-07-12 17:28:28",
+    "modifiedBy": 82444
 }

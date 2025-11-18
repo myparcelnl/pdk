@@ -89,6 +89,8 @@ it('exposes inherited options', function () {
             ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
             ShipmentOptions::COLLECT           => TriStateService::INHERIT,
             ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
+            ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
+            ShipmentOptions::FROZEN            => TriStateService::INHERIT,
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
@@ -112,6 +114,8 @@ it('exposes inherited options', function () {
                     ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
                     ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
+                    ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
+                    ShipmentOptions::FROZEN            => TriStateService::DISABLED,
                 ],
             ],
             'dhlforyou:12345' => [
@@ -133,6 +137,8 @@ it('exposes inherited options', function () {
                     ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
                     ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
+                    ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
+                    ShipmentOptions::FROZEN            => TriStateService::DISABLED,
                 ],
             ],
         ]);
