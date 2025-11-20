@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.67.1](https://github.com/myparcelnl/pdk/compare/v2.67.0...v2.67.1) (2025-11-20)
+
+
+### :bug: Bug Fixes
+
+* prevent order notes request failure ([#401](https://github.com/myparcelnl/pdk/issues/401)) ([4ecfec0](https://github.com/myparcelnl/pdk/commit/4ecfec0471a4074dda8027a46c70b90efa026150))
+
 ## [2.67.0](https://github.com/myparcelnl/pdk/compare/v2.66.0...v2.67.0) (2025-11-18)
 
 
