@@ -25,6 +25,11 @@ it('creates a valid order note collection from api data', function (?string $ful
 
     assertMatchesJsonSnapshot(json_encode($savedOrderNotes->toArrayWithoutNull()));
 })->with([
+    'no notes' => [
+        'fulfilmentId' => '1337',
+        'input'        => [],
+    ],
+
     'single note' => [
         'fulfilmentId' => '657718',
         'input'        => [
