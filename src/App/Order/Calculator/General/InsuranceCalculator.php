@@ -19,6 +19,14 @@ use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
     /**
+     * Placeholder until we can get this from the Capabilities API.
+     *
+     * @deprecated This is a temporary solution and should be replaced with a proper implementation through the Capabilities API.
+     * @var string
+     */
+    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.' . ShipmentOptions::INSURANCE;
+
+    /**
      * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
      */
     private $countryService;
@@ -33,14 +41,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private $schemaRepository;
 
-
-    /**
-     * Placeholder until we can get this from the Capabilities API.
-     * @deprecated This is a temporary solution and should be replaced with a proper implementation through the Capabilities API.
-     * @var string
-     */
-    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.'  . ShipmentOptions::INSURANCE;
-
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
@@ -48,10 +48,9 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     {
         parent::__construct($order);
 
-        $this->countryService  = Pdk::get(CountryServiceInterface::class);
-        $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
+        $this->countryService   = Pdk::get(CountryServiceInterface::class);
+        $this->currencyService  = Pdk::get(CurrencyServiceInterface::class);
         $this->schemaRepository = Pdk::get(SchemaRepository::class);
-
     }
 
     /**
@@ -83,7 +82,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         $enabledViaCarrier = TriStateService::INHERIT === $amount && $carrierSettings->exportInsurance;
 
         if ($amount > TriStateService::ENABLED && ! $enabledViaCarrier) {
-            return $this->getMaxInsurance($carrierSettings, $amount);
+            return $this->getMaxInsurance($carrierSettings, $amount, false);
         }
 
         $orderAmount = (int) ceil(
@@ -127,10 +126,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
      * @param  int                                            $amount
+     * @param  bool                                           $enforceLimit
      *
      * @return mixed
      */
-    private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount)
+    private function getMaxInsurance(CarrierSettings $carrierSettings, int $amount, bool $enforceLimit = true)
     {
         // Get a schema resolved to this specific order's combination of carrier, country, package type and delivery type.
         $orderSchema = $this->schemaRepository->getOrderValidationSchema(
@@ -145,13 +145,16 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             self::INSURANCE_SCHEMA_PREFIX
         );
 
+        $validatedAmount = $this->getMinimumInsuranceAmount($allowedInsuranceAmounts, $amount);
+
+        if (! $enforceLimit) {
+            return $validatedAmount;
+        }
+
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
         $maxInsuranceValue = $carrierSettings->getAttribute($insuranceUpToKey) ?? 0;
 
-        return min(
-            $this->getMinimumInsuranceAmount($allowedInsuranceAmounts, $amount),
-            $maxInsuranceValue
-        );
+        return min($validatedAmount, $maxInsuranceValue);
     }
 
     /**
