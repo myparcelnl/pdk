@@ -93,6 +93,20 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 25000,
         ],
 
+        'manual amount respects schema but ignores export settings limit' => [
+            [
+                'deliveryOptions' => [
+                    'shipmentOptions' => [
+                        'insurance' => 10000,
+                    ],
+                ],
+                'settings' => [
+                    CarrierSettings::EXPORT_INSURANCE_UP_TO => 0,
+                ],
+            ],
+            'result' => 10000,
+        ],
+
         'value € 44.81 -> rounded up to € 100' => [
             [
                 'orderPrice' => 4481,
