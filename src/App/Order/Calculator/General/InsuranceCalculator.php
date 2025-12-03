@@ -126,7 +126,8 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $carrierSettings
      * @param  int                                            $amount
-     * @param  bool                                           $enforceLimit
+     * @param  bool                                           $enforceLimit When true, the amount will be capped at the "export insurance up to" setting.
+     *                                                                      Should be false when the amount is manually set by the user.
      *
      * @return mixed
      */
