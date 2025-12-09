@@ -50,6 +50,11 @@ return [
                             'name'   => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
                             'schema' => 'order/postnl/digital_stamp',
                         ],
+                        [
+                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                            'schema' => 'order/postnl/nl_package_small',
+                        ],
                     ],
                 ],
                 [
