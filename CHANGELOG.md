@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.68.0](https://github.com/myparcelnl/pdk/compare/v2.67.1...v2.68.0) (2025-12-09)
+
+
+### :bug: Bug Fixes
+
+* Disable DO when configured in product settings ([#399](https://github.com/myparcelnl/pdk/issues/399)) ([055cb01](https://github.com/myparcelnl/pdk/commit/055cb0173f28e326c15e14f1f005432694a053b4))
+
+
+### :sparkles: New Features
+
+* **pdk:** allow insurance small package ([#404](https://github.com/myparcelnl/pdk/issues/404)) ([1bdfd32](https://github.com/myparcelnl/pdk/commit/1bdfd32bcf369b9e42acda48b185ccb40b56bb84))
+
 ## [2.67.1](https://github.com/myparcelnl/pdk/compare/v2.67.0...v2.67.1) (2025-11-20)
 
 
