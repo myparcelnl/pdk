@@ -24,7 +24,7 @@ jobs:
           token: ${{ steps.credentials.outputs.token }}
 
       - name: 'Handle Rector cache'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: rector-cache
         with:
           path: './.cache/rector'
