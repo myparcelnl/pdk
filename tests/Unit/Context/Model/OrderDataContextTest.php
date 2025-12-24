@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -77,20 +78,21 @@ it('exposes inherited options', function () {
 
     expect($context->deliveryOptions->shipmentOptions->toArrayWithoutNull())
         ->toEqual([
-            ShipmentOptions::INSURANCE         => TriStateService::INHERIT,
-            ShipmentOptions::AGE_CHECK         => TriStateService::INHERIT,
-            ShipmentOptions::HIDE_SENDER       => TriStateService::INHERIT,
-            ShipmentOptions::LARGE_FORMAT      => TriStateService::INHERIT,
-            ShipmentOptions::ONLY_RECIPIENT    => TriStateService::INHERIT,
-            ShipmentOptions::DIRECT_RETURN     => TriStateService::ENABLED,
-            ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
-            ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
-            ShipmentOptions::TRACKED           => TriStateService::INHERIT,
-            ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
-            ShipmentOptions::COLLECT           => TriStateService::INHERIT,
+            ShipmentOptions::INSURANCE              => TriStateService::INHERIT,
+            ShipmentOptions::AGE_CHECK              => TriStateService::INHERIT,
+            ShipmentOptions::HIDE_SENDER            => TriStateService::INHERIT,
+            ShipmentOptions::LARGE_FORMAT           => TriStateService::INHERIT,
+            ShipmentOptions::ONLY_RECIPIENT         => TriStateService::INHERIT,
+            ShipmentOptions::DIRECT_RETURN          => TriStateService::ENABLED,
+            ShipmentOptions::SAME_DAY_DELIVERY      => TriStateService::INHERIT,
+            ShipmentOptions::SIGNATURE              => TriStateService::INHERIT,
+            ShipmentOptions::TRACKED                => TriStateService::INHERIT,
+            ShipmentOptions::RECEIPT_CODE           => TriStateService::INHERIT,
+            ShipmentOptions::COLLECT                => TriStateService::INHERIT,
             ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
-            ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
-            ShipmentOptions::FROZEN            => TriStateService::INHERIT,
+            ShipmentOptions::FRESH_FOOD             => TriStateService::INHERIT,
+            ShipmentOptions::FROZEN                 => TriStateService::INHERIT,
+            ShipmentOptions::PRIORITY               => TriStateService::INHERIT,
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
@@ -99,23 +101,24 @@ it('exposes inherited options', function () {
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                 DeliveryOptions::SHIPMENT_OPTIONS => [
-                    ShipmentOptions::INSURANCE         => TriStateService::DISABLED,
+                    ShipmentOptions::INSURANCE              => TriStateService::DISABLED,
                     // Enabled by carrier, but disabled by product
-                    ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
-                    ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
+                    ShipmentOptions::AGE_CHECK              => TriStateService::DISABLED,
+                    ShipmentOptions::HIDE_SENDER            => TriStateService::DISABLED,
                     // Enabled by product
-                    ShipmentOptions::LARGE_FORMAT      => TriStateService::ENABLED,
-                    ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
-                    ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
-                    ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
+                    ShipmentOptions::LARGE_FORMAT           => TriStateService::ENABLED,
+                    ShipmentOptions::ONLY_RECIPIENT         => TriStateService::DISABLED,
+                    ShipmentOptions::DIRECT_RETURN          => TriStateService::DISABLED,
+                    ShipmentOptions::SAME_DAY_DELIVERY      => TriStateService::DISABLED,
                     // Enabled by carrier
-                    ShipmentOptions::SIGNATURE         => TriStateService::ENABLED,
-                    ShipmentOptions::TRACKED           => TriStateService::DISABLED,
-                    ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
-                    ShipmentOptions::COLLECT           => TriStateService::DISABLED,
+                    ShipmentOptions::SIGNATURE              => TriStateService::ENABLED,
+                    ShipmentOptions::TRACKED                => TriStateService::DISABLED,
+                    ShipmentOptions::RECEIPT_CODE           => TriStateService::DISABLED,
+                    ShipmentOptions::COLLECT                => TriStateService::DISABLED,
                     ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
-                    ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
-                    ShipmentOptions::FROZEN            => TriStateService::DISABLED,
+                    ShipmentOptions::FRESH_FOOD             => TriStateService::DISABLED,
+                    ShipmentOptions::FROZEN                 => TriStateService::DISABLED,
+                    ShipmentOptions::PRIORITY               => TriStateService::INHERIT,
                 ],
             ],
             'dhlforyou:12345' => [
@@ -123,22 +126,23 @@ it('exposes inherited options', function () {
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
                 DeliveryOptions::SHIPMENT_OPTIONS => [
-                    ShipmentOptions::INSURANCE         => TriStateService::DISABLED,
-                    ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
-                    ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
+                    ShipmentOptions::INSURANCE              => TriStateService::DISABLED,
+                    ShipmentOptions::AGE_CHECK              => TriStateService::DISABLED,
+                    ShipmentOptions::HIDE_SENDER            => TriStateService::DISABLED,
                     // Enabled by product
-                    ShipmentOptions::LARGE_FORMAT      => TriStateService::ENABLED,
+                    ShipmentOptions::LARGE_FORMAT           => TriStateService::ENABLED,
                     // Enabled by carrier
-                    ShipmentOptions::ONLY_RECIPIENT    => TriStateService::ENABLED,
-                    ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
-                    ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
-                    ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
-                    ShipmentOptions::TRACKED           => TriStateService::DISABLED,
-                    ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
-                    ShipmentOptions::COLLECT           => TriStateService::DISABLED,
+                    ShipmentOptions::ONLY_RECIPIENT         => TriStateService::ENABLED,
+                    ShipmentOptions::DIRECT_RETURN          => TriStateService::DISABLED,
+                    ShipmentOptions::SAME_DAY_DELIVERY      => TriStateService::DISABLED,
+                    ShipmentOptions::SIGNATURE              => TriStateService::DISABLED,
+                    ShipmentOptions::TRACKED                => TriStateService::DISABLED,
+                    ShipmentOptions::RECEIPT_CODE           => TriStateService::DISABLED,
+                    ShipmentOptions::COLLECT                => TriStateService::DISABLED,
                     ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
-                    ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
-                    ShipmentOptions::FROZEN            => TriStateService::DISABLED,
+                    ShipmentOptions::FRESH_FOOD             => TriStateService::DISABLED,
+                    ShipmentOptions::FROZEN                 => TriStateService::DISABLED,
+                    ShipmentOptions::PRIORITY               => TriStateService::INHERIT,
                 ],
             ],
         ]);

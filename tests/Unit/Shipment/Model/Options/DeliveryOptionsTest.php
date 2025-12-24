@@ -57,26 +57,28 @@ it('instantiates shipment options', function () {
             'receiptCode'          => true,
             'collect'              => true,
             'excludeParcelLockers' => false,
+            'priorityDelivery'     => false,
         ],
     ]);
 
     expect($deliveryOptions->shipmentOptions->toArray())
         ->toEqual([
-            'insurance'        => 5000,
-            'labelDescription' => 'hello',
-            'ageCheck'         => TriStateService::ENABLED,
-            'hideSender'       => TriStateService::ENABLED,
-            'largeFormat'      => TriStateService::ENABLED,
-            'onlyRecipient'    => TriStateService::ENABLED,
-            'return'           => TriStateService::ENABLED,
-            'sameDayDelivery'  => TriStateService::ENABLED,
-            'signature'        => TriStateService::ENABLED,
-            'tracked'          => TriStateService::INHERIT,
-            'receiptCode'      => TriStateService::ENABLED,
-            'collect'          => TriStateService::ENABLED,
+            'insurance'            => 5000,
+            'labelDescription'     => 'hello',
+            'ageCheck'             => TriStateService::ENABLED,
+            'hideSender'           => TriStateService::ENABLED,
+            'largeFormat'          => TriStateService::ENABLED,
+            'onlyRecipient'        => TriStateService::ENABLED,
+            'return'               => TriStateService::ENABLED,
+            'sameDayDelivery'      => TriStateService::ENABLED,
+            'signature'            => TriStateService::ENABLED,
+            'tracked'              => TriStateService::INHERIT,
+            'receiptCode'          => TriStateService::ENABLED,
+            'collect'              => TriStateService::ENABLED,
             'excludeParcelLockers' => TriStateService::DISABLED,
-            'freshFood'        => TriStateService::INHERIT,
-            'frozen'           => TriStateService::INHERIT,
+            'freshFood'            => TriStateService::INHERIT,
+            'frozen'               => TriStateService::INHERIT,
+            'priorityDelivery'     => TriStateService::DISABLED,
         ]);
 });
 

@@ -24,21 +24,22 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
     $defaults = [
-        ShipmentOptions::LABEL_DESCRIPTION => TriStateService::INHERIT,
-        ShipmentOptions::INSURANCE         => TriStateService::INHERIT,
-        ShipmentOptions::AGE_CHECK         => TriStateService::INHERIT,
-        ShipmentOptions::DIRECT_RETURN     => TriStateService::INHERIT,
-        ShipmentOptions::HIDE_SENDER       => TriStateService::INHERIT,
-        ShipmentOptions::LARGE_FORMAT      => TriStateService::INHERIT,
-        ShipmentOptions::ONLY_RECIPIENT    => TriStateService::INHERIT,
-        ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
-        ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
-        ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
-        ShipmentOptions::TRACKED           => TriStateService::INHERIT,
-        ShipmentOptions::COLLECT           => TriStateService::INHERIT,
+        ShipmentOptions::LABEL_DESCRIPTION      => TriStateService::INHERIT,
+        ShipmentOptions::INSURANCE              => TriStateService::INHERIT,
+        ShipmentOptions::AGE_CHECK              => TriStateService::INHERIT,
+        ShipmentOptions::DIRECT_RETURN          => TriStateService::INHERIT,
+        ShipmentOptions::HIDE_SENDER            => TriStateService::INHERIT,
+        ShipmentOptions::LARGE_FORMAT           => TriStateService::INHERIT,
+        ShipmentOptions::ONLY_RECIPIENT         => TriStateService::INHERIT,
+        ShipmentOptions::RECEIPT_CODE           => TriStateService::INHERIT,
+        ShipmentOptions::SAME_DAY_DELIVERY      => TriStateService::INHERIT,
+        ShipmentOptions::SIGNATURE              => TriStateService::INHERIT,
+        ShipmentOptions::TRACKED                => TriStateService::INHERIT,
+        ShipmentOptions::COLLECT                => TriStateService::INHERIT,
         ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
-        ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
-        ShipmentOptions::FROZEN            => TriStateService::INHERIT,
+        ShipmentOptions::FRESH_FOOD             => TriStateService::INHERIT,
+        ShipmentOptions::FROZEN                 => TriStateService::INHERIT,
+        ShipmentOptions::PRIORITY               => TriStateService::INHERIT,
     ];
 
     $order = factory(PdkOrder::class)

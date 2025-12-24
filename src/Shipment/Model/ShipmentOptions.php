@@ -42,7 +42,7 @@ class ShipmentOptions extends Model
     public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
     public const FRESH_FOOD        = 'freshFood';
     public const FROZEN            = 'frozen';
-    public const PRIORITY          = 'priority_delivery';
+    public const PRIORITY          = 'priorityDelivery';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,

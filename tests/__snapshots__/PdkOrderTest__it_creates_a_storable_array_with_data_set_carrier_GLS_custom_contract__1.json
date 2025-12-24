@@ -1,30 +1,31 @@
 [
-    {
-        "exported": false,
-        "deliveryOptions": {
-            "carrier": {
-                "externalIdentifier": "gls:5678"
-            },
-            "labelAmount": 1,
-            "shipmentOptions": {
-                "insurance": -1,
-                "ageCheck": -1,
-                "return": -1,
-                "hideSender": -1,
-                "largeFormat": 1,
-                "onlyRecipient": 1,
-                "receiptCode": -1,
-                "sameDayDelivery": -1,
-                "signature": -1,
-                "tracked": -1,
-                "collect": -1,
-                "excludeParcelLockers": -1,
-                "freshFood": -1,
-                "frozen": -1
-            },
-            "deliveryType": "standard",
-            "packageType": "package"
-        },
-        "physicalProperties": []
-    }
+  {
+    "exported": false,
+    "deliveryOptions": {
+      "carrier": {
+        "externalIdentifier": "gls:5678"
+      },
+      "labelAmount": 1,
+      "shipmentOptions": {
+        "insurance": -1,
+        "ageCheck": -1,
+        "return": -1,
+        "hideSender": -1,
+        "largeFormat": 1,
+        "onlyRecipient": 1,
+        "receiptCode": -1,
+        "sameDayDelivery": -1,
+        "signature": -1,
+        "tracked": -1,
+        "collect": -1,
+        "excludeParcelLockers": -1,
+        "freshFood": -1,
+        "frozen": -1,
+        "priorityDelivery": -1
+      },
+      "deliveryType": "standard",
+      "packageType": "package"
+    },
+    "physicalProperties": []
+  }
 ]

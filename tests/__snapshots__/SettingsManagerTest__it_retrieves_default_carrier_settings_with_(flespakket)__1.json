@@ -101,6 +101,8 @@
     "priceSignature": 0,
     "allowInternationalMailbox": false,
     "priceInternationalMailbox": 0,
+    "allowMailboxPriority": false,
+    "pricePackageTypeMailboxPriority": 0,
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   },
@@ -206,6 +208,8 @@
     "priceSignature": 0,
     "allowInternationalMailbox": false,
     "priceInternationalMailbox": 0,
+    "allowMailboxPriority": false,
+    "pricePackageTypeMailboxPriority": 0,
     "priceCollect": 0,
     "priceDeliveryTypeExpress": 0
   }
