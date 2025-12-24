@@ -154,6 +154,17 @@ class CarrierSettingsItemView extends AbstractSettingsView
     /**
      * @return array
      */
+    private function createMailboxPriorityFields(): array
+    {
+        return $this->createSettingWithPriceFields(
+            CarrierSettings::ALLOW_MAILBOX_PRIORITY,
+            CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX_PRIORITY
+        );
+    }
+
+    /**
+     * @return array
+     */
     private function createInternationalMailboxFields(): array
     {
         $fields = $this->createSettingWithPriceFields(
@@ -227,21 +238,21 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
             $this->carrierSchema->canHaveAgeCheck()
                 ? [
-                (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
-                    ->builder(function (FormOperationBuilder $builder) {
-                        $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
-                            $afterUpdate
-                                ->setValue(true)
-                                ->on(CarrierSettings::EXPORT_SIGNATURE)
-                                ->if->eq(true);
+                    (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
+                        ->builder(function (FormOperationBuilder $builder) {
+                            $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
+                                $afterUpdate
+                                    ->setValue(true)
+                                    ->on(CarrierSettings::EXPORT_SIGNATURE)
+                                    ->if->eq(true);
 
-                            $afterUpdate
-                                ->setValue(true)
-                                ->on(CarrierSettings::EXPORT_ONLY_RECIPIENT)
-                                ->if->eq(true);
-                        });
-                    }),
-            ]
+                                $afterUpdate
+                                    ->setValue(true)
+                                    ->on(CarrierSettings::EXPORT_ONLY_RECIPIENT)
+                                    ->if->eq(true);
+                            });
+                        }),
+                ]
                 : [],
 
             $this->withOperation(
@@ -526,6 +537,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             );
 
             $fields[] = $this->createInternationalMailboxFields();
+            $fields[] = $this->createMailboxPriorityFields();
         }
 
         if (in_array(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME, $allowedPackageTypes, true)) {
