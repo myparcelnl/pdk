@@ -537,7 +537,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
             );
 
             $fields[] = $this->createInternationalMailboxFields();
-            $fields[] = $this->createMailboxPriorityFields();
+
+            if (Carrier::CARRIER_POSTNL_NAME === $this->carrier->name) {
+                $fields[] = $this->createMailboxPriorityFields();
+            }
         }
 
         if (in_array(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME, $allowedPackageTypes, true)) {
