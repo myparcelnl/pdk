@@ -23,7 +23,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $excludeParcelLockers
  * @property int<-1|0|1>         $freshFood
  * @property int<-1|0|1>         $frozen
- * @property int<-1|0|1>         $priority_delivery
+ * @property int<-1|0|1>         $priorityDelivery
  */
 class ShipmentOptions extends Model
 {
@@ -42,7 +42,7 @@ class ShipmentOptions extends Model
     public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
     public const FRESH_FOOD        = 'freshFood';
     public const FROZEN            = 'frozen';
-    public const PRIORITY          = 'priorityDelivery';
+    public const PRIORITY_DELIVERY = 'priorityDelivery';
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
@@ -60,7 +60,7 @@ class ShipmentOptions extends Model
         self::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
         self::FRESH_FOOD        => TriStateService::INHERIT,
         self::FROZEN            => TriStateService::INHERIT,
-        self::PRIORITY          => TriStateService::INHERIT,
+        self::PRIORITY_DELIVERY => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -79,6 +79,6 @@ class ShipmentOptions extends Model
         self::EXCLUDE_PARCEL_LOCKERS => TriStateService::TYPE_STRICT,
         self::FRESH_FOOD        => TriStateService::TYPE_STRICT,
         self::FROZEN            => TriStateService::TYPE_STRICT,
-        self::PRIORITY          => TriStateService::TYPE_STRICT,
+        self::PRIORITY_DELIVERY => TriStateService::TYPE_STRICT,
     ];
 }

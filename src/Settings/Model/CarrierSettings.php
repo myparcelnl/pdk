@@ -62,8 +62,8 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property float                $allowInternationalMailbox
  * @property float                $priceInternationalMailbox
  * @property float                $priceCollect
- * @property bool                 $allowMailboxPriority
- * @property float                $pricePackageTypeMailboxPriority
+ * @property bool                 $allowPriorityDelivery
+ * @property float                $pricePriorityDelivery
  */
 class CarrierSettings extends AbstractSettingsModel
 {
@@ -131,8 +131,8 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_INTERNATIONAL_MAILBOX             = 'allowInternationalMailbox';
     public const  PRICE_INTERNATIONAL_MAILBOX             = 'priceInternationalMailbox';
     public const  PRICE_COLLECT                           = 'priceCollect';
-    public const  ALLOW_MAILBOX_PRIORITY                  = 'allowMailboxPriority';
-    public const  PRICE_PACKAGE_TYPE_MAILBOX_PRIORITY     = 'pricePackageTypeMailboxPriority';
+    public const  ALLOW_PRIORITY_DELIVERY                 = 'allowPriorityDelivery';
+    public const  PRICE_PRIORITY_DELIVERY                 = 'pricePriorityDelivery';
     public const  PRICE_DELIVERY_TYPE_EXPRESS             = 'priceDeliveryTypeExpress';
 
     protected $attributes = [
@@ -193,8 +193,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_SIGNATURE                         => 0,
         self::ALLOW_INTERNATIONAL_MAILBOX             => false,
         self::PRICE_INTERNATIONAL_MAILBOX             => 0,
-        self::ALLOW_MAILBOX_PRIORITY                  => false,
-        self::PRICE_PACKAGE_TYPE_MAILBOX_PRIORITY     => 0,
+        self::ALLOW_PRIORITY_DELIVERY                 => false,
+        self::PRICE_PRIORITY_DELIVERY                 => 0,
         self::PRICE_COLLECT                           => 0,
         self::PRICE_DELIVERY_TYPE_EXPRESS             => 0,
     ];
@@ -256,8 +256,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_SIGNATURE                         => 'float',
         self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
         self::PRICE_INTERNATIONAL_MAILBOX             => 'float',
-        self::ALLOW_MAILBOX_PRIORITY                  => 'bool',
-        self::PRICE_PACKAGE_TYPE_MAILBOX_PRIORITY     => 'float',
+        self::ALLOW_PRIORITY_DELIVERY                 => 'bool',
+        self::PRICE_PRIORITY_DELIVERY                 => 'float',
         self::PRICE_COLLECT                           => 'float',
         self::PRICE_DELIVERY_TYPE_EXPRESS             => 'float',
     ];

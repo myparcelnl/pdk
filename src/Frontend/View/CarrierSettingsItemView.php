@@ -157,8 +157,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function createMailboxPriorityFields(): array
     {
         return $this->createSettingWithPriceFields(
-            CarrierSettings::ALLOW_MAILBOX_PRIORITY,
-            CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX_PRIORITY
+            CarrierSettings::ALLOW_PRIORITY_DELIVERY,
+            CarrierSettings::PRICE_PRIORITY_DELIVERY
         );
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -39,7 +40,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
         ShipmentOptions::FRESH_FOOD             => TriStateService::INHERIT,
         ShipmentOptions::FROZEN                 => TriStateService::INHERIT,
-        ShipmentOptions::PRIORITY               => TriStateService::INHERIT,
+        ShipmentOptions::PRIORITY_DELIVERY      => TriStateService::INHERIT,
     ];
 
     $order = factory(PdkOrder::class)

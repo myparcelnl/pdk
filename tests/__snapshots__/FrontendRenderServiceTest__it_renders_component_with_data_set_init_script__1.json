@@ -506,8 +506,8 @@
           "priceSignature": 0,
           "allowInternationalMailbox": false,
           "priceInternationalMailbox": 0,
-          "allowMailboxPriority": false,
-          "pricePackageTypeMailboxPriority": 0,
+          "allowPriorityDelivery": false,
+          "pricePriorityDelivery": 0,
           "priceCollect": 0,
           "priceDeliveryTypeExpress": 0
         }

@@ -791,7 +791,7 @@
           "description": "settings_carrier_price_international_mailbox_description"
         },
         {
-          "name": "allowMailboxPriority",
+          "name": "allowPriorityDelivery",
           "$builders": [
             {
               "$visibleWhen": {
@@ -811,17 +811,17 @@
             }
           ],
           "$component": "ToggleInput",
-          "label": "settings_carrier_allow_mailbox_priority",
-          "description": "settings_carrier_allow_mailbox_priority_description"
+          "label": "settings_carrier_allow_priority_delivery",
+          "description": "settings_carrier_allow_priority_delivery_description"
         },
         {
-          "name": "pricePackageTypeMailboxPriority",
+          "name": "pricePriorityDelivery",
           "$builders": [
             {
               "$visibleWhen": {
                 "$if": [
                   {
-                    "$target": "allowMailboxPriority"
+                    "$target": "allowPriorityDelivery"
                   },
                   {
                     "$and": [
@@ -838,8 +838,8 @@
             }
           ],
           "$component": "CurrencyInput",
-          "label": "settings_carrier_price_package_type_mailbox_priority",
-          "description": "settings_carrier_price_package_type_mailbox_priority_description"
+          "label": "settings_carrier_price_priority_delivery",
+          "description": "settings_carrier_price_priority_delivery_description"
         },
         {
           "name": "pricePackageTypeDigitalStamp",

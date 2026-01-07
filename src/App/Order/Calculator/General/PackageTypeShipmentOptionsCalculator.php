@@ -23,7 +23,7 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             return;
         }
 
-        $this->order->deliveryOptions->shipmentOptions->fill([
+        $options = [
             ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
             ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
             ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
@@ -32,7 +32,12 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
             ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
-        ]);
-    }
+        ];
 
+        if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME !== $deliveryOptions->packageType) {
+            $options[ShipmentOptions::PRIORITY_DELIVERY] = TriStateService::DISABLED;
+        }
+
+        $this->order->deliveryOptions->shipmentOptions->fill($options);
+    }
 }
