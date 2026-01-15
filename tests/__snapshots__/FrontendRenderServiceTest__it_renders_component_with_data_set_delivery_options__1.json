@@ -12,8 +12,8 @@
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
       "closedDays": [],
-      "excludeParcelLockers": false,
-      "apiBaseUrl": "https://api.myparcel.nl"
+      "apiBaseUrl": "https://api.myparcel.nl",
+      "excludeParcelLockers": false
     },
     "strings": {
       "morning": "Ochtend"
@@ -53,17 +53,6 @@
             },
             "path": "",
             "property": "validate",
-            "responseProperty": null
-          },
-          "proxyCapabilities": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyCapabilities"
-            },
-            "path": "",
-            "property": "capabilities",
             "responseProperty": null
           },
           "fetchContext": {

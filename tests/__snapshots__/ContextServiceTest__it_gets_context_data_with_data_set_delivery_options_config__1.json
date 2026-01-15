@@ -40,17 +40,6 @@
             "property": "validate",
             "responseProperty": null
           },
-          "proxyCapabilities": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyCapabilities"
-            },
-            "path": "",
-            "property": "capabilities",
-            "responseProperty": null
-          },
           "fetchContext": {
             "body": null,
             "headers": [],
