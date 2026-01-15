@@ -53,7 +53,8 @@
           "features": {
             "labelDescriptionLength": 45,
             "carrierSmallPackageContract": "featureCustomContractOnly",
-            "multiCollo": true
+            "multiCollo": true,
+            "priorityDelivery": true
           },
           "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
           "shipmentOptions": {

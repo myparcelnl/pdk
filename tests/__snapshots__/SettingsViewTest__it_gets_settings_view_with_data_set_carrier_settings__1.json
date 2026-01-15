@@ -791,57 +791,6 @@
           "description": "settings_carrier_price_international_mailbox_description"
         },
         {
-          "name": "allowPriorityDelivery",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "ToggleInput",
-          "label": "settings_carrier_allow_priority_delivery",
-          "description": "settings_carrier_allow_priority_delivery_description"
-        },
-        {
-          "name": "pricePriorityDelivery",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "allowPriorityDelivery"
-                  },
-                  {
-                    "$and": [
-                      {
-                        "$target": "deliveryOptionsEnabled"
-                      },
-                      {
-                        "$target": "allowDeliveryOptions"
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "$component": "CurrencyInput",
-          "label": "settings_carrier_price_priority_delivery",
-          "description": "settings_carrier_price_priority_delivery_description"
-        },
-        {
           "name": "pricePackageTypeDigitalStamp",
           "$builders": [
             {
