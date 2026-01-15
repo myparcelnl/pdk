@@ -146,6 +146,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHave(OnlyRecipientDefinition::class);
     }
 
+    public function canHavePriorityDelivery(): bool
+    {
+        return $this->canHaveFeature('priorityDelivery');
+    }
+
     public function canHavePickup(): bool
     {
         return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME);

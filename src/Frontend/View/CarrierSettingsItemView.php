@@ -538,7 +538,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
             $fields[] = $this->createInternationalMailboxFields();
 
-            if (Carrier::CARRIER_POSTNL_NAME === $this->carrier->name) {
+            if ($this->carrierSchema->canHavePriorityDelivery()) {
                 $fields[] = $this->createMailboxPriorityFields();
             }
         }

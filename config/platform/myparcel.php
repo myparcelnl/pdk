@@ -70,6 +70,7 @@ return [
                     'labelDescriptionLength'      => 45,
                     'carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY,
                     'multiCollo'                  => true,
+                    'priorityDelivery'            => true,
                 ],
             ],
             'returnCapabilities' => [
@@ -418,4 +419,3 @@ return [
         ],
     ],
 ];
-
