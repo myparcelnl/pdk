@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
@@ -148,7 +149,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function canHavePriorityDelivery(): bool
     {
-        return $this->canHaveFeature('priorityDelivery');
+        return $this->canHave(PriorityDeliveryDefinition::class);
     }
 
     public function canHavePickup(): bool
