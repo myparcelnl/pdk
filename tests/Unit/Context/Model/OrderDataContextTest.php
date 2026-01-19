@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -18,6 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -43,7 +45,7 @@ function setup(): void
                 ->withExportSignature(true)
         )
         ->withCarrier(
-            'dhlforyou:12345',
+            'DHL_FOR_YOU:12345',
             factory(CarrierSettings::class)->withExportOnlyRecipient(true)
         )
         ->store();

@@ -78,19 +78,24 @@ abstract class AbstractOrderAction implements ActionInterface
             /*
              Merge nested attributes with existing data (just like unnested attributes will be).
              Explicit unsets must be done by setting the value to null.
-             This is currently implemented only for deliveryOptions, but could (should) be extended to other attributes in the future.
+             This is currently implemented for deliveryOptions and physicalProperties, but could (should) be extended to other attributes in the future.
             */
-            if (array_key_exists('deliveryOptions', $attributes)) {
-                if (null !== $attributes['deliveryOptions']) {
-                    $attributes['deliveryOptions'] = \array_replace_recursive(
-                        $pdkOrder->deliveryOptions->toArray(),
-                        $attributes['deliveryOptions']
-                    );
-                } else {
-                    // If deliveryOptions is explicitly set to null, we should unset it in the PdkOrder.
-                    $attributes['deliveryOptions'] = null;
+            $nestedAttributes = ['deliveryOptions', 'physicalProperties'];
+
+            foreach ($nestedAttributes as $nestedAttribute) {
+                if (array_key_exists($nestedAttribute, $attributes)) {
+                    if (null !== $attributes[$nestedAttribute]) {
+                        $attributes[$nestedAttribute] = \array_replace_recursive(
+                            $pdkOrder->{$nestedAttribute}->toArray(),
+                            $attributes[$nestedAttribute]
+                        );
+                    } else {
+                        // If the nested attribute is explicitly set to null, we should unset it in the PdkOrder.
+                        $attributes[$nestedAttribute] = null;
+                    }
                 }
             }
+
             return $pdkOrder->fill($attributes);
         });
     }

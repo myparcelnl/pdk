@@ -5,6 +5,7 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
+
 use function DI\factory;
 use function DI\value;
 
@@ -31,7 +32,7 @@ return [
     /**
      * The minimum PHP version required to run the app.
      */
-    'minimumPhpVersion'         => value('7.1'),
+    'minimumPhpVersion'         => value('7.4'),
 
     /**
      * The version of the delivery options in the checkout.

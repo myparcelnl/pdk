@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\App\Request\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -25,6 +26,7 @@ class CheckoutContext extends Model
 {
     public $attributes = [
         'config'    => null,
+        'platformConfig' => null,
         'strings'   => [],
         'settings'  => [],
         'endpoints' => EndpointRequestCollection::class,
@@ -32,6 +34,7 @@ class CheckoutContext extends Model
 
     protected $casts      = [
         'config'    => DeliveryOptionsConfig::class,
+        'platformConfig' => 'array',
         'strings'   => 'array',
         'settings'  => 'array',
         'endpoints' => EndpointRequestCollection::class,
@@ -46,6 +49,7 @@ class CheckoutContext extends Model
 
         $this->attributes['strings']  = $this->getStrings();
         $this->attributes['settings'] = $this->getSettings();
+        $this->attributes['platformConfig'] = Pdk::get(DeliveryOptionsService::class)->createPropositionConfig();
     }
 
     /**
@@ -56,6 +60,7 @@ class CheckoutContext extends Model
     public static function fromCart(PdkCart $cart): self
     {
         return new self([
+
             'config'   => DeliveryOptionsConfig::fromCart($cart),
             'settings' => [
                 'hasDeliveryOptions' => $cart->shippingMethod->hasDeliveryOptions,

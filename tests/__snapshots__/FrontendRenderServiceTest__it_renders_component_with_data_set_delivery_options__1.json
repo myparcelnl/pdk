@@ -1,81 +1,360 @@
 {
-  "checkout": {
-    "config": {
-      "allowRetry": false,
-      "basePrice": 0,
-      "carrierSettings": [],
-      "currency": "EUR",
-      "locale": "nl-NL",
-      "packageType": "package",
-      "allowPickupLocationsViewSelection": true,
-      "platform": "myparcel",
-      "priceStandardDelivery": 0,
-      "showPriceSurcharge": false,
-      "closedDays": [],
-      "apiBaseUrl": "https://api.myparcel.nl",
-      "excludeParcelLockers": false
-    },
-    "strings": {
-      "morning": "Ochtend"
-    },
-    "settings": {
-      "actions": {
-        "baseUrl": "FRONTEND_URL",
-        "endpoints": {
-          "fetchCheckoutContext": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "fetchCheckoutContext"
+    "checkout": {
+        "config": {
+            "allowRetry": false,
+            "basePrice": 0,
+            "carrierSettings": [],
+            "currency": "EUR",
+            "locale": "nl-NL",
+            "packageType": "package",
+            "allowPickupLocationsViewSelection": true,
+            "platform": "myparcel",
+            "priceStandardDelivery": 0,
+            "showPriceSurcharge": false,
+            "closedDays": [],
+            "excludeParcelLockers": false,
+            "apiBaseUrl": "https:\/\/api.myparcel.nl"
+        },
+        "platformConfig": {
+            "carriers": [
+                {
+                    "name": "postnl",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package",
+                        "mailbox",
+                        "letter",
+                        "digital_stamp",
+                        "package_small"
+                    ],
+                    "deliveryTypes": [
+                        "morning",
+                        "standard",
+                        "evening",
+                        "pickup"
+                    ],
+                    "deliveryCountries": [
+                        "NL",
+                        "BE"
+                    ],
+                    "pickupCountries": [
+                        "NL",
+                        "BE",
+                        "DK",
+                        "SE",
+                        "DE"
+                    ],
+                    "smallPackagePickupCountries": [
+                        "NL",
+                        "BE"
+                    ],
+                    "fakeDelivery": true,
+                    "shipmentOptionsPerPackageType": {
+                        "package": [
+                            "only_recipient",
+                            "signature"
+                        ],
+                        "mailbox": [
+                            "priority_delivery"
+                        ],
+                        "letter": [],
+                        "digital_stamp": [],
+                        "package_small": [
+                            "only_recipient",
+                            "signature"
+                        ]
+                    },
+                    "features": [
+                        "deliveryDaysWindow",
+                        "dropOffDays",
+                        "dropOffDelay",
+                        "pickupMapAllowLoadMore"
+                    ],
+                    "addressFields": [
+                        "postalCode",
+                        "street",
+                        "city"
+                    ]
+                },
+                {
+                    "name": "dpd",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package",
+                        "mailbox"
+                    ],
+                    "deliveryTypes": [
+                        "standard",
+                        "pickup"
+                    ],
+                    "deliveryCountries": [
+                        "AT",
+                        "BE",
+                        "BG",
+                        "CZ",
+                        "DK",
+                        "EE",
+                        "FI",
+                        "FR",
+                        "DE",
+                        "GR",
+                        "HU",
+                        "IE",
+                        "IT",
+                        "LV",
+                        "LI",
+                        "LT",
+                        "LU",
+                        "NL",
+                        "PL",
+                        "PT",
+                        "RO",
+                        "SK",
+                        "SI",
+                        "ES",
+                        "SE"
+                    ],
+                    "pickupCountries": [
+                        "AT",
+                        "BE",
+                        "CZ",
+                        "DK",
+                        "EE",
+                        "FI",
+                        "FR",
+                        "DE",
+                        "HU",
+                        "LV",
+                        "LT",
+                        "LU",
+                        "NL",
+                        "PL",
+                        "PT",
+                        "SK",
+                        "SI",
+                        "ES",
+                        "GB"
+                    ],
+                    "shipmentOptionsPerPackageType": {
+                        "package": []
+                    },
+                    "features": [
+                        "dropOffDays",
+                        "dropOffDelay"
+                    ],
+                    "addressFields": [
+                        "postalCode",
+                        "street",
+                        "city"
+                    ]
+                },
+                {
+                    "name": "dhlforyou",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package",
+                        "mailbox",
+                        "package_small"
+                    ],
+                    "deliveryTypes": [
+                        "standard",
+                        "pickup"
+                    ],
+                    "deliveryCountries": [
+                        "NL",
+                        "BE"
+                    ],
+                    "pickupCountries": [
+                        "NL",
+                        "BE"
+                    ],
+                    "smallPackagePickupCountries": [
+                        "NL",
+                        "BE"
+                    ],
+                    "shipmentOptionsPerPackageType": {
+                        "package": [
+                            "age_check",
+                            "only_recipient",
+                            "same_day_delivery",
+                            "signature",
+                            "saturday_delivery",
+                            "hide_sender",
+                            "insurance"
+                        ]
+                    },
+                    "features": [
+                        "deliveryDaysWindow",
+                        "dropOffDays",
+                        "dropOffDelay"
+                    ],
+                    "addressFields": [
+                        "city",
+                        "postalCode"
+                    ]
+                },
+                {
+                    "name": "dhlparcelconnect",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package"
+                    ],
+                    "deliveryTypes": [
+                        "standard",
+                        "pickup"
+                    ],
+                    "shipmentOptionsPerPackageType": {
+                        "package": [
+                            "signature"
+                        ]
+                    }
+                },
+                {
+                    "name": "dhleuroplus",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package"
+                    ],
+                    "deliveryTypes": [
+                        "standard"
+                    ],
+                    "shipmentOptionsPerPackageType": {
+                        "package": [
+                            "signature",
+                            "saturday_delivery",
+                            "hide_sender",
+                            "insurance"
+                        ]
+                    }
+                },
+                {
+                    "name": "upsstandard",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package"
+                    ],
+                    "deliveryTypes": [
+                        "standard",
+                        "pickup"
+                    ],
+                    "shipmentOptionsPerPackageType": {
+                        "package": [
+                            "age_check",
+                            "only_recipient",
+                            "return",
+                            "signature",
+                            "collect",
+                            "insurance"
+                        ]
+                    },
+                    "addressFields": [
+                        "postalCode",
+                        "street",
+                        "city"
+                    ]
+                },
+                {
+                    "name": "upsexpresssaver",
+                    "active": true,
+                    "subscription": -1,
+                    "packageTypes": [
+                        "package"
+                    ],
+                    "deliveryTypes": [
+                        "express",
+                        "pickup"
+                    ],
+                    "shipmentOptionsPerPackageType": {
+                        "package": [
+                            "age_check",
+                            "only_recipient",
+                            "return",
+                            "signature",
+                            "collect",
+                            "insurance"
+                        ]
+                    },
+                    "addressFields": [
+                        "postalCode",
+                        "street",
+                        "city"
+                    ],
+                    "unsupportedParameters": [
+                        "package_type"
+                    ]
+                }
+            ]
+        },
+        "strings": {
+            "morning": "Ochtend"
+        },
+        "settings": {
+            "actions": {
+                "baseUrl": "FRONTEND_URL",
+                "endpoints": {
+                    "fetchCheckoutContext": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "fetchCheckoutContext"
+                        },
+                        "path": "",
+                        "property": "context",
+                        "responseProperty": null
+                    },
+                    "proxyAddressList": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "proxyAddressList"
+                        },
+                        "path": "",
+                        "property": "addresses",
+                        "responseProperty": null
+                    },
+                    "proxyAddressValidate": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "proxyAddressValidate"
+                        },
+                        "path": "",
+                        "property": "validate",
+                        "responseProperty": null
+                    },
+                    "fetchContext": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "fetchContext"
+                        },
+                        "path": "",
+                        "property": "context",
+                        "responseProperty": null
+                    }
+                }
             },
-            "path": "",
-            "property": "context",
-            "responseProperty": null
-          },
-          "proxyAddressList": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyAddressList"
-            },
-            "path": "",
-            "property": "addresses",
-            "responseProperty": null
-          },
-          "proxyAddressValidate": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyAddressValidate"
-            },
-            "path": "",
-            "property": "validate",
-            "responseProperty": null
-          },
-          "fetchContext": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "fetchContext"
-            },
-            "path": "",
-            "property": "context",
-            "responseProperty": null
-          }
-        }
-      },
-      "allowedShippingMethods": [],
-      "hasDeliveryOptions": false,
-      "hiddenInputName": "pest_checkout_data",
-      "checkoutAddressHiddenInputName": "pest_checkout_address",
-      "countriesWithSeparateAddressFields": ["NL", "BE"],
-      "carriersWithTaxFields": [],
-      "hasAddressWidget": false
-    },
-    "endpoints": []
-  }
+            "allowedShippingMethods": [],
+            "hasDeliveryOptions": false,
+            "hiddenInputName": "pest_checkout_data",
+            "checkoutAddressHiddenInputName": "pest_checkout_address",
+            "countriesWithSeparateAddressFields": [
+                "NL",
+                "BE"
+            ],
+            "carriersWithTaxFields": [],
+            "hasAddressWidget": false
+        },
+        "endpoints": []
+    }
 }
