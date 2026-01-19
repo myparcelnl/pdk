@@ -161,7 +161,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                         [
                             DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => array_map(function ($key) {
                                 return Str::snake($key);
-                            }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions)) ?? []
+                            }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions))
                         ],
                 "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
                 "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
