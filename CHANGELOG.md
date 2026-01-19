@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/myparcelnl/pdk/compare/v2.68.0...v3.0.0) (2026-01-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **config:** replace platform- and carrier config with new json-based proposition configuration (#387)
+
+### :sparkles: New Features
+
+* **config:** replace platform- and carrier config with new json-based proposition configuration ([#387](https://github.com/myparcelnl/pdk/issues/387)) ([c7e8634](https://github.com/myparcelnl/pdk/commit/c7e8634814972636bde4b5e65b1301ab7985ab1e)), closes [#379](https://github.com/myparcelnl/pdk/issues/379) [#364](https://github.com/myparcelnl/pdk/issues/364) [#377](https://github.com/myparcelnl/pdk/issues/377)
+
 ## [2.68.0](https://github.com/myparcelnl/pdk/compare/v2.67.1...v2.68.0) (2025-12-09)
 
 
