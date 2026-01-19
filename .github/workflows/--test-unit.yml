@@ -7,7 +7,7 @@ jobs:
   test-unit:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: 'Handle coverage cache'
         uses: actions/cache@v5
