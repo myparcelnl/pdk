@@ -9,7 +9,7 @@ use DateTime;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Console\Types\Shared\Concern\UsesCache;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 class TsTypeParser
 {

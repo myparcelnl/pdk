@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests;
 
 use MyParcelNL\Pdk\Tests\Uses\BaseMock;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 use Pest\PendingObjects\UsesCall;
 use Pest\Support\Backtrace;
 

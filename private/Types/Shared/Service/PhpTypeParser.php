@@ -7,7 +7,7 @@ namespace MyParcelNL\Pdk\Console\Types\Shared\Service;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 use Symfony\Component\PropertyInfo\Type;
 
 class PhpTypeParser

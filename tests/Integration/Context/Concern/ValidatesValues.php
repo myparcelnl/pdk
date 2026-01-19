@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 /**
  * @extends \MyParcelNL\Pdk\Tests\Bootstrap\TestCase

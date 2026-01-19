@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-use MyParcelNL\Sdk\src\Support\Arr as SdkArr;
+use MyParcelNL\Sdk\Support\Arr as SdkArr;
 
 class Arr extends SdkArr
 {

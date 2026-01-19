@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Console\Storage\ConsoleFileCacheStorage;
 use MyParcelNL\Pdk\Console\Storage\ConsoleMemoryCacheStorage;
 use MyParcelNL\Pdk\Console\Storage\Contract\ConsoleStorageInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 use function sprintf;
 
 trait UsesCache
