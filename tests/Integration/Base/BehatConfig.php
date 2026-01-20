@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Base\FileSystem;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 final class BehatConfig extends Config
 {

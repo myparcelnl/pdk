@@ -1,9 +1,0 @@
-{
-  "0.property": "deliveryOptions.packageType",
-  "0.pointer": "/deliveryOptions/packageType",
-  "0.message": "Does not have a value in the enumeration [\"letter\",\"package\"]",
-  "0.constraint": "enum",
-  "0.context": 1,
-  "0.enum.0": "letter",
-  "0.enum.1": "package"
-}

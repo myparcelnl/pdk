@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Webhook\Request\GetWebhookSubscriptionRequest;
 use MyParcelNL\Pdk\Webhook\Request\GetWebhookSubscriptionsRequest;
 use MyParcelNL\Pdk\Webhook\Request\PostWebhookSubscriptionsRequest;
 use MyParcelNL\Pdk\Webhook\Response\GetWebhookSubscriptionsResponse;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 use MyParcelNL\Pdk\Facade\Logger;
 
 /**
@@ -140,7 +140,7 @@ class WebhookSubscriptionRepository extends ApiRepository
                 ]);
                 return true; // Return true since we can consider this webhook "removed" from our perspective
             }
-            
+
             throw $e;
         }
     }

@@ -17,6 +17,8 @@ use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\FrontendData;
 
 /**
  * @property \MyParcelNL\Pdk\App\Order\Model\PdkOrder[] $items
@@ -78,7 +80,7 @@ class PdkOrderCollection extends Collection
 
             if (!$schema->hasReturnCapabilities()) {
                 Notifications::warning(
-                    "{$shipment->carrier->human} has no return capabilities",
+                    "{$shipment->carrier->name} has no return capabilities",
                     "Skipping return shipment for carrier without return capabilities",
                     Notification::CATEGORY_ACTION,
                     [
@@ -163,6 +165,12 @@ class PdkOrderCollection extends Collection
     public function updateShipments(ShipmentCollection $shipments): self
     {
         $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
+
+        // The carrier in the incoming request is not in the correct format, so we need to convert it,
+        // this is needed for legacy support in the frontend.
+        $shipments->each(function (Shipment $shipment) {
+            $shipment->carrier = FrontendData::convertCarrierToLegacyFormat($shipment->carrier);
+        });
 
         $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
             $order->shipments = $useOrderId

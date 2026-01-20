@@ -1,6 +1,6 @@
 {
     "name": "myparcelnl/pdk",
-    "version": "2.68.0",
+    "version": "3.0.0",
     "description": "MyParcel Plugin Development Kit",
     "type": "library",
     "homepage": "https://myparcel.nl",
@@ -9,7 +9,7 @@
         "ext-zip": "*",
         "fruitcake/php-cors": "^1.2",
         "justinrainbow/json-schema": "^5.2",
-        "myparcelnl/sdk": "^7.0.0",
+        "myparcelnl/sdk": "^10.0.0",
         "php": ">=7.4.0",
         "php-di/php-di": "^6.0.0",
         "psr/log": "^1.0.0 || ^2.0.0 || ^3.0.0",

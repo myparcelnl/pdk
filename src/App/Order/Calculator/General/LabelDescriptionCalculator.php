@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Fulfilment\Model\OrderNote;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
 {

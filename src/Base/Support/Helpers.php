@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
-class Helpers extends \MyParcelNL\Sdk\src\Support\Helpers
+class Helpers extends \MyParcelNL\Sdk\Support\Helpers
 {
     /**
      * @param  mixed $target

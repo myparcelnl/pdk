@@ -10,16 +10,16 @@ use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilitiesFactory;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeaturesFactory;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
+use MyParcelNL\Pdk\Proposition\Model\PropositionMetadata;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -42,9 +42,9 @@ function getViewSettings(CarrierFactory $carrierFactory): array
 
 usesShared(new UsesMockPdkInstance());
 
-it('shows settings based on capabilities', function (CarrierCapabilitiesFactory $capabilitiesFactory, array $expected) {
-    $emptySettings = getViewSettings(factory(Carrier::class)->withCapabilities([]));
-    $settingsWithCapabilities = getViewSettings(factory(Carrier::class)->withCapabilities($capabilitiesFactory));
+it('shows settings based on capabilities', function (PropositionCarrierFeaturesFactory $featuresFactory, array $expected) {
+    $emptySettings = getViewSettings(factory(Carrier::class)->withOutboundFeatures([]));
+    $settingsWithCapabilities = getViewSettings(factory(Carrier::class)->withOutboundFeatures($featuresFactory));
 
     expect($emptySettings)->not->toContain(...$expected)
         ->and($settingsWithCapabilities)
@@ -52,8 +52,8 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 })->with([
     'delivery type: standard' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withDeliveryTypes([DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withDeliveryTypes([PropositionCarrierFeatures::DELIVERY_TYPE_STANDARD_NAME]);
         },
         [
             CarrierSettings::ALLOW_STANDARD_DELIVERY,
@@ -63,8 +63,8 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'delivery type: morning' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withDeliveryTypes([DeliveryOptions::DELIVERY_TYPE_MORNING_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withDeliveryTypes([PropositionCarrierFeatures::DELIVERY_TYPE_MORNING_NAME]);
         },
         [
             CarrierSettings::ALLOW_MORNING_DELIVERY,
@@ -74,8 +74,8 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'delivery type: evening' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withDeliveryTypes([DeliveryOptions::DELIVERY_TYPE_EVENING_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withDeliveryTypes([PropositionCarrierFeatures::DELIVERY_TYPE_EVENING_NAME]);
         },
         [
             CarrierSettings::ALLOW_EVENING_DELIVERY,
@@ -85,32 +85,32 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'package type: mailbox' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         [CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX],
     ],
 
     'package type: digital stamp' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_DIGITAL_STAMP_NAME]);
         },
         [CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP],
     ],
 
     'package type: package_small' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_PACKAGE_SMALL_NAME]);
         },
         [CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL],
     ],
 
     'shipment option: only recipient' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::ONLY_RECIPIENT => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME]);
         },
         [
             CarrierSettings::EXPORT_ONLY_RECIPIENT,
@@ -121,8 +121,8 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'shipment option: signature' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::SIGNATURE => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME]);
         },
         [
             CarrierSettings::EXPORT_SIGNATURE,
@@ -133,32 +133,32 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'shipment option: age check' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::AGE_CHECK => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME]);
         },
         [CarrierSettings::EXPORT_AGE_CHECK],
     ],
 
     'shipment option: hide sender' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::HIDE_SENDER => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_HIDE_SENDER_NAME]);
         },
         [CarrierSettings::EXPORT_HIDE_SENDER],
     ],
 
     'shipment option: direct return' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::DIRECT_RETURN => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_DIRECT_RETURN_NAME]);
         },
         [CarrierSettings::EXPORT_RETURN],
     ],
 
     'shipment option: large format' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::LARGE_FORMAT => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME]);
         },
         [
             CarrierSettings::EXPORT_LARGE_FORMAT,
@@ -168,8 +168,8 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'shipment option: same day delivery' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::SAME_DAY_DELIVERY => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_SAME_DAY_DELIVERY_NAME]);
         },
         [
             CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
@@ -180,8 +180,9 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 
     'shipment option: insurance' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::INSURANCE => [0, 100, 1000, 10000]]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0, 100, 1000, 10000]]);
         },
         [
             CarrierSettings::EXPORT_INSURANCE,
@@ -195,15 +196,15 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
     ],
     'shipment option: fresh food' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::FRESH_FOOD => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_FRESH_FOOD_NAME]);
         },
         [CarrierSettings::EXPORT_FRESH_FOOD],
     ],
     'shipment option: frozen' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withShipmentOptions([ShipmentOptions::FROZEN => true]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_FROZEN_NAME]);
         },
         [CarrierSettings::EXPORT_FROZEN],
     ],
@@ -212,7 +213,7 @@ it('shows settings based on capabilities', function (CarrierCapabilitiesFactory 
 it(
     'shows international mailbox settings based on capabilities',
     function (
-        CarrierCapabilitiesFactory $capabilitiesFactory,
+        PropositionCarrierFeaturesFactory $featuresFactory,
         bool                       $accountHasCarrierSmallPackageContract,
         ?string                    $carrierExternalIdentifier,
         bool                       $shouldHaveInternationalMailbox
@@ -221,9 +222,9 @@ it(
             ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
             ->store();
 
-        $settingsWithCapabilities = getViewSettings(
+        $settingsWithFeatures = getViewSettings(
             factory(Carrier::class)
-                ->withCapabilities($capabilitiesFactory)
+                ->withOutboundFeatures($featuresFactory)
                 ->withExternalIdentifier($carrierExternalIdentifier)
         );
 
@@ -231,52 +232,52 @@ it(
             'allowInternationalMailbox',
             'priceInternationalMailbox',
         ];
-        $contains                   = ! array_diff($internationalMailboxFields, $settingsWithCapabilities);
+        $contains                   = ! array_diff($internationalMailboxFields, $settingsWithFeatures);
 
         expect($contains)->toBe($shouldHaveInternationalMailbox);
     }
 )->with([
     'package type: international-mailbox, contract on, custom carrier' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withMetadata(['carrierSmallpackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => true,
-        'externalIdentifier'                    => 'postnl:12345',
+        'externalIdentifier'                    => 'POSTNL:12345',
         'shouldHaveInternationalMailbox'        => true,
     ],
 
     'package type: international-mailbox, contract off, custom carrier' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withMetadata(['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => false,
-        'externalIdentifier'                    => 'postnl:12345',
+        'externalIdentifier'                    => 'POSTNL:12345',
         'shouldHaveInternationalMailbox'        => true,
     ],
     'package type: international-mailbox, contract on, normal carrier'  => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withMetadata(['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => true,
-        'externalIdentifier'                    => 'postnl',
+        'externalIdentifier'                    => 'POSTNL',
         'shouldHaveInternationalMailbox'        => true,
 
     ],
 
     'package type: international-mailbox, contract off, normal carrier' => [
         function () {
-            return factory(CarrierCapabilities::class)
-                ->withFeatures(['carrierSmallPackageContract' => CarrierSchema::FEATURE_CUSTOM_CONTRACT_ONLY])
-                ->withPackageTypes([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+            return factory(PropositionCarrierFeatures::class)
+                ->withMetadata(['carrierSmallPackageContract' => PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY])
+                ->withPackageTypes([PropositionCarrierFeatures::PACKAGE_TYPE_MAILBOX_NAME]);
         },
         'accountHasCarrierSmallPackageContract' => false,
-        'externalIdentifier'                    => 'postnl',
+        'externalIdentifier'                    => 'POSTNL',
         'shouldHaveInternationalMailbox'        => true,
 
     ],

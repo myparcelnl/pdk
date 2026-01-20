@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Sdk\Support\Str;
 
 class CountryService implements CountryServiceInterface
 {
@@ -68,7 +70,7 @@ class CountryService implements CountryServiceInterface
      */
     public function isLocalCountry(string $country): bool
     {
-        return Platform::get('localCountry') === $country;
+        return Pdk::get(PropositionService::class)->getPropositionConfig()->countryCode === $country;
     }
 
     /**

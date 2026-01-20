@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
 {

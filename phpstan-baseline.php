@@ -57,12 +57,12 @@ $ignoreErrors[] = [
 	'path' => __DIR__ . '/src/Shipment/Repository/ShipmentRepository.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property MyParcelNL\\\\Pdk\\\\Shipment\\\\Request\\\\FetchShipmentsRequest\\:\\:\\$ids \\(MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection\\) does not accept MyParcelNL\\\\Sdk\\\\src\\\\Support\\\\Collection\\.$#',
+	'message' => '#^Property MyParcelNL\\\\Pdk\\\\Shipment\\\\Request\\\\FetchShipmentsRequest\\:\\:\\$ids \\(MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection\\) does not accept MyParcelNL\\\\Sdk\\\\Support\\\\Collection\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Shipment/Request/FetchShipmentsRequest.php',
 ];
 $ignoreErrors[] = [
-	'message' => '#^Property MyParcelNL\\\\Pdk\\\\Shipment\\\\Request\\\\FetchShipmentsRequest\\:\\:\\$referenceIdentifiers \\(MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection\\) does not accept MyParcelNL\\\\Sdk\\\\src\\\\Support\\\\Collection\\.$#',
+	'message' => '#^Property MyParcelNL\\\\Pdk\\\\Shipment\\\\Request\\\\FetchShipmentsRequest\\:\\:\\$referenceIdentifiers \\(MyParcelNL\\\\Pdk\\\\Base\\\\Support\\\\Collection\\) does not accept MyParcelNL\\\\Sdk\\\\Support\\\\Collection\\.$#',
 	'count' => 1,
 	'path' => __DIR__ . '/src/Shipment/Request/FetchShipmentsRequest.php',
 ];

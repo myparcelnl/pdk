@@ -7,12 +7,107 @@
                     "externalIdentifier": "postnl",
                     "id": 1,
                     "name": "postnl",
-                    "human": "PostNL",
+                    "human": null,
+                    "contractId": null,
                     "enabled": true,
                     "isDefault": true,
+                    "label": null,
                     "optional": false,
                     "primary": false,
                     "type": "main",
+                    "inboundFeatures": {
+                        "packageTypes": [
+                            "PACKAGE"
+                        ],
+                        "deliveryTypes": [
+                            "STANDARD_DELIVERY"
+                        ],
+                        "deliveryCountries": null,
+                        "pickupCountries": null,
+                        "shipmentOptions": [
+                            "SIGNATURE",
+                            "RETURN",
+                            "AGE_CHECK",
+                            "ONLY_RECIPIENT",
+                            "SAME_DAY_DELIVERY",
+                            "LARGE_FORMAT",
+                            "INSURANCE"
+                        ],
+                        "metadata": {
+                            "labelDescriptionLength": 45,
+                            "insuranceSteps": [
+                                0,
+                                10000,
+                                25000,
+                                50000,
+                                100000,
+                                150000,
+                                200000,
+                                250000,
+                                300000,
+                                350000,
+                                400000,
+                                450000,
+                                500000
+                            ]
+                        }
+                    },
+                    "outboundFeatures": {
+                        "packageTypes": [
+                            "PACKAGE",
+                            "MAILBOX",
+                            "LETTER",
+                            "DIGITAL_STAMP",
+                            "SMALL_PACKAGE"
+                        ],
+                        "deliveryTypes": [
+                            "MORNING_DELIVERY",
+                            "STANDARD_DELIVERY",
+                            "EVENING_DELIVERY",
+                            "PICKUP_DELIVERY"
+                        ],
+                        "deliveryCountries": [
+                            "NL",
+                            "BE"
+                        ],
+                        "pickupCountries": [
+                            "NL",
+                            "BE",
+                            "DK",
+                            "SE",
+                            "DE"
+                        ],
+                        "shipmentOptions": [
+                            "AGE_CHECK",
+                            "LARGE_FORMAT",
+                            "ONLY_RECIPIENT",
+                            "RETURN",
+                            "SIGNATURE",
+                            "RECEIPT_CODE",
+                            "INSURANCE",
+                            "TRACKED"
+                        ],
+                        "metadata": {
+                            "labelDescriptionLength": 45,
+                            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+                            "multiCollo": true,
+                            "insuranceOptions": [
+                                0,
+                                10000,
+                                25000,
+                                50000,
+                                100000,
+                                150000,
+                                200000,
+                                250000,
+                                300000,
+                                350000,
+                                400000,
+                                450000,
+                                500000
+                            ]
+                        }
+                    },
                     "capabilities": {
                         "deliveryTypes": [
                             "morning",
@@ -22,7 +117,7 @@
                         ],
                         "features": {
                             "labelDescriptionLength": 45,
-                            "carrierSmallPackageContract": "featureCustomContractOnly",
+                            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
                             "multiCollo": true
                         },
                         "packageTypes": [
@@ -37,10 +132,8 @@
                             "largeFormat": true,
                             "onlyRecipient": true,
                             "return": true,
-                            "sameDayDelivery": false,
                             "signature": true,
                             "receiptCode": true,
-                            "collect": false,
                             "tracked": true,
                             "insurance": [
                                 0,
@@ -71,32 +164,49 @@
                         ],
                         "shipmentOptions": {
                             "signature": true,
-                            "insurance": [
-                                0,
-                                10000,
-                                25000,
-                                50000,
-                                100000,
-                                150000,
-                                200000,
-                                250000,
-                                300000,
-                                350000,
-                                400000,
-                                450000,
-                                500000
-                            ],
                             "return": true,
                             "ageCheck": true,
                             "onlyRecipient": true,
-                            "sameDayDelivery": false,
-                            "largeFormat": true,
-                            "collect": false
+                            "sameDayDelivery": true,
+                            "largeFormat": true
                         }
+                    },
+                    "deliveryOptions": {
+                        "addressFields": [
+                            "postalCode",
+                            "street",
+                            "city"
+                        ],
+                        "unsupportedParameters": null,
+                        "availableFeatures": [
+                            "deliveryDaysWindow",
+                            "dropOffDays",
+                            "dropOffDelay",
+                            "pickupMapAllowLoadMore"
+                        ],
+                        "shipmentOptionsPerPackageType": {
+                            "package": [
+                                "only_recipient",
+                                "signature"
+                            ],
+                            "mailbox": [
+                                "priority_delivery"
+                            ],
+                            "letter": [],
+                            "digital_stamp": [],
+                            "package_small": [
+                                "only_recipient",
+                                "signature"
+                            ]
+                        },
+                        "allowFakeDelivery": true
                     }
                 },
+                "date": null,
                 "labelAmount": 1,
+                "pickupLocation": null,
                 "shipmentOptions": {
+                    "labelDescription": null,
                     "insurance": -1,
                     "ageCheck": -1,
                     "return": -1,

@@ -22,7 +22,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Mocks\MockApiResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Sdk\src\Support\Arr;
+use MyParcelNL\Sdk\Support\Arr;
 use Psr\Log\LogLevel;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -107,7 +107,7 @@ it('gets base url with acceptance environment setting', function () {
     // For now, we just test that the method exists and returns a string
     $clientAdapter = mock(\MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface::class);
     $api = new \MyParcelNL\Pdk\Api\Service\MyParcelApiService($clientAdapter);
-    
+
     expect($api->getBaseUrl())->toBeString();
 });
 
@@ -117,7 +117,7 @@ it('gets base url with production environment setting', function () {
     // For now, we just test that the method exists and returns a string
     $clientAdapter = mock(\MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface::class);
     $api = new \MyParcelNL\Pdk\Api\Service\MyParcelApiService($clientAdapter);
-    
+
     expect($api->getBaseUrl())->toBeString();
 });
 

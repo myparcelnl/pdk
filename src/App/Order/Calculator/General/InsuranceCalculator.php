@@ -9,7 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -64,12 +64,14 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
+     * Given the insurance amount, calculate the final insurance value.
      * @param  null|int $amount
      *
      * @return int
      */
     private function calculateInsurance(?int $amount): int
     {
+        // If no specific amount is given, return the lowest insurable amount for the carrier, or 0 if none is specified.
         if (null === $amount || TriStateService::DISABLED === $amount) {
             /** @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $schema */
             $schema        = Pdk::get(CarrierSchema::class);
@@ -81,6 +83,8 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         $carrierSettings   = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
         $enabledViaCarrier = TriStateService::INHERIT === $amount && $carrierSettings->exportInsurance;
 
+        // If the carrier has been configured by the customer to not export insurances,
+        // but an amount was specified, use the maximum possible amount for the carrier instead.
         if ($amount > TriStateService::ENABLED && ! $enabledViaCarrier) {
             return $this->getMaxInsurance($carrierSettings, $amount, false);
         }
@@ -106,7 +110,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getInsuranceUpToKey(?string $cc): string
     {
-        $country = $cc ?? Platform::get('localCountry');
+        if ($cc) {
+            $country = $cc;
+        } else {
+            $country = Pdk::get(PropositionService::class)->getPropositionConfig()->countryCode;
+        }
 
         if ($this->countryService->isLocalCountry($country)) {
             return CarrierSettings::EXPORT_INSURANCE_UP_TO;
@@ -135,7 +143,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     {
         // Get a schema resolved to this specific order's combination of carrier, country, package type and delivery type.
         $orderSchema = $this->schemaRepository->getOrderValidationSchema(
-            $this->order->deliveryOptions->carrier->name ?? Platform::get('defaultCarrier'),
+            $this->order->deliveryOptions->carrier->name ?? Pdk::get(PropositionService::class)->getDefaultCarrier()->name,
             $this->order->shippingAddress->cc ?? null,
             $this->order->deliveryOptions->packageType,
             $this->order->deliveryOptions->deliveryType

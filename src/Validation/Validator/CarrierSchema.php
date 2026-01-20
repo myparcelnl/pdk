@@ -21,16 +21,17 @@ use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 
+/**
+ * @deprecated Should switch to proposition-related functionality in the future
+ * @package MyParcelNL\Pdk\Validation\Validator
+ */
 class CarrierSchema implements DeliveryOptionsValidatorInterface
 {
-    /**
-     * Used for features to indicate that the feature is only available for custom contracts.
-     */
-    public const FEATURE_CUSTOM_CONTRACT_ONLY = 'featureCustomContractOnly';
-
     /**
      * @var array
      */
@@ -40,6 +41,22 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      * @var \MyParcelNL\Pdk\Carrier\Model\Carrier|null
      */
     protected $carrier;
+
+    /**
+     * Given a Shipment Option Name from the Proposition config, return whether that's enabled in the schema.
+     *
+     * @todo this should use ENUMs in the future.
+     * @param string $shipmentOptionName
+     * @return bool
+     * @throws BadMethodCallException
+     */
+    public function hasShipmentOptionName(string $shipmentOptionName): bool
+    {
+        return in_array(
+            $shipmentOptionName,
+            $this->getFromSchema('shipmentOptions') ?: [],
+        );
+    }
 
     public function canBeDigitalStamp(): bool
     {
@@ -188,7 +205,18 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function getAllowedInsuranceAmounts(): array
     {
-        return $this->getShipmentOption(InsuranceDefinition::class) ?: [];
+        $allowedAmounts = $this->getMetadataFeature('insuranceOptions');
+        $hasOption = $this->hasShipmentOption(InsuranceDefinition::class);
+        if (!$allowedAmounts && $hasOption) {
+            Logger::warning(
+                'Carrier schema does not have insurance options defined, but the carrier has the insurance option enabled.',
+                [
+                    'carrier' => $this->getCarrier()->externalIdentifier,
+                ]
+            );
+            return [0];
+        }
+        return $hasOption ? $allowedAmounts : [];
     }
 
     public function getAllowedPackageTypes(): array
@@ -215,7 +243,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function needsCustomerInfo(): bool
     {
-        return (bool) $this->getFeature('needsCustomerInfo');
+        return (bool) $this->getMetadataFeature('needsCustomerInfo');
     }
 
     /**
@@ -237,9 +265,9 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     protected function canHaveFeature(string $feature): bool
     {
-        $value = $this->getFeature($feature);
+        $value = $this->getMetadataFeature($feature);
 
-        if (self::FEATURE_CUSTOM_CONTRACT_ONLY === $value) {
+        if (PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY === $value) {
             return $this->carrier->isCustom;
         }
 
@@ -275,13 +303,24 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     private function canHave($definition): bool
     {
-        return (bool) $this->getShipmentOption($definition);
+        return $this->hasShipmentOption($definition);
     }
 
     private function createSchema(): array
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return $this->getCarrier()->capabilities->toArray();
+        // Return the outbound features from the proposition config if present.
+        return $this->getCarrier()->outboundFeatures ? $this->getCarrier()->outboundFeatures->toArray() : [];
+    }
+
+    public function hasMetadataFeature(string $feature): bool
+    {
+        $value = $this->getMetadataFeature($feature);
+
+        if (PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY === $value) {
+            return $this->carrier->isCustom;
+        }
+
+        return (bool) $value;
     }
 
     /**
@@ -289,9 +328,9 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      *
      * @return mixed
      */
-    private function getFeature(string $feature)
+    private function getMetadataFeature(string $feature)
     {
-        return $this->getFromSchema(sprintf('features.%s', $feature));
+        return $this->getFromSchema(sprintf('metadata.%s', $feature));
     }
 
     /**
@@ -309,11 +348,14 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      *
      * @return mixed
      */
-    private function getShipmentOption($definition)
+    private function hasShipmentOption($definition)
     {
         $resolvedDefinition = $this->resolveDefinition($definition);
 
-        return $this->getFromSchema(sprintf('shipmentOptions.%s', $resolvedDefinition->getShipmentOptionsKey()));
+        return in_array(
+            $resolvedDefinition->getPropositionKey(),
+            $this->getFromSchema('shipmentOptions') ?: [],
+        );
     }
 
     /**

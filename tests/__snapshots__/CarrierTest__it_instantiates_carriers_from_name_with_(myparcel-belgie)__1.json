@@ -1,0 +1,136 @@
+[
+  {
+    "externalIdentifier": "POSTNL",
+    "id": 1,
+    "name": "POSTNL",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "deliveryCountries": ["BE", "NL"],
+      "pickupCountries": ["BE", "NL"],
+      "shipmentOptions": ["SIGNATURE", "ONLY_RECIPIENT", "LARGE_FORMAT", "INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "multiCollo": true,
+        "insuranceOptions": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
+    },
+    "deliveryOptions": {
+      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+      "allowFakeDelivery": true
+    }
+  },
+  {
+    "externalIdentifier": "BPOST",
+    "id": 2,
+    "name": "BPOST",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "deliveryCountries": ["NL", "BE"],
+      "pickupCountries": ["NL", "BE"],
+      "shipmentOptions": ["SATURDAY_DELIVERY", "SIGNATURE", "INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "multiCollo": true,
+        "insuranceOptions": [0, 50000, 250000, 500000]
+      }
+    },
+    "deliveryOptions": {
+      "addressFields": ["postalCode", "street", "city"],
+      "unsupportedParameters": ["package_type"],
+      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+      "allowFakeDelivery": true
+    }
+  },
+  {
+    "externalIdentifier": "DPD",
+    "id": 4,
+    "name": "DPD",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": [],
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "deliveryCountries": [
+        "AT",
+        "BE",
+        "BG",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "GR",
+        "HU",
+        "IE",
+        "IT",
+        "LV",
+        "LI",
+        "LT",
+        "LU",
+        "NL",
+        "PL",
+        "PT",
+        "RO",
+        "SK",
+        "SI",
+        "ES",
+        "SE"
+      ],
+      "pickupCountries": [
+        "AT",
+        "BE",
+        "CZ",
+        "DK",
+        "EE",
+        "FI",
+        "FR",
+        "DE",
+        "HU",
+        "LV",
+        "LT",
+        "LU",
+        "NL",
+        "PL",
+        "PT",
+        "SK",
+        "SI",
+        "ES",
+        "GB"
+      ],
+      "shipmentOptions": ["INSURANCE"],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "multiCollo": true,
+        "needsCustomerInfo": true,
+        "dropOffAtPostalPoint": true,
+        "insuranceOptions": [52000]
+      }
+    },
+    "deliveryOptions": {
+      "addressFields": ["postalCode", "street", "city"],
+      "availableFeatures": ["dropOffDays", "dropOffDelay"],
+      "allowFakeDelivery": false
+    }
+  }
+]

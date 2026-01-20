@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Webhook\Collection\WebhookSubscriptionCollection;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use MyParcelNL\Pdk\Webhook\Repository\WebhookSubscriptionRepository;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 abstract class AbstractWebhooksAction implements ActionInterface
 {

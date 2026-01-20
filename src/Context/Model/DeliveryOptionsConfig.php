@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -31,14 +33,14 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class DeliveryOptionsConfig extends Model
 {
-    public    $attributes = [
-        'allowRetry'                        => false,
-        'basePrice'                         => 0,
-        'carrierSettings'                   => [],
-        'currency'                          => 'EUR',
-        'locale'                            => null,
-        'packageType'                       => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        'pickupLocationsDefaultView'        => null,
+    public $attributes = [
+        'allowRetry'                     => false,
+        'basePrice'                      => 0,
+        'carrierSettings'                => [],
+        'currency'                       => 'EUR',
+        'locale'                         => null,
+        'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        'pickupLocationsDefaultView'     => null,
         'allowPickupLocationsViewSelection' => true,
         'platform'                          => null,
         'priceStandardDelivery'             => 0,
@@ -70,7 +72,10 @@ class DeliveryOptionsConfig extends Model
     {
         $this->locale     = Language::getLanguage();
         $this->apiBaseUrl = Pdk::get('apiUrl');
-        $this->platform   = Pdk::get('platform');
+        // Get platform from proposition service for backwards compatibility
+        $propositionService = Pdk::get(PropositionService::class);
+        $platformConfig = $propositionService->mapToPlatformConfig($propositionService->getPropositionConfig());
+        $this->platform = $platformConfig['name'];
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 
@@ -103,7 +108,7 @@ class DeliveryOptionsConfig extends Model
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
         $config = new self($service->createAllCarrierSettings($cart));
-        
+
         // Override excludeParcelLockers based on cart calculation
         if (isset($cart->shippingMethod->excludeParcelLockers)) {
             $config->excludeParcelLockers = $cart->shippingMethod->excludeParcelLockers;

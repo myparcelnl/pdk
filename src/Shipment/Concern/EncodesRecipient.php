@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Concern;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 use MyParcelNL\Pdk\Base\Support\Utils;
 
 trait EncodesRecipient

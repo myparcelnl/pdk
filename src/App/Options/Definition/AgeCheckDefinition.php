@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -27,9 +28,13 @@ final class AgeCheckDefinition implements OrderOptionDefinitionInterface
         return ShipmentOptions::AGE_CHECK;
     }
 
+    public function getPropositionKey(): ?string
+    {
+        return PropositionCarrierFeatures::SHIPMENT_OPTION_AGE_CHECK_NAME;
+    }
+
     public function validate(CarrierSchema $carrierSchema): bool
     {
         return $carrierSchema->canHaveAgeCheck();
     }
 }
-

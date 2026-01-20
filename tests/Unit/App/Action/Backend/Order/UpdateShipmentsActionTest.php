@@ -20,7 +20,7 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Sdk\src\Support\Collection;
+use MyParcelNL\Sdk\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;

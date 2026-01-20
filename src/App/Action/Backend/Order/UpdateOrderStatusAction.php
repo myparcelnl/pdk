@@ -36,8 +36,6 @@ class UpdateOrderStatusAction extends AbstractOrderAction
      * @param  \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     *                                                   
-     * @todo INT-944 this allows an array of orderIds in the request, but the action only works with one orderId
      */
     public function handle(Request $request): Response
     {

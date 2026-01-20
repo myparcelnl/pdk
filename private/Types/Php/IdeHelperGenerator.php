@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Console\Types\Shared\Model\ClassDefinition;
 use MyParcelNL\Pdk\Console\Types\Shared\Model\KeyValue;
 use MyParcelNL\Pdk\Console\Types\Shared\Service\PhpTypeParser;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 use Symfony\Component\PropertyInfo\Type;
 
 final class IdeHelperGenerator extends AbstractHelperGenerator

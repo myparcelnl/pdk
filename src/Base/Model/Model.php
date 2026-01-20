@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Contract\ModelInterface;
 use MyParcelNL\Pdk\Base\Contract\StorableArrayable;
 use MyParcelNL\Pdk\Base\Support\Utils;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -89,10 +89,10 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
      */
     public function __call(string $method, array $parameters)
     {
-        $trimmed   = str_replace(['get', 'set', 'Attribute'], '', $method);
-        $attribute = Str::camel($trimmed);
+        $attribute   = str_replace(['get', 'set', 'Attribute'], '', $method);
 
         if (Str::contains($method, 'get')) {
+            $attribute = Str::camel($attribute);
             return $this->getAttribute($attribute);
         }
 

@@ -12,7 +12,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Sdk\src\Support\Str;
+use MyParcelNL\Sdk\Support\Str;
 
 trait ResolvesModels
 {
