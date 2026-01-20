@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
+ * @property string $proposition
  * @property string $platform
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
@@ -42,6 +43,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView'     => null,
         'allowPickupLocationsViewSelection' => true,
+        'proposition'                       => null,
         'platform'                          => null,
         'priceStandardDelivery'             => 0,
         'showPriceSurcharge'                => false,
@@ -58,6 +60,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                       => 'string',
         'pickupLocationsDefaultView'        => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
+        'proposition'                       => 'string',
         'platform'                          => 'string',
         'priceStandardDelivery'             => 'float',
         'showPriceSurcharge'                => 'boolean',
@@ -75,7 +78,8 @@ class DeliveryOptionsConfig extends Model
         // Get platform from proposition service for backwards compatibility
         $propositionService = Pdk::get(PropositionService::class);
         $platformConfig = $propositionService->mapToPlatformConfig($propositionService->getPropositionConfig());
-        $this->platform = $platformConfig['name'];
+        $this->proposition = $platformConfig['name'];
+        $this->platform    = $platformConfig['name'];
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 
