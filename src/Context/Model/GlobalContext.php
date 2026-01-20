@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
  * @property string                    $eventPong
  * @property string                    $language
  * @property string                    $mode
+ * @property array                     $proposition
  * @property array                     $platform
  * @property array{string, string}     $translations
  */
@@ -38,6 +39,7 @@ class GlobalContext extends Model
         'eventPong'    => FrontendRenderService::BOOTSTRAP_RENDER_EVENT_PONG,
         'language'     => null,
         'mode'         => null,
+        'proposition'  => [],
         'platform'     => [],
         'translations' => [],
     ];
@@ -51,6 +53,7 @@ class GlobalContext extends Model
         'eventPong'    => 'string',
         'language'     => 'string',
         'mode'         => 'string',
+        'proposition'  => 'array',
         'platform'     => 'array',
         'translations' => 'array',
     ];
@@ -77,7 +80,7 @@ class GlobalContext extends Model
             $propositionService = Pdk::get(PropositionService::class);
             $proposition = $propositionService->getPropositionConfig();
 
-            $this->attributes['platform'] = array_intersect_key(
+            $filteredData = array_intersect_key(
                 $propositionService->mapToPlatformConfig($proposition),
                 array_flip([
                     'name',
@@ -89,6 +92,9 @@ class GlobalContext extends Model
                     'defaultCarrierId',
                 ])
             );
+
+            $this->attributes['proposition'] = $filteredData;
+            $this->attributes['platform']    = $filteredData;
         } catch (\Throwable $throwable) {
             // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.
             Logger::alert(
