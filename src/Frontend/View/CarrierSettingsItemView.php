@@ -154,7 +154,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     /**
      * @return array
      */
-    private function createMailboxPriorityFields(): array
+    private function createPriorityDeliveryFields(): array
     {
         return $this->createSettingWithPriceFields(
             CarrierSettings::ALLOW_PRIORITY_DELIVERY,
@@ -539,7 +539,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $fields[] = $this->createInternationalMailboxFields();
 
             if ($this->carrierSchema->canHavePriorityDelivery()) {
-                $fields[] = $this->createMailboxPriorityFields();
+                $fields[] = $this->createPriorityDeliveryFields();
             }
         }
 

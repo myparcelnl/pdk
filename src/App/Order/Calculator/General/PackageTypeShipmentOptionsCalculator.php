@@ -29,14 +29,11 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
             ShipmentOptions::LARGE_FORMAT      => TriStateService::DISABLED,
             ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
+            ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
             ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
             ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
         ];
-
-        if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME !== $deliveryOptions->packageType) {
-            $options[ShipmentOptions::PRIORITY_DELIVERY] = TriStateService::DISABLED;
-        }
 
         $this->order->deliveryOptions->shipmentOptions->fill($options);
     }
