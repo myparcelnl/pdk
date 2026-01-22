@@ -9,6 +9,8 @@ use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Service\CapabilitiesApiService;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
@@ -205,6 +207,7 @@ return [
      * Capabilities API proxy
      */
     CapabilitiesApiService::class              => autowire(),
+    CapabilitiesServiceInterface::class        => autowire(CapabilitiesService::class),
 
     /**
      * @todo remove in v3.0.0
