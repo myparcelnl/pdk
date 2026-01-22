@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
@@ -67,7 +68,9 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierBpost($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_BPOST_NAME, $data);
+        // All withCarrierX use legacy names as keys as these are currently still used in the frontend context for bc-compability.
+        // In the future we should migrate to the new constant names.
+        return $this->withCarrier(Carrier::CARRIER_BPOST_LEGACY_NAME, $data);
     }
 
     /**
@@ -77,7 +80,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDhlEuroplus($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME, $data);
+        return $this->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_LEGACY_NAME, $data);
     }
 
     /**
@@ -87,7 +90,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDhlForYou($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME, $data);
+        return $this->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME, $data);
     }
 
     /**
@@ -97,7 +100,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDhlParcelConnect($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME, $data);
+        return $this->withCarrier(Carrier::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME, $data);
     }
 
     /**
@@ -107,7 +110,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDpd($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DPD_NAME, $data);
+        return $this->withCarrier(Carrier::CARRIER_DPD_LEGACY_NAME, $data);
     }
 
     /**
@@ -117,7 +120,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierPostNl($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_POSTNL_NAME, $data);
+        return $this->withCarrier(Carrier::CARRIER_POSTNL_LEGACY_NAME, $data);
     }
 
     /**
@@ -140,7 +143,10 @@ final class SettingsFactory extends AbstractModelFactory
      */
     protected function createDefault(): FactoryInterface
     {
-        return $this->withCarrier(Platform::get('defaultCarrier'));
+        $propositionService = Pdk::get(PropositionService::class);
+        return $this->withCarrier(
+            $propositionService->mapNewToLegacyCarrierName($propositionService->getDefaultCarrier()->name)
+        );
     }
 
     /**
