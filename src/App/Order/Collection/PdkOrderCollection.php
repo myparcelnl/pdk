@@ -56,12 +56,12 @@ class PdkOrderCollection extends Collection
 
             $schema->setCarrier($order->deliveryOptions->carrier);
 
-            $amountOfShipmentsToCreate = $schema->canHaveMultiCollo() ? 1 : $order->deliveryOptions->labelAmount;
+            $amountOfShipmentsToCreate = max(1, $schema->canHaveMultiCollo() ? 1 : $order->deliveryOptions->labelAmount);
 
             for ($i = 0; $i < $amountOfShipmentsToCreate; $i++) {
                 $newShipment = $order->createShipment();
                 // distribute weight equally over shipments (use original labelAmount so weight is exported correctly for multi-collo as well)
-                $newShipment->physicalProperties->setWeightAttribute($newShipment->physicalProperties->weight / $order->deliveryOptions->labelAmount);
+                $newShipment->physicalProperties->weight /= $order->deliveryOptions->labelAmount;
                 $newShipments->push($newShipment);
             }
         });
