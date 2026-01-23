@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/myparcelnl/pdk/compare/v3.0.0...v3.0.1) (2026-01-23)
+
+
+### :bug: Bug Fixes
+
+* distribute weight when multiple shipments ([#412](https://github.com/myparcelnl/pdk/issues/412)) ([a8e0a5f](https://github.com/myparcelnl/pdk/commit/a8e0a5ffaeee2ce2c3cd4915051224801274bcfb))
+
 ## [3.0.0](https://github.com/myparcelnl/pdk/compare/v2.68.0...v3.0.0) (2026-01-19)
 
 
