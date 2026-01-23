@@ -73,6 +73,7 @@ final class PropositionCarrierFeaturesFactory extends AbstractModelFactory
                 PropositionCarrierFeatures::SHIPMENT_OPTION_HIDE_SENDER_NAME,
                 PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME,
                 PropositionCarrierFeatures::SHIPMENT_OPTION_ONLY_RECIPIENT_NAME,
+                PropositionCarrierFeatures::SHIPMENT_OPTION_PRIORITY_DELIVERY_NAME,
                 PropositionCarrierFeatures::SHIPMENT_OPTION_SAME_DAY_DELIVERY_NAME,
                 PropositionCarrierFeatures::SHIPMENT_OPTION_SIGNATURE_NAME,
                 PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME

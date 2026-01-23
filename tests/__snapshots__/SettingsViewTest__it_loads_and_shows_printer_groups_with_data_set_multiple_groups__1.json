@@ -1,35 +1,35 @@
 {
-    "id": "direct_print",
-    "title": "settings_direct_print_title",
-    "description": "settings_direct_print_description",
-    "elements": [
+  "id": "direct_print",
+  "title": "settings_direct_print_title",
+  "description": "settings_direct_print_description",
+  "elements": [
+    {
+      "name": "printerGroupId",
+      "$builders": [
         {
-            "name": "printerGroupId",
-            "$builders": [
-                {
-                    "$visibleWhen": {
-                        "$if": [
-                            {
-                                "$target": "directPrint"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "$component": "SelectInput",
-            "label": "settings_direct_print_printer_group_id",
-            "description": "settings_direct_print_printer_group_id_description",
-            "options": [
-                {
-                    "plainLabel": "Test name",
-                    "value": "55b53b20-91aa-4a53-8bb2-c4c120df9921"
-                },
-                {
-                    "plainLabel": "Another name",
-                    "value": "d72fd4bf-7d5a-4c25-bffc-140c4c817260"
-                }
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "directPrint"
+              }
             ]
+          }
         }
-    ],
-    "children": null
+      ],
+      "$component": "SelectInput",
+      "label": "settings_direct_print_printer_group_id",
+      "description": "settings_direct_print_printer_group_id_description",
+      "options": [
+        {
+          "plainLabel": "Test name",
+          "value": "55b53b20-91aa-4a53-8bb2-c4c120df9921"
+        },
+        {
+          "plainLabel": "Another name",
+          "value": "d72fd4bf-7d5a-4c25-bffc-140c4c817260"
+        }
+      ]
+    }
+  ],
+  "children": null
 }

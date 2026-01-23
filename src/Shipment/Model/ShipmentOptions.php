@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $hideSender
  * @property int<-1|0|1>         $largeFormat
  * @property int<-1|0|1>         $onlyRecipient
+ * @property int<-1|0|1>         $priorityDelivery
  * @property int<-1|0|1>         $receiptCode
  * @property int<-1|0|1>         $return
  * @property int<-1|0|1>         $sameDayDelivery
@@ -33,6 +34,7 @@ class ShipmentOptions extends Model
     public const HIDE_SENDER       = 'hideSender';
     public const LARGE_FORMAT      = 'largeFormat';
     public const ONLY_RECIPIENT    = 'onlyRecipient';
+    public const PRIORITY_DELIVERY = 'priorityDelivery';
     public const RECEIPT_CODE      = 'receiptCode';
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
 
@@ -55,6 +57,7 @@ class ShipmentOptions extends Model
         self::HIDE_SENDER,
         self::LARGE_FORMAT,
         self::ONLY_RECIPIENT,
+        self::PRIORITY_DELIVERY,
         self::RECEIPT_CODE,
         self::SAME_DAY_DELIVERY,
         self::SIGNATURE,
@@ -72,6 +75,7 @@ class ShipmentOptions extends Model
         self::HIDE_SENDER       => TriStateService::INHERIT,
         self::LARGE_FORMAT      => TriStateService::INHERIT,
         self::ONLY_RECIPIENT    => TriStateService::INHERIT,
+        self::PRIORITY_DELIVERY => TriStateService::INHERIT,
         self::RECEIPT_CODE      => TriStateService::INHERIT,
         self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         self::SIGNATURE         => TriStateService::INHERIT,
@@ -90,6 +94,7 @@ class ShipmentOptions extends Model
         self::HIDE_SENDER       => TriStateService::TYPE_STRICT,
         self::LARGE_FORMAT      => TriStateService::TYPE_STRICT,
         self::ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
+        self::PRIORITY_DELIVERY => TriStateService::TYPE_STRICT,
         self::RECEIPT_CODE      => TriStateService::TYPE_STRICT,
         self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
         self::SIGNATURE         => TriStateService::TYPE_STRICT,

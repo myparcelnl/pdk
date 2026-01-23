@@ -84,6 +84,7 @@ it('exposes inherited options', function () {
             ShipmentOptions::HIDE_SENDER       => TriStateService::INHERIT,
             ShipmentOptions::LARGE_FORMAT      => TriStateService::INHERIT,
             ShipmentOptions::ONLY_RECIPIENT    => TriStateService::INHERIT,
+            ShipmentOptions::PRIORITY_DELIVERY => TriStateService::INHERIT,
             ShipmentOptions::DIRECT_RETURN     => TriStateService::ENABLED,
             ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
             ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
@@ -108,6 +109,7 @@ it('exposes inherited options', function () {
                     // Enabled by product
                     ShipmentOptions::LARGE_FORMAT      => TriStateService::ENABLED,
                     ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
+                    ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
                     ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                     // Enabled by carrier
@@ -132,6 +134,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::LARGE_FORMAT      => TriStateService::ENABLED,
                     // Enabled by carrier
                     ShipmentOptions::ONLY_RECIPIENT    => TriStateService::ENABLED,
+                    ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
                     ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                     ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,

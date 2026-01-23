@@ -23,6 +23,7 @@ it('resets all delivery options to false', function () {
         'allowSaturdayDelivery' => true,
         'allowSignature' => true,
         'allowOnlyRecipient' => true,
+        'allowPriorityDelivery' => true,
         'allowPickupLocations' => true,
         'allowDeliveryTypeExpress' => true,
     ]);
@@ -38,6 +39,7 @@ it('resets all delivery options to false', function () {
         ->and($carrierSettings->allowSaturdayDelivery)->toBeFalse()
         ->and($carrierSettings->allowSignature)->toBeFalse()
         ->and($carrierSettings->allowOnlyRecipient)->toBeFalse()
+        ->and($carrierSettings->allowPriorityDelivery)->toBeFalse()
         ->and($carrierSettings->allowPickupLocations)->toBeFalse()
         ->and($carrierSettings->allowDeliveryTypeExpress)->toBeFalse();
 });
@@ -46,7 +48,7 @@ it('returns the correct list of delivery option settings', function () {
     $service = new DeliveryOptionsResetService();
     $settings = $service->getDeliveryOptionSettings();
 
-    expect($settings)->toHaveLength(11)
+    expect($settings)->toHaveLength(12)
         ->and($settings)->toContain(
             CarrierSettings::ALLOW_DELIVERY_OPTIONS,
             CarrierSettings::ALLOW_STANDARD_DELIVERY,
@@ -57,6 +59,7 @@ it('returns the correct list of delivery option settings', function () {
             CarrierSettings::ALLOW_SATURDAY_DELIVERY,
             CarrierSettings::ALLOW_SIGNATURE,
             CarrierSettings::ALLOW_ONLY_RECIPIENT,
+            CarrierSettings::ALLOW_PRIORITY_DELIVERY,
             CarrierSettings::ALLOW_PICKUP_LOCATIONS,
             CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS
         );

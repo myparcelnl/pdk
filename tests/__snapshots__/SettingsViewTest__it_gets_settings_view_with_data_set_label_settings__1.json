@@ -1,125 +1,125 @@
 {
-    "id": "label",
-    "title": "settings_label_title",
-    "description": "settings_label_description",
-    "elements": [
+  "id": "label",
+  "title": "settings_label_title",
+  "description": "settings_label_description",
+  "elements": [
+    {
+      "name": "description",
+      "$component": "TextInput",
+      "label": "settings_label_description",
+      "description": "settings_label_description_description"
+    },
+    {
+      "name": "directPrint",
+      "$component": "ToggleInput",
+      "label": "settings_label_direct_print",
+      "description": "settings_label_direct_print_description"
+    },
+    {
+      "name": "prompt",
+      "$builders": [
         {
-            "name": "description",
-            "$component": "TextInput",
-            "label": "settings_label_description",
-            "description": "settings_label_description_description"
-        },
-        {
-            "name": "directPrint",
-            "$component": "ToggleInput",
-            "label": "settings_label_direct_print",
-            "description": "settings_label_direct_print_description"
-        },
-        {
-            "name": "prompt",
-            "$builders": [
-                {
-                    "$visibleWhen": {
-                        "$if": [
-                            {
-                                "$target": "directPrint",
-                                "$eq": false
-                            }
-                        ]
-                    }
-                }
-            ],
-            "$component": "ToggleInput",
-            "label": "settings_label_prompt",
-            "description": "settings_label_prompt_description"
-        },
-        {
-            "$builders": [
-                {
-                    "$visibleWhen": {
-                        "$if": [
-                            {
-                                "$target": "directPrint",
-                                "$eq": false
-                            }
-                        ]
-                    }
-                }
-            ],
-            "$component": "SettingsDivider",
-            "$wrapper": false,
-            "level": 2,
-            "content": "settings_label_defaults_description",
-            "heading": "settings_label_defaults_title"
-        },
-        {
-            "name": "output",
-            "$component": "RadioGroup",
-            "label": "settings_label_output",
-            "description": "settings_label_output_description",
-            "options": [
-                {
-                    "label": "settings_label_output_option_open",
-                    "value": "open"
-                },
-                {
-                    "label": "settings_label_output_option_download",
-                    "value": "download"
-                }
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "directPrint",
+                "$eq": false
+              }
             ]
-        },
-        {
-            "name": "format",
-            "$component": "RadioGroup",
-            "label": "settings_label_format",
-            "description": "settings_label_format_description",
-            "options": [
-                {
-                    "label": "settings_label_format_option_a4",
-                    "value": "a4"
-                },
-                {
-                    "label": "settings_label_format_option_a6",
-                    "value": "a6"
-                }
-            ]
-        },
-        {
-            "name": "position",
-            "$builders": [
-                {
-                    "$visibleWhen": {
-                        "$if": [
-                            {
-                                "$target": "format",
-                                "$eq": "a4"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "$component": "MultiSelectInput",
-            "label": "settings_label_position",
-            "description": "settings_label_position_description",
-            "options": [
-                {
-                    "label": "settings_label_position_option_1",
-                    "value": 1
-                },
-                {
-                    "label": "settings_label_position_option_2",
-                    "value": 2
-                },
-                {
-                    "label": "settings_label_position_option_3",
-                    "value": 3
-                },
-                {
-                    "label": "settings_label_position_option_4",
-                    "value": 4
-                }
-            ]
+          }
         }
-    ],
-    "children": null
+      ],
+      "$component": "ToggleInput",
+      "label": "settings_label_prompt",
+      "description": "settings_label_prompt_description"
+    },
+    {
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "directPrint",
+                "$eq": false
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "SettingsDivider",
+      "$wrapper": false,
+      "level": 2,
+      "content": "settings_label_defaults_description",
+      "heading": "settings_label_defaults_title"
+    },
+    {
+      "name": "output",
+      "$component": "RadioGroup",
+      "label": "settings_label_output",
+      "description": "settings_label_output_description",
+      "options": [
+        {
+          "label": "settings_label_output_option_open",
+          "value": "open"
+        },
+        {
+          "label": "settings_label_output_option_download",
+          "value": "download"
+        }
+      ]
+    },
+    {
+      "name": "format",
+      "$component": "RadioGroup",
+      "label": "settings_label_format",
+      "description": "settings_label_format_description",
+      "options": [
+        {
+          "label": "settings_label_format_option_a4",
+          "value": "a4"
+        },
+        {
+          "label": "settings_label_format_option_a6",
+          "value": "a6"
+        }
+      ]
+    },
+    {
+      "name": "position",
+      "$builders": [
+        {
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "format",
+                "$eq": "a4"
+              }
+            ]
+          }
+        }
+      ],
+      "$component": "MultiSelectInput",
+      "label": "settings_label_position",
+      "description": "settings_label_position_description",
+      "options": [
+        {
+          "label": "settings_label_position_option_1",
+          "value": 1
+        },
+        {
+          "label": "settings_label_position_option_2",
+          "value": 2
+        },
+        {
+          "label": "settings_label_position_option_3",
+          "value": 3
+        },
+        {
+          "label": "settings_label_position_option_4",
+          "value": 4
+        }
+      ]
+    }
+  ],
+  "children": null
 }

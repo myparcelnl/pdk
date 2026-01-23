@@ -102,6 +102,7 @@
       "labelDescription": "#1025",
       "largeFormat": false,
       "onlyRecipient": false,
+      "priorityDelivery": null,
       "packageType": 2,
       "return": false,
       "sameDayDelivery": null,
