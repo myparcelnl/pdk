@@ -119,6 +119,17 @@ it('shows settings based on capabilities', function (PropositionCarrierFeaturesF
         ],
     ],
 
+    'shipment option: priority delivery' => [
+        function () {
+            return factory(PropositionCarrierFeatures::class)
+                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_PRIORITY_DELIVERY_NAME]);
+        },
+        [
+            CarrierSettings::ALLOW_PRIORITY_DELIVERY,
+            CarrierSettings::PRICE_PRIORITY_DELIVERY,
+        ],
+    ],
+
     'shipment option: signature' => [
         function () {
             return factory(PropositionCarrierFeatures::class)

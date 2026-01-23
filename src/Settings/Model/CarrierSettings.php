@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool                 $allowMorningDelivery
  * @property bool                 $allowOnlyRecipient
  * @property bool                 $allowPickupLocations
+ * @property bool                 $allowPriorityDelivery
  * @property bool                 $allowSameDayDelivery
  * @property bool                 $allowSaturdayDelivery
  * @property bool                 $allowSignature
@@ -61,6 +62,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property float                $pricePackageTypeDigitalStamp
  * @property float                $pricePackageTypeMailbox
  * @property float                $priceSignature
+ * @property float                $pricePriorityDelivery
  * @property float                $allowInternationalMailbox
  * @property float                $priceInternationalMailbox
  * @property float                $priceCollect
@@ -82,6 +84,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
     public const  ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
     public const  ALLOW_EXPRESS_DELIVERY                  = 'allowExpressDelivery';
+    public const  ALLOW_PRIORITY_DELIVERY                 = 'allowPriorityDelivery';
 
     /**
      * @deprecated use ALLOW_PICKUP_DELIVERY instead
@@ -139,6 +142,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
     public const  PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
     public const  PRICE_SIGNATURE                         = 'priceSignature';
+    public const  PRICE_PRIORITY_DELIVERY                 = 'pricePriorityDelivery';
     public const  ALLOW_INTERNATIONAL_MAILBOX             = 'allowInternationalMailbox';
     public const  PRICE_INTERNATIONAL_MAILBOX             = 'priceInternationalMailbox';
     public const  PRICE_COLLECT                           = 'priceCollect';
@@ -156,6 +160,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_MORNING_DELIVERY                  => false,
         self::ALLOW_ONLY_RECIPIENT                    => false,
         self::ALLOW_EXPRESS_DELIVERY                  => false,
+        self::ALLOW_PRIORITY_DELIVERY                 => false,
         self::ALLOW_PICKUP_DELIVERY                   => false,
         self::ALLOW_SAME_DAY_DELIVERY                 => false,
         self::ALLOW_SATURDAY_DELIVERY                 => false,
@@ -201,6 +206,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
         self::PRICE_PACKAGE_TYPE_PACKAGE_SMALL        => 0,
         self::PRICE_SIGNATURE                         => 0,
+        self::PRICE_PRIORITY_DELIVERY                 => 0,
         self::ALLOW_INTERNATIONAL_MAILBOX             => false,
         self::PRICE_INTERNATIONAL_MAILBOX             => 0,
         self::PRICE_COLLECT                           => 0,
@@ -217,6 +223,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_MORNING_DELIVERY                  => 'bool',
         self::ALLOW_ONLY_RECIPIENT                    => 'bool',
         self::ALLOW_DELIVERY_TYPE_EXPRESS             => 'bool',
+        self::ALLOW_PRIORITY_DELIVERY                 => 'bool',
         self::ALLOW_PICKUP_DELIVERY                   => 'bool',
         self::ALLOW_SAME_DAY_DELIVERY                 => 'bool',
         self::ALLOW_SATURDAY_DELIVERY                 => 'bool',
@@ -262,6 +269,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
         self::PRICE_PACKAGE_TYPE_PACKAGE_SMALL        => 'float',
         self::PRICE_SIGNATURE                         => 'float',
+        self::PRICE_PRIORITY_DELIVERY                 => 'float',
         self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
         self::PRICE_INTERNATIONAL_MAILBOX             => 'float',
         self::PRICE_COLLECT                           => 'float',

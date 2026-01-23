@@ -21,6 +21,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withLabelDescription(string $labelDescription)
  * @method $this withLargeFormat(bool $largeFormat)
  * @method $this withOnlyRecipient(bool $onlyRecipient)
+ * @method $this withPriorityDelivery(bool $priorityDelivery)
  * @method $this withPackageType(int $packageType)
  * @method $this withReturn(bool $return)
  * @method $this withSameDayDelivery(bool $sameDayDelivery)

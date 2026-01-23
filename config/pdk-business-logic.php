@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
@@ -78,6 +79,7 @@ return [
             new InsuranceDefinition(),
             new LargeFormatDefinition(),
             new OnlyRecipientDefinition(),
+            new PriorityDeliveryDefinition(),
             new SameDayDeliveryDefinition(),
             new SignatureDefinition(),
             new TrackedDefinition(),

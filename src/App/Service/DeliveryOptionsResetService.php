@@ -24,6 +24,7 @@ class DeliveryOptionsResetService
         CarrierSettings::ALLOW_SATURDAY_DELIVERY,
         CarrierSettings::ALLOW_SIGNATURE,
         CarrierSettings::ALLOW_ONLY_RECIPIENT,
+        CarrierSettings::ALLOW_PRIORITY_DELIVERY,
         CarrierSettings::ALLOW_PICKUP_LOCATIONS,
         CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
     ];

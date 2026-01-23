@@ -1,350 +1,223 @@
 {
-    "multiCollo": false,
-    "id": 7,
-    "shopId": 6,
-    "referenceIdentifier": "GeheimeDingen-1",
-    "externalIdentifier": "CV515676839NL",
-    "barcode": "CV515676839NL",
-    "carrier": {
-        "externalIdentifier": "POSTNL",
-        "id": 1,
-        "name": "POSTNL",
-        "enabled": true,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "inboundFeatures": {
-            "packageTypes": [
-                "PACKAGE"
-            ],
-            "deliveryTypes": [
-                "STANDARD_DELIVERY"
-            ],
-            "shipmentOptions": [
-                "SIGNATURE",
-                "RETURN",
-                "AGE_CHECK",
-                "ONLY_RECIPIENT",
-                "SAME_DAY_DELIVERY",
-                "LARGE_FORMAT",
-                "INSURANCE"
-            ],
-            "metadata": {
-                "labelDescriptionLength": 45,
-                "insuranceSteps": [
-                    0,
-                    10000,
-                    25000,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        },
-        "outboundFeatures": {
-            "packageTypes": [
-                "PACKAGE",
-                "MAILBOX",
-                "LETTER",
-                "DIGITAL_STAMP",
-                "SMALL_PACKAGE"
-            ],
-            "deliveryTypes": [
-                "MORNING_DELIVERY",
-                "STANDARD_DELIVERY",
-                "EVENING_DELIVERY",
-                "PICKUP_DELIVERY"
-            ],
-            "deliveryCountries": [
-                "NL",
-                "BE"
-            ],
-            "pickupCountries": [
-                "NL",
-                "BE",
-                "DK",
-                "SE",
-                "DE"
-            ],
-            "shipmentOptions": [
-                "AGE_CHECK",
-                "LARGE_FORMAT",
-                "ONLY_RECIPIENT",
-                "RETURN",
-                "SIGNATURE",
-                "RECEIPT_CODE",
-                "INSURANCE",
-                "TRACKED"
-            ],
-            "metadata": {
-                "labelDescriptionLength": 45,
-                "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-                "multiCollo": true,
-                "insuranceOptions": [
-                    0,
-                    10000,
-                    25000,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        },
-        "deliveryOptions": {
-            "addressFields": [
-                "postalCode",
-                "street",
-                "city"
-            ],
-            "availableFeatures": [
-                "deliveryDaysWindow",
-                "dropOffDays",
-                "dropOffDelay",
-                "pickupMapAllowLoadMore"
-            ],
-            "shipmentOptionsPerPackageType": {
-                "package": [
-                    "only_recipient",
-                    "signature"
-                ],
-                "mailbox": [
-                    "priority_delivery"
-                ],
-                "letter": [],
-                "digital_stamp": [],
-                "package_small": [
-                    "only_recipient",
-                    "signature"
-                ]
-            },
-            "allowFakeDelivery": true
-        }
+  "multiCollo": false,
+  "id": 7,
+  "shopId": 6,
+  "referenceIdentifier": "GeheimeDingen-1",
+  "externalIdentifier": "CV515676839NL",
+  "barcode": "CV515676839NL",
+  "carrier": {
+    "externalIdentifier": "POSTNL",
+    "id": 1,
+    "name": "POSTNL",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "RETURN",
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "LARGE_FORMAT",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceSteps": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
     },
-    "customsDeclaration": {
-        "contents": 1,
-        "invoice": "123456",
-        "items": [
-            {
-                "amount": 1,
-                "classification": "123456",
-                "country": "NL",
-                "description": "Product",
-                "itemValue": {
-                    "amount": 1000,
-                    "currency": "EUR"
-                },
-                "weight": 500
-            }
-        ],
-        "weight": 3500
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+      "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+      "deliveryCountries": ["NL", "BE"],
+      "pickupCountries": ["NL", "BE", "DK", "SE", "DE"],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "LARGE_FORMAT",
+        "ONLY_RECIPIENT",
+        "PRIORITY_DELIVERY",
+        "RETURN",
+        "SIGNATURE",
+        "RECEIPT_CODE",
+        "INSURANCE",
+        "TRACKED"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+        "multiCollo": true,
+        "insuranceOptions": [
+          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+        ]
+      }
     },
-    "delayed": false,
-    "delivered": false,
     "deliveryOptions": {
-        "carrier": {
-            "externalIdentifier": "POSTNL",
-            "id": 1,
-            "name": "POSTNL",
-            "enabled": true,
-            "isDefault": true,
-            "optional": false,
-            "primary": false,
-            "type": "main",
-            "inboundFeatures": {
-                "packageTypes": [
-                    "PACKAGE"
-                ],
-                "deliveryTypes": [
-                    "STANDARD_DELIVERY"
-                ],
-                "shipmentOptions": [
-                    "SIGNATURE",
-                    "RETURN",
-                    "AGE_CHECK",
-                    "ONLY_RECIPIENT",
-                    "SAME_DAY_DELIVERY",
-                    "LARGE_FORMAT",
-                    "INSURANCE"
-                ],
-                "metadata": {
-                    "labelDescriptionLength": 45,
-                    "insuranceSteps": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                }
-            },
-            "outboundFeatures": {
-                "packageTypes": [
-                    "PACKAGE",
-                    "MAILBOX",
-                    "LETTER",
-                    "DIGITAL_STAMP",
-                    "SMALL_PACKAGE"
-                ],
-                "deliveryTypes": [
-                    "MORNING_DELIVERY",
-                    "STANDARD_DELIVERY",
-                    "EVENING_DELIVERY",
-                    "PICKUP_DELIVERY"
-                ],
-                "deliveryCountries": [
-                    "NL",
-                    "BE"
-                ],
-                "pickupCountries": [
-                    "NL",
-                    "BE",
-                    "DK",
-                    "SE",
-                    "DE"
-                ],
-                "shipmentOptions": [
-                    "AGE_CHECK",
-                    "LARGE_FORMAT",
-                    "ONLY_RECIPIENT",
-                    "RETURN",
-                    "SIGNATURE",
-                    "RECEIPT_CODE",
-                    "INSURANCE",
-                    "TRACKED"
-                ],
-                "metadata": {
-                    "labelDescriptionLength": 45,
-                    "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-                    "multiCollo": true,
-                    "insuranceOptions": [
-                        0,
-                        10000,
-                        25000,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                }
-            },
-            "deliveryOptions": {
-                "addressFields": [
-                    "postalCode",
-                    "street",
-                    "city"
-                ],
-                "availableFeatures": [
-                    "deliveryDaysWindow",
-                    "dropOffDays",
-                    "dropOffDelay",
-                    "pickupMapAllowLoadMore"
-                ],
-                "shipmentOptionsPerPackageType": {
-                    "package": [
-                        "only_recipient",
-                        "signature"
-                    ],
-                    "mailbox": [
-                        "priority_delivery"
-                    ],
-                    "letter": [],
-                    "digital_stamp": [],
-                    "package_small": [
-                        "only_recipient",
-                        "signature"
-                    ]
-                },
-                "allowFakeDelivery": true
-            }
+      "addressFields": ["postalCode", "street", "city"],
+      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+      "shipmentOptionsPerPackageType": {
+        "package": ["only_recipient", "signature"],
+        "mailbox": ["priority_delivery"],
+        "letter": [],
+        "digital_stamp": [],
+        "package_small": ["only_recipient", "signature"]
+      },
+      "allowFakeDelivery": true
+    }
+  },
+  "customsDeclaration": {
+    "contents": 1,
+    "invoice": "123456",
+    "items": [
+      {
+        "amount": 1,
+        "classification": "123456",
+        "country": "NL",
+        "description": "Product",
+        "itemValue": {
+          "amount": 1000,
+          "currency": "EUR"
         },
-        "labelAmount": 1,
-        "shipmentOptions": {
-            "labelDescription": "standaard kenmerk",
-            "insurance": 20000,
-            "ageCheck": 0,
-            "return": 0,
-            "hideSender": -1,
-            "largeFormat": 0,
-            "onlyRecipient": 0,
-            "receiptCode": -1,
-            "sameDayDelivery": -1,
-            "signature": 0,
-            "tracked": -1,
-            "collect": 0,
-            "excludeParcelLockers": -1,
-            "freshFood": -1,
-            "frozen": -1
+        "weight": 500
+      }
+    ],
+    "weight": 3500
+  },
+  "delayed": false,
+  "delivered": false,
+  "deliveryOptions": {
+    "carrier": {
+      "externalIdentifier": "POSTNL",
+      "id": 1,
+      "name": "POSTNL",
+      "enabled": true,
+      "isDefault": true,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": [
+          "SIGNATURE",
+          "RETURN",
+          "AGE_CHECK",
+          "ONLY_RECIPIENT",
+          "SAME_DAY_DELIVERY",
+          "LARGE_FORMAT",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceSteps": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
+        "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+        "deliveryCountries": ["NL", "BE"],
+        "pickupCountries": ["NL", "BE", "DK", "SE", "DE"],
+        "shipmentOptions": [
+          "AGE_CHECK",
+          "LARGE_FORMAT",
+          "ONLY_RECIPIENT",
+          "PRIORITY_DELIVERY",
+          "RETURN",
+          "SIGNATURE",
+          "RECEIPT_CODE",
+          "INSURANCE",
+          "TRACKED"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
+          "multiCollo": true,
+          "insuranceOptions": [
+            0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          ]
+        }
+      },
+      "deliveryOptions": {
+        "addressFields": ["postalCode", "street", "city"],
+        "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+        "shipmentOptionsPerPackageType": {
+          "package": ["only_recipient", "signature"],
+          "mailbox": ["priority_delivery"],
+          "letter": [],
+          "digital_stamp": [],
+          "package_small": ["only_recipient", "signature"]
         },
-        "deliveryType": "standard",
-        "packageType": "package"
+        "allowFakeDelivery": true
+      }
     },
-    "hidden": false,
-    "isReturn": false,
-    "partnerTrackTraces": [],
-    "physicalProperties": {
-        "height": 20,
-        "length": 40,
-        "width": 30,
-        "weight": 3500
+    "labelAmount": 1,
+    "shipmentOptions": {
+      "labelDescription": "standaard kenmerk",
+      "insurance": 20000,
+      "ageCheck": 0,
+      "return": 0,
+      "hideSender": -1,
+      "largeFormat": 0,
+      "onlyRecipient": 0,
+      "priorityDelivery": -1,
+      "receiptCode": -1,
+      "sameDayDelivery": -1,
+      "signature": 0,
+      "tracked": -1,
+      "collect": 0,
+      "excludeParcelLockers": -1,
+      "freshFood": -1,
+      "frozen": -1
     },
-    "price": {
-        "amount": 5390,
-        "currency": "EUR"
-    },
-    "recipient": {
-        "cc": "CW",
-        "city": "Willemstad",
-        "number": "12",
-        "street": "Schottegatweg Oost",
-        "email": "meneer@groenteboer.nl",
-        "phone": "+31699335577",
-        "person": "Joep Meloen",
-        "company": "MyParcel"
-    },
-    "sender": {
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "number": "31",
-        "postalCode": "2132 JE",
-        "street": "Antareslaan",
-        "email": "shop@geheimedingen.nl",
-        "phone": "0612345678",
-        "person": "Denzel Crocker",
-        "company": "Geheime Dingen"
-    },
-    "shipmentType": 1,
-    "status": 2,
-    "created": "2021-04-26 14:06:45",
-    "createdBy": 35159,
-    "modified": "2021-05-03 07:42:43",
-    "modifiedBy": 35159
+    "deliveryType": "standard",
+    "packageType": "package"
+  },
+  "hidden": false,
+  "isReturn": false,
+  "partnerTrackTraces": [],
+  "physicalProperties": {
+    "height": 20,
+    "length": 40,
+    "width": 30,
+    "weight": 3500
+  },
+  "price": {
+    "amount": 5390,
+    "currency": "EUR"
+  },
+  "recipient": {
+    "cc": "CW",
+    "city": "Willemstad",
+    "number": "12",
+    "street": "Schottegatweg Oost",
+    "email": "meneer@groenteboer.nl",
+    "phone": "+31699335577",
+    "person": "Joep Meloen",
+    "company": "MyParcel"
+  },
+  "sender": {
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "number": "31",
+    "postalCode": "2132 JE",
+    "street": "Antareslaan",
+    "email": "shop@geheimedingen.nl",
+    "phone": "0612345678",
+    "person": "Denzel Crocker",
+    "company": "Geheime Dingen"
+  },
+  "shipmentType": 1,
+  "status": 2,
+  "created": "2021-04-26 14:06:45",
+  "createdBy": 35159,
+  "modified": "2021-05-03 07:42:43",
+  "modifiedBy": 35159
 }

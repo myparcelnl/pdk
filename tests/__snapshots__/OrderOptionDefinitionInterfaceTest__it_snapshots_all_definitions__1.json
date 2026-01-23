@@ -60,6 +60,11 @@
     "productSettingsKey": "packageType"
   },
   {
+    "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\PriorityDeliveryDefinition",
+    "carrierSettingsKey": "allowPriorityDelivery",
+    "shipmentOptionsKey": "priorityDelivery"
+  },
+  {
     "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\SameDayDeliveryDefinition",
     "shipmentOptionsKey": "sameDayDelivery"
   },

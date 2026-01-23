@@ -18,6 +18,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
 {
     private const FRONTEND_SHIPMENT_OPTIONS = [
         ShipmentOptions::ONLY_RECIPIENT,
+        ShipmentOptions::PRIORITY_DELIVERY,
         ShipmentOptions::SIGNATURE,
     ];
 

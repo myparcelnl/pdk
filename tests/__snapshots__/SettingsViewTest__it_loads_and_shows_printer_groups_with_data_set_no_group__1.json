@@ -1,25 +1,25 @@
 {
-    "id": "direct_print",
-    "title": "settings_direct_print_title",
-    "description": "settings_direct_print_description",
-    "elements": [
+  "id": "direct_print",
+  "title": "settings_direct_print_title",
+  "description": "settings_direct_print_description",
+  "elements": [
+    {
+      "name": "printerGroupId",
+      "$builders": [
         {
-            "name": "printerGroupId",
-            "$builders": [
-                {
-                    "$visibleWhen": {
-                        "$if": [
-                            {
-                                "$target": "directPrint"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "$component": "SelectInput",
-            "label": "settings_direct_print_printer_group_id",
-            "description": "settings_direct_print_printer_group_id_description"
+          "$visibleWhen": {
+            "$if": [
+              {
+                "$target": "directPrint"
+              }
+            ]
+          }
         }
-    ],
-    "children": null
+      ],
+      "$component": "SelectInput",
+      "label": "settings_direct_print_printer_group_id",
+      "description": "settings_direct_print_printer_group_id_description"
+    }
+  ],
+  "children": null
 }

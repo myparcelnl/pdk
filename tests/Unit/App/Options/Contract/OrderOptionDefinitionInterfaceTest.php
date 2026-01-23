@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\PackageTypeDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -47,6 +48,7 @@ $definitions = [
     LargeFormatDefinition::class,
     OnlyRecipientDefinition::class,
     PackageTypeDefinition::class,
+    PriorityDeliveryDefinition::class,
     SameDayDeliveryDefinition::class,
     SignatureDefinition::class,
 ];
