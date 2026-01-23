@@ -554,6 +554,17 @@ class CarrierSettingsItemView extends AbstractSettingsView
             );
         }
 
+        // Priority delivery option
+        if ($this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_PRIORITY_DELIVERY_NAME)) {
+            $settings = array_merge(
+                $settings,
+                $this->createSettingWithPriceFields(
+                    CarrierSettings::ALLOW_PRIORITY_DELIVERY,
+                    CarrierSettings::PRICE_PRIORITY_DELIVERY
+                )
+            );
+        }
+
         return $settings;
     }
 

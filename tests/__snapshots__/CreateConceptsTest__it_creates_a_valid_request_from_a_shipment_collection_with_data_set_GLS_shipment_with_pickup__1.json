@@ -1,32 +1,32 @@
 [
-    {
-        "carrier": 14,
-        "general_settings": {
-            "save_recipient_address": 0
-        },
-        "options": {
-            "package_type": 1,
-            "delivery_type": 4
-        },
-        "physical_properties": {
-            "weight": 0
-        },
-        "pickup": {
-            "location_code": "215795",
-            "location_name": "Phone House Aalsmeer",
-            "retail_network_id": "PNPNL-01",
-            "cc": "NL",
-            "street": "Zijdstraat",
-            "number": "38",
-            "postal_code": "1431ED",
-            "city": "AALSMEER"
-        },
-        "recipient": {
-            "cc": "NL",
-            "city": "Hoofddorp",
-            "person": "Jaap Krekel",
-            "postal_code": "2132JE",
-            "street": "Antareslaan 31"
-        }
+  {
+    "carrier": 14,
+    "general_settings": {
+      "save_recipient_address": 0
+    },
+    "options": {
+      "package_type": 1,
+      "delivery_type": 4
+    },
+    "physical_properties": {
+      "weight": 0
+    },
+    "pickup": {
+      "location_code": "215795",
+      "location_name": "Phone House Aalsmeer",
+      "retail_network_id": "PNPNL-01",
+      "cc": "NL",
+      "street": "Zijdstraat",
+      "number": "38",
+      "postal_code": "1431ED",
+      "city": "AALSMEER"
+    },
+    "recipient": {
+      "cc": "NL",
+      "city": "Hoofddorp",
+      "person": "Jaap Krekel",
+      "postal_code": "2132JE",
+      "street": "Antareslaan 31"
     }
+  }
 ]

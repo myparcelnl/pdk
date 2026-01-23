@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $labelDescription
  * @property bool   $largeFormat
  * @property bool   $onlyRecipient
+ * @property bool   $priorityDelivery
  * @property int    $packageType
  * @property bool   $return
  * @property bool   $sameDayDelivery
@@ -41,6 +42,7 @@ class ShipmentOptions extends Model
         'labelDescription' => '',
         'largeFormat'      => null,
         'onlyRecipient'    => null,
+        'priorityDelivery' => null,
         'packageType'      => null,
         'return'           => null,
         'sameDayDelivery'  => null,
@@ -59,6 +61,7 @@ class ShipmentOptions extends Model
         'labelDescription' => 'string',
         'largeFormat'      => 'bool',
         'onlyRecipient'    => 'bool',
+        'priorityDelivery' => 'bool',
         'packageType'      => 'int',
         'return'           => 'bool',
         'sameDayDelivery'  => 'bool',

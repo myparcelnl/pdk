@@ -14,18 +14,43 @@
     "primary": false,
     "type": "main",
     "inboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "RETURN",
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "LARGE_FORMAT"
+      ],
       "metadata": {
         "labelDescriptionLength": 45
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-      "deliveryCountries": ["NL", "BE"],
-      "pickupCountries": ["NL", "BE"],
+      "packageTypes": [
+        "PACKAGE",
+        "MAILBOX",
+        "SMALL_PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
+      "deliveryCountries": [
+        "NL",
+        "BE"
+      ],
+      "pickupCountries": [
+        "NL",
+        "BE"
+      ],
       "shipmentOptions": [
         "AGE_CHECK",
         "ONLY_RECIPIENT",
@@ -37,12 +62,31 @@
       ],
       "metadata": {
         "labelDescriptionLength": 45,
-        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        "insuranceOptions": [
+          0,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
+        ]
       }
     },
     "deliveryOptions": {
-      "addressFields": ["city", "postalCode"],
-      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+      "addressFields": [
+        "city",
+        "postalCode"
+      ],
+      "availableFeatures": [
+        "deliveryDaysWindow",
+        "dropOffDays",
+        "dropOffDelay"
+      ],
       "allowFakeDelivery": false
     }
   },
@@ -59,18 +103,43 @@
       "primary": false,
       "type": "main",
       "inboundFeatures": {
-        "packageTypes": ["PACKAGE"],
-        "deliveryTypes": ["STANDARD_DELIVERY"],
-        "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+        "packageTypes": [
+          "PACKAGE"
+        ],
+        "deliveryTypes": [
+          "STANDARD_DELIVERY"
+        ],
+        "shipmentOptions": [
+          "SIGNATURE",
+          "RETURN",
+          "AGE_CHECK",
+          "ONLY_RECIPIENT",
+          "SAME_DAY_DELIVERY",
+          "LARGE_FORMAT"
+        ],
         "metadata": {
           "labelDescriptionLength": 45
         }
       },
       "outboundFeatures": {
-        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-        "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-        "deliveryCountries": ["NL", "BE"],
-        "pickupCountries": ["NL", "BE"],
+        "packageTypes": [
+          "PACKAGE",
+          "MAILBOX",
+          "SMALL_PACKAGE"
+        ],
+        "deliveryTypes": [
+          "STANDARD_DELIVERY",
+          "EVENING_DELIVERY",
+          "PICKUP_DELIVERY"
+        ],
+        "deliveryCountries": [
+          "NL",
+          "BE"
+        ],
+        "pickupCountries": [
+          "NL",
+          "BE"
+        ],
         "shipmentOptions": [
           "AGE_CHECK",
           "ONLY_RECIPIENT",
@@ -82,12 +151,31 @@
         ],
         "metadata": {
           "labelDescriptionLength": 45,
-          "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+          "insuranceOptions": [
+            0,
+            50000,
+            100000,
+            150000,
+            200000,
+            250000,
+            300000,
+            350000,
+            400000,
+            450000,
+            500000
+          ]
         }
       },
       "deliveryOptions": {
-        "addressFields": ["city", "postalCode"],
-        "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+        "addressFields": [
+          "city",
+          "postalCode"
+        ],
+        "availableFeatures": [
+          "deliveryDaysWindow",
+          "dropOffDays",
+          "dropOffDelay"
+        ],
         "allowFakeDelivery": false
       }
     },
