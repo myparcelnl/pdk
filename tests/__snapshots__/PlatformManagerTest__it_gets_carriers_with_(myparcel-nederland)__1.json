@@ -72,6 +72,7 @@
         "AGE_CHECK",
         "LARGE_FORMAT",
         "ONLY_RECIPIENT",
+        "PRIORITY_DELIVERY",
         "RETURN",
         "SIGNATURE",
         "RECEIPT_CODE",
