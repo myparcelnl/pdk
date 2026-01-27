@@ -105,9 +105,6 @@ abstract class AbstractOrderAction implements ActionInterface
                         $pdkOrder->physicalProperties->toArray(),
                         $attributes['physicalProperties']
                     );
-                } else {
-                    // If physicalProperties is explicitly set to null, we should unset it in the PdkOrder.
-                    $attributes['physicalProperties'] = null;
                 }
             }
 
