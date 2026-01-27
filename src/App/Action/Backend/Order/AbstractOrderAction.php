@@ -91,6 +91,22 @@ abstract class AbstractOrderAction implements ActionInterface
                     $attributes['deliveryOptions'] = null;
                 }
             }
+
+            /**
+             * Merge physicalProperties attribute
+             */
+            if (array_key_exists('physicalProperties', $attributes)) {
+                if (null !== $attributes['physicalProperties']) {
+                    $attributes['physicalProperties'] = \array_replace_recursive(
+                        $pdkOrder->physicalProperties->toArray(),
+                        $attributes['physicalProperties']
+                    );
+                } else {
+                    // If physicalProperties is explicitly set to null, we should unset it in the PdkOrder.
+                    $attributes['physicalProperties'] = null;
+                }
+            }
+
             return $pdkOrder->fill($attributes);
         });
     }
