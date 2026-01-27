@@ -18,7 +18,7 @@
   },
   "outboundFeatures": {
     "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-    "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+    "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
     "deliveryCountries": ["NL", "BE"],
     "pickupCountries": ["NL", "BE"],
     "shipmentOptions": [
