@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/myparcelnl/pdk/compare/v3.0.1...v3.1.0) (2026-01-27)
+
+
+### :sparkles: New Features
+
+* allow evening delivery dhlforyou ([#414](https://github.com/myparcelnl/pdk/issues/414)) ([0788ba8](https://github.com/myparcelnl/pdk/commit/0788ba88f51d93ea0ac39e4a6ef9c11337f41048))
+
 ## [3.0.1](https://github.com/myparcelnl/pdk/compare/v3.0.0...v3.0.1) (2026-01-23)
 
 
