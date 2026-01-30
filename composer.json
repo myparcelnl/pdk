@@ -40,7 +40,7 @@
         "myparcelnl/devtools": "^1.0.0",
         "nette/robot-loader": "^3.0.0",
         "pestphp/pest": "^1.0.0",
-        "phpdocumentor/reflection-docblock": "^5.0.0",
+        "phpdocumentor/reflection-docblock": "^5.0.0 || ^6.0.0",
         "phpstan/phpstan": "^1.0.0",
         "rector/rector": "^1.0.0",
         "spatie/pest-plugin-snapshots": "^1.0.0",
