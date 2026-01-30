@@ -14,6 +14,8 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,7 +162,9 @@ class UpdateAccountAction implements ActionInterface
         // this try is for the case when the UI is no longer supplying an empty api key when you click "remove api key"
         try {
             $account = $this->accountRepository->getAccount();
+            Pdk::get(PropositionService::class)->setActivePropositionId($account->platformId);
         } catch (\Throwable $e) {
+            Pdk::get(PropositionService::class)->clearActivePropositionId();
             $this->setApiKeyValidity(false);
             $this->pdkAccountRepository->store(null);
             throw $e;
