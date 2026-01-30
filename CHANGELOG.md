@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/myparcelnl/pdk/compare/v3.1.0...v3.1.1) (2026-01-30)
+
+
+### :bug: Bug Fixes
+
+* **proposition:** fix proposition not switching when updating account ([#418](https://github.com/myparcelnl/pdk/issues/418)) ([5a41526](https://github.com/myparcelnl/pdk/commit/5a415264fa4a44301158265c2284f140a0319475))
+
 ## [3.1.0](https://github.com/myparcelnl/pdk/compare/v3.0.1...v3.1.0) (2026-01-27)
 
 
