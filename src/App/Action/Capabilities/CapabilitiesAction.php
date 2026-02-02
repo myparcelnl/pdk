@@ -81,8 +81,13 @@ class CapabilitiesAction implements ActionInterface
     {
         $sender     = $data['sender'] ?? null;
         $country    = $data['country'] ?? $data['country_code'] ?? $data['countryCode'] ?? null;
-        $shop       = AccountSettings::getShop();
-        $shopId     = $data['shopId'] ?? $data['shop_id'] ?? ($shop ? $shop->id : null);
+        $shopId     = $data['shopId'] ?? $data['shop_id'] ?? null;
+        
+        if (!$shopId) {
+            $shop   = AccountSettings::getShop();
+            $shopId = $shop ? $shop->id : null;
+        }
+        
         $carrier    = $data['carrier'] ?? $data['carrier_id'] ?? null;
         $options    = $this->normalizeOptions($data['options'] ?? $data['shipment_options'] ?? null);
         $properties = $data['physicalProperties'] ?? $data['physical_properties'] ?? null;

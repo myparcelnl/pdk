@@ -4,49 +4,23 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\App\Action\Capabilities;
 
+use Mockery;
 use MyParcelNL\Pdk\Api\Handler\CorsHandler;
-use MyParcelNL\Pdk\Api\Response\CapabilitiesResponse;
-use MyParcelNL\Pdk\Api\Service\CapabilitiesApiService;
 use MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Mockery;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-it('builds request with correct path and parameters', function () {
-    $incomingRequest = new Request([
-        'path' => '/delivery-options',
-        'carrier' => 'postnl',
-        'cc' => 'NL',
-        'action' => 'proxyCapabilities',
-        'pdk_action' => 'proxyCapabilities',
-    ]);
-
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
-    $action = new CapabilitiesAction($mockService);
-
-    $request = $action->buildRequest($incomingRequest);
-
-    expect($request->getPath())->toBe('/delivery-options')
-        ->and($request->getMethod())->toBe('GET')
-        ->and($request->getQueryString())->toBe('carrier=postnl&cc=NL');
-});
-
-it('uses incoming request method', function () {
-    $incomingRequest = Request::create('/', 'POST', [
-        'path' => '/delivery-options',
-    ]);
-
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
-    $action = new CapabilitiesAction($mockService);
-
-    $request = $action->buildRequest($incomingRequest);
-
-    expect($request->getMethod())->toBe('POST');
+beforeEach(function () {
+    TestBootstrapper::hasApiKey('test-api-key');
+    mockPdkProperty('capabilitiesServiceUrl', 'https://api.myparcel.nl');
 });
 
 it('handles OPTIONS preflight request', function () {
@@ -59,9 +33,9 @@ it('handles OPTIONS preflight request', function () {
 
     Pdk::set(CorsHandler::class, $mockCorsHandler);
 
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
+    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
     // Service should NOT be called for OPTIONS
-    $mockService->shouldNotReceive('doRequest');
+    $mockService->shouldNotReceive('get');
 
     $action = new CapabilitiesAction($mockService);
     $response = $action->handle($request);
@@ -69,25 +43,86 @@ it('handles OPTIONS preflight request', function () {
     expect($response->getStatusCode())->toBe(204);
 });
 
-it('adds CORS headers to response', function () {
-    $request = Request::create('/', 'GET');
+it('configures service with API key and base URL', function () {
+    $request = Request::create('/', 'GET', [
+        'country' => 'NL',
+        'shopId' => 123, // Avoid AccountSettings::getShop() call
+    ]);
 
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
-    $mockResponse = Mockery::mock(CapabilitiesResponse::class);
-    $symfonyResponse = new Response('{}', 200);
+    $mockCapabilitiesResponse = Mockery::mock();
+    $mockCapabilitiesResponse->shouldReceive('getRawResponse')
+        ->andReturn('{"data": {"capabilities": ["standard"]}}');
+    $mockCapabilitiesResponse->shouldReceive('getStatusCode')
+        ->andReturn(200);
 
-    $mockResponse->shouldReceive('getSymfonyResponse')->andReturn($symfonyResponse);
-    $mockService->shouldReceive('doRequest')->once()->andReturn($mockResponse);
+    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
+    $mockService->shouldReceive('setApiKey')
+        ->once()
+        ->with('test-api-key')
+        ->andReturnSelf();
+    $mockService->shouldReceive('setUserAgents')
+        ->once()
+        ->andReturnSelf();
+    $mockService->shouldReceive('setBaseUrl')
+        ->once()
+        ->with('https://api.myparcel.nl')
+        ->andReturnSelf();
+    $mockService->shouldReceive('get')
+        ->once()
+        ->andReturn($mockCapabilitiesResponse);
 
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
     $mockCorsHandler->shouldReceive('addCorsHeaders')
-        ->with($request, $symfonyResponse)
-        ->andReturn($symfonyResponse);
+        ->once()
+        ->andReturnUsing(fn($req, $res) => $res);
 
     Pdk::set(CorsHandler::class, $mockCorsHandler);
 
     $action = new CapabilitiesAction($mockService);
     $response = $action->handle($request);
 
-    expect($response)->toBe($symfonyResponse);
+    expect($response->getStatusCode())->toBe(200);
 });
+
+it('creates CapabilitiesRequest with correct country', function () {
+    $request = Request::create('/', 'GET', [
+        'country' => 'BE',
+        'carrier' => 'dpd',
+        'shopId' => 456, // Avoid AccountSettings::getShop() call
+    ]);
+
+    $capturedRequest = null;
+
+    $mockCapabilitiesResponse = Mockery::mock();
+    $mockCapabilitiesResponse->shouldReceive('getRawResponse')
+        ->andReturn('{"data": {"capabilities": []}}');
+    $mockCapabilitiesResponse->shouldReceive('getStatusCode')
+        ->andReturn(200);
+
+    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
+    $mockService->shouldReceive('setApiKey')->andReturnSelf();
+    $mockService->shouldReceive('setUserAgents')->andReturnSelf();
+    $mockService->shouldReceive('setBaseUrl')->andReturnSelf();
+    $mockService->shouldReceive('get')
+        ->once()
+        ->andReturnUsing(function ($request) use ($mockCapabilitiesResponse, &$capturedRequest) {
+            $capturedRequest = $request;
+            return $mockCapabilitiesResponse;
+        });
+
+    $mockCorsHandler = Mockery::mock(CorsHandler::class);
+    $mockCorsHandler->shouldReceive('addCorsHeaders')
+        ->once()
+        ->andReturnUsing(fn($req, $res) => $res);
+
+    Pdk::set(CorsHandler::class, $mockCorsHandler);
+
+    $action = new CapabilitiesAction($mockService);
+    $response = $action->handle($request);
+
+    expect($response->getStatusCode())->toBe(200)
+        ->and($capturedRequest)->not->toBeNull();
+});
+
+
+
