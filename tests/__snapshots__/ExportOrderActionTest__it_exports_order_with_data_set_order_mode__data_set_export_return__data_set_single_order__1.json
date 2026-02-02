@@ -51,6 +51,7 @@
             "package_type": 1,
             "return": 1,
             "same_day_delivery": 0,
+            "saturday_delivery": 0,
             "signature": 1
           },
           "physical_properties": {
