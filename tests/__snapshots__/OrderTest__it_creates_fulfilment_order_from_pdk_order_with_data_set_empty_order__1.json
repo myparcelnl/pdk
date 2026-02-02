@@ -17,6 +17,7 @@
       "packageType": 1,
       "return": false,
       "sameDayDelivery": false,
+      "saturdayDelivery": false,
       "signature": false
     },
     "recipient": [],
