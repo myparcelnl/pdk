@@ -78,9 +78,9 @@ class GlobalContext extends Model
 
         try {
             $propositionService = Pdk::get(PropositionService::class);
-            $proposition = $propositionService->getPropositionConfig();
+            $proposition        = $propositionService->getPropositionConfig();
 
-            $filteredData = array_intersect_key(
+            $platformFiltered = array_intersect_key(
                 $propositionService->mapToPlatformConfig($proposition),
                 array_flip([
                     'name',
@@ -93,8 +93,19 @@ class GlobalContext extends Model
                 ])
             );
 
-            $this->attributes['proposition'] = $filteredData;
-            $this->attributes['platform']    = $filteredData;
+            // Build a new-format proposition payload (not legacy-mapped)
+            $defaultCarrier = $propositionService->getDefaultCarrier();
+            $this->attributes['proposition'] = [
+                'name'             => $proposition->proposition->key,
+                'human'            => $proposition->proposition->name,
+                'backofficeUrl'    => $proposition->applications['backoffice']['url'] ?? null,
+                'supportUrl'       => $proposition->applications['developerPortal']['url'] ?? null,
+                'localCountry'     => $proposition->countryCode,
+                'defaultCarrier'   => $defaultCarrier ? $defaultCarrier->name : null, // CONSTANT_CASE name
+                'defaultCarrierId' => $defaultCarrier ? $defaultCarrier->id : null,
+            ];
+            // Keep legacy-mapped platform config for backwards compatibility
+            $this->attributes['platform']    = $platformFiltered;
         } catch (\Throwable $throwable) {
             // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.
             Logger::alert(

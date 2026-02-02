@@ -56,7 +56,7 @@ it('can be instantiated', function () {
             'packageType'                       => 'package',
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
-            'proposition'                       => Platform::LEGACY_MYPARCEL_NAME,
+            'proposition'                       => Platform::MYPARCEL_NAME,
             'platform'                          => Platform::LEGACY_MYPARCEL_NAME,
             'showPriceSurcharge'                => false,
             'priceStandardDelivery'             => \floatval(0),
@@ -189,7 +189,7 @@ it('uses correct price when price is shown as surcharge', function () {
             'allowPickupLocationsViewSelection' => true,
             'closedDays'                        => [],
             'excludeParcelLockers'              => false,
-            'proposition'                       => Platform::LEGACY_MYPARCEL_NAME,
+            'proposition'                       => Platform::MYPARCEL_NAME,
         ]);
 });
 

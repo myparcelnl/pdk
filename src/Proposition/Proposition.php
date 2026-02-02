@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyParcelNL\Pdk\Account;
+namespace MyParcelNL\Pdk\Proposition;
 
 /**
  * Proposition constants - new terminology replacing Platform.
@@ -30,3 +30,4 @@ class Proposition
         self::SENDMYPARCEL_ID => self::SENDMYPARCEL_NAME,
     ];
 }
+

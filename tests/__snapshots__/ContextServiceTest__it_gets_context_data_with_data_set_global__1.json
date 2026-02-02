@@ -227,12 +227,12 @@
     "language": "nl",
     "mode": "production",
     "proposition": {
-      "name": "myparcel",
+      "name": "myparcel-nederland",
       "human": "MyParcel Nederland",
       "backofficeUrl": "https://backoffice.myparcel.nl",
       "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
-      "defaultCarrier": "postnl",
+      "defaultCarrier": "POSTNL",
       "defaultCarrierId": 1
     },
     "platform": {

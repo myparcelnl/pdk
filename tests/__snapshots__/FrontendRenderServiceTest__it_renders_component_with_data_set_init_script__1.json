@@ -4,7 +4,7 @@
       "name": "pest",
       "title": "Pest",
       "version": "1.0.0",
-      "path": "/app/.tmp/",
+      "path": "\/app\/.tmp\/",
       "url": "APP_URL"
     },
     "baseUrl": "BACKEND_URL",
@@ -184,7 +184,7 @@
       },
       "downloadLogs": {
         "headers": {
-          "Accept": "application/zip"
+          "Accept": "application\/zip"
         },
         "method": "POST",
         "parameters": {
@@ -194,7 +194,7 @@
       },
       "switchToAcceptanceApi": {
         "headers": {
-          "Accept": "application/json"
+          "Accept": "application\/json"
         },
         "method": "POST",
         "parameters": {
@@ -204,7 +204,7 @@
       },
       "switchToProductionApi": {
         "headers": {
-          "Accept": "application/json"
+          "Accept": "application\/json"
         },
         "method": "POST",
         "parameters": {
@@ -238,8 +238,8 @@
     "platform": {
       "name": "myparcel",
       "human": "MyParcel Nederland",
-      "backofficeUrl": "https://backoffice.myparcel.nl",
-      "supportUrl": "https://developer.myparcel.nl",
+      "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
+      "supportUrl": "https:\/\/developer.myparcel.nl",
       "localCountry": "NL",
       "defaultCarrier": "postnl",
       "defaultCarrierId": 1
@@ -357,7 +357,6 @@
                   "HIDE_SENDER",
                   "LARGE_FORMAT",
                   "ONLY_RECIPIENT",
-                  "PRIORITY_DELIVERY",
                   "SAME_DAY_DELIVERY",
                   "SIGNATURE",
                   "INSURANCE"
@@ -471,7 +470,6 @@
             "HIDE_SENDER",
             "LARGE_FORMAT",
             "ONLY_RECIPIENT",
-            "PRIORITY_DELIVERY",
             "SAME_DAY_DELIVERY",
             "SIGNATURE",
             "INSURANCE"
@@ -507,7 +505,6 @@
             "hideSender": true,
             "largeFormat": true,
             "onlyRecipient": true,
-            "priorityDelivery": true,
             "sameDayDelivery": true,
             "signature": true
           }
@@ -629,7 +626,6 @@
           "allowMorningDelivery": false,
           "allowOnlyRecipient": false,
           "allowExpressDelivery": false,
-          "allowPriorityDelivery": false,
           "allowPickupLocations": false,
           "allowSameDayDelivery": false,
           "allowSaturdayDelivery": false,
@@ -678,7 +674,6 @@
           "pricePackageTypeMailbox": 0,
           "pricePackageTypePackageSmall": 0,
           "priceSignature": 0,
-          "pricePriorityDelivery": 0,
           "allowInternationalMailbox": false,
           "priceInternationalMailbox": 0,
           "priceCollect": 0,
@@ -771,7 +766,6 @@
               "HIDE_SENDER",
               "LARGE_FORMAT",
               "ONLY_RECIPIENT",
-              "PRIORITY_DELIVERY",
               "SAME_DAY_DELIVERY",
               "SIGNATURE",
               "INSURANCE"
