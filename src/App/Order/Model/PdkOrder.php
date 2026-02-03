@@ -21,9 +21,13 @@ use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 /**
- * @property null|string                                                 $externalIdentifier
- * @property null|string                                                 $apiIdentifier
- * @property null|string                                                 $referenceIdentifier
+ * @property null|string                                                 $externalIdentifier   plugin order id. this is the primary identifier for orders in the PDK and also stored by the order service as it's reference identifier.
+ * @property null|string                                                 $apiIdentifier        fulfilment order ID from MyParcel
+ * @deprecated apiIdentifier is no longer used by the order service (v2), it stores our externalIdentifier and will always use that to fetch and update orders.
+ *
+ * @property null|string                                                 $referenceIdentifier  custom order number (not the ID) given by plugin
+ * @deprecated referenceIdentifiers should not be used. Communicate the `externalIdentifier` instead.
+ *
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
  * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
@@ -54,10 +58,16 @@ class PdkOrder extends Model
         /** Plugin order id */
         'externalIdentifier'  => null,
 
-        /** Fulfilment order ID from MyParcel */
+        /**
+         * Fulfilment order ID from MyParcel
+         * @deprecated apiIdentifier is no longer used by the order service (v2), it stores our externalIdentifier and will communicate that back through webhooks.
+         */
         'apiIdentifier'       => null,
 
-        /** Custom order number given by plugin */
+        /**
+         * Custom order number given by plugin
+         * @deprecated referenceIdentifiers should not be used. Communicate the `externalIdentifier` instead.
+         */
         'referenceIdentifier' => null,
 
         'deliveryOptions' => DeliveryOptions::class,
