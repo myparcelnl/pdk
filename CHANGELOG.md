@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/myparcelnl/pdk/compare/v3.1.1...v3.1.2) (2026-02-03)
+
+
+### :bug: Bug Fixes
+
+* use latest delivery options ([#420](https://github.com/myparcelnl/pdk/issues/420)) ([0f7adb1](https://github.com/myparcelnl/pdk/commit/0f7adb1d2f286d99cf9aac87fd0fa6f38af64e96))
+
 ## [3.1.1](https://github.com/myparcelnl/pdk/compare/v3.1.0...v3.1.1) (2026-01-30)
 
 
