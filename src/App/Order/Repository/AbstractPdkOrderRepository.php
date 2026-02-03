@@ -27,6 +27,16 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
     /**
      * @inheritdoc
      *
+     * Base implementation of exists() method.
+     */
+    public function exists($id): bool
+    {
+        return $this->find($id) !== null;
+    }
+
+    /**
+     * @inheritdoc
+     *
      * Included for backward compatibility, will be made abstract in next version.
      */
     public function find($id): ?PdkOrder
