@@ -14,6 +14,10 @@ use MyParcelNL\Pdk\Fulfilment\Response\GetOrderResponse;
 use MyParcelNL\Pdk\Fulfilment\Response\GetOrdersResponse;
 use MyParcelNL\Pdk\Fulfilment\Response\PostOrdersResponse;
 
+/**
+ * Interacts with Orders in the MyParcel Order (v1) API
+ * @package MyParcelNL\Pdk\Fulfilment\Repository
+ */
 class OrderRepository extends ApiRepository
 {
     /**
