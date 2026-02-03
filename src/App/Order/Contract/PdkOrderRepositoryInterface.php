@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Order\Contract;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\ModelRepositoryInterface;
-use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 
 interface PdkOrderRepositoryInterface extends ModelRepositoryInterface
 {
@@ -17,6 +16,12 @@ interface PdkOrderRepositoryInterface extends ModelRepositoryInterface
      * @deprecated this will be removed in a future release. Switch to instantiating PdkOrder directly if you want a new order. Use find() to retrieve an existing order.
      */
     public function get($input): PdkOrder;
+
+    /**
+     * @inheritdoc
+     * Returns a PdkOrder or null if not found.
+     */
+    public function find($id): ?PdkOrder;
 
     /**
      * Create a collection of order objects from input data
