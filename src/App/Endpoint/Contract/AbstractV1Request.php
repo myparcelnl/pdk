@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint\Contract;
 
-use MyParcelNL\Pdk\App\Endpoint\Resource\ProblemDetails;
-use MyParcelNL\Pdk\App\Endpoint\Resource\V1ErrorResource;
 use Symfony\Component\HttpFoundation\Response;
-
 /**
  * Base class for all API v1 request handlers.
  */
