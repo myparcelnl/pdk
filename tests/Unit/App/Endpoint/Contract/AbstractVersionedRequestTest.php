@@ -87,3 +87,17 @@ it('correctly decodes a json body', function () {
 
     expect($body)->toBe(['foo' => 'bar']);
 });
+
+it('getValidationErrorMessage() returns null if there are no validation errors', function () {
+    $httpRequest = new Request(['orderId' => '123']);
+    $request     = new GetDeliveryOptionsV1Request($httpRequest);
+
+    $request->validate();
+
+    // Use reflection to access protected method
+    $reflection = new \ReflectionClass($request);
+    $method     = $reflection->getMethod('getValidationErrorMessage');
+    $method->setAccessible(true);
+
+    expect($method->invoke($request))->toBeNull();
+});

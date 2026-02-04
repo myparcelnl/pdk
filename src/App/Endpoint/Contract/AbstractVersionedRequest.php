@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint\Contract;
+
 use MyParcelNL\Pdk\App\Endpoint\ProblemDetails;
 use MyParcelNL\Pdk\App\Endpoint\Resource\ProblemDetailsV1Resource;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,10 +70,10 @@ abstract class AbstractVersionedRequest implements VersionedRequestInterface
     /**
      * Get a summary validation error message.
      */
-    protected function getValidationErrorMessage(): string
+    protected function getValidationErrorMessage(): ?string
     {
         if (empty($this->validationErrors)) {
-            return 'Request validation failed';
+            return null;
         }
 
         return sprintf(
