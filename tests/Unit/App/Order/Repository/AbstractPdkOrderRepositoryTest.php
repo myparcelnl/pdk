@@ -187,3 +187,33 @@ it('findOrFail() always throws ModelNotFoundException unless implemented by a cl
 
     $repository->findOrFail('123');
 })->throws(ModelNotFoundException::class);
+
+it('all() returns empty collection and logs a notice it should be implemented', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+    class AllMockPdkOrderRepository extends AbstractPdkOrderRepository
+    {
+        public function get($input): PdkOrder
+        {
+            return new PdkOrder();
+        }
+    }
+    $repository = new AllMockPdkOrderRepository(Pdk::get(StorageInterface::class));
+    $orders     = $repository->all();
+
+    expect($orders)
+        ->toBeInstanceOf(PdkOrderCollection::class)
+        ->and($orders->count())
+        ->toBe(0)
+        ->and($logger->getLogs())
+        ->toContain(
+            [
+                'level'   => 'notice',
+                'message' => '[PDK]: Please implement all() in MyParcelNL\Pdk\App\Order\Repository\AbstractPdkOrderRepository to retrieve all orders.',
+                'context' =>
+                [
+                    'class' => 'MyParcelNL\\Pdk\\App\\Order\\Repository\\AbstractPdkOrderRepository',
+                ],
+            ],
+        );
+});
