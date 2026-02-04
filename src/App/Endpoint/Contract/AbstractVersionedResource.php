@@ -36,8 +36,12 @@ abstract class AbstractVersionedResource implements VersionedResourceInterface
 
     /**
      * Create a versioned response with properly formatted data.
+     *
+     * @param Request $request The HTTP request
+     * @param int $status HTTP status code
+     * @param int[] $supportedVersions All versions supported by the endpoint
      */
-    public function createResponse(Request $request, int $status = 200): Response
+    public function createResponse(Request $request, int $status = 200, array $supportedVersions = []): Response
     {
         $version = static::getVersion();
 
@@ -47,9 +51,28 @@ abstract class AbstractVersionedResource implements VersionedResourceInterface
         // Set Content-Type header with version
         $response->headers->set('Content-Type', "application/json; version={$version}");
 
-        // Set Accept header to indicate this version is supported
-        $response->headers->set('Accept', "application/json; version={$version}");
+        // Set Accept header to indicate all supported versions
+        $response->headers->set('Accept', $this->formatAcceptHeader($supportedVersions));
 
         return $response;
+    }
+
+    /**
+     * Format the Accept header with all supported versions.
+     *
+     * @param int[] $supportedVersions
+     * @return string Accept header value like "application/json; version=1; version=2"
+     */
+    protected function formatAcceptHeader(array $supportedVersions): string
+    {
+        $versions = empty($supportedVersions) ? [static::getVersion()] : $supportedVersions;
+        $versionParams = array_map(
+            static function (int $version): string {
+                return "version={$version}";
+            },
+            $versions
+        );
+
+        return 'application/json; ' . implode('; ', $versionParams);
     }
 }
