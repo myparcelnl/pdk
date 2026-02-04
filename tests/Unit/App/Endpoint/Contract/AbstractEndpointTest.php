@@ -17,6 +17,11 @@ usesShared(new UsesMockPdkInstance());
 // Concrete test implementation of AbstractEndpoint for testing
 class TestEndpoint extends AbstractEndpoint
 {
+    public function getSupportedVersions(): array
+    {
+        return [1];
+    }
+
     public function handle(Request $request): Response
     {
         return new Response('test response');
