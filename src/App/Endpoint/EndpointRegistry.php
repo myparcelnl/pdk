@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint;
 
-use InvalidArgumentException;
 use MyParcelNL\Pdk\App\Endpoint\Handler\GetDeliveryOptionsEndpoint;
 
 /**
