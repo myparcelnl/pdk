@@ -85,6 +85,12 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
      */
     public function all(): PdkOrderCollection
     {
+        Logger::notice(
+            'Please implement all() in ' . self::class . ' to retrieve all orders.',
+            [
+                'class' => self::class,
+            ]
+        );
         return new PdkOrderCollection([]);
     }
 

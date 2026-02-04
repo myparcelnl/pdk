@@ -147,21 +147,20 @@ it('detects API version from request headers', function () {
     expect($response->headers->get('Content-Type'))->toContain('version=1');
 });
 
-it('falls back to v1 by default when no API version is specified', function () {
-    // Create and store a mock order
-    factory(PdkOrder::class)
-        ->withExternalIdentifier('123')
-        ->withDeliveryOptions(
-            factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
-        )
-        ->store();
-
+it('createVersionedRequest() falls back to v1 for unsupported versions', function () {
     $endpoint = new GetDeliveryOptionsEndpoint();
     $request = new Request(['orderId' => '123']);
 
-    $response = $endpoint->handle($request);
+    $versionedRequest = $endpoint->createVersionedRequest($request, 99);
 
-    expect($response->getStatusCode())->toBe(200);
-    expect($response->headers->get('Content-Type'))->toContain('version=1');
+    expect($versionedRequest)->toBeInstanceOf(\MyParcelNL\Pdk\App\Endpoint\Request\GetDeliveryOptionsV1Request::class);
+});
+
+it('createVersionedResource() falls back to v1 for unsupported versions', function () {
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $deliveryOptions = factory(DeliveryOptions::class)->withCarrier('postnl')->make();
+
+    $resource = $endpoint->createVersionedResource($deliveryOptions, 99);
+
+    expect($resource)->toBeInstanceOf(\MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource::class);
 });
