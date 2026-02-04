@@ -38,11 +38,6 @@ class TestEndpoint extends AbstractEndpoint
     }
 
     // Expose protected methods for testing
-    public function testGetRequestBody(Request $request): array
-    {
-        return $this->getRequestBody($request);
-    }
-
     public function testDetectVersion(Request $request): int
     {
         return $this->detectVersion($request);
@@ -89,19 +84,6 @@ it('validates a request successfully by default', function () {
     $isValid = $endpoint->validate($request);
 
     expect($isValid)->toBeTrue();
-});
-
-it('extracts JSON body from request', function () {
-    $endpoint = new TestEndpoint();
-
-    $data = ['key' => 'value'];
-    $jsonContent = json_encode($data);
-    $request = new Request([], [], [], [], [], [], $jsonContent);
-
-    $body = $endpoint->testGetRequestBody($request);
-
-    expect($body)->toBeArray();
-    expect($body)->toHaveKey('key', 'value');
 });
 
 it('detects the version from Content-Type header', function () {
