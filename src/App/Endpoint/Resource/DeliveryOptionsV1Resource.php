@@ -51,28 +51,26 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     /**
      * Format shipment options following API standards.
      * Returns an array of enabled shipment option names in CONSTANT_CASE format.
+     *
+     * We assume that inherited options were resolved before passing them here.
      */
     private static function formatShipmentOptions(ShipmentOptions $shipmentOptions): array
     {
-        // Create a temporary order to resolve inherited shipment options
-        // This uses carrier settings, product settings, and proposition config
-        $tempOrder = new PdkOrder(['deliveryOptions' => $shipmentOptions]);
-        /** @var PdkOrderOptionsServiceInterface $orderOptionsService */
-        $orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
-        $resolvedOrder = $orderOptionsService->calculateShipmentOptions($tempOrder);
-
-        $shipmentOptions = $resolvedOrder->deliveryOptions->shipmentOptions;
-
         return array_map(
             fn($key) => Str::upper(Str::snake($key)), // convert key to CONSTANT_CASE
-            array_keys(array_filter($shipmentOptions->toArray())) // add only the keys and filter for truthy values
+            array_keys(
+                array_filter(
+                    $shipmentOptions->toArray(),
+                    fn($value) => $value && $value !== -1
+                )
+            ) // add only the keys and filter for truthy values, ignoring -1 inherited options
         );
     }
 
     /**
      * Format pickup location information.
      */
-    private static function formatPickupLocation(RetailLocation $pickupLocation): ?array
+    private static function formatPickupLocation(RetailLocation $pickupLocation): array
     {
         return [
             'locationCode' => $pickupLocation->locationCode,
