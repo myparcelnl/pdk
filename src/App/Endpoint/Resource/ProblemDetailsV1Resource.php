@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint\Resource;
 
-use MyParcelNL\Pdk\App\Api\PdkEndpoint;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
 
 /**
