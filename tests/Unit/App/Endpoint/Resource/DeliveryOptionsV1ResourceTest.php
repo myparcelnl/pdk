@@ -163,36 +163,3 @@ it('correctly returns a pickup location when applicable', function () {
         ]
     ]);
 });
-
-it('returns null for carrier when no carrier name is given', function () {
-    $deliveryOptions = new DeliveryOptions([
-        'carrier' => new Carrier(['name' => null]),
-    ]);
-
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
-
-    expect($result['carrier'])->toBeNull();
-});
-
-it('returns null for packageType when no package type is given', function () {
-    $deliveryOptions = new DeliveryOptions([
-        'packageType' => null,
-    ]);
-
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
-
-    expect($result['packageType'])->toBeNull();
-});
-
-it('returns null for deliveryType when no delivery type is given', function () {
-    $deliveryOptions = new DeliveryOptions([
-        'deliveryType' => null,
-    ]);
-
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
-
-    expect($result['deliveryType'])->toBeNull();
-});

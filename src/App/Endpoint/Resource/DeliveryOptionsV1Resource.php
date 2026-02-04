@@ -100,12 +100,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     /**
      * Convert carrier name to CONSTANT_CASE format using PropositionService.
      */
-    private static function formatCarrier(?string $carrierName): ?string
+    private static function formatCarrier(string $carrierName): string
     {
-        if (!$carrierName) {
-            return null;
-        }
-
         $propositionService = Pdk::get(PropositionService::class);
         return $propositionService->mapLegacyToNewCarrierName($carrierName);
     }
@@ -113,12 +109,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     /**
      * Convert package type to CONSTANT_CASE format using existing constants.
      */
-    private static function formatPackageType(?string $packageType): ?string
+    private static function formatPackageType(string $packageType): string
     {
-        if (!$packageType) {
-            return null;
-        }
-
         // Mapping from DeliveryOptions constants to PropositionCarrierFeatures constants
         $packageTypeMapping = [
             DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => PropositionCarrierFeatures::PACKAGE_TYPE_PACKAGE_NAME,
@@ -134,12 +126,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     /**
      * Convert delivery type to CONSTANT_CASE format using existing constants.
      */
-    private static function formatDeliveryType(?string $deliveryType): ?string
+    private static function formatDeliveryType(string $deliveryType): string
     {
-        if (!$deliveryType) {
-            return null;
-        }
-
         // Mapping from DeliveryOptions constants to PropositionCarrierFeatures constants
         $deliveryTypeMapping = [
             DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME => PropositionCarrierFeatures::DELIVERY_TYPE_STANDARD_NAME,
