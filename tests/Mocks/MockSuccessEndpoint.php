@@ -21,12 +21,12 @@ class MockSuccessEndpoint extends AbstractEndpoint
         return new Response('success', 200);
     }
 
-    protected function createVersionedRequest(Request $request, int $version): AbstractVersionedRequest
+    public function createVersionedRequest(Request $request, int $version): AbstractVersionedRequest
     {
         return mock(AbstractVersionedRequest::class);
     }
 
-    protected function createVersionedResource(Model $model, int $version): AbstractVersionedResource
+    public function createVersionedResource(Model $model, int $version): AbstractVersionedResource
     {
         return mock(AbstractVersionedResource::class);
     }
