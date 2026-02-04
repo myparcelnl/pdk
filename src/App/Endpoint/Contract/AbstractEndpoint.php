@@ -47,22 +47,6 @@ abstract class AbstractEndpoint
     }
 
     /**
-     * Extract JSON body from request.
-     */
-    protected function getRequestBody(Request $request): array
-    {
-        $content = $request->getContent();
-
-        if (empty($content)) {
-            return [];
-        }
-
-        $decoded = json_decode($content, true);
-
-        return is_array($decoded) ? $decoded : [];
-    }
-
-    /**
      * Detect API version from request headers following ADR-0011.
      */
     protected function detectVersion(Request $request): int
