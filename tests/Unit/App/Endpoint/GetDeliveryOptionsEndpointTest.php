@@ -120,7 +120,7 @@ it('logs an error and returns a 500 error when an exception occurs', function ()
 
     $content = json_decode($response->getContent(), true);
     expect($content['status'])->toBe(500);
-    expect($content['detail'])->toContain('Something went wrong.');
+    expect($content['detail'])->toContain('Internal server error');
 
     // Reset PDK instance so subsequent tests get the default mock
     Pdk::setPdkInstance(null);
