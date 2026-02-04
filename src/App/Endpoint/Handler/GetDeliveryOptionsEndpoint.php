@@ -34,6 +34,16 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
     }
 
     /**
+     * Get all API versions supported by this endpoint.
+     *
+     * @return int[]
+     */
+    public function getSupportedVersions(): array
+    {
+        return [1];
+    }
+
+    /**
      * Handle the delivery options request.
      */
     public function handle(Request $request): Response
@@ -56,7 +66,8 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
                 return $versionedRequest->createNotFoundErrorResponse('Order not found for the specified orderId');
             }
 
-            return $this->createVersionedResource($order->deliveryOptions, $version)->createResponse($request);
+            return $this->createVersionedResource($order->deliveryOptions, $version)
+                ->createResponse($request, 200, $this->getSupportedVersions());
         } catch (\Exception $exception) {
             Logger::error('Failed to fetch delivery options', [
                 'orderId' => $orderId,

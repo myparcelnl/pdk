@@ -22,6 +22,13 @@ abstract class AbstractEndpoint
     abstract public function handle(Request $request): Response;
 
     /**
+     * Get all API versions supported by this endpoint.
+     *
+     * @return int[]
+     */
+    abstract public function getSupportedVersions(): array;
+
+    /**
      * Create a versioned request object based on API version.
      */
     abstract public function createVersionedRequest(Request $request, int $version): VersionedRequestInterface;
