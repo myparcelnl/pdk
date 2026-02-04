@@ -7,8 +7,9 @@ namespace MyParcelNL\Pdk\App\Order\Contract;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\ModelRepositoryInterface;
+use MyParcelNL\Pdk\Base\Contract\RepositoryInterface;
 
-interface PdkOrderRepositoryInterface extends ModelRepositoryInterface
+interface PdkOrderRepositoryInterface extends ModelRepositoryInterface, RepositoryInterface
 {
     /**
      * Create a new order object from input data.
