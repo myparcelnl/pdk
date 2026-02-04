@@ -11,6 +11,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -36,13 +38,13 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     public function format(): array
     {
         return [
-            'carrier' => self::formatCarrier($this->model->carrier->name),
-            'packageType' => self::formatPackageType($this->model->packageType),
-            'deliveryType' => self::formatDeliveryType($this->model->deliveryType),
-            'shipmentOptions' => self::formatShipmentOptions($this->model),
+            'carrier' => $this->model->carrier->name ? self::formatCarrier($this->model->carrier->name) : null,
+            'packageType' => $this->model->packageType ? self::formatPackageType($this->model->packageType) : null,
+            'deliveryType' => $this->model->deliveryType ? self::formatDeliveryType($this->model->deliveryType) : null,
+            'shipmentOptions' => self::formatShipmentOptions($this->model->shipmentOptions),
             // format date as ISO 8601 string or null
             'date' => $this->model->date ? $this->model->date->format('c') : null,
-            'pickupLocation' => self::formatPickupLocation($this->model),
+            'pickupLocation' => $this->model->pickupLocation ? self::formatPickupLocation($this->model->pickupLocation) : null,
         ];
     }
 
@@ -50,12 +52,11 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      * Format shipment options following API standards.
      * Returns an array of enabled shipment option names in CONSTANT_CASE format.
      */
-    private static function formatShipmentOptions(DeliveryOptions $deliveryOptions): array
+    private static function formatShipmentOptions(ShipmentOptions $shipmentOptions): array
     {
         // Create a temporary order to resolve inherited shipment options
         // This uses carrier settings, product settings, and proposition config
-        $tempOrder = new PdkOrder(['deliveryOptions' => $deliveryOptions]);
-
+        $tempOrder = new PdkOrder(['deliveryOptions' => $shipmentOptions]);
         /** @var PdkOrderOptionsServiceInterface $orderOptionsService */
         $orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
         $resolvedOrder = $orderOptionsService->calculateShipmentOptions($tempOrder);
@@ -71,14 +72,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     /**
      * Format pickup location information.
      */
-    private static function formatPickupLocation(DeliveryOptions $deliveryOptions): ?array
+    private static function formatPickupLocation(RetailLocation $pickupLocation): ?array
     {
-        $pickupLocation = $deliveryOptions->pickupLocation;
-
-        if (! $pickupLocation) {
-            return null;
-        }
-
         return [
             'locationCode' => $pickupLocation->locationCode,
             'locationName' => $pickupLocation->locationName,
