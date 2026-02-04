@@ -30,6 +30,10 @@ interface VersionedResourceInterface
 
     /**
      * Create a versioned response with properly formatted data.
+     *
+     * @param Request $request The HTTP request
+     * @param int $status HTTP status code
+     * @param int[] $supportedVersions All versions supported by the endpoint
      */
-    public function createResponse(Request $request, int $status = 200): Response;
+    public function createResponse(Request $request, int $status = 200, array $supportedVersions = []): Response;
 }
