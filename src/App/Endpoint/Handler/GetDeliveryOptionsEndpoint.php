@@ -62,7 +62,7 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
                 'orderId' => $orderId,
                 'error' => $exception->getMessage(),
             ]);
-            return $versionedRequest->createInternalServerErrorResponse($exception->getMessage());
+            return $versionedRequest->createInternalServerErrorResponse('Internal server error');
         }
     }
 
