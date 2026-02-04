@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockNotFoundPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -103,6 +104,29 @@ it('returns 404 error when order not found', function () {
     MockPdkFactory::create();
 });
 
+
+it('logs an error and returns a 500 error when an exception occurs', function () {
+    // Recreate PDK instance with a repository that throws an exception
+    MockPdkFactory::create([
+        PdkOrderRepositoryInterface::class => autowire(MockExceptionPdkOrderRepository::class),
+    ]);
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $request = new Request(['orderId' => '123']);
+
+    $response = $endpoint->handle($request);
+
+    expect($response->getStatusCode())->toBe(500);
+
+    $content = json_decode($response->getContent(), true);
+    expect($content['status'])->toBe(500);
+    expect($content['detail'])->toContain('Something went wrong.');
+
+    // Reset PDK instance so subsequent tests get the default mock
+    Pdk::setPdkInstance(null);
+    MockPdkFactory::create();
+});
+
 it('detects API version from request headers', function () {
     // Create and store a mock order
     factory(PdkOrder::class)
@@ -116,6 +140,25 @@ it('detects API version from request headers', function () {
     $endpoint = new GetDeliveryOptionsEndpoint();
     $request = new Request(['orderId' => '123']);
     $request->headers->set('Content-Type', 'application/json; version=1');
+
+    $response = $endpoint->handle($request);
+
+    expect($response->getStatusCode())->toBe(200);
+    expect($response->headers->get('Content-Type'))->toContain('version=1');
+});
+
+it('falls back to v1 by default when no API version is specified', function () {
+    // Create and store a mock order
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('123')
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('postnl')
+        )
+        ->store();
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $request = new Request(['orderId' => '123']);
 
     $response = $endpoint->handle($request);
 

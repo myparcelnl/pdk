@@ -41,7 +41,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
             'deliveryType' => self::formatDeliveryType($this->model->deliveryType),
             'shipmentOptions' => self::formatShipmentOptions($this->model),
             // format date as ISO 8601 string or null
-            'date' => $this->model->date ? $this->model->date->format('c'): null,
+            'date' => $this->model->date ? $this->model->date->format('c') : null,
             'pickupLocation' => self::formatPickupLocation($this->model),
         ];
     }
@@ -52,8 +52,6 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatShipmentOptions(DeliveryOptions $deliveryOptions): array
     {
-        $options = [];
-
         // Create a temporary order to resolve inherited shipment options
         // This uses carrier settings, product settings, and proposition config
         $tempOrder = new PdkOrder(['deliveryOptions' => $deliveryOptions]);
@@ -90,8 +88,11 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
                 'number' => $pickupLocation->number,
                 'numberSuffix' => $pickupLocation->numberSuffix,
                 'postalCode' => $pickupLocation->postalCode,
+                'boxNumber' => $pickupLocation->boxNumber,
                 'city' => $pickupLocation->city,
                 'cc' => $pickupLocation->cc,
+                'state' => $pickupLocation->state,
+                'region' => $pickupLocation->region,
             ],
         ];
     }
