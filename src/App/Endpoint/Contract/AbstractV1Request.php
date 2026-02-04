@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Base class for all API v1 request handlers.
- *
- * Provides a reusable validation error response method following v1 API standards.
  */
 abstract class AbstractV1Request extends AbstractVersionedRequest
 {
