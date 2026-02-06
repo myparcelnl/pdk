@@ -53,6 +53,7 @@ it('disables options that are not allowed in carrier', function (OrderOptionDefi
                 ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
                 ShipmentOptions::LARGE_FORMAT      => TriStateService::DISABLED,
                 ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
+                ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
                 ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                 ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
             ],

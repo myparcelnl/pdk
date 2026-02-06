@@ -49,6 +49,7 @@
       "labelDescription": "",
       "largeFormat": false,
       "onlyRecipient": true,
+      "priorityDelivery": false,
       "packageType": 1,
       "return": false,
       "sameDayDelivery": false,

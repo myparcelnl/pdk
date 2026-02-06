@@ -9,8 +9,12 @@
     "primary": false,
     "type": "main",
     "inboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY"
+      ],
       "shipmentOptions": [
         "SIGNATURE",
         "RETURN",
@@ -23,19 +27,52 @@
       "metadata": {
         "labelDescriptionLength": 45,
         "insuranceSteps": [
-          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          0,
+          10000,
+          25000,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
         ]
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "LETTER", "DIGITAL_STAMP", "SMALL_PACKAGE"],
-      "deliveryTypes": ["MORNING_DELIVERY", "STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-      "deliveryCountries": ["NL", "BE"],
-      "pickupCountries": ["NL", "BE", "DK", "SE", "DE"],
+      "packageTypes": [
+        "PACKAGE",
+        "MAILBOX",
+        "LETTER",
+        "DIGITAL_STAMP",
+        "SMALL_PACKAGE"
+      ],
+      "deliveryTypes": [
+        "MORNING_DELIVERY",
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
+      "deliveryCountries": [
+        "NL",
+        "BE"
+      ],
+      "pickupCountries": [
+        "NL",
+        "BE",
+        "DK",
+        "SE",
+        "DE"
+      ],
       "shipmentOptions": [
         "AGE_CHECK",
         "LARGE_FORMAT",
         "ONLY_RECIPIENT",
+        "PRIORITY_DELIVERY",
         "RETURN",
         "SIGNATURE",
         "RECEIPT_CODE",
@@ -47,19 +84,48 @@
         "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
         "multiCollo": true,
         "insuranceOptions": [
-          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          0,
+          10000,
+          25000,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
         ]
       }
     },
     "deliveryOptions": {
-      "addressFields": ["postalCode", "street", "city"],
-      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+      "addressFields": [
+        "postalCode",
+        "street",
+        "city"
+      ],
+      "availableFeatures": [
+        "deliveryDaysWindow",
+        "dropOffDays",
+        "dropOffDelay",
+        "pickupMapAllowLoadMore"
+      ],
       "shipmentOptionsPerPackageType": {
-        "package": ["only_recipient", "signature"],
-        "mailbox": ["priority_delivery"],
+        "package": [
+          "only_recipient",
+          "signature"
+        ],
+        "mailbox": [
+          "priority_delivery"
+        ],
         "letter": [],
         "digital_stamp": [],
-        "package_small": ["only_recipient", "signature"]
+        "package_small": [
+          "only_recipient",
+          "signature"
+        ]
       },
       "allowFakeDelivery": true
     }
@@ -75,8 +141,14 @@
     "type": "main",
     "inboundFeatures": [],
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
+      "packageTypes": [
+        "PACKAGE",
+        "MAILBOX"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
       "deliveryCountries": [
         "AT",
         "BE",
@@ -132,8 +204,15 @@
       }
     },
     "deliveryOptions": {
-      "addressFields": ["postalCode", "street", "city"],
-      "availableFeatures": ["dropOffDays", "dropOffDelay"],
+      "addressFields": [
+        "postalCode",
+        "street",
+        "city"
+      ],
+      "availableFeatures": [
+        "dropOffDays",
+        "dropOffDelay"
+      ],
       "allowFakeDelivery": false
     }
   },
@@ -147,18 +226,43 @@
     "primary": false,
     "type": "main",
     "inboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "RETURN",
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "LARGE_FORMAT"
+      ],
       "metadata": {
         "labelDescriptionLength": 45
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-      "deliveryCountries": ["NL", "BE"],
-      "pickupCountries": ["NL", "BE"],
+      "packageTypes": [
+        "PACKAGE",
+        "MAILBOX",
+        "SMALL_PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
+      "deliveryCountries": [
+        "NL",
+        "BE"
+      ],
+      "pickupCountries": [
+        "NL",
+        "BE"
+      ],
       "shipmentOptions": [
         "AGE_CHECK",
         "ONLY_RECIPIENT",
@@ -170,12 +274,31 @@
       ],
       "metadata": {
         "labelDescriptionLength": 45,
-        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        "insuranceOptions": [
+          0,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
+        ]
       }
     },
     "deliveryOptions": {
-      "addressFields": ["city", "postalCode"],
-      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+      "addressFields": [
+        "city",
+        "postalCode"
+      ],
+      "availableFeatures": [
+        "deliveryDaysWindow",
+        "dropOffDays",
+        "dropOffDelay"
+      ],
       "allowFakeDelivery": false
     }
   },
@@ -189,21 +312,49 @@
     "primary": false,
     "type": "main",
     "inboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
-      "shipmentOptions": ["INSURANCE"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "INSURANCE"
+      ],
       "metadata": {
         "labelDescriptionLength": 45,
-        "insuranceOptions": [50000]
+        "insuranceOptions": [
+          50000
+        ]
       }
     },
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "INSURANCE"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "INSURANCE"
+      ],
       "metadata": {
         "labelDescriptionLength": 45,
-        "insurance": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        "insurance": [
+          0,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
+        ]
       }
     },
     "deliveryOptions": {
@@ -222,12 +373,33 @@
     "type": "main",
     "inboundFeatures": [],
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "SATURDAY_DELIVERY", "HIDE_SENDER", "INSURANCE"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "SIGNATURE",
+        "SATURDAY_DELIVERY",
+        "HIDE_SENDER",
+        "INSURANCE"
+      ],
       "metadata": {
         "labelDescriptionLength": 45,
-        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        "insuranceOptions": [
+          0,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
+        ]
       }
     },
     "deliveryOptions": {
@@ -246,18 +418,46 @@
     "type": "main",
     "inboundFeatures": [],
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-      "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT", "INSURANCE"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "STANDARD_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "RETURN",
+        "SIGNATURE",
+        "COLLECT",
+        "INSURANCE"
+      ],
       "metadata": {
         "labelDescriptionLength": 45,
         "insuranceOptions": [
-          0, 10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          0,
+          10000,
+          25000,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
         ]
       }
     },
     "deliveryOptions": {
-      "addressFields": ["postalCode", "street", "city"],
+      "addressFields": [
+        "postalCode",
+        "street",
+        "city"
+      ],
       "allowFakeDelivery": false
     }
   },
@@ -272,19 +472,47 @@
     "type": "main",
     "inboundFeatures": [],
     "outboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["EXPRESS_DELIVERY", "PICKUP_DELIVERY"],
-      "shipmentOptions": ["AGE_CHECK", "ONLY_RECIPIENT", "RETURN", "SIGNATURE", "COLLECT"],
+      "packageTypes": [
+        "PACKAGE"
+      ],
+      "deliveryTypes": [
+        "EXPRESS_DELIVERY",
+        "PICKUP_DELIVERY"
+      ],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "RETURN",
+        "SIGNATURE",
+        "COLLECT"
+      ],
       "metadata": {
         "labelDescriptionLength": 45,
         "insuranceOptions": [
-          10000, 25000, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000
+          10000,
+          25000,
+          50000,
+          100000,
+          150000,
+          200000,
+          250000,
+          300000,
+          350000,
+          400000,
+          450000,
+          500000
         ]
       }
     },
     "deliveryOptions": {
-      "addressFields": ["postalCode", "street", "city"],
-      "unsupportedParameters": ["package_type"],
+      "addressFields": [
+        "postalCode",
+        "street",
+        "city"
+      ],
+      "unsupportedParameters": [
+        "package_type"
+      ],
       "allowFakeDelivery": false
     }
   }

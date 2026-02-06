@@ -132,6 +132,9 @@
             "onlyRecipient": {
               "enum": [0, 1]
             },
+            "priorityDelivery": {
+              "enum": [0, 1]
+            },
             "return": {
               "enum": [0, 1]
             },

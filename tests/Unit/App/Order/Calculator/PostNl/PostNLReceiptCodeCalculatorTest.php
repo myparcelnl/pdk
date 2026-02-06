@@ -34,6 +34,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ShipmentOptions::HIDE_SENDER       => TriStateService::INHERIT,
         ShipmentOptions::LARGE_FORMAT      => TriStateService::INHERIT,
         ShipmentOptions::ONLY_RECIPIENT    => TriStateService::INHERIT,
+        ShipmentOptions::PRIORITY_DELIVERY => TriStateService::INHERIT,
         ShipmentOptions::RECEIPT_CODE      => TriStateService::INHERIT,
         ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::INHERIT,
         ShipmentOptions::SIGNATURE         => TriStateService::INHERIT,
