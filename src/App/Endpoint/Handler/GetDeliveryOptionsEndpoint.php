@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Endpoint\Handler;
 
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractEndpoint;
+use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedRequest;
+use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
 use MyParcelNL\Pdk\App\Endpoint\Contract\VersionedResourceInterface;
 use MyParcelNL\Pdk\App\Endpoint\Request\GetDeliveryOptionsV1Request;
 use MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource;
@@ -64,7 +66,7 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
             $order = $this->orderRepository->find($orderId);
             // Return problem details not found error if order is missing
             if (!$order) {
-                return $versionedRequest->createNotFoundErrorResponse('Order not found for the specified orderId');
+                return $versionedRequest->createNotFoundErrorResponse(\sprintf('Order not found for the orderId %s', $orderId));
             }
 
             // Resolve the shipment options before passing them to the resource
@@ -95,8 +97,10 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
 
     /**
      * Create version-specific request based on detected version.
+     *
+     * @return GetDeliveryOptionsV1Request|AbstractVersionedRequest
      */
-    public function createVersionedRequest(Request $request, int $version): GetDeliveryOptionsV1Request
+    public function createVersionedRequest(Request $request, int $version): AbstractVersionedRequest
     {
         switch ($version) {
             case 1:
@@ -109,10 +113,8 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
 
     /**
      * Create version-specific resource response based on detected version.
-     *
-     * @param DeliveryOptions $deliveryOptions
      */
-    public function createVersionedResource(Arrayable $deliveryOptions, int $version): VersionedResourceInterface
+    public function createVersionedResource(Arrayable $deliveryOptions, int $version): AbstractVersionedResource
     {
         switch ($version) {
             case 1:

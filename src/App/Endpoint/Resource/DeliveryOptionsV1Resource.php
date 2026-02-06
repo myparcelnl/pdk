@@ -95,8 +95,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatCarrier(string $carrierName): string
     {
-        $propositionService = Pdk::get(PropositionService::class);
-        return $propositionService->mapLegacyToNewCarrierName($carrierName);
+        return Pdk::get(PropositionService::class)->mapLegacyToNewCarrierName($carrierName);
     }
 
     /**

@@ -147,10 +147,8 @@ components:
           enum:
             - PACKAGE
             - MAILBOX
-            - UNFRANKED
             - DIGITAL_STAMP
             - SMALL_PACKAGE
-            - PALLET
             - LETTER
           example: "PACKAGE"
         deliveryType:
@@ -162,8 +160,6 @@ components:
             - MORNING_DELIVERY
             - EVENING_DELIVERY
             - PICKUP_DELIVERY
-            - PICKUP_EXPRESS_DELIVERY
-            - SAME_DAY_DELIVERY
             - EXPRESS_DELIVERY
           example: "STANDARD_DELIVERY"
         shipmentOptions:
@@ -192,7 +188,6 @@ components:
           - RECEIPT_CODE
           - SAME_DAY_DELIVERY
           - SATURDAY_DELIVERY
-          - MONDAY_DELIVERY
           - TRACKED
           - COLLECT
           - FRESH_FOOD
@@ -224,19 +219,6 @@ components:
           example: "PNPNL-01"
         address:
           $ref: '#/components/schemas/Address'
-        openingHours:
-          type: object
-          description: Opening hours for each day of the week
-          additionalProperties:
-            type: string
-          example:
-            monday: "08:00-18:00"
-            tuesday: "08:00-18:00"
-            wednesday: "08:00-18:00"
-            thursday: "08:00-18:00"
-            friday: "08:00-18:00"
-            saturday: "08:00-17:00"
-            sunday: "closed"
 
     Address:
       type: object
@@ -259,6 +241,11 @@ components:
           type: string
           description: Postal code
           example: "1234AB"
+        boxNumber:
+          type: string
+          nullable: true
+          description: Box number (for Belgian addresses)
+          example: "B"
         city:
           type: string
           description: City name
@@ -267,6 +254,16 @@ components:
           type: string
           description: Country code (ISO 3166-1 alpha-2)
           example: "NL"
+        state:
+          type: string
+          nullable: true
+          description: State or province
+          example: "North Holland"
+        region:
+          type: string
+          nullable: true
+          description: Region
+          example: "Randstad"
 
     Error:
       type: object
