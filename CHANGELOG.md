@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/myparcelnl/pdk/compare/v3.1.2...v3.2.0) (2026-02-06)
+
+
+### :sparkles: New Features
+
+* replace platform references with proposition terminology ([#398](https://github.com/myparcelnl/pdk/issues/398)) ([5d2b989](https://github.com/myparcelnl/pdk/commit/5d2b9891766c21630343335b1249af4e3a12f2d5))
+* **shipment-options:** add priority delivery ([#413](https://github.com/myparcelnl/pdk/issues/413)) ([2de5edc](https://github.com/myparcelnl/pdk/commit/2de5edcf2615f0ac354eec46c1d0635e91f5d32d))
+
+
+### :bug: Bug Fixes
+
+* prevent deprecation warnings for address1/address2 fields ([#419](https://github.com/myparcelnl/pdk/issues/419)) ([ec86f8d](https://github.com/myparcelnl/pdk/commit/ec86f8d04817c79b3a37b61735dc09c8c26b7fb1))
+
 ## [3.1.2](https://github.com/myparcelnl/pdk/compare/v3.1.1...v3.1.2) (2026-02-03)
 
 
