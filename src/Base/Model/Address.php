@@ -93,7 +93,10 @@ class Address extends Model
     {
         // Merge address1 and 2 into "street" and then put address2 also as "streetAdditionalInfo"
         if (!isset($data['street']) && (isset($data['address1']) || isset($data['address2']))) {
-            $data['street'] = trim(implode(' ', [$data['address1'], $data['address2']])) ?: null;
+            $data['street'] = trim(implode(' ', [
+                $data['address1'] ?? null,
+                $data['address2'] ?? null,
+            ])) ?: null;
             if (isset($data['address1']) && isset($data['address2'])) {
                 $data['streetAdditionalInfo'] = $data['address2'];
             }
@@ -102,6 +105,11 @@ class Address extends Model
         foreach ($this->additionalDeprecated as $field) {
             if (isset($data[$field])) {
                 unset($data[$field]);
+
+                if (in_array($field, [self::ADDRESS1, self::ADDRESS2], true)) {
+                    continue;
+                }
+
                 $this->logDeprecationWarning(
                     sprintf('%s', $field),
                     'street, number, numberSuffix, streetAdditionalInfo',
