@@ -74,6 +74,12 @@ abstract class AbstractPdkOrderRepository extends Repository implements PdkOrder
      */
     public function findOrFail($id): PdkOrder
     {
+        Logger::notice(
+            'Please implement findOrFail() in ' . self::class . ' to retrieve orders by their identifier.',
+            [
+                'class' => self::class,
+            ]
+        );
         throw new ModelNotFoundException(PdkOrder::class, [$id]);
     }
 
