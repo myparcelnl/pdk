@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
  * @property string                    $eventPong
  * @property string                    $language
  * @property string                    $mode
+ * @property array                     $proposition
  * @property array                     $platform
  * @property array{string, string}     $translations
  */
@@ -38,6 +39,7 @@ class GlobalContext extends Model
         'eventPong'    => FrontendRenderService::BOOTSTRAP_RENDER_EVENT_PONG,
         'language'     => null,
         'mode'         => null,
+        'proposition'  => [],
         'platform'     => [],
         'translations' => [],
     ];
@@ -51,6 +53,7 @@ class GlobalContext extends Model
         'eventPong'    => 'string',
         'language'     => 'string',
         'mode'         => 'string',
+        'proposition'  => 'array',
         'platform'     => 'array',
         'translations' => 'array',
     ];
@@ -75,9 +78,9 @@ class GlobalContext extends Model
 
         try {
             $propositionService = Pdk::get(PropositionService::class);
-            $proposition = $propositionService->getPropositionConfig();
+            $proposition        = $propositionService->getPropositionConfig();
 
-            $this->attributes['platform'] = array_intersect_key(
+            $platformFiltered = array_intersect_key(
                 $propositionService->mapToPlatformConfig($proposition),
                 array_flip([
                     'name',
@@ -89,6 +92,20 @@ class GlobalContext extends Model
                     'defaultCarrierId',
                 ])
             );
+
+            // Build a new-format proposition payload (not legacy-mapped)
+            $defaultCarrier = $propositionService->getDefaultCarrier();
+            $this->attributes['proposition'] = [
+                'name'             => $proposition->proposition->key,
+                'human'            => $proposition->proposition->name,
+                'backofficeUrl'    => $proposition->applications['backoffice']['url'] ?? null,
+                'supportUrl'       => $proposition->applications['developerPortal']['url'] ?? null,
+                'localCountry'     => $proposition->countryCode,
+                'defaultCarrier'   => $defaultCarrier ? $defaultCarrier->name : null, // CONSTANT_CASE name
+                'defaultCarrierId' => $defaultCarrier ? $defaultCarrier->id : null,
+            ];
+            // Keep legacy-mapped platform config for backwards compatibility
+            $this->attributes['platform']    = $platformFiltered;
         } catch (\Throwable $throwable) {
             // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.
             Logger::alert(

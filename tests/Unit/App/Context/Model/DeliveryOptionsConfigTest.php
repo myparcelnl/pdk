@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
@@ -56,6 +57,7 @@ it('can be instantiated', function () {
             'packageType'                       => 'package',
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
+            'proposition'                       => Proposition::MYPARCEL_NAME,
             'platform'                          => Platform::LEGACY_MYPARCEL_NAME,
             'showPriceSurcharge'                => false,
             'priceStandardDelivery'             => \floatval(0),
@@ -188,6 +190,7 @@ it('uses correct price when price is shown as surcharge', function () {
             'allowPickupLocationsViewSelection' => true,
             'closedDays'                        => [],
             'excludeParcelLockers'              => false,
+            'proposition'                       => Proposition::MYPARCEL_NAME,
         ]);
 });
 

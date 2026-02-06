@@ -8,6 +8,7 @@
       "locale": "nl-NL",
       "packageType": "package",
       "allowPickupLocationsViewSelection": true,
+      "proposition": "myparcel-nederland",
       "platform": "myparcel",
       "priceStandardDelivery": 0,
       "showPriceSurcharge": false,
