@@ -20,6 +20,8 @@ use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\MondayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -197,6 +199,11 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveTracked(): bool
     {
         return $this->canHave(TrackedDefinition::class);
+    }
+
+    public function canHaveSaturdayDelivery(): bool
+    {
+        return $this->canHave(SaturdayDeliveryDefinition::class);
     }
 
     public function canHaveWeight(?int $weight): bool
