@@ -69,7 +69,7 @@
     },
     {
       "name": "disableDeliveryOptions",
-      "$component": "ToggleInput",
+      "$component": "TriStateInput",
       "label": "settings_product_disable_delivery_options",
       "description": "settings_product_disable_delivery_options_description"
     },
