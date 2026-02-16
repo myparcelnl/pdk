@@ -6,6 +6,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account;
 
+/**
+ * Legacy platform constants - maintained for backward compatibility.
+ *
+ * @deprecated Use Proposition class constants instead. This class will be removed in a future version.
+ * @see \MyParcelNL\Pdk\Proposition\Proposition
+ */
 class Platform
 {
     public const MYPARCEL_ID       = 1;

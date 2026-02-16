@@ -226,6 +226,15 @@
     "eventPong": "myparcel_pdk_pong",
     "language": "nl",
     "mode": "production",
+    "proposition": {
+      "name": "myparcel-nederland",
+      "human": "MyParcel Nederland",
+      "backofficeUrl": "https://backoffice.myparcel.nl",
+      "supportUrl": "https://developer.myparcel.nl",
+      "localCountry": "NL",
+      "defaultCarrier": "POSTNL",
+      "defaultCarrierId": 1
+    },
     "platform": {
       "name": "myparcel",
       "human": "MyParcel Nederland",

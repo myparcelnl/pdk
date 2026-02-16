@@ -57,6 +57,9 @@ it('instantiates shipment options', function () {
             'receiptCode'          => true,
             'collect'              => true,
             'excludeParcelLockers' => false,
+            'priorityDelivery'     => true,
+            'frozen'               => false,
+            'freshFood'             => false,
         ],
     ]);
 
@@ -75,8 +78,9 @@ it('instantiates shipment options', function () {
             'receiptCode'      => TriStateService::ENABLED,
             'collect'          => TriStateService::ENABLED,
             'excludeParcelLockers' => TriStateService::DISABLED,
-            'freshFood'        => TriStateService::INHERIT,
-            'frozen'           => TriStateService::INHERIT,
+            'priorityDelivery' => TriStateService::ENABLED,
+            'frozen'           => TriStateService::DISABLED,
+            'freshFood'        => TriStateService::DISABLED,
         ]);
 });
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Proposition\Service;
 
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -326,7 +325,8 @@ class PropositionService
     public function mapToPlatformConfig(PropositionConfig $propositionConfig): array
     {
         return [
-            'name' => Platform::PLATFORMS_TO_LEGACY_MAP[$propositionConfig->proposition->key] ?? $propositionConfig->proposition->key,
+            'name' => \MyParcelNL\Pdk\Proposition\Proposition::PROPOSITIONS_TO_LEGACY_MAP[$propositionConfig->proposition->key]
+                ?? $propositionConfig->proposition->key,
             'human' => $propositionConfig->proposition->name,
             'backofficeUrl' => $propositionConfig->applications['backoffice']['url'] ?? null,
             'supportUrl' => $propositionConfig->applications['developerPortal']['url'] ?? null,

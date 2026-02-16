@@ -80,4 +80,4 @@ it('calculates options', function (
     expect($finalValue)->toBe($result);
 })
     ->with('triState3BoolFirst')
-    ->with('all shipment options');
+    ->with('shipment options with product settings');

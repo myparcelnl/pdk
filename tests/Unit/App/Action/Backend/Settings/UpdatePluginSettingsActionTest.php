@@ -60,6 +60,7 @@ it('resets delivery options when disabled', function () {
                         'allowSaturdayDelivery'    => true,
                         'allowSignature'           => true,
                         'allowOnlyRecipient'       => true,
+                        'allowPriorityDelivery'    => true,
                         'allowPickupLocations'     => true,
                         'allowDeliveryTypeExpress' => true,
                     ],
@@ -89,6 +90,7 @@ it('resets delivery options when disabled', function () {
             'allowSaturdayDelivery'    => false,
             'allowSignature'           => false,
             'allowOnlyRecipient'       => false,
+            'allowPriorityDelivery'    => false,
             'allowPickupLocations'     => false,
             'allowDeliveryTypeExpress' => false,
         ]);
