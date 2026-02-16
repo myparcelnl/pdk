@@ -57,7 +57,11 @@ it('injects bearer token in headers', function () {
     expect($headers)
         ->toHaveKey('Authorization')
         ->and($headers['Authorization'])
-        ->toBe('bearer ' . base64_encode($apiKey));
+        ->toBe('bearer ' . base64_encode($apiKey))
+        ->and($headers)
+        ->toHaveKey('Accept')
+        ->and($headers['Accept'])
+        ->toBe('application/json;charset=utf-8;version=2.0');
 });
 
 it('throws exception if api key is not configured', function () {
