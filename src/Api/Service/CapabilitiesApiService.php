@@ -14,6 +14,8 @@ use RuntimeException;
  */
 class CapabilitiesApiService extends AbstractApiService
 {
+    private const CAPABILITIES_ACCEPT_HEADER = 'application/json;charset=utf-8;version=2.0';
+
     /**
      * @return string
      */
@@ -41,6 +43,7 @@ class CapabilitiesApiService extends AbstractApiService
 
         return [
             'Authorization' => sprintf('bearer %s', base64_encode($apiKey)),
+            'Accept'        => self::CAPABILITIES_ACCEPT_HEADER,
             'User-Agent'    => $this->getUserAgentHeader(),
         ];
     }
