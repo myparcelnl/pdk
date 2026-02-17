@@ -102,6 +102,17 @@ paths:
                     title: "Not Found"
                     status: 404
                     detail: "Delivery options not found for the specified order"
+        '406':
+          description: Not Acceptable - unsupported API version requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                type: null
+                title: "Not Acceptable"
+                status: 406
+                detail: "API version 2 is not supported. Supported versions: 1"
         '500':
           description: Internal server error
           content:
@@ -356,6 +367,13 @@ components:
 
     NotFound:
       description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotAcceptable:
+      description: Not Acceptable - unsupported API version requested
       content:
         application/json:
           schema:

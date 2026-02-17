@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Endpoint\Handler;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractEndpoint;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedRequest;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
-use MyParcelNL\Pdk\App\Endpoint\Contract\VersionedResourceInterface;
 use MyParcelNL\Pdk\App\Endpoint\Request\GetDeliveryOptionsV1Request;
 use MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
@@ -47,11 +46,10 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
     }
 
     /**
-     * Handle the delivery options request.
+     * Handle the delivery options request with validated API version.
      */
-    public function handle(Request $request): Response
+    protected function handleVersionedRequest(Request $request, int $version): Response
     {
-        $version = $this->detectVersion($request);
         $versionedRequest = $this->createVersionedRequest($request, $version);
 
         if (! $versionedRequest->validate()) {

@@ -164,3 +164,36 @@ it('createVersionedResource() falls back to v1 for unsupported versions', functi
 
     expect($resource)->toBeInstanceOf(\MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource::class);
 });
+
+it('returns 406 Not Acceptable when unsupported API version is requested', function () {
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $request = new Request(['orderId' => '123']);
+    $request->headers->set('Content-Type', 'application/json; version=2'); // v2 not supported
+
+    $response = $endpoint->handle($request);
+
+    expect($response->getStatusCode())->toBe(406);
+
+    $content = json_decode($response->getContent(), true);
+    expect($content)->toHaveKey('type', null);
+    expect($content)->toHaveKey('title', 'Not Acceptable');
+    expect($content)->toHaveKey('status', 406);
+    expect($content)->toHaveKey('detail');
+    expect($content['detail'])->toContain('API version 2 is not supported');
+    expect($content['detail'])->toContain('Supported versions: 1');
+});
+
+it('handles unsupported version before validating orderId parameter', function () {
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $request = new Request(); // Missing orderId, but unsupported version should take priority
+    $request->headers->set('Accept', 'application/json; version=5');
+
+    $response = $endpoint->handle($request);
+
+    // Should return 406 for unsupported version, not 400 for missing orderId
+    expect($response->getStatusCode())->toBe(406);
+
+    $content = json_decode($response->getContent(), true);
+    expect($content['status'])->toBe(406);
+    expect($content['detail'])->toContain('API version 5 is not supported');
+});

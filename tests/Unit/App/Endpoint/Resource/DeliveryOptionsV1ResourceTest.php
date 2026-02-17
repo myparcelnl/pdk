@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\App\Endpoint\Resource;
 
+use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
@@ -47,15 +48,26 @@ it('formats delivery options correctly', function () {
         ->toHaveKey('shipmentOptions')
         ->and($result['shipmentOptions'])
         ->toBeArray()
-        ->toContain('SIGNATURE')
-        ->toContain('ONLY_RECIPIENT')
-        ->toContain('LARGE_FORMAT')
-        ->toContain('AGE_CHECK')
-        ->toContain('INSURANCE')
-        ->not()->toContain('RETURN');
+        ->toHaveKey('signature')
+        ->toHaveKey('onlyRecipient')
+        ->toHaveKey('largeFormat')
+        ->toHaveKey('ageCheck')
+        ->toHaveKey('insurance')
+        ->not()->toHaveKey('return');
+
+    // Check that regular options are empty objects
+    expect($result['shipmentOptions']['signature'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['onlyRecipient'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['largeFormat'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['ageCheck'])->toBeInstanceOf(ArrayObject::class);
+
+    // Check that insurance has amount in micro units
+    expect($result['shipmentOptions']['insurance'])
+        ->toBeArray()
+        ->toHaveKey('amount', 50000 * 1000000);
 });
 
-it('returns empty array when no shipment options are enabled', function () {
+it('returns empty object when no shipment options are enabled', function () {
     $shipmentOptions = new ShipmentOptions([
         'signature' => TriStateService::DISABLED,
         'onlyRecipient' => TriStateService::DISABLED,
@@ -75,6 +87,49 @@ it('returns empty array when no shipment options are enabled', function () {
     expect($result['shipmentOptions'])
         ->toBeArray()
         ->toBeEmpty();
+});
+
+it('correctly formats insurance amount in micro units', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'insurance' => 100, // €100
+    ]);
+
+    $deliveryOptions = new DeliveryOptions([
+        'shipmentOptions' => $shipmentOptions,
+    ]);
+
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    expect($result['shipmentOptions'])
+        ->toHaveKey('insurance')
+        ->and($result['shipmentOptions']['insurance'])
+        ->toBeArray()
+        ->toHaveKey('amount', 100 * 1000000);
+});
+
+it('ignores inherited shipment options', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'signature' => TriStateService::INHERIT,
+        'onlyRecipient' => TriStateService::ENABLED,
+        'largeFormat' => TriStateService::INHERIT,
+        'insurance' => 50,
+    ]);
+
+    $deliveryOptions = new DeliveryOptions([
+        'shipmentOptions' => $shipmentOptions,
+    ]);
+
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    expect($result['shipmentOptions'])
+        ->toHaveKey('onlyRecipient')
+        ->toHaveKey('insurance')
+        ->not()->toHaveKey('signature')
+        ->not()->toHaveKey('largeFormat');
+
+    expect($result['shipmentOptions']['onlyRecipient'])->toBeInstanceOf(ArrayObject::class);
 });
 
 it('declares version 1', function () {
