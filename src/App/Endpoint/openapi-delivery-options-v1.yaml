@@ -63,10 +63,11 @@ paths:
                 packageType: "PACKAGE"
                 deliveryType: "EVENING_DELIVERY"
                 shipmentOptions:
-                  - "SIGNATURE"
-                  - "INSURANCE"
-                  - "SATURDAY_DELIVERY"
-                  - "ONLY_RECIPIENT"
+                  signature: {}
+                  insurance:
+                    amount: 50000000
+                  saturdayDelivery: {}
+                  onlyRecipient: {}
                 date: "2026-02-15T18:00:00+00:00"
                 pickupLocation: null
         '400':
@@ -174,31 +175,84 @@ components:
           $ref: '#/components/schemas/PickupLocation'
 
     ShipmentOptions:
-      type: array
-      description: Array of enabled shipment options in CONSTANT_CASE format
-      items:
-        type: string
-        enum:
-          - SIGNATURE
-          - ONLY_RECIPIENT
-          - RETURN
-          - LARGE_FORMAT
-          - AGE_CHECK
-          - HIDE_SENDER
-          - RECEIPT_CODE
-          - SAME_DAY_DELIVERY
-          - SATURDAY_DELIVERY
-          - TRACKED
-          - COLLECT
-          - FRESH_FOOD
-          - FROZEN
-          - INSURANCE
-          - LABEL_DESCRIPTION
-        description: Enabled shipment option name
+      type: object
+      description: Object containing enabled shipment options with camelCase property names as per ADR-0013
+      properties:
+        signature:
+          type: object
+          description: Signature required option - empty object when enabled
+          additionalProperties: false
+        onlyRecipient:
+          type: object
+          description: Only recipient option - empty object when enabled
+          additionalProperties: false
+        return:
+          type: object
+          description: Return option - empty object when enabled
+          additionalProperties: false
+        largeFormat:
+          type: object
+          description: Large format option - empty object when enabled
+          additionalProperties: false
+        ageCheck:
+          type: object
+          description: Age check option - empty object when enabled
+          additionalProperties: false
+        hideSender:
+          type: object
+          description: Hide sender option - empty object when enabled
+          additionalProperties: false
+        receiptCode:
+          type: object
+          description: Receipt code option - empty object when enabled
+          additionalProperties: false
+        sameDayDelivery:
+          type: object
+          description: Same day delivery option - empty object when enabled
+          additionalProperties: false
+        saturdayDelivery:
+          type: object
+          description: Saturday delivery option - empty object when enabled
+          additionalProperties: false
+        tracked:
+          type: object
+          description: Tracking option - empty object when enabled
+          additionalProperties: false
+        collect:
+          type: object
+          description: Collect option - empty object when enabled
+          additionalProperties: false
+        freshFood:
+          type: object
+          description: Fresh food option - empty object when enabled
+          additionalProperties: false
+        frozen:
+          type: object
+          description: Frozen option - empty object when enabled
+          additionalProperties: false
+        insurance:
+          type: object
+          description: Insurance option with amount in integer micro units (as per ADR-0014)
+          properties:
+            amount:
+              type: integer
+              description: Insurance amount in micro units (amount * 1000000)
+              minimum: 0
+              example: 50000000
+          required:
+            - amount
+          additionalProperties: false
+        labelDescription:
+          type: object
+          description: Label description option - empty object when enabled
+          additionalProperties: false
+      additionalProperties: false
       example:
-        - SIGNATURE
-        - INSURANCE
-        - SATURDAY_DELIVERY
+        signature: {}
+        insurance:
+          amount: 50000000
+        saturdayDelivery: {}
+        onlyRecipient: {}
 
     PickupLocation:
       type: object
