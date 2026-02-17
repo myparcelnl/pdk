@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint\Contract;
 
+use MyParcelNL\Pdk\App\Endpoint\ProblemDetails;
+use MyParcelNL\Pdk\App\Endpoint\Resource\ProblemDetailsV1Resource;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +19,24 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractEndpoint
 {
     /**
-     * Handle the endpoint request.
+     * Handle the endpoint request with automatic version detection and error handling.
+     * All version-related exceptions are handled automatically.
      */
-    abstract public function handle(Request $request): Response;
+    final public function handle(Request $request): Response
+    {
+        try {
+            $version = $this->detectVersion($request);
+            return $this->handleVersionedRequest($request, $version);
+        } catch (UnsupportedVersionException $exception) {
+            return $this->createUnsupportedVersionResponse($request, $exception);
+        }
+    }
+
+    /**
+     * Handle the actual endpoint logic with a validated API version.
+     * Concrete endpoints should implement their business logic here.
+     */
+    abstract protected function handleVersionedRequest(Request $request, int $version): Response;
 
     /**
      * Get all API versions supported by this endpoint.
@@ -48,6 +65,8 @@ abstract class AbstractEndpoint
 
     /**
      * Detect API version from request headers following ADR-0011.
+     *
+     * @throws UnsupportedVersionException When requested version is not supported
      */
     protected function detectVersion(Request $request): int
     {
@@ -56,6 +75,7 @@ abstract class AbstractEndpoint
         $contentTypeVersion = $this->extractVersionFromHeader($contentTypeHeader);
 
         if ($contentTypeVersion !== null) {
+            $this->validateSupportedVersion($contentTypeVersion);
             return $contentTypeVersion;
         }
 
@@ -63,7 +83,15 @@ abstract class AbstractEndpoint
         $acceptHeader = $request->headers->get('Accept', '');
         $acceptVersion = $this->extractVersionFromHeader($acceptHeader);
 
-        return $acceptVersion ?? 1; // Default to v1
+        if ($acceptVersion !== null) {
+            $this->validateSupportedVersion($acceptVersion);
+            return $acceptVersion;
+        }
+
+        // Default to v1 and validate it's supported
+        $defaultVersion = 1;
+        $this->validateSupportedVersion($defaultVersion);
+        return $defaultVersion;
     }
 
     /**
@@ -78,5 +106,47 @@ abstract class AbstractEndpoint
         }
 
         return null;
+    }
+
+    /**
+     * Validate that the requested version is supported by this endpoint.
+     *
+     * @throws UnsupportedVersionException When version is not supported
+     */
+    protected function validateSupportedVersion(int $version): void
+    {
+        $supportedVersions = $this->getSupportedVersions();
+
+        if (!in_array($version, $supportedVersions, true)) {
+            throw new UnsupportedVersionException(
+                sprintf(
+                    'API version %d is not supported. Supported versions: %s',
+                    $version,
+                    implode(', ', $supportedVersions)
+                ),
+                $version,
+                $supportedVersions
+            );
+        }
+    }
+
+    /**
+     * Create a 406 Not Acceptable response for unsupported API versions.
+     * As per ADR-0011, unsupported version requests must return HTTP 406.
+     */
+    protected function createUnsupportedVersionResponse(Request $request, UnsupportedVersionException $exception): Response
+    {
+        $supportedVersionsText = implode(', ', $exception->getSupportedVersions());
+        $detail = sprintf(
+            'API version %d is not supported. Supported versions: %s',
+            $exception->getRequestedVersion(),
+            $supportedVersionsText
+        );
+
+        $resource = new ProblemDetailsV1Resource(
+            new ProblemDetails(null, 'Not Acceptable', Response::HTTP_NOT_ACCEPTABLE, $detail)
+        );
+
+        return $resource->createResponse($request, Response::HTTP_NOT_ACCEPTABLE);
     }
 }
