@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint\Resource;
 
+use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Frontend\Form\Element\TriStateInput;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -50,21 +53,32 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
 
     /**
      * Format shipment options following API standards.
-     * Returns an array of enabled shipment option names in CONSTANT_CASE format.
+     * Returns an associative array with camelCase keys and values.
      *
      * We assume that inherited options were resolved before passing them here.
      */
     private static function formatShipmentOptions(ShipmentOptions $shipmentOptions): array
     {
-        return array_map(
-            fn($key) => Str::upper(Str::snake($key)), // convert key to CONSTANT_CASE
-            array_keys(
-                array_filter(
-                    $shipmentOptions->toArray(),
-                    fn($value) => $value && $value !== -1
-                )
-            ) // add only the keys and filter for truthy values, ignoring -1 inherited options
+        // Include only explcitly enabled options - we assume any inherited options were resolved before being passed here
+        $filteredOptions = array_filter(
+            $shipmentOptions->toArray(),
+            fn($value) => $value && $value !== TriStateService::INHERIT
         );
+
+        $formattedOptions = [];
+
+        foreach ($filteredOptions as $key => $value) {
+            if ($key === ShipmentOptions::INSURANCE) {
+                // Insurance amount converted to integer micro as per ADR-0014
+                $amount = is_numeric($value) ? (int) ($value * 1000000) : (int) $value;
+                $formattedOptions[$key] = ['amount' => $amount];
+            } else {
+                // Empty object as per ADR-0013
+                $formattedOptions[$key] = new ArrayObject();
+            }
+        }
+
+        return $formattedOptions;
     }
 
     /**
