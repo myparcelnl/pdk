@@ -1,249 +1,164 @@
 {
-    "multiCollo": false,
-    "id": 136510070,
-    "shopId": 93683,
-    "referenceIdentifier": "",
-    "barcode": "",
-    "carrier": {
-        "externalIdentifier": "DHL_FOR_YOU",
-        "id": 9,
-        "name": "DHL_FOR_YOU",
-        "enabled": true,
-        "isDefault": true,
-        "optional": false,
-        "primary": false,
-        "type": "main",
-        "inboundFeatures": {
-            "packageTypes": [
-                "PACKAGE"
-            ],
-            "deliveryTypes": [
-                "STANDARD_DELIVERY"
-            ],
-            "shipmentOptions": [
-                "SIGNATURE",
-                "RETURN",
-                "AGE_CHECK",
-                "ONLY_RECIPIENT",
-                "SAME_DAY_DELIVERY",
-                "LARGE_FORMAT"
-            ],
-            "metadata": {
-                "labelDescriptionLength": 45
-            }
-        },
-        "outboundFeatures": {
-            "packageTypes": [
-                "PACKAGE",
-                "MAILBOX",
-                "SMALL_PACKAGE"
-            ],
-            "deliveryTypes": [
-                "STANDARD_DELIVERY",
-                "PICKUP_DELIVERY"
-            ],
-            "deliveryCountries": [
-                "NL",
-                "BE"
-            ],
-            "pickupCountries": [
-                "NL",
-                "BE"
-            ],
-            "shipmentOptions": [
-                "AGE_CHECK",
-                "ONLY_RECIPIENT",
-                "SAME_DAY_DELIVERY",
-                "SIGNATURE",
-                "SATURDAY_DELIVERY",
-                "HIDE_SENDER",
-                "INSURANCE"
-            ],
-            "metadata": {
-                "labelDescriptionLength": 45,
-                "insuranceOptions": [
-                    0,
-                    50000,
-                    100000,
-                    150000,
-                    200000,
-                    250000,
-                    300000,
-                    350000,
-                    400000,
-                    450000,
-                    500000
-                ]
-            }
-        },
-        "deliveryOptions": {
-            "addressFields": [
-                "city",
-                "postalCode"
-            ],
-            "availableFeatures": [
-                "deliveryDaysWindow",
-                "dropOffDays",
-                "dropOffDelay"
-            ],
-            "allowFakeDelivery": false
-        }
+  "multiCollo": false,
+  "id": 136510070,
+  "shopId": 93683,
+  "referenceIdentifier": "",
+  "barcode": "",
+  "carrier": {
+    "externalIdentifier": "DHL_FOR_YOU",
+    "id": 9,
+    "name": "DHL_FOR_YOU",
+    "enabled": true,
+    "isDefault": true,
+    "optional": false,
+    "primary": false,
+    "type": "main",
+    "inboundFeatures": {
+      "packageTypes": ["PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY"],
+      "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+      "metadata": {
+        "labelDescriptionLength": 45
+      }
     },
-    "delayed": false,
-    "delivered": false,
+    "outboundFeatures": {
+      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
+      "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+      "deliveryCountries": ["NL", "BE"],
+      "pickupCountries": ["NL", "BE"],
+      "shipmentOptions": [
+        "AGE_CHECK",
+        "ONLY_RECIPIENT",
+        "SAME_DAY_DELIVERY",
+        "SIGNATURE",
+        "SATURDAY_DELIVERY",
+        "HIDE_SENDER",
+        "INSURANCE"
+      ],
+      "metadata": {
+        "labelDescriptionLength": 45,
+        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+      }
+    },
     "deliveryOptions": {
-        "carrier": {
-            "externalIdentifier": "DHL_FOR_YOU",
-            "id": 9,
-            "name": "DHL_FOR_YOU",
-            "enabled": true,
-            "isDefault": true,
-            "optional": false,
-            "primary": false,
-            "type": "main",
-            "inboundFeatures": {
-                "packageTypes": [
-                    "PACKAGE"
-                ],
-                "deliveryTypes": [
-                    "STANDARD_DELIVERY"
-                ],
-                "shipmentOptions": [
-                    "SIGNATURE",
-                    "RETURN",
-                    "AGE_CHECK",
-                    "ONLY_RECIPIENT",
-                    "SAME_DAY_DELIVERY",
-                    "LARGE_FORMAT"
-                ],
-                "metadata": {
-                    "labelDescriptionLength": 45
-                }
-            },
-            "outboundFeatures": {
-                "packageTypes": [
-                    "PACKAGE",
-                    "MAILBOX",
-                    "SMALL_PACKAGE"
-                ],
-                "deliveryTypes": [
-                    "STANDARD_DELIVERY",
-                    "PICKUP_DELIVERY"
-                ],
-                "deliveryCountries": [
-                    "NL",
-                    "BE"
-                ],
-                "pickupCountries": [
-                    "NL",
-                    "BE"
-                ],
-                "shipmentOptions": [
-                    "AGE_CHECK",
-                    "ONLY_RECIPIENT",
-                    "SAME_DAY_DELIVERY",
-                    "SIGNATURE",
-                    "SATURDAY_DELIVERY",
-                    "HIDE_SENDER",
-                    "INSURANCE"
-                ],
-                "metadata": {
-                    "labelDescriptionLength": 45,
-                    "insuranceOptions": [
-                        0,
-                        50000,
-                        100000,
-                        150000,
-                        200000,
-                        250000,
-                        300000,
-                        350000,
-                        400000,
-                        450000,
-                        500000
-                    ]
-                }
-            },
-            "deliveryOptions": {
-                "addressFields": [
-                    "city",
-                    "postalCode"
-                ],
-                "availableFeatures": [
-                    "deliveryDaysWindow",
-                    "dropOffDays",
-                    "dropOffDelay"
-                ],
-                "allowFakeDelivery": false
-            }
-        },
-        "labelAmount": 1,
-        "shipmentOptions": {
-            "labelDescription": "Vliegtuig",
-            "insurance": 0,
-            "ageCheck": 1,
-            "return": 1,
-            "hideSender": -1,
-            "largeFormat": 1,
-            "onlyRecipient": 1,
-            "receiptCode": -1,
-            "sameDayDelivery": 1,
-            "signature": 0,
-            "tracked": -1,
-            "collect": 0,
-            "excludeParcelLockers": -1,
-            "freshFood": -1,
-            "frozen": -1
-        },
-        "deliveryType": "standard",
-        "packageType": "package"
+      "addressFields": ["city", "postalCode"],
+      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+      "allowFakeDelivery": false
+    }
+  },
+  "delayed": false,
+  "delivered": false,
+  "deliveryOptions": {
+    "carrier": {
+      "externalIdentifier": "DHL_FOR_YOU",
+      "id": 9,
+      "name": "DHL_FOR_YOU",
+      "enabled": true,
+      "isDefault": true,
+      "optional": false,
+      "primary": false,
+      "type": "main",
+      "inboundFeatures": {
+        "packageTypes": ["PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY"],
+        "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
+        "metadata": {
+          "labelDescriptionLength": 45
+        }
+      },
+      "outboundFeatures": {
+        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
+        "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
+        "deliveryCountries": ["NL", "BE"],
+        "pickupCountries": ["NL", "BE"],
+        "shipmentOptions": [
+          "AGE_CHECK",
+          "ONLY_RECIPIENT",
+          "SAME_DAY_DELIVERY",
+          "SIGNATURE",
+          "SATURDAY_DELIVERY",
+          "HIDE_SENDER",
+          "INSURANCE"
+        ],
+        "metadata": {
+          "labelDescriptionLength": 45,
+          "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
+        }
+      },
+      "deliveryOptions": {
+        "addressFields": ["city", "postalCode"],
+        "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+        "allowFakeDelivery": false
+      }
     },
-    "dropOffPoint": {
-        "locationCode": "ed14eb91-7374-4dcc-a41d-34c0d3e45c01",
-        "locationName": "Instabox",
-        "cc": "NL",
-        "city": "Leiden",
-        "number": "2",
-        "numberSuffix": "H",
-        "postalCode": "2321 TD",
-        "street": "Telderskade"
+    "labelAmount": 1,
+    "shipmentOptions": {
+      "labelDescription": "Vliegtuig",
+      "insurance": 0,
+      "ageCheck": 1,
+      "return": 1,
+      "hideSender": -1,
+      "largeFormat": 1,
+      "onlyRecipient": 1,
+      "priorityDelivery": -1,
+      "receiptCode": -1,
+      "sameDayDelivery": 1,
+      "signature": 0,
+      "tracked": -1,
+      "collect": 0,
+      "excludeParcelLockers": -1,
+      "freshFood": -1,
+      "frozen": -1
     },
-    "hidden": false,
-    "isReturn": false,
-    "partnerTrackTraces": [],
-    "physicalProperties": {
-        "weight": 5000
-    },
-    "price": {
-        "amount": 1920,
-        "currency": "EUR"
-    },
-    "recipient": {
-        "cc": "NL",
-        "city": "Wenum Wiesel",
-        "number": "12",
-        "numberSuffix": "c",
-        "postalCode": "7345AB",
-        "street": "Wieselsedwarsweg",
-        "email": "test@webshopje.nl",
-        "phone": "0172765435",
-        "person": "Epke Zonderland"
-    },
-    "sender": {
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "number": "31",
-        "postalCode": "2132JE",
-        "street": "Antareslaan",
-        "email": "mrparcel@myparcel.nl",
-        "phone": "0606607834",
-        "person": "Mister Parcel",
-        "company": "MyParcel"
-    },
-    "shipmentType": 1,
-    "status": 1,
-    "created": "2022-07-13 11:56:18",
-    "createdBy": 82444,
-    "modified": "2022-07-13 11:56:18",
-    "modifiedBy": 82444
+    "deliveryType": "standard",
+    "packageType": "package"
+  },
+  "dropOffPoint": {
+    "locationCode": "ed14eb91-7374-4dcc-a41d-34c0d3e45c01",
+    "locationName": "Instabox",
+    "cc": "NL",
+    "city": "Leiden",
+    "number": "2",
+    "numberSuffix": "H",
+    "postalCode": "2321 TD",
+    "street": "Telderskade"
+  },
+  "hidden": false,
+  "isReturn": false,
+  "partnerTrackTraces": [],
+  "physicalProperties": {
+    "weight": 5000
+  },
+  "price": {
+    "amount": 1920,
+    "currency": "EUR"
+  },
+  "recipient": {
+    "cc": "NL",
+    "city": "Wenum Wiesel",
+    "number": "12",
+    "numberSuffix": "c",
+    "postalCode": "7345AB",
+    "street": "Wieselsedwarsweg",
+    "email": "test@webshopje.nl",
+    "phone": "0172765435",
+    "person": "Epke Zonderland"
+  },
+  "sender": {
+    "cc": "NL",
+    "city": "Hoofddorp",
+    "number": "31",
+    "postalCode": "2132JE",
+    "street": "Antareslaan",
+    "email": "mrparcel@myparcel.nl",
+    "phone": "0606607834",
+    "person": "Mister Parcel",
+    "company": "MyParcel"
+  },
+  "shipmentType": 1,
+  "status": 1,
+  "created": "2022-07-13 11:56:18",
+  "createdBy": 82444,
+  "modified": "2022-07-13 11:56:18",
+  "modifiedBy": 82444
 }

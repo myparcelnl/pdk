@@ -33,6 +33,7 @@ it('can create instance from pdk delivery options', function () {
         'hideSender'       => true,
         'largeFormat'      => true,
         'onlyRecipient'    => true,
+        'priorityDelivery' => true,
         'return'           => true,
         'sameDayDelivery'  => true,
         'saturdayDelivery' => null,

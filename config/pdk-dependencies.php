@@ -53,7 +53,7 @@ return [
         $scriptService = Pdk::get(ScriptServiceInterface::class);
 
         return $scriptService->createCdnUrl(
-            '@myparcel/delivery-options',
+            '@myparcel-dev/delivery-options',
             Pdk::get('deliveryOptionsVersion'),
             'dist/myparcel.js'
         );
@@ -64,7 +64,7 @@ return [
         $scriptService = Pdk::get(ScriptServiceInterface::class);
 
         return $scriptService->createCdnUrl(
-            '@myparcel/delivery-options',
+            '@myparcel-dev/delivery-options',
             Pdk::get('deliveryOptionsVersion'),
             'dist/myparcel.lib.js'
         );
@@ -75,7 +75,7 @@ return [
         $scriptService = Pdk::get(ScriptServiceInterface::class);
 
         return $scriptService->createCdnUrl(
-            '@myparcel/delivery-options',
+            '@myparcel-dev/delivery-options',
             Pdk::get('deliveryOptionsVersion'),
             'dist/style.css'
         );

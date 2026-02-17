@@ -14,7 +14,7 @@ usesShared(new UsesMockPdkInstance());
 it('gets configuration factory values', function (string $key, $value) {
     expect(Pdk::get($key))->toBe($value);
 })->with([
-    ['deliveryOptionsCdnUrlCss', 'https://cdn.jsdelivr.net/npm/@myparcel/delivery-options@6/dist/style.css'],
-    ['deliveryOptionsCdnUrlJs', 'https://cdn.jsdelivr.net/npm/@myparcel/delivery-options@6/dist/myparcel.js'],
-    ['deliveryOptionsCdnUrlJsLib', 'https://cdn.jsdelivr.net/npm/@myparcel/delivery-options@6/dist/myparcel.lib.js'],
+    ['deliveryOptionsCdnUrlCss', 'https://cdn.jsdelivr.net/npm/@myparcel-dev/delivery-options@6/dist/style.css'],
+    ['deliveryOptionsCdnUrlJs', 'https://cdn.jsdelivr.net/npm/@myparcel-dev/delivery-options@6/dist/myparcel.js'],
+    ['deliveryOptionsCdnUrlJsLib', 'https://cdn.jsdelivr.net/npm/@myparcel-dev/delivery-options@6/dist/myparcel.lib.js'],
 ]);

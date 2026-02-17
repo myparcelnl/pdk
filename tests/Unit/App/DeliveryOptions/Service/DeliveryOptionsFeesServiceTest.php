@@ -30,6 +30,7 @@ usesShared(
 
                         CarrierSettings::PRICE_ONLY_RECIPIENT => 0.7,
                         CarrierSettings::PRICE_SIGNATURE      => 1.1,
+                        CarrierSettings::PRICE_PRIORITY_DELIVERY => 2.2,
 
                         CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP => 3.6,
                         CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX       => 4.8,
@@ -140,6 +141,26 @@ it('calculates fees based on delivery options', function (array $input, array $e
                 'id'          => 'signature',
                 'translation' => 'delivery_options_signature_title',
                 'amount'      => 1.1,
+            ],
+        ],
+    ],
+
+    'priority delivery' => [
+        'input'       => [
+            'shipmentOptions' => [
+                ShipmentOptions::PRIORITY_DELIVERY => true,
+            ],
+        ],
+        'expectation' => [
+            [
+                'id'          => 'delivery_type_standard',
+                'translation' => 'delivery_options_delivery_type_standard_title',
+                'amount'      => 4.5,
+            ],
+            [
+                'id'          => 'priority_delivery',
+                'translation' => 'delivery_options_priority_delivery_title',
+                'amount'      => 2.2,
             ],
         ],
     ],

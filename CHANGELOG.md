@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/myparcelnl/pdk/compare/v3.2.0...v3.2.1) (2026-02-13)
+
+
+### :bug: Bug Fixes
+
+* default disable disable deliveryoptions product settings ([#421](https://github.com/myparcelnl/pdk/issues/421)) ([5041708](https://github.com/myparcelnl/pdk/commit/50417081064bd5d067101843377ad76df4795dcc))
+
+## [3.2.0](https://github.com/myparcelnl/pdk/compare/v3.1.2...v3.2.0) (2026-02-06)
+
+
+### :sparkles: New Features
+
+* replace platform references with proposition terminology ([#398](https://github.com/myparcelnl/pdk/issues/398)) ([5d2b989](https://github.com/myparcelnl/pdk/commit/5d2b9891766c21630343335b1249af4e3a12f2d5))
+* **shipment-options:** add priority delivery ([#413](https://github.com/myparcelnl/pdk/issues/413)) ([2de5edc](https://github.com/myparcelnl/pdk/commit/2de5edcf2615f0ac354eec46c1d0635e91f5d32d))
+
+
+### :bug: Bug Fixes
+
+* prevent deprecation warnings for address1/address2 fields ([#419](https://github.com/myparcelnl/pdk/issues/419)) ([ec86f8d](https://github.com/myparcelnl/pdk/commit/ec86f8d04817c79b3a37b61735dc09c8c26b7fb1))
+
+## [3.1.2](https://github.com/myparcelnl/pdk/compare/v3.1.1...v3.1.2) (2026-02-03)
+
+
+### :bug: Bug Fixes
+
+* use latest delivery options ([#420](https://github.com/myparcelnl/pdk/issues/420)) ([0f7adb1](https://github.com/myparcelnl/pdk/commit/0f7adb1d2f286d99cf9aac87fd0fa6f38af64e96))
+
+## [3.1.1](https://github.com/myparcelnl/pdk/compare/v3.1.0...v3.1.1) (2026-01-30)
+
+
+### :bug: Bug Fixes
+
+* **proposition:** fix proposition not switching when updating account ([#418](https://github.com/myparcelnl/pdk/issues/418)) ([5a41526](https://github.com/myparcelnl/pdk/commit/5a415264fa4a44301158265c2284f140a0319475))
+
+## [3.1.0](https://github.com/myparcelnl/pdk/compare/v3.0.1...v3.1.0) (2026-01-27)
+
+
+### :sparkles: New Features
+
+* allow evening delivery dhlforyou ([#414](https://github.com/myparcelnl/pdk/issues/414)) ([0788ba8](https://github.com/myparcelnl/pdk/commit/0788ba88f51d93ea0ac39e4a6ef9c11337f41048))
+
+## [3.0.1](https://github.com/myparcelnl/pdk/compare/v3.0.0...v3.0.1) (2026-01-23)
+
+
+### :bug: Bug Fixes
+
+* distribute weight when multiple shipments ([#412](https://github.com/myparcelnl/pdk/issues/412)) ([a8e0a5f](https://github.com/myparcelnl/pdk/commit/a8e0a5ffaeee2ce2c3cd4915051224801274bcfb))
+
 ## [3.0.0](https://github.com/myparcelnl/pdk/compare/v2.68.0...v3.0.0) (2026-01-19)
 
 
