@@ -87,7 +87,7 @@
           "active": true,
           "subscription": -1,
           "packageTypes": ["package", "mailbox", "package_small"],
-          "deliveryTypes": ["standard", "pickup"],
+          "deliveryTypes": ["standard", "evening", "pickup"],
           "deliveryCountries": ["NL", "BE"],
           "pickupCountries": ["NL", "BE"],
           "smallPackagePickupCountries": ["NL", "BE"],
