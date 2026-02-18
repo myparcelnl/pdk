@@ -16,7 +16,6 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleAclResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
@@ -31,12 +30,10 @@ usesShared(new UsesMockPdkInstance(), new UsesApiMock());
 function executeUpdateAccount(
     ?array $settings,
     array  $accounts = null,
-    array  $carrierOptions = null
 ): Response {
     MockApi::enqueue(
         new ExampleGetAccountsResponse($accounts),
         new ExampleGetCarrierConfigurationResponse(),
-        new ExampleGetCarrierOptionsResponse($carrierOptions),
         new ExampleAclResponse()
     );
 
@@ -116,6 +113,7 @@ it('maps carriers correctly', function () {
         ]);
 });
 
+// TODO: remove/replace
 it('maps carriers correctly with custom postnl contract', function () {
     executeUpdateAccount(['apiKey' => 'test-api-key'], null, [
         // This is a lot like what the API returns in case of a PostNL contract.
@@ -183,7 +181,7 @@ it('maps carriers correctly with custom postnl contract', function () {
     expect($externalIdentifiers)->toBe(['POSTNL:23991']);
 });
 
-it('updates validity of api key', function(?string $apiKey, bool $expectedValidity) {
+it('updates validity of api key', function (?string $apiKey, bool $expectedValidity) {
     executeUpdateAccount(['apiKey' => $apiKey]);
 
     $account = Settings::all()->account;

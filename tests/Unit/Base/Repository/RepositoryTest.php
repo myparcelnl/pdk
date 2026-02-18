@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -10,13 +11,11 @@ use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
-use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierOptionsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
@@ -58,13 +57,6 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
         ShopCarrierConfiguration::class,
         'getCarrierConfiguration',
         ['shopId' => 3, 'carrier' => 'postnl'],
-    ],
-    [
-        ExampleGetCarrierOptionsResponse::class,
-        ShopCarrierOptionsRepository::class,
-        Collection::class,
-        'getCarrierOptions',
-        ['shopId' => 3],
     ],
 ]);
 
