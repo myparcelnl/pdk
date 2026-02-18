@@ -1,0 +1,391 @@
+openapi: 3.0.3
+info:
+  title: PDK Delivery Options API
+  description: |
+    API for retrieving order delivery options from a plugin.
+
+    This API uses header-based versioning following ADR-0011. Specify the version using:
+    - `Content-Type: application/json; version=1` (takes precedence)
+    - `Accept: application/json; version=1` (fallback)
+
+    The endpoint path may differ per plugin implementation. The parameters, request, and response structures remain consistent.
+
+    If no version is specified, defaults to v1.
+  version: 1.0.0
+  contact:
+    name: MyParcel Development Team
+    url: https://github.com/myparcelnl/pdk
+
+servers:
+  - url: https://example.com/api
+    description: Production server (example)
+  - url: https://staging.example.com/api
+    description: Staging server (example)
+
+paths:
+  /delivery-options:
+    get:
+      summary: Get delivery options for an order
+      description: |
+        Retrieves the delivery options for a specific order by order ID provided as a query parameter.
+      operationId: getDeliveryOptions
+      parameters:
+        - name: orderId
+          in: query
+          description: The order ID as set in the webshop to retrieve delivery options for
+          required: true
+          schema:
+            type: string
+            example: "12345"
+        - name: Content-Type
+          in: header
+          description: Content type with optional version parameter
+          schema:
+            type: string
+            default: "application/json; version=1"
+            example: "application/json; version=1"
+        - name: Accept
+          in: header
+          description: Accept header with optional version parameter (fallback if Content-Type version not specified)
+          schema:
+            type: string
+            default: "application/json; version=1"
+            example: "application/json; version=1"
+      responses:
+        '200':
+          description: Delivery options retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryOptions'
+              example:
+                carrier: "POSTNL"
+                packageType: "PACKAGE"
+                deliveryType: "EVENING_DELIVERY"
+                shipmentOptions:
+                  signature: {}
+                  insurance:
+                    amount: 50000000
+                  saturdayDelivery: {}
+                  onlyRecipient: {}
+                date: "2026-02-15T18:00:00+00:00"
+                pickupLocation: null
+        '400':
+          description: Validation error - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              example:
+                type: null
+                title: "Invalid Request"
+                status: 400
+                detail: "Request validation failed: orderId"
+        '404':
+          description: Order or delivery options not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                orderNotFound:
+                  summary: Order not found
+                  value:
+                    type: null
+                    title: "Not Found"
+                    status: 404
+                    detail: "Order not found for the specified orderId"
+                deliveryOptionsNotFound:
+                  summary: Delivery options not found
+                  value:
+                    type: null
+                    title: "Not Found"
+                    status: 404
+                    detail: "Delivery options not found for the specified order"
+        '406':
+          description: Not Acceptable - unsupported API version requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                type: null
+                title: "Not Acceptable"
+                status: 406
+                detail: "API version 2 is not supported. Supported versions: 1"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                type: null
+                title: "Internal Server Error"
+                status: 500
+                detail: "An unexpected error occurred while processing the request"
+
+components:
+  schemas:
+    DeliveryOptions:
+      type: object
+      properties:
+        carrier:
+          type: string
+          nullable: true
+          description: The carrier name in CONSTANT_CASE format
+          enum:
+            - POSTNL
+            - BPOST
+            - CHEAP_CARGO
+            - DPD
+            - INSTABOX
+            - DHL
+            - BOL
+            - UPS
+            - DHL_FOR_YOU
+            - DHL_PARCEL_CONNECT
+            - DHL_EUROPLUS
+            - UPS_STANDARD
+            - UPS_EXPRESS_SAVER
+            - GLS
+            - BRT
+            - TRUNKRS
+          example: "POSTNL"
+        packageType:
+          type: string
+          nullable: true
+          description: The package type in CONSTANT_CASE format
+          enum:
+            - PACKAGE
+            - MAILBOX
+            - DIGITAL_STAMP
+            - SMALL_PACKAGE
+            - LETTER
+          example: "PACKAGE"
+        deliveryType:
+          type: string
+          nullable: true
+          description: The delivery type in CONSTANT_CASE format
+          enum:
+            - STANDARD_DELIVERY
+            - MORNING_DELIVERY
+            - EVENING_DELIVERY
+            - PICKUP_DELIVERY
+            - EXPRESS_DELIVERY
+          example: "STANDARD_DELIVERY"
+        shipmentOptions:
+          $ref: '#/components/schemas/ShipmentOptions'
+        date:
+          type: string
+          format: date-time
+          nullable: true
+          description: The delivery date and time in ISO 8601 format with timezone
+          example: "2026-02-15T18:00:00+00:00"
+        pickupLocation:
+          $ref: '#/components/schemas/PickupLocation'
+
+    ShipmentOptions:
+      type: object
+      description: Object containing enabled shipment options with camelCase property names as per ADR-0013
+      properties:
+        signature:
+          type: object
+          description: Signature required option - empty object when enabled
+          additionalProperties: false
+        onlyRecipient:
+          type: object
+          description: Only recipient option - empty object when enabled
+          additionalProperties: false
+        return:
+          type: object
+          description: Return option - empty object when enabled
+          additionalProperties: false
+        largeFormat:
+          type: object
+          description: Large format option - empty object when enabled
+          additionalProperties: false
+        ageCheck:
+          type: object
+          description: Age check option - empty object when enabled
+          additionalProperties: false
+        hideSender:
+          type: object
+          description: Hide sender option - empty object when enabled
+          additionalProperties: false
+        receiptCode:
+          type: object
+          description: Receipt code option - empty object when enabled
+          additionalProperties: false
+        sameDayDelivery:
+          type: object
+          description: Same day delivery option - empty object when enabled
+          additionalProperties: false
+        saturdayDelivery:
+          type: object
+          description: Saturday delivery option - empty object when enabled
+          additionalProperties: false
+        tracked:
+          type: object
+          description: Tracking option - empty object when enabled
+          additionalProperties: false
+        collect:
+          type: object
+          description: Collect option - empty object when enabled
+          additionalProperties: false
+        freshFood:
+          type: object
+          description: Fresh food option - empty object when enabled
+          additionalProperties: false
+        frozen:
+          type: object
+          description: Frozen option - empty object when enabled
+          additionalProperties: false
+        insurance:
+          type: object
+          description: Insurance option with amount in integer micro units (as per ADR-0014)
+          properties:
+            amount:
+              type: integer
+              description: Insurance amount in micro units (amount * 1000000)
+              minimum: 0
+              example: 50000000
+          required:
+            - amount
+          additionalProperties: false
+        labelDescription:
+          type: object
+          description: Label description option - empty object when enabled
+          additionalProperties: false
+      additionalProperties: false
+      example:
+        signature: {}
+        insurance:
+          amount: 50000000
+        saturdayDelivery: {}
+        onlyRecipient: {}
+
+    PickupLocation:
+      type: object
+      nullable: true
+      description: Pickup location details
+      properties:
+        locationCode:
+          type: string
+          description: Unique location code
+          example: "NL-12345"
+        locationName:
+          type: string
+          description: Name of the pickup location
+          example: "Albert Heijn Hoofdstraat"
+        retailNetworkId:
+          type: string
+          description: Retail network identifier
+          example: "PNPNL-01"
+        address:
+          $ref: '#/components/schemas/Address'
+
+    Address:
+      type: object
+      description: Address information
+      properties:
+        street:
+          type: string
+          description: Street name
+          example: "Hoofdstraat"
+        number:
+          type: string
+          description: Street number
+          example: "123"
+        numberSuffix:
+          type: string
+          nullable: true
+          description: Street number suffix
+          example: "A"
+        postalCode:
+          type: string
+          description: Postal code
+          example: "1234AB"
+        boxNumber:
+          type: string
+          nullable: true
+          description: Box number (for Belgian addresses)
+          example: "B"
+        city:
+          type: string
+          description: City name
+          example: "Amsterdam"
+        cc:
+          type: string
+          description: Country code (ISO 3166-1 alpha-2)
+          example: "NL"
+        state:
+          type: string
+          nullable: true
+          description: State or province
+          example: "North Holland"
+        region:
+          type: string
+          nullable: true
+          description: Region
+          example: "Randstad"
+
+    Error:
+      type: object
+      description: Standard error response following RFC 9457 Problem Details for HTTP APIs
+      properties:
+        type:
+          type: string
+          format: uri
+          nullable: true
+          description: A URI reference that identifies the problem type (nullable)
+          example: null
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type
+          example: "Delivery Options Error"
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 500
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence
+          example: "An unexpected error occurred while processing the request"
+
+    ValidationError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+
+  responses:
+    ValidationError:
+      description: Validation error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotAcceptable:
+      description: Not Acceptable - unsupported API version requested
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+tags:
+  - name: Delivery Options
+    description: Operations for retrieving order delivery options

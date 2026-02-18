@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
@@ -81,6 +82,7 @@ return [
             new OnlyRecipientDefinition(),
             new PriorityDeliveryDefinition(),
             new SameDayDeliveryDefinition(),
+            new SaturdayDeliveryDefinition(),
             new SignatureDefinition(),
             new TrackedDefinition(),
             new ReceiptCodeDefinition(),

@@ -19,7 +19,7 @@ class PdkEndpointException extends Exception
      * @param  int             $statusCode
      * @param  \Throwable|null $previous
      */
-    public function __construct(string $message, int $statusCode = 0, Throwable $previous = null)
+    public function __construct(string $message, int $statusCode = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->setStatusCode($statusCode);

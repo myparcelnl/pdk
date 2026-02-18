@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -81,6 +82,7 @@ it('instantiates shipment options', function () {
             'priorityDelivery' => TriStateService::ENABLED,
             'frozen'           => TriStateService::DISABLED,
             'freshFood'        => TriStateService::DISABLED,
+            'saturdayDelivery' => TriStateService::INHERIT
         ]);
 });
 

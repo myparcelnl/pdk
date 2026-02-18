@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>         $excludeParcelLockers
  * @property int<-1|0|1>         $freshFood
  * @property int<-1|0|1>         $frozen
+ * @property int<-1|0|1>         $saturdayDelivery
  */
 class ShipmentOptions extends Model
 {
@@ -63,6 +64,8 @@ class ShipmentOptions extends Model
         self::SIGNATURE,
         self::TRACKED,
         self::COLLECT,
+        self::FRESH_FOOD,
+        self::FROZEN,
         self::SATURDAY_DELIVERY,
         self::MONDAY_DELIVERY,
     ];
@@ -84,6 +87,7 @@ class ShipmentOptions extends Model
         self::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
         self::FRESH_FOOD        => TriStateService::INHERIT,
         self::FROZEN            => TriStateService::INHERIT,
+        self::SATURDAY_DELIVERY => TriStateService::INHERIT,
     ];
 
     protected $casts      = [
@@ -103,5 +107,6 @@ class ShipmentOptions extends Model
         self::EXCLUDE_PARCEL_LOCKERS => TriStateService::TYPE_STRICT,
         self::FRESH_FOOD        => TriStateService::TYPE_STRICT,
         self::FROZEN            => TriStateService::TYPE_STRICT,
+        self::SATURDAY_DELIVERY => TriStateService::TYPE_STRICT,
     ];
 }
