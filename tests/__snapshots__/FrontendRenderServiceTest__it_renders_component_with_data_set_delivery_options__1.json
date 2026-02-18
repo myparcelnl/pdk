@@ -22,74 +22,28 @@
           "name": "postnl",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package",
-            "mailbox",
-            "letter",
-            "digital_stamp",
-            "package_small"
-          ],
-          "deliveryTypes": [
-            "morning",
-            "standard",
-            "evening",
-            "pickup"
-          ],
-          "deliveryCountries": [
-            "NL",
-            "BE"
-          ],
-          "pickupCountries": [
-            "NL",
-            "BE",
-            "DK",
-            "SE",
-            "DE"
-          ],
-          "smallPackagePickupCountries": [
-            "NL",
-            "BE"
-          ],
+          "packageTypes": ["package", "mailbox", "letter", "digital_stamp", "package_small"],
+          "deliveryTypes": ["morning", "standard", "evening", "pickup"],
+          "deliveryCountries": ["NL", "BE"],
+          "pickupCountries": ["NL", "BE", "DK", "SE", "DE"],
+          "smallPackagePickupCountries": ["NL", "BE"],
           "fakeDelivery": true,
           "shipmentOptionsPerPackageType": {
-            "package": [
-              "only_recipient",
-              "signature"
-            ],
-            "mailbox": [
-              "priority_delivery"
-            ],
+            "package": ["only_recipient", "signature"],
+            "mailbox": ["priority_delivery"],
             "letter": [],
             "digital_stamp": [],
-            "package_small": [
-              "only_recipient",
-              "signature"
-            ]
+            "package_small": ["only_recipient", "signature"]
           },
-          "features": [
-            "deliveryDaysWindow",
-            "dropOffDays",
-            "dropOffDelay",
-            "pickupMapAllowLoadMore"
-          ],
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ]
+          "features": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay", "pickupMapAllowLoadMore"],
+          "addressFields": ["postalCode", "street", "city"]
         },
         {
           "name": "dpd",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package",
-            "mailbox"
-          ],
-          "deliveryTypes": [
-            "standard",
-            "pickup"
-          ],
+          "packageTypes": ["package", "mailbox"],
+          "deliveryTypes": ["standard", "pickup"],
           "deliveryCountries": [
             "AT",
             "BE",
@@ -141,42 +95,18 @@
           "shipmentOptionsPerPackageType": {
             "package": []
           },
-          "features": [
-            "dropOffDays",
-            "dropOffDelay"
-          ],
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ]
+          "features": ["dropOffDays", "dropOffDelay"],
+          "addressFields": ["postalCode", "street", "city"]
         },
         {
           "name": "dhlforyou",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package",
-            "mailbox",
-            "package_small"
-          ],
-          "deliveryTypes": [
-            "standard",
-            "evening",
-            "pickup"
-          ],
-          "deliveryCountries": [
-            "NL",
-            "BE"
-          ],
-          "pickupCountries": [
-            "NL",
-            "BE"
-          ],
-          "smallPackagePickupCountries": [
-            "NL",
-            "BE"
-          ],
+          "packageTypes": ["package", "mailbox", "package_small"],
+          "deliveryTypes": ["standard", "evening", "pickup"],
+          "deliveryCountries": ["NL", "BE"],
+          "pickupCountries": ["NL", "BE"],
+          "smallPackagePickupCountries": ["NL", "BE"],
           "shipmentOptionsPerPackageType": {
             "package": [
               "age_check",
@@ -188,108 +118,51 @@
               "insurance"
             ]
           },
-          "features": [
-            "deliveryDaysWindow",
-            "dropOffDays",
-            "dropOffDelay"
-          ],
-          "addressFields": [
-            "city",
-            "postalCode"
-          ]
+          "features": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
+          "addressFields": ["city", "postalCode"]
         },
         {
           "name": "dhlparcelconnect",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package"
-          ],
-          "deliveryTypes": [
-            "standard",
-            "pickup"
-          ],
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard", "pickup"],
           "shipmentOptionsPerPackageType": {
-            "package": [
-              "signature"
-            ]
+            "package": ["signature"]
           }
         },
         {
           "name": "dhleuroplus",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package"
-          ],
-          "deliveryTypes": [
-            "standard"
-          ],
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard"],
           "shipmentOptionsPerPackageType": {
-            "package": [
-              "signature",
-              "saturday_delivery",
-              "hide_sender",
-              "insurance"
-            ]
+            "package": ["signature", "saturday_delivery", "hide_sender", "insurance"]
           }
         },
         {
           "name": "upsstandard",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package"
-          ],
-          "deliveryTypes": [
-            "standard",
-            "pickup"
-          ],
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard", "pickup"],
           "shipmentOptionsPerPackageType": {
-            "package": [
-              "age_check",
-              "only_recipient",
-              "return",
-              "signature",
-              "collect",
-              "insurance"
-            ]
+            "package": ["age_check", "only_recipient", "return", "signature", "collect", "insurance"]
           },
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ]
+          "addressFields": ["postalCode", "street", "city"]
         },
         {
           "name": "upsexpresssaver",
           "active": true,
           "subscription": -1,
-          "packageTypes": [
-            "package"
-          ],
-          "deliveryTypes": [
-            "express",
-            "pickup"
-          ],
+          "packageTypes": ["package"],
+          "deliveryTypes": ["express", "pickup"],
           "shipmentOptionsPerPackageType": {
-            "package": [
-              "age_check",
-              "only_recipient",
-              "return",
-              "signature",
-              "collect",
-              "insurance"
-            ]
+            "package": ["age_check", "only_recipient", "return", "signature", "collect", "insurance"]
           },
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ],
-          "unsupportedParameters": [
-            "package_type"
-          ]
+          "addressFields": ["postalCode", "street", "city"],
+          "unsupportedParameters": ["package_type"]
         }
       ]
     },
@@ -333,6 +206,17 @@
             "property": "validate",
             "responseProperty": null
           },
+          "proxyCapabilities": {
+            "body": null,
+            "headers": [],
+            "method": "GET",
+            "parameters": {
+              "action": "proxyCapabilities"
+            },
+            "path": "",
+            "property": "capabilities",
+            "responseProperty": null
+          },
           "fetchContext": {
             "body": null,
             "headers": [],
@@ -350,10 +234,7 @@
       "hasDeliveryOptions": false,
       "hiddenInputName": "pest_checkout_data",
       "checkoutAddressHiddenInputName": "pest_checkout_address",
-      "countriesWithSeparateAddressFields": [
-        "NL",
-        "BE"
-      ],
+      "countriesWithSeparateAddressFields": ["NL", "BE"],
       "carriersWithTaxFields": [],
       "hasAddressWidget": false
     },
