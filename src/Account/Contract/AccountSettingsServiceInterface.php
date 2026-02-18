@@ -17,12 +17,6 @@ interface AccountSettingsServiceInterface
 
     /**
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     * @deprecated use getCarriers()
-     */
-    public function getCarrierOptions(): CarrierCollection;
-
-    /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection;
 
