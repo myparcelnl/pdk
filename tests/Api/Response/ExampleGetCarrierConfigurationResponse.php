@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Api\Response;
 
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
+// TODO: Restore and/or document
 class ExampleGetCarrierConfigurationResponse extends ExampleJsonResponse
 {
     /**

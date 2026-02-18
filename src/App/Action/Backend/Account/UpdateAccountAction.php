@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Account;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
-use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
@@ -34,11 +33,6 @@ class UpdateAccountAction implements ActionInterface
     protected $carrierConfigurationRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository
-     */
-    protected $carrierOptionsRepository;
-
-    /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
     protected $pdkAccountRepository;
@@ -56,13 +50,11 @@ class UpdateAccountAction implements ActionInterface
      */
     public function __construct(
         ShopCarrierConfigurationRepository $carrierConfigurationRepository,
-        ShopCarrierOptionsRepository       $carrierOptionsRepository,
         PdkSettingsRepositoryInterface     $pdkSettingsRepository,
         PdkAccountRepositoryInterface      $pdkAccountRepository,
         AccountRepository                  $accountRepository
     ) {
         $this->carrierConfigurationRepository = $carrierConfigurationRepository;
-        $this->carrierOptionsRepository       = $carrierOptionsRepository;
         $this->pdkSettingsRepository          = $pdkSettingsRepository;
         $this->pdkAccountRepository           = $pdkAccountRepository;
         $this->accountRepository              = $accountRepository;
@@ -98,10 +90,9 @@ class UpdateAccountAction implements ActionInterface
      */
     protected function fillAccount(Account $account): void
     {
-        $shop = $account->shops->first();
-
-        $shop->carrierConfigurations = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
-        $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
+        // @TODO: Replace with (cached) contract definitions call via SDK (does not need shop)
+        // $shop->carrierConfigurations = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
+        // $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
     }
 
     /**

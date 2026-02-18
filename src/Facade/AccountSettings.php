@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 
 /**
  * @method static null|Account getAccount()
- * @method static CarrierCollection getCarrierOptions()
  * @method static CarrierCollection getCarriers()
  * @method static null|Shop getShop()
  * @method static bool hasCarrier(string $name)
