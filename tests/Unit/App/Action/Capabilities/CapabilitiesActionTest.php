@@ -5,32 +5,22 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\App\Action\Capabilities;
 
 use Mockery;
+use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
+use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Handler\CorsHandler;
+use MyParcelNL\Pdk\Api\Request\Request as ApiRequest;
+use MyParcelNL\Pdk\Api\Response\CapabilitiesResponse as ProxyCapabilitiesResponse;
+use MyParcelNL\Pdk\Api\Service\CapabilitiesApiService;
 use MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
-use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
-use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-beforeEach(function () {
-    TestBootstrapper::hasApiKey('test-api-key');
-});
-
 it('handles OPTIONS preflight request', function () {
-    if (! interface_exists(CapabilitiesServiceInterface::class) ||
-        ! class_exists(CapabilitiesRequest::class) ||
-        ! class_exists(CapabilitiesResponse::class)) {
-        $this->markTestSkipped('SDK capabilities classes are unavailable. Install SDK v11 branch first.');
-    }
-
     $request = Request::create('/', 'OPTIONS');
 
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
@@ -40,8 +30,8 @@ it('handles OPTIONS preflight request', function () {
 
     Pdk::set(CorsHandler::class, $mockCorsHandler);
 
-    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
-    $mockService->shouldNotReceive('get');
+    $mockService = Mockery::mock(CapabilitiesApiService::class);
+    $mockService->shouldNotReceive('doRequest');
 
     $action = new CapabilitiesAction($mockService);
     $response = $action->handle($request);
@@ -49,15 +39,9 @@ it('handles OPTIONS preflight request', function () {
     expect($response->getStatusCode())->toBe(204);
 });
 
-it('builds sdk capabilities request from incoming payload', function () {
-    if (! interface_exists(CapabilitiesServiceInterface::class) ||
-        ! class_exists(CapabilitiesRequest::class) ||
-        ! class_exists(CapabilitiesResponse::class)) {
-        $this->markTestSkipped('SDK capabilities classes are unavailable. Install SDK v11 branch first.');
-    }
-
+it('proxies request body and query params to capabilities endpoint', function () {
     $request = Request::create(
-        '/?action=proxyCapabilities&shopId=123',
+        '/?action=proxyCapabilities&foo=bar',
         'POST',
         [],
         [],
@@ -65,37 +49,32 @@ it('builds sdk capabilities request from incoming payload', function () {
         [
             'CONTENT_TYPE' => 'application/json',
         ],
-        '{"country":"NL","carrier":"postnl","deliveryType":"standard_delivery","packageType":"package","direction":"outbound","options":{"requires_signature":null},"sender":{"country_code":"NL","is_business":true}}'
+        '{"recipient":{"country_code":"NL"}}'
     );
 
-    $sdkResponse = new CapabilitiesResponse(
-        ['package'],
-        ['standard_delivery'],
-        ['requires_signature'],
-        'postnl',
-        ['b2c'],
-        3
-    );
-
-    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
-    $mockService->shouldReceive('get')
+    $proxyResponse = Mockery::mock(ProxyCapabilitiesResponse::class);
+    $proxyResponse->shouldReceive('getSymfonyResponse')
         ->once()
-        ->withArgs(function (CapabilitiesRequest $sdkRequest): bool {
-            return 'NL' === $sdkRequest->getCountryCode()
-                && 123 === $sdkRequest->getShopId()
-                && 'postnl' === $sdkRequest->getCarrier()
-                && 'standard_delivery' === $sdkRequest->getDeliveryType()
-                && 'package' === $sdkRequest->getPackageType()
-                && 'outbound' === $sdkRequest->getDirection()
-                && ['requires_signature' => null] === $sdkRequest->getOptions()
-                && ['country_code' => 'NL', 'is_business' => true] === $sdkRequest->getSender();
+        ->andReturn(new Response('{"ok":true}', 200, ['Content-Type' => 'application/json']));
+
+    $mockService = Mockery::mock(CapabilitiesApiService::class);
+    $mockService->shouldReceive('doRequest')
+        ->once()
+        ->withArgs(function (ApiRequest $apiRequest, string $responseClass): bool {
+            return '/shipments/capabilities' === $apiRequest->getPath()
+                && 'POST' === $apiRequest->getMethod()
+                && 'foo=bar' === $apiRequest->getQueryString()
+                && '{"recipient":{"country_code":"NL"}}' === $apiRequest->getBody()
+                && ProxyCapabilitiesResponse::class === $responseClass;
         })
-        ->andReturn($sdkResponse);
+        ->andReturn($proxyResponse);
 
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
     $mockCorsHandler->shouldReceive('addCorsHeaders')
         ->once()
-        ->andReturnUsing(fn($req, $res) => $res);
+        ->andReturnUsing(function ($req, $res) {
+            return $res;
+        });
 
     Pdk::set(CorsHandler::class, $mockCorsHandler);
 
@@ -103,34 +82,29 @@ it('builds sdk capabilities request from incoming payload', function () {
     $response = $action->handle($request);
 
     expect($response->getStatusCode())->toBe(200)
-        ->and(getenv('API_KEY'))->toBe('test-api-key')
-        ->and($response->getContent())->toContain('"package_types":["package"]')
-        ->and($response->getContent())->toContain('"carrier":"postnl"');
+        ->and($response->getContent())->toBe('{"ok":true}');
 });
 
-it('passes through sdk error payload and status code', function () {
-    if (! interface_exists(CapabilitiesServiceInterface::class) ||
-        ! class_exists(CapabilitiesRequest::class) ||
-        ! class_exists(CapabilitiesResponse::class)) {
-        $this->markTestSkipped('SDK capabilities classes are unavailable. Install SDK v11 branch first.');
-    }
+it('passes through error status code and body from capabilities api', function () {
+    $request = Request::create('/?foo=bar', 'POST', [], [], [], [], '{"invalid":true}');
 
-    $request = Request::create('/', 'POST', [], [], [], [], '{"country":"NL"}');
+    $clientResponse = Mockery::mock(ClientResponseInterface::class);
+    $clientResponse->shouldReceive('getBody')
+        ->andReturn('{"errors":[{"code":"invalid_request"}]}');
+    $clientResponse->shouldReceive('getStatusCode')
+        ->andReturn(422);
 
-    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
-    $mockService->shouldReceive('get')
+    $mockService = Mockery::mock(CapabilitiesApiService::class);
+    $mockService->shouldReceive('doRequest')
         ->once()
-        ->andThrow(new class('invalid', 422) extends RuntimeException {
-            public function getResponseBody(): string
-            {
-                return '{"errors":[{"code":"invalid_request"}]}';
-            }
-        });
+        ->andThrow(new ApiException($clientResponse));
 
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
     $mockCorsHandler->shouldReceive('addCorsHeaders')
         ->once()
-        ->andReturnUsing(fn($req, $res) => $res);
+        ->andReturnUsing(function ($req, $res) {
+            return $res;
+        });
 
     Pdk::set(CorsHandler::class, $mockCorsHandler);
 
