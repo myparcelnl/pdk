@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.2](https://github.com/myparcelnl/pdk/compare/v3.2.1...v3.2.2) (2026-02-20)
+
+
+### :bug: Bug Fixes
+
+* **proposition:** include custom carrier features in getCarriers to keep Trunkrs visible in settings ([#422](https://github.com/myparcelnl/pdk/issues/422)) ([d6f395a](https://github.com/myparcelnl/pdk/commit/d6f395a1923e275a02984e8a2422482c31e9b66e))
+
 ## [3.2.1](https://github.com/myparcelnl/pdk/compare/v3.2.0...v3.2.1) (2026-02-13)
 
 
