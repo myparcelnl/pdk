@@ -9,11 +9,14 @@
         "ext-zip": "*",
         "fruitcake/php-cors": "^1.2",
         "justinrainbow/json-schema": "^5.2",
-        "myparcelnl/sdk": "^10.0.0",
+        "myparcelnl/sdk": "^11.0.0-dev",
         "php": ">=7.4.0",
         "php-di/php-di": "^6.0.0",
         "psr/log": "^1.0.0 || ^2.0.0 || ^3.0.0",
-        "symfony/http-foundation": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
+        "symfony/http-foundation": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0",
+        "alcohol/iso4217": "^4.3",
+        "symfony/psr-http-message-bridge": "^2.3",
+        "league/openapi-psr7-validator": "^0.22.0"
     },
     "platform": {
         "php": "7.4"
