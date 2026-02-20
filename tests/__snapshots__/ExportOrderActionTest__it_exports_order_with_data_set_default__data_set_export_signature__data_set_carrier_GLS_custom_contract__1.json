@@ -13,7 +13,8 @@
           "insurance": {
             "amount": 10000,
             "currency": "EUR"
-          }
+          },
+          "signature": 1
         },
         "physical_properties": {
           "weight": 100
