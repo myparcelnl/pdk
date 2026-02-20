@@ -101,7 +101,7 @@ abstract class AbstractEndpoint
      */
     protected function extractVersionFromHeader(string $header): ?int
     {
-        if (preg_match('/version=v?(\d+)/', $header, $matches)) {
+        if (preg_match('/version=v?(\d+)/i', $header, $matches)) {
             return (int) $matches[1];
         }
 
