@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\Base\Model\Model;
  * @property null|string $region
  * @property null|string $state
  * @property null|string $street
+ * @property null|string $type
  */
 class RetailLocation extends Model
 {
@@ -35,6 +36,7 @@ class RetailLocation extends Model
         'region'          => null,
         'state'           => null,
         'street'          => null,
+        'type'            => null,
     ];
 
     protected $casts      = [
@@ -50,5 +52,6 @@ class RetailLocation extends Model
         'region'          => 'string',
         'state'           => 'string',
         'street'          => 'string',
+        'type'            => RetailLocationType::class,
     ];
 }

@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: PDK Delivery Options API
   description: |
@@ -131,51 +131,71 @@ components:
       type: object
       properties:
         carrier:
-          type: string
-          nullable: true
-          description: The carrier name in CONSTANT_CASE format
-          enum:
-            - POSTNL
-            - BPOST
-            - CHEAP_CARGO
-            - DPD
-            - INSTABOX
-            - DHL
-            - BOL
-            - UPS
-            - DHL_FOR_YOU
-            - DHL_PARCEL_CONNECT
-            - DHL_EUROPLUS
-            - UPS_STANDARD
-            - UPS_EXPRESS_SAVER
-            - GLS
-            - BRT
-            - TRUNKRS
-          example: "POSTNL"
+          $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/Carrier
         packageType:
-          type: string
-          nullable: true
-          description: The package type in CONSTANT_CASE format
-          enum:
-            - PACKAGE
-            - MAILBOX
-            - DIGITAL_STAMP
-            - SMALL_PACKAGE
-            - LETTER
-          example: "PACKAGE"
+          $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/PackageType
         deliveryType:
-          type: string
-          nullable: true
-          description: The delivery type in CONSTANT_CASE format
-          enum:
-            - STANDARD_DELIVERY
-            - MORNING_DELIVERY
-            - EVENING_DELIVERY
-            - PICKUP_DELIVERY
-            - EXPRESS_DELIVERY
-          example: "STANDARD_DELIVERY"
+          $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/DeliveryType
         shipmentOptions:
-          $ref: '#/components/schemas/ShipmentOptions'
+          type: object
+          description: |
+            Shipment options following the Order API ShipmentOptions schema
+            (https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptions)
+            with one key difference: the insurance.amount property uses integer micro format
+            (e.g., 50000000 for €50) instead of the Money object format with integral/fractional parts.
+
+            All other properties follow ADR-0013 (empty object format for enabled options).
+          properties:
+            # Insurance with integer micro format (differs from Order API's Money object format)
+            insurance:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  description: Insurance amount in micro (1/1,000,000) of the currency unit
+                  example: 50000000
+                currency:
+                  type: string
+                  description: Currency code (ISO 4217 alpha-3)
+                  example: "EUR"
+              additionalProperties: false
+            # All other options reference the Order API ShipmentOptions schema
+            additionalInsurance:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/additionalInsurance
+            deliverAtPostalPoint:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/deliverAtPostalPoint
+            hideSender:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/hideSender
+            noTracking:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/noTracking
+            oversizedPackage:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/oversizedPackage
+            printReturnLabelAtDropOff:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/printReturnLabelAtDropOff
+            priorityDelivery:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/priorityDelivery
+            recipientOnlyDelivery:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/recipientOnlyDelivery
+            requiresAgeVerification:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/requiresAgeVerification
+            requiresCashOnDelivery:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/requiresCashOnDelivery
+            requiresReceiptCode:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/requiresReceiptCode
+            requiresSignature:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/requiresSignature
+            returnContributionFee:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/returnContributionFee
+            returnOnFirstFailedDelivery:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/returnOnFirstFailedDelivery
+            sameDayDelivery:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/sameDayDelivery
+            saturdayDelivery:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/saturdayDelivery
+            scheduledCollection:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/scheduledCollection
+            customLabelText:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsPackage/properties/customLabelText
         date:
           type: string
           format: date-time
@@ -184,86 +204,6 @@ components:
           example: "2026-02-15T18:00:00+00:00"
         pickupLocation:
           $ref: '#/components/schemas/PickupLocation'
-
-    ShipmentOptions:
-      type: object
-      description: Object containing enabled shipment options with camelCase property names as per ADR-0013
-      properties:
-        signature:
-          type: object
-          description: Signature required option - empty object when enabled
-          additionalProperties: false
-        onlyRecipient:
-          type: object
-          description: Only recipient option - empty object when enabled
-          additionalProperties: false
-        return:
-          type: object
-          description: Return option - empty object when enabled
-          additionalProperties: false
-        largeFormat:
-          type: object
-          description: Large format option - empty object when enabled
-          additionalProperties: false
-        ageCheck:
-          type: object
-          description: Age check option - empty object when enabled
-          additionalProperties: false
-        hideSender:
-          type: object
-          description: Hide sender option - empty object when enabled
-          additionalProperties: false
-        receiptCode:
-          type: object
-          description: Receipt code option - empty object when enabled
-          additionalProperties: false
-        sameDayDelivery:
-          type: object
-          description: Same day delivery option - empty object when enabled
-          additionalProperties: false
-        saturdayDelivery:
-          type: object
-          description: Saturday delivery option - empty object when enabled
-          additionalProperties: false
-        tracked:
-          type: object
-          description: Tracking option - empty object when enabled
-          additionalProperties: false
-        collect:
-          type: object
-          description: Collect option - empty object when enabled
-          additionalProperties: false
-        freshFood:
-          type: object
-          description: Fresh food option - empty object when enabled
-          additionalProperties: false
-        frozen:
-          type: object
-          description: Frozen option - empty object when enabled
-          additionalProperties: false
-        insurance:
-          type: object
-          description: Insurance option with amount in integer micro units (as per ADR-0014)
-          properties:
-            amount:
-              type: integer
-              description: Insurance amount in micro units (amount * 1000000)
-              minimum: 0
-              example: 50000000
-          required:
-            - amount
-          additionalProperties: false
-        labelDescription:
-          type: object
-          description: Label description option - empty object when enabled
-          additionalProperties: false
-      additionalProperties: false
-      example:
-        signature: {}
-        insurance:
-          amount: 50000000
-        saturdayDelivery: {}
-        onlyRecipient: {}
 
     PickupLocation:
       type: object

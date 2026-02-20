@@ -48,18 +48,18 @@ it('formats delivery options correctly', function () {
         ->toHaveKey('shipmentOptions')
         ->and($result['shipmentOptions'])
         ->toBeArray()
-        ->toHaveKey('signature')
-        ->toHaveKey('onlyRecipient')
-        ->toHaveKey('largeFormat')
-        ->toHaveKey('ageCheck')
+        ->toHaveKey('requiresSignature')
+        ->toHaveKey('recipientOnlyDelivery')
+        ->toHaveKey('oversizedPackage')
+        ->toHaveKey('requiresAgeVerification')
         ->toHaveKey('insurance')
-        ->not()->toHaveKey('return');
+        ->not()->toHaveKey('printReturnLabelAtDropOff');
 
     // Check that regular options are empty objects
-    expect($result['shipmentOptions']['signature'])->toBeInstanceOf(ArrayObject::class);
-    expect($result['shipmentOptions']['onlyRecipient'])->toBeInstanceOf(ArrayObject::class);
-    expect($result['shipmentOptions']['largeFormat'])->toBeInstanceOf(ArrayObject::class);
-    expect($result['shipmentOptions']['ageCheck'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['requiresSignature'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['recipientOnlyDelivery'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['oversizedPackage'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['requiresAgeVerification'])->toBeInstanceOf(ArrayObject::class);
 
     // Check that insurance has amount in micro units
     expect($result['shipmentOptions']['insurance'])
@@ -124,12 +124,12 @@ it('ignores inherited shipment options', function () {
     $result = $resource->format();
 
     expect($result['shipmentOptions'])
-        ->toHaveKey('onlyRecipient')
+        ->toHaveKey('recipientOnlyDelivery')
         ->toHaveKey('insurance')
-        ->not()->toHaveKey('signature')
-        ->not()->toHaveKey('largeFormat');
+        ->not()->toHaveKey('requiresSignature')
+        ->not()->toHaveKey('oversizedPackage');
 
-    expect($result['shipmentOptions']['onlyRecipient'])->toBeInstanceOf(ArrayObject::class);
+    expect($result['shipmentOptions']['recipientOnlyDelivery'])->toBeInstanceOf(ArrayObject::class);
 });
 
 it('declares version 1', function () {
@@ -205,6 +205,7 @@ it('correctly returns a pickup location when applicable', function () {
         'locationCode'    => 'LOC123',
         'locationName'    => 'Main Street Pickup',
         'retailNetworkId' => 'RN001',
+        'type'            => null,
         'address' => [
             'city'            => 'Amsterdam',
             'postalCode'      => '1000 AA',
@@ -217,4 +218,190 @@ it('correctly returns a pickup location when applicable', function () {
             'region'         => 'RegionX',
         ]
     ]);
+});
+
+it('maps carrier names using direct carrier mapping', function () {
+    $carriers = [
+        'POSTNL' => 'POSTNL',
+        'BPOST' => 'BPOST',
+        'CHEAP_CARGO' => 'CHEAP_CARGO',
+        'DPD' => 'DPD',
+        'BOL' => 'BOL',
+        'DHL_FOR_YOU' => 'DHL_FOR_YOU',
+        'DHL_PARCEL_CONNECT' => 'DHL_PARCEL_CONNECT',
+        'DHL_EUROPLUS' => 'DHL_EUROPLUS',
+        'UPS_STANDARD' => 'UPS_STANDARD',
+        'UPS_EXPRESS_SAVER' => 'UPS_EXPRESS_SAVER',
+        'GLS' => 'GLS',
+        'BRT' => 'BRT',
+        'TRUNKRS' => 'TRUNKRS',
+    ];
+
+    foreach ($carriers as $carrierName => $expected) {
+        $carrier = new Carrier(['name' => $carrierName]);
+        $deliveryOptions = new DeliveryOptions(['carrier' => $carrier]);
+        $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+        $result = $resource->format();
+
+        expect($result['carrier'])->toBe($expected);
+    }
+});
+
+it('maps package types using direct mapping', function () {
+    $packageTypes = [
+        'package' => 'PACKAGE',
+        'mailbox' => 'MAILBOX',
+        'letter' => 'UNFRANKED',
+        'digital_stamp' => 'DIGITAL_STAMP',
+        'package_small' => 'SMALL_PACKAGE',
+    ];
+
+    foreach ($packageTypes as $packageType => $expected) {
+        $deliveryOptions = new DeliveryOptions(['packageType' => $packageType]);
+        $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+        $result = $resource->format();
+
+        expect($result['packageType'])->toBe($expected);
+    }
+});
+
+it('maps delivery types using direct mapping', function () {
+    $deliveryTypes = [
+        'standard' => 'STANDARD_DELIVERY',
+        'morning' => 'MORNING_DELIVERY',
+        'evening' => 'EVENING_DELIVERY',
+        'pickup' => 'PICKUP_DELIVERY',
+        'express' => 'EXPRESS_DELIVERY',
+    ];
+
+    foreach ($deliveryTypes as $deliveryType => $expected) {
+        $deliveryOptions = new DeliveryOptions(['deliveryType' => $deliveryType]);
+        $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+        $result = $resource->format();
+
+        expect($result['deliveryType'])->toBe($expected);
+    }
+});
+
+it('maps shipment option keys to Order API format', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'ageCheck' => TriStateService::ENABLED,
+        'signature' => TriStateService::ENABLED,
+        'onlyRecipient' => TriStateService::ENABLED,
+        'largeFormat' => TriStateService::ENABLED,
+        'return' => TriStateService::ENABLED,
+        'hideSender' => TriStateService::ENABLED,
+        'labelDescription' => 'Test Label',
+    ]);
+
+    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    // Check that keys are mapped correctly
+    expect($result['shipmentOptions'])
+        ->toHaveKey('requiresAgeVerification')
+        ->toHaveKey('requiresSignature')
+        ->toHaveKey('recipientOnlyDelivery')
+        ->toHaveKey('oversizedPackage')
+        ->toHaveKey('printReturnLabelAtDropOff')
+        ->toHaveKey('hideSender')
+        ->toHaveKey('customLabelText')
+        // Original camelCase keys should not be present
+        ->not()->toHaveKey('ageCheck')
+        ->not()->toHaveKey('signature')
+        ->not()->toHaveKey('onlyRecipient')
+        ->not()->toHaveKey('largeFormat')
+        ->not()->toHaveKey('return')
+        ->not()->toHaveKey('labelDescription');
+});
+
+it('handles tracked option with inverted no_tracking logic when disabled', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'tracked' => TriStateService::DISABLED,
+        'signature' => TriStateService::ENABLED,
+    ]);
+
+    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    // When tracked is disabled, no_tracking should be present
+    expect($result['shipmentOptions'])
+        ->toHaveKey('noTracking')
+        ->toHaveKey('requiresSignature')
+        ->not()->toHaveKey('tracked');
+
+    expect($result['shipmentOptions']['noTracking'])->toBeInstanceOf(ArrayObject::class);
+});
+
+it('handles tracked option when enabled by not including no_tracking', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'tracked' => TriStateService::ENABLED,
+        'signature' => TriStateService::ENABLED,
+    ]);
+
+    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    // When tracked is enabled, no_tracking should NOT be present
+    expect($result['shipmentOptions'])
+        ->not()->toHaveKey('noTracking')
+        ->not()->toHaveKey('tracked')
+        ->toHaveKey('requiresSignature');
+});
+
+it('handles tracked option when not set by not including no_tracking', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'signature' => TriStateService::ENABLED,
+    ]);
+
+    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    // When tracked is not set, no_tracking should NOT be present (tracking enabled by default)
+    expect($result['shipmentOptions'])
+        ->not()->toHaveKey('noTracking')
+        ->not()->toHaveKey('tracked')
+        ->toHaveKey('requiresSignature');
+});
+
+it('maps all supported shipment options correctly', function () {
+    $shipmentOptions = new ShipmentOptions([
+        'ageCheck' => TriStateService::ENABLED,
+        'signature' => TriStateService::ENABLED,
+        'onlyRecipient' => TriStateService::ENABLED,
+        'largeFormat' => TriStateService::ENABLED,
+        'return' => TriStateService::ENABLED,
+        'hideSender' => TriStateService::ENABLED,
+        'priorityDelivery' => TriStateService::ENABLED,
+        'receiptCode' => TriStateService::ENABLED,
+        'sameDayDelivery' => TriStateService::ENABLED,
+        'saturdayDelivery' => TriStateService::ENABLED,
+        'collect' => TriStateService::ENABLED,
+    ]);
+
+    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    expect($result['shipmentOptions'])
+        ->toHaveKey('requiresAgeVerification')
+        ->toHaveKey('requiresSignature')
+        ->toHaveKey('recipientOnlyDelivery')
+        ->toHaveKey('oversizedPackage')
+        ->toHaveKey('printReturnLabelAtDropOff')
+        ->toHaveKey('hideSender')
+        ->toHaveKey('priorityDelivery')
+        ->toHaveKey('requiresReceiptCode')
+        ->toHaveKey('sameDayDelivery')
+        ->toHaveKey('saturdayDelivery')
+        ->toHaveKey('scheduledCollection');
+
+    // Verify all are empty objects
+    foreach ($result['shipmentOptions'] as $key => $value) {
+        expect($value)->toBeInstanceOf(ArrayObject::class, "Expected {$key} to be an ArrayObject");
+    }
 });

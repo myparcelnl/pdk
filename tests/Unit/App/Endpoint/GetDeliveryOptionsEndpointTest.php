@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Unit\App\Endpoint;
 
+use GuzzleHttp\Psr7\Response;
+use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
+use League\OpenAPIValidation\PSR7\Exception\ValidationFailed;
+use League\OpenAPIValidation\PSR7\OperationAddress;
+use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use MyParcelNL\Pdk\App\Endpoint\Handler\GetDeliveryOptionsEndpoint;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocationType;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockNotFoundPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
@@ -197,3 +205,63 @@ it('handles unsupported version before validating orderId parameter', function (
     expect($content['status'])->toBe(406);
     expect($content['detail'])->toContain('API version 5 is not supported');
 });
+
+it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) {
+    $allShipmentOptions = [];
+    foreach (ShipmentOptions::ALL_SHIPMENT_OPTIONS as $option) {
+        if ($option === ShipmentOptions::SIGNATURE) {
+            // Value should be insured amount
+            $allShipmentOptions[$option] = 1000;
+        } else {
+            $allShipmentOptions[$option] = true;
+        }
+    }
+
+    // Create and store a mock order with all shipment options, a date and a pickup location to fully test the schema
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('123')
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('postnl')
+                ->withDate('2024-01-15T10:30:00+00:00')
+                ->withPackageType($packageTypeName)
+                ->withDeliveryType($deliveryTypeName)
+                ->withShipmentOptions($allShipmentOptions)
+                ->withPickupLocation(
+                    factory(RetailLocation::class)
+                        ->withName('Pickup Location 1')
+                        ->withStreet('Main Street')
+                        ->withPostalCode('12345')
+                        ->withCity('Anytown')
+                        ->withCountry('NL')
+                        ->withType(new RetailLocationType($retailLocationType))
+                )
+        )
+        ->store();
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $request = new Request(['orderId' => '123']);
+    $request->headers->set('Content-Type', 'application/json; version=1');
+
+    $response = $endpoint->handle($request);
+
+    expect($response->getStatusCode())->toBe(200);
+
+    // Validate response against OpenAPI schema
+    $validator = (new ValidatorBuilder())->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')->getResponseValidator();
+    $operation  = new OperationAddress('/delivery-options', 'get');
+
+    // Convert Symfony Response to PSR-7 Response using Guzzle for validation
+    $psr7Response = new Response(
+        $response->getStatusCode(),
+        $response->headers->all(),
+        $response->getContent()
+    );
+
+    // Try - catch the validate, so we can print the validation errors if it fails
+    try {
+        $validator->validate($operation, $psr7Response);
+    } catch (InvalidBody $e) {
+        $this->fail($e->getVerboseMessage());
+    }
+})->with('packageTypeNames', 'deliveryTypeNames', 'retailLocationTypes');
