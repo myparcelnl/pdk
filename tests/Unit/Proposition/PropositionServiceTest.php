@@ -182,4 +182,5 @@ it('can filter out carriers with unsupported package types', function () {
     expect(count($allCarriers))->toBeGreaterThan(count($carriers));
     expect($carriers)->not->toBeEmpty();
     expect(array_column($carriers, 'name'))->not->toContain(Carrier::CARRIER_CHEAP_CARGO_NAME);
+    expect(array_column($carriers, 'name'))->toContain(Carrier::CARRIER_TRUNKRS_NAME);
 });
