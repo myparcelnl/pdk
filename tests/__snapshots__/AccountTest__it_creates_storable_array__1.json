@@ -37,7 +37,6 @@
       "return": [],
       "shipmentOptions": [],
       "trackTrace": [],
-      "carrierConfigurations": [],
       "carriers": [
         {
           "externalIdentifier": "POSTNL",
