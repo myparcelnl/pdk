@@ -8,14 +8,10 @@ namespace MyParcelNL\Pdk\Base\Repository;
 
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
-use MyParcelNL\Pdk\Account\Model\ShopCarrierConfiguration;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
-use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
 use MyParcelNL\Pdk\Account\Repository\ShopRepository;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetCarrierConfigurationResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShopsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockRepository;
@@ -43,20 +39,6 @@ it('gets repositories', function ($response, $repositoryClass, $expected, $metho
         ShopRepository::class,
         Shop::class,
         'getShop',
-    ],
-    [
-        ExampleGetCarrierConfigurationResponse::class,
-        ShopCarrierConfigurationRepository::class,
-        Collection::class,
-        'getCarrierConfigurations',
-        ['shopId' => 3],
-    ],
-    [
-        ExampleGetCarrierConfigurationResponse::class,
-        ShopCarrierConfigurationRepository::class,
-        ShopCarrierConfiguration::class,
-        'getCarrierConfiguration',
-        ['shopId' => 3, 'carrier' => 'postnl'],
     ],
 ]);
 

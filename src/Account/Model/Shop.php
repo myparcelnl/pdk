@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Model;
 
-use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
@@ -25,7 +24,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  * @property array<string, mixed>               $shipmentOptions
  * @property array<string, mixed>[]             $trackTrace
  * @property CarrierCollection                  $carriers
- * @property ShopCarrierConfigurationCollection $carrierConfigurations
  */
 class Shop extends Model
 {
@@ -44,7 +42,6 @@ class Shop extends Model
         'shipmentOptions'       => [],
         'trackTrace'            => [],
         'carriers'              => CarrierCollection::class,
-        'carrierConfigurations' => ShopCarrierConfigurationCollection::class,
     ];
 
     protected $casts      = [
@@ -60,7 +57,6 @@ class Shop extends Model
         'shipmentOptions'       => 'array',
         'trackTrace'            => 'array',
         'carriers'              => CarrierCollection::class,
-        'carrierConfigurations' => ShopCarrierConfigurationCollection::class,
     ];
 
     protected $deprecated = [
