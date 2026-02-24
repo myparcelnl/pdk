@@ -29,11 +29,10 @@ usesShared(new UsesMockPdkInstance(), new UsesApiMock());
 
 function executeUpdateAccount(
     ?array $settings,
-    array  $accounts = null,
+    array  $accounts = null
 ): Response {
     MockApi::enqueue(
         new ExampleGetAccountsResponse($accounts),
-        new ExampleGetCarrierConfigurationResponse(),
         new ExampleAclResponse()
     );
 
