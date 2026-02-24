@@ -105,13 +105,13 @@ abstract class AbstractApiService implements ApiServiceInterface
         try {
             $settingsRepository = Pdk::get(\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface::class);
             $accountSettings = $settingsRepository->all()->account;
-            
+
             Logger::info('AbstractApiService - getBaseUrl environment check', [
                 'hasAccountSettings' => $accountSettings ? 'yes' : 'no',
                 'environment' => $accountSettings ? $accountSettings->environment : 'null',
                 'isAcceptance' => $accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE ? 'yes' : 'no'
             ]);
-            
+
             if ($accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE) {
                 Logger::info('AbstractApiService - Using acceptance API URL');
                 return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
