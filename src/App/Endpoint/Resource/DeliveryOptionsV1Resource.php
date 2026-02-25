@@ -63,7 +63,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatShipmentOptions(ShipmentOptions $shipmentOptions): array
     {
-        // Include only explcitly enabled options - we assume any inherited options were resolved before being passed her
+        // Include only explicitly enabled options - we assume any inherited options were resolved before being passed here
         $filteredOptions = array_filter(
             $shipmentOptions->toArray(),
             fn($value) => $value && $value !== TriStateService::INHERIT
