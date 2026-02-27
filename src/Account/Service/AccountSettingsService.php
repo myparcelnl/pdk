@@ -39,15 +39,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     * @deprecated use getCarriers()
-     */
-    public function getCarrierOptions(): CarrierCollection
-    {
-        return $this->getCarriers();
-    }
-
-    /**
      * Return the carriers for the current shop, filtered by the carriers available in the proposition service.
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
@@ -143,9 +134,9 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         return $this->hasAccount()
             && (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
-                ->contains(function (string $carrier) {
-                    return $this->hasCarrier($carrier);
-                });
+            ->contains(function (string $carrier) {
+                return $this->hasCarrier($carrier);
+            });
     }
 
     /**
@@ -165,9 +156,9 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         return $this->hasAccount()
             && $this->getCarriers()
-                ->contains(function (Carrier $carrier) use ($carrierName) {
-                    return $carrier->name === $carrierName;
-                });
+            ->contains(function (Carrier $carrier) use ($carrierName) {
+                return $carrier->name === $carrierName;
+            });
     }
 
     /**
