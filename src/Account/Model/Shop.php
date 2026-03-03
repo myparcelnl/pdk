@@ -27,8 +27,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  */
 class Shop extends Model
 {
-    private const DEPRECATED_KEY_CARRIER_OPTIONS = 'carrierOptions';
-
     public    $attributes = [
         'id'                    => null,
         'accountId'             => null,
@@ -58,54 +56,4 @@ class Shop extends Model
         'trackTrace'            => 'array',
         'carriers'              => CarrierCollection::class,
     ];
-
-    protected $deprecated = [
-        self::DEPRECATED_KEY_CARRIER_OPTIONS => 'carriers',
-    ];
-
-    /**
-     * @param  null|array $data
-     */
-    public function __construct(?array $data = null)
-    {
-        if (isset($data[self::DEPRECATED_KEY_CARRIER_OPTIONS])) {
-            $data['carriers'] = array_map(
-                static function (array $carrierOptions): array {
-                    $rest = Arr::except($carrierOptions, ['carrier']);
-
-                    return array_merge($rest, $carrierOptions['carrier'] ?? null);
-                },
-                $data[self::DEPRECATED_KEY_CARRIER_OPTIONS]
-            );
-
-            unset($data[self::DEPRECATED_KEY_CARRIER_OPTIONS]);
-        }
-
-        parent::__construct($data);
-    }
-
-    /**
-     * @return array
-     */
-    public function toStorableArray(): array
-    {
-        $carriers = (new Collection($this->carriers))
-            ->map(static function (Carrier $carrier): array {
-                return $carrier->only([
-                    'externalIdentifier',
-                    'enabled',
-                    'label',
-                    'primary',
-                    'optional',
-                    'type',
-                ], Arrayable::STORABLE_NULL);
-            });
-
-        return array_replace(
-            $this->except('carriers', Arrayable::STORABLE_NULL),
-            [
-                'carriers' => $carriers->toArray(self::STORABLE_NULL),
-            ]
-        );
-    }
 }
