@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\Gls;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractCarrierOptionsCalculator;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 final class GlsCalculator extends AbstractCarrierOptionsCalculator
 {
@@ -20,6 +20,6 @@ final class GlsCalculator extends AbstractCarrierOptionsCalculator
 
     protected function getCarrier(): string
     {
-        return Carrier::CARRIER_GLS_NAME;
+        return RefTypesCarrierV2::GLS;
     }
 }
