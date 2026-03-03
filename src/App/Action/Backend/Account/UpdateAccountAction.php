@@ -77,7 +77,6 @@ class UpdateAccountAction implements ActionInterface
     protected function fillAccount(Account $account): void
     {
         // @TODO: Replace with (cached) contract definitions call via SDK (does not need shop)
-        // $shop->carrierConfigurations = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
         // $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
     }
 
