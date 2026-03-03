@@ -12,6 +12,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 /**
  * @property string                   $externalIdentifier
@@ -33,155 +35,110 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
  * @property null|array                 $deliveryCountries
  * @property null|array                 $pickupCountries
  *
- * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
  */
 class Carrier extends Model
 {
-    public const CARRIER_POSTNL_ID                   = 1;
     /**
-     * @deprecated use CARRIER_POSTNL_NAME
+     * @deprecated use RefTypesCarrierV2::POSTNL
      */
     public const CARRIER_POSTNL_LEGACY_NAME          = 'postnl';
-    public const CARRIER_POSTNL_NAME                 = 'POSTNL';
-    public const CARRIER_BPOST_ID                    = 2;
+
     /**
-     * @deprecated use CARRIER_BPOST_NAME
+     * @deprecated use RefTypesCarrierV2::BPOST
      */
     public const CARRIER_BPOST_LEGACY_NAME           = 'bpost';
-    public const CARRIER_BPOST_NAME                  = 'BPOST';
-    public const CARRIER_CHEAP_CARGO_ID              = 3;
+
     /**
-     * @deprecated use CARRIER_CHEAP_CARGO_NAME
+     * @deprecated use RefTypesCarrierV2::CHEAP_CARGO
      */
     public const CARRIER_CHEAP_CARGO_LEGACY_NAME     = 'cheapcargo';
-    public const CARRIER_CHEAP_CARGO_NAME            = 'CHEAP_CARGO';
-    public const CARRIER_DPD_ID                      = 4;
+
     /**
-     * @deprecated use CARRIER_DPD_NAME
+     * @deprecated use RefTypesCarrierV2::DPD
      */
     public const CARRIER_DPD_LEGACY_NAME             = 'dpd';
-    public const CARRIER_DPD_NAME                    = 'DPD';
-    public const CARRIER_INSTABOX_ID                 = 5;
+
     /**
-     * @deprecated use CARRIER_INSTABOX_NAME
-     */
-    public const CARRIER_INSTABOX_LEGACY_NAME        = 'instabox';
-    public const CARRIER_INSTABOX_NAME               = 'INSTABOX';
-    public const CARRIER_DHL_ID                      = 6;
-    /**
-     * @deprecated use CARRIER_DHL_NAME
-     */
-    public const CARRIER_DHL_LEGACY_NAME             = 'dhl';
-    public const CARRIER_DHL_NAME                    = 'DHL';
-    public const CARRIER_BOL_COM_ID                  = 7;
-    /**
-     * @deprecated use CARRIER_BOL_COM_NAME
+     * @deprecated use RefTypesCarrierV2::BOL
      */
     public const CARRIER_BOL_COM_LEGACY_NAME         = 'bol.com';
-    public const CARRIER_BOL_COM_NAME                = 'BOL';
+
     /**
-     * @deprecated Use CARRIER_UPS_STANDARD_ID or CARRIER_UPS_EXPRESS_SAVER_ID instead
-     */
-    public const CARRIER_UPS_ID                      = 8;
-    /**
-     * @deprecated Use CARRIER_UPS_STANDARD_NAME or CARRIER_UPS_EXPRESS_SAVER_NAME instead
-     */
-    public const CARRIER_UPS_LEGACY_NAME             = 'ups';
-    public const CARRIER_UPS_NAME                    = 'UPS';
-    public const CARRIER_DHL_FOR_YOU_ID              = 9;
-    /**
-     * @deprecated use CARRIER_DHL_FOR_YOU_NAME
+     * @deprecated use RefTypesCarrierV2::DHL_FOR_YOU
      */
     public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
-    public const CARRIER_DHL_FOR_YOU_NAME            = 'DHL_FOR_YOU';
-    public const CARRIER_DHL_PARCEL_CONNECT_ID       = 10;
+
     /**
-     * @deprecated use CARRIER_DHL_PARCEL_CONNECT_NAME
+     * @deprecated use RefTypesCarrierV2::DHL_PARCEL_CONNECT
      */
     public const CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME = 'dhlparcelconnect';
-    public const CARRIER_DHL_PARCEL_CONNECT_NAME     = 'DHL_PARCEL_CONNECT';
-    public const CARRIER_DHL_EUROPLUS_ID             = 11;
+
     /**
-     * @deprecated use CARRIER_DHL_EUROPLUS_NAME
+     * @deprecated use RefTypesCarrierV2::DHL_EUROPLUS
      */
     public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
-    public const CARRIER_DHL_EUROPLUS_NAME           = 'DHL_EUROPLUS';
-    public const CARRIER_UPS_STANDARD_ID         = 12;
 
     /**
-     * @deprecated use CARRIER_UPS_STANDARD_NAME
+     * @deprecated use RefTypesCarrierV2::UPS_STANDARD
      */
     public const CARRIER_UPS_STANDARD_LEGACY_NAME = 'upsstandard';
-    public const CARRIER_UPS_STANDARD_NAME       = 'UPS_STANDARD';
-    public const CARRIER_UPS_EXPRESS_SAVER_ID    = 13;
 
     /**
-     * @deprecated use CARRIER_UPS_EXPRESS_SAVER_NAME
+     * @deprecated use RefTypesCarrierV2::UPS_EXPRESS_SAVER
      */
     public const CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME = 'upsexpresssaver';
-    public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'UPS_EXPRESS_SAVER';
-    public const CARRIER_GLS_ID                  = 14;
 
     /**
-     * @deprecated use CARRIER_GLS_NAME
+     * @deprecated use RefTypesCarrierV2::GLS
      */
     public const CARRIER_GLS_LEGACY_NAME       = 'gls';
-    public const CARRIER_GLS_NAME                = 'GLS';
 
     /**
-     * @deprecated use CARRIER_BRT_NAME
+     * @deprecated use RefTypesCarrierV2::BRT
      */
     public const CARRIER_BRT_LEGACY_NAME       = 'brt';
-    public const CARRIER_BRT_NAME                = 'BRT';
-    public const CARRIER_BRT_ID                  = 15;
 
-    public const CARRIER_TRUNKRS_ID              = 16;
     /**
-     * @deprecated use CARRIER_TRUNKRS_NAME
+     * @deprecated use RefTypesCarrierV2::TRUNKRS
      */
     public const CARRIER_TRUNKRS_LEGACY_NAME   = 'trunkrs';
-    public const CARRIER_TRUNKRS_NAME            = 'TRUNKRS';
 
     /**
      * @deprecated use new carrier names directly
      */
     public const CARRIER_NAME_TO_LEGACY_MAP = [
-        self::CARRIER_BOL_COM_NAME            => self::CARRIER_BOL_COM_LEGACY_NAME,
-        self::CARRIER_BPOST_NAME              => self::CARRIER_BPOST_LEGACY_NAME,
-        self::CARRIER_CHEAP_CARGO_NAME        => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
-        self::CARRIER_DHL_EUROPLUS_NAME       => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
-        self::CARRIER_DHL_FOR_YOU_NAME        => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
-        self::CARRIER_DHL_NAME                => self::CARRIER_DHL_LEGACY_NAME,
-        self::CARRIER_DHL_PARCEL_CONNECT_NAME => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
-        self::CARRIER_DPD_NAME                => self::CARRIER_DPD_LEGACY_NAME,
-        self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_LEGACY_NAME,
-        self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_LEGACY_NAME,
-        self::CARRIER_UPS_NAME                => self::CARRIER_UPS_LEGACY_NAME,
-        self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
-        self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
-        self::CARRIER_GLS_NAME                => self::CARRIER_GLS_LEGACY_NAME,
-        self::CARRIER_BRT_NAME                => self::CARRIER_BRT_LEGACY_NAME,
-        self::CARRIER_TRUNKRS_NAME            => self::CARRIER_TRUNKRS_LEGACY_NAME,
+        RefTypesCarrierV2::BOL            => self::CARRIER_BOL_COM_LEGACY_NAME,
+        RefTypesCarrierV2::BPOST          => self::CARRIER_BPOST_LEGACY_NAME,
+        RefTypesCarrierV2::CHEAP_CARGO    => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
+        RefTypesCarrierV2::DHL_EUROPLUS   => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
+        RefTypesCarrierV2::DHL_FOR_YOU    => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
+        RefTypesCarrierV2::DHL_PARCEL_CONNECT => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
+        RefTypesCarrierV2::DPD            => self::CARRIER_DPD_LEGACY_NAME,
+        RefTypesCarrierV2::POSTNL         => self::CARRIER_POSTNL_LEGACY_NAME,
+        RefTypesCarrierV2::UPS_STANDARD   => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
+        RefTypesCarrierV2::UPS_EXPRESS_SAVER => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
+        RefTypesCarrierV2::GLS            => self::CARRIER_GLS_LEGACY_NAME,
+        RefTypesCarrierV2::BRT            => self::CARRIER_BRT_LEGACY_NAME,
+        RefTypesCarrierV2::TRUNKRS        => self::CARRIER_TRUNKRS_LEGACY_NAME,
     ];
 
     /**
      * Names to ids
+     * @deprecated use mapping functionality from the SDK when available
      */
     public const CARRIER_NAME_ID_MAP = [
-        self::CARRIER_BOL_COM_NAME            => self::CARRIER_BOL_COM_ID,
-        self::CARRIER_BPOST_NAME              => self::CARRIER_BPOST_ID,
-        self::CARRIER_CHEAP_CARGO_NAME        => self::CARRIER_CHEAP_CARGO_ID,
-        self::CARRIER_DHL_EUROPLUS_NAME       => self::CARRIER_DHL_EUROPLUS_ID,
-        self::CARRIER_DHL_FOR_YOU_NAME        => self::CARRIER_DHL_FOR_YOU_ID,
-        self::CARRIER_DHL_NAME                => self::CARRIER_DHL_ID,
-        self::CARRIER_DHL_PARCEL_CONNECT_NAME => self::CARRIER_DHL_PARCEL_CONNECT_ID,
-        self::CARRIER_DPD_NAME                => self::CARRIER_DPD_ID,
-        self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_ID,
-        self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_ID,
-        self::CARRIER_GLS_NAME                => self::CARRIER_GLS_ID,
-        self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_ID,
-        self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_ID,
-        self::CARRIER_TRUNKRS_NAME            => self::CARRIER_TRUNKRS_ID,
+        RefTypesCarrierV2::BOL            => RefTypesCarrier::BOL,
+        RefTypesCarrierV2::BPOST          => RefTypesCarrier::BPOST,
+        RefTypesCarrierV2::CHEAP_CARGO    => RefTypesCarrier::CHEAP_CARGO,
+        RefTypesCarrierV2::DHL_EUROPLUS   => RefTypesCarrier::DHL_EUROPLUS,
+        RefTypesCarrierV2::DHL_FOR_YOU    => RefTypesCarrier::DHL_FOR_YOU,
+        RefTypesCarrierV2::DHL_PARCEL_CONNECT => RefTypesCarrier::DHL_PARCEL_CONNECT,
+        RefTypesCarrierV2::DPD            => RefTypesCarrier::DPD,
+        RefTypesCarrierV2::POSTNL         => RefTypesCarrier::POSTNL,
+        RefTypesCarrierV2::GLS            => RefTypesCarrier::GLS,
+        RefTypesCarrierV2::UPS_STANDARD   => RefTypesCarrier::UPS_STANDARD,
+        RefTypesCarrierV2::UPS_EXPRESS_SAVER => RefTypesCarrier::UPS_EXPRESS_SAVER,
+        RefTypesCarrierV2::TRUNKRS        => RefTypesCarrier::TRUNKRS,
     ];
 
     /**
@@ -189,27 +146,17 @@ class Carrier extends Model
      * @see CARRIER_NAME_ID_MAP
      */
     public const CARRIER_LEGACY_NAME_ID_MAP = [
-        self::CARRIER_BOL_COM_LEGACY_NAME    => self::CARRIER_BOL_COM_ID,
-        self::CARRIER_BPOST_LEGACY_NAME              => self::CARRIER_BPOST_ID,
-        self::CARRIER_CHEAP_CARGO_LEGACY_NAME        => self::CARRIER_CHEAP_CARGO_ID,
-        self::CARRIER_DHL_EUROPLUS_LEGACY_NAME       => self::CARRIER_DHL_EUROPLUS_ID,
-        self::CARRIER_DHL_FOR_YOU_LEGACY_NAME        => self::CARRIER_DHL_FOR_YOU_ID,
-        self::CARRIER_DHL_LEGACY_NAME                => self::CARRIER_DHL_ID,
-        self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => self::CARRIER_DHL_PARCEL_CONNECT_ID,
-        self::CARRIER_DPD_LEGACY_NAME                => self::CARRIER_DPD_ID,
-        self::CARRIER_INSTABOX_LEGACY_NAME           => self::CARRIER_INSTABOX_ID,
-        self::CARRIER_POSTNL_LEGACY_NAME             => self::CARRIER_POSTNL_ID,
-        self::CARRIER_UPS_LEGACY_NAME                => self::CARRIER_UPS_ID,
-        self::CARRIER_TRUNKRS_LEGACY_NAME            => self::CARRIER_TRUNKRS_ID,
+        self::CARRIER_BOL_COM_LEGACY_NAME    => RefTypesCarrier::BOL,
+        self::CARRIER_BPOST_LEGACY_NAME      => RefTypesCarrier::BPOST,
+        self::CARRIER_CHEAP_CARGO_LEGACY_NAME => RefTypesCarrier::CHEAP_CARGO,
+        self::CARRIER_DHL_EUROPLUS_LEGACY_NAME => RefTypesCarrier::DHL_EUROPLUS,
+        self::CARRIER_DHL_FOR_YOU_LEGACY_NAME => RefTypesCarrier::DHL_FOR_YOU,
+        self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => RefTypesCarrier::DHL_PARCEL_CONNECT,
+        self::CARRIER_DPD_LEGACY_NAME        => RefTypesCarrier::DPD,
+        self::CARRIER_POSTNL_LEGACY_NAME     => RefTypesCarrier::POSTNL,
+        self::CARRIER_TRUNKRS_LEGACY_NAME    => RefTypesCarrier::TRUNKRS,
     ];
 
-    /**
-     * Types
-     */
-    // @deprecated
-    public const  TYPE_CUSTOM = 'custom';
-    // @deprecated
-    public const  TYPE_MAIN   = 'main';
 
     protected $attributes = [
         'externalIdentifier' => null,
@@ -222,7 +169,6 @@ class Carrier extends Model
         'label'              => null,
         'optional'           => false,
         'primary'            => false,
-        'type'               => self::TYPE_MAIN,
         'inboundFeatures'    => null,
         'outboundFeatures'   => null,
         'capabilities'        => null, // @deprecated use outboundFeatures instead
@@ -241,19 +187,11 @@ class Carrier extends Model
         'label'              => 'string',
         'optional'           => 'bool',
         'primary'            => 'bool',
-        'type'               => 'string',
         'inboundFeatures'    => PropositionCarrierFeatures::class,
         'outboundFeatures'   => PropositionCarrierFeatures::class,
         'capabilities'        => CarrierCapabilities::class, // @deprecated use outboundFeatures instead
         'returnCapabilities'  => CarrierCapabilities::class, // @deprecated use inboundFeatures instead
         'deliveryOptions'     => 'array',
-    ];
-
-    /**
-     * @todo remove in v3.0.0
-     */
-    protected $deprecated = [
-        'subscriptionId' => 'contractId',
     ];
 
     /**
@@ -330,25 +268,6 @@ class Carrier extends Model
     {
         return ! $this->isDefault;
     }
-
-    /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function getIsDefaultAttribute(): bool
-    {
-        return self::TYPE_MAIN === $this->type;
-    }
-
-    /**
-     * @return string
-     * @noinspection PhpUnused
-     */
-    public function getTypeAttribute(): string
-    {
-        return $this->contractId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
-    }
-
     /**
      * @return string[]
      */
