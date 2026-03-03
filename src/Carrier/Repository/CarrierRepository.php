@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Base\Repository\Repository;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
@@ -67,11 +68,6 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
                 if ($carrier) {
                     break;
                 }
-            }
-
-            // Migrate deprecated UPS carrier name "ups" to UPS Standard
-            if (!$carrier && isset($input['name']) && $input['name'] === Carrier::CARRIER_UPS_NAME) {
-                $carrier = $collection->firstWhere('id', Carrier::CARRIER_UPS_STANDARD_ID);
             }
 
             if (!$carrier) {
