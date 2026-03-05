@@ -4,39 +4,36 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
-use MyParcelNL\Pdk\Facade\FrontendData;
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 /**
- * @property string                   $externalIdentifier
- * @property null|int                 $id
- * @property null|string              $name
- * @property null|string              $human
- * @property null|int                 $contractId
- * @property bool                     $enabled
- * @property bool                     $primary
- * @property bool                     $isCustom
- * @property bool                     $isDefault
- * @property bool                     $optional
- * @property null|string              $label
- * @property null|string              $type
- * @property PropositionCarrierFeatures|null  $inboundFeatures
- * @property PropositionCarrierFeatures|null  $outboundFeatures
- * @property CarrierCapabilities        $capabilities        // @deprecated use outboundFeatures instead
- * @property CarrierCapabilities        $returnCapabilities  // @deprecated use inboundFeatures instead
- * @property null|array                 $deliveryCountries
- * @property null|array                 $pickupCountries
+ * Intantiate a Carrier model based on existing known data when passed an ID/Name, or creates a new Carrier model based on the data passed to the constructor.
+ * If nothing is passed, the configured default carrier is returned.
  *
+ * This Carrier model is modelled on top of the carrier as returned by the shipments/capabilities endpoint with additional metadata.
+ * This gives us the relevant information about the carrier that we need to use, where the other API endpoints only concern themselves with being passed the ID/Name of the carrier.
+ *
+ * @property null|int    $id      The numeric ID of the carrier, as returned by the v1 API
+ * @property null|string $name    The CONSTANT_CASE machine name of the carrier, as returned by the v2 API
+ * @property null|string $human   The human readable name of the carrier, as returned by the API
+ * @property bool        $enabled Whether or not the carrier is enabled in the plugin settings
+ *
+ * Properties from the backing RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2 SDK model
+ * @property mixed|null  $carrier          Carrier info from contract definitions
+ * @property array|null  $packageTypes     Available package types
+ * @property mixed|null  $options          Available shipment options
+ * @property array|null  $deliveryTypes    Available delivery types
+ * @property array|null  $transactionTypes Available transaction types
+ * @property mixed|null  $collo            Collo constraints
  */
-class Carrier extends Model
+class Carrier extends SdkBackedModel
 {
     /**
      * @deprecated use RefTypesCarrierV2::POSTNL
@@ -142,7 +139,7 @@ class Carrier extends Model
     ];
 
     /**
-     * @deprecated use CARRIER_NAME_ID_MAP instead.
+     * @deprecated use mapping functionality from the SDK when available
      * @see CARRIER_NAME_ID_MAP
      */
     public const CARRIER_LEGACY_NAME_ID_MAP = [
@@ -157,124 +154,42 @@ class Carrier extends Model
         self::CARRIER_TRUNKRS_LEGACY_NAME    => RefTypesCarrier::TRUNKRS,
     ];
 
+    protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
 
-    protected $attributes = [
-        'externalIdentifier' => null,
-        'id'                 => null,
-        'name'               => null,
-        'human'              => null,
-        'contractId'         => null,
-        'enabled'            => true,
-        'isDefault'          => true,
-        'label'              => null,
-        'optional'           => false,
-        'primary'            => false,
-        'inboundFeatures'    => null,
-        'outboundFeatures'   => null,
-        'capabilities'        => null, // @deprecated use outboundFeatures instead
-        'returnCapabilities'  => null, // @deprecated use inboundFeatures instead
-        'deliveryOptions'     => null,
-    ];
+    protected $attributes = [];
 
-    protected $casts      = [
-        'externalIdentifier' => 'string',
-        'id'                 => 'int',
-        'name'               => 'string',
-        'human'              => 'string',
-        'contractId'         => 'string',
-        'enabled'            => 'bool',
-        'isDefault'          => 'bool',
-        'label'              => 'string',
-        'optional'           => 'bool',
-        'primary'            => 'bool',
-        'inboundFeatures'    => PropositionCarrierFeatures::class,
-        'outboundFeatures'   => PropositionCarrierFeatures::class,
-        'capabilities'        => CarrierCapabilities::class, // @deprecated use outboundFeatures instead
-        'returnCapabilities'  => CarrierCapabilities::class, // @deprecated use inboundFeatures instead
-        'deliveryOptions'     => 'array',
-    ];
+    protected $casts = [];
 
     /**
-     * If carrier ID and/or name are given, look up an existing carrier configuration from the CarrierRepository and instantiate with that data.
+     * If carrier ID and/or name are given, look up an existing carrier configuration for the current account and instantiate with that data.
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
     {
-        /** @var CarrierRepositoryInterface $repository */
-        $repository = Pdk::get(CarrierRepositoryInterface::class);
+        /** @var AccountSettingsServiceInterface $accountSettings */
+        $accountSettings = Pdk::get(AccountSettingsServiceInterface::class);
 
-        if (isset($data['externalIdentifier']) && ! isset($data['name'], $data['id'])) {
-            $parts = explode(':', $data['externalIdentifier']);
+        $carrierName = null;
 
-            $data['name']       = $parts[0] ?? null;
-            $data['contractId'] = $parts[1] ?? null;
+        // Determine carrier name from input
+        if (isset($data['name'])) {
+            $carrierName = $data['name'];
+        } elseif (isset($data['id'])) {
+            // Convert ID to name using the map
+            $carrierName = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true) ?: null;
         }
 
-        if (! isset($data['name'], $data['id'])) {
-            $carrierInput         = [];
-            $carrierInput['id']   = $data['id'] ?? null;
-            $carrierInput['name'] = $data['name'] ?? null;
-
-            // If neither the id or name is provided, fallback to the default carrier
-            // Prevents the default carrier being returned if an unknown ID is provided
-            if (! $carrierInput['id'] && ! $carrierInput['name']) {
-                try {
-                    $propositionService = Pdk::get(PropositionService::class);
-                    $proposition = $propositionService->getPropositionConfig();
-                    $defaultCarrier = $propositionService->getDefaultCarrier($proposition);
-                    $carrierInput['name'] = $defaultCarrier->name;
-
-                    Logger::warning(
-                        'Carrier Name and ID not given, instantiating default Carrier model',
-                        [
-                            'id'   => $data['id'] ?? null,
-                            'name' => $data['name'] ?? null,
-                        ]
-                    );
-                } catch (\Exception $e) {
-                    Logger::error('Failed to get default carrier', ['exception' => $e]);
-                }
-            }
-            $found = $repository->get($carrierInput);
+        // Look up the carrier by name. If no existing carrier was found, simply return a model with the passed data (if any)
+        $existing = null;
+        if ($carrierName) {
+            $found = $accountSettings->getCarriers()->firstWhere('name', $carrierName);
 
             if ($found) {
                 $existing = $found->getAttributes();
             }
         }
 
+        // Merges passed data with found data (if any), giving priority to passed data in case of overlap
         parent::__construct(array_replace($existing ?? [], $data ?? []));
-    }
-
-    /**
-     * @return string
-     * @noinspection PhpUnused
-     */
-    public function getExternalIdentifierAttribute(): string
-    {
-        $identifier = $this->name;
-
-        if ($this->contractId) {
-            $identifier .= ":$this->contractId";
-        }
-
-        return $identifier ?: '?';
-    }
-
-    /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function getIsCustomAttribute(): bool
-    {
-        return ! $this->isDefault;
-    }
-    /**
-     * @return string[]
-     */
-    public function toStorableArray(): array
-    {
-        return [
-            'externalIdentifier' => FrontendData::getLegacyIdentifier($this->externalIdentifier),
-        ];
     }
 }

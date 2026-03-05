@@ -5,13 +5,15 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 return [
     'description' => 'myparcel/order',
     'carrier'     => [
         [
-            'id'           => Carrier::CARRIER_POSTNL_ID,
-            'name'         => Carrier::CARRIER_POSTNL_NAME,
+            'id'           => RefTypesCarrier::POSTNL,
+            'name'         => RefTypesCarrierV2::POSTNL,
             'human'        => 'PostNL',
             'schema'       => 'order/postnl/base',
             'shippingZone' => [
@@ -161,8 +163,8 @@ return [
             ],
         ],
         [
-            'id'           => Carrier::CARRIER_DHL_FOR_YOU_ID,
-            'name'         => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+            'id'           => RefTypesCarrier::DHL_FOR_YOU,
+            'name'         => RefTypesCarrierV2::DHL_FOR_YOU,
             'human'        => 'DHL For You',
             'schema'       => 'order/dhlforyou/base',
             'shippingZone' => [
@@ -262,8 +264,8 @@ return [
             ],
         ],
         [
-            'id'           => Carrier::CARRIER_DHL_EUROPLUS_ID,
-            'name'         => Carrier::CARRIER_DHL_EUROPLUS_NAME,
+            'id'           => RefTypesCarrier::DHL_EUROPLUS,
+            'name'         => RefTypesCarrierV2::DHL_EUROPLUS,
             'human'        => 'DHL Europlus',
             'schema'       => 'order/dhleuroplus/base',
             'shippingZone' => [
@@ -338,8 +340,8 @@ return [
             ],
         ],
         [
-            'id'           => Carrier::CARRIER_INSTABOX_ID,
-            'name'         => Carrier::CARRIER_INSTABOX_NAME,
+            'id'           => RefTypesCarrier::INSTABOX,
+            'name'         => RefTypesCarrierV2::INSTABOX,
             'human'        => 'Instabox',
             'schema'       => 'order/instabox/base',
             'shippingZone' => [
@@ -361,8 +363,8 @@ return [
             ],
         ],
         [
-            'id'           => Carrier::CARRIER_DPD_ID,
-            'name'         => Carrier::CARRIER_DPD_NAME,
+            'id'           => RefTypesCarrier::DPD,
+            'name'         => RefTypesCarrierV2::DPD,
             'human'        => 'DPD',
             'schema'       => 'order/dpd/base',
             'shippingZone' => [
@@ -432,8 +434,8 @@ return [
             ],
         ],
         [
-            'id'           => Carrier::CARRIER_GLS_ID,
-            'name'         => Carrier::CARRIER_GLS_NAME,
+            'id'           => RefTypesCarrier::GLS,
+            'name'         => RefTypesCarrierV2::GLS,
             'human'        => 'GLS',
             'schema'       => 'order/gls/base',
             'shippingZone' => [
@@ -482,8 +484,8 @@ return [
             ],
         ],
         [
-            'id'           => Carrier::CARRIER_TRUNKRS_ID,
-            'name'         => Carrier::CARRIER_TRUNKRS_NAME,
+            'id'           => RefTypesCarrier::TRUNKRS,
+            'name'         => RefTypesCarrierV2::TRUNKRS,
             'human'        => 'Trunkrs',
             'schema'       => 'order/trunkrs/base',
             'shippingZone' => [
