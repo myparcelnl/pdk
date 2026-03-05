@@ -94,6 +94,7 @@ it('exposes inherited options', function () {
             ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
             ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
             ShipmentOptions::FROZEN            => TriStateService::INHERIT,
+            ShipmentOptions::SATURDAY_DELIVERY => TriStateService::INHERIT
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
@@ -114,12 +115,14 @@ it('exposes inherited options', function () {
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
                     // Enabled by carrier
                     ShipmentOptions::SIGNATURE         => TriStateService::ENABLED,
+                    // Disabled by default
                     ShipmentOptions::TRACKED           => TriStateService::DISABLED,
                     ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
                     ShipmentOptions::COLLECT           => TriStateService::DISABLED,
                     ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
                     ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
                     ShipmentOptions::FROZEN            => TriStateService::DISABLED,
+                    ShipmentOptions::SATURDAY_DELIVERY => TriStateService::DISABLED
                 ],
             ],
             'dhlforyou:12345' => [
@@ -134,6 +137,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::LARGE_FORMAT      => TriStateService::ENABLED,
                     // Enabled by carrier
                     ShipmentOptions::ONLY_RECIPIENT    => TriStateService::ENABLED,
+                    // Disabled by default
                     ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
                     ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
                     ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
@@ -144,6 +148,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::DISABLED,
                     ShipmentOptions::FRESH_FOOD        => TriStateService::DISABLED,
                     ShipmentOptions::FROZEN            => TriStateService::DISABLED,
+                    ShipmentOptions::SATURDAY_DELIVERY => TriStateService::DISABLED
                 ],
             ],
         ]);
