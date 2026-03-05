@@ -56,6 +56,6 @@ abstract class AbstractShipmentApiService extends AbstractCoreApiService
      */
     public function __construct()
     {
-        $this->shipmentApi = new ShipmentApi(null, $this->getApiConfig());
+        $this->shipmentApi = new ShipmentApi($this->createGuzzleClient(), $this->getApiConfig());
     }
 }

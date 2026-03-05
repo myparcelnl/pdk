@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment;
 
+use GuzzleHttp\HandlerStack;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Service for retrieving capabilities information from the CoreAPI.
@@ -41,6 +42,35 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinit
 class CapabilitiesService extends AbstractShipmentApiService
 {
     /**
+     * Create a HandlerStack with custom middleware for capabilities endpoints.
+     *
+     * Adds middleware that enforces the Accept header to 'application/json;charset=utf-8;version=2'
+     * for all capabilities endpoints, ensuring consistent API version responses.
+     *
+     * @return HandlerStack The configured handler stack
+     */
+    protected function createGuzzleClientHandlerStack(): HandlerStack
+    {
+        $stack = parent::createGuzzleClientHandlerStack();
+
+        // Add middleware to enforce version 2 Accept header for capabilities endpoints
+        $stack->push(function (callable $handler) {
+            return function (RequestInterface $request, array $options) use ($handler) {
+                $path = $request->getUri()->getPath();
+
+                // Apply to both capabilities endpoints
+                if (strpos($path, '/shipments/capabilities') !== false) {
+                    $request = $request->withHeader('Accept', 'application/json;charset=utf-8;version=2');
+                }
+
+                return $handler($request, $options);
+            };
+        });
+
+        return $stack;
+    }
+
+    /**
      * Get shipment capabilities based on specific parameters.
      *
      * Calculates and returns available delivery options, shipment options, and capabilities
@@ -65,12 +95,10 @@ class CapabilitiesService extends AbstractShipmentApiService
     public function getCapabilities(array $parameters): array
     {
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
-        $response = $this->executeOperationWithErrorHandling(function () use ($parameters): CapabilitiesResponsesCapabilitiesV2 {
-            return $this->shipmentApi->postCapabilities(
-                $this->getUserAgent(),
-                new CapabilitiesPostCapabilitiesRequestV2($parameters)
-            );
-        }, 'postCapabilities');
+        $response = $this->shipmentApi->postCapabilities(
+            $this->getUserAgent(),
+            new CapabilitiesPostCapabilitiesRequestV2($parameters)
+        );
 
         return $response->getResults();
     }
@@ -97,15 +125,12 @@ class CapabilitiesService extends AbstractShipmentApiService
             $request->setCarrier($carrier);
         }
 
-        /**
-         * @var CapabilitiesResponsesContractDefinitionsV2 $response
-         */
-        $response = $this->executeOperationWithErrorHandling(function () use ($request): CapabilitiesResponsesContractDefinitionsV2 {
-            return $this->shipmentApi->postCapabilitiesContractDefinitions(
-                $this->getUserAgent(),
-                $request
-            );
-        }, 'postContractDefinitions');
+        $response = $this->shipmentApi->postCapabilitiesContractDefinitions(
+            $this->getUserAgent(),
+            $request
+        );
+
+        \var_dump($response); // Debugging output to inspect the response structure
 
         return $response->getItems();
     }
