@@ -50,6 +50,9 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
      */
     protected function handleVersionedRequest(Request $request, int $version): Response
     {
+        /**
+         * @var GetDeliveryOptionsV1Request $versionedRequest
+         */
         $versionedRequest = $this->createVersionedRequest($request, $version);
 
         if (! $versionedRequest->validate()) {
