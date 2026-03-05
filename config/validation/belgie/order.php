@@ -5,12 +5,14 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 return [
     'carrier' => [
         [
-            'id'           => Carrier::CARRIER_BPOST_ID,
-            'name'         => Carrier::CARRIER_BPOST_NAME,
+            'id'           => RefTypesCarrier::BPOST,
+            'name'         => RefTypesCarrierV2::BPOST,
             'human'        => 'Bpost',
             'schema'       => 'order/bpost/base',
             'shippingZone' => [
@@ -52,14 +54,14 @@ return [
             ],
         ],
         [
-            'id'     => Carrier::CARRIER_DPD_ID,
-            'name'   => Carrier::CARRIER_DPD_NAME,
+            'id'     => RefTypesCarrier::DPD,
+            'name'   => RefTypesCarrierV2::DPD,
             'human'  => 'DPD',
             'schema' => 'order/dpd/base',
         ],
         [
-            'id'           => Carrier::CARRIER_POSTNL_ID,
-            'name'         => Carrier::CARRIER_POSTNL_NAME,
+            'id'           => RefTypesCarrier::POSTNL,
+            'name'         => RefTypesCarrierV2::POSTNL,
             'human'        => 'PostNL',
             'schema'       => 'order/postnl/base',
             'shippingZone' => [
