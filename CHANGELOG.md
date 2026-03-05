@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.0](https://github.com/myparcelnl/pdk/compare/v3.2.3...v3.3.0) (2026-03-05)
+
+
+### :sparkles: New Features
+
+* **endpoint:** add a new endpoint to allow retrieval of an orders shipment preferences ([#417](https://github.com/myparcelnl/pdk/issues/417)) ([d613dbc](https://github.com/myparcelnl/pdk/commit/d613dbc0a28fa4f2a89df88b8f7d8bf6bb546dfd))
+
 ## [3.2.3](https://github.com/myparcelnl/pdk/compare/v3.2.2...v3.2.3) (2026-02-24)
 
 ## [3.2.2](https://github.com/myparcelnl/pdk/compare/v3.2.1...v3.2.2) (2026-02-20)
