@@ -27,7 +27,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  */
 class Shop extends Model
 {
-    public    $attributes = [
+    public $attributes = [
         'id'                    => null,
         'accountId'             => null,
         'platformId'            => null,
@@ -42,7 +42,7 @@ class Shop extends Model
         'carriers'              => CarrierCollection::class,
     ];
 
-    protected $casts      = [
+    protected $casts = [
         'id'                    => 'int',
         'accountId'             => 'int',
         'platformId'            => 'int',
