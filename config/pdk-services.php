@@ -43,8 +43,6 @@ use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Service\ZipService;
-use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
-use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Service\ContextService;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
@@ -94,11 +92,6 @@ return [
      * Used to manage audit data.
      */
     AuditServiceInterface::class               => autowire(AuditService::class),
-
-    /**
-     * Retrieves carriers from the config.
-     */
-    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     /**
      * Does calculations on carts.

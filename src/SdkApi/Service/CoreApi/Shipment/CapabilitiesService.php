@@ -130,8 +130,6 @@ class CapabilitiesService extends AbstractShipmentApiService
             $request
         );
 
-        \var_dump($response); // Debugging output to inspect the response structure
-
         return $response->getItems();
     }
 }

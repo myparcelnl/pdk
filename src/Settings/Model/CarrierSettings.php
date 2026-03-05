@@ -277,29 +277,15 @@ class CarrierSettings extends AbstractSettingsModel
     ];
 
     /**
-     * @param  string|\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
      * @return self
      */
-    public static function fromCarrier($carrier): self
+    public static function fromCarrier(Carrier $carrier): self
     {
-        if ($carrier instanceof Carrier) {
-            $carrier = $carrier->externalIdentifier;
-        }
-
         // Try to get settings using the carrier identifier as-is (for backwards compatibility)
         /** @var null|\MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings */
-        $settings = Settings::all()->carrier->get($carrier);
-
-        if (! $settings) {
-            // If not found, try mapping the carrier name to legacy format
-            $propositionService = Pdk::get(PropositionService::class);
-            $legacyIdentifier = $propositionService->mapNewToLegacyCarrierName($carrier);
-
-            if ($legacyIdentifier !== $carrier) {
-                $settings = Settings::all()->carrier->get($legacyIdentifier);
-            }
-        }
+        $settings = Settings::all()->carrier->get($carrier->name);
 
         if (! $settings) {
             return new CarrierSettings();
