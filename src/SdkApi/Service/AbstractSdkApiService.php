@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\SdkApi\Middleware\LoggingMiddleware;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException;
-use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -28,8 +29,7 @@ use Throwable;
  * - API key retrieval from settings
  * - User agent string construction (platform + PDK version + PHP version)
  * - Environment detection (production vs acceptance)
- * - Error handling wrapper for OpenAPI operations
- * - Request/response logging
+ * - Guzzle client factory with logging middleware
  *
  * **Usage:**
  * Extend this class in namespace-specific abstracts (e.g., AbstractCoreApiService), then create
@@ -115,62 +115,45 @@ abstract class AbstractSdkApiService
     }
 
     /**
-     * Execute an OpenAPI operation with error handling and logging.
+     * Create a HandlerStack with middleware.
      *
-     * Wraps an OpenAPI SDK operation callable with try-catch for ApiException,
-     * logs the request and response (debug on success, error on failure),
-     * and re-throws exceptions after logging.
+     * This method can be overridden in child classes to add custom middleware
+     * to the Guzzle client handler stack. By default, it includes logging middleware.
      *
-     * @param callable $operation The OpenAPI operation to execute
-     * @param string   $name      A descriptive name for logging purposes
+     * **Example override:**
+     * ```php
+     * protected function createGuzzleClientHandlerStack(): HandlerStack
+     * {
+     *     $stack = parent::createGuzzleClientHandlerStack();
+     *     $stack->push($myCustomMiddleware);
+     *     return $stack;
+     * }
+     * ```
      *
-     * @return mixed The result of the OpenAPI operation if successful (specific generated Response class instance)
-     * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException Re-thrown after logging
-     * @throws \Throwable Any other exception that occurs
+     * @return HandlerStack The configured handler stack
      */
-    protected function executeOperationWithErrorHandling(callable $operation, string $name)
+    protected function createGuzzleClientHandlerStack(): HandlerStack
     {
-        $logContext = [
-            'operation' => $name
-        ];
+        $stack = HandlerStack::create();
+        $stack->push(LoggingMiddleware::forApiRequests());
 
-        try {
-            /** @var ResponseInterface $response */
-            $response = $operation();
-            $body     = (string) $response->getBody();
-            $logContext['response'] = [
-                'code' => $response->getStatusCode(),
-                'body' => $body ? json_decode($body, true) : null,
-            ];
-            Logger::debug('Successfully sent request', $logContext);
-        } catch (ApiException $e) {
-            // Handle OpenAPI-specific ApiException with detailed context
-            Logger::error(
-                'An exception was thrown while sending request',
-                array_replace($logContext, [
-                    'error' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                    'responseBody' => $e->getResponseBody(),
-                    'responseHeaders' => $e->getResponseHeaders(),
-                ])
-            );
+        return $stack;
+    }
 
-            // Re-throw after logging
-            throw $e;
-        } catch (Throwable $e) {
-            // Handle any other exceptions without OpenAPI-specific methods
-            Logger::error(
-                'An exception was thrown while sending request',
-                array_replace($logContext, [
-                    'error' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                ])
-            );
-
-            // Re-throw after logging
-            throw $e;
-        }
-
-        return $response;
+    /**
+     * Create a Guzzle HTTP client pre-configured with middleware.
+     *
+     * All API classes that accept a `?ClientInterface` as their first constructor
+     * argument should receive the client produced here so that every request and
+     * response is automatically logged at the transport layer.
+     *
+     * Uses {@see createGuzzleClientHandlerStack()} to build the middleware stack, which can
+     * be overridden in child classes to add custom middleware.
+     *
+     * @return Client
+     */
+    protected function createGuzzleClient(): Client
+    {
+        return new Client(['handler' => $this->createGuzzleClientHandlerStack()]);
     }
 }
