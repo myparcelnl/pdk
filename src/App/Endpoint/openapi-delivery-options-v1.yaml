@@ -129,13 +129,18 @@ components:
   schemas:
     DeliveryOptions:
       type: object
+      required:
+        - carrier
       properties:
         carrier:
           $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/Carrier
+          type: [string, "null"]
         packageType:
           $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/PackageType
+          type: [string, "null"]
         deliveryType:
           $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/DeliveryType
+          type: [string, "null"]
         shipmentOptions:
           type: object
           description: |
@@ -197,7 +202,7 @@ components:
             customLabelText:
               $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsPackage/properties/customLabelText
         date:
-          type: string
+          type: [string, "null"]
           format: date-time
           nullable: true
           description: The delivery date and time in ISO 8601 format with timezone
@@ -206,8 +211,7 @@ components:
           $ref: '#/components/schemas/PickupLocation'
 
     PickupLocation:
-      type: object
-      nullable: true
+      type: [object, "null"]
       description: Pickup location details
       properties:
         locationCode:
@@ -226,47 +230,45 @@ components:
           $ref: '#/components/schemas/Address'
 
     Address:
-      type: object
+      type: [object, "null"]
       description: Address information
+      required:
       properties:
         street:
-          type: string
+          type: [string, "null"]
           description: Street name
           example: "Hoofdstraat"
         number:
-          type: string
+          type: [string, "null"]
           description: Street number
           example: "123"
         numberSuffix:
-          type: string
-          nullable: true
+          type: [string, "null"]
           description: Street number suffix
           example: "A"
         postalCode:
-          type: string
+          type: [string, "null"]
           description: Postal code
           example: "1234AB"
         boxNumber:
-          type: string
-          nullable: true
+          type: [string, "null"]
           description: Box number (for Belgian addresses)
           example: "B"
         city:
-          type: string
+          type: [string, "null"]
           description: City name
           example: "Amsterdam"
         cc:
-          type: string
+          type: [string, "null"]
           description: Country code (ISO 3166-1 alpha-2)
           example: "NL"
         state:
-          type: string
+          type: [string, "null"]
           nullable: true
           description: State or province
           example: "North Holland"
         region:
-          type: string
-          nullable: true
+          type: [string, "null"]
           description: Region
           example: "Randstad"
 
