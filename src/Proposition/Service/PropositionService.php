@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Proposition\Service;
 
-use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Sdk\Support\Str;
 use RuntimeException;
 
 class PropositionService
@@ -167,6 +162,8 @@ class PropositionService
     }
 
     /**
+     * @TODO: Refactor to shiping rules api?
+     *
      * Get the default carrier from the proposition config.
      * Returns the outbound carrier by default. Use $outbound = false to get the inbound (return shipments) carrier.
 

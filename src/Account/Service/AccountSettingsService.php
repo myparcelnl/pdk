@@ -70,18 +70,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function hasCarrierSmallPackageContract(): bool
-    {
-        $account = $this->getAccount();
-
-        return $account ? $account->generalSettings->hasCarrierSmallPackageContract : false;
-    }
-
-
-    /**
      * @param  string $feature
      *
      * @return bool
@@ -129,7 +117,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $this->hasAccount()
             && $this->getCarriers()
             ->contains(function (Carrier $carrier) use ($carrierName) {
-                return $carrier->name === $carrierName;
+                return $carrier->carrier === $carrierName;
             });
     }
 }

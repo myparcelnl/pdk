@@ -6,35 +6,34 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
-use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 /**
- * Intantiate a Carrier model based on existing known data when passed an ID/Name, or creates a new Carrier model based on the data passed to the constructor.
+ * Instantiate a Carrier model based on existing known data when passed an ID/Name, or creates a new Carrier model based on the data passed to the constructor.
  * If nothing is passed, the configured default carrier is returned.
  *
  * This Carrier model is modelled on top of the carrier as returned by the shipments/capabilities endpoint with additional metadata.
  * This gives us the relevant information about the carrier that we need to use, where the other API endpoints only concern themselves with being passed the ID/Name of the carrier.
  *
- * @property null|int    $id      The numeric ID of the carrier, as returned by the v1 API
- * @property null|string $name    The CONSTANT_CASE machine name of the carrier, as returned by the v2 API
- * @property null|string $human   The human readable name of the carrier, as returned by the API
- * @property bool        $enabled Whether or not the carrier is enabled in the plugin settings
  *
  * Properties from the backing RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2 SDK model
- * @property mixed|null  $carrier          Carrier info from contract definitions
- * @property array|null  $packageTypes     Available package types
- * @property mixed|null  $options          Available shipment options
- * @property array|null  $deliveryTypes    Available delivery types
- * @property array|null  $transactionTypes Available transaction types
- * @property mixed|null  $collo            Collo constraints
+ * @property string $carrier          Carrier name in CONSTANT_CASE from contract definitions
+ * @property string[]|null  $packageTypes     Available package types as an array of CONSTANT_CASE strings from contract definitions
+ * @property \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2|null  $options          Available shipment options including default/required states and additional metadata for options (e.g. insurance suboptions and their constraints)
+ * @property string[]|null  $deliveryTypes    Available delivery types as an array of CONSTANT_CASE strings from contract definitions
+ * @property string[]|null  $transactionTypes Available transaction types as an array of CONSTANT_CASE strings from contract definitions
+ * @property \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo|null  $collo            Collo constraints
  */
 class Carrier extends SdkBackedModel
 {
+    /*
+     * Inherit all getters and setters from this model.
+     */
+    protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
+
     /**
      * @deprecated use RefTypesCarrierV2::POSTNL
      */
@@ -101,6 +100,8 @@ class Carrier extends SdkBackedModel
     public const CARRIER_TRUNKRS_LEGACY_NAME   = 'trunkrs';
 
     /**
+     * Legacy names as used by delivery options and internal storage.
+     *
      * @deprecated use new carrier names directly
      */
     public const CARRIER_NAME_TO_LEGACY_MAP = [
@@ -154,14 +155,24 @@ class Carrier extends SdkBackedModel
         self::CARRIER_TRUNKRS_LEGACY_NAME    => RefTypesCarrier::TRUNKRS,
     ];
 
-    protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
-
+    /**
+     * Any attributes here extend/overwrite the data from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.
+     * @see RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
+     */
     protected $attributes = [];
 
+    /**
+     * Any attributes here extend/overwrite the getters from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.
+     * @see RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
+     */
     protected $casts = [];
 
     /**
-     * If carrier ID and/or name are given, look up an existing carrier configuration for the current account and instantiate with that data.
+     * The Carrier constructor will use existing carrier data from the account settings service when a name or ID is passed,
+     * and will merge it with any passed data (giving priority to passed data in case of overlap).
+     *
+     * If an unknown, or no name or ID is passed, it will simply return a new Carrier model with the passed data (if any).
+     *
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
@@ -172,17 +183,19 @@ class Carrier extends SdkBackedModel
         $carrierName = null;
 
         // Determine carrier name from input
-        if (isset($data['name'])) {
+        if (isset($data['carrier'])) {
+            $carrierName = $data['carrier'];
+        } elseif (isset($data['name'])) {
             $carrierName = $data['name'];
         } elseif (isset($data['id'])) {
             // Convert ID to name using the map
             $carrierName = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true) ?: null;
         }
 
-        // Look up the carrier by name. If no existing carrier was found, simply return a model with the passed data (if any)
+        // Look up the carrier by carrier property (SDK-backed). If no existing carrier was found, simply return a model with the passed data (if any)
         $existing = null;
         if ($carrierName) {
-            $found = $accountSettings->getCarriers()->firstWhere('name', $carrierName);
+            $found = $accountSettings->getCarriers()->firstWhere('carrier', $carrierName);
 
             if ($found) {
                 $existing = $found->getAttributes();

@@ -27,6 +27,8 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -93,7 +95,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -108,7 +110,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withContractId(1234)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
@@ -124,7 +126,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -145,7 +147,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -165,7 +167,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -184,7 +186,7 @@ it(
                     ->withDeliveryOptionsWithPickupLocationInTheNetherlands()
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -200,7 +202,7 @@ it(
                     ->withCustomsDeclaration(factory(CustomsDeclaration::class))
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -215,7 +217,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -231,7 +233,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -247,7 +249,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -267,14 +269,14 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
+                            ->withId(RefTypesCarrier::POSTNL)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
                     ),
                 factory(Shipment::class)->withCarrier(
                     factory(Carrier::class)
-                        ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
+                        ->withId(RefTypesCarrier::DHL_FOR_YOU)
                         ->withOutboundFeatures(
                             factory(PropositionCarrierFeatures::class)->withEverything()
                         )
@@ -288,7 +290,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_GLS_ID)
+                            ->withId(RefTypesCarrier::GLS)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -303,7 +305,7 @@ it(
                 factory(Shipment::class)
                     ->withCarrier(
                         factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_GLS_ID)
+                            ->withId(RefTypesCarrier::GLS)
                             ->withOutboundFeatures(
                                 factory(PropositionCarrierFeatures::class)->withEverything()
                             )
@@ -338,7 +340,7 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     'single shipment' => [
         'input'       => [
             [
-                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'            => ['id' => RefTypesCarrier::POSTNL],
                 'deliveryOptions'    => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [
@@ -395,7 +397,7 @@ it('direct prints', function ($input, $printerGroupId, $accept) {
     'missing printer group'   => [
         'input'          => [
             [
-                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'   => ['id' => RefTypesCarrier::POSTNL],
                 'recipient' => DEFAULT_INPUT_RECIPIENT,
                 'sender'    => DEFAULT_INPUT_SENDER,
             ],
@@ -406,7 +408,7 @@ it('direct prints', function ($input, $printerGroupId, $accept) {
     'available printer group' => [
         'input'          => [
             [
-                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'   => ['id' => RefTypesCarrier::POSTNL],
                 'recipient' => DEFAULT_INPUT_RECIPIENT,
                 'sender'    => DEFAULT_INPUT_SENDER,
             ],

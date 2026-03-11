@@ -19,13 +19,11 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
-use MyParcelNL\Pdk\Proposition\Model\PropositionMetadata;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -34,7 +32,6 @@ use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclarationItem;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationFactory;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentLabelsLinkResponse;
@@ -50,12 +47,15 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+
 
 usesShared(new UsesMockPdkInstance(), new UsesApiMock(), new UsesNotificationsMock(), new UsesSettingsMock());
 
@@ -152,8 +152,8 @@ it('exports order', function (
 
     MockApi::enqueue(
         ...$orderMode
-        ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
-        : [new ExamplePostShipmentsResponse()]
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
     );
 
     $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
@@ -221,8 +221,8 @@ it('merges partial payload with existing order', function (
 
     MockApi::enqueue(
         ...$orderMode
-        ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
-        : [new ExamplePostShipmentsResponse()]
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
     );
 
     $date = new \DateTime('+1 day');
@@ -261,15 +261,15 @@ it('merges partial payload with existing order', function (
         [],
         json_encode(
             [
-            'data' => [
-                'orders' => [
-                    [
-                        'deliveryOptions' => $partialDeliveryOptions,
-                        'physicalProperties' => $partialPhysicalProperties
+                'data' => [
+                    'orders' => [
+                        [
+                            'deliveryOptions' => $partialDeliveryOptions,
+                            'physicalProperties' => $partialPhysicalProperties
+                        ],
                     ],
                 ],
-            ],
-        ]
+            ]
         )
     );
 
@@ -306,12 +306,10 @@ it('merges partial payload with existing order', function (
         expect($responseShipments)->each->toHaveLength(1)
             ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
     }
-
 })
     ->with('order mode toggle')
     ->with('carrier export settings')
-    ->with('pdk orders domestic');
-;
+    ->with('pdk orders domestic');;
 
 it('exports multicollo order', function (
     PdkOrderCollectionFactory $orderFactory,
@@ -372,12 +370,12 @@ it('adds api errors as notifications if shipment export fails', function () {
     $errorResponse = new ExamplePostShipmentsValidationErrorResponse();
     MockApi::enqueue($errorResponse);
 
-    factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)->store();
+    factory(CarrierSettings::class, RefTypesCarrierV2::POSTNL)->store();
     factory(PdkOrder::class)
         ->withExternalIdentifier('error')
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME)
+                ->withCarrier(RefTypesCarrierV2::DHL_FOR_YOU)
                 ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
         )
         ->store();
@@ -414,13 +412,12 @@ it('adds api errors as notifications if shipment export fails', function () {
                 ],
             ]);
     }
-
 });
 
 it('exports order and directly returns barcode if concept shipments is off', function () {
     factory(Settings::class)
         ->withOrder(factory(OrderSettings::class)->withConceptShipments(false))
-        ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+        ->withCarrier(RefTypesCarrierV2::POSTNL)
         ->store();
 
     $collection = factory(PdkOrderCollection::class, 1)
@@ -456,7 +453,7 @@ it(
     'exports pickup order without signature',
     function (?RetailLocationFactory $pickupLocation, ShippingAddressFactory $shippingAddress) {
         factory(CarrierSettings::class)
-            ->withId((string) Carrier::CARRIER_POSTNL_ID)
+            ->withId((string) RefTypesCarrier::POSTNL)
             ->withExportSignature(false)
             ->store();
 
@@ -516,7 +513,7 @@ it(
     'exports evening order',
     function (ShippingAddressFactory $shippingAddress) {
         factory(CarrierSettings::class)
-            ->withId((string) Carrier::CARRIER_POSTNL_ID)
+            ->withId((string) RefTypesCarrier::POSTNL)
             ->store();
 
         $order = factory(PdkOrder::class)
@@ -558,9 +555,9 @@ it(
     ->with(
         [
             'foreign shipping location' =>
-                function () {
-                    return factory(ShippingAddress::class)->inTheUnitedKingdom();
-                },
+            function () {
+                return factory(ShippingAddress::class)->inTheUnitedKingdom();
+            },
         ]
     );
 
@@ -574,8 +571,8 @@ it(
     ) {
         MockApi::enqueue(
             ...$orderMode
-            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
-            : [new ExamplePostShipmentsResponse()]
+                ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+                : [new ExamplePostShipmentsResponse()]
         );
 
         $collection  = $factory
