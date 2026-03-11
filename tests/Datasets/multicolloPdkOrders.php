@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -21,7 +22,7 @@ dataset('multicolloPdkOrders', [
                             ->withLabelAmount(5)
                             ->withCarrier(
                                 factory(Carrier::class)
-                                    ->withName(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withName(RefTypesCarrierV2::POSTNL)
                                     ->withOutboundFeatures([
                                         'metadata' => [
                                             'multiCollo' => true,
@@ -43,7 +44,7 @@ dataset('multicolloPdkOrders', [
                             ->withLabelAmount(2)
                             ->withCarrier(
                                 factory(Carrier::class)
-                                    ->withName(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withName(RefTypesCarrierV2::POSTNL)
                                     ->withOutboundFeatures([
                                         'metadata' => [
                                             'multiCollo' => false,

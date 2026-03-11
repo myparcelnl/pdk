@@ -12,12 +12,14 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use function MyParcelNL\Pdk\Tests\factory;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
 it('can hold and expose data', function () {
     $shipment = new Shipment([
-        'carrier'         => new Carrier(['carrier' => ['name' => Carrier::CARRIER_POSTNL_NAME]]),
+        'carrier'         => new Carrier(['carrier' => ['name' => RefTypesCarrierV2::POSTNL]]),
         'sender'          => new Address(),
         'recipient'       => new Address(),
         'deliveryOptions' => new DeliveryOptions(),

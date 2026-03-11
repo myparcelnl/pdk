@@ -17,8 +17,8 @@ use MyParcelNL\Pdk\App\Order\Calculator\UPSStandard\UPSStandardCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPSExpressSaver\UPSExpressSaverCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
