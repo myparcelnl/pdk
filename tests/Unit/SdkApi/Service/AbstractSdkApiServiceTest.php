@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
@@ -13,9 +15,6 @@ use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Log\LogLevel;
 
 use function DI\value;
@@ -48,9 +47,14 @@ class ConcreteSdkApiServiceForTest extends AbstractSdkApiService
         return $this->isAcceptanceEnvironment();
     }
 
-    public function publicExecuteOperationWithErrorHandling(callable $operation, string $name)
+    public function publicCreateGuzzleClientHandlerStack(): HandlerStack
     {
-        return $this->executeOperationWithErrorHandling($operation, $name);
+        return $this->createGuzzleClientHandlerStack();
+    }
+
+    public function publicCreateGuzzleClient(): Client
+    {
+        return $this->createGuzzleClient();
     }
 }
 
@@ -164,147 +168,17 @@ it('returns false when environment is not set', function () {
     expect($result)->toBeFalse();
 });
 
-// Tests for executeOperationWithErrorHandling()
-it('processes a 200 response and logs debug message', function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(PdkLoggerInterface::class);
-    $logger->clear();
-
+// Tests for createGuzzleClientHandlerStack() and createGuzzleClient()
+it('createGuzzleClientHandlerStack returns a HandlerStack', function () {
     $service = new ConcreteSdkApiServiceForTest();
+    $stack   = $service->publicCreateGuzzleClientHandlerStack();
 
-    $mockBody = \Mockery::mock(StreamInterface::class);
-    $mockBody->shouldReceive('__toString')->andReturn('{"success": true}');
-
-    $mockResponse = \Mockery::mock(ResponseInterface::class);
-    $mockResponse->shouldReceive('getStatusCode')->andReturn(200);
-    $mockResponse->shouldReceive('getBody')->andReturn($mockBody);
-
-    $operation = fn() => $mockResponse;
-
-    $result = $service->publicExecuteOperationWithErrorHandling($operation, 'testOperation');
-
-    expect($result)->toBe($mockResponse);
-
-    $logs = $logger->getLogs(LogLevel::DEBUG);
-
-    expect($logs)
-        ->toHaveCount(1)
-        ->and($logs[0]['message'])
-        ->toBe('[PDK]: Successfully sent request')
-        ->and($logs[0]['context']['operation'])
-        ->toBe('testOperation')
-        ->and($logs[0]['context']['response']['code'])
-        ->toBe(200)
-        ->and($logs[0]['context']['response']['body'])
-        ->toBe(['success' => true]);
+    expect($stack)->toBeInstanceOf(HandlerStack::class);
 });
 
-it('handles empty response body gracefully', function () {
-    $logger = Pdk::get(PdkLoggerInterface::class);
-    $logger->clear();
-
+it('createGuzzleClient returns a Guzzle Client', function () {
     $service = new ConcreteSdkApiServiceForTest();
+    $client  = $service->publicCreateGuzzleClient();
 
-    $mockBody = \Mockery::mock(StreamInterface::class);
-    $mockBody->shouldReceive('__toString')->andReturn('');
-
-    $mockResponse = \Mockery::mock(ResponseInterface::class);
-    $mockResponse->shouldReceive('getStatusCode')->andReturn(204);
-    $mockResponse->shouldReceive('getBody')->andReturn($mockBody);
-
-    $operation = fn() => $mockResponse;
-
-    $result = $service->publicExecuteOperationWithErrorHandling($operation, 'testOperation');
-
-    expect($result)->toBe($mockResponse);
-
-    $logs = $logger->getLogs(LogLevel::DEBUG);
-
-    expect($logs[0]['context']['response']['body'])->toBeNull();
-});
-
-it('catches and logs an OpenApi client ApiException with full context', function () {
-    $logger = Pdk::get(PdkLoggerInterface::class);
-    $logger->clear();
-
-    $service = new ConcreteSdkApiServiceForTest();
-
-    $exception = new ApiException(
-        'API Error occurred',
-        400,
-        ['X-Request-Id' => 'abc123'],
-        '{"error": "Bad request"}'
-    );
-
-    $operation = function () use ($exception) {
-        throw $exception;
-    };
-
-    expect(fn() => $service->publicExecuteOperationWithErrorHandling($operation, 'failOperation'))
-        ->toThrow(ApiException::class);
-
-    $errorLogs = $logger->getLogs(LogLevel::ERROR);
-
-    expect($errorLogs)
-        ->toHaveCount(1)
-        ->and($errorLogs[0]['message'])
-        ->toBe('[PDK]: An exception was thrown while sending request')
-        ->and($errorLogs[0]['context']['operation'])
-        ->toBe('failOperation')
-        ->and($errorLogs[0]['context']['error'])
-        ->toBe('API Error occurred')
-        ->and($errorLogs[0]['context']['code'])
-        ->toBe(400)
-        ->and($errorLogs[0]['context']['responseBody'])
-        ->toBe('{"error": "Bad request"}')
-        ->and($errorLogs[0]['context']['responseHeaders'])
-        ->toBe(['X-Request-Id' => 'abc123']);
-});
-
-it('catches and logs generic Throwable without ApiException context', function () {
-    $logger = Pdk::get(PdkLoggerInterface::class);
-    $logger->clear();
-
-    $service = new ConcreteSdkApiServiceForTest();
-
-    $exception = new \RuntimeException('Generic runtime error', 500);
-
-    $operation = function () use ($exception) {
-        throw $exception;
-    };
-
-    expect(fn() => $service->publicExecuteOperationWithErrorHandling($operation, 'genericError'))
-        ->toThrow(\RuntimeException::class);
-
-    $errorLogs = $logger->getLogs(LogLevel::ERROR);
-
-    expect($errorLogs)
-        ->toHaveCount(1)
-        ->and($errorLogs[0]['context']['error'])
-        ->toBe('Generic runtime error')
-        ->and($errorLogs[0]['context']['code'])
-        ->toBe(500)
-        ->and($errorLogs[0]['context'])
-        ->not->toHaveKey('responseBody')
-        ->and($errorLogs[0]['context'])
-        ->not->toHaveKey('responseHeaders');
-});
-
-it('re-throws exception after logging', function () {
-    $service = new ConcreteSdkApiServiceForTest();
-
-    $exception = new ApiException('Test error', 500, [], '');
-    $operation = function () use ($exception) {
-        throw $exception;
-    };
-
-    try {
-        $service->publicExecuteOperationWithErrorHandling($operation, 'test');
-        $caught = false;
-    } catch (ApiException $e) {
-        $caught = true;
-        expect($e)->toBe($exception);
-    }
-
-    expect($caught)->toBeTrue();
+    expect($client)->toBeInstanceOf(Client::class);
 });
