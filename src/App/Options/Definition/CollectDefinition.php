@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 
 class CollectDefinition implements OrderOptionDefinitionInterface
 {
@@ -36,9 +36,12 @@ class CollectDefinition implements OrderOptionDefinitionInterface
         return ShipmentOptions::COLLECT;
     }
 
-    public function getPropositionKey(): ?string
+    /**
+     * @inheritDoc
+     */
+    public function getCapabilitiesOptionsKey(): ?string
     {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_COLLECT_NAME;
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['scheduled_collection'];
     }
 
     /**

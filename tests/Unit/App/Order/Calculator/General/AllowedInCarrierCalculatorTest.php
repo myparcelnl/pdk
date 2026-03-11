@@ -31,7 +31,7 @@ it('disables options that are not allowed in carrier', function (OrderOptionDefi
     $option = $definition->getPropositionKey();
 
     $fakeCarrier = factory(Carrier::class)
-        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withShipmentOptions([$option]));
+        ->withShipmentOptions([$option]);
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
@@ -45,21 +45,16 @@ it('disables options that are not allowed in carrier', function (OrderOptionDefi
     $service  = Pdk::get(PdkOrderOptionsService::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toHaveKeysAndValues(
-        array_replace(
-            [
-                ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
-                ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
-                ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
-                ShipmentOptions::LARGE_FORMAT      => TriStateService::DISABLED,
-                ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
-                ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
-                ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
-                ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
-            ],
-            [Pdk::get(PropositionService::class)->shipmentOptionNameForDeliveryOptions($option) => TriStateService::ENABLED]
-        )
-    );
+    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toHaveKeysAndValues([
+        ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
+        ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
+        ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
+        ShipmentOptions::LARGE_FORMAT      => TriStateService::DISABLED,
+        ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
+        ShipmentOptions::PRIORITY_DELIVERY => TriStateService::DISABLED,
+        ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
+        ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
+    ]);
 
     $reset();
 })->with('all shipment options');
