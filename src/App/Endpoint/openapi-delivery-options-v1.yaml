@@ -264,7 +264,6 @@ components:
           example: "NL"
         state:
           type: [string, "null"]
-          nullable: true
           description: State or province
           example: "North Holland"
         region:
