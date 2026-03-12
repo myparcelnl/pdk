@@ -22,6 +22,8 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 const LINES_FITS_IN_MAILBOX = [
     [
@@ -181,7 +183,7 @@ it(
     function (array $lines, array $shippingAddress, array $result, bool $allowInternationalMailbox = false) {
         factory(Settings::class)
             ->withCarrierPostNl(
-                factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
+                factory(CarrierSettings::class, RefTypesCarrierV2::POSTNL)
                     ->withAllowInternationalMailbox($allowInternationalMailbox)
                     ->withDeliveryOptionsEnabled(true)
             )

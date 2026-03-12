@@ -158,13 +158,13 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
                 // Map shipment options to package type package as a fallback, if the proposition config does not have a "shipmentOptionsPerPackageType" property within the deliveryOptions.
                 "shipmentOptionsPerPackageType" =>
-                    array_key_exists('shipmentOptionsPerPackageType', $carrier->deliveryOptions) ?
-                        $carrier->deliveryOptions['shipmentOptionsPerPackageType'] :
-                        [
-                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => array_map(function ($key) {
-                                return Str::snake($key);
-                            }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions))
-                        ],
+                array_key_exists('shipmentOptionsPerPackageType', $carrier->deliveryOptions) ?
+                    $carrier->deliveryOptions['shipmentOptionsPerPackageType'] :
+                    [
+                        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => array_map(function ($key) {
+                            return Str::snake($key);
+                        }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions))
+                    ],
                 "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
                 "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
                 "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? null
@@ -234,7 +234,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $cc = $cart->shippingMethod->shippingAddress->cc ?? null;
         if (
             $cc
-            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)) {
+            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)
+        ) {
             $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
         }
 
@@ -296,6 +297,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
+        // TODO: Replace $allCarriers here with carriers from contract-definitions
         $allCarriers     = $this->frontendDataAdapter->carrierCollectionToLegacyFormat(
             AccountSettings::getCarriers()
         );

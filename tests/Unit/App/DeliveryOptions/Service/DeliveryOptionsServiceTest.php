@@ -25,6 +25,8 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 uses()->group('checkout');
 
@@ -37,7 +39,7 @@ it(
         CarrierFactory $carrierFactory = null,
         callable       $carrierSettingsFactoryCb = null
     ) {
-        $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(Carrier::CARRIER_POSTNL_NAME))
+        $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(RefTypesCarrierV2::POSTNL))
             ->make();
 
         $carrierSettingsFactory = factory(CarrierSettings::class, FrontendData::getLegacyIdentifier($fakeCarrier->externalIdentifier))

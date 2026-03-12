@@ -37,6 +37,7 @@ return [
     /**
      * Url to the API.
      */
+    //@deprecated, use the apiUrl from the OpenAPI spec instead.
     'apiUrl'                 => env('PDK_API_URL', 'https://api.myparcel.nl'),
     'printingApiUrl'         => env('PDK_PRINTING_API_URL', 'https://printing.api.myparcel.nl'),
     'addressesServiceUrl'    => env('PDK_ADDRESSES_SERVICE_URL', 'https://address.api.myparcel.nl'),

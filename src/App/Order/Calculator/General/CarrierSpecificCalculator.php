@@ -16,9 +16,9 @@ use MyParcelNL\Pdk\App\Order\Calculator\Trunkrs\TrunkrsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPSStandard\UPSStandardCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\UPSExpressSaver\UPSExpressSaverCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -27,16 +27,16 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
      * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
     private const CARRIER_CALCULATOR_MAP = [
-        Carrier::CARRIER_POSTNL_NAME             => PostNLCalculator::class,
-        Carrier::CARRIER_DHL_FOR_YOU_NAME        => DhlForYouCalculator::class,
-        Carrier::CARRIER_DHL_EUROPLUS_NAME       => DhlEuroplusCalculator::class,
-        Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME => DhlParcelConnectCalculator::class,
-        Carrier::CARRIER_DPD_NAME                => DpdCalculator::class,
-        Carrier::CARRIER_UPS_STANDARD_NAME       => UPSStandardCalculator::class,
-        Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME  => UPSExpressSaverCalculator::class,
-        Carrier::CARRIER_BPOST_NAME              => BpostCalculator::class,
-        Carrier::CARRIER_GLS_NAME                => GlsCalculator::class,
-        Carrier::CARRIER_TRUNKRS_NAME            => TrunkrsCalculator::class,
+        RefTypesCarrierV2::POSTNL             => PostNLCalculator::class,
+        RefTypesCarrierV2::DHL_FOR_YOU        => DhlForYouCalculator::class,
+        RefTypesCarrierV2::DHL_EUROPLUS       => DhlEuroplusCalculator::class,
+        RefTypesCarrierV2::DHL_PARCEL_CONNECT => DhlParcelConnectCalculator::class,
+        RefTypesCarrierV2::DPD                => DpdCalculator::class,
+        RefTypesCarrierV2::UPS_STANDARD       => UPSStandardCalculator::class,
+        RefTypesCarrierV2::UPS_EXPRESS_SAVER  => UPSExpressSaverCalculator::class,
+        RefTypesCarrierV2::BPOST              => BpostCalculator::class,
+        RefTypesCarrierV2::GLS                => GlsCalculator::class,
+        RefTypesCarrierV2::TRUNKRS            => TrunkrsCalculator::class,
     ];
 
     public function calculate(): void

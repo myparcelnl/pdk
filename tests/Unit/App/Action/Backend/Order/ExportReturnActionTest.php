@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -76,7 +78,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('2')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                                     ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
                                     ->withShipmentOptions(factory(ShipmentOptions::class)->withSignature(1))
                             ),
@@ -85,7 +87,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                     ->withExternalIdentifier('247')
                     ->withDeliveryOptions(
                         factory(DeliveryOptions::class)
-                            ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                            ->withCarrier(RefTypesCarrierV2::POSTNL)
                             ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
                     )
             );
@@ -102,7 +104,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('1')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(0)
@@ -113,7 +115,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('2')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(500)
@@ -134,7 +136,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('1')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME)
+                                    ->withCarrier(RefTypesCarrierV2::DHL_EUROPLUS)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(0)
@@ -145,7 +147,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('2')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME)
+                                    ->withCarrier(RefTypesCarrierV2::DHL_EUROPLUS)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(500)

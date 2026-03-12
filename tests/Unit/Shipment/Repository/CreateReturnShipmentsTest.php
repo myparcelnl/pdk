@@ -16,6 +16,8 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 usesShared(new UsesEachMockPdkInstance());
 
@@ -59,7 +61,7 @@ it('creates return shipment', function (array $input) {
         'input' => [
             [
                 'id'                  => 65435213,
-                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'             => ['id' => RefTypesCarrier::POSTNL],
                 'deliveryOptions'     => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [
@@ -107,7 +109,7 @@ it('creates a valid request from a shipment collection', function ($input, $path
         'input' => [
             [
                 'id'                  => 65435213,
-                'carrier'             => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'             => ['id' => RefTypesCarrier::POSTNL],
                 'deliveryOptions'     => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [

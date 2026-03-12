@@ -4,358 +4,205 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
-use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
-use MyParcelNL\Pdk\Facade\FrontendData;
-use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 /**
- * @property string                   $externalIdentifier
- * @property null|int                 $id
- * @property null|string              $name
- * @property null|string              $human
- * @property null|int                 $contractId
- * @property bool                     $enabled
- * @property bool                     $primary
- * @property bool                     $isCustom
- * @property bool                     $isDefault
- * @property bool                     $optional
- * @property null|string              $label
- * @property null|string              $type
- * @property PropositionCarrierFeatures|null  $inboundFeatures
- * @property PropositionCarrierFeatures|null  $outboundFeatures
- * @property CarrierCapabilities        $capabilities        // @deprecated use outboundFeatures instead
- * @property CarrierCapabilities        $returnCapabilities  // @deprecated use inboundFeatures instead
- * @property null|array                 $deliveryCountries
- * @property null|array                 $pickupCountries
+ * Instantiate a Carrier model based on existing known data when passed an ID/Name, or creates a new Carrier model based on the data passed to the constructor.
+ * If nothing is passed, the configured default carrier is returned.
  *
- * @mixin \MyParcelNL\Pdk\Carrier\Concern\HasDeprecatedSubscriptionId
+ * This Carrier model is modelled on top of the carrier as returned by the shipments/capabilities endpoint with additional metadata.
+ * This gives us the relevant information about the carrier that we need to use, where the other API endpoints only concern themselves with being passed the ID/Name of the carrier.
+ *
+ *
+ * Properties from the backing RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2 SDK model
+ * @property string $carrier          Carrier name in CONSTANT_CASE from contract definitions
+ * @property string[]|null  $packageTypes     Available package types as an array of CONSTANT_CASE strings from contract definitions
+ * @property \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2|null  $options          Available shipment options including default/required states and additional metadata for options (e.g. insurance suboptions and their constraints)
+ * @property string[]|null  $deliveryTypes    Available delivery types as an array of CONSTANT_CASE strings from contract definitions
+ * @property string[]|null  $transactionTypes Available transaction types as an array of CONSTANT_CASE strings from contract definitions
+ * @property \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo|null  $collo            Collo constraints
  */
-class Carrier extends Model
+class Carrier extends SdkBackedModel
 {
-    public const CARRIER_POSTNL_ID                   = 1;
+    /*
+     * Inherit all getters and setters from this model.
+     */
+    protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
+
     /**
-     * @deprecated use CARRIER_POSTNL_NAME
+     * @deprecated use RefTypesCarrierV2::POSTNL
      */
     public const CARRIER_POSTNL_LEGACY_NAME          = 'postnl';
-    public const CARRIER_POSTNL_NAME                 = 'POSTNL';
-    public const CARRIER_BPOST_ID                    = 2;
+
     /**
-     * @deprecated use CARRIER_BPOST_NAME
+     * @deprecated use RefTypesCarrierV2::BPOST
      */
     public const CARRIER_BPOST_LEGACY_NAME           = 'bpost';
-    public const CARRIER_BPOST_NAME                  = 'BPOST';
-    public const CARRIER_CHEAP_CARGO_ID              = 3;
+
     /**
-     * @deprecated use CARRIER_CHEAP_CARGO_NAME
+     * @deprecated use RefTypesCarrierV2::CHEAP_CARGO
      */
     public const CARRIER_CHEAP_CARGO_LEGACY_NAME     = 'cheapcargo';
-    public const CARRIER_CHEAP_CARGO_NAME            = 'CHEAP_CARGO';
-    public const CARRIER_DPD_ID                      = 4;
+
     /**
-     * @deprecated use CARRIER_DPD_NAME
+     * @deprecated use RefTypesCarrierV2::DPD
      */
     public const CARRIER_DPD_LEGACY_NAME             = 'dpd';
-    public const CARRIER_DPD_NAME                    = 'DPD';
-    public const CARRIER_INSTABOX_ID                 = 5;
+
     /**
-     * @deprecated use CARRIER_INSTABOX_NAME
-     */
-    public const CARRIER_INSTABOX_LEGACY_NAME        = 'instabox';
-    public const CARRIER_INSTABOX_NAME               = 'INSTABOX';
-    public const CARRIER_DHL_ID                      = 6;
-    /**
-     * @deprecated use CARRIER_DHL_NAME
-     */
-    public const CARRIER_DHL_LEGACY_NAME             = 'dhl';
-    public const CARRIER_DHL_NAME                    = 'DHL';
-    public const CARRIER_BOL_COM_ID                  = 7;
-    /**
-     * @deprecated use CARRIER_BOL_COM_NAME
+     * @deprecated use RefTypesCarrierV2::BOL
      */
     public const CARRIER_BOL_COM_LEGACY_NAME         = 'bol.com';
-    public const CARRIER_BOL_COM_NAME                = 'BOL';
+
     /**
-     * @deprecated Use CARRIER_UPS_STANDARD_ID or CARRIER_UPS_EXPRESS_SAVER_ID instead
-     */
-    public const CARRIER_UPS_ID                      = 8;
-    /**
-     * @deprecated Use CARRIER_UPS_STANDARD_NAME or CARRIER_UPS_EXPRESS_SAVER_NAME instead
-     */
-    public const CARRIER_UPS_LEGACY_NAME             = 'ups';
-    public const CARRIER_UPS_NAME                    = 'UPS';
-    public const CARRIER_DHL_FOR_YOU_ID              = 9;
-    /**
-     * @deprecated use CARRIER_DHL_FOR_YOU_NAME
+     * @deprecated use RefTypesCarrierV2::DHL_FOR_YOU
      */
     public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
-    public const CARRIER_DHL_FOR_YOU_NAME            = 'DHL_FOR_YOU';
-    public const CARRIER_DHL_PARCEL_CONNECT_ID       = 10;
+
     /**
-     * @deprecated use CARRIER_DHL_PARCEL_CONNECT_NAME
+     * @deprecated use RefTypesCarrierV2::DHL_PARCEL_CONNECT
      */
     public const CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME = 'dhlparcelconnect';
-    public const CARRIER_DHL_PARCEL_CONNECT_NAME     = 'DHL_PARCEL_CONNECT';
-    public const CARRIER_DHL_EUROPLUS_ID             = 11;
+
     /**
-     * @deprecated use CARRIER_DHL_EUROPLUS_NAME
+     * @deprecated use RefTypesCarrierV2::DHL_EUROPLUS
      */
     public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
-    public const CARRIER_DHL_EUROPLUS_NAME           = 'DHL_EUROPLUS';
-    public const CARRIER_UPS_STANDARD_ID         = 12;
 
     /**
-     * @deprecated use CARRIER_UPS_STANDARD_NAME
+     * @deprecated use RefTypesCarrierV2::UPS_STANDARD
      */
     public const CARRIER_UPS_STANDARD_LEGACY_NAME = 'upsstandard';
-    public const CARRIER_UPS_STANDARD_NAME       = 'UPS_STANDARD';
-    public const CARRIER_UPS_EXPRESS_SAVER_ID    = 13;
 
     /**
-     * @deprecated use CARRIER_UPS_EXPRESS_SAVER_NAME
+     * @deprecated use RefTypesCarrierV2::UPS_EXPRESS_SAVER
      */
     public const CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME = 'upsexpresssaver';
-    public const CARRIER_UPS_EXPRESS_SAVER_NAME  = 'UPS_EXPRESS_SAVER';
-    public const CARRIER_GLS_ID                  = 14;
 
     /**
-     * @deprecated use CARRIER_GLS_NAME
+     * @deprecated use RefTypesCarrierV2::GLS
      */
     public const CARRIER_GLS_LEGACY_NAME       = 'gls';
-    public const CARRIER_GLS_NAME                = 'GLS';
 
     /**
-     * @deprecated use CARRIER_BRT_NAME
+     * @deprecated use RefTypesCarrierV2::BRT
      */
     public const CARRIER_BRT_LEGACY_NAME       = 'brt';
-    public const CARRIER_BRT_NAME                = 'BRT';
-    public const CARRIER_BRT_ID                  = 15;
 
-    public const CARRIER_TRUNKRS_ID              = 16;
     /**
-     * @deprecated use CARRIER_TRUNKRS_NAME
+     * @deprecated use RefTypesCarrierV2::TRUNKRS
      */
     public const CARRIER_TRUNKRS_LEGACY_NAME   = 'trunkrs';
-    public const CARRIER_TRUNKRS_NAME            = 'TRUNKRS';
 
     /**
+     * Legacy names as used by delivery options and internal storage.
+     *
      * @deprecated use new carrier names directly
      */
     public const CARRIER_NAME_TO_LEGACY_MAP = [
-        self::CARRIER_BOL_COM_NAME            => self::CARRIER_BOL_COM_LEGACY_NAME,
-        self::CARRIER_BPOST_NAME              => self::CARRIER_BPOST_LEGACY_NAME,
-        self::CARRIER_CHEAP_CARGO_NAME        => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
-        self::CARRIER_DHL_EUROPLUS_NAME       => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
-        self::CARRIER_DHL_FOR_YOU_NAME        => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
-        self::CARRIER_DHL_NAME                => self::CARRIER_DHL_LEGACY_NAME,
-        self::CARRIER_DHL_PARCEL_CONNECT_NAME => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
-        self::CARRIER_DPD_NAME                => self::CARRIER_DPD_LEGACY_NAME,
-        self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_LEGACY_NAME,
-        self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_LEGACY_NAME,
-        self::CARRIER_UPS_NAME                => self::CARRIER_UPS_LEGACY_NAME,
-        self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
-        self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
-        self::CARRIER_GLS_NAME                => self::CARRIER_GLS_LEGACY_NAME,
-        self::CARRIER_BRT_NAME                => self::CARRIER_BRT_LEGACY_NAME,
-        self::CARRIER_TRUNKRS_NAME            => self::CARRIER_TRUNKRS_LEGACY_NAME,
+        RefTypesCarrierV2::BOL            => self::CARRIER_BOL_COM_LEGACY_NAME,
+        RefTypesCarrierV2::BPOST          => self::CARRIER_BPOST_LEGACY_NAME,
+        RefTypesCarrierV2::CHEAP_CARGO    => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
+        RefTypesCarrierV2::DHL_EUROPLUS   => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
+        RefTypesCarrierV2::DHL_FOR_YOU    => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
+        RefTypesCarrierV2::DHL_PARCEL_CONNECT => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
+        RefTypesCarrierV2::DPD            => self::CARRIER_DPD_LEGACY_NAME,
+        RefTypesCarrierV2::POSTNL         => self::CARRIER_POSTNL_LEGACY_NAME,
+        RefTypesCarrierV2::UPS_STANDARD   => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
+        RefTypesCarrierV2::UPS_EXPRESS_SAVER => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
+        RefTypesCarrierV2::GLS            => self::CARRIER_GLS_LEGACY_NAME,
+        RefTypesCarrierV2::BRT            => self::CARRIER_BRT_LEGACY_NAME,
+        RefTypesCarrierV2::TRUNKRS        => self::CARRIER_TRUNKRS_LEGACY_NAME,
     ];
 
     /**
      * Names to ids
+     * @deprecated use mapping functionality from the SDK when available
      */
     public const CARRIER_NAME_ID_MAP = [
-        self::CARRIER_BOL_COM_NAME            => self::CARRIER_BOL_COM_ID,
-        self::CARRIER_BPOST_NAME              => self::CARRIER_BPOST_ID,
-        self::CARRIER_CHEAP_CARGO_NAME        => self::CARRIER_CHEAP_CARGO_ID,
-        self::CARRIER_DHL_EUROPLUS_NAME       => self::CARRIER_DHL_EUROPLUS_ID,
-        self::CARRIER_DHL_FOR_YOU_NAME        => self::CARRIER_DHL_FOR_YOU_ID,
-        self::CARRIER_DHL_NAME                => self::CARRIER_DHL_ID,
-        self::CARRIER_DHL_PARCEL_CONNECT_NAME => self::CARRIER_DHL_PARCEL_CONNECT_ID,
-        self::CARRIER_DPD_NAME                => self::CARRIER_DPD_ID,
-        self::CARRIER_INSTABOX_NAME           => self::CARRIER_INSTABOX_ID,
-        self::CARRIER_POSTNL_NAME             => self::CARRIER_POSTNL_ID,
-        self::CARRIER_GLS_NAME                => self::CARRIER_GLS_ID,
-        self::CARRIER_UPS_STANDARD_NAME       => self::CARRIER_UPS_STANDARD_ID,
-        self::CARRIER_UPS_EXPRESS_SAVER_NAME  => self::CARRIER_UPS_EXPRESS_SAVER_ID,
-        self::CARRIER_TRUNKRS_NAME            => self::CARRIER_TRUNKRS_ID,
+        RefTypesCarrierV2::BOL            => RefTypesCarrier::BOL,
+        RefTypesCarrierV2::BPOST          => RefTypesCarrier::BPOST,
+        RefTypesCarrierV2::CHEAP_CARGO    => RefTypesCarrier::CHEAP_CARGO,
+        RefTypesCarrierV2::DHL_EUROPLUS   => RefTypesCarrier::DHL_EUROPLUS,
+        RefTypesCarrierV2::DHL_FOR_YOU    => RefTypesCarrier::DHL_FOR_YOU,
+        RefTypesCarrierV2::DHL_PARCEL_CONNECT => RefTypesCarrier::DHL_PARCEL_CONNECT,
+        RefTypesCarrierV2::DPD            => RefTypesCarrier::DPD,
+        RefTypesCarrierV2::POSTNL         => RefTypesCarrier::POSTNL,
+        RefTypesCarrierV2::GLS            => RefTypesCarrier::GLS,
+        RefTypesCarrierV2::UPS_STANDARD   => RefTypesCarrier::UPS_STANDARD,
+        RefTypesCarrierV2::UPS_EXPRESS_SAVER => RefTypesCarrier::UPS_EXPRESS_SAVER,
+        RefTypesCarrierV2::TRUNKRS        => RefTypesCarrier::TRUNKRS,
     ];
 
     /**
-     * @deprecated use CARRIER_NAME_ID_MAP instead.
+     * @deprecated use mapping functionality from the SDK when available
      * @see CARRIER_NAME_ID_MAP
      */
     public const CARRIER_LEGACY_NAME_ID_MAP = [
-        self::CARRIER_BOL_COM_LEGACY_NAME    => self::CARRIER_BOL_COM_ID,
-        self::CARRIER_BPOST_LEGACY_NAME              => self::CARRIER_BPOST_ID,
-        self::CARRIER_CHEAP_CARGO_LEGACY_NAME        => self::CARRIER_CHEAP_CARGO_ID,
-        self::CARRIER_DHL_EUROPLUS_LEGACY_NAME       => self::CARRIER_DHL_EUROPLUS_ID,
-        self::CARRIER_DHL_FOR_YOU_LEGACY_NAME        => self::CARRIER_DHL_FOR_YOU_ID,
-        self::CARRIER_DHL_LEGACY_NAME                => self::CARRIER_DHL_ID,
-        self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => self::CARRIER_DHL_PARCEL_CONNECT_ID,
-        self::CARRIER_DPD_LEGACY_NAME                => self::CARRIER_DPD_ID,
-        self::CARRIER_INSTABOX_LEGACY_NAME           => self::CARRIER_INSTABOX_ID,
-        self::CARRIER_POSTNL_LEGACY_NAME             => self::CARRIER_POSTNL_ID,
-        self::CARRIER_UPS_LEGACY_NAME                => self::CARRIER_UPS_ID,
-        self::CARRIER_TRUNKRS_LEGACY_NAME            => self::CARRIER_TRUNKRS_ID,
+        self::CARRIER_BOL_COM_LEGACY_NAME    => RefTypesCarrier::BOL,
+        self::CARRIER_BPOST_LEGACY_NAME      => RefTypesCarrier::BPOST,
+        self::CARRIER_CHEAP_CARGO_LEGACY_NAME => RefTypesCarrier::CHEAP_CARGO,
+        self::CARRIER_DHL_EUROPLUS_LEGACY_NAME => RefTypesCarrier::DHL_EUROPLUS,
+        self::CARRIER_DHL_FOR_YOU_LEGACY_NAME => RefTypesCarrier::DHL_FOR_YOU,
+        self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => RefTypesCarrier::DHL_PARCEL_CONNECT,
+        self::CARRIER_DPD_LEGACY_NAME        => RefTypesCarrier::DPD,
+        self::CARRIER_POSTNL_LEGACY_NAME     => RefTypesCarrier::POSTNL,
+        self::CARRIER_TRUNKRS_LEGACY_NAME    => RefTypesCarrier::TRUNKRS,
     ];
 
     /**
-     * Types
+     * Any attributes here extend/overwrite the data from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.
+     * @see RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
      */
-    // @deprecated
-    public const  TYPE_CUSTOM = 'custom';
-    // @deprecated
-    public const  TYPE_MAIN   = 'main';
-
-    protected $attributes = [
-        'externalIdentifier' => null,
-        'id'                 => null,
-        'name'               => null,
-        'human'              => null,
-        'contractId'         => null,
-        'enabled'            => true,
-        'isDefault'          => true,
-        'label'              => null,
-        'optional'           => false,
-        'primary'            => false,
-        'type'               => self::TYPE_MAIN,
-        'inboundFeatures'    => null,
-        'outboundFeatures'   => null,
-        'capabilities'        => null, // @deprecated use outboundFeatures instead
-        'returnCapabilities'  => null, // @deprecated use inboundFeatures instead
-        'deliveryOptions'     => null,
-    ];
-
-    protected $casts      = [
-        'externalIdentifier' => 'string',
-        'id'                 => 'int',
-        'name'               => 'string',
-        'human'              => 'string',
-        'contractId'         => 'string',
-        'enabled'            => 'bool',
-        'isDefault'          => 'bool',
-        'label'              => 'string',
-        'optional'           => 'bool',
-        'primary'            => 'bool',
-        'type'               => 'string',
-        'inboundFeatures'    => PropositionCarrierFeatures::class,
-        'outboundFeatures'   => PropositionCarrierFeatures::class,
-        'capabilities'        => CarrierCapabilities::class, // @deprecated use outboundFeatures instead
-        'returnCapabilities'  => CarrierCapabilities::class, // @deprecated use inboundFeatures instead
-        'deliveryOptions'     => 'array',
-    ];
+    protected $attributes = [];
 
     /**
-     * @todo remove in v3.0.0
+     * Any attributes here extend/overwrite the getters from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.
+     * @see RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
      */
-    protected $deprecated = [
-        'subscriptionId' => 'contractId',
-    ];
+    protected $casts = [];
 
     /**
-     * If carrier ID and/or name are given, look up an existing carrier configuration from the CarrierRepository and instantiate with that data.
+     * The Carrier constructor will use existing carrier data from the account settings service when a name or ID is passed,
+     * and will merge it with any passed data (giving priority to passed data in case of overlap).
+     *
+     * If an unknown, or no name or ID is passed, it will simply return a new Carrier model with the passed data (if any).
+     *
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
     {
-        /** @var CarrierRepositoryInterface $repository */
-        $repository = Pdk::get(CarrierRepositoryInterface::class);
+        /** @var AccountSettingsServiceInterface $accountSettings */
+        $accountSettings = Pdk::get(AccountSettingsServiceInterface::class);
 
-        if (isset($data['externalIdentifier']) && ! isset($data['name'], $data['id'])) {
-            $parts = explode(':', $data['externalIdentifier']);
+        $carrierName = null;
 
-            $data['name']       = $parts[0] ?? null;
-            $data['contractId'] = $parts[1] ?? null;
+        // Determine carrier name from input
+        if (isset($data['carrier'])) {
+            $carrierName = $data['carrier'];
+        } elseif (isset($data['name'])) {
+            $carrierName = $data['name'];
+        } elseif (isset($data['id'])) {
+            // Convert ID to name using the map
+            $carrierName = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true) ?: null;
         }
 
-        if (! isset($data['name'], $data['id'])) {
-            $carrierInput         = [];
-            $carrierInput['id']   = $data['id'] ?? null;
-            $carrierInput['name'] = $data['name'] ?? null;
-
-            // If neither the id or name is provided, fallback to the default carrier
-            // Prevents the default carrier being returned if an unknown ID is provided
-            if (! $carrierInput['id'] && ! $carrierInput['name']) {
-                try {
-                    $propositionService = Pdk::get(PropositionService::class);
-                    $proposition = $propositionService->getPropositionConfig();
-                    $defaultCarrier = $propositionService->getDefaultCarrier($proposition);
-                    $carrierInput['name'] = $defaultCarrier->name;
-
-                    Logger::warning(
-                        'Carrier Name and ID not given, instantiating default Carrier model',
-                        [
-                            'id'   => $data['id'] ?? null,
-                            'name' => $data['name'] ?? null,
-                        ]
-                    );
-                } catch (\Exception $e) {
-                    Logger::error('Failed to get default carrier', ['exception' => $e]);
-                }
-            }
-            $found = $repository->get($carrierInput);
+        // Look up the carrier by carrier property (SDK-backed). If no existing carrier was found, simply return a model with the passed data (if any)
+        $existing = null;
+        if ($carrierName) {
+            $found = $accountSettings->getCarriers()->firstWhere('carrier', $carrierName);
 
             if ($found) {
                 $existing = $found->getAttributes();
             }
         }
 
+        // Merges passed data with found data (if any), giving priority to passed data in case of overlap
         parent::__construct(array_replace($existing ?? [], $data ?? []));
-    }
-
-    /**
-     * @return string
-     * @noinspection PhpUnused
-     */
-    public function getExternalIdentifierAttribute(): string
-    {
-        $identifier = $this->name;
-
-        if ($this->contractId) {
-            $identifier .= ":$this->contractId";
-        }
-
-        return $identifier ?: '?';
-    }
-
-    /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function getIsCustomAttribute(): bool
-    {
-        return ! $this->isDefault;
-    }
-
-    /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function getIsDefaultAttribute(): bool
-    {
-        return self::TYPE_MAIN === $this->type;
-    }
-
-    /**
-     * @return string
-     * @noinspection PhpUnused
-     */
-    public function getTypeAttribute(): string
-    {
-        return $this->contractId ? self::TYPE_CUSTOM : self::TYPE_MAIN;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function toStorableArray(): array
-    {
-        return [
-            'externalIdentifier' => FrontendData::getLegacyIdentifier($this->externalIdentifier),
-        ];
     }
 }
