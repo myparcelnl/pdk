@@ -232,7 +232,6 @@ components:
     Address:
       type: [object, "null"]
       description: Address information
-      required:
       properties:
         street:
           type: [string, "null"]
