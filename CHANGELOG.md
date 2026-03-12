@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/myparcelnl/pdk/compare/v3.3.0...v3.3.1) (2026-03-12)
+
+
+### :bug: Bug Fixes
+
+* make several properties nullable in the openapi spec ([#424](https://github.com/myparcelnl/pdk/issues/424)) ([e293441](https://github.com/myparcelnl/pdk/commit/e293441cfca18df9e80e283b8f340820b43cfbd1))
+
 ## [3.3.0](https://github.com/myparcelnl/pdk/compare/v3.2.3...v3.3.0) (2026-03-05)
 
 
