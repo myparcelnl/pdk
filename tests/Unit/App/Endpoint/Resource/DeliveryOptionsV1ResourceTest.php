@@ -148,7 +148,7 @@ it('creates response with versioned headers', function () {
 });
 
 it('formats future dates as ISO 8601 string', function () {
-    // Set a relative date one day in the future, as currently the PDK wil return `null` for past dates.
+    // Set a relative date one day in the future, as currently the PDK will return `null` for past dates.
     $deliveryOptions = new DeliveryOptions([
         'date' => new \DateTime('+1 day')
     ]);
