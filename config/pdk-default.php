@@ -154,7 +154,7 @@ return [
      * Languages present in the translations directory after the build process.
      * @todo refactor to use the proposition config instead of the hardcoded array.
      */
-    'availableLanguages'               => value(['en', 'nl', 'fr']),
+    'availableLanguages'               => value(['en', 'nl', 'fr', 'de', 'it']),
 
     /**
      * The prefix to use for delivery options translations.
