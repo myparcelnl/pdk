@@ -26,7 +26,6 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockNotFoundPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use Mockery;
 use Symfony\Component\HttpFoundation\Request;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
