@@ -147,9 +147,10 @@ it('creates response with versioned headers', function () {
     expect($response->headers->get('Content-Type'))->toContain('version=1');
 });
 
-it('formats date as ISO 8601 string', function () {
+it('formats future dates as ISO 8601 string', function () {
+    // Set a relative date one day in the future, as currently the PDK wil return `null` for past dates.
     $deliveryOptions = new DeliveryOptions([
-        'date' => new \DateTime('2026-03-15T10:30:00+00:00'),
+        'date' => new \DateTime('+1 day')
     ]);
 
     $resource = new DeliveryOptionsV1Resource($deliveryOptions);

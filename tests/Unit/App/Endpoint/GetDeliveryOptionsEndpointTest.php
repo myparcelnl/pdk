@@ -6,13 +6,17 @@ namespace MyParcelNL\Pdk\Tests\Unit\App\Endpoint;
 
 use GuzzleHttp\Psr7\Response;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
-use League\OpenAPIValidation\PSR7\Exception\ValidationFailed;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use MyParcelNL\Pdk\App\Endpoint\Handler\GetDeliveryOptionsEndpoint;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocationType;
@@ -21,6 +25,8 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockNotFoundPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
+use Mockery;
 use Symfony\Component\HttpFoundation\Request;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -248,7 +254,9 @@ it('returns a response which matches the openApi schema', function (string $pack
     expect($response->getStatusCode())->toBe(200);
 
     // Validate response against OpenAPI schema
-    $validator = (new ValidatorBuilder())->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')->getResponseValidator();
+    $validator = (new ValidatorBuilder())
+        ->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')
+        ->getResponseValidator();
     $operation  = new OperationAddress('/delivery-options', 'get');
 
     // Convert Symfony Response to PSR-7 Response using Guzzle for validation
@@ -265,3 +273,116 @@ it('returns a response which matches the openApi schema', function (string $pack
         $this->fail($e->getVerboseMessage());
     }
 })->with('packageTypeNames', 'deliveryTypeNames', 'retailLocationTypes');
+
+it('insurance: calls calculate() on the options service when handling a delivery options request', function () {
+    // Spy test: verifies the endpoint calls PdkOrderOptionsServiceInterface::calculate(), which runs
+    // the full orderCalculators chain including InsuranceCalculator.
+    //
+    // Root-cause: the endpoint previously called calculateShipmentOptions() only, which resolves
+    // boolean TriState flags from settings but never runs InsuranceCalculator. Insurance was left
+    // as TriState ENABLED (1), and the formatter produced 1 * 1_000_000 = 1_000_000.
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('insurance-spy-order')
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('postnl'))
+        ->store();
+
+    /** @var \Mockery\MockInterface&PdkOrderOptionsServiceInterface $spyService */
+    $spyService = mock(PdkOrderOptionsServiceInterface::class)->makePartial();
+    $spyService->shouldReceive('calculate')->once()->passthru();
+
+    MockPdkFactory::create([PdkOrderOptionsServiceInterface::class => $spyService]);
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $endpoint->handle(new Request(['orderId' => 'insurance-spy-order']));
+
+    // Mockery verifies calculate() was called exactly once.
+    // If the fix is reverted to calculateShipmentOptions(), this assertion fails.
+    $this->addToAssertionCount(1); // We will assert the method call via Mockery, so we need to tell Pest about it
+
+    // Reset the factory so other tests are not affected by the spy
+    MockPdkFactory::create();
+});
+
+it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipment options insurance is INHERIT and carrier has enabled insurance', function () {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('insurance-order')
+        ->withLines([factory(PdkOrderLine::class)->withPrice(100000)])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('postnl')
+                ->withShipmentOptions(factory(ShipmentOptions::class)->withInsurance(TriStateService::INHERIT))
+        )
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier('postnl', [
+            CarrierSettings::EXPORT_INSURANCE        => true,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
+        ])
+        ->store();
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $response = $endpoint->handle(new Request(['orderId' => 'insurance-order']));
+
+    expect($response->getStatusCode())->toBe(200);
+
+    $content = json_decode($response->getContent(), true);
+
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(500 * 1_000_000);
+
+    Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
+});
+
+it('insurance: omits insurance from the response when exportInsurance is disabled in carrier settings', function () {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('insurance-disabled-order')
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('postnl'))
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier('postnl', [
+            CarrierSettings::EXPORT_INSURANCE        => false,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
+        ])
+        ->store();
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $response = $endpoint->handle(new Request(['orderId' => 'insurance-disabled-order']));
+
+    expect($response->getStatusCode())->toBe(200);
+
+    $content = json_decode($response->getContent(), true);
+    expect($content['shipmentOptions'])->not()->toHaveKey('insurance');
+
+    Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
+});
+
+it('insurance: preserves an explicit monetary amount already set on the order shipment options', function () {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('insurance-explicit-order')
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('postnl')
+                ->withShipmentOptions(factory(ShipmentOptions::class)->withInsurance(10000))
+        )
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier('postnl', [
+            CarrierSettings::EXPORT_INSURANCE        => true,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
+        ])
+        ->store();
+
+    $endpoint = new GetDeliveryOptionsEndpoint();
+    $response = $endpoint->handle(new Request(['orderId' => 'insurance-explicit-order']));
+
+    expect($response->getStatusCode())->toBe(200);
+
+    $content = json_decode($response->getContent(), true);
+
+    // The explicit amount (10000) must win over the carrier setting (500).
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 1_000_000);
+
+    Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
+});
