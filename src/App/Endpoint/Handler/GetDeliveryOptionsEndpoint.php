@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Endpoint\Request\GetDeliveryOptionsV1Request;
 use MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -70,10 +71,12 @@ class GetDeliveryOptionsEndpoint extends AbstractEndpoint
                 return $versionedRequest->createNotFoundErrorResponse(\sprintf('Order not found for the orderId %s', $orderId));
             }
 
-            // Resolve the shipment options before passing them to the resource
+            // Run the full options calculation chain. This runs TriStateOptionCalculator
+            // (which resolves boolean flags from carrier/product settings) followed by
+            // InsuranceCalculator (which converts the ENABLED flag to a concrete monetary amount) et al.
             /** @var PdkOrderOptionsServiceInterface $orderOptionsService */
             $orderOptionsService = Pdk::get(PdkOrderOptionsServiceInterface::class);
-            $orderOptionsService->calculateShipmentOptions($order);
+            $order = $orderOptionsService->calculate($order);
 
             return $this->createVersionedResource($order->deliveryOptions, $version)
                 ->createResponse($request, 200, $this->getSupportedVersions());
