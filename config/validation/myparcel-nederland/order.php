@@ -340,29 +340,6 @@ return [
             ],
         ],
         [
-            'id'           => RefTypesCarrier::INSTABOX,
-            'name'         => RefTypesCarrierV2::INSTABOX,
-            'human'        => 'Instabox',
-            'schema'       => 'order/instabox/base',
-            'shippingZone' => [
-                [
-                    'name'        => CountryCodes::CC_NL,
-                    'packageType' => [
-                        [
-                            'id'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_ID,
-                            'name'   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                            'schema' => 'order/instabox/nl_package',
-                        ],
-                        [
-                            'id'     => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
-                            'name'   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                            'schema' => 'order/instabox/mailbox',
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        [
             'id'           => RefTypesCarrier::DPD,
             'name'         => RefTypesCarrierV2::DPD,
             'human'        => 'DPD',
