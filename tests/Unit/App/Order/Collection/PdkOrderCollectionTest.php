@@ -213,13 +213,13 @@ it('updates order shipments by order ids', function () {
 
 it('can generate return shipments', function () {
     // Create a mock for CarrierSchema
-    $carrierSchema = new class () extends CarrierSchema {
+    $carrierSchema = new class() extends CarrierSchema {
         public function setCarrier(Carrier $carrier): CarrierSchema
         {
             return $this;
         }
 
-        public function hasReturnCapabilities()
+        public function hasReturnCapabilities(): bool
         {
             return true;
         }
@@ -264,13 +264,13 @@ it('can generate return shipments', function () {
 
 it('skips shipments from carriers without return capabilities when generating return shipments', function () {
     // Create a mock for CarrierSchema
-    $carrierSchema = new class () extends CarrierSchema {
+    $carrierSchema = new class() extends CarrierSchema {
         public function setCarrier(Carrier $carrier): CarrierSchema
         {
             return $this;
         }
 
-        public function hasReturnCapabilities()
+        public function hasReturnCapabilities(): bool
         {
             return false;
         }

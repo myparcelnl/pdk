@@ -26,7 +26,7 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 uses()->group('checkout');
 
@@ -39,10 +39,10 @@ it(
         CarrierFactory $carrierFactory = null,
         callable       $carrierSettingsFactoryCb = null
     ) {
-        $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(RefTypesCarrierV2::POSTNL))
+        $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(RefCapabilitiesSharedCarrierV2::POSTNL))
             ->make();
 
-        $carrierSettingsFactory = factory(CarrierSettings::class, FrontendData::getLegacyIdentifier($fakeCarrier->externalIdentifier))
+        $carrierSettingsFactory = factory(CarrierSettings::class, FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier))
             ->withDeliveryOptions();
 
         if ($carrierSettingsFactoryCb) {
@@ -216,7 +216,7 @@ it(
     'custom POSTNL: eu mailbox package' => [
         'cart'                   => [
             'carrier'        => [
-                'externalIdentifier' => 'POSTNL:123',
+                'carrier' => 'POSTNL',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'FR'],
@@ -237,7 +237,7 @@ it(
             ],
         ],
         'carrierFactory'         => function () {
-            return factory(Carrier::class)->withExternalIdentifier('POSTNL:123');
+            return factory(Carrier::class)->withCarrier('POSTNL');
         },
         'carrierSettingsFactory' => function () {
             return function (CarrierSettingsFactory $factory) {
@@ -251,7 +251,7 @@ it(
     'custom POSTNL: be mailbox package' => [
         'cart'                   => [
             'carrier'        => [
-                'externalIdentifier' => 'POSTNL:123',
+                'carrier' => 'POSTNL',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'BE'],
@@ -272,7 +272,7 @@ it(
             ],
         ],
         'carrierFactory'         => function () {
-            return factory(Carrier::class)->withExternalIdentifier('POSTNL:123');
+            return factory(Carrier::class)->withCarrier('POSTNL');
         },
         'carrierSettingsFactory' => function () {
             return function (CarrierSettingsFactory $factory) {
@@ -286,7 +286,7 @@ it(
     'custom POSTNL: row mailbox package' => [
         'cart'                   => [
             'carrier'        => [
-                'externalIdentifier' => 'POSTNL:123',
+                'carrier' => 'POSTNL',
             ],
             'shippingMethod' => [
                 'shippingAddress'     => ['cc' => 'KH'],
@@ -307,7 +307,7 @@ it(
             ],
         ],
         'carrierFactory'         => function () {
-            return factory(Carrier::class)->withExternalIdentifier('POSTNL:123');
+            return factory(Carrier::class)->withCarrier('POSTNL');
         },
         'carrierSettingsFactory' => function () {
             return function (CarrierSettingsFactory $factory) {

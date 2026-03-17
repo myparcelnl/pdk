@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -9,12 +10,13 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
@@ -40,12 +42,13 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrier(string $carrier, $data = null): self
     {
+        // The "carrier" attribute refers not to a Carrier model but to a collection of CarrierSetting models.
         if (! isset($this->attributes['carrier'])) {
             $this->attributes['carrier'] = factory(SettingsModelCollection::class);
         }
 
         if ($data instanceof FactoryInterface) {
-            $value = $data->withId($carrier);
+            $value = $data->withCarrier($carrier);
         } elseif (is_array($data) || null === $data) {
             $value = factory(CarrierSettings::class, $carrier)
                 ->withId($carrier)
@@ -68,9 +71,8 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierBpost($data): self
     {
-        // All withCarrierX use legacy names as keys as these are currently still used in the frontend context for bc-compability.
-        // In the future we should migrate to the new constant names.
-        return $this->withCarrier(Carrier::CARRIER_BPOST_LEGACY_NAME, $data);
+
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::BPOST, $data);
     }
 
     /**
@@ -80,7 +82,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDhlEuroplus($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DHL_EUROPLUS_LEGACY_NAME, $data);
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS, $data);
     }
 
     /**
@@ -90,7 +92,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDhlForYou($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME, $data);
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU, $data);
     }
 
     /**
@@ -100,7 +102,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDhlParcelConnect($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME, $data);
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT, $data);
     }
 
     /**
@@ -110,7 +112,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierDpd($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_DPD_LEGACY_NAME, $data);
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::DPD, $data);
     }
 
     /**
@@ -120,7 +122,7 @@ final class SettingsFactory extends AbstractModelFactory
      */
     public function withCarrierPostNl($data): self
     {
-        return $this->withCarrier(Carrier::CARRIER_POSTNL_LEGACY_NAME, $data);
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL, $data);
     }
 
     /**
@@ -143,10 +145,9 @@ final class SettingsFactory extends AbstractModelFactory
      */
     protected function createDefault(): FactoryInterface
     {
+        // @TODO replace with dynamic fetch from shipping rules in the future
         $propositionService = Pdk::get(PropositionService::class);
-        return $this->withCarrier(
-            $propositionService->mapNewToLegacyCarrierName($propositionService->getDefaultCarrier()->name)
-        );
+        return $this->withCarrier($propositionService->getDefaultCarrier()->carrier);
     }
 
     /**
@@ -162,4 +163,3 @@ final class SettingsFactory extends AbstractModelFactory
         $repository->storeAllSettings($model);
     }
 }
-

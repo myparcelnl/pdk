@@ -21,11 +21,11 @@ usesShared(
             ->constructorParameter('settings', [
                 CarrierSettings::ID => [
                     'postnl' => [
-                        CarrierSettings::PRICE_DELIVERY_TYPE_MORNING  => 1.3,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD => 4.5,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_EVENING  => 3,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY   => 1.5,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY => 8.2,
+                        CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY  => 1.3,
+                        CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY => 4.5,
+                        CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY  => 3,
+                        CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY   => 1.5,
+                        CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY => 8.2,
                         CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP   => 0.5,
 
                         CarrierSettings::PRICE_ONLY_RECIPIENT => 0.7,

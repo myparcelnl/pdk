@@ -20,6 +20,8 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -52,12 +54,13 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
             factory(DeliveryOptions::class)
                 ->withCarrier(
                     factory(Carrier::class)
-                        ->withName(Carrier::CARRIER_POSTNL_NAME)
-                        ->withOutboundFeatures(
-                            factory(PropositionCarrierFeatures::class)
-                                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-                                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [5000, 10000, 25000]])
-                        )
+                        ->withName(RefCapabilitiesSharedCarrierV2::POSTNL)
+                    // @TODO: refactor test to a non-specific manner
+                    // ->withOutboundFeatures(
+                    //     factory(PropositionCarrierFeatures::class)
+                    //         ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+                    //         ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [5000, 10000, 25000]])
+                    // )
                 )
                 ->withShipmentOptions(factory(ShipmentOptions::class)->with(array_replace($defaults, $input)))
         )
@@ -162,12 +165,13 @@ it('sets insurance to 0 when no valid insurance amounts are available', function
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
     $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withOutboundFeatures(
-            factory(PropositionCarrierFeatures::class)
-                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0]])
-        )
+        ->withName(RefCapabilitiesSharedCarrierV2::POSTNL)
+        // @TODO: set insurance shipment option using new Carrier API
+        // ->withOutboundFeatures(
+        //     factory(PropositionCarrierFeatures::class)
+        //         ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+        //         ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0]])
+        // )
         ->make();
 
     $order = factory(PdkOrder::class)

@@ -39,7 +39,7 @@ it('returns delivery options for valid order id', function () {
         ->withExternalIdentifier('123')
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
                 ->withDate('2024-01-15')
                 ->withPackageType('package')
         )
@@ -146,7 +146,7 @@ it('detects API version from request headers', function () {
         ->withExternalIdentifier('123')
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
         )
         ->store();
 
@@ -227,7 +227,7 @@ it('returns a response which matches the openApi schema', function (string $pack
         ->withExternalIdentifier('123')
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
                 ->withDate('2024-01-15T10:30:00+00:00')
                 ->withPackageType($packageTypeName)
                 ->withDeliveryType($deliveryTypeName)

@@ -7,14 +7,16 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use MyParcelNL\Pdk\Base\Exception\ModelNotFoundException;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -45,12 +47,12 @@ it('creates carrier with SDK-backed properties', function (int $propositionId) {
 
 it('creates carrier using factory with capabilities', function () {
     $carrier = factory(Carrier::class)
-        ->withCarrier(RefTypesCarrierV2::POSTNL)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
         ->withPackageTypes(['PACKAGE', 'MAILBOX'])
         ->withDeliveryTypes(['STANDARD_DELIVERY', 'MORNING_DELIVERY'])
         ->make();
 
-    expect($carrier->carrier)->toBe(RefTypesCarrierV2::POSTNL)
+    expect($carrier->carrier)->toBe(RefCapabilitiesSharedCarrierV2::POSTNL)
         ->and($carrier->packageTypes)->toBe(['PACKAGE', 'MAILBOX'])
         ->and($carrier->deliveryTypes)->toBe(['STANDARD_DELIVERY', 'MORNING_DELIVERY']);
 });
@@ -76,9 +78,8 @@ it('supports minimal capabilities through factory', function () {
         ->and($carrier->options)->toBe([]);
 });
 
-// TODO: This test requires SDK-backed carrier properties to be properly serialized/deserialized
-// Currently skipped because factory-created carriers don't preserve SDK model structure through lookup
-it('looks up carriers from account when instantiated with name', function () {
+
+it('looks up carriers from account using repository', function () {
     TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
 
     /** @var AccountSettingsServiceInterface $accountSettings */
@@ -90,43 +91,42 @@ it('looks up carriers from account when instantiated with name', function () {
     $firstCarrier = $carriers->first();
     $carrierName = $firstCarrier->carrier;
 
-    // Create new carrier with just the name - should look up from account
-    $lookedUpCarrier = new Carrier(['carrier' => $carrierName]);
+    /** @var CarrierRepositoryInterface $carrierRepository */
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
 
-    expect($lookedUpCarrier->carrier)->toBe($carrierName)
+    // Look up carrier from repository
+    $lookedUpCarrier = $carrierRepository->find($carrierName);
+
+    expect($lookedUpCarrier)->not->toBeNull()
+        ->and($lookedUpCarrier->carrier)->toBe($carrierName)
         ->and($lookedUpCarrier->packageTypes)->toBeArray()
         ->and($lookedUpCarrier->packageTypes)->not->toBeEmpty();
-})->skip('SDK-backed properties not preserved through factory lookup');
-
-it('returns empty carrier when name not found in account', function () {
-    TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
-
-    $carrier = new Carrier(['carrier' => 'UNKNOWN_CARRIER']);
-
-    // Should create carrier with just the data passed, no lookup data
-    expect($carrier->carrier)->toBe('UNKNOWN_CARRIER')
-        ->and($carrier->packageTypes)->toBeNull();
 });
 
-it('merges passed data with looked up carrier data', function () {
+it('returns null from repository when carrier not found', function () {
     TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
 
-    /** @var AccountSettingsServiceInterface $accountSettings */
-    $accountSettings = Pdk::get(AccountSettingsServiceInterface::class);
-    $carriers = $accountSettings->getCarriers();
+    /** @var CarrierRepositoryInterface $carrierRepository */
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
 
-    expect($carriers)->not->toBeEmpty();
+    $carrier = $carrierRepository->find('UNKNOWN_CARRIER');
 
-    $firstCarrier = $carriers->first();
-    $carrierName = $firstCarrier->carrier;
+    expect($carrier)->toBeNull();
+});
 
-    // Create carrier with name (looks up) but override packageTypes
-    $carrier = new Carrier([
-        'carrier' => $carrierName,
-        'packageTypes' => ['CUSTOM_PACKAGE'],
-    ]);
+it('throws exception from repository when carrier not found with findOrFail', function () {
+    TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
 
-    // Should use custom package types instead of looked up ones
-    expect($carrier->carrier)->toBe($carrierName)
-        ->and($carrier->packageTypes)->toBe(['CUSTOM_PACKAGE']);
+    /** @var CarrierRepositoryInterface $carrierRepository */
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
+
+    $carrierRepository->findOrFail('UNKNOWN_CARRIER');
+})->throws(ModelNotFoundException::class);
+
+it('creates carrier directly with constructor without lookup', function () {
+    $carrier = new Carrier(['carrier' => 'UNKNOWN_CARRIER']);
+
+    // Constructor should create carrier with just the data passed, no lookup
+    expect($carrier->carrier)->toBe('UNKNOWN_CARRIER')
+        ->and($carrier->packageTypes)->toBeNull();
 });
