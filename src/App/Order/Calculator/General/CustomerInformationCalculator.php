@@ -51,9 +51,10 @@ final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculat
 
         $schema->setCarrier($carrier);
 
-        $carrierNeedsCustomerInfo = $schema->needsCustomerInfo();
+        // $carrierNeedsCustomerInfo = $schema->needsCustomerInfo();
+        // @TODO "needs customer info" not available through any endpoint
         $sharingCustomerInfo      = Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
 
-        return $carrierNeedsCustomerInfo || $sharingCustomerInfo;
+        return !!$sharingCustomerInfo;
     }
 }

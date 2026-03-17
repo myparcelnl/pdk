@@ -45,19 +45,19 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
         'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,
         'allowExpressDelivery'         => CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
-        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
-        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
+        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY,
+        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY,
         'priceOnlyRecipient'           => CarrierSettings::PRICE_ONLY_RECIPIENT,
         'pricePriorityDelivery'        => CarrierSettings::PRICE_PRIORITY_DELIVERY,
         'pricePackageTypeDigitalStamp' => CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
         'pricePackageTypeMailbox'      => CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
         'pricePackageTypePackageSmall' => CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL,
         'pricePickup'                  => CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP,
-        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
+        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY,
         'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
-        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
+        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY,
         'priceCollect'                 => CarrierSettings::PRICE_COLLECT,
-        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS,
+        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY,
         'excludeParcelLockers'         => CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
     ];
 
@@ -92,18 +92,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $triStateService;
 
     /**
-     * @var \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface
-     */
-    private $frontendDataAdapter;
-
-    /**
      * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      * @param  \MyParcelNL\Pdk\Types\Service\TriStateService             $triStateService
-     * @param  \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface $frontendDataAdapter
      */
     public function __construct(
         CountryServiceInterface     $countryService,
@@ -111,8 +105,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         DropOffServiceInterface     $dropOffService,
         TaxServiceInterface         $taxService,
         SchemaRepository            $schemaRepository,
-        TriStateService             $triStateService,
-        FrontendDataAdapterInterface $frontendDataAdapter
+        TriStateService             $triStateService
     ) {
         $this->countryService      = $countryService;
         $this->currencyService     = $currencyService;
@@ -120,57 +113,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $this->taxService          = $taxService;
         $this->schemaRepository    = $schemaRepository;
         $this->triStateService     = $triStateService;
-        $this->frontendDataAdapter = $frontendDataAdapter;
-    }
-
-    /**
-     * Creates a carrier configuration for the delivery options.
-     * Note that some of these properties will be deprecated and should be replaced by interactions with the capabilities API.
-     * (e.g. packageTypes, features, shipmentOptionsPerPackageType)
-     * @return array
-     * @throws InvalidArgumentException
-     */
-    public function createPropositionConfig(): array
-    {
-        $config = ['carriers' => []];
-        $carriers = Pdk::get(PropositionService::class)
-            ->getCarriers(true);
-
-        /**
-         * @var FrontendDataAdapterInterface $adapter
-         */
-        $adapter = Pdk::get(FrontendDataAdapterInterface::class);
-
-        // @TODO: this data should be based on calls by the DO to the capabilities API through a proxy in the PDK
-        $config['carriers'] = array_map(function ($carrier) use ($adapter) {
-            $legacyCarrier = $adapter->convertCarrierToLegacyFormat($carrier);
-
-            return array_filter([
-                "name"      => $legacyCarrier->name,
-                "active"    => true,
-                "subscription" => TriStateService::INHERIT, // This does not seem to be actually used in the DO?
-                "packageTypes" => $legacyCarrier->capabilities->packageTypes,
-                'deliveryTypes' => $legacyCarrier->capabilities->deliveryTypes,
-                'deliveryCountries' => $carrier->outboundFeatures->deliveryCountries ?? [],
-                "pickupCountries" => $carrier->outboundFeatures->pickupCountries ?? [],
-                // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
-                "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures->deliveryCountries ?? []) : [],
-                "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
-                // Map shipment options to package type package as a fallback, if the proposition config does not have a "shipmentOptionsPerPackageType" property within the deliveryOptions.
-                "shipmentOptionsPerPackageType" =>
-                array_key_exists('shipmentOptionsPerPackageType', $carrier->deliveryOptions) ?
-                    $carrier->deliveryOptions['shipmentOptionsPerPackageType'] :
-                    [
-                        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => array_map(function ($key) {
-                            return Str::snake($key);
-                        }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions))
-                    ],
-                "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
-                "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
-                "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? null
-            ]);
-        }, $carriers->all());
-        return $config;
     }
 
     /**
@@ -199,7 +141,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         foreach ($carriers as $carrier) {
             // Use the legacy identifier for the delivery options, as that endpoint does not yet support the new identifiers.
-            $identifier = FrontendData::getLegacyIdentifier($carrier->externalIdentifier);
+            $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
             $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
         }
 
@@ -297,10 +239,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        // TODO: Replace $allCarriers here with carriers from contract-definitions
-        $allCarriers     = $this->frontendDataAdapter->carrierCollectionToLegacyFormat(
-            AccountSettings::getCarriers()
-        );
+        $allCarriers     = AccountSettings::getCarriers();
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         // Get the package types from the cart
@@ -332,14 +271,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 ->filter(
                     function (Carrier $carrier) use ($cart, $weight, $packageType, $carrierSettings): bool {
                         $hasDeliveryOptions =
-                            $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
+                            $carrierSettings[$carrier->carrier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
 
                         if (! $hasDeliveryOptions) {
                             return false;
                         }
 
                         $schema = $this->schemaRepository->getOrderValidationSchema(
-                            $carrier->name,
+                            $carrier->carrier,
                             $cart->shippingMethod->shippingAddress->cc,
                             // TODO: support full package type class instead of string
                             $packageType->name

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Proposition\Service;
 
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -25,6 +26,19 @@ class PropositionService
      * @var array<int, PropositionConfig>
      */
     private static $configCache = [];
+
+    /**
+     * @var \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface
+     */
+    private $carrierRepository;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface $carrierRepository
+     */
+    public function __construct(CarrierRepositoryInterface $carrierRepository)
+    {
+        $this->carrierRepository = $carrierRepository;
+    }
 
     /**
      * Get the active proposition ID.
@@ -177,7 +191,7 @@ class PropositionService
         } else {
             $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
-        return new Carrier(['id' => $defaultCarrierId]);
+        return $this->carrierRepository->findByLegacyId($defaultCarrierId);
     }
 
     /**

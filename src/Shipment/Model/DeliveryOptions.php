@@ -10,8 +10,11 @@ use DateTime;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 /**
  * @property Carrier                $carrier
@@ -24,6 +27,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
  */
 class DeliveryOptions extends Model
 {
+    use HasCarrierAttribute;
+
     /**
      * Attributes
      */
@@ -117,7 +122,7 @@ class DeliveryOptions extends Model
     public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
 
     protected $attributes = [
-        self::CARRIER          => Carrier::class,
+        self::CARRIER          => null,
         self::DATE             => null,
         self::LABEL_AMOUNT     => 1,
         self::PICKUP_LOCATION  => null,
@@ -127,7 +132,7 @@ class DeliveryOptions extends Model
     ];
 
     protected $casts      = [
-        self::CARRIER          => Carrier::class,
+        // Note: carrier attribute is not using the cast system as we do not want to store a carrier instance internally, only resolve it on demand via the getter (see getCarrierAttribute).
         self::DATE             => DateTime::class,
         self::LABEL_AMOUNT     => 'int',
         self::PICKUP_LOCATION  => RetailLocation::class,
@@ -152,10 +157,6 @@ class DeliveryOptions extends Model
             );
         }
 
-        if (isset($data[self::CARRIER]) && is_string($data[self::CARRIER])) {
-            $data[self::CARRIER] = ['externalIdentifier' => $data[self::CARRIER]];
-        }
-
         parent::__construct($data);
     }
 
@@ -166,6 +167,29 @@ class DeliveryOptions extends Model
     public function getDateAsString(): ?string
     {
         return $this->date ? $this->date->format(Pdk::get('defaultDateFormat')) : null;
+    }
+
+    /**
+     * Always resolves a fresh Carrier from the repository so capability data is never stale.
+     *
+     * - No carrier set → returns the proposition default carrier.
+     * - Carrier name set but not found in the repository → throws (repository findOrFail).
+     *
+     * Reads directly from $this->attributes to avoid re-entering getAttribute() which would
+     * cause infinite recursion (getAttribute → transformModelValue → mutateAttribute → here).
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Model\Carrier
+     */
+    public function getCarrierAttribute(): Carrier
+    {
+        $carrierName = $this->attributes[self::CARRIER];
+
+        if (! $carrierName) {
+            return Pdk::get(PropositionService::class)->getDefaultCarrier();
+        }
+
+        $found = Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);
+        return $found;
     }
 
     /**

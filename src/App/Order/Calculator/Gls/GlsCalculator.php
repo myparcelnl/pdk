@@ -19,6 +19,6 @@ final class GlsCalculator extends AbstractCarrierOptionsCalculator
 
     protected function getCarrier(): string
     {
-        return RefTypesCarrierV2::GLS;
+        return RefCapabilitiesSharedCarrierV2::GLS;
     }
 }
