@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.2](https://github.com/myparcelnl/pdk/compare/v3.3.1...v3.3.2) (2026-03-17)
+
+
+### :bug: Bug Fixes
+
+* **endpoint:** correct the insurance amount in DO-endpoint ([#427](https://github.com/myparcelnl/pdk/issues/427)) ([263c8f7](https://github.com/myparcelnl/pdk/commit/263c8f7d49011b0ba57436489c0038fa173101fe))
+* **security:** fix tar vulnerability ([#425](https://github.com/myparcelnl/pdk/issues/425)) ([436765e](https://github.com/myparcelnl/pdk/commit/436765e88bb1653f0e2dd156407e77aee2742adf))
+* translations for DE and IT ([#426](https://github.com/myparcelnl/pdk/issues/426)) ([28e91a5](https://github.com/myparcelnl/pdk/commit/28e91a5b47493f3538a73b619f7ce25dfbf0e23b))
+
 ## [3.3.1](https://github.com/myparcelnl/pdk/compare/v3.3.0...v3.3.1) (2026-03-12)
 
 
