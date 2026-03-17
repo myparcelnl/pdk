@@ -3,12 +3,9 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
-use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
@@ -126,24 +123,6 @@ return [
      * Allowed positions for the delivery options in the checkout.
      */
     'deliveryOptionsPositions' => value([]),
-
-    /**
-     * All carriers available in the proposition.
-     * @deprecated use PropositionService::getCarriers() instead.
-     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
-     */
-    'allCarriers' => factory(function (): CarrierCollection {
-        return Pdk::get(PropositionService::class)->getCarriers();
-    }),
-
-    /**
-     * All carriers available in the proposition that support available delivery types.
-     * @deprecated use PropositionService::getCarriers(true) instead.
-     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
-     */
-    'carriers' => factory(function (): CarrierCollection {
-        return Pdk::get(PropositionService::class)->getCarriers(true);
-    }),
 
     /**
      * Language to default to when no language is set.

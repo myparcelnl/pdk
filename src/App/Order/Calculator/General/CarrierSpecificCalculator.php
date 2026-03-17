@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\UPSExpressSaver\UPSExpressSaverCalculato
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionCalculatorInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -27,21 +27,21 @@ final class CarrierSpecificCalculator extends AbstractPdkOrderOptionCalculator
      * @var array<string, class-string<PdkOrderOptionCalculatorInterface>>
      */
     private const CARRIER_CALCULATOR_MAP = [
-        RefTypesCarrierV2::POSTNL             => PostNLCalculator::class,
-        RefTypesCarrierV2::DHL_FOR_YOU        => DhlForYouCalculator::class,
-        RefTypesCarrierV2::DHL_EUROPLUS       => DhlEuroplusCalculator::class,
-        RefTypesCarrierV2::DHL_PARCEL_CONNECT => DhlParcelConnectCalculator::class,
-        RefTypesCarrierV2::DPD                => DpdCalculator::class,
-        RefTypesCarrierV2::UPS_STANDARD       => UPSStandardCalculator::class,
-        RefTypesCarrierV2::UPS_EXPRESS_SAVER  => UPSExpressSaverCalculator::class,
-        RefTypesCarrierV2::BPOST              => BpostCalculator::class,
-        RefTypesCarrierV2::GLS                => GlsCalculator::class,
-        RefTypesCarrierV2::TRUNKRS            => TrunkrsCalculator::class,
+        RefCapabilitiesSharedCarrierV2::POSTNL             => PostNLCalculator::class,
+        RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU        => DhlForYouCalculator::class,
+        RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS       => DhlEuroplusCalculator::class,
+        RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT => DhlParcelConnectCalculator::class,
+        RefCapabilitiesSharedCarrierV2::DPD                => DpdCalculator::class,
+        RefCapabilitiesSharedCarrierV2::UPS_STANDARD       => UPSStandardCalculator::class,
+        RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER  => UPSExpressSaverCalculator::class,
+        RefCapabilitiesSharedCarrierV2::BPOST              => BpostCalculator::class,
+        RefCapabilitiesSharedCarrierV2::GLS                => GlsCalculator::class,
+        RefCapabilitiesSharedCarrierV2::TRUNKRS            => TrunkrsCalculator::class,
     ];
 
     public function calculate(): void
     {
-        $carrierName = Pdk::get(PropositionService::class)->mapLegacyToNewCarrierName($this->order->deliveryOptions->carrier->name);
+        $carrierName = $this->order->deliveryOptions->carrier->carrier;
         $calculator  = self::CARRIER_CALCULATOR_MAP[$carrierName] ?? null;
 
         if (! $calculator) {
