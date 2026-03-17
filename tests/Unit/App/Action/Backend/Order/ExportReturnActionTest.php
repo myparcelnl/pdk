@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -18,15 +19,17 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostIdsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesApiMock());
 
 it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
     $ordersFactory->store();
@@ -78,7 +81,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('2')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(RefTypesCarrierV2::POSTNL)
+                                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
                                     ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
                                     ->withShipmentOptions(factory(ShipmentOptions::class)->withSignature(1))
                             ),
@@ -87,7 +90,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                     ->withExternalIdentifier('247')
                     ->withDeliveryOptions(
                         factory(DeliveryOptions::class)
-                            ->withCarrier(RefTypesCarrierV2::POSTNL)
+                            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
                             ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
                     )
             );
@@ -104,7 +107,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('1')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(RefTypesCarrierV2::POSTNL)
+                                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(0)
@@ -115,7 +118,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('2')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(RefTypesCarrierV2::POSTNL)
+                                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(500)
@@ -136,7 +139,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('1')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(RefTypesCarrierV2::DHL_EUROPLUS)
+                                    ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(0)
@@ -147,7 +150,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withReferenceIdentifier('2')
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
-                                    ->withCarrier(RefTypesCarrierV2::DHL_EUROPLUS)
+                                    ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS)
                                     ->withShipmentOptions(
                                         factory(ShipmentOptions::class)
                                             ->withInsurance(500)

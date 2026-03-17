@@ -6,9 +6,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Model;
 
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Tests\Mocks\MockSdkInheritingModel;
 use MyParcelNL\Pdk\Tests\Mocks\MockSdkModel;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney;
 use function expect;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -190,4 +197,88 @@ it('can set native attributes without affecting SDK model', function () {
 
     expect($model->title)->toBe('Dr.')
         ->and($model->firstName)->toBe('John');
+});
+
+// ----- Typed-property hydration via openAPITypes (SdkBackedModel::setAttribute) -----
+
+it('hydrates a raw array into a ModelInterface for a typed SDK property', function () {
+    $carrier = new Carrier(['collo' => ['max' => 7]]);
+
+    expect($carrier->collo)
+        ->toBeInstanceOf(RefCapabilitiesResponseCollo::class)
+        ->and($carrier->collo->getMax())->toBe(7);
+});
+
+it('hydrates nested models recursively when the outer model is also an array', function () {
+    $carrier = new Carrier([
+        'options' => [
+            // attributeMap for requiresSignature uses camelCase JSON key 'requiresSignature'
+            'requiresSignature' => ['isSelectedByDefault' => true, 'isRequired' => false],
+        ],
+    ]);
+
+    expect($carrier->options)
+        ->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::class)
+        ->and($carrier->options->getRequiresSignature())
+        ->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsOptionV2::class)
+        ->and($carrier->options->getRequiresSignature()->getIsSelectedByDefault())->toBeTrue()
+        ->and($carrier->options->getRequiresSignature()->getIsRequired())->toBeFalse();
+});
+
+it('passes an already-hydrated ModelInterface instance through without re-hydrating', function () {
+    $collo = new RefCapabilitiesResponseCollo(['max' => 3]);
+
+    $carrier = new Carrier(['collo' => $collo]);
+
+    expect($carrier->collo)->toBe($collo);
+});
+
+it('passes an already-hydrated ModelInterface through when set via setAttribute', function () {
+    $collo   = new RefCapabilitiesResponseCollo(['max' => 9]);
+    $carrier = new Carrier();
+
+    $carrier->collo = $collo;
+
+    expect($carrier->collo)->toBe($collo);
+});
+
+it('round-trips a carrier through toArray and back without corrupting typed properties', function () {
+    $original = new Carrier(['collo' => ['max' => 4]]);
+
+    $array  = $original->toArray();
+    $reload = new Carrier($array);
+
+    expect($reload->collo)
+        ->toBeInstanceOf(RefCapabilitiesResponseCollo::class)
+        ->and($reload->collo->getMax())->toBe(4);
+});
+
+it('hydrates insurance option with nested insuredAmount from plain arrays', function () {
+    $carrier = new Carrier([
+        'options' => [
+            'insurance' => [
+                'insuredAmount' => [
+                    'default' => ['currency' => 'EUR', 'amount' => 0],
+                    'min'     => ['currency' => 'EUR', 'amount' => 0],
+                    'max'     => ['currency' => 'EUR', 'amount' => 500000],
+                ],
+            ],
+        ],
+    ]);
+
+    $options = $carrier->options;
+    expect($options)->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::class);
+
+    $insurance = $options->getInsurance();
+    expect($insurance)->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2::class);
+
+    $insuredAmount = $insurance->getInsuredAmount();
+    expect($insuredAmount)->toBeInstanceOf(RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount::class);
+
+    expect($insuredAmount->getMax())->toBeInstanceOf(RefTypesMoney::class)
+        ->and($insuredAmount->getMax()->getAmount())->toBe(500000)
+        ->and($insuredAmount->getMin())->toBeInstanceOf(RefTypesMoney::class)
+        ->and($insuredAmount->getMin()->getAmount())->toBe(0)
+        ->and($insuredAmount->getDefault())->toBeInstanceOf(RefTypesMoney::class)
+        ->and($insuredAmount->getDefault()->getAmount())->toBe(0);
 });

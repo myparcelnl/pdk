@@ -62,6 +62,11 @@ class MockSdkModel implements ArrayAccess, JsonSerializable
         return self::$setters;
     }
 
+    public static function openAPITypes(): array
+    {
+        return [];
+    }
+
     public function getFirstName(): ?string
     {
         return $this->container['first_name'] ?? null;

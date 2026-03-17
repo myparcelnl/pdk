@@ -40,11 +40,11 @@ it('calculates options', function (
     OrderOptionDefinitionInterface $definition
 ) {
     $fakeCarrier = factory(Carrier::class)
-        ->withName('fake')
-        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withAllOptions())
+        ->withCarrier('fake')
+        ->withAllCapabilities()
         ->make();
 
-    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+    factory(CarrierSettings::class, $fakeCarrier->carrier)
         ->with([$definition->getCarrierSettingsKey() => $carrierSetting])
         ->store();
 

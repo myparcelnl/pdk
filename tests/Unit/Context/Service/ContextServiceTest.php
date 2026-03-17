@@ -16,7 +16,7 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -100,7 +100,7 @@ it('gets context data', function (string $id, array $arguments) {
         'arguments' => [
             'order' => [
                 'deliveryOptions' => [
-                    'carrier'     => RefTypesCarrierV2::POSTNL,
+                    'carrier'     => RefCapabilitiesSharedCarrierV2::POSTNL,
                     'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
             ],

@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 
 class ExamplePostOrdersResponse extends ExampleJsonResponse
 {
@@ -46,7 +47,7 @@ class ExamplePostOrdersResponse extends ExampleJsonResponse
                 'shipment'       => [
                     'apiKey'             => '123',
                     'carrier'            => [
-                        'id' => Carrier::CARRIER_POSTNL_ID,
+                        'id' => RefTypesCarrier::POSTNL,
                     ],
                     'customsDeclaration' => [
                         'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
@@ -71,7 +72,7 @@ class ExamplePostOrdersResponse extends ExampleJsonResponse
                         ],
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => Carrier::CARRIER_POSTNL_NAME,
+                        'carrier'         => RefTypesCarrier::POSTNL,
                         'date'            => '2077-10-23 09:47:51',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,

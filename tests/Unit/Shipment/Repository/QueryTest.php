@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -28,22 +29,11 @@ it('creates shipment collection from queried data', function (string $responseCl
     $shipment = $response->first();
     $array    = $shipment->toArrayWithoutNull();
 
-    // No need to test this data here.
-    $arrayWithoutCapabilities = Arr::except(
-        $array,
-        [
-            'carrier.capabilities',
-            'carrier.returnCapabilities',
-            'deliveryOptions.carrier.capabilities',
-            'deliveryOptions.carrier.returnCapabilities',
-        ]
-    );
-
     expect($response)
-        ->and($shipment->deliveryOptions->carrier->externalIdentifier)
-        ->toBe($shipment->carrier->externalIdentifier);
+        ->and($shipment->deliveryOptions->carrier->carrier)
+        ->toBe($shipment->carrier->carrier);
 
-    assertMatchesJsonSnapshot(json_encode($arrayWithoutCapabilities));
+    assertMatchesJsonSnapshot(json_encode($array));
 })->with([
     'normal shipment' => [
         'response' => ExampleGetShipmentsResponse::class,

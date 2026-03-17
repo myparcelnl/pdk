@@ -13,13 +13,13 @@ use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use function MyParcelNL\Pdk\Tests\factory;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
 it('can hold and expose data', function () {
     $shipment = new Shipment([
-        'carrier'         => new Carrier(['carrier' => ['name' => RefTypesCarrierV2::POSTNL]]),
+        'carrier'         => factory(Carrier::class)->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)->make(),
         'sender'          => new Address(),
         'recipient'       => new Address(),
         'deliveryOptions' => new DeliveryOptions(),
@@ -36,8 +36,9 @@ it('can hold and expose data', function () {
 });
 
 it('passes carrier to delivery options', function (string $carrierName) {
+    $carrier = factory(Carrier::class)->withCarrier($carrierName)->make();
     $shipment = new Shipment([
-        'carrier'         => new Carrier(['name' => $carrierName]),
+        'carrier'         => $carrier,
         'deliveryOptions' => new DeliveryOptions([
             'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
             'shipmentOptions' => [
@@ -47,7 +48,7 @@ it('passes carrier to delivery options', function (string $carrierName) {
     ]);
 
     $deliveryOptions = $shipment->deliveryOptions;
-    expect($deliveryOptions ? $deliveryOptions->carrier->name : null)->toEqual($carrierName);
+    expect($deliveryOptions ? $deliveryOptions->carrier->carrier : null)->toEqual($carrierName);
 })->with('carrierNames');
 
 it('encodes recipient street fields correctly', function () {

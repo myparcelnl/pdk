@@ -69,7 +69,7 @@ final class CarrierSettingsFactory extends AbstractSettingsModelFactory
     /**
      * @param  null|string $id
      */
-    public function __construct(string $id = null)
+    public function __construct(?string $id = null)
     {
         parent::__construct();
 
@@ -97,7 +97,7 @@ final class CarrierSettingsFactory extends AbstractSettingsModelFactory
      */
     public function withId(string $id): self
     {
-        return $this->with(['id' => FrontendData::getLegacyIdentifier($id)]);
+        return $this->with(['id' => $id]);
     }
 
     protected function save(Model $model): void

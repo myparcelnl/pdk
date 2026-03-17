@@ -19,7 +19,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -107,7 +107,7 @@ it('creates a valid order collection from api data', function (array $input) {
                         ],
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => RefTypesCarrierV2::POSTNL,
+                        'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -173,7 +173,7 @@ it('creates a valid order collection from api data', function (array $input) {
                         'id' => RefTypesCarrier::POSTNL,
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => RefTypesCarrierV2::POSTNL,
+                        'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,

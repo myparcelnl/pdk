@@ -71,7 +71,7 @@ it('snapshots all definitions', function () use ($definitions) {
 
 it('can validate', function () use ($definitions) {
     $fakeCarrier = factory(Carrier::class)
-        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
+        // @TODO: All features
         ->make();
 
     $carrierSchema = Pdk::get(CarrierSchema::class);

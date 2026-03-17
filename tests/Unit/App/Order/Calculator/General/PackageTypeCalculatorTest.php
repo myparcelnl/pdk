@@ -12,37 +12,24 @@ use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
-const CARRIER_POSTNL      = [
-    'carrierExternalIdentifier' => 'POSTNL:123',
-    'carrierName'               => 'POSTNL',
-];
-const CARRIER_DHL_FOR_YOU = [
-    'carrierExternalIdentifier' => 'DHL_FOR_YOU:123',
-    'carrierName'               => 'DHL_FOR_YOU',
-];
-const CARRIER_DPD         = [
-    'carrierExternalIdentifier' => 'DPD:123',
-    'carrierName'               => 'DPD',
-];
 const CARRIERS            = [
-    CARRIER_POSTNL,
-    CARRIER_DHL_FOR_YOU,
-    CARRIER_DPD,
+    RefCapabilitiesSharedCarrierV2::POSTNL,
+    RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
+    RefCapabilitiesSharedCarrierV2::DPD,
 ];
 
 const ACCOUNT_FLAG_ON_CARRIER_SETTING_ON = [
@@ -93,12 +80,11 @@ it(
             'orderCalculators' => [PackageTypeCalculator::class],
         ]);
 
-        $fakeCarrier = factory(Carrier::class)
-            ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withAllOptions());
+        $fakeCarrier = factory(Carrier::class)->withAllCapabilities();
 
         $order = factory(PdkOrder::class)
             ->withShippingAddress(
-                factory(ShippingAddress::class)->withCc($options['cc'] ?? Platform::get('localCountry'))
+                factory(ShippingAddress::class)->withCc($options['cc'] ?? Pdk::get(PropositionService::class)->getPropositionConfig()->countryCode)
             )
             ->withDeliveryOptions(
                 factory(DeliveryOptions::class)
@@ -163,8 +149,7 @@ it(
 it('calculates international mailbox', function (
     $platform,
     $country,
-    $carrierExternalIdentifier,
-    $carrierName,
+    $carrier,
     $accountHasCarrierSmallPackageContract,
     $carrierHasInternationalMailboxAllowed
 ) {
@@ -175,13 +160,11 @@ it('calculates international mailbox', function (
     ]);
 
     $fakeCarrier = factory(Carrier::class)
-        ->withExternalIdentifier($carrierExternalIdentifier)
-        ->withOutboundFeatures(
-            factory(PropositionCarrierFeatures::class)->fromCarrier($carrierName)
-        )
+        ->withCarrier($carrier)
+        ->withAllCapabilities()
         ->make();
 
-    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+    factory(CarrierSettings::class, $fakeCarrier->carrier)
         ->withAllowInternationalMailbox($carrierHasInternationalMailboxAllowed)
         ->store();
 
