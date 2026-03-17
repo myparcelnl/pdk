@@ -57,9 +57,7 @@ class DynamicContext extends Model
         }
 
         $this->attributes['account']  = AccountSettings::getAccount();
-        $this->attributes['carriers'] = FrontendData::carrierCollectionToLegacyFormat(
-            AccountSettings::getCarriers()
-        );
+        $this->attributes['carriers'] = AccountSettings::getCarriers();
         $this->attributes['shop']     = AccountSettings::getShop();
     }
 }
