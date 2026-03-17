@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Calculator\DhlForYou;
 
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractCarrierOptionsCalculator;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 final class DhlForYouCalculator extends AbstractCarrierOptionsCalculator
 {
@@ -19,6 +19,6 @@ final class DhlForYouCalculator extends AbstractCarrierOptionsCalculator
 
     protected function getCarrier(): string
     {
-        return RefTypesCarrierV2::DHL_FOR_YOU;
+        return RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU;
     }
 }

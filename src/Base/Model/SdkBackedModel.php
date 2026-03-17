@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\Base\Model;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\SdkModelHelper;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ModelInterface;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
 
 /**
  * Base class for PDK Models that are backed by a single SDK generated ModelInterface instance.
@@ -154,6 +156,14 @@ abstract class SdkBackedModel extends Model
                     $this->sdkModel = new $this->sdkModelClass();
                 }
 
+                $snakeKey     = SdkModelHelper::toSdkCase($key);
+                $openApiTypes = $this->sdkModelClass::openAPITypes();
+                $type         = $openApiTypes[$snakeKey] ?? null;
+
+                if ($type !== null && ! $this->isAlreadyHydrated($value, $type)) {
+                    $value = ObjectSerializer::deserialize($value, $type);
+                }
+
                 $this->sdkModel->{$setterMap[$key]}($value);
 
                 return $this;
@@ -225,5 +235,25 @@ abstract class SdkBackedModel extends Model
         }
 
         return self::$sdkSetterMapCache[$this->sdkModelClass];
+    }
+
+    /**
+     * Returns true when $value is already a hydrated SDK model (or array of models) that should be passed
+     * through to the setter as-is. Passing already-hydrated ModelInterface instances to ObjectSerializer::deserialize
+     * would break them because the serializer accesses dynamic public properties, which SDK models don't expose.
+     *
+     * @param  mixed  $value
+     * @param  string $type  openAPI type string, e.g. '\Ns\SomeModel' or '\Ns\SomeModel[]'
+     *
+     * @return bool
+     */
+    private function isAlreadyHydrated($value, string $type): bool
+    {
+        // openAPI array types are suffixed with '[]', e.g. '\Ns\SomeModel[]'
+        if (strcasecmp(substr($type, -2), '[]') === 0) {
+            return is_array($value) && ! empty($value) && reset($value) instanceof ModelInterface;
+        }
+
+        return $value instanceof ModelInterface;
     }
 }

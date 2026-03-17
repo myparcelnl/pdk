@@ -43,6 +43,8 @@ use MyParcelNL\Pdk\Base\Service\CountryService;
 use MyParcelNL\Pdk\Base\Service\CurrencyService;
 use MyParcelNL\Pdk\Base\Service\WeightService;
 use MyParcelNL\Pdk\Base\Service\ZipService;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Service\ContextService;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
@@ -53,8 +55,6 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Frontend\Service\ScriptService;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
-use MyParcelNL\Pdk\Platform\PlatformManager;
-use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -159,11 +159,6 @@ return [
     NotificationServiceInterface::class        => autowire(NotificationService::class),
 
     /**
-     * Handles platform specific logic.
-     */
-    PlatformManagerInterface::class            => autowire(PlatformManager::class),
-
-    /**
      * Handles CDN urls.
      */
     ScriptServiceInterface::class              => autowire(ScriptService::class),
@@ -237,6 +232,11 @@ return [
      * that JS-PDK and Delivery Options expect.
      */
     FrontendDataAdapterInterface::class        => autowire(FrontendDataAdapter::class),
+
+    /**
+     * Handles carrier lookups from account data.
+     */
+    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     PropositionService::class            => autowire(),
 ];

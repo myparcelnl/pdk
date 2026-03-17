@@ -9,9 +9,6 @@ use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -177,7 +174,6 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
             Carrier::CARRIER_BPOST_LEGACY_NAME => OrderApiCarrier::BPOST,
             Carrier::CARRIER_CHEAP_CARGO_LEGACY_NAME => OrderApiCarrier::CHEAP_CARGO,
             Carrier::CARRIER_DPD_LEGACY_NAME => OrderApiCarrier::DPD,
-            Carrier::CARRIER_BOL_COM_LEGACY_NAME => OrderApiCarrier::BOL,
             Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME => OrderApiCarrier::DHL_FOR_YOU,
             Carrier::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => OrderApiCarrier::DHL_PARCEL_CONNECT,
             Carrier::CARRIER_DHL_EUROPLUS_LEGACY_NAME => OrderApiCarrier::DHL_EUROPLUS,

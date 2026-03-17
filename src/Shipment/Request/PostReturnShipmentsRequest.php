@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 class PostReturnShipmentsRequest extends Request
 {
@@ -121,23 +122,23 @@ class PostReturnShipmentsRequest extends Request
      */
     private function ensureReturnCapabilities(Shipment $shipment): Shipment
     {
-        $carrierId = $shipment->carrier->id;
-
-        $propositionService = Pdk::get(PropositionService::class);
-        $carrier = $propositionService->getCarrierById($carrierId);
-
-        if (! $carrier || ! $carrier->returnCapabilities) {
+        $schema = Pdk::get(CarrierSchema::class);
+        if ($shipment->carrier) {
+            $schema->setCarrier($shipment->carrier);
+        }
+        if (!$shipment->carrier || !$schema->hasReturnCapabilities()) {
+            $propositionService = Pdk::get(PropositionService::class);
             $defaultCarrier = $propositionService->getDefaultCarrier();
             Notifications::warning(
-                "{$shipment->carrier->name} has no return capabilities",
-                'Return shipment exported with default carrier ' . $defaultCarrier->name,
+                "{$shipment->carrier->carrier} has no return capabilities",
+                'Return shipment exported with default carrier ' . $defaultCarrier->carrier,
                 Notification::CATEGORY_ACTION,
                 [
                     'action'   => PdkBackendActions::EXPORT_RETURN,
                     'orderIds' => $shipment->referenceIdentifier,
                 ]
             );
-            $shipment->carrier = new Carrier(['carrierId' => $defaultCarrier->id]);
+            $shipment->carrier = $defaultCarrier;
         }
 
         return $shipment;

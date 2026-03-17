@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
-use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 /**
  * Instantiate a Carrier model based on existing known data when passed an ID/Name, or creates a new Carrier model based on the data passed to the constructor.
@@ -35,67 +33,62 @@ class Carrier extends SdkBackedModel
     protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
 
     /**
-     * @deprecated use RefTypesCarrierV2::POSTNL
+     * @deprecated use RefCapabilitiesSharedCarrierV2::POSTNL
      */
     public const CARRIER_POSTNL_LEGACY_NAME          = 'postnl';
 
     /**
-     * @deprecated use RefTypesCarrierV2::BPOST
+     * @deprecated use RefCapabilitiesSharedCarrierV2::BPOST
      */
     public const CARRIER_BPOST_LEGACY_NAME           = 'bpost';
 
     /**
-     * @deprecated use RefTypesCarrierV2::CHEAP_CARGO
+     * @deprecated use RefCapabilitiesSharedCarrierV2::CHEAP_CARGO
      */
     public const CARRIER_CHEAP_CARGO_LEGACY_NAME     = 'cheapcargo';
 
     /**
-     * @deprecated use RefTypesCarrierV2::DPD
+     * @deprecated use RefCapabilitiesSharedCarrierV2::DPD
      */
     public const CARRIER_DPD_LEGACY_NAME             = 'dpd';
 
     /**
-     * @deprecated use RefTypesCarrierV2::BOL
-     */
-    public const CARRIER_BOL_COM_LEGACY_NAME         = 'bol.com';
-
-    /**
-     * @deprecated use RefTypesCarrierV2::DHL_FOR_YOU
+     * @deprecated use RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU
      */
     public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
 
     /**
-     * @deprecated use RefTypesCarrierV2::DHL_PARCEL_CONNECT
+     * @deprecated use RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT
      */
     public const CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME = 'dhlparcelconnect';
 
     /**
-     * @deprecated use RefTypesCarrierV2::DHL_EUROPLUS
+     * @deprecated use RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS
      */
     public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
 
     /**
-     * @deprecated use RefTypesCarrierV2::UPS_STANDARD
+     * @deprecated use RefCapabilitiesSharedCarrierV2::UPS_STANDARD
      */
     public const CARRIER_UPS_STANDARD_LEGACY_NAME = 'upsstandard';
 
     /**
-     * @deprecated use RefTypesCarrierV2::UPS_EXPRESS_SAVER
+     * @deprecated use RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER
      */
     public const CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME = 'upsexpresssaver';
 
     /**
-     * @deprecated use RefTypesCarrierV2::GLS
+     * @deprecated use RefCapabilitiesSharedCarrierV2::GLS
      */
     public const CARRIER_GLS_LEGACY_NAME       = 'gls';
 
     /**
-     * @deprecated use RefTypesCarrierV2::BRT
+     * @deprecated use RefCapabilitiesSharedCarrierV2::BRT
      */
     public const CARRIER_BRT_LEGACY_NAME       = 'brt';
 
     /**
-     * @deprecated use RefTypesCarrierV2::TRUNKRS
+     * @deprecated use RefCapabilitiesSharedCarrierV2::TRUNKRS
      */
     public const CARRIER_TRUNKRS_LEGACY_NAME   = 'trunkrs';
 
@@ -105,38 +98,36 @@ class Carrier extends SdkBackedModel
      * @deprecated use new carrier names directly
      */
     public const CARRIER_NAME_TO_LEGACY_MAP = [
-        RefTypesCarrierV2::BOL            => self::CARRIER_BOL_COM_LEGACY_NAME,
-        RefTypesCarrierV2::BPOST          => self::CARRIER_BPOST_LEGACY_NAME,
-        RefTypesCarrierV2::CHEAP_CARGO    => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
-        RefTypesCarrierV2::DHL_EUROPLUS   => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
-        RefTypesCarrierV2::DHL_FOR_YOU    => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
-        RefTypesCarrierV2::DHL_PARCEL_CONNECT => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
-        RefTypesCarrierV2::DPD            => self::CARRIER_DPD_LEGACY_NAME,
-        RefTypesCarrierV2::POSTNL         => self::CARRIER_POSTNL_LEGACY_NAME,
-        RefTypesCarrierV2::UPS_STANDARD   => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
-        RefTypesCarrierV2::UPS_EXPRESS_SAVER => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
-        RefTypesCarrierV2::GLS            => self::CARRIER_GLS_LEGACY_NAME,
-        RefTypesCarrierV2::BRT            => self::CARRIER_BRT_LEGACY_NAME,
-        RefTypesCarrierV2::TRUNKRS        => self::CARRIER_TRUNKRS_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::BPOST              => self::CARRIER_BPOST_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::CHEAP_CARGO        => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS       => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU        => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::DPD                => self::CARRIER_DPD_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::POSTNL             => self::CARRIER_POSTNL_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::UPS_STANDARD       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::GLS                => self::CARRIER_GLS_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::BRT                => self::CARRIER_BRT_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::TRUNKRS            => self::CARRIER_TRUNKRS_LEGACY_NAME,
     ];
 
     /**
      * Names to ids
-     * @deprecated use mapping functionality from the SDK when available
+     * @deprecated use mapping functionality from the SDK when available (INT-1441)
      */
     public const CARRIER_NAME_ID_MAP = [
-        RefTypesCarrierV2::BOL            => RefTypesCarrier::BOL,
-        RefTypesCarrierV2::BPOST          => RefTypesCarrier::BPOST,
-        RefTypesCarrierV2::CHEAP_CARGO    => RefTypesCarrier::CHEAP_CARGO,
-        RefTypesCarrierV2::DHL_EUROPLUS   => RefTypesCarrier::DHL_EUROPLUS,
-        RefTypesCarrierV2::DHL_FOR_YOU    => RefTypesCarrier::DHL_FOR_YOU,
-        RefTypesCarrierV2::DHL_PARCEL_CONNECT => RefTypesCarrier::DHL_PARCEL_CONNECT,
-        RefTypesCarrierV2::DPD            => RefTypesCarrier::DPD,
-        RefTypesCarrierV2::POSTNL         => RefTypesCarrier::POSTNL,
-        RefTypesCarrierV2::GLS            => RefTypesCarrier::GLS,
-        RefTypesCarrierV2::UPS_STANDARD   => RefTypesCarrier::UPS_STANDARD,
-        RefTypesCarrierV2::UPS_EXPRESS_SAVER => RefTypesCarrier::UPS_EXPRESS_SAVER,
-        RefTypesCarrierV2::TRUNKRS        => RefTypesCarrier::TRUNKRS,
+        RefCapabilitiesSharedCarrierV2::BPOST              => RefTypesCarrier::BPOST,
+        RefCapabilitiesSharedCarrierV2::CHEAP_CARGO        => RefTypesCarrier::CHEAP_CARGO,
+        RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS       => RefTypesCarrier::DHL_EUROPLUS,
+        RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU        => RefTypesCarrier::DHL_FOR_YOU,
+        RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT => RefTypesCarrier::DHL_PARCEL_CONNECT,
+        RefCapabilitiesSharedCarrierV2::DPD                => RefTypesCarrier::DPD,
+        RefCapabilitiesSharedCarrierV2::POSTNL             => RefTypesCarrier::POSTNL,
+        RefCapabilitiesSharedCarrierV2::GLS                => RefTypesCarrier::GLS,
+        RefCapabilitiesSharedCarrierV2::UPS_STANDARD       => RefTypesCarrier::UPS_STANDARD,
+        RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER  => RefTypesCarrier::UPS_EXPRESS_SAVER,
+        RefCapabilitiesSharedCarrierV2::TRUNKRS            => RefTypesCarrier::TRUNKRS,
     ];
 
     /**
@@ -144,7 +135,6 @@ class Carrier extends SdkBackedModel
      * @see CARRIER_NAME_ID_MAP
      */
     public const CARRIER_LEGACY_NAME_ID_MAP = [
-        self::CARRIER_BOL_COM_LEGACY_NAME    => RefTypesCarrier::BOL,
         self::CARRIER_BPOST_LEGACY_NAME      => RefTypesCarrier::BPOST,
         self::CARRIER_CHEAP_CARGO_LEGACY_NAME => RefTypesCarrier::CHEAP_CARGO,
         self::CARRIER_DHL_EUROPLUS_LEGACY_NAME => RefTypesCarrier::DHL_EUROPLUS,
@@ -168,41 +158,15 @@ class Carrier extends SdkBackedModel
     protected $casts = [];
 
     /**
-     * The Carrier constructor will use existing carrier data from the account settings service when a name or ID is passed,
-     * and will merge it with any passed data (giving priority to passed data in case of overlap).
+     * Create a new Carrier model instance with the provided data.
      *
-     * If an unknown, or no name or ID is passed, it will simply return a new Carrier model with the passed data (if any).
+     * To fetch existing carriers from account data, use CarrierRepository instead.
      *
      * @param  null|array $data
+     * @see \MyParcelNL\Pdk\Carrier\Repository\CarrierRepository
      */
     public function __construct(?array $data = null)
     {
-        /** @var AccountSettingsServiceInterface $accountSettings */
-        $accountSettings = Pdk::get(AccountSettingsServiceInterface::class);
-
-        $carrierName = null;
-
-        // Determine carrier name from input
-        if (isset($data['carrier'])) {
-            $carrierName = $data['carrier'];
-        } elseif (isset($data['name'])) {
-            $carrierName = $data['name'];
-        } elseif (isset($data['id'])) {
-            // Convert ID to name using the map
-            $carrierName = array_search($data['id'], self::CARRIER_NAME_ID_MAP, true) ?: null;
-        }
-
-        // Look up the carrier by carrier property (SDK-backed). If no existing carrier was found, simply return a model with the passed data (if any)
-        $existing = null;
-        if ($carrierName) {
-            $found = $accountSettings->getCarriers()->firstWhere('carrier', $carrierName);
-
-            if ($found) {
-                $existing = $found->getAttributes();
-            }
-        }
-
-        // Merges passed data with found data (if any), giving priority to passed data in case of overlap
-        parent::__construct(array_replace($existing ?? [], $data ?? []));
+        parent::__construct($data ?? []);
     }
 }

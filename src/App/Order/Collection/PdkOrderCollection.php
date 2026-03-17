@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -168,12 +167,6 @@ class PdkOrderCollection extends Collection
     public function updateShipments(ShipmentCollection $shipments): self
     {
         $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
-
-        // The carrier in the incoming request is not in the correct format, so we need to convert it,
-        // this is needed for legacy support in the frontend.
-        $shipments->each(function (Shipment $shipment) {
-            $shipment->carrier = FrontendData::convertCarrierToLegacyFormat($shipment->carrier);
-        });
 
         $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
             $order->shipments = $useOrderId

@@ -210,19 +210,27 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->getFromSchema('deliveryTypes') ?: [];
     }
 
+    public function hasReturnCapabilities(): bool
+    {
+        // @TODO: Replace by a directionality call to capabilities given shipment context.
+        // Currently always true for limited backwards compatibility
+        return true;
+    }
+
     public function getAllowedInsuranceAmounts(): array
     {
         $hasOption = $this->hasShipmentOption(InsuranceDefinition::class);
 
         // Take the min and max from the insurance shipment option and return a range in between them
         // Note: The amount is currently in cents (EUR * 100)
-        $max = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMax()->getAmount();
-        $min = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMin()->getAmount();
-        $step = 50000;
+        if ($hasOption) {
+            $max = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMax()->getAmount();
+            $min = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMin()->getAmount();
+            $step = 50000;
 
-        $allowedAmounts = range($min, $max, $step);
-
-        return $hasOption ? $allowedAmounts : [];
+            return range($min, $max, $step);
+        }
+        return [];
     }
 
     public function getAllowedPackageTypes(): array
