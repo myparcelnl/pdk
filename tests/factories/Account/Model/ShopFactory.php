@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -61,18 +61,30 @@ final class ShopFactory extends AbstractModelFactory
     }
 
     /**
-     * Set up default carriers based on the active proposition
+     * Set up default carriers for all carriers used across the test suite.
      *
-     * @param  int|null $propositionId
+     * @TODO Replace with dynamically fetched capabilities per carrier once the capabilities endpoint is fully
+     *       integrated. Until then, all carriers are given permissive all-capabilities to align with the
+     *       transitional state of CarrierSchema (@deprecated).
+     *
      * @return $this
      */
-    public function withDefaultCarriers(?int $propositionId = null): self
+    public function withDefaultCarriers(): self
     {
-        // Create a minimal set of test carriers
-        //For testing purposes, we just create one basic carrier with minimal capabilities
-        $carrierFactories = factory(CarrierCollection::class)->push(
-            factory(Carrier::class)->withMinimalCapabilities()
-        );
+        $carrierNames = [
+            RefCapabilitiesSharedCarrierV2::POSTNL,
+            RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
+            RefCapabilitiesSharedCarrierV2::GLS,
+            RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER,
+            RefCapabilitiesSharedCarrierV2::UPS_STANDARD,
+            RefCapabilitiesSharedCarrierV2::BPOST,
+        ];
+
+        $carrierFactories = factory(CarrierCollection::class);
+
+        foreach ($carrierNames as $name) {
+            $carrierFactories->push(factory(Carrier::class)->withAllCapabilities($name));
+        }
 
         return $this->withCarriers($carrierFactories);
     }
@@ -84,18 +96,7 @@ final class ShopFactory extends AbstractModelFactory
 
     protected function createDefault(): FactoryInterface
     {
-        $propositionService = Pdk::get(PropositionService::class);
-        $defaultCarrier = $propositionService->getDefaultCarrier();
-
-        // Get the carrier name from the SDK model's carrier property
-        $carrierName = $defaultCarrier->carrier ?? RefTypesCarrierV2::POSTNL;
-
-        return $this->withCarriers(
-            factory(CarrierCollection::class)->push(
-                factory(Carrier::class)
-                    ->withCarrier($carrierName)
-            )
-        );
+        return $this->withDefaultCarriers();
     }
 
     /**

@@ -14,7 +14,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -27,7 +27,7 @@ it('returns correct carrier name', function () {
     $method = $reflection->getMethod('getCarrier');
     $method->setAccessible(true);
     
-    expect($method->invoke($calculator))->toBe(RefTypesCarrierV2::GLS);
+    expect($method->invoke($calculator))->toBe(RefCapabilitiesSharedCarrierV2::GLS);
 });
 
 it('returns correct calculators array', function () {

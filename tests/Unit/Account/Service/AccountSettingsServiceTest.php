@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -38,16 +38,16 @@ beforeAll(function () {
                     'carriers'   => [
                         // Messed up sorting on purpose
                         [
-                            'carrier' => RefTypesCarrierV2::DHL_EUROPLUS,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS,
                         ],
                         [
-                            'carrier' => RefTypesCarrierV2::DHL_PARCEL_CONNECT,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT,
                         ],
                         [
-                            'carrier' => RefTypesCarrierV2::POSTNL,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
                         ],
                         [
-                            'carrier' => RefTypesCarrierV2::DHL_FOR_YOU,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
                         ],
                     ],
                 ],
@@ -67,10 +67,10 @@ it('gets carriers in the same order as stored', function () {
             ->all()
     )
         ->toEqual([
-            RefTypesCarrierV2::DHL_EUROPLUS,
-            RefTypesCarrierV2::DHL_PARCEL_CONNECT,
-            RefTypesCarrierV2::POSTNL,
-            RefTypesCarrierV2::DHL_FOR_YOU,
+            RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS,
+            RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT,
+            RefCapabilitiesSharedCarrierV2::POSTNL,
+            RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
         ]);
 });
 
