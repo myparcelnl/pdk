@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
@@ -24,6 +25,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
+ * @property string $platform
  * @property string $proposition
  * @property int    $priceStandardDelivery
  * @property bool   $showPriceSurcharge
@@ -41,6 +43,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
         'pickupLocationsDefaultView'     => null,
         'allowPickupLocationsViewSelection' => true,
+        'platform'                          => null,
         'proposition'                       => null,
         'priceStandardDelivery'             => 0,
         'showPriceSurcharge'                => false,
@@ -57,6 +60,7 @@ class DeliveryOptionsConfig extends Model
         'packageType'                       => 'string',
         'pickupLocationsDefaultView'        => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
+        'platform'                          => 'string',
         'proposition'                       => 'string',
         'priceStandardDelivery'             => 'float',
         'showPriceSurcharge'                => 'boolean',
@@ -74,8 +78,9 @@ class DeliveryOptionsConfig extends Model
         // Get proposition
         $propositionService = Pdk::get(PropositionService::class);
         $propositionConfig  = $propositionService->getPropositionConfig();
-        // New proposition identifier (machine-readable key)
-        $this->proposition = $propositionConfig->proposition->key;
+        $propositionKey    = $propositionConfig->proposition->key;
+        $this->proposition = $propositionKey;
+        $this->platform    = Proposition::PROPOSITION_KEY_TO_PLATFORM_NAME_MAP[$propositionKey] ?? $propositionKey;
 
         $priceType = Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID);
 
