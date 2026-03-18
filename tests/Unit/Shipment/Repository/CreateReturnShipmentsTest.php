@@ -18,8 +18,9 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesEachMockPdkInstance());
+usesShared(new UsesEachMockPdkInstance(), new UsesAccountMock());
 
 const INPUT_RECIPIENT = [
     'cc'         => 'NL',
