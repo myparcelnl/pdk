@@ -14,8 +14,9 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use function MyParcelNL\Pdk\Tests\factory;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('can hold and expose data', function () {
     $shipment = new Shipment([

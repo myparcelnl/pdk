@@ -16,8 +16,9 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesEachMockPdkInstance());
+usesShared(new UsesEachMockPdkInstance(), new UsesAccountMock());
 
 it('creates shipment collection from queried data', function (string $responseClass) {
     MockApi::enqueue(new $responseClass());

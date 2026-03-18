@@ -30,8 +30,9 @@ use Symfony\Component\HttpFoundation\Request;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('returns delivery options for valid order id', function () {
     // Create and store a mock order using the factory pattern
