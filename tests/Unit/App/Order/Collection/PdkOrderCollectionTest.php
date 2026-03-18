@@ -18,8 +18,9 @@ use MyParcelNL\Pdk\Pdk;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
+usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock(), new UsesAccountMock());
 
 it('holds PdkOrders', function () {
     $pdkOrderCollection = new PdkOrderCollection([

@@ -15,8 +15,9 @@ use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use RuntimeException;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
+usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock(), new UsesAccountMock());
 
 it('creates a valid request for return shipments', function () {
     $shipmentCollection = new ShipmentCollection([
