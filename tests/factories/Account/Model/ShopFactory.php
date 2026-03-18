@@ -61,25 +61,13 @@ final class ShopFactory extends AbstractModelFactory
     }
 
     /**
-     * Set up default carriers for all carriers used across the test suite.
-     *
-     * @TODO Replace with dynamically fetched capabilities per carrier once the capabilities endpoint is fully
-     *       integrated. Until then, all carriers are given permissive all-capabilities to align with the
-     *       transitional state of CarrierSchema (@deprecated).
+     * Add all known carriers with all available capabilities as a default for testing.
      *
      * @return $this
      */
-    public function withDefaultCarriers(): self
+    public function withAllCarriers(): self
     {
-        $carrierNames = [
-            RefCapabilitiesSharedCarrierV2::POSTNL,
-            RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
-            RefCapabilitiesSharedCarrierV2::GLS,
-            RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER,
-            RefCapabilitiesSharedCarrierV2::UPS_STANDARD,
-            RefCapabilitiesSharedCarrierV2::BPOST,
-        ];
-
+        $carrierNames = RefCapabilitiesSharedCarrierV2::getAllowableEnumValues();
         $carrierFactories = factory(CarrierCollection::class);
 
         foreach ($carrierNames as $name) {
@@ -96,7 +84,7 @@ final class ShopFactory extends AbstractModelFactory
 
     protected function createDefault(): FactoryInterface
     {
-        return $this->withDefaultCarriers();
+        return $this->withAllCarriers();
     }
 
     /**
