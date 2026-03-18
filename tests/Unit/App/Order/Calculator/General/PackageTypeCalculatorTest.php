@@ -2,6 +2,9 @@
 
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
+// @TODO replace with capabilities-based assertions where no carrier-specific calculators are present.
+// @TODO use concrete expectations rather than snapshots to determine the correct assertions, and to make the tests more readable.
+
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;

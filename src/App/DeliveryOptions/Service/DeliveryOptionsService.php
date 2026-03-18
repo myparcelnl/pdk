@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -92,12 +93,18 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $triStateService;
 
     /**
+     * @var \MyParcelNL\Pdk\Carrier\Repository\CarrierRepository
+     */
+    private $carrierRepository;
+
+    /**
      * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
      * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
      * @param  \MyParcelNL\Pdk\Types\Service\TriStateService             $triStateService
+     * @param  \MyParcelNL\Pdk\Carrier\Repository\CarrierRepository       $carrierRepository
      */
     public function __construct(
         CountryServiceInterface     $countryService,
@@ -105,7 +112,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         DropOffServiceInterface     $dropOffService,
         TaxServiceInterface         $taxService,
         SchemaRepository            $schemaRepository,
-        TriStateService             $triStateService
+        TriStateService             $triStateService,
+        CarrierRepository           $carrierRepository
     ) {
         $this->countryService      = $countryService;
         $this->currencyService     = $currencyService;
@@ -113,6 +121,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $this->taxService          = $taxService;
         $this->schemaRepository    = $schemaRepository;
         $this->triStateService     = $triStateService;
+        $this->carrierRepository   = $carrierRepository;
     }
 
     /**
@@ -239,7 +248,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        $allCarriers     = AccountSettings::getCarriers();
+        $allCarriers     = $this->carrierRepository->all();
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
         // Get the package types from the cart

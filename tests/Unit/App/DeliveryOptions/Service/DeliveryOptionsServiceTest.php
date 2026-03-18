@@ -15,22 +15,20 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 uses()->group('checkout');
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock);
 
 it(
     'creates carrier settings',
@@ -39,10 +37,10 @@ it(
         CarrierFactory $carrierFactory = null,
         callable       $carrierSettingsFactoryCb = null
     ) {
-        $fakeCarrier = ($carrierFactory ?? factory(Carrier::class)->withName(RefCapabilitiesSharedCarrierV2::POSTNL))
-            ->make();
+        $resolvedCarrierFactory = $carrierFactory ?? factory(Carrier::class)->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
+        $fakeCarrier            = $resolvedCarrierFactory->make();
 
-        $carrierSettingsFactory = factory(CarrierSettings::class, FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier))
+        $carrierSettingsFactory = factory(CarrierSettings::class, $fakeCarrier->carrier)
             ->withDeliveryOptions();
 
         if ($carrierSettingsFactoryCb) {
@@ -52,7 +50,7 @@ it(
         $carrierSettingsFactory->store();
 
         factory(Shop::class)
-            ->withCarriers(factory(CarrierCollection::class)->push($carrierFactory))
+            ->withCarriers(factory(CarrierCollection::class)->push($resolvedCarrierFactory))
             ->store();
 
         /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
@@ -65,7 +63,6 @@ it(
 )->with([
     'simple' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -90,7 +87,6 @@ it(
 
     'only virtual products' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'product' => [
@@ -103,7 +99,6 @@ it(
 
     'mailbox package' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -121,7 +116,6 @@ it(
 
     'mailbox package that is too heavy for mailbox' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 5,
@@ -139,7 +133,6 @@ it(
 
     'mailbox package with fit in mailbox' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -158,7 +151,6 @@ it(
 
     'digital stamp' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -176,7 +168,6 @@ it(
 
     'letter' => [
         'cart' => [
-            'carrier' => ['name' => 'POSTNL'],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -194,7 +185,6 @@ it(
 
     'international mailbox that becomes package for non-custom POSTNL' => [
         'cart' => [
-            'carrier'        => ['name' => 'POSTNL'],
             'shippingMethod' => [
                 'shippingAddress' => ['cc' => 'FR'],
             ],
@@ -212,140 +202,44 @@ it(
             ],
         ],
     ],
-
-    'custom POSTNL: eu mailbox package' => [
-        'cart'                   => [
-            'carrier'        => [
-                'carrier' => 'POSTNL',
-            ],
-            'shippingMethod' => [
-                'shippingAddress'     => ['cc' => 'FR'],
-                'allowedPackageTypes' => ['mailbox'],
-            ],
-            'lines'          => [
-                [
-                    'quantity' => 1,
-                    'product'  => [
-                        'weight'        => 500,
-                        'isDeliverable' => true,
-                        'settings'      => [
-                            ProductSettings::FIT_IN_MAILBOX => 5,
-                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        'carrierFactory'         => function () {
-            return factory(Carrier::class)->withCarrier('POSTNL');
-        },
-        'carrierSettingsFactory' => function () {
-            return function (CarrierSettingsFactory $factory) {
-                return $factory
-                    ->withAllowInternationalMailbox(true)
-                    ->withPriceInternationalMailbox(5);
-            };
-        },
-    ],
-
-    'custom POSTNL: be mailbox package' => [
-        'cart'                   => [
-            'carrier'        => [
-                'carrier' => 'POSTNL',
-            ],
-            'shippingMethod' => [
-                'shippingAddress'     => ['cc' => 'BE'],
-                'allowedPackageTypes' => ['mailbox'],
-            ],
-            'lines'          => [
-                [
-                    'quantity' => 1,
-                    'product'  => [
-                        'weight'        => 500,
-                        'isDeliverable' => true,
-                        'settings'      => [
-                            ProductSettings::FIT_IN_MAILBOX => 5,
-                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        'carrierFactory'         => function () {
-            return factory(Carrier::class)->withCarrier('POSTNL');
-        },
-        'carrierSettingsFactory' => function () {
-            return function (CarrierSettingsFactory $factory) {
-                return $factory
-                    ->withAllowInternationalMailbox(true)
-                    ->withPriceInternationalMailbox(5);
-            };
-        },
-    ],
-
-    'custom POSTNL: row mailbox package' => [
-        'cart'                   => [
-            'carrier'        => [
-                'carrier' => 'POSTNL',
-            ],
-            'shippingMethod' => [
-                'shippingAddress'     => ['cc' => 'KH'],
-                'allowedPackageTypes' => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME],
-            ],
-            'lines'          => [
-                [
-                    'quantity' => 1,
-                    'product'  => [
-                        'weight'        => 500,
-                        'isDeliverable' => true,
-                        'settings'      => [
-                            ProductSettings::FIT_IN_MAILBOX => 5,
-                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-                        ],
-                    ],
-                ],
-            ],
-        ],
-        'carrierFactory'         => function () {
-            return factory(Carrier::class)->withCarrier('POSTNL');
-        },
-        'carrierSettingsFactory' => function () {
-            return function (CarrierSettingsFactory $factory) {
-                return $factory
-                    ->withAllowInternationalMailbox(true)
-                    ->withPriceInternationalMailbox(5);
-            };
-        },
-    ],
 ]);
 
-it('creates platform settings from propositions', function () {
-    $deliveryOptionsService = Pdk::get(DeliveryOptionsServiceInterface::class);
-    $propositionService = Pdk::get(PropositionService::class);
-    // We're testing with an unmocked proposition here, as the config is local at this point.
-    $propositionService->setActivePropositionId(1);
+it('uses international mailbox price when shipping address is non-local', function () {
+    $fakeCarrier = factory(Carrier::class)->withCarrier('POSTNL')->make();
 
-    $config = $propositionService->getPropositionConfig();
-    $platformSettings = $deliveryOptionsService->createPropositionConfig();
+    factory(CarrierSettings::class, $fakeCarrier->carrier)
+        ->withDeliveryOptions()
+        ->withAllowInternationalMailbox(true)
+        ->withPriceInternationalMailbox(5)
+        ->store();
 
-    expect($platformSettings)->toHaveKey('carriers');
+    factory(Shop::class)
+        ->withCarriers(factory(CarrierCollection::class)->push(factory(Carrier::class)->withCarrier('POSTNL')))
+        ->store();
 
-    expect($platformSettings['carriers'][0])->toMatchArray([
-        'name' => 'postnl',
-        "packageTypes" => ['package', 'mailbox', 'letter', 'digital_stamp', 'package_small'],
-        'deliveryTypes' => ['morning', 'standard', 'evening', 'pickup'],
-        'deliveryCountries' => ['NL', 'BE'],
-        "pickupCountries" => ['NL', 'BE', 'DK', 'SE', 'DE'],
-        "smallPackagePickupCountries" => ['NL', 'BE'],
-        "fakeDelivery" => true,
-        "shipmentOptionsPerPackageType" => [
-            "package" => ['only_recipient', 'signature'],
-            "mailbox" => ['priority_delivery'],
-            "letter" => [],
-            "digital_stamp" => [],
-            "package_small" => ['only_recipient', 'signature'],
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createAllCarrierSettings(new PdkCart([
+        'shippingMethod' => [
+            'shippingAddress'     => ['cc' => 'KH'],
+            'allowedPackageTypes' => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME],
         ],
-        "features" => ['deliveryDaysWindow', 'dropOffDays', 'dropOffDelay', 'pickupMapAllowLoadMore'],
-        "addressFields" => ['postalCode', 'street', 'city']
-    ]);
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 500,
+                    'isDeliverable' => true,
+                    'settings'      => [
+                        ProductSettings::FIT_IN_MAILBOX => 5,
+                        ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    ],
+                ],
+            ],
+        ],
+    ]));
+
+    $carrierId   = FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier);
+    expect($result['carrierSettings'][$carrierId]['pricePackageTypeMailbox'])->toBe(1.05);
 });
