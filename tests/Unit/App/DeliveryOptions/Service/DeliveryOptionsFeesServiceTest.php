@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -11,6 +12,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -20,7 +22,7 @@ usesShared(
         PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)
             ->constructorParameter('settings', [
                 CarrierSettings::ID => [
-                    'postnl' => [
+                    'POSTNL' => [
                         CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY  => 1.3,
                         CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY => 4.5,
                         CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY  => 3,
@@ -37,14 +39,15 @@ usesShared(
                     ],
                 ],
             ]),
-    ])
+    ]),
+    new UsesAccountMock()
 );
 
 it('calculates fees based on delivery options', function (array $input, array $expectation) {
     /** @var DeliveryOptionsFeesService $service */
     $service = Pdk::get(DeliveryOptionsFeesService::class);
 
-    $input += ['carrier' => 'postnl'];
+    $input += ['carrier' => 'POSTNL'];
 
     $fees = $service->getFees(new DeliveryOptions($input));
 

@@ -1,6 +1,5 @@
 # General constraints
 
-- Do not assume the user is correct in their understanding of the codebase. You should always verify assumptions by checking the codebase, by running the code or tests.
 - Avoid writing prompt instructions or reasoning into code comments. Instead, keep comments focused on explaining the code itself. If you need to include reasoning or instructions for yourself, consider using inline comments with a "@TODO:" prefix marker to indicate that they are temporary notes for future reference.
 
 # PHP constraints
@@ -12,7 +11,9 @@
 # Testing
 
 - Use Pest for testing
-- Avoid usage of snapshots, write concrete assertions instead
+- Avoid usage of snapshots, concrete assertions SHOULD be used instead
+- Snapshots MAY still be used to assert the shape and contents of objects, API requests and responses, but not in situations where specific values are important to assert on (e.g., asserting that a specific carrier is used, or that a specific error message is returned). In those cases, write concrete assertions instead of relying on snapshots.
+- Avoid testing specific carriers, focus on testing capabilities and expectations based on it (like available package types, delivery types, shipment options etc.)
 - Match class names to actual class names in the codebase
 - Write Mocks using existing PDK custom mocking utilities
 - Run all tests through docker: `docker compose run php`
