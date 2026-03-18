@@ -61,6 +61,21 @@ final class ShopFactory extends AbstractModelFactory
     }
 
     /**
+     * Add all known carriers only when no carriers have been explicitly configured yet.
+     * Use this as a default fallback so that custom carrier configurations are not overridden.
+     *
+     * @return $this
+     */
+    public function withDefaultCarriers(): self
+    {
+        if ($this->attributes->has('carriers')) {
+            return $this;
+        }
+
+        return $this->withAllCarriers();
+    }
+
+    /**
      * Add all known carriers with all available capabilities as a default for testing.
      *
      * @return $this

@@ -94,6 +94,7 @@ class DeliveryOptionsConfig extends Model
             CheckoutSettings::ID
         );
 
+
         parent::__construct($data);
     }
 
