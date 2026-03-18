@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -10,11 +11,12 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Tests\Factory\Collection\FactoryCollection;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 beforeEach(function () {
     (new FactoryCollection([
