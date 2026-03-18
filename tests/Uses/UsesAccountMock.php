@@ -29,9 +29,9 @@ final class UsesAccountMock implements BaseMock
     }
 
     /**
-     * Clean up account data after all tests in the file.
+     * Clean up account data after each test.
      */
-    public function afterAll(): void
+    public function afterEach(): void
     {
         /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $accountRepository */
         $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
