@@ -34,7 +34,7 @@ dataset('multicolloPdkOrders', [
 
     // collo.max <= 1 → CarrierSchema::canHaveMultiCollo() returns false → separate shipment per label.
     // Directly updates the stored account's POSTNL carrier to have collo max 1, bypassing the factory
-    // chain which would re-apply withDefaultCarriers() and reset collo to max 10.
+    // chain which would re-apply withAllCarriers() and reset collo to max 10.
     'fake multicollo' => [
         'factory'                   => function () {
             /** @var PdkAccountRepositoryInterface $accountRepository */
