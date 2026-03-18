@@ -88,7 +88,7 @@ final class AccountFactory extends AbstractModelFactory
                 ->withPlatformId($this->attributes->get('platformId'))
                 ->withAccountId($this->attributes->get('id'))
                 ->withDeliveryAddress($this->attributes->get('contactInfo'))
-                ->withDefaultCarriers();
+                ->withAllCarriers();
         });
     }
 
