@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Hook;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
@@ -23,20 +24,32 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
     {
         $content  = $this->getHookBody($request);
         $orderIds = [];
+        $shipmentReferenceIdentifier = trim((string) ($content['shipment_reference_identifier'] ?? ''));
+        $orderId                     = trim((string) ($content['order_id'] ?? ''));
 
         // when the webhook is received from shipment mode
-        if (isset($content['shipment_reference_identifier'])) {
-            $orderIds = [$content['shipment_reference_identifier']];
+        if ('' !== $shipmentReferenceIdentifier) {
+            $orderIds = [$shipmentReferenceIdentifier];
         }
 
         // when the webhook is received from order mode
-        if (isset($content['order_id'])) {
+        if ('' !== $orderId) {
             // translate order_id (which is api identifier / uuid) to local order id for db
             $order    = Pdk::get(PdkOrderRepositoryInterface::class)
-                ->getByApiIdentifier($content['order_id']);
-            if ($order) {
+                ->getByApiIdentifier($orderId);
+            if ($order && $order->getExternalIdentifier()) {
                 $orderIds = [$order->getExternalIdentifier()];
             }
+        }
+
+        if (empty($orderIds)) {
+            Logger::warning('Skipping shipment status change webhook without a valid order identifier', [
+                'shipment_id'                   => $content['shipment_id'] ?? null,
+                'order_id'                      => $content['order_id'] ?? null,
+                'shipment_reference_identifier' => $content['shipment_reference_identifier'] ?? null,
+            ]);
+
+            return;
         }
 
         Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [

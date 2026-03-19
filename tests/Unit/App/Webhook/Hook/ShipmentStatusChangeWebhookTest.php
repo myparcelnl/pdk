@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
@@ -137,3 +139,61 @@ it('handles an api request', function (string $hook, string $expectedClass, stri
     ],
 ]);
 
+it('skips shipment status change webhook without valid order identifier', function () {
+    /** @var PdkWebhooksRepositoryInterface $repository */
+    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
+    /** @var PdkWebhookManagerInterface $webhookManager */
+    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
+    $cronService = Pdk::get(CronServiceInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionsService $actions */
+    $actions = Pdk::get(PdkActionsServiceInterface::class);
+
+    $repository->storeHashedUrl('https://example.com/hook/1234567890abcdef');
+    $repository->store(new WebhookSubscriptionCollection([[
+        'hook' => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+        'url'  => $repository->getHashedUrl(),
+    ]]));
+
+    $request = Request::create(
+        $repository->getHashedUrl(),
+        Request::METHOD_POST,
+        [],
+        [],
+        [],
+        ['HTTP_X_MYPARCEL_HOOK' => WebhookSubscription::SHIPMENT_STATUS_CHANGE],
+        json_encode([
+            'data' => [
+                'hooks' => [[
+                    'event'                         => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+                    'shipment_id'                   => 192031595,
+                    'status'                        => 2,
+                    'order_id'                      => '   ',
+                    'shipment_reference_identifier' => '',
+                ]],
+            ],
+        ])
+    );
+
+    $webhookManager->call($request);
+    $cronService->executeScheduledTask();
+
+    expect(
+        $actions->getCalls()
+            ->pluck('action')
+            ->contains(PdkBackendActions::UPDATE_SHIPMENTS)
+    )
+        ->toBeFalse()
+        ->and($logger->getLogs('warning'))
+        ->toContain([
+            'level'   => 'warning',
+            'message' => '[PDK]: Skipping shipment status change webhook without a valid order identifier',
+            'context' => [
+                'shipment_id'                   => 192031595,
+                'order_id'                      => '   ',
+                'shipment_reference_identifier' => '',
+            ],
+        ]);
+});
