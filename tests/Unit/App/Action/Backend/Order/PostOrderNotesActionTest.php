@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -34,10 +35,10 @@ it('posts order notes if order has notes', function (
     TestBootstrapper::hasApiKey();
 
     (new FactoryCollection([
+        factory(Account::class)->withShops()->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES]),
+        factory(OrderSettings::class)->withOrderMode(true),
         $ordersFactory,
         $notesFactory,
-        factory(OrderSettings::class)->withOrderMode(true),
-        factory(Account::class)->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES]),
     ]))->store();
 
     $orderCollection = new Collection($ordersFactory->make());

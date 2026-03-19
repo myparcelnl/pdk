@@ -25,7 +25,7 @@ final class CustomsCodeDefinition implements OrderOptionDefinitionInterface
         return null;
     }
 
-    public function getPropositionKey(): ?string
+    public function getCapabilitiesOptionsKey(): ?string
     {
         return null;
     }

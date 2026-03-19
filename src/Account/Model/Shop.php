@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Model;
 
-use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
@@ -25,13 +24,10 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  * @property array<string, mixed>               $shipmentOptions
  * @property array<string, mixed>[]             $trackTrace
  * @property CarrierCollection                  $carriers
- * @property ShopCarrierConfigurationCollection $carrierConfigurations
  */
 class Shop extends Model
 {
-    private const DEPRECATED_KEY_CARRIER_OPTIONS = 'carrierOptions';
-
-    public    $attributes = [
+    public $attributes = [
         'id'                    => null,
         'accountId'             => null,
         'platformId'            => null,
@@ -44,10 +40,9 @@ class Shop extends Model
         'shipmentOptions'       => [],
         'trackTrace'            => [],
         'carriers'              => CarrierCollection::class,
-        'carrierConfigurations' => ShopCarrierConfigurationCollection::class,
     ];
 
-    protected $casts      = [
+    protected $casts = [
         'id'                    => 'int',
         'accountId'             => 'int',
         'platformId'            => 'int',
@@ -60,56 +55,5 @@ class Shop extends Model
         'shipmentOptions'       => 'array',
         'trackTrace'            => 'array',
         'carriers'              => CarrierCollection::class,
-        'carrierConfigurations' => ShopCarrierConfigurationCollection::class,
     ];
-
-    protected $deprecated = [
-        self::DEPRECATED_KEY_CARRIER_OPTIONS => 'carriers',
-    ];
-
-    /**
-     * @param  null|array $data
-     */
-    public function __construct(?array $data = null)
-    {
-        if (isset($data[self::DEPRECATED_KEY_CARRIER_OPTIONS])) {
-            $data['carriers'] = array_map(
-                static function (array $carrierOptions): array {
-                    $rest = Arr::except($carrierOptions, ['carrier']);
-
-                    return array_merge($rest, $carrierOptions['carrier'] ?? null);
-                },
-                $data[self::DEPRECATED_KEY_CARRIER_OPTIONS]
-            );
-
-            unset($data[self::DEPRECATED_KEY_CARRIER_OPTIONS]);
-        }
-
-        parent::__construct($data);
-    }
-
-    /**
-     * @return array
-     */
-    public function toStorableArray(): array
-    {
-        $carriers = (new Collection($this->carriers))
-            ->map(static function (Carrier $carrier): array {
-                return $carrier->only([
-                    'externalIdentifier',
-                    'enabled',
-                    'label',
-                    'primary',
-                    'optional',
-                    'type',
-                ], Arrayable::STORABLE_NULL);
-            });
-
-        return array_replace(
-            $this->except('carriers', Arrayable::STORABLE_NULL),
-            [
-                'carriers' => $carriers->toArray(self::STORABLE_NULL),
-            ]
-        );
-    }
 }

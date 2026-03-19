@@ -353,8 +353,7 @@
                 "allowFakeDelivery": true
               }
             }
-          ],
-          "carrierConfigurations": []
+          ]
         }
       ],
       "status": 2,
@@ -656,8 +655,7 @@
             "allowFakeDelivery": true
           }
         }
-      ],
-      "carrierConfigurations": []
+      ]
     }
   }
 }

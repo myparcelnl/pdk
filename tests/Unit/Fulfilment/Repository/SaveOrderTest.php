@@ -18,6 +18,8 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -80,7 +82,7 @@ it('creates a valid order collection from api data', function (array $input) {
                 'shipment'       => [
                     'apiKey'             => '123',
                     'carrier'            => [
-                        'id' => Carrier::CARRIER_POSTNL_ID,
+                        'id' => RefTypesCarrier::POSTNL,
                     ],
                     'customsDeclaration' => [
                         'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
@@ -105,7 +107,7 @@ it('creates a valid order collection from api data', function (array $input) {
                         ],
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => Carrier::CARRIER_POSTNL_NAME,
+                        'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -168,10 +170,10 @@ it('creates a valid order collection from api data', function (array $input) {
                 'shipment'       => [
                     'apiKey'             => '123',
                     'carrier'            => [
-                        'id' => Carrier::CARRIER_POSTNL_ID,
+                        'id' => RefTypesCarrier::POSTNL,
                     ],
                     'deliveryOptions'    => [
-                        'carrier'         => Carrier::CARRIER_POSTNL_NAME,
+                        'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
                         'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
                         'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
@@ -261,7 +263,7 @@ it('creates order', function ($input, $path, $query) {
             'price'          => 260,
             'shipment'       => [
                 'carrier'            => [
-                    'id' => Carrier::CARRIER_POSTNL_ID,
+                    'id' => RefTypesCarrier::POSTNL,
                 ],
                 'customsDeclaration' => null,
                 'deliveryOptions'    => [

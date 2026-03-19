@@ -28,8 +28,11 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 afterEach(function () {
     /** @var MockPdkProductRepository $productRepository */
@@ -39,7 +42,7 @@ afterEach(function () {
 
 it('calculates insurance', function (array $input, int $result) {
     $reset   = mockPdkProperty('orderCalculators', [InsuranceCalculator::class]);
-    $carrier = $input['carrier'] ?? Carrier::CARRIER_POSTNL_NAME;
+    $carrier = $input['carrier'] ?? RefCapabilitiesSharedCarrierV2::POSTNL;
 
     factory(Settings::class)
         ->withCarrier(
@@ -335,27 +338,27 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 5000,
         ],
 
-        sprintf('carrier %s', Carrier::CARRIER_DHL_FOR_YOU_NAME) => [
+        sprintf('carrier %s', RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU) => [
             [
                 'orderPrice' => 160000,
-                'carrier'    => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+                'carrier'    => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
             ],
             'result' => 200000,
         ],
 
-        sprintf('carrier %s', Carrier::CARRIER_DHL_EUROPLUS_NAME) => [
+        sprintf('carrier %s', RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS) => [
             [
                 'country'    => 'DE',
                 'orderPrice' => 360000,
-                'carrier'    => Carrier::CARRIER_DHL_EUROPLUS_NAME,
+                'carrier'    => RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS,
             ],
             'result' => 400000,
         ],
 
-        sprintf('carrier %s', Carrier::CARRIER_GLS_NAME) => [
+        sprintf('carrier %s', RefCapabilitiesSharedCarrierV2::GLS) => [
             [
                 'orderPrice' => 10000,
-                'carrier'    => Carrier::CARRIER_GLS_NAME,
+                'carrier'    => RefCapabilitiesSharedCarrierV2::GLS,
             ],
             'result' => 10000,
         ],
@@ -366,7 +369,7 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
 
     factory(Settings::class)
         ->withCarrier(
-            Carrier::CARRIER_DPD_NAME,
+            RefCapabilitiesSharedCarrierV2::DPD,
             [
                 CarrierSettings::EXPORT_INSURANCE => false,
             ]
@@ -374,14 +377,15 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
         ->store();
 
     $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_DPD_NAME)
-        ->withOutboundFeatures(
-            factory(PropositionCarrierFeatures::class)
-            ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-            ->withMetadata([
-                PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [52000],
-            ])
-        )
+        ->withName(RefCapabilitiesSharedCarrierV2::DPD)
+        // @TODO replace with Carrier model shipment options
+        // ->withOutboundFeatures(
+        //     factory(PropositionCarrierFeatures::class)
+        //     ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
+        //     ->withMetadata([
+        //         PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [52000],
+        //     ])
+        // )
         ->make();
 
     $order = factory(PdkOrder::class)

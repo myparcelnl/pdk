@@ -25,7 +25,7 @@ final class DisableDeliveryOptionsDefinition implements OrderOptionDefinitionInt
         return null;
     }
 
-    public function getPropositionKey(): ?string
+    public function getCapabilitiesOptionsKey(): ?string
     {
         return null;
     }

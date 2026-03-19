@@ -21,8 +21,9 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('handles customer information', function (bool $shareCustomerInfo, bool $needsCustomerInfo) {
     factory(OrderSettings::class)
@@ -32,8 +33,8 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
     $reset = mockPdkProperty('orderCalculators', [CustomerInformationCalculator::class]);
 
     $fakeCarrier = factory(Carrier::class)
-        ->fromPostNL()
-        ->withOutboundFeatures(['metadata' => [PropositionCarrierMetadata::FEATURE_NAME_NEEDS_CUSTOMER_INFO => $needsCustomerInfo]]);
+        ->fromPostNL();
+    // @TODO: figure this out
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($fakeCarrier))

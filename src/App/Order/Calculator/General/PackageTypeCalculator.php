@@ -71,10 +71,11 @@ final class PackageTypeCalculator extends AbstractPdkOrderOptionCalculator
     {
         $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
-        $isMailbox         = $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
-        $isNotLocal        = ! $this->countryService->isLocalCountry($this->order->shippingAddress->cc);
-        $enabledInSettings = $carrierSettings->allowInternationalMailbox;
+        $isMailbox          = $this->order->deliveryOptions->packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        $isNotLocal         = ! $this->countryService->isLocalCountry($this->order->shippingAddress->cc);
+        $enabledInSettings  = $carrierSettings->allowInternationalMailbox;
+        $hasCustomContract  = AccountSettings::hasCarrierSmallPackageContract();
 
-        return $isMailbox && $isNotLocal && $enabledInSettings;
+        return $isMailbox && $isNotLocal && $enabledInSettings && $hasCustomContract;
     }
 }

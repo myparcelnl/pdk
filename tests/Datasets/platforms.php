@@ -4,9 +4,14 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Account\Platform;
+use MyParcelNL\Pdk\Proposition\Proposition;
 
 dataset('platforms', function () {
-    yield Platform::MYPARCEL_NAME;
-    yield Platform::SENDMYPARCEL_NAME;
+    yield Proposition::MYPARCEL_NAME;
+    yield Proposition::SENDMYPARCEL_NAME;
+});
+
+dataset('propositions', function () {
+    yield Proposition::MYPARCEL_ID;
+    yield Proposition::SENDMYPARCEL_ID;
 });

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 
 final class SaturdayDeliveryDefinition implements OrderOptionDefinitionInterface
 {
@@ -26,9 +26,9 @@ final class SaturdayDeliveryDefinition implements OrderOptionDefinitionInterface
         return ShipmentOptions::SATURDAY_DELIVERY;
     }
 
-    public function getPropositionKey(): ?string
+    public function getCapabilitiesOptionsKey(): ?string
     {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_SATURDAY_DELIVERY_NAME;
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['saturday_delivery'];
     }
 
     public function validate(CarrierSchema $carrierSchema): bool
