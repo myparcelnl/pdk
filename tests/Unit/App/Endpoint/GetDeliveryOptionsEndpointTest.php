@@ -42,7 +42,7 @@ it('returns delivery options for valid order id', function () {
             factory(DeliveryOptions::class)
                 ->withCarrier('POSTNL')
                 ->withDate('2024-01-15')
-                ->withPackageType('package')
+                ->withPackageType('PACKAGE')
         )
         ->store();
 
