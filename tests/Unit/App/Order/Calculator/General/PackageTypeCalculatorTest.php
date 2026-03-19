@@ -2,9 +2,6 @@
 
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
-// @TODO replace with capabilities-based assertions where no carrier-specific calculators are present.
-// @TODO use concrete expectations rather than snapshots to determine the correct assertions, and to make the tests more readable.
-
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
@@ -16,184 +13,160 @@ use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use function Spatie\Snapshots\assertMatchesSnapshot;
-
-const CARRIERS            = [
-    RefCapabilitiesSharedCarrierV2::POSTNL,
-    RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
-    RefCapabilitiesSharedCarrierV2::DPD,
-];
-
-const ACCOUNT_FLAG_ON_CARRIER_SETTING_ON = [
-    'accountHasCarrierSmallPackageContract' => true,
-    'carrierHasInternationalMailboxAllowed' => true,
-];
-
-const ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF = [
-    'accountHasCarrierSmallPackageContract' => true,
-    'carrierHasInternationalMailboxAllowed' => false,
-];
-
-const ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON = [
-    'accountHasCarrierSmallPackageContract' => false,
-    'carrierHasInternationalMailboxAllowed' => true,
-];
-
-const ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF = [
-    'accountHasCarrierSmallPackageContract' => false,
-    'carrierHasInternationalMailboxAllowed' => false,
-];
-
-const CONFIG = [
-    ACCOUNT_FLAG_ON_CARRIER_SETTING_ON,
-    ACCOUNT_FLAG_ON_CARRIER_SETTING_OFF,
-    ACCOUNT_FLAG_OFF_CARRIER_SETTING_ON,
-    ACCOUNT_FLAG_OFF_CARRIER_SETTING_OFF,
-];
-
-const DESTINATION_INTERNATIONAL_COUNTRIES = [
-    CountryCodes::CC_FR,
-    CountryCodes::CC_US,
-    CountryCodes::CC_BE,
-];
 
 usesShared(new UsesEachMockPdkInstance());
 
-it(
-    'calculates package type',
-    function (
-        string $platform,
-        array  $options,
-        string $result
-    ) {
-        TestBootstrapper::forPlatform($platform);
-
-        mockPdkProperties([
-            'orderCalculators' => [PackageTypeCalculator::class],
-        ]);
-
-        $fakeCarrier = factory(Carrier::class)->withAllCapabilities();
-
-        $order = factory(PdkOrder::class)
-            ->withShippingAddress(
-                factory(ShippingAddress::class)->withCc($options['cc'] ?? Pdk::get(PropositionService::class)->getPropositionConfig()->countryCode)
-            )
-            ->withDeliveryOptions(
-                factory(DeliveryOptions::class)
-                    ->withCarrier($fakeCarrier)
-                    ->withPackageType($options['packageType'])
-                    ->withAllShipmentOptions()
-            )
-            ->make();
-
-        /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
-        $service  = Pdk::get(PdkOrderOptionsService::class);
-        $newOrder = $service->calculate($order);
-
-        expect($newOrder->deliveryOptions->packageType)->toBe($result);
-    }
-)
-    ->with('platforms')
-    ->with([
-        'local country, package type package' => [
-            'options' => ['packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
-            'result'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        ],
-
-        'local country, package type letter' => [
-            'options' => ['packageType' => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME],
-            'result'  => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-        ],
-
-        'non-local country, package type package' => [
-            'options' => [
-                'cc'          => CountryCodes::CC_GB,
-                'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-            ],
-            'result'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        ],
-
-        'non-local country, package type letter' => [
-            'options' => [
-                'cc'          => CountryCodes::CC_GB,
-                'packageType' => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-            ],
-            'result'  => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-        ],
-
-        'non-local country, package type mailbox' => [
-            'options' => [
-                'cc'          => CountryCodes::CC_GB,
-                'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-            ],
-            'result'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        ],
-
-        'non-local country, package type package small' => [
-            'options' => [
-                'cc'          => CountryCodes::CC_GB,
-                'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
-            ],
-            'result'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
-        ],
-    ]);
-
-it('calculates international mailbox', function (
-    $platform,
-    $country,
-    $carrier,
-    $accountHasCarrierSmallPackageContract,
-    $carrierHasInternationalMailboxAllowed
+it('calculates package type', function (
+    string $cc,
+    string $packageType,
+    bool $allowInternationalMailbox,
+    bool $hasCarrierSmallPackageContract,
+    string $expectedPackageType
 ) {
-    TestBootstrapper::forPlatform($platform);
+    TestBootstrapper::forPlatform(Proposition::MYPARCEL_NAME);
 
     mockPdkProperties([
         'orderCalculators' => [PackageTypeCalculator::class],
     ]);
 
-    $fakeCarrier = factory(Carrier::class)
-        ->withCarrier($carrier)
-        ->withAllCapabilities()
-        ->make();
+    $carrier = factory(Carrier::class)->withAllCapabilities();
 
-    factory(CarrierSettings::class, $fakeCarrier->carrier)
-        ->withAllowInternationalMailbox($carrierHasInternationalMailboxAllowed)
+    factory(CarrierSettings::class, $carrier->make()->carrier)
+        ->withAllowInternationalMailbox($allowInternationalMailbox)
+        ->store();
+
+    factory(AccountGeneralSettings::class)
+        ->withHasCarrierSmallPackageContract($hasCarrierSmallPackageContract)
         ->store();
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(
-            factory(ShippingAddress::class)->withCc($country)
+            factory(ShippingAddress::class)->withCc($cc)
         )
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier($fakeCarrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withCarrier($carrier)
+                ->withPackageType($packageType)
                 ->withAllShipmentOptions()
         )
         ->make();
-
-    factory(AccountGeneralSettings::class)
-        ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
-        ->store();
 
     /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsService::class);
     $newOrder = $service->calculate($order);
 
-    assertMatchesSnapshot((string) $newOrder->deliveryOptions->packageType);
-})
-    ->with('platforms')
-    ->with(DESTINATION_INTERNATIONAL_COUNTRIES)
-    ->with(CARRIERS)
-    ->with(CONFIG);
+    expect($newOrder->deliveryOptions->packageType)->toBe($expectedPackageType);
+})->with([
+    'local country, package' => [
+        'cc'                            => CountryCodes::CC_NL,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+    ],
+
+    'local country, mailbox' => [
+        'cc'                            => CountryCodes::CC_NL,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+    ],
+
+    'local country, letter' => [
+        'cc'                            => CountryCodes::CC_NL,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+    ],
+
+    'local country, digital stamp' => [
+        'cc'                            => CountryCodes::CC_NL,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+    ],
+
+    'local country, package small' => [
+        'cc'                            => CountryCodes::CC_NL,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+    ],
+
+    'non-local country, package' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+    ],
+
+    'non-local country, letter' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+    ],
+
+    'non-local country, package small' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+    ],
+
+    'non-local country, digital stamp falls back to package' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+    ],
+
+    'non-local country, mailbox without international mailbox settings falls back to package' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+    ],
+
+    'non-local country, mailbox with only carrier setting falls back to package' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'allowInternationalMailbox'     => true,
+        'hasCarrierSmallPackageContract' => false,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+    ],
+
+    'non-local country, mailbox with only account flag falls back to package' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'allowInternationalMailbox'     => false,
+        'hasCarrierSmallPackageContract' => true,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+    ],
+
+    'non-local country, mailbox with both settings enabled stays mailbox' => [
+        'cc'                            => CountryCodes::CC_GB,
+        'packageType'                   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        'allowInternationalMailbox'     => true,
+        'hasCarrierSmallPackageContract' => true,
+        'expectedPackageType'           => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+    ],
+]);
