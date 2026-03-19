@@ -172,7 +172,7 @@ it('createVersionedRequest() falls back to v1 for unsupported versions', functio
 
 it('createVersionedResource() falls back to v1 for unsupported versions', function () {
     $endpoint = new GetDeliveryOptionsEndpoint();
-    $deliveryOptions = factory(DeliveryOptions::class)->withCarrier('postnl')->make();
+    $deliveryOptions = factory(DeliveryOptions::class)->withCarrier('POSTNL')->make();
 
     $resource = $endpoint->createVersionedResource($deliveryOptions, 99);
 
@@ -212,7 +212,12 @@ it('handles unsupported version before validating orderId parameter', function (
     expect($content['detail'])->toContain('API version 5 is not supported');
 });
 
-it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) {
+// Instantiate validator outside of tests so it is only built once, since building the validator is expensive. We can reuse it across tests since the schema does not change.
+$openApiValidator = (new ValidatorBuilder())
+    ->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')
+    ->getResponseValidator();
+
+it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) use ($openApiValidator) {
     $allShipmentOptions = [];
     foreach (ShipmentOptions::ALL_SHIPMENT_OPTIONS as $option) {
         if ($option === ShipmentOptions::SIGNATURE) {
@@ -254,9 +259,6 @@ it('returns a response which matches the openApi schema', function (string $pack
     expect($response->getStatusCode())->toBe(200);
 
     // Validate response against OpenAPI schema
-    $validator = (new ValidatorBuilder())
-        ->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')
-        ->getResponseValidator();
     $operation  = new OperationAddress('/delivery-options', 'get');
 
     // Convert Symfony Response to PSR-7 Response using Guzzle for validation
@@ -268,7 +270,7 @@ it('returns a response which matches the openApi schema', function (string $pack
 
     // Try - catch the validate, so we can print the validation errors if it fails
     try {
-        $validator->validate($operation, $psr7Response);
+        $openApiValidator->validate($operation, $psr7Response);
     } catch (InvalidBody $e) {
         $this->fail($e->getVerboseMessage());
     }
@@ -283,7 +285,7 @@ it('insurance: calls calculate() on the options service when handling a delivery
     // as TriState ENABLED (1), and the formatter produced 1 * 1_000_000 = 1_000_000.
     factory(PdkOrder::class)
         ->withExternalIdentifier('insurance-spy-order')
-        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('postnl'))
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('POSTNL'))
         ->store();
 
     /** @var \Mockery\MockInterface&PdkOrderOptionsServiceInterface $spyService */
@@ -309,13 +311,13 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
         ->withLines([factory(PdkOrderLine::class)->withPrice(100000)])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->withInsurance(TriStateService::INHERIT))
         )
         ->store();
 
     factory(Settings::class)
-        ->withCarrier('postnl', [
+        ->withCarrier('POSTNL', [
             CarrierSettings::EXPORT_INSURANCE        => true,
             CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
         ])
@@ -336,11 +338,11 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
 it('insurance: omits insurance from the response when exportInsurance is disabled in carrier settings', function () {
     factory(PdkOrder::class)
         ->withExternalIdentifier('insurance-disabled-order')
-        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('postnl'))
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('POSTNL'))
         ->store();
 
     factory(Settings::class)
-        ->withCarrier('postnl', [
+        ->withCarrier('POSTNL', [
             CarrierSettings::EXPORT_INSURANCE        => false,
             CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
         ])
@@ -362,13 +364,13 @@ it('insurance: preserves an explicit monetary amount already set on the order sh
         ->withExternalIdentifier('insurance-explicit-order')
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->withInsurance(10000))
         )
         ->store();
 
     factory(Settings::class)
-        ->withCarrier('postnl', [
+        ->withCarrier('POSTNL', [
             CarrierSettings::EXPORT_INSURANCE        => true,
             CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
         ])
