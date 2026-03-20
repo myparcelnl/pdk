@@ -47,7 +47,7 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
         }
 
         if (empty($orderIds)) {
-            Logger::warning('Skipping shipment status change webhook without a valid order identifier', [
+            Logger::debug('Skipping shipment status change webhook without a valid order identifier', [
                 'shipment_id'                   => $content['shipment_id'] ?? null,
                 'order_id'                      => $content['order_id'] ?? null,
                 'shipment_reference_identifier' => $content['shipment_reference_identifier'] ?? null,
