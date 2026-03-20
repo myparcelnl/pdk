@@ -33,12 +33,12 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
         // when the webhook is received from order mode
         if (\array_key_exists('order_id', $content) && '' !== trim($content['order_id'])) {
             // translate order_id (which is api identifier / uuid) to local order id for db
-            $order    = Pdk::get(PdkOrderRepositoryInterface::class)
+            $order = Pdk::get(PdkOrderRepositoryInterface::class)
                 ->getByApiIdentifier(trim($content['order_id']));
             if ($order) {
                 $externalIdentifier = $order->getExternalIdentifier();
 
-                if (null !== $externalIdentifier && '' !== $externalIdentifier) {
+                if (!empty($externalIdentifier)) {
                     $orderIds = [$externalIdentifier];
                 }
             }
