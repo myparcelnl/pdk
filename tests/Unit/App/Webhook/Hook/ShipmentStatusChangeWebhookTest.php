@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -28,118 +29,8 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
 
-it('handles an api request', function (string $hook, string $expectedClass, string $expectedStatus, array $hookBody) {
-    /** @var PdkWebhooksRepositoryInterface $repository */
-    $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
-    /** @var PdkWebhookManagerInterface $webhookManager */
-    $webhookManager = Pdk::get(PdkWebhookManagerInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCronService $cronService */
-    $cronService = Pdk::get(CronServiceInterface::class);
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-    $logger = Pdk::get(LoggerInterface::class);
-
-    $repository->storeHashedUrl('https://example.com/hook/1234567890abcdef');
-    $repository->store(new WebhookSubscriptionCollection([['hook' => $hook, 'url' => $repository->getHashedUrl()]]));
-    MockApi::enqueue(new ExampleGetShipmentsResponse());
-
-    $request = Request::create(
-        $repository->getHashedUrl(),
-        Request::METHOD_POST,
-        [],
-        [],
-        [],
-        ['HTTP_X_MYPARCEL_HOOK' => $hook],
-        json_encode([
-            'data' => [
-                'hooks' => [
-                    array_merge(['event' => $hook], $hookBody),
-                ],
-            ],
-        ])
-    );
-
-    $webhookManager->call($request);
-    $cronService->executeScheduledTask();
-
-    $logs = (new Collection($logger->getLogs()))->map(function (array $log) {
-        // Omit the request from the logs.
-        unset($log['context']['request']);
-        return $log;
-    });
-    // Omit the shipment response from the logs.
-    unset($logs[1]);
-
-    // Filter logs to only include the ones we're interested in
-    $filteredLogs = $logs->filter(function (array $log) {
-        return $log['message'] === '[PDK]: Webhook received' || $log['message'] === '[PDK]: Webhook processed';
-    })
-        ->values();
-    expect(
-        $logs->filter(function (array $log) {
-            return 0 === strpos($log['message'], '[PDK]: Update status');
-        })
-            ->first()['context']['status']
-    )
-        ->toBe($expectedStatus)
-        ->and($filteredLogs->toArray())
-        ->toBe([
-            [
-                'level'   => 'debug',
-                'message' => '[PDK]: Webhook received',
-                'context' => [],
-            ],
-            [
-                'level'   => 'debug',
-                'message' => '[PDK]: Webhook processed',
-                'context' => ['hook' => $expectedClass],
-            ],
-        ]);
-})->with([
-    'shipment updated' => [
-        'hook'   => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
-        'class'  => ShipmentStatusChangeWebhook::class,
-        'status' => OrderSettings::STATUS_ON_LABEL_CREATE,
-        'body'   => [
-            'shipment_id'                   => 192031595,
-            'account_id'                    => 162450,
-            'order_id'                      => 'api-uuid-string',
-            'shop_id'                       => 83287,
-            'status'                        => 2,
-            'barcode'                       => '3SHOHR763563926',
-            'shipment_reference_identifier' => '',
-        ],
-    ],
-    'shipment scanned' => [
-        'hook'   => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
-        'class'  => ShipmentStatusChangeWebhook::class,
-        'status' => OrderSettings::STATUS_WHEN_LABEL_SCANNED,
-        'body'   => [
-            'shipment_id'                   => 192031595,
-            'account_id'                    => 162450,
-            'order_id'                      => 'api-uuid-string',
-            'shop_id'                       => 83287,
-            'status'                        => 5,
-            'barcode'                       => '3SHOHR763563926',
-            'shipment_reference_identifier' => '',
-        ],
-    ],
-    'shipment delivered' => [
-        'hook'   => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
-        'class'  => ShipmentStatusChangeWebhook::class,
-        'status' => OrderSettings::STATUS_WHEN_DELIVERED,
-        'body'   => [
-            'shipment_id'                   => 192031595,
-            'account_id'                    => 162450,
-            'order_id'                      => 'api-uuid-string',
-            'shop_id'                       => 83287,
-            'status'                        => 9,
-            'barcode'                       => '3SHOHR763563926',
-            'shipment_reference_identifier' => '',
-        ],
-    ],
-]);
-
-it('skips shipment status change webhook without valid order identifier', function () {
+function dispatchWebhook(array $hookBody): array
+{
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
     /** @var PdkWebhookManagerInterface $webhookManager */
@@ -156,6 +47,7 @@ it('skips shipment status change webhook without valid order identifier', functi
         'hook' => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
         'url'  => $repository->getHashedUrl(),
     ]]));
+    MockApi::enqueue(new ExampleGetShipmentsResponse());
 
     $request = Request::create(
         $repository->getHashedUrl(),
@@ -166,13 +58,9 @@ it('skips shipment status change webhook without valid order identifier', functi
         ['HTTP_X_MYPARCEL_HOOK' => WebhookSubscription::SHIPMENT_STATUS_CHANGE],
         json_encode([
             'data' => [
-                'hooks' => [[
-                    'event'                         => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
-                    'shipment_id'                   => 192031595,
-                    'status'                        => 2,
-                    'order_id'                      => '   ',
-                    'shipment_reference_identifier' => '',
-                ]],
+                'hooks' => [
+                    array_merge(['event' => WebhookSubscription::SHIPMENT_STATUS_CHANGE], $hookBody),
+                ],
             ],
         ])
     );
@@ -180,20 +68,116 @@ it('skips shipment status change webhook without valid order identifier', functi
     $webhookManager->call($request);
     $cronService->executeScheduledTask();
 
-    expect(
-        $actions->getCalls()
-            ->pluck('action')
-            ->contains(PdkBackendActions::UPDATE_SHIPMENTS)
-    )
+    return [
+        'actions' => $actions,
+        'logger'  => $logger,
+    ];
+}
+
+
+function validHookBody($orderId = 'api-uuid-string', $referenceIdentifier = null)
+{
+    $body = [
+        'shipment_id' => 192031595,
+        'account_id'  => 162450,
+        'shop_id'     => 83287,
+        'status'      => 2,
+        'barcode'     => '3SHOHR763563926',
+    ];
+
+    if ($orderId !== null) {
+        $body['order_id'] = $orderId;
+    }
+
+    if ($referenceIdentifier !== null) {
+        $body['shipment_reference_identifier'] = $referenceIdentifier;
+    }
+
+    return $body;
+}
+
+
+it('dispatches update action when order_id is valid', function () {
+    $result = dispatchWebhook(validHookBody('api-uuid-string'));
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeTrue();
+});
+
+
+it('dispatches update action when shipment_reference_identifier is valid', function () {
+    $result = dispatchWebhook(validHookBody(null, 'REF-123'));
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeTrue();
+});
+
+
+it('skips webhook when identifiers are missing or empty', function ($orderId, $referenceIdentifier) {
+    $hookBody = validHookBody($orderId, $referenceIdentifier);
+    $result   = dispatchWebhook($hookBody);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
         ->toBeFalse()
-        ->and($logger->getLogs('warning'))
+        ->and($result['logger']->getLogs('debug'))
         ->toContain([
-            'level'   => 'warning',
+            'level'   => 'debug',
             'message' => '[PDK]: Skipping shipment status change webhook without a valid order identifier',
             'context' => [
-                'shipment_id'                   => 192031595,
-                'order_id'                      => '   ',
-                'shipment_reference_identifier' => '',
+                'shipment_id'                   => $hookBody['shipment_id'],
+                'order_id'                      => $hookBody['order_id'] ?? null,
+                'shipment_reference_identifier' => $hookBody['shipment_reference_identifier'] ?? null,
             ],
         ]);
+})->with([
+    'order_id empty, reference empty'              => ['', ''],
+    'order_id empty, reference whitespace'         => ['', '   '],
+    'order_id whitespace, reference not present'   => ['   ', null],
+    'order_id not present, reference empty'        => [null, ''],
+    'both not present'                             => [null, null],
+    'both whitespace'                              => ['  ', '  '],
+]);
+
+it('maps shipment status to correct order status', function (int $status, string $expectedStatus) {
+    $body = validHookBody();
+    $body['status'] = $status;
+    $result = dispatchWebhook($body);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeTrue();
+
+    $statusLog = (new Collection($result['logger']->getLogs()))
+        ->filter(fn(array $log) => str_starts_with($log['message'], '[PDK]: Update status'))
+        ->first();
+
+    expect($statusLog['context']['status'])->toBe($expectedStatus);
+})->with([
+    'status 2 - label created'  => [2, OrderSettings::STATUS_ON_LABEL_CREATE],
+    'status 5 - label scanned'  => [5, OrderSettings::STATUS_WHEN_LABEL_SCANNED],
+    'status 9 - delivered'      => [9, OrderSettings::STATUS_WHEN_DELIVERED],
+]);
+
+it('logs webhook received and processed', function () {
+    $result = dispatchWebhook(validHookBody());
+
+    $logs = (new Collection($result['logger']->getLogs()))
+        ->map(function (array $log) {
+            unset($log['context']['request']);
+            return $log;
+        })
+        ->filter(fn(array $log) => in_array($log['message'], ['[PDK]: Webhook received', '[PDK]: Webhook processed']))
+        ->values();
+
+    expect($logs->toArray())->toBe([
+        [
+            'level'   => 'debug',
+            'message' => '[PDK]: Webhook received',
+            'context' => [],
+        ],
+        [
+            'level'   => 'debug',
+            'message' => '[PDK]: Webhook processed',
+            'context' => ['hook' => ShipmentStatusChangeWebhook::class],
+        ],
+    ]);
 });
