@@ -6,10 +6,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
+use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -37,11 +39,22 @@ usesShared(
     ])
 );
 
+beforeEach(function () {
+    /** @var \MyParcelNL\Pdk\Proposition\Service\PropositionService $propositionService */
+    $propositionService = Pdk::get(PropositionService::class);
+    $propositionService->clearCache();
+    $propositionService->setActivePropositionId(Platform::MYPARCEL_ID);
+});
+
 afterEach(function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Proposition\Service\PropositionService $propositionService */
+    $propositionService = Pdk::get(PropositionService::class);
 
     $settingsRepository->reset();
+    $propositionService->clearActivePropositionId();
+    $propositionService->clearCache();
 });
 
 function expectSettingsToContain(array $values): void

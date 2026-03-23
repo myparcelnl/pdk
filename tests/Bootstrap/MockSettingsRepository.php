@@ -17,14 +17,15 @@ class MockSettingsRepository extends AbstractPdkSettingsRepository
     private $settings = [];
 
     /**
-     * @param  array                                      $settings
-     * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     * @param  array                                           $settings
+     * @param  null|\MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
      */
-    public function __construct(array $settings = [], MemoryCacheStorage $storage)
+    public function __construct(array $settings = [], ?MemoryCacheStorage $storage = null)
     {
+        $storage = $storage ?? new MemoryCacheStorage();
+
         parent::__construct($storage);
+        $this->reset();
 
         foreach ($settings as $key => $value) {
             $this->store($this->createSettingsKey($key), $value);
