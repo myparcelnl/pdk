@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Service\CapabilitiesApiService;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
+use MyParcelNL\Pdk\Api\Service\PdkCapabilitiesClient;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Api\Service\PdkActionsService;
@@ -68,6 +69,9 @@ use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesService;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface;
+use MyParcelNL\Sdk\Services\CoreApi\CapabilitiesClientInterface;
 
 use function DI\autowire;
 use function DI\factory;
@@ -205,6 +209,10 @@ return [
      * Capabilities API proxy
      */
     CapabilitiesApiService::class              => autowire(),
+    CapabilitiesClientInterface::class         => autowire(PdkCapabilitiesClient::class),
+    CapabilitiesServiceInterface::class        => factory(function () {
+        return new CapabilitiesService(\MyParcelNL\Pdk\Facade\Pdk::get(CapabilitiesClientInterface::class));
+    }),
 
     /**
      * @todo remove in v3.0.0

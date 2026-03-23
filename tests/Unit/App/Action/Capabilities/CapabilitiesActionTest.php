@@ -5,33 +5,41 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\App\Action\Capabilities;
 
 use Mockery;
-use MyParcelNL\Pdk\Api\Contract\ClientResponseInterface;
-use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Handler\CorsHandler;
-use MyParcelNL\Pdk\Api\Request\Request as ApiRequest;
-use MyParcelNL\Pdk\Api\Response\CapabilitiesResponse as ProxyCapabilitiesResponse;
-use MyParcelNL\Pdk\Api\Service\CapabilitiesApiService;
 use MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction;
-use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException as CoreApiException;
+use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesRequest;
+use MyParcelNL\Sdk\Model\Capabilities\CapabilitiesResponse;
+use MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
+beforeEach(function () {
+    TestBootstrapper::hasApiKey('test-api-key');
+});
+
 it('handles OPTIONS preflight request', function () {
     $request = Request::create('/', 'OPTIONS');
 
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Handler\CorsHandler $mockCorsHandler */
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
-    $mockCorsHandler->shouldReceive('handlePreflightRequest')
+    /** @var \Mockery\Expectation $preflightExpectation */
+    $preflightExpectation = $mockCorsHandler->shouldReceive('handlePreflightRequest');
+    $preflightExpectation
         ->with($request)
         ->andReturn(new Response('', 204));
 
-    Pdk::set(CorsHandler::class, $mockCorsHandler);
+    mockPdkProperty(CorsHandler::class, $mockCorsHandler);
 
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
-    $mockService->shouldNotReceive('doRequest');
+    /** @var \Mockery\MockInterface&\MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface $mockService */
+    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
+    $mockService->shouldNotReceive('get');
 
     $action = new CapabilitiesAction($mockService);
     $response = $action->handle($request);
@@ -39,9 +47,9 @@ it('handles OPTIONS preflight request', function () {
     expect($response->getStatusCode())->toBe(204);
 });
 
-it('proxies request body and query params to capabilities endpoint', function () {
+it('maps proxied request to sdk capabilities request', function () {
     $request = Request::create(
-        '/?action=proxyCapabilities&foo=bar',
+        '/?action=proxyCapabilities&shopId=123&carrier=postnl&packageType=package&deliveryType=standard_delivery&direction=outbound',
         'POST',
         [],
         [],
@@ -49,64 +57,81 @@ it('proxies request body and query params to capabilities endpoint', function ()
         [
             'CONTENT_TYPE' => 'application/json',
         ],
-        '{"recipient":{"country_code":"NL"}}'
+        '{"country":"NL","pickup":{"location":{"type":"retail"}},"sender":{"country_code":"NL","is_business":true},"physicalProperties":{"weight":{"value":1000,"unit":"g"}},"options":{"requires_signature":null}}'
     );
 
-    $proxyResponse = Mockery::mock(ProxyCapabilitiesResponse::class);
-    $proxyResponse->shouldReceive('getSymfonyResponse')
-        ->once()
-        ->andReturn(new Response('{"ok":true}', 200, ['Content-Type' => 'application/json']));
+    $sdkResponse = new CapabilitiesResponse(
+        ['package'],
+        ['standard_delivery'],
+        ['requires_signature'],
+        'postnl',
+        ['b2c'],
+        3
+    );
 
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
-    $mockService->shouldReceive('doRequest')
+    /** @var \Mockery\MockInterface&\MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface $mockService */
+    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
+    /** @var \Mockery\Expectation $serviceExpectation */
+    $serviceExpectation = $mockService->shouldReceive('get');
+    $serviceExpectation
         ->once()
-        ->withArgs(function (ApiRequest $apiRequest, string $responseClass): bool {
-            return '/shipments/capabilities' === $apiRequest->getPath()
-                && 'POST' === $apiRequest->getMethod()
-                && 'foo=bar' === $apiRequest->getQueryString()
-                && '{"recipient":{"country_code":"NL"}}' === $apiRequest->getBody()
-                && ProxyCapabilitiesResponse::class === $responseClass;
+        ->withArgs(function (CapabilitiesRequest $request): bool {
+            return 'NL' === $request->getCountryCode()
+                && 123 === $request->getShopId()
+                && 'postnl' === $request->getCarrier()
+                && 'package' === $request->getPackageType()
+                && 'standard_delivery' === $request->getDeliveryType()
+                && 'outbound' === $request->getDirection()
+                && ['location' => ['type' => 'retail']] === $request->getPickup()
+                && ['country_code' => 'NL', 'is_business' => true] === $request->getSender()
+                && ['weight' => ['value' => 1000, 'unit' => 'g']] === $request->getPhysicalProperties()
+                && ['requires_signature' => null] === $request->getOptions();
         })
-        ->andReturn($proxyResponse);
+        ->andReturn($sdkResponse);
 
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Handler\CorsHandler $mockCorsHandler */
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
-    $mockCorsHandler->shouldReceive('addCorsHeaders')
+    /** @var \Mockery\Expectation $corsExpectation */
+    $corsExpectation = $mockCorsHandler->shouldReceive('addCorsHeaders');
+    $corsExpectation
         ->once()
         ->andReturnUsing(function ($req, $res) {
             return $res;
         });
 
-    Pdk::set(CorsHandler::class, $mockCorsHandler);
+    mockPdkProperty(CorsHandler::class, $mockCorsHandler);
 
     $action = new CapabilitiesAction($mockService);
     $response = $action->handle($request);
 
     expect($response->getStatusCode())->toBe(200)
-        ->and($response->getContent())->toBe('{"ok":true}');
+        ->and($response->getContent())->toContain('"package_types":["package"]')
+        ->and($response->getContent())->toContain('"carrier":"postnl"')
+        ->and($response->getContent())->toContain('"collo_max":3');
 });
 
-it('passes through error status code and body from capabilities api', function () {
+it('passes through sdk core api error response', function () {
     $request = Request::create('/?foo=bar', 'POST', [], [], [], [], '{"invalid":true}');
 
-    $clientResponse = Mockery::mock(ClientResponseInterface::class);
-    $clientResponse->shouldReceive('getBody')
-        ->andReturn('{"errors":[{"code":"invalid_request"}]}');
-    $clientResponse->shouldReceive('getStatusCode')
-        ->andReturn(422);
-
-    $mockService = Mockery::mock(CapabilitiesApiService::class);
-    $mockService->shouldReceive('doRequest')
+    /** @var \Mockery\MockInterface&\MyParcelNL\Sdk\Services\Capabilities\CapabilitiesServiceInterface $mockService */
+    $mockService = Mockery::mock(CapabilitiesServiceInterface::class);
+    /** @var \Mockery\Expectation $serviceExpectation */
+    $serviceExpectation = $mockService->shouldReceive('get');
+    $serviceExpectation
         ->once()
-        ->andThrow(new ApiException($clientResponse));
+        ->andThrow(new CoreApiException('invalid', 422, [], '{"errors":[{"code":"invalid_request"}]}'));
 
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Handler\CorsHandler $mockCorsHandler */
     $mockCorsHandler = Mockery::mock(CorsHandler::class);
-    $mockCorsHandler->shouldReceive('addCorsHeaders')
+    /** @var \Mockery\Expectation $corsExpectation */
+    $corsExpectation = $mockCorsHandler->shouldReceive('addCorsHeaders');
+    $corsExpectation
         ->once()
         ->andReturnUsing(function ($req, $res) {
             return $res;
         });
 
-    Pdk::set(CorsHandler::class, $mockCorsHandler);
+    mockPdkProperty(CorsHandler::class, $mockCorsHandler);
 
     $action = new CapabilitiesAction($mockService);
     $response = $action->handle($request);
