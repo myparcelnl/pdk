@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -109,7 +110,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: only recipient' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['recipient_only_delivery' => ['enabled' => true]]);
+                ->withOptions(['recipientOnlyDelivery' => ['enabled' => true]]);
         },
         [
             CarrierSettings::EXPORT_ONLY_RECIPIENT,
@@ -121,7 +122,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: priority delivery' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['priority_delivery' => ['enabled' => true]]);
+                ->withOptions(['priorityDelivery' => ['enabled' => true]]);
         },
         [
             CarrierSettings::ALLOW_PRIORITY_DELIVERY,
@@ -132,7 +133,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: signature' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['requires_signature' => ['enabled' => true]]);
+                ->withOptions(['requiresSignature' => ['enabled' => true]]);
         },
         [
             CarrierSettings::EXPORT_SIGNATURE,
@@ -144,7 +145,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: age check' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['requires_age_verification' => ['enabled' => true]]);
+                ->withOptions(['requiresAgeVerification' => ['enabled' => true]]);
         },
         [CarrierSettings::EXPORT_AGE_CHECK],
     ],
@@ -152,7 +153,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: hide sender' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['hide_sender' => ['enabled' => true]]);
+                ->withOptions(['hideSender' => ['enabled' => true]]);
         },
         [CarrierSettings::EXPORT_HIDE_SENDER],
     ],
@@ -160,7 +161,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: direct return' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['return_on_first_failed_delivery' => ['enabled' => true]]);
+                ->withOptions(['returnOnFirstFailedDelivery' => ['enabled' => true]]);
         },
         [CarrierSettings::EXPORT_RETURN],
     ],
@@ -168,7 +169,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: large format' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['oversized_package' => ['enabled' => true]]);
+                ->withOptions(['oversizedPackage' => ['enabled' => true]]);
         },
         [
             CarrierSettings::EXPORT_LARGE_FORMAT,
@@ -179,7 +180,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: same day delivery' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['same_day_delivery' => ['enabled' => true]]);
+                ->withOptions(['sameDayDelivery' => ['enabled' => true]]);
         },
         [
             CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
@@ -191,7 +192,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: insurance' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['insurance' => ['enabled' => true, 'amounts' => [0, 100, 1000, 10000]]]);
+                ->withInsurance(0, 0, 10000);
         },
         [
             CarrierSettings::EXPORT_INSURANCE,
@@ -206,14 +207,14 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
     'shipment option: fresh food' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['cooled_delivery' => ['enabled' => true]]);
+                ->withOptions(['freshFood' => ['enabled' => true]]);
         },
         [CarrierSettings::EXPORT_FRESH_FOOD],
     ],
     'shipment option: frozen' => [
         function () {
             return factory(Carrier::class)
-                ->withOptions(['frozen_delivery' => ['enabled' => true]]);
+                ->withOptions(['frozen' => ['enabled' => true]]);
         },
         [CarrierSettings::EXPORT_FROZEN],
     ],

@@ -20,7 +20,6 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
@@ -49,20 +48,18 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ShipmentOptions::SATURDAY_DELIVERY => TriStateService::INHERIT
     ];
 
+    // Set up a carrier with required insurance between 100 and 2500 euros.
+    factory(Carrier::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->withInsurance(100 * 100, 100 * 100, 2500 * 100)
+        ->store();
+
+
     $order = factory(PdkOrder::class)
         ->withShippingAddress(['cc' => $cc])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier(
-                    factory(Carrier::class)
-                        ->withName(RefCapabilitiesSharedCarrierV2::POSTNL)
-                    // @TODO: refactor test to a non-specific manner
-                    // ->withOutboundFeatures(
-                    //     factory(PropositionCarrierFeatures::class)
-                    //         ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-                    //         ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [5000, 10000, 25000]])
-                    // )
-                )
+                ->withCarrier('POSTNL')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->with(array_replace($defaults, $input)))
         )
         ->make();
@@ -153,7 +150,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ],
         [
             ShipmentOptions::RECEIPT_CODE   => TriStateService::ENABLED,
-            ShipmentOptions::INSURANCE      => 5000,
+            ShipmentOptions::INSURANCE      => 100 * 100,
             ShipmentOptions::SIGNATURE      => TriStateService::DISABLED,
             ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
             ShipmentOptions::LARGE_FORMAT   => TriStateService::DISABLED,
@@ -166,14 +163,9 @@ it('sets insurance to 0 when no valid insurance amounts are available', function
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
     $carrier = factory(Carrier::class)
-        ->withName(RefCapabilitiesSharedCarrierV2::POSTNL)
-        // @TODO: set insurance shipment option using new Carrier API
-        // ->withOutboundFeatures(
-        //     factory(PropositionCarrierFeatures::class)
-        //         ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-        //         ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0]])
-        // )
-        ->make();
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->withInsurance(0, 0, 0) // insurance is supported but must be 0 for this test
+        ->store();
 
     $order = factory(PdkOrder::class)
         ->toTheNetherlands()

@@ -30,7 +30,7 @@ final class FrozenDefinition implements OrderOptionDefinitionInterface
 
     public function getCapabilitiesOptionsKey(): ?string
     {
-        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['cooled_delivery'];;
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['frozen'];
     }
 
     public function validate(CarrierSchema $carrierSchema): bool

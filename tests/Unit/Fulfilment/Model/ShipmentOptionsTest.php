@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -15,6 +16,7 @@ usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('can create instance from pdk delivery options', function () {
     $deliveryOptions = factory(DeliveryOptions::class)
+        ->withCarrier('POSTNL')
         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
         ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
         ->withAllShipmentOptions()
@@ -29,7 +31,7 @@ it('can create instance from pdk delivery options', function () {
         'insurance'        => 100,
         'labelDescription' => 'test',
         'ageCheck'         => true,
-        'collect'          => null,
+        'collect'          => false,
         'cooledDelivery'   => null,
         'hideSender'       => true,
         'largeFormat'      => true,
@@ -37,7 +39,8 @@ it('can create instance from pdk delivery options', function () {
         'priorityDelivery' => true,
         'return'           => true,
         'sameDayDelivery'  => true,
-        'saturdayDelivery' => null,
+        'saturdayDelivery' => false,
         'signature'        => true,
+        'receiptCode'      => true,
     ]);
 });

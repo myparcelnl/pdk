@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -26,7 +27,7 @@ it('invokes trunkrs calculators and enforces age check rule', function () {
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('trunkrs')
+                ->withCarrier('TRUNKRS')
                 ->withShipmentOptions(
                     factory(ShipmentOptions::class)
                         ->withAgeCheck(TriStateService::ENABLED)
@@ -47,5 +48,3 @@ it('invokes trunkrs calculators and enforces age check rule', function () {
 
     $reset();
 });
-
-

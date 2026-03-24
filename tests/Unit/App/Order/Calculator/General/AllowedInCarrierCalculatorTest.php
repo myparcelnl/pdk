@@ -6,16 +6,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
+use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Service\PdkOrderOptionsService;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
@@ -23,20 +23,24 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('disables options that are not allowed in carrier', function (OrderOptionDefinitionInterface $definition) {
     $reset = mockPdkProperty('orderCalculators', [AllowedInCarrierCalculator::class]);
 
-    $option = $definition->getPropositionKey();
+    $option = $definition->getCapabilitiesOptionsKey();
 
-    $fakeCarrier = factory(Carrier::class)
-        ->withShipmentOptions([$option]);
+    $fakeCarrierFactory = factory(Carrier::class)
+        ->withCapabilityShipmentOptions([$option]);
+
+    factory(Shop::class)
+        ->withCarriers(factory(CarrierCollection::class)->push($fakeCarrierFactory))
+        ->store();
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier($fakeCarrier)
+                ->withCarrier($fakeCarrierFactory)
                 ->withAllShipmentOptions()
         )
         ->make();

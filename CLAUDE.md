@@ -11,6 +11,7 @@
 # Testing
 
 - Use Pest for testing
+- Remember we use Pest v1, do not suggest features from Pest v2 or later
 - Avoid usage of snapshots, concrete assertions SHOULD be used instead
 - Snapshots MAY still be used to assert the shape and contents of objects, API requests and responses, but not in situations where specific values are important to assert on (e.g., asserting that a specific carrier is used, or that a specific error message is returned). In those cases, write concrete assertions instead of relying on snapshots.
 - Avoid testing specific carriers, focus on testing capabilities and expectations based on it (like available package types, delivery types, shipment options etc.)

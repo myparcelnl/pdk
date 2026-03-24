@@ -16,7 +16,6 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -136,7 +135,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInsuranceElement(string $name): InteractiveElement
     {
-        $hasInsurance = $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::INSURANCE);
+        $hasInsurance = $this->carrierSchema->canHaveInsurance();
 
         if ($hasInsurance) {
             $insuranceAmounts = $this->carrier->outboundFeatures['metadata']['insuranceOptions'] ?? [];
@@ -229,7 +228,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
              */
             new SettingsDivider($this->createGenericLabel('export')),
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::AGE_CHECK)
+            $this->carrierSchema->canHaveAgeCheck()
                 ? [
                     (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
                         ->builder(function (FormOperationBuilder $builder) {
@@ -251,41 +250,41 @@ class CarrierSettingsItemView extends AbstractSettingsView
             // Disable the signature / only recipient options when age check is enabled. With age check these are mandatory.
             $this->withOperation(
                 function (FormOperationBuilder $builder) {
-                    if (!$this->carrierSchema->hasShipmentOptionName(ShipmentOptions::AGE_CHECK)) {
+                    if (!$this->carrierSchema->canHaveAgeCheck()) {
                         return;
                     }
 
                     $builder->readOnlyWhen(CarrierSettings::EXPORT_AGE_CHECK);
                 },
-                $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::SIGNATURE)
+                $this->carrierSchema->canHaveSignature()
                     ? [new InteractiveElement(CarrierSettings::EXPORT_SIGNATURE, Components::INPUT_TOGGLE)]
                     : [],
-                $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::ONLY_RECIPIENT)
+                $this->carrierSchema->canHaveOnlyRecipient()
                     ? [new InteractiveElement(CarrierSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TOGGLE)]
                     : []
             ),
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::RECEIPT_CODE) ? [
+            $this->carrierSchema->canHaveReceiptCode() ? [
                 new InteractiveElement(CarrierSettings::EXPORT_RECEIPT_CODE, Components::INPUT_TOGGLE),
             ] : [],
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::LARGE_FORMAT)
+            $this->carrierSchema->canHaveLargeFormat()
                 ? [new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE)]
                 : [],
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::DIRECT_RETURN)
+            $this->carrierSchema->canHaveDirectReturn()
                 ? [new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE)]
                 : [],
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::HIDE_SENDER)
+            $this->carrierSchema->canHaveHideSender()
                 ? [new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE)]
                 : [],
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::INSURANCE)
+            $this->carrierSchema->canHaveInsurance()
                 ? $this->getExportInsuranceFields()
                 : [],
 
-            $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::COLLECT)
+            $this->carrierSchema->canHaveCollect()
                 ? [new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
                 : [],
 
@@ -305,7 +304,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
     private function getDefaultExportReturnsFields(): array
     {
         $hasPackageTypeOptions = !empty($this->carrier->outboundFeatures->packageTypes);
-        $canHaveLargeFormat    = $this->carrierSchema->hasShipmentOptionName(ShipmentOptions::LARGE_FORMAT);
+        $canHaveLargeFormat    = $this->carrierSchema->canHaveLargeFormat();
 
         if (! $hasPackageTypeOptions && ! $canHaveLargeFormat) {
             return [];
@@ -439,7 +438,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getSameDayDeliverySettings(): array
     {
-        if (!$this->carrierSchema->hasShipmentOptionName(ShipmentOptions::SAME_DAY_DELIVERY)) {
+        if (!$this->carrierSchema->canHaveSameDayDelivery()) {
             return [];
         }
 
@@ -457,7 +456,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getSaturdayDeliverySettings(): array
     {
-        if (!$this->carrierSchema->hasShipmentOptionName(ShipmentOptions::SATURDAY_DELIVERY)) {
+        if (!$this->carrierSchema->canHaveSaturdayDelivery()) {
             return [];
         }
 
@@ -472,7 +471,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getMondayDeliverySettings(): array
     {
-        if (!$this->carrierSchema->hasShipmentOptionName(ShipmentOptions::MONDAY_DELIVERY)) {
+        if (!$this->carrierSchema->canHaveMondayDelivery()) {
             return [];
         }
 
@@ -499,11 +498,24 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 continue;
             }
 
+            // @TODO: in the future, make this fully dynamic by also allowing custom delivery types from carriers and not relying on predefined constants
+            if (\defined(CarrierSettings::class . "::ALLOW_" . strtoupper($deliveryType))) {
+                $typeAllowedSetting = constant(CarrierSettings::class . "::ALLOW_" . strtoupper($deliveryType));
+            } else {
+                continue;
+            }
+
+            if (\defined(CarrierSettings::class . "::PRICE_DELIVERY_TYPE_" . strtoupper($deliveryType))) {
+                $typePriceSetting = constant(CarrierSettings::class . "::PRICE_DELIVERY_TYPE_" . strtoupper($deliveryType));
+            } else {
+                continue;
+            }
+
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
-                    constant(CarrierSettings::class . "::ALLOW_" . strtoupper($deliveryType)),
-                    constant(CarrierSettings::class . "::PRICE_DELIVERY_TYPE_" . strtoupper($deliveryType))
+                    $typeAllowedSetting,
+                    $typePriceSetting
                 )
             );
         }
@@ -519,7 +531,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $settings = [];
 
         // Signature option
-        if ($this->carrierSchema->hasShipmentOptionName(ShipmentOptions::SIGNATURE)) {
+        if ($this->carrierSchema->canHaveSignature()) {
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
@@ -530,7 +542,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         // Only recipient option
-        if ($this->carrierSchema->hasShipmentOptionName(ShipmentOptions::ONLY_RECIPIENT)) {
+        if ($this->carrierSchema->canHaveOnlyRecipient()) {
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
@@ -541,7 +553,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         // Priority delivery option
-        if ($this->carrierSchema->hasShipmentOptionName(ShipmentOptions::PRIORITY_DELIVERY)) {
+        if ($this->carrierSchema->canHavePriorityDelivery()) {
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
