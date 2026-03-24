@@ -90,11 +90,13 @@ class PostReturnShipmentsRequest extends Request
                 throw new \RuntimeException('Recipient data is required for return shipments');
             }
 
+            $carrierId = Utils::convertToId($shipment->carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+
             // Create a new array with only the required fields
             $returnShipment = [
                 'parent' => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
-                'carrier' => $shipment->carrier->id,
+                'carrier' => $carrierId,
                 'email' => $recipient->email,
                 'name' => $recipient->person,
                 'options' => [
@@ -129,8 +131,9 @@ class PostReturnShipmentsRequest extends Request
         if (!$shipment->carrier || !$schema->hasReturnCapabilities()) {
             $propositionService = Pdk::get(PropositionService::class);
             $defaultCarrier = $propositionService->getDefaultCarrier();
+            $carrierName = $shipment->carrier ? $shipment->carrier->carrier : 'No carrier';
             Notifications::warning(
-                "{$shipment->carrier->carrier} has no return capabilities",
+                "{$carrierName} has no return capabilities",
                 'Return shipment exported with default carrier ' . $defaultCarrier->carrier,
                 Notification::CATEGORY_ACTION,
                 [
