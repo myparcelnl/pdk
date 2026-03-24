@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\SdkApi\Middleware;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
+use MyParcelNL\Pdk\Base\Support\SensitiveDataScrubber;
 use MyParcelNL\Pdk\Facade\Logger;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -43,7 +44,7 @@ class LoggingMiddleware
             return static function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
                 Logger::debug('Sending API request', [
                     'method' => $request->getMethod(),
-                    'uri'    => (string) $request->getUri(),
+                    'uri'    => SensitiveDataScrubber::scrubUri((string) $request->getUri()),
                 ]);
 
 
@@ -54,7 +55,7 @@ class LoggingMiddleware
 
                         Logger::debug('Received API response', [
                             'status' => $response->getStatusCode(),
-                            'body'   => $decoded,
+                            'body'   => is_array($decoded) ? SensitiveDataScrubber::scrubArray($decoded) : null,
                         ]);
 
                         // Rewind so the SDK can still read the body after logging.
@@ -69,9 +70,11 @@ class LoggingMiddleware
                         ];
 
                         if ($e instanceof RequestException && $e->getResponse()) {
-                            $body                      = (string) $e->getResponse()->getBody();
-                            $context['responseBody']    = $body ? json_decode($body, true) : null;
-                            $context['responseHeaders'] = $e->getResponse()->getHeaders();
+                            $body    = (string) $e->getResponse()->getBody();
+                            $decoded = $body ? json_decode($body, true) : null;
+
+                            $context['responseBody']    = is_array($decoded) ? SensitiveDataScrubber::scrubArray($decoded) : $decoded;
+                            $context['responseHeaders'] = SensitiveDataScrubber::scrubHeaders($e->getResponse()->getHeaders());
                         }
 
                         Logger::error('API request failed', $context);
