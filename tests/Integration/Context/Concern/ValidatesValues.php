@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -107,11 +105,6 @@ trait ValidatesValues
         $entity = $this->resolveModel($entityResolver);
 
         $match = preg_replace_callback_array([
-            '/PLATFORM_(\w+)/' => static function ($matches) {
-                // @TODO: include a compatibility layer with mapping from platform => proposition and log deprecation warnings here
-                return Platform::get(strtolower($matches[1]));
-            },
-
             // Matches models defined in ResolvesModels
             '/\w+:(\w+)/'      => function ($matches) use ($entity) {
                 return $this->matchModelProperty($entity, $matches[1]);
