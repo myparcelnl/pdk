@@ -67,7 +67,7 @@ final class TrackedCalculator extends AbstractPdkOrderOptionCalculator
     private function isDhlForYouToNonLocal(): bool
     {
         $carrier     = $this->order->deliveryOptions->carrier;
-        $isDhlForYou = RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU === $carrier->name;
+        $isDhlForYou = RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU === $carrier->carrier;
         $isNotLocal  = ! $this->countryService->isLocalCountry($this->order->shippingAddress->cc);
 
         return $isDhlForYou && $isNotLocal;
