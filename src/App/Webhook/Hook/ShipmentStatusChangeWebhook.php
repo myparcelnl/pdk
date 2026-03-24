@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Webhook\Hook;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
@@ -25,18 +26,32 @@ final class ShipmentStatusChangeWebhook extends AbstractHook
         $orderIds = [];
 
         // when the webhook is received from shipment mode
-        if (isset($content['shipment_reference_identifier'])) {
-            $orderIds = [$content['shipment_reference_identifier']];
+        if (\array_key_exists('shipment_reference_identifier', $content) && '' !== trim($content['shipment_reference_identifier'])) {
+            $orderIds = [trim($content['shipment_reference_identifier'])];
         }
 
         // when the webhook is received from order mode
-        if (isset($content['order_id'])) {
+        if (\array_key_exists('order_id', $content) && '' !== trim($content['order_id'])) {
             // translate order_id (which is api identifier / uuid) to local order id for db
-            $order    = Pdk::get(PdkOrderRepositoryInterface::class)
-                ->getByApiIdentifier($content['order_id']);
+            $order = Pdk::get(PdkOrderRepositoryInterface::class)
+                ->getByApiIdentifier(trim($content['order_id']));
             if ($order) {
-                $orderIds = [$order->getExternalIdentifier()];
+                $externalIdentifier = $order->getExternalIdentifier();
+
+                if (!empty($externalIdentifier)) {
+                    $orderIds = [$externalIdentifier];
+                }
             }
+        }
+
+        if (empty($orderIds)) {
+            Logger::debug('Skipping shipment status change webhook without a valid order identifier', [
+                'shipment_id'                   => $content['shipment_id'] ?? null,
+                'order_id'                      => $content['order_id'] ?? null,
+                'shipment_reference_identifier' => $content['shipment_reference_identifier'] ?? null,
+            ]);
+
+            return;
         }
 
         Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [

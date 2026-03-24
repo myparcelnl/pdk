@@ -20,6 +20,10 @@ final class OrderStatusChangeWebhook extends AbstractHook
     {
         $content = $this->getHookBody($request);
 
+        if (! isset($content['uuid']) || empty($content['uuid'])) {
+            return;
+        }
+
         Actions::execute(PdkBackendActions::SYNCHRONIZE_ORDERS, [
             'orderIds' => $content['uuid'],
         ]);
