@@ -42,9 +42,9 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
      */
     public function find($carrierName): ?Carrier
     {
-        // return $this->retrieve($this->getCacheKey($carrierName), function () use ($carrierName) {
-        return $this->findCarrierInCollection($carrierName);
-        // });
+        return $this->retrieve($this->getCacheKey($carrierName), function () use ($carrierName) {
+            return $this->findCarrierInCollection($carrierName);
+        });
     }
 
     /**
