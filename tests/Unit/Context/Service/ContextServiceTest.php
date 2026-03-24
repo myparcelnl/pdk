@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -15,7 +16,6 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 

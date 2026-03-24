@@ -20,7 +20,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 
 it('fetches proposition config for the active proposition', function (int $propositionId, string $expectedKey) {
     TestBootstrapper::forProposition($propositionId);
-    $propositionService = new PropositionService();
+    $propositionService = Pdk::get(PropositionService::class);
     $propositionName = $propositionService->getPropositionConfig()->proposition->key;
     expect($propositionName)->toBe($expectedKey);
 })->with([
@@ -31,7 +31,7 @@ it('fetches proposition config for the active proposition', function (int $propo
 it('throws exception for unknown proposition', function () {
     TestBootstrapper::forProposition(Proposition::SENDMYPARCEL_ID);
 
-    $propositionService = new PropositionService();
+    $propositionService = Pdk::get(PropositionService::class);
 
     $propositionService->getPropositionConfigById(9999);
 })->throws(\InvalidArgumentException::class, 'Proposition config ID 9999 does not exist');
@@ -42,7 +42,7 @@ it('handles empty files', function () {
 
     $logger = Pdk::get(PdkLoggerInterface::class);
 
-    $propositionService = new PropositionService();
+    $propositionService = Pdk::get(PropositionService::class);
 
     $propositionService->processConfigData(1337, 'mock-path', '');
 })->throws(\RuntimeException::class, 'Proposition config file: mock-path appears to be empty');
@@ -53,7 +53,7 @@ it('handles invalid json', function () {
 
     $logger = Pdk::get(PdkLoggerInterface::class);
 
-    $propositionService = new PropositionService();
+    $propositionService = Pdk::get(PropositionService::class);
 
     $propositionService->processConfigData(1223, 'mock-path', '{ invalid json }');
 })->throws(\RuntimeException::class, 'Invalid JSON in proposition config file: mock-path - Error: Syntax error');
@@ -61,7 +61,7 @@ it('handles invalid json', function () {
 it('only fetches the config once per request', function () {
     TestBootstrapper::forProposition(Proposition::SENDMYPARCEL_ID);
 
-    $propositionService = new PropositionService();
+    $propositionService = Pdk::get(PropositionService::class);
     $propositionService->clearCache();
 
     $logger = Pdk::get(PdkLoggerInterface::class);
@@ -87,7 +87,7 @@ it('only fetches the config once per request', function () {
 it('clears specific proposition caches', function () {
     TestBootstrapper::forProposition(Proposition::SENDMYPARCEL_ID);
 
-    $propositionService = new PropositionService();
+    $propositionService = Pdk::get(PropositionService::class);
     $propositionService->clearCache();
 
     $logger = Pdk::get(PdkLoggerInterface::class);
