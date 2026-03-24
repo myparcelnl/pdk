@@ -61,7 +61,9 @@ class CarrierCapabilitiesRepository extends Repository
      */
     public function getCapabilities(array $args): array
     {
-        return $this->retrieve('capabilities', function () use ($args) {
+        $cacheKey = 'capabilities.' . md5(json_encode($args));
+
+        return $this->retrieve($cacheKey, function () use ($args) {
             return $this->apiService->getCapabilities($args);
         });
     }
