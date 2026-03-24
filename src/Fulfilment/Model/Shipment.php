@@ -34,6 +34,7 @@ class Shipment extends Model
     public $attributes = [
         'orderId'            => null,
         'carrier'            => null,
+        'contractId'         => null,
         'customsDeclaration' => null,
         'options'            => ShipmentOptions::class,
         'pickup'             => null,
@@ -44,6 +45,7 @@ class Shipment extends Model
 
     public $casts      = [
         'orderId'            => 'string',
+        'contractId'         => 'string',
         'customsDeclaration' => CustomsDeclaration::class,
         'options'            => ShipmentOptions::class,
         'pickup'             => RetailLocation::class,
@@ -75,6 +77,7 @@ class Shipment extends Model
 
         return new self([
             'orderId'            => $pdkShipment->orderId,
+            'contractId'         => $pdkShipment->contractId,
             'carrier'            => $pdkShipment->carrier->carrier,
             'customsDeclaration' => $pdkShipment->customsDeclaration,
             'options'            => ShipmentOptions::fromPdkDeliveryOptions($pdkShipment->deliveryOptions),

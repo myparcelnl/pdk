@@ -95,6 +95,7 @@ class PostShipmentsRequest extends Request
     {
         return Utils::filterNull([
             'carrier'              => $this->getCarrierId($shipment->carrier),
+            'contract_id'          => $shipment->contractId ? (int) $shipment->contractId : null,
             'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'       => $this->getDropOffPoint($shipment),
             'general_settings'     => [

@@ -83,6 +83,7 @@
           "max": 10
         }
       },
+      "contractId": "123",
       "customsDeclaration": {
         "contents": 1,
         "invoice": "25",

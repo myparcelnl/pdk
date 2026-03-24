@@ -206,6 +206,28 @@ it('creates a valid order collection from api data', function (array $input) {
     ],
 ]);
 
+it('includes contract_id in shipment request when contractId is set', function () {
+    MockApi::enqueue(new ExampleGetOrdersResponse());
+
+    $order = new Order([
+        'orderDate' => '2022-08-22 00:00:00',
+        'lines'     => [],
+        'shipment'  => [
+            'carrier'    => RefCapabilitiesSharedCarrierV2::POSTNL,
+            'contractId' => '12345',
+            'recipient'  => DEFAULT_INPUT_RECIPIENT_SAVE_ORDER,
+        ],
+    ]);
+
+    $repository = Pdk::get(OrderRepository::class);
+    $repository->postOrders(new OrderCollection([$order->toArray()]));
+
+    $body       = json_decode(MockApi::ensureLastRequest()->getBody()->getContents(), true);
+    $contractId = $body['data']['orders'][0]['shipment']['contract_id'] ?? null;
+
+    expect($contractId)->toBe(12345);
+});
+
 it('creates order', function ($input, $path, $query) {
     MockApi::enqueue(new ExampleGetOrdersResponse());
 

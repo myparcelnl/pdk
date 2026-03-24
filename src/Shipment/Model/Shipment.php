@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
@@ -24,6 +23,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|string                                            $externalIdentifier
  * @property null|string                                            $barcode
  * @property \MyParcelNL\Pdk\Carrier\Model\Carrier                  $carrier
+ * @property null|string                                            $contractId
  * @property null|string                                            $collectionContact
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property bool                                                   $delayed
@@ -98,6 +98,7 @@ class Shipment extends Model
         'externalIdentifier'       => null,
         'barcode'                  => null,
         'carrier'                  => null,
+        'contractId'               => null,
         'collectionContact'        => null,
         'customsDeclaration'       => null,
         'delayed'                  => false,
@@ -183,6 +184,7 @@ class Shipment extends Model
         'externalIdentifier'       => 'string',
         'barcode'                  => 'string',
         'collectionContact'        => 'string',
+        'contractId'               => 'string',
         'customsDeclaration'       => CustomsDeclaration::class,
         'delayed'                  => 'bool',
         'delivered'                => 'bool',

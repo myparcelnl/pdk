@@ -145,6 +145,7 @@
         "max": 10
       }
     },
+    "contractId": null,
     "customsDeclaration": null,
     "options": {
       "ageCheck": false,

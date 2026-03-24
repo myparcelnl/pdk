@@ -220,6 +220,26 @@ it(
     ],
 ]);
 
+it('includes contract_id in request when contractId is set on shipment', function () {
+    MockApi::enqueue(new ExamplePostIdsResponse());
+
+    $shipmentCollection = factory(ShipmentCollection::class)->push(
+        factory(Shipment::class)
+            ->withCarrier(RefTypesCarrierV2::POSTNL)
+            ->withContractId('99887766')
+            ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+    );
+
+    $repository = Pdk::get(ShipmentRepository::class);
+    $repository->createConcepts($shipmentCollection->make());
+
+    $body     = json_decode(MockApi::ensureLastRequest()->getBody()->getContents(), true);
+    $shipment = Arr::get($body, 'data.shipments.0');
+
+    expect($shipment)->toHaveKey('contract_id')
+        ->and($shipment['contract_id'])->toBe(99887766);
+});
+
 it('creates shipment', function ($input, $path, $query, $contentType) {
     MockApi::enqueue(new ExamplePostIdsResponse());
 
