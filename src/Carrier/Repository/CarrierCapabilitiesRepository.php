@@ -39,7 +39,9 @@ class CarrierCapabilitiesRepository extends Repository
      */
     public function getContractDefinitions(?string $carrier = null): CarrierCollection
     {
-        return $this->retrieve('contractDefinitions', function () use ($carrier) {
+        $cacheKey = 'contractDefinitions' . (null !== $carrier ? '.' . $carrier : '');
+
+        return $this->retrieve($cacheKey, function () use ($carrier) {
             $contractDefinitions = $this->apiService->getContractDefinitions($carrier);
             // Convert contract definitions to an array so they can be cast into Carrier models
             $contractDefinitions = array_map(function ($contractDefinition) {
