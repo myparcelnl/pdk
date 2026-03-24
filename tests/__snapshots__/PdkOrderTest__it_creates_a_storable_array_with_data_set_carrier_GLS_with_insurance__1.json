@@ -28,6 +28,7 @@
           "sameDayDelivery": [],
           "saturdayDelivery": [],
           "scheduledCollection": [],
+          "tracked": [],
           "insurance": {
             "insuredAmount": {
               "default": {
