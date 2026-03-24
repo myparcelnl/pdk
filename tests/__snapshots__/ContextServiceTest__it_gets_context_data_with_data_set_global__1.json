@@ -232,17 +232,7 @@
       "backofficeUrl": "https://backoffice.myparcel.nl",
       "supportUrl": "https://developer.myparcel.nl",
       "localCountry": "NL",
-      "defaultCarrier": "POSTNL",
-      "defaultCarrierId": 1
-    },
-    "platform": {
-      "name": "myparcel",
-      "human": "MyParcel Nederland",
-      "backofficeUrl": "https://backoffice.myparcel.nl",
-      "supportUrl": "https://developer.myparcel.nl",
-      "localCountry": "NL",
-      "defaultCarrier": "postnl",
-      "defaultCarrierId": 1
+      "defaultCarrier": "POSTNL"
     },
     "translations": {
       "apple_tree": "Appelboom",

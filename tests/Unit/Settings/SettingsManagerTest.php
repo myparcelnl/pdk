@@ -100,6 +100,7 @@ it('retrieves default carrier settings', function (int $propositionId) {
         ->values()  // Re-index array
         ->toArray();
 
+
     $defaults        = Settings::getDefaults();
     $carrierSettings = $defaults[CarrierSettings::ID];
 
@@ -121,8 +122,8 @@ it('retrieves default carrier settings', function (int $propositionId) {
     // Verify carrier settings object can be created
     $carrierSettingsModel = (new SettingsModel([CarrierSettings::ID => $carrierSettings]))->carrier;
 
-    expect($carrierSettingsModel)->toBeInstanceOf(CarrierSettings::class)
-        ->and($carrierSettingsModel->toArrayWithoutNull())->toBeArray();
+    expect($carrierSettingsModel->first())->toBeInstanceOf(CarrierSettings::class)
+        ->and($carrierSettingsModel->first()->toArrayWithoutNull())->toBeArray();
 })->with([
     [Proposition::MYPARCEL_ID],
     [Proposition::SENDMYPARCEL_ID],

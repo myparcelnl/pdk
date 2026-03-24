@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -44,7 +45,7 @@ it('creates fulfilment order from pdk order', function (array $input) {
                 'weight'   => 1000,
             ],
             'deliveryOptions'       => [
-                'carrier'         => 'postnl',
+                'carrier'         => 'POSTNL',
                 'date'            => '2020-01-01',
                 'deliveryType'    => 'standard',
                 'labelAmount'     => 1,
@@ -106,7 +107,7 @@ it('creates fulfilment order from pdk order', function (array $input) {
             'shipments' => [
                 [
                     'deliveryOptions' => [
-                        'carrier'         => 'postnl',
+                        'carrier'         => 'POSTNL',
                         'date'            => '2020-01-01',
                         'deliveryType'    => 'standard',
                         'labelAmount'     => 1,
@@ -128,4 +129,3 @@ it('returns empty fulfilment order when no pdk order is passed', function () {
     expect($fulfilmentOrder)->toBeInstanceOf(Order::class);
     assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArrayWithoutNull()));
 });
-

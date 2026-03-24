@@ -8,14 +8,12 @@ namespace MyParcelNL\Pdk\Carrier\Model;
 
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Base\Exception\ModelNotFoundException;
-use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Proposition;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
@@ -65,7 +63,7 @@ it('supports all capability types through factory', function () {
     expect($carrier->packageTypes)->toContain('PACKAGE')
         ->and($carrier->packageTypes)->toContain('MAILBOX')
         ->and($carrier->deliveryTypes)->toContain('STANDARD_DELIVERY')
-        ->and($carrier->options)->toBeArray();
+        ->and($carrier->options)->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::class);
 });
 
 it('supports minimal capabilities through factory', function () {
@@ -75,7 +73,7 @@ it('supports minimal capabilities through factory', function () {
 
     expect($carrier->packageTypes)->toBe(['PACKAGE'])
         ->and($carrier->deliveryTypes)->toBe(['STANDARD_DELIVERY'])
-        ->and($carrier->options)->toBe([]);
+        ->and($carrier->options)->toBeNull();
 });
 
 
@@ -124,9 +122,13 @@ it('throws exception from repository when carrier not found with findOrFail', fu
 })->throws(ModelNotFoundException::class);
 
 it('creates carrier directly with constructor without lookup', function () {
-    $carrier = new Carrier(['carrier' => 'UNKNOWN_CARRIER']);
+    $carrier = new Carrier(['carrier' => 'POSTNL']);
 
     // Constructor should create carrier with just the data passed, no lookup
-    expect($carrier->carrier)->toBe('UNKNOWN_CARRIER')
+    expect($carrier->carrier)->toBe('POSTNL')
         ->and($carrier->packageTypes)->toBeNull();
 });
+
+it('throws exception when carrier name does not match enum', function () {
+    new Carrier(['carrier' => 'NOT_AN_ENUM_VALUE']);
+})->throws(\InvalidArgumentException::class);

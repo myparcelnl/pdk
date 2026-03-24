@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -15,13 +16,13 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 const DEFAULT_INPUT_RECIPIENT_SAVE_ORDER = [
     'cc'         => 'NL',
@@ -81,9 +82,7 @@ it('creates a valid order collection from api data', function (array $input) {
                 'price'          => 260,
                 'shipment'       => [
                     'apiKey'             => '123',
-                    'carrier'            => [
-                        'id' => RefTypesCarrier::POSTNL,
-                    ],
+                    'carrier'            => RefCapabilitiesSharedCarrierV2::POSTNL,
                     'customsDeclaration' => [
                         'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
                         'invoice'  => '25',
@@ -169,9 +168,7 @@ it('creates a valid order collection from api data', function (array $input) {
                 'price'          => 260,
                 'shipment'       => [
                     'apiKey'             => '123',
-                    'carrier'            => [
-                        'id' => RefTypesCarrier::POSTNL,
-                    ],
+                    'carrier'            => RefCapabilitiesSharedCarrierV2::POSTNL,
                     'deliveryOptions'    => [
                         'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
@@ -262,9 +259,7 @@ it('creates order', function ($input, $path, $query) {
             ],
             'price'          => 260,
             'shipment'       => [
-                'carrier'            => [
-                    'id' => RefTypesCarrier::POSTNL,
-                ],
+                'carrier'            => RefCapabilitiesSharedCarrierV2::POSTNL,
                 'customsDeclaration' => null,
                 'deliveryOptions'    => [
                     'date'            => '2022-08-22 00:00:00',

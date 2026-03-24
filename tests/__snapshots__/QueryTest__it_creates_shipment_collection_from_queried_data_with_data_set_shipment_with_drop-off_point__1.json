@@ -5,13 +5,119 @@
   "referenceIdentifier": "",
   "barcode": "",
   "carrier": {
-    "id": 9
+    "carrier": "DHL_FOR_YOU",
+    "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+    "options": {
+      "additionalInsurance": [],
+      "cooledDelivery": [],
+      "customLabelText": [],
+      "deliverAtPostalPoint": [],
+      "deliveryDate": [],
+      "freshFood": [],
+      "frozen": [],
+      "hideSender": [],
+      "noTracking": [],
+      "oversizedPackage": [],
+      "priorityDelivery": [],
+      "printReturnLabelAtDropOff": [],
+      "recipientOnlyDelivery": [],
+      "requiresAgeVerification": [],
+      "requiresCashOnDelivery": [],
+      "requiresReceiptCode": [],
+      "requiresSignature": [],
+      "returnContributionFee": [],
+      "returnOnFirstFailedDelivery": [],
+      "sameDayDelivery": [],
+      "saturdayDelivery": [],
+      "scheduledCollection": [],
+      "insurance": {
+        "insuredAmount": {
+          "default": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "min": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "max": {
+            "currency": "EUR",
+            "amount": 500000
+          }
+        }
+      }
+    },
+    "deliveryTypes": [
+      "MORNING_DELIVERY",
+      "STANDARD_DELIVERY",
+      "EVENING_DELIVERY",
+      "PICKUP_DELIVERY",
+      "SAME_DAY_DELIVERY",
+      "EXPRESS_DELIVERY",
+      "EARLY_MORNING_DELIVERY"
+    ],
+    "collo": {
+      "max": 10
+    }
   },
   "delayed": false,
   "delivered": false,
   "deliveryOptions": {
     "carrier": {
-      "id": 9
+      "carrier": "DHL_FOR_YOU",
+      "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+      "options": {
+        "additionalInsurance": [],
+        "cooledDelivery": [],
+        "customLabelText": [],
+        "deliverAtPostalPoint": [],
+        "deliveryDate": [],
+        "freshFood": [],
+        "frozen": [],
+        "hideSender": [],
+        "noTracking": [],
+        "oversizedPackage": [],
+        "priorityDelivery": [],
+        "printReturnLabelAtDropOff": [],
+        "recipientOnlyDelivery": [],
+        "requiresAgeVerification": [],
+        "requiresCashOnDelivery": [],
+        "requiresReceiptCode": [],
+        "requiresSignature": [],
+        "returnContributionFee": [],
+        "returnOnFirstFailedDelivery": [],
+        "sameDayDelivery": [],
+        "saturdayDelivery": [],
+        "scheduledCollection": [],
+        "insurance": {
+          "insuredAmount": {
+            "default": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "min": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "max": {
+              "currency": "EUR",
+              "amount": 500000
+            }
+          }
+        }
+      },
+      "deliveryTypes": [
+        "MORNING_DELIVERY",
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY",
+        "SAME_DAY_DELIVERY",
+        "EXPRESS_DELIVERY",
+        "EARLY_MORNING_DELIVERY"
+      ],
+      "collo": {
+        "max": 10
+      }
     },
     "labelAmount": 1,
     "shipmentOptions": {

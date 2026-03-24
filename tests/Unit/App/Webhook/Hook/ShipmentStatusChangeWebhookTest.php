@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -27,7 +28,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('webhook');
 
-usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
+usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger(), new UsesAccountMock());
 
 function dispatchWebhook(array $hookBody): array
 {
@@ -167,17 +168,67 @@ it('logs webhook received and processed', function () {
         })
         ->filter(fn(array $log) => in_array($log['message'], ['[PDK]: Webhook received', '[PDK]: Webhook processed']))
         ->values();
-
-    expect($logs->toArray())->toBe([
-        [
-            'level'   => 'debug',
-            'message' => '[PDK]: Webhook received',
-            'context' => [],
+    expect(
+        $logs->filter(function (array $log) {
+            return 0 === strpos($log['message'], '[PDK]: Update status');
+        })
+            ->first()['context']['status']
+    )
+        ->toBe($expectedStatus)
+        ->and($filteredLogs->toArray())
+        ->toBe([
+            [
+                'level'   => 'debug',
+                'message' => '[PDK]: Webhook received',
+                'context' => [],
+            ],
+            [
+                'level'   => 'debug',
+                'message' => '[PDK]: Webhook processed',
+                'context' => ['hook' => $expectedClass],
+            ],
+        ]);
+})->with([
+    'shipment updated' => [
+        'hook'   => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+        'class'  => ShipmentStatusChangeWebhook::class,
+        'status' => OrderSettings::STATUS_ON_LABEL_CREATE,
+        'body'   => [
+            'shipment_id'                   => 192031595,
+            'account_id'                    => 162450,
+            'order_id'                      => 'api-uuid-string',
+            'shop_id'                       => 83287,
+            'status'                        => 2,
+            'barcode'                       => '3SHOHR763563926',
+            'shipment_reference_identifier' => '',
         ],
-        [
-            'level'   => 'debug',
-            'message' => '[PDK]: Webhook processed',
-            'context' => ['hook' => ShipmentStatusChangeWebhook::class],
+    ],
+    'shipment scanned' => [
+        'hook'   => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+        'class'  => ShipmentStatusChangeWebhook::class,
+        'status' => OrderSettings::STATUS_WHEN_LABEL_SCANNED,
+        'body'   => [
+            'shipment_id'                   => 192031595,
+            'account_id'                    => 162450,
+            'order_id'                      => 'api-uuid-string',
+            'shop_id'                       => 83287,
+            'status'                        => 5,
+            'barcode'                       => '3SHOHR763563926',
+            'shipment_reference_identifier' => '',
         ],
-    ]);
-});
+    ],
+    'shipment delivered' => [
+        'hook'   => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
+        'class'  => ShipmentStatusChangeWebhook::class,
+        'status' => OrderSettings::STATUS_WHEN_DELIVERED,
+        'body'   => [
+            'shipment_id'                   => 192031595,
+            'account_id'                    => 162450,
+            'order_id'                      => 'api-uuid-string',
+            'shop_id'                       => 83287,
+            'status'                        => 9,
+            'barcode'                       => '3SHOHR763563926',
+            'shipment_reference_identifier' => '',
+        ],
+    ],
+]);
