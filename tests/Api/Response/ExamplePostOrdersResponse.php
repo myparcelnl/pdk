@@ -19,21 +19,21 @@ class ExamplePostOrdersResponse extends ExampleJsonResponse
     {
         return [
             [
-                'invoiceAddress' => null,
+                'invoice_address' => null,
                 'language'       => null,
-                'orderDate'      => '2022-08-22 00:00:00',
-                'lines'          => [
+                'order_date'      => '2022-08-22 00:00:00',
+                'order_lines'          => [
                     [
                         'uuid'          => '1234',
                         'quantity'      => 1,
                         'price'         => 250,
                         'vat'           => 10,
-                        'priceAfterVat' => 260,
+                        'price_after_vat' => 260,
                         'product'       => [
                             'uuid'               => '12345',
                             'sku'                => '018234',
                             'ean'                => '018234',
-                            'externalIdentifier' => '018234',
+                            'external_identifier' => '018234',
                             'name'               => 'Paarse stofzuiger',
                             'description'        => 'Een paars object waarmee stof opgezogen kan worden',
                             'width'              => null,
@@ -45,11 +45,9 @@ class ExamplePostOrdersResponse extends ExampleJsonResponse
                 ],
                 'price'          => 260,
                 'shipment'       => [
-                    'apiKey'             => '123',
-                    'carrier'            => [
-                        'id' => RefTypesCarrier::POSTNL,
-                    ],
-                    'customsDeclaration' => [
+                    'contract_id'        => '123',
+                    'carrier'            => RefTypesCarrier::POSTNL,
+                    'customs_declaration' => [
                         'contents' => CustomsDeclaration::CONTENTS_COMMERCIAL_GOODS,
                         'invoice'  => '25',
                         'items'    => [
@@ -58,7 +56,7 @@ class ExamplePostOrdersResponse extends ExampleJsonResponse
                                 'classification' => 5256,
                                 'country'        => CountryCodes::CC_BE,
                                 'description'    => 'Vlaamse Patatekes',
-                                'itemValue'      => ['amount' => 5000, 'currency' => 'EUR'],
+                                'item_value'      => ['amount' => 5000, 'currency' => 'EUR'],
                                 'weight'         => 200,
                             ],
                             [
@@ -66,51 +64,34 @@ class ExamplePostOrdersResponse extends ExampleJsonResponse
                                 'classification' => 9221,
                                 'country'        => CountryCodes::CC_FR,
                                 'description'    => 'Omelette du Fromage',
-                                'itemValue'      => ['amount' => 10000, 'currency' => 'EUR'],
+                                'item_value'      => ['amount' => 10000, 'currency' => 'EUR'],
                                 'weight'         => 350,
                             ],
                         ],
                     ],
-                    'deliveryOptions'    => [
-                        'carrier'         => RefTypesCarrier::POSTNL,
-                        'date'            => '2077-10-23 09:47:51',
-                        'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                        'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-                        'pickupLocation'  => null,
-                        'shipmentOptions' => [
-                            'ageCheck'         => true,
-                            'insurance'        => 0,
-                            'labelDescription' => null,
-                            'largeFormat'      => false,
-                            'onlyRecipient'    => false,
-                            'return'           => false,
-                            'sameDayDelivery'  => false,
-                            'signature'        => true,
-                        ],
-                    ],
-                    'dropOffPoint'       => null,
-                    'physicalProperties' => [
+                    'drop_off_point'       => null,
+                    'physical_properties' => [
                         'weight' => 3500,
                     ],
                     'recipient'          => [
                         'cc'         => 'NL',
                         'city'       => 'Hoofddorp',
                         'person'     => 'Jaap Krekel',
-                        'postalCode' => '2132JE',
+                        'postal_code' => '2132JE',
                         'address1'   => 'Antareslaan 31',
                     ],
                     'sender'             => [
                         'cc'         => 'NL',
                         'city'       => 'Amsterdam',
                         'person'     => 'Willem Wever',
-                        'postalCode' => '4164ZF',
+                        'postal_code' => '4164ZF',
                         'address1'   => 'Werf 2',
                     ],
                 ],
-                'shopId'         => null,
+                'shop_id'         => null,
                 'status'         => null,
                 'type'           => null,
-                'updatedAt'      => null,
+                'updated_at'     => null,
                 'uuid'           => '123',
                 'vat'            => null,
             ],
