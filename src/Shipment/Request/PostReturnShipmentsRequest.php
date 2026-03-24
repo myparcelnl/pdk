@@ -125,15 +125,12 @@ class PostReturnShipmentsRequest extends Request
     private function ensureReturnCapabilities(Shipment $shipment): Shipment
     {
         $schema = Pdk::get(CarrierSchema::class);
-        if ($shipment->carrier) {
-            $schema->setCarrier($shipment->carrier);
-        }
-        if (!$shipment->carrier || !$schema->hasReturnCapabilities()) {
+
+        if (!$schema->hasReturnCapabilities()) {
             $propositionService = Pdk::get(PropositionService::class);
             $defaultCarrier = $propositionService->getDefaultCarrier();
-            $carrierName = $shipment->carrier ? $shipment->carrier->carrier : 'No carrier';
             Notifications::warning(
-                "{$carrierName} has no return capabilities",
+                "{$$shipment->carrier->carrier} has no return capabilities",
                 'Return shipment exported with default carrier ' . $defaultCarrier->carrier,
                 Notification::CATEGORY_ACTION,
                 [
