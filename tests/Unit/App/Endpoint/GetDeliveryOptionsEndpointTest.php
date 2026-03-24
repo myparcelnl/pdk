@@ -31,6 +31,9 @@ use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -306,6 +309,13 @@ it('insurance: calls calculate() on the options service when handling a delivery
 });
 
 it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipment options insurance is INHERIT and carrier has enabled insurance', function () {
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)->withCarrier('POSTNL')->withInsurance(0, 0, 100000))
+        )
+        ->store();
+
     factory(PdkOrder::class)
         ->withExternalIdentifier('insurance-order')
         ->withLines([factory(PdkOrderLine::class)->withPrice(100000)])
@@ -330,7 +340,9 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
 
     $content = json_decode($response->getContent(), true);
 
-    expect($content['shipmentOptions']['insurance']['amount'])->toBe(500 * 1_000_000);
+    // After TriStateOptionCalculator resolves INHERIT → ENABLED (1), InsuranceCalculator treats
+    // the value as an explicit amount. Tier lookup: first PostNL NL tier ≥ 1 = 10000. Carrier max = 100000.
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 1_000_000);
 
     Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
 });
