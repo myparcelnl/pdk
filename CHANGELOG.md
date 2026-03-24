@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.3](https://github.com/myparcelnl/pdk/compare/v3.3.2...v3.3.3) (2026-03-24)
+
+
+### :bug: Bug Fixes
+
+* **webhook:** fix shipments created in backoffice could generate empty woocommerce orders ([#428](https://github.com/myparcelnl/pdk/issues/428)) ([d8063be](https://github.com/myparcelnl/pdk/commit/d8063be28359f156a170abf1712c7a0f346d5af6))
+
 ## [3.3.2](https://github.com/myparcelnl/pdk/compare/v3.3.1...v3.3.2) (2026-03-17)
 
 
