@@ -31,7 +31,7 @@ function setup(): void
     factory(Shop::class)
         ->withCarriers(
             factory(CarrierCollection::class)->push(
-                factory(Carrier::class)->fromPostNL(),
+                factory(Carrier::class)->fromPOSTNL(),
                 factory(Carrier::class)
                     ->fromDhlForYou()
                     ->withContractId(12345)
@@ -46,7 +46,7 @@ function setup(): void
                 ->withExportSignature(true)
         )
         ->withCarrier(
-            'DHL_FOR_YOU:12345',
+            'DHL_FOR_YOU',
             factory(CarrierSettings::class)->withExportOnlyRecipient(true)
         )
         ->store();
@@ -69,7 +69,7 @@ it('exposes inherited options', function () {
         ->withLines([factory(PdkOrderLine::class)->withProduct('product-1')])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('postnl')
+                ->withCarrier('POSTNL')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->withReturn(TriStateService::ENABLED))
         )
         ->make();
@@ -99,7 +99,7 @@ it('exposes inherited options', function () {
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
         ->toEqual([
-            'postnl'          => [
+            'POSTNL'          => [
                 DeliveryOptions::LABEL_AMOUNT     => 1,
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -126,7 +126,7 @@ it('exposes inherited options', function () {
                     ShipmentOptions::SATURDAY_DELIVERY => TriStateService::DISABLED
                 ],
             ],
-            'dhlforyou:12345' => [
+            'DHL_FOR_YOU' => [
                 DeliveryOptions::LABEL_AMOUNT     => 1,
                 DeliveryOptions::DELIVERY_TYPE    => DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME,
                 DeliveryOptions::PACKAGE_TYPE     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,

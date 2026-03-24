@@ -39,7 +39,6 @@ class GlobalContext extends Model
         'language'     => null,
         'mode'         => null,
         'proposition'  => [],
-        'platform'     => [],
         'translations' => [],
     ];
 
@@ -53,7 +52,6 @@ class GlobalContext extends Model
         'language'     => 'string',
         'mode'         => 'string',
         'proposition'  => 'array',
-        'platform'     => 'array',
         'translations' => 'array',
     ];
 
