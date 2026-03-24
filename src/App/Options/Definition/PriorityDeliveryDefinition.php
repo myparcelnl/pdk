@@ -34,8 +34,6 @@ final class PriorityDeliveryDefinition implements OrderOptionDefinitionInterface
 
     public function validate(CarrierSchema $carrierSchema): bool
     {
-        return $carrierSchema->hasShipmentOptionName(
-            $this->getShipmentOptionsKey()
-        );
+        return $carrierSchema->canHavePriorityDelivery();
     }
 }

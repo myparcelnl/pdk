@@ -30,7 +30,7 @@ final class FreshFoodDefinition implements OrderOptionDefinitionInterface
 
     public function getCapabilitiesOptionsKey(): ?string
     {
-        return null; // Not yet implemented in capabilities response
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['fresh_food'];
     }
 
     public function validate(CarrierSchema $carrierSchema): bool

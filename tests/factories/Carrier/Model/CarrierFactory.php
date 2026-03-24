@@ -7,6 +7,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Model;
 
 use ArrayObject;
+use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
+use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2;
@@ -75,10 +81,31 @@ final class CarrierFactory extends AbstractModelFactory
     }
 
     /**
-     * Create carrier with all common capabilities.
+     * Add or replace the insurance shipment option capability.
      *
-     * @TODO Remove permissive all-capabilities once CarrierSchema is replaced by capabilities-focused logic.
-     *       CarrierSchema is @deprecated; real per-carrier capability constraints will come from the capabilities API.
+     * @param  int    $default Default insured amount
+     * @param  int    $min     Minimum insured amount
+     * @param  int    $max     Maximum insured amount
+     * @param  string $currency ISO 4217 currency code
+     * @return $this
+     */
+    public function withInsurance(int $default = 0, int $min = 0, int $max = 500000, string $currency = 'EUR'): self
+    {
+        $existingOptions = (array) ($this->attributes->get('options') ?? []);
+
+        return $this->withOptions(array_merge($existingOptions, [
+            'insurance' => [
+                'insuredAmount' => [
+                    'default' => ['currency' => $currency, 'amount' => $default],
+                    'min'     => ['currency' => $currency, 'amount' => $min],
+                    'max'     => ['currency' => $currency, 'amount' => $max],
+                ],
+            ],
+        ]));
+    }
+
+    /**
+     * Create carrier with all known capabilities.
      *
      * @param  string $carrier V2 carrier name to assign capabilities to
      * @return $this
@@ -193,5 +220,48 @@ final class CarrierFactory extends AbstractModelFactory
     {
         return $this
             ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
+    }
+
+    /**
+     * Store the carrier in the first shop of the current account.
+     * If no account or shop exists, creates them through the relevant factories.
+     *
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $model
+     *
+     * @return void
+     */
+    protected function save(Model $model): void
+    {
+        /** @var PdkAccountRepositoryInterface $accountRepository */
+        $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
+        $account           = $accountRepository->getAccount();
+
+        if (! $account || $account->shops->isEmpty()) {
+            factory(Shop::class)
+                ->withCarriers(
+                    factory(CarrierCollection::class)->push($model)
+                )
+                ->store();
+
+            return;
+        }
+
+        /** @var Shop $shop */
+        $shop     = $account->shops->first();
+        $carriers = $shop->carriers;
+
+        $existing = $carriers->firstWhere('carrier', $model->carrier);
+
+        if ($existing) {
+            $carriers = $carriers->map(function (Carrier $carrier) use ($model) {
+                return $carrier->carrier === $model->carrier ? $model : $carrier;
+            });
+        } else {
+            $carriers = $carriers->push($model);
+        }
+
+        $shop->carriers = new CarrierCollection($carriers->all());
+
+        $accountRepository->store($account);
     }
 }
