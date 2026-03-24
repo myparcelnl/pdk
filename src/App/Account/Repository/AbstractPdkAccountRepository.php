@@ -44,8 +44,6 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
     abstract protected function getFromStorage(): ?Account;
 
     /**
-     * Gets account data from storage only, does not call the API.
-     *
      * @param  bool $force
      *
      * @return null|\MyParcelNL\Pdk\Account\Model\Account
@@ -58,7 +56,7 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
             $this->save('account', $account);
         }
 
-        return $this->retrieve('account', function () use ($account) {
+        return $this->retrieve('account', function () {
             // Api key marked as invalid or not set means no account available.
             if (
                 ! $this->settingsRepository->all()->account->apiKeyValid
@@ -67,7 +65,7 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
                 return null;
             }
 
-            return $account;
+            return $this->accountRepository->getAccount();
         }, $force);
     }
 }

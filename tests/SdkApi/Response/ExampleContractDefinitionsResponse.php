@@ -113,6 +113,22 @@ class ExampleContractDefinitionsResponse extends SdkJsonResponse
                 'transactionTypes' => null,
                 'collo'            => null,
             ],
+            [
+                'carrier'          => 'BRT',
+                'packageTypes'     => ['PACKAGE'],
+                'deliveryTypes'    => ['STANDARD_DELIVERY'],
+                'options'          => null,
+                'transactionTypes' => null,
+                'collo'            => null,
+            ],
+            [
+                'carrier'          => 'INPOST',
+                'packageTypes'     => ['PACKAGE'],
+                'deliveryTypes'    => ['STANDARD_DELIVERY', 'PICKUP_DELIVERY'],
+                'options'          => null,
+                'transactionTypes' => null,
+                'collo'            => null,
+            ],
         ];
     }
 }

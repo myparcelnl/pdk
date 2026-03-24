@@ -79,7 +79,7 @@ it('fetches account with shops and carrier capabilities', function () {
         ->and($account->shops->all())
         ->toHaveLength(1)
         ->and($firstShop->carriers->all())
-        ->toHaveLength(5);
+        ->toHaveLength(7);
 });
 
 it('fetches new account and carrier data from api when called with empty array', function () {
