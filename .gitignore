@@ -40,3 +40,5 @@ docker-compose.override.yml
 !/.idea/phpunit.xml
 !/.idea/prettier.xml
 !/.idea/vcs.xml
+
+.claude

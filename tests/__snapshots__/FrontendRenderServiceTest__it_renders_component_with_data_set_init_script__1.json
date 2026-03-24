@@ -265,6 +265,7 @@
         {
           "accountId": 1,
           "platformId": 1,
+          "name": "Test Shop",
           "hidden": false,
           "billing": [],
           "deliveryAddress": {
@@ -2120,6 +2121,7 @@
     "shop": {
       "accountId": 1,
       "platformId": 1,
+      "name": "Test Shop",
       "hidden": false,
       "billing": [],
       "deliveryAddress": {
