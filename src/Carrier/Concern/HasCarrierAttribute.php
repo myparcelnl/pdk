@@ -42,7 +42,7 @@ trait HasCarrierAttribute
     }
 
     /**
-     * Normalise any incoming carrier value to its string identifier and store it.
+     * Normalise any incoming carrier value to its string identifier
      * Only a Carrier model (reduces to its carrier name), a plain string name, or
      * null are accepted. An array in Carrier-model-array form is also handled.
      * Passing any other type is a programming error and throws immediately.
