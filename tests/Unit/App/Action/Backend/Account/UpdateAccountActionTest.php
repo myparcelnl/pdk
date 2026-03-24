@@ -176,7 +176,7 @@ it('saves carrier capabilities as account->shop->carriers correctly', function (
     expect($insurance->getInsuredAmount()->getMax()->getCurrency())->toBe('EUR');
     expect($insurance->getInsuredAmount()->getMax()->getAmount())->toBe(500000);
 
-    expect($firstCarrier->collo)->toBe(['max' => 10]);
+    expect($firstCarrier->collo->getMax())->toBe(10);
 });
 
 it('updates validity of api key', function (?string $apiKey, bool $expectedValidity) {
