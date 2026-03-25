@@ -112,7 +112,6 @@ class CapabilitiesService extends AbstractShipmentApiService
      *
      * @param string|null $carrier The carrier identifier (e.g., 'POSTNL', 'DPD', 'DHL_FOR_YOU') to get a
      *                             specific carrier's contract definitions, or null to retrieve all.
-     * @todo type the parameter! or document the enum
      *
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[] An array of contract definitions per carrier.
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException On API errors
