@@ -26,13 +26,13 @@ use Psr\Http\Message\RequestInterface;
  *
  * // Get dynamic capabilities for a specific shipment
  * $capabilities = $service->getCapabilities([
- *     'carrier' => 'postnl',
+ *     'carrier' => 'POSTNL',
  *     'recipient' => ['cc' => 'NL', 'postal_code' => '2132WT'],
  *     'package_type' => 'package',
  * ]);
  *
  * // Get contract definitions for a carrier
- * $definitions = $service->getContractDefinitions('postnl');
+ * $definitions = $service->getContractDefinitions('POSTNL');
  * ```
  *
  * @see \MyParcelNL\Pdk\SdkApi\Service\CoreApi\AbstractShipmentApiService
@@ -110,7 +110,7 @@ class CapabilitiesService extends AbstractShipmentApiService
      * and capabilities for specific carriers based on the user's contracts. This provides static
      * configuration data rather than dynamic calculations.
      *
-     * @param string|null $carrier The carrier identifier (e.g., 'postnl', 'dpd', 'dhl') to get a
+     * @param string|null $carrier The carrier identifier (e.g., 'POSTNL', 'DPD', 'DHL_FOR_YOU') to get a
      *                             specific carrier's contract definitions, or null to retrieve all.
      * @todo type the parameter! or document the enum
      *
