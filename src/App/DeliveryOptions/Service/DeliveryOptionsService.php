@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -93,18 +94,18 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $triStateService;
 
     /**
-     * @var \MyParcelNL\Pdk\Carrier\Repository\CarrierRepository
+     * @var \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface
      */
     private $carrierRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
-     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
-     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
-     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
-     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
-     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService             $triStateService
-     * @param  \MyParcelNL\Pdk\Carrier\Repository\CarrierRepository       $carrierRepository
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface       $countryService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface      $currencyService
+     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface   $dropOffService
+     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface        $taxService
+     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository      $schemaRepository
+     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService               $triStateService
+     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface $carrierRepository
      */
     public function __construct(
         CountryServiceInterface     $countryService,
@@ -113,7 +114,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         TaxServiceInterface         $taxService,
         SchemaRepository            $schemaRepository,
         TriStateService             $triStateService,
-        CarrierRepository           $carrierRepository
+        CarrierRepositoryInterface  $carrierRepository
     ) {
         $this->countryService      = $countryService;
         $this->currencyService     = $currencyService;
