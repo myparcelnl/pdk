@@ -153,7 +153,7 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
      */
     private function findCarrierInCollection(string $carrierName): ?Carrier
     {
-        $carriers = $this->accountSettingsService->getCarriers();
+        $carriers = $this->all();
         return $carriers->firstWhere('carrier', $carrierName);
     }
 
