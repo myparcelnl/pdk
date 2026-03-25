@@ -56,10 +56,6 @@
     "nx": "^19.5.0",
     "prettier": "^3.0.0"
   },
-  "volta": {
-    "node": "18.17.0",
-    "yarn": "4.3.1"
-  },
   "nx": {
     "namedInputs": {
       "production": [
@@ -194,5 +190,12 @@
       }
     }
   },
-  "packageManager": "yarn@4.3.1"
+  "volta": {
+    "node": "24.14.0",
+    "yarn": "4.12.0"
+  },
+  "resolutions": {
+    "tar": "7.5.11"
+  },
+  "packageManager": "yarn@4.12.0"
 }

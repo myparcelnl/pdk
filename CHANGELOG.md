@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.3](https://github.com/myparcelnl/pdk/compare/v3.3.2...v3.3.3) (2026-03-24)
+
+
+### :bug: Bug Fixes
+
+* **webhook:** fix shipments created in backoffice could generate empty woocommerce orders ([#428](https://github.com/myparcelnl/pdk/issues/428)) ([d8063be](https://github.com/myparcelnl/pdk/commit/d8063be28359f156a170abf1712c7a0f346d5af6))
+
+## [3.3.2](https://github.com/myparcelnl/pdk/compare/v3.3.1...v3.3.2) (2026-03-17)
+
+
+### :bug: Bug Fixes
+
+* **endpoint:** correct the insurance amount in DO-endpoint ([#427](https://github.com/myparcelnl/pdk/issues/427)) ([263c8f7](https://github.com/myparcelnl/pdk/commit/263c8f7d49011b0ba57436489c0038fa173101fe))
+* **security:** fix tar vulnerability ([#425](https://github.com/myparcelnl/pdk/issues/425)) ([436765e](https://github.com/myparcelnl/pdk/commit/436765e88bb1653f0e2dd156407e77aee2742adf))
+* translations for DE and IT ([#426](https://github.com/myparcelnl/pdk/issues/426)) ([28e91a5](https://github.com/myparcelnl/pdk/commit/28e91a5b47493f3538a73b619f7ce25dfbf0e23b))
+
+## [3.3.1](https://github.com/myparcelnl/pdk/compare/v3.3.0...v3.3.1) (2026-03-12)
+
+
+### :bug: Bug Fixes
+
+* make several properties nullable in the openapi spec ([#424](https://github.com/myparcelnl/pdk/issues/424)) ([e293441](https://github.com/myparcelnl/pdk/commit/e293441cfca18df9e80e283b8f340820b43cfbd1))
+
+## [3.3.0](https://github.com/myparcelnl/pdk/compare/v3.2.3...v3.3.0) (2026-03-05)
+
+
+### :sparkles: New Features
+
+* **endpoint:** add a new endpoint to allow retrieval of an orders shipment preferences ([#417](https://github.com/myparcelnl/pdk/issues/417)) ([d613dbc](https://github.com/myparcelnl/pdk/commit/d613dbc0a28fa4f2a89df88b8f7d8bf6bb546dfd))
+
+## [3.2.3](https://github.com/myparcelnl/pdk/compare/v3.2.2...v3.2.3) (2026-02-24)
+
+## [3.2.2](https://github.com/myparcelnl/pdk/compare/v3.2.1...v3.2.2) (2026-02-20)
+
+
+### :bug: Bug Fixes
+
+* **proposition:** include custom carrier features in getCarriers to keep Trunkrs visible in settings ([#422](https://github.com/myparcelnl/pdk/issues/422)) ([d6f395a](https://github.com/myparcelnl/pdk/commit/d6f395a1923e275a02984e8a2422482c31e9b66e))
+
 ## [3.2.1](https://github.com/myparcelnl/pdk/compare/v3.2.0...v3.2.1) (2026-02-13)
 
 

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -23,6 +24,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withRetailNetworkId(string $retailNetworkId)
  * @method $this withState(string $state)
  * @method $this withStreet(string $street)
+ * @method $this withType(RetailLocationType $type)
  */
 final class RetailLocationFactory extends AbstractModelFactory
 {
@@ -41,7 +43,8 @@ final class RetailLocationFactory extends AbstractModelFactory
             ->withNumber('1')
             ->withLocationCode('215700')
             ->withLocationName('Berghain')
-            ->withRetailNetworkId('BGHN-01');
+            ->withRetailNetworkId('BGHN-01')
+            ->withType(new RetailLocationType(RetailLocationType::PARCEL_POINT));
     }
 
     public function inTheNetherlands(): self
@@ -54,7 +57,8 @@ final class RetailLocationFactory extends AbstractModelFactory
             ->withNumber('38')
             ->withLocationCode('215795')
             ->withLocationName('Phone House Aalsmeer')
-            ->withRetailNetworkId('PNPNL-01');
+            ->withRetailNetworkId('PNPNL-01')
+            ->withType(new RetailLocationType(RetailLocationType::PARCEL_LOCKER));
     }
 
     protected function createDefault(): FactoryInterface

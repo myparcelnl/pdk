@@ -163,6 +163,35 @@
           },
           "addressFields": ["postalCode", "street", "city"],
           "unsupportedParameters": ["package_type"]
+        },
+        {
+          "name": "gls",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard", "pickup"],
+          "shipmentOptionsPerPackageType": {
+            "package": ["signature", "saturday_delivery", "insurance"]
+          }
+        },
+        {
+          "name": "trunkrs",
+          "active": true,
+          "subscription": -1,
+          "packageTypes": ["package"],
+          "deliveryTypes": ["standard"],
+          "fakeDelivery": true,
+          "shipmentOptionsPerPackageType": {
+            "package": [
+              "age_check",
+              "only_recipient",
+              "receipt_code",
+              "fresh_food",
+              "frozen",
+              "same_day_delivery",
+              "signature"
+            ]
+          }
         }
       ]
     },

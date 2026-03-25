@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -27,3 +28,29 @@ dataset('deliveryTypeNamesToIds', function () {
     );
 });
 
+dataset('packageTypeNames', function () {
+    return array_map(
+        static function (string $name) {
+            return [$name];
+        },
+        DeliveryOptions::PACKAGE_TYPES_NAMES
+    );
+});
+
+dataset('deliveryTypeNames', function () {
+    return array_map(
+        static function (string $name) {
+            return [$name];
+        },
+        DeliveryOptions::DELIVERY_TYPES_NAMES
+    );
+});
+
+dataset('retailLocationTypes', function () {
+    return array_map(
+        static function (string $name) {
+            return [$name];
+        },
+        \MyParcelNL\Pdk\Shipment\Model\RetailLocationType::ALL_TYPES
+    );
+});
