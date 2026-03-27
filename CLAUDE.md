@@ -34,6 +34,7 @@
 - When asked a question that requires information about the codebase, analyze by adding debugging statements (e.g., `print_r`, `var_dump`, etc.) or using breakpoints and executing sections of code or relevant tests. Rather than analyzing the codebase without executing it. This is especially important when the question is about dynamic data or behavior that cannot be easily inferred from static code analysis alone.
 - When solving a bug, always write a test that fails under the current conditions before implementing the fix, and then implement the fix to make the test pass. This ensures that the bug is properly addressed and prevents regressions in the future.
 - Ensure debug output is visible with the verbosity level of the command being used to run the tests (e.g., `-v` for verbose mode in PHPUnit/Pest). If necessary, adjust the verbosity level to ensure that debug output is displayed.
+- When a root cause is identified, immediately output any findings to the user
 
 # Carriers
 

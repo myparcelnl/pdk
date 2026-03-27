@@ -28,17 +28,12 @@ final class TrackedDefinition implements OrderOptionDefinitionInterface
         return ShipmentOptions::TRACKED;
     }
 
-    /**
-     * Note: The capabilities implementation is inverted:
-     * - Tracking is ON by default
-     * - When no_tracking is present, it is disabled
-     * - In the definition, no_tracking means that it is possible to request no tracking.
-     * - If the carrier does not support tracking, the option will not be available and tracking is always disabled anyway.
+    /*
      * @return null|string
      */
     public function getCapabilitiesOptionsKey(): ?string
     {
-        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['no_tracking'];
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['tracked'];
     }
 
     public function validate(CarrierSchema $carrierSchema): bool
