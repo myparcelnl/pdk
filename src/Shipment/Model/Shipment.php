@@ -236,12 +236,17 @@ class Shipment extends Model
             $this->updated = new DateTime('now', $timeZone);
         }
 
-        return $this->except([
+        $array = $this->except([
             'customsDeclaration',
             'physicalProperties',
             'recipient',
             'sender',
         ], Arrayable::STORABLE_NULL);
+
+        // Carrier should be the (raw) name only, not the full resolved carrier data.
+        $array['carrier'] = $this->attributes['carrier'];
+
+        return $array;
     }
 
     /**

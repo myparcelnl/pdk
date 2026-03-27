@@ -6,8 +6,16 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Sdk\Support\Arr;
 
 /**
+ * This model represents the shipment options as they exist within the DeliveryOptions of a Shipment.
+ * They mostly correspond to the shipment options as they exist within the MyParcel API delivery options endpoint, not the shipment options are supported by capabilities and POST /shipments endpoint.
+ *
+ * @TODO: This should be based off of dynamic shipment option names, but currently from the openApi spec there are no enum equivalents, only Models with (runtime) attribute constraints.
+ *
  * @property int<-1>|string|null $labelDescription
  * @property int                 $insurance
  * @property int<-1|0|1>         $ageCheck
@@ -109,4 +117,66 @@ class ShipmentOptions extends Model
         self::FROZEN            => TriStateService::TYPE_STRICT,
         self::SATURDAY_DELIVERY => TriStateService::TYPE_STRICT,
     ];
+
+    /**
+     * Intantiate a ShipmentOptions model based on their OrderOptionDefinition capabilities definition.
+     *
+     * @param array $data
+     * @return ShipmentOptions
+     */
+    public static function fromCapabilitiesDefinitions(array $data): self
+    {
+        // Abuse the OrderOptionsDefinition as they contain the mapping between capabilities and shipment option keys
+
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        // Given $data is an array of shipment option in the format ['name' => -1/0/1], find a definition matching the data
+        foreach ($data as $shipmentOptionName => $value) {
+            /**
+             * @var OrderOptionDefinitionInterface|null $definition
+             */
+            $definition = Arr::first($definitions, static function (OrderOptionDefinitionInterface $definition) use ($shipmentOptionName) {
+                return $definition->getCapabilitiesOptionsKey() === $shipmentOptionName;
+            });
+
+            if (!$definition) {
+                continue;
+            }
+
+            // Map the shipment option name to the corresponding shipment option key and retain the value
+            $data[$definition->getShipmentOptionsKey()] = $value;
+
+            // Unset the original shipment option name as it's not used in the ShipmentOptions model
+            unset($data[$shipmentOptionName]);
+        }
+
+        return new self($data);
+    }
+
+    /**
+     * Given an existing ShipmentOptions model, returns an array of that model with the V2 definition keys
+     * @param ShipmentOptions $shipmentOptions
+     * @return array
+     */
+    public static function toCapabilitiesDefinitions(ShipmentOptions $shipmentOptions): array
+    {
+        $data = [];
+
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        foreach ($definitions as $definition) {
+            $shipmentOptionsKey = $definition->getShipmentOptionsKey();
+            $capabilitiesOptionsKey = $definition->getCapabilitiesOptionsKey();
+
+            if (!$shipmentOptionsKey || !$capabilitiesOptionsKey) {
+                continue;
+            }
+
+            $data[$capabilitiesOptionsKey] = $shipmentOptions->{$shipmentOptionsKey};
+        }
+
+        return $data;
+    }
 }

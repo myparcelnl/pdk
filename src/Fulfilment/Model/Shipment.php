@@ -87,4 +87,12 @@ class Shipment extends Model
             'physicalProperties' => $pdkShipment->physicalProperties,
         ]);
     }
+
+    public function toStorableArray(): array
+    {
+        $array = parent::toStorableArray();
+        // Carrier should be the (raw) name only, not the full resolved carrier data.
+        $array['carrier'] = $this->attributes['carrier'];
+        return $array;
+    }
 }
