@@ -21,6 +21,17 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
     private static $classCastCache = [];
 
     /**
+     * Clear the static class cast cache. Used in test teardown to prevent stale cached model objects
+     * (which are mutable) from leaking between tests.
+     *
+     * @return void
+     */
+    public static function clearCastCache(): void
+    {
+        self::$classCastCache = [];
+    }
+
+    /**
      * @template T
      * @param  class-string<T> $class
      * @param  mixed           ...$args
@@ -40,7 +51,9 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
                 self::$classCastCache[$cacheKey] = new $class(...$args);
             }
 
-            return self::$classCastCache[$cacheKey];
+            // Clone to prevent callers from mutating the cached instance,
+            // which would silently corrupt future lookups with the same key.
+            return clone self::$classCastCache[$cacheKey];
         } catch (Throwable $e) {
             // Skip cache if instantiation fails, for example when input contains something that can't be serialized.
             return new $class(...$args);

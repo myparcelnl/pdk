@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 /** @noinspection StaticClosureCanBeUsedInspection */
@@ -18,6 +19,7 @@ use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Support\Collection;
@@ -26,7 +28,7 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
-usesShared(new UsesMockPdkInstance(), new UsesApiMock());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesApiMock());
 
 it('updates shipments', function () {
     MockApi::enqueue(
@@ -52,7 +54,7 @@ it('updates shipments', function () {
 it('updates barcode in note', function () {
     // Setup account and shop
     factory(\MyParcelNL\Pdk\Account\Model\Account::class)
-        ->withShops(factory(\MyParcelNL\Pdk\Account\Model\Shop::class))
+        ->withShops()
         ->store();
 
     $collection = factory(PdkOrderCollection::class)

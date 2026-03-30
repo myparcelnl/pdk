@@ -1,6 +1,61 @@
 {
-  "carrier": 1,
-  "contractId": "1234567890",
+  "carrier": {
+    "carrier": "POSTNL",
+    "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+    "options": {
+      "additionalInsurance": [],
+      "cooledDelivery": [],
+      "customLabelText": [],
+      "deliverAtPostalPoint": [],
+      "deliveryDate": [],
+      "freshFood": [],
+      "frozen": [],
+      "hideSender": [],
+      "noTracking": [],
+      "oversizedPackage": [],
+      "priorityDelivery": [],
+      "printReturnLabelAtDropOff": [],
+      "recipientOnlyDelivery": [],
+      "requiresAgeVerification": [],
+      "requiresCashOnDelivery": [],
+      "requiresReceiptCode": [],
+      "requiresSignature": [],
+      "returnContributionFee": [],
+      "returnOnFirstFailedDelivery": [],
+      "sameDayDelivery": [],
+      "saturdayDelivery": [],
+      "scheduledCollection": [],
+      "tracked": [],
+      "insurance": {
+        "insuredAmount": {
+          "default": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "min": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "max": {
+            "currency": "EUR",
+            "amount": 500000
+          }
+        }
+      }
+    },
+    "deliveryTypes": [
+      "MORNING_DELIVERY",
+      "STANDARD_DELIVERY",
+      "EVENING_DELIVERY",
+      "PICKUP_DELIVERY",
+      "SAME_DAY_DELIVERY",
+      "EXPRESS_DELIVERY",
+      "EARLY_MORNING_DELIVERY"
+    ],
+    "collo": {
+      "max": 10
+    }
+  },
   "customsDeclaration": {
     "contents": 0,
     "invoice": "ABC123456",
@@ -30,6 +85,7 @@
     "onlyRecipient": false,
     "priorityDelivery": false,
     "packageType": 1,
+    "receiptCode": false,
     "return": false,
     "sameDayDelivery": false,
     "saturdayDelivery": false,

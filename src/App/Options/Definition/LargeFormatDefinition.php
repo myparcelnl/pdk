@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 
 final class LargeFormatDefinition implements OrderOptionDefinitionInterface
 {
@@ -28,9 +28,9 @@ final class LargeFormatDefinition implements OrderOptionDefinitionInterface
         return ShipmentOptions::LARGE_FORMAT;
     }
 
-    public function getPropositionKey(): ?string
+    public function getCapabilitiesOptionsKey(): ?string
     {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME;
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['oversized_package'];
     }
 
     public function validate(CarrierSchema $carrierSchema): bool

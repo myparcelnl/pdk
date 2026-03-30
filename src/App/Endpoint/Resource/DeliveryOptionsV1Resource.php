@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Endpoint\Resource;
 
-use Alcohol\ISO4217;
 use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
+use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -45,7 +42,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
     public function format(): array
     {
         return [
-            'carrier' => self::formatCarrier($this->model->carrier->name),
+            'carrier' => self::formatCarrier($this->model->carrier->carrier),
             'packageType' => $this->model->packageType ? self::formatPackageType($this->model->packageType) : null,
             'deliveryType' => $this->model->deliveryType ? self::formatDeliveryType($this->model->deliveryType) : null,
             'shipmentOptions' => self::formatShipmentOptions($this->model->shipmentOptions),
@@ -102,8 +99,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
             if ($key === ShipmentOptions::INSURANCE) {
                 // Insurance amount converted to integer micro as per ADR-0014
                 $amount = ((int)$value) * 1_000_000;
-                $currency = (new ISO4217())->getByAlpha3('EUR'); // Assuming EUR, adjust in the future as needed
-                $formattedOptions[$orderApiShipmentOptions['insurance']] = ['amount' => $amount, 'currency' => $currency['alpha3']];
+                $currency = new Currency();
+                $formattedOptions[$orderApiShipmentOptions['insurance']] = ['amount' => $amount, 'currency' => $currency->currency];
             } elseif ($key === ShipmentOptions::LABEL_DESCRIPTION) {
                 // Custom label text option needs to be formatted as an object with a "text" property
                 $formattedOptions[$orderApiShipmentOptions['custom_label_text']] = ['text' => (string) $value];
@@ -177,7 +174,6 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
             Carrier::CARRIER_BPOST_LEGACY_NAME => OrderApiCarrier::BPOST,
             Carrier::CARRIER_CHEAP_CARGO_LEGACY_NAME => OrderApiCarrier::CHEAP_CARGO,
             Carrier::CARRIER_DPD_LEGACY_NAME => OrderApiCarrier::DPD,
-            Carrier::CARRIER_BOL_COM_LEGACY_NAME => OrderApiCarrier::BOL,
             Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME => OrderApiCarrier::DHL_FOR_YOU,
             Carrier::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => OrderApiCarrier::DHL_PARCEL_CONNECT,
             Carrier::CARRIER_DHL_EUROPLUS_LEGACY_NAME => OrderApiCarrier::DHL_EUROPLUS,

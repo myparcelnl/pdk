@@ -30,11 +30,12 @@ interface OrderOptionDefinitionInterface
     public function getShipmentOptionsKey(): ?string;
 
     /**
-     * Get the key that represents the option in the proposition.
+     * Get the camelCase property key that represents this option in the capabilities options object
+     * (RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2).
      *
      * @return null|string
      */
-    public function getPropositionKey(): ?string;
+    public function getCapabilitiesOptionsKey(): ?string;
 
     /**
      * Validates if the option is allowed for the current carrier.

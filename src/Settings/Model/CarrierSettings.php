@@ -76,6 +76,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const CARRIER_NAME = 'carrierName';
     /**
      * Settings in this category.
+     * @TODO these settings need to be made generic based on available definitions in API spec
      */
     public const  ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
     public const  ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
@@ -130,13 +131,14 @@ class CarrierSettings extends AbstractSettingsModel
     public const  EXPORT_COLLECT                          = 'exportCollect';
     public const  EXPORT_FRESH_FOOD                       = 'exportFreshFood';
     public const  EXPORT_FROZEN                           = 'exportFrozen';
-    public const  PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
-    public const  PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
-    public const  PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
+    public const  PRICE_DELIVERY_TYPE_EVENING_DELIVERY    = 'priceDeliveryTypeEvening';
+    public const  PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     = 'priceDeliveryTypeMonday';
+    public const  PRICE_DELIVERY_TYPE_MORNING_DELIVERY    = 'priceDeliveryTypeMorning';
     public const  PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
-    public const  PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
-    public const  PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
-    public const  PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
+    public const  PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   = 'priceDeliveryTypeSameDay';
+    public const  PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   = 'priceDeliveryTypeSaturday';
+    public const  PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   = 'priceDeliveryTypeStandard';
+    public const  PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    = 'priceDeliveryTypeExpress';
     public const  PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
     public const  PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
     public const  PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
@@ -146,7 +148,6 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_INTERNATIONAL_MAILBOX             = 'allowInternationalMailbox';
     public const  PRICE_INTERNATIONAL_MAILBOX             = 'priceInternationalMailbox';
     public const  PRICE_COLLECT                           = 'priceCollect';
-    public const  PRICE_DELIVERY_TYPE_EXPRESS             = 'priceDeliveryTypeExpress';
 
 
     protected $attributes = [
@@ -194,13 +195,13 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_COLLECT                          => false,
         self::EXPORT_FRESH_FOOD                       => false,
         self::EXPORT_FROZEN                           => false,
-        self::PRICE_DELIVERY_TYPE_EVENING             => 0,
-        self::PRICE_DELIVERY_TYPE_MONDAY              => 0,
-        self::PRICE_DELIVERY_TYPE_MORNING             => 0,
+        self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 0,
+        self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 0,
+        self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 0,
         self::PRICE_DELIVERY_TYPE_PICKUP              => 0,
-        self::PRICE_DELIVERY_TYPE_SAME_DAY            => 0,
-        self::PRICE_DELIVERY_TYPE_SATURDAY            => 0,
-        self::PRICE_DELIVERY_TYPE_STANDARD            => 0,
+        self::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   => 0,
+        self::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   => 0,
+        self::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   => 0,
         self::PRICE_ONLY_RECIPIENT                    => 0,
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
@@ -210,7 +211,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_INTERNATIONAL_MAILBOX             => false,
         self::PRICE_INTERNATIONAL_MAILBOX             => 0,
         self::PRICE_COLLECT                           => 0,
-        self::PRICE_DELIVERY_TYPE_EXPRESS             => 0,
+        self::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY             => 0,
     ];
 
     protected $casts      = [
@@ -257,13 +258,13 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_COLLECT                          => 'bool',
         self::EXPORT_FRESH_FOOD                       => 'bool',
         self::EXPORT_FROZEN                           => 'bool',
-        self::PRICE_DELIVERY_TYPE_EVENING             => 'float',
-        self::PRICE_DELIVERY_TYPE_MONDAY              => 'float',
-        self::PRICE_DELIVERY_TYPE_MORNING             => 'float',
+        self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 'float',
+        self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 'float',
+        self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 'float',
         self::PRICE_DELIVERY_TYPE_PICKUP              => 'float',
-        self::PRICE_DELIVERY_TYPE_SAME_DAY            => 'float',
-        self::PRICE_DELIVERY_TYPE_SATURDAY            => 'float',
-        self::PRICE_DELIVERY_TYPE_STANDARD            => 'float',
+        self::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   => 'float',
+        self::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   => 'float',
+        self::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   => 'float',
         self::PRICE_ONLY_RECIPIENT                    => 'float',
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 'float',
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
@@ -273,33 +274,18 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
         self::PRICE_INTERNATIONAL_MAILBOX             => 'float',
         self::PRICE_COLLECT                           => 'float',
-        self::PRICE_DELIVERY_TYPE_EXPRESS             => 'float',
+        self::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    => 'float',
     ];
 
     /**
-     * @param  string|\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
      * @return self
      */
-    public static function fromCarrier($carrier): self
+    public static function fromCarrier(Carrier $carrier): self
     {
-        if ($carrier instanceof Carrier) {
-            $carrier = $carrier->externalIdentifier;
-        }
-
-        // Try to get settings using the carrier identifier as-is (for backwards compatibility)
         /** @var null|\MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings */
-        $settings = Settings::all()->carrier->get($carrier);
-
-        if (! $settings) {
-            // If not found, try mapping the carrier name to legacy format
-            $propositionService = Pdk::get(PropositionService::class);
-            $legacyIdentifier = $propositionService->mapNewToLegacyCarrierName($carrier);
-
-            if ($legacyIdentifier !== $carrier) {
-                $settings = Settings::all()->carrier->get($legacyIdentifier);
-            }
-        }
+        $settings = Settings::all()->carrier->get($carrier->carrier);
 
         if (! $settings) {
             return new CarrierSettings();

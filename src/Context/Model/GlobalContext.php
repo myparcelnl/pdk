@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
@@ -40,7 +39,6 @@ class GlobalContext extends Model
         'language'     => null,
         'mode'         => null,
         'proposition'  => [],
-        'platform'     => [],
         'translations' => [],
     ];
 
@@ -54,7 +52,6 @@ class GlobalContext extends Model
         'language'     => 'string',
         'mode'         => 'string',
         'proposition'  => 'array',
-        'platform'     => 'array',
         'translations' => 'array',
     ];
 
@@ -80,19 +77,6 @@ class GlobalContext extends Model
             $propositionService = Pdk::get(PropositionService::class);
             $proposition        = $propositionService->getPropositionConfig();
 
-            $platformFiltered = array_intersect_key(
-                $propositionService->mapToPlatformConfig($proposition),
-                array_flip([
-                    'name',
-                    'human',
-                    'backofficeUrl',
-                    'supportUrl',
-                    'localCountry',
-                    'defaultCarrier',
-                    'defaultCarrierId',
-                ])
-            );
-
             // Build a new-format proposition payload (not legacy-mapped)
             $defaultCarrier = $propositionService->getDefaultCarrier();
             $this->attributes['proposition'] = [
@@ -101,11 +85,8 @@ class GlobalContext extends Model
                 'backofficeUrl'    => $proposition->applications['backoffice']['url'] ?? null,
                 'supportUrl'       => $proposition->applications['developerPortal']['url'] ?? null,
                 'localCountry'     => $proposition->countryCode,
-                'defaultCarrier'   => $defaultCarrier ? $defaultCarrier->name : null, // CONSTANT_CASE name
-                'defaultCarrierId' => $defaultCarrier ? $defaultCarrier->id : null,
+                'defaultCarrier'   => $defaultCarrier ? $defaultCarrier->carrier : null, // CONSTANT_CASE name
             ];
-            // Keep legacy-mapped platform config for backwards compatibility
-            $this->attributes['platform']    = $platformFiltered;
         } catch (\Throwable $throwable) {
             // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.
             Logger::alert(

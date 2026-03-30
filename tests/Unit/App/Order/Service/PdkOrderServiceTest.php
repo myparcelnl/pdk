@@ -24,8 +24,9 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 afterEach(function () {
     Pdk::get(PdkProductRepositoryInterface::class)
@@ -40,11 +41,11 @@ it('calculates options', function (
     OrderOptionDefinitionInterface $definition
 ) {
     $fakeCarrier = factory(Carrier::class)
-        ->withName('fake')
-        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withAllOptions())
+        ->withCarrier('fake')
+        ->withAllCapabilities()
         ->make();
 
-    factory(CarrierSettings::class, $fakeCarrier->externalIdentifier)
+    factory(CarrierSettings::class, $fakeCarrier->carrier)
         ->with([$definition->getCarrierSettingsKey() => $carrierSetting])
         ->store();
 

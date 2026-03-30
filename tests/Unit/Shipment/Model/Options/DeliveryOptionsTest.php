@@ -9,12 +9,15 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use DateTime;
 use DateTimeImmutable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('instantiates default delivery options', function () {
     $deliveryOptions = new DeliveryOptions();
@@ -136,10 +139,8 @@ it('can get delivery type as id', function (string $name, int $id) {
 })->with('deliveryTypeNamesToIds');
 
 it('can be instantiated from its storable array', function () {
-    $carrier = new Carrier([
-        'externalIdentifier' => 'dhlforyou:8277',
-    ]);
-
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
+    $carrier = $carrierRepository->findOrFail('DHL_FOR_YOU');
     $original = new DeliveryOptions([
         'carrier'         => $carrier,
         'packageType'     => 'package',

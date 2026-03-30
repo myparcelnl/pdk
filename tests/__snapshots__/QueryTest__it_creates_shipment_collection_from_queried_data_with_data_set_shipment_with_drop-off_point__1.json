@@ -5,90 +5,120 @@
   "referenceIdentifier": "",
   "barcode": "",
   "carrier": {
-    "externalIdentifier": "DHL_FOR_YOU",
-    "id": 9,
-    "name": "DHL_FOR_YOU",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
-      "metadata": {
-        "labelDescriptionLength": 45
+    "carrier": "DHL_FOR_YOU",
+    "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+    "options": {
+      "additionalInsurance": [],
+      "cooledDelivery": [],
+      "customLabelText": [],
+      "deliverAtPostalPoint": [],
+      "deliveryDate": [],
+      "freshFood": [],
+      "frozen": [],
+      "hideSender": [],
+      "noTracking": [],
+      "oversizedPackage": [],
+      "priorityDelivery": [],
+      "printReturnLabelAtDropOff": [],
+      "recipientOnlyDelivery": [],
+      "requiresAgeVerification": [],
+      "requiresCashOnDelivery": [],
+      "requiresReceiptCode": [],
+      "requiresSignature": [],
+      "returnContributionFee": [],
+      "returnOnFirstFailedDelivery": [],
+      "sameDayDelivery": [],
+      "saturdayDelivery": [],
+      "scheduledCollection": [],
+      "tracked": [],
+      "insurance": {
+        "insuredAmount": {
+          "default": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "min": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "max": {
+            "currency": "EUR",
+            "amount": 500000
+          }
+        }
       }
     },
-    "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-      "deliveryCountries": ["NL", "BE"],
-      "pickupCountries": ["NL", "BE"],
-      "shipmentOptions": [
-        "AGE_CHECK",
-        "ONLY_RECIPIENT",
-        "SAME_DAY_DELIVERY",
-        "SIGNATURE",
-        "SATURDAY_DELIVERY",
-        "HIDE_SENDER",
-        "INSURANCE"
-      ],
-      "metadata": {
-        "labelDescriptionLength": 45,
-        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-      }
-    },
-    "deliveryOptions": {
-      "addressFields": ["city", "postalCode"],
-      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
-      "allowFakeDelivery": false
+    "deliveryTypes": [
+      "MORNING_DELIVERY",
+      "STANDARD_DELIVERY",
+      "EVENING_DELIVERY",
+      "PICKUP_DELIVERY",
+      "SAME_DAY_DELIVERY",
+      "EXPRESS_DELIVERY",
+      "EARLY_MORNING_DELIVERY"
+    ],
+    "collo": {
+      "max": 10
     }
   },
   "delayed": false,
   "delivered": false,
   "deliveryOptions": {
     "carrier": {
-      "externalIdentifier": "DHL_FOR_YOU",
-      "id": 9,
-      "name": "DHL_FOR_YOU",
-      "enabled": true,
-      "isDefault": true,
-      "optional": false,
-      "primary": false,
-      "type": "main",
-      "inboundFeatures": {
-        "packageTypes": ["PACKAGE"],
-        "deliveryTypes": ["STANDARD_DELIVERY"],
-        "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
-        "metadata": {
-          "labelDescriptionLength": 45
+      "carrier": "DHL_FOR_YOU",
+      "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+      "options": {
+        "additionalInsurance": [],
+        "cooledDelivery": [],
+        "customLabelText": [],
+        "deliverAtPostalPoint": [],
+        "deliveryDate": [],
+        "freshFood": [],
+        "frozen": [],
+        "hideSender": [],
+        "noTracking": [],
+        "oversizedPackage": [],
+        "priorityDelivery": [],
+        "printReturnLabelAtDropOff": [],
+        "recipientOnlyDelivery": [],
+        "requiresAgeVerification": [],
+        "requiresCashOnDelivery": [],
+        "requiresReceiptCode": [],
+        "requiresSignature": [],
+        "returnContributionFee": [],
+        "returnOnFirstFailedDelivery": [],
+        "sameDayDelivery": [],
+        "saturdayDelivery": [],
+        "scheduledCollection": [],
+        "tracked": [],
+        "insurance": {
+          "insuredAmount": {
+            "default": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "min": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "max": {
+              "currency": "EUR",
+              "amount": 500000
+            }
+          }
         }
       },
-      "outboundFeatures": {
-        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-        "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-        "deliveryCountries": ["NL", "BE"],
-        "pickupCountries": ["NL", "BE"],
-        "shipmentOptions": [
-          "AGE_CHECK",
-          "ONLY_RECIPIENT",
-          "SAME_DAY_DELIVERY",
-          "SIGNATURE",
-          "SATURDAY_DELIVERY",
-          "HIDE_SENDER",
-          "INSURANCE"
-        ],
-        "metadata": {
-          "labelDescriptionLength": 45,
-          "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        }
-      },
-      "deliveryOptions": {
-        "addressFields": ["city", "postalCode"],
-        "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
-        "allowFakeDelivery": false
+      "deliveryTypes": [
+        "MORNING_DELIVERY",
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY",
+        "SAME_DAY_DELIVERY",
+        "EXPRESS_DELIVERY",
+        "EARLY_MORNING_DELIVERY"
+      ],
+      "collo": {
+        "max": 10
       }
     },
     "labelAmount": 1,

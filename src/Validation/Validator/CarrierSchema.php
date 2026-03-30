@@ -20,17 +20,18 @@ use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\MondayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierMetadata;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
 /**
- * @deprecated Should switch to proposition-related functionality in the future
+ * @deprecated This will be replaced with generic capabilities-focussed functionality in the future.
+ *
  * @package MyParcelNL\Pdk\Validation\Validator
  */
 class CarrierSchema implements DeliveryOptionsValidatorInterface
@@ -45,85 +46,64 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     protected $carrier;
 
-    /**
-     * Given a Shipment Option Name from the Proposition config, return whether that's enabled in the schema.
-     *
-     * @todo this should use ENUMs in the future.
-     * @param string $shipmentOptionName
-     * @return bool
-     * @throws BadMethodCallException
-     */
-    public function hasShipmentOptionName(string $shipmentOptionName): bool
-    {
-        return in_array(
-            $shipmentOptionName,
-            $this->getFromSchema('shipmentOptions') ?: [],
-        );
-    }
-
     public function canBeDigitalStamp(): bool
     {
-        return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME);
+        return $this->canHavePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP);
     }
 
     public function canBeLetter(): bool
     {
-        return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_LETTER_NAME);
+        return $this->canHavePackageType(RefShipmentPackageTypeV2::UNFRANKED);
     }
 
     public function canBeMailbox(): bool
     {
-        return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+        return $this->canHavePackageType(RefShipmentPackageTypeV2::MAILBOX);
     }
 
     public function canBePackage(): bool
     {
-        return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+        return $this->canHavePackageType(RefShipmentPackageTypeV2::PACKAGE);
     }
 
     public function canBePackageSmall(): bool
     {
-        return $this->canHavePackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME);
+        return $this->canHavePackageType(RefShipmentPackageTypeV2::SMALL_PACKAGE);
     }
 
     public function canHaveAgeCheck(): bool
     {
-        return $this->canHave(AgeCheckDefinition::class);
-    }
-
-    public function canHaveCarrierSmallPackageContract(): bool
-    {
-        return $this->canHaveFeature('carrierSmallPackageContract');
+        return $this->canHaveShipmentOption(AgeCheckDefinition::class);
     }
 
     public function canHaveCollect(): bool
     {
-        return $this->canHave(CollectDefinition::class);
+        return $this->canHaveShipmentOption(CollectDefinition::class);
     }
 
     public function canHaveDirectReturn(): bool
     {
-        return $this->canHave(DirectReturnDefinition::class);
+        return $this->canHaveShipmentOption(DirectReturnDefinition::class);
     }
 
     public function canHaveEveningDelivery(): bool
     {
-        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME);
+        return $this->hasDeliveryType(RefTypesDeliveryTypeV2::EVENING);
     }
 
     public function canHaveExpressDelivery(): bool
     {
-        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME);
+        return $this->hasDeliveryType(RefTypesDeliveryTypeV2::EXPRESS);
     }
 
     public function canHaveFreshFood(): bool
     {
-        return $this->canHave(FreshFoodDefinition::class);
+        return $this->canHaveShipmentOption(FreshFoodDefinition::class);
     }
 
     public function canHaveFrozen(): bool
     {
-        return $this->canHave(FrozenDefinition::class);
+        return $this->canHaveShipmentOption(FrozenDefinition::class);
     }
 
     /**
@@ -131,7 +111,7 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function canHaveHideSender(): bool
     {
-        return $this->canHave(HideSenderDefinition::class);
+        return $this->canHaveShipmentOption(HideSenderDefinition::class);
     }
 
     /**
@@ -143,67 +123,94 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function canHaveInsurance(?int $amount = 0): bool
     {
-        return $this->canHave(InsuranceDefinition::class);
+        return $this->canHaveShipmentOption(InsuranceDefinition::class);
     }
 
     public function canHaveLargeFormat(): bool
     {
-        return $this->canHave(LargeFormatDefinition::class);
+        return $this->canHaveShipmentOption(LargeFormatDefinition::class);
+    }
+
+    public function canHaveMondayDelivery(): bool
+    {
+        // @TODO: replace with non-carrier specific check.
+        // Currently, we do not have any endpoint to check this with (not an actual shipment option, just for DO)
+        return $this->getCarrier()->carrier === RefTypesCarrierV2::POSTNL;
     }
 
     public function canHaveMorningDelivery(): bool
     {
-        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME);
+        return $this->hasDeliveryType(RefTypesDeliveryTypeV2::MORNING);
     }
 
     public function canHaveMultiCollo(): bool
     {
-        return $this->canHaveFeature('multiCollo');
+        return $this->getFromSchema('collo') ? $this->getFromSchema('collo')['max'] > 1 : false;
     }
 
     public function canHaveOnlyRecipient(): bool
     {
-        return $this->canHave(OnlyRecipientDefinition::class);
+        return $this->canHaveShipmentOption(OnlyRecipientDefinition::class);
     }
 
     public function canHavePriorityDelivery(): bool
     {
-        return $this->canHave(PriorityDeliveryDefinition::class);
+        return $this->canHaveShipmentOption(PriorityDeliveryDefinition::class);
     }
 
     public function canHavePickup(): bool
     {
-        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME);
+        return $this->hasDeliveryType(RefTypesDeliveryTypeV2::PICKUP);
     }
 
     public function canHaveReceiptCode(): bool
     {
-        return $this->canHave(ReceiptCodeDefinition::class);
+        return $this->canHaveShipmentOption(ReceiptCodeDefinition::class);
     }
 
     public function canHaveSameDayDelivery(): bool
     {
-        return $this->canHave(SameDayDeliveryDefinition::class);
+        return $this->canHaveShipmentOption(SameDayDeliveryDefinition::class);
+    }
+
+    /**
+     * Check if a shipment option is available.
+     *
+     * Note that in capabilities, the shipment option is presented as an object/array with optional configuration,
+     * so an empty array/object means the option is available, while a missing key means it's not.
+     *
+     * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
+     *
+     * @return bool
+     */
+    public function canHaveShipmentOption($definition): bool
+    {
+        $resolvedDefinition = $this->resolveDefinition($definition);
+
+        return array_key_exists(
+            $resolvedDefinition->getCapabilitiesOptionsKey(),
+            $this->getFromSchema('options') ?: [],
+        );
     }
 
     public function canHaveSignature(): bool
     {
-        return $this->canHave(SignatureDefinition::class);
+        return $this->canHaveShipmentOption(SignatureDefinition::class);
     }
 
     public function canHaveStandardDelivery(): bool
     {
-        return $this->hasDeliveryType(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME);
+        return $this->hasDeliveryType(RefTypesDeliveryTypeV2::STANDARD);
     }
 
     public function canHaveTracked(): bool
     {
-        return $this->canHave(TrackedDefinition::class);
+        return $this->canHaveShipmentOption(TrackedDefinition::class);
     }
 
     public function canHaveSaturdayDelivery(): bool
     {
-        return $this->canHave(SaturdayDeliveryDefinition::class);
+        return $this->canHaveShipmentOption(SaturdayDeliveryDefinition::class);
     }
 
     public function canHaveWeight(?int $weight): bool
@@ -216,20 +223,32 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->getFromSchema('deliveryTypes') ?: [];
     }
 
+    public function hasReturnCapabilities(): bool
+    {
+        // @TODO: Replace by a directionality call to capabilities given shipment context.
+        // Currently always true for limited backwards compatibility
+        return true;
+    }
+
     public function getAllowedInsuranceAmounts(): array
     {
-        $allowedAmounts = $this->getMetadataFeature('insuranceOptions');
-        $hasOption = $this->hasShipmentOption(InsuranceDefinition::class);
-        if (!$allowedAmounts && $hasOption) {
-            Logger::warning(
-                'Carrier schema does not have insurance options defined, but the carrier has the insurance option enabled.',
-                [
-                    'carrier' => $this->getCarrier()->externalIdentifier,
-                ]
-            );
-            return [0];
+        $hasOption = $this->canHaveShipmentOption(InsuranceDefinition::class);
+
+        // Take the min and max from the insurance shipment option and return a range in between them
+        // Note: The amount is currently in cents (EUR * 100)
+        if ($hasOption) {
+            $max = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMax()->getAmount();
+            $min = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMin()->getAmount();
+            // Determine whether the difference between min and max is smaller than 50.000 cents (500 EUR), if so, return a range with a step of 10.000 cents (100 EUR)
+            if ($max - $min <= 50_000) {
+                $step = 10_000;
+            } else {
+                $step = 50_000;
+            }
+
+            return range($min, $max, $step);
         }
-        return $hasOption ? $allowedAmounts : [];
+        return [];
     }
 
     public function getAllowedPackageTypes(): array
@@ -242,21 +261,13 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
      */
     public function getSchema(): array
     {
-        $identifier = $this->getCarrier()->externalIdentifier;
+        $identifier = $this->getCarrier()->carrier;
 
         if (! isset($this->cache[$identifier])) {
             $this->cache[$identifier] = $this->createSchema();
         }
 
         return $this->cache[$identifier];
-    }
-
-    /**
-     * @return bool
-     */
-    public function needsCustomerInfo(): bool
-    {
-        return (bool) $this->getMetadataFeature('needsCustomerInfo');
     }
 
     /**
@@ -269,22 +280,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         $this->carrier = $carrier;
 
         return $this;
-    }
-
-    /**
-     * @param  string $feature
-     *
-     * @return bool
-     */
-    protected function canHaveFeature(string $feature): bool
-    {
-        $value = $this->getMetadataFeature($feature);
-
-        if (PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY === $value) {
-            return $this->carrier->isCustom;
-        }
-
-        return (bool) $value;
     }
 
     /**
@@ -309,41 +304,9 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->carrier;
     }
 
-    /**
-     * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
-     *
-     * @return bool
-     */
-    private function canHave($definition): bool
-    {
-        return $this->hasShipmentOption($definition);
-    }
-
     private function createSchema(): array
     {
-        // Return the outbound features from the proposition config if present.
-        return $this->getCarrier()->outboundFeatures ? $this->getCarrier()->outboundFeatures->toArray() : [];
-    }
-
-    public function hasMetadataFeature(string $feature): bool
-    {
-        $value = $this->getMetadataFeature($feature);
-
-        if (PropositionCarrierMetadata::FEATURE_CUSTOM_CONTRACT_ONLY === $value) {
-            return $this->carrier->isCustom;
-        }
-
-        return (bool) $value;
-    }
-
-    /**
-     * @param  string $feature
-     *
-     * @return mixed
-     */
-    private function getMetadataFeature(string $feature)
-    {
-        return $this->getFromSchema(sprintf('metadata.%s', $feature));
+        return $this->getCarrier()->toArray();
     }
 
     /**
@@ -354,21 +317,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     private function getFromSchema(string $key)
     {
         return Arr::get($this->getSchema(), $key);
-    }
-
-    /**
-     * @param  class-string<OrderOptionDefinitionInterface>|OrderOptionDefinitionInterface $definition
-     *
-     * @return mixed
-     */
-    private function hasShipmentOption($definition)
-    {
-        $resolvedDefinition = $this->resolveDefinition($definition);
-
-        return in_array(
-            $resolvedDefinition->getPropositionKey(),
-            $this->getFromSchema('shipmentOptions') ?: [],
-        );
     }
 
     /**

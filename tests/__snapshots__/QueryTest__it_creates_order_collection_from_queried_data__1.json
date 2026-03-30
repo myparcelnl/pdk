@@ -88,7 +88,63 @@
   "notes": [],
   "shipment": {
     "orderId": "1ed6c2c8-c15a-68a6-96b4-7ffb046c7237",
-    "carrier": 1,
+    "carrier": {
+      "carrier": "POSTNL",
+      "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+      "options": {
+        "additionalInsurance": [],
+        "cooledDelivery": [],
+        "customLabelText": [],
+        "deliverAtPostalPoint": [],
+        "deliveryDate": [],
+        "freshFood": [],
+        "frozen": [],
+        "hideSender": [],
+        "noTracking": [],
+        "oversizedPackage": [],
+        "priorityDelivery": [],
+        "printReturnLabelAtDropOff": [],
+        "recipientOnlyDelivery": [],
+        "requiresAgeVerification": [],
+        "requiresCashOnDelivery": [],
+        "requiresReceiptCode": [],
+        "requiresSignature": [],
+        "returnContributionFee": [],
+        "returnOnFirstFailedDelivery": [],
+        "sameDayDelivery": [],
+        "saturdayDelivery": [],
+        "scheduledCollection": [],
+        "tracked": [],
+        "insurance": {
+          "insuredAmount": {
+            "default": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "min": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "max": {
+              "currency": "EUR",
+              "amount": 500000
+            }
+          }
+        }
+      },
+      "deliveryTypes": [
+        "MORNING_DELIVERY",
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY",
+        "SAME_DAY_DELIVERY",
+        "EXPRESS_DELIVERY",
+        "EARLY_MORNING_DELIVERY"
+      ],
+      "collo": {
+        "max": 10
+      }
+    },
     "contractId": null,
     "customsDeclaration": null,
     "options": {
@@ -104,6 +160,7 @@
       "onlyRecipient": false,
       "priorityDelivery": null,
       "packageType": 2,
+      "receiptCode": null,
       "return": false,
       "sameDayDelivery": null,
       "saturdayDelivery": null,

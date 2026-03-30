@@ -6,168 +6,129 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
-use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Account\Platform as AccountPlatform;
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use MyParcelNL\Pdk\Base\Exception\ModelNotFoundException;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockConfig;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Sdk\Support\Collection;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-
-const DHL_FOR_YOU_CUSTOM_IDENTIFIER = Carrier::CARRIER_DHL_FOR_YOU_NAME . ':' . MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU;
 
 usesShared(new UsesEachMockPdkInstance());
 
-it('creates default carrier for platform', function (string $platform) {
-    TestBootstrapper::forPlatform($platform);
+it('creates carrier with SDK-backed properties', function (int $propositionId) {
+    TestBootstrapper::forProposition($propositionId);
 
-    $carrier = new Carrier();
+    /** @var AccountSettingsServiceInterface $accountSettings */
+    $accountSettings = Pdk::get(AccountSettingsServiceInterface::class);
+    $carriers = $accountSettings->getCarriers();
 
-    assertMatchesJsonSnapshot(
-        json_encode($carrier->except(['capabilities', 'returnCapabilities'], Arrayable::SKIP_NULL))
-    );
-})->with('platforms');
+    expect($carriers)->not->toBeEmpty();
 
+    $carrier = $carriers->first();
 
-it('does not return a carrier for an unknown ID', function (string $platform) {
-    TestBootstrapper::forPlatform($platform);
-
-    $carrier = new Carrier(['id' => 1337]);
-
-    expect($carrier->name)
-        ->toBeNull();
-})->with('platforms');
-
-
-it('generates external identifier', function (array $input, string $identifier) {
-    $carrier = new Carrier($input);
-
-    expect($carrier->externalIdentifier)
-        ->toBe($identifier);
+    // Test that SDK-backed properties are available
+    expect($carrier)->toBeInstanceOf(Carrier::class)
+        ->and($carrier->carrier)->toBeString() // 'carrier' property from SDK
+        ->and($carrier->packageTypes)->toBeArray()
+        ->and($carrier->deliveryTypes)->toBeArray()
+        ->and($carrier->options)->not->toBeNull();
 })->with([
-    'id' => [
-        'input'      => ['id' => Carrier::CARRIER_POSTNL_ID],
-        'identifier' => Carrier::CARRIER_POSTNL_NAME,
-    ],
-
-    'name' => [
-        'input'      => ['name' => Carrier::CARRIER_BPOST_NAME],
-        'identifier' => Carrier::CARRIER_BPOST_NAME,
-    ],
-
-    'name and contractId' => [
-        'input'      => [
-            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-            'contractId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
-        ],
-        'identifier' => DHL_FOR_YOU_CUSTOM_IDENTIFIER,
-    ],
+    [Proposition::MYPARCEL_ID],
+    [Proposition::SENDMYPARCEL_ID],
 ]);
 
-it('determines type based on contract id', function (array $input, string $type) {
-    $carrier = new Carrier($input);
+it('creates carrier using factory with capabilities', function () {
+    $carrier = factory(Carrier::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->withPackageTypes(['PACKAGE', 'MAILBOX'])
+        ->withDeliveryTypes(['STANDARD_DELIVERY', 'MORNING_DELIVERY'])
+        ->make();
 
-    expect($carrier->type)->toBe($type);
-})->with([
-    'name' => [
-        'input' => [
-            'name' => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-        ],
-        'type'  => Carrier::TYPE_MAIN,
-    ],
-
-    'name and contractId' => [
-        'input' => [
-            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-            'contractId' => MockConfig::SUBSCRIPTION_ID_DHL_FOR_YOU,
-        ],
-        'type'  => Carrier::TYPE_CUSTOM,
-    ],
-]);
-
-it('generates the same data with either name or id', function (array $values, array $keys) {
-
-    // Instantiate a platform with expected carriers included
-    TestBootstrapper::forPlatform(AccountPlatform::MYPARCEL_NAME);
-
-    $carrierA = new Carrier(Arr::only($values, $keys[0]));
-    $carrierB = new Carrier(Arr::only($values, $keys[1]));
-
-    $arrayA = $carrierA->toArrayWithoutNull();
-    $arrayB = $carrierB->toArrayWithoutNull();
-
-    expect($arrayA)
-        ->not()
-        ->toBeEmpty()
-        ->and($arrayA)
-        ->toEqual($arrayB);
-})
-    ->with(
-        array_reduce([
-            Carrier::CARRIER_DHL_EUROPLUS_NAME,
-            Carrier::CARRIER_DHL_FOR_YOU_NAME,
-            Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
-            Carrier::CARRIER_POSTNL_NAME,
-        ], function (array $carry, string $name) {
-            $id         = Carrier::CARRIER_NAME_ID_MAP[$name];
-            $contractId = 124230;
-
-            $carry[$name] = [
-                [
-                    'id'                 => $id,
-                    'name'               => $name,
-                    'contractId'         => $contractId,
-                    'externalIdentifier' => "$name:$contractId",
-                ],
-            ];
-
-            return $carry;
-        }, [])
-    )
-    ->with([
-        'id and name'             => [[['id'], ['name']]],
-        'id, name and contractId' => [[['id', 'contractId'], ['name', 'contractId']]],
-        'external identifier'     => [[['externalIdentifier'], ['externalIdentifier']]],
-    ]);
-
-it('instantiates carriers from name', function (string $platform) {
-    TestBootstrapper::forPlatform($platform);
-
-    $carriers    = new Collection(Platform::getCarriers());
-    $newCarriers = $carriers->map(function (Carrier $carrier) {
-        return new Carrier(['name' => $carrier->name]);
-    });
-
-    assertMatchesJsonSnapshot(json_encode($newCarriers->toArrayWithoutNull()));
-})->with('platforms');
-
-it('instantiates carrier from external identifier', function (string $identifier) {
-    // This should run on proposition ID 1
-    expect(Pdk::get(PropositionService::class)->getActivePropositionId())->toBe(1);
-    $carrier = new Carrier(['externalIdentifier' => $identifier]);
-
-    assertMatchesJsonSnapshot(json_encode($carrier->toArrayWithoutNull()));
-})->with([
-    'subscription carrier' => [DHL_FOR_YOU_CUSTOM_IDENTIFIER],
-    'default carrier'      => [Carrier::CARRIER_DHL_FOR_YOU_NAME],
-]);
-
-
-it('creates a GLS carrier via id or name', function () {
-    // Instantiate a platform with GLS included
-    TestBootstrapper::forPlatform(AccountPlatform::MYPARCEL_NAME);
-    $carrierById = new Carrier(['id' => Carrier::CARRIER_GLS_ID]);
-    $carrierByName = new Carrier(['name' => Carrier::CARRIER_GLS_NAME]);
-
-    expect($carrierById->id)->toBe(Carrier::CARRIER_GLS_ID)
-        ->and($carrierByName->id)->toBe(Carrier::CARRIER_GLS_ID)
-        ->and($carrierById->name)->toBe(Carrier::CARRIER_GLS_NAME)
-        ->and($carrierByName->name)->toBe(Carrier::CARRIER_GLS_NAME);
-
+    expect($carrier->carrier)->toBe(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->and($carrier->packageTypes)->toBe(['PACKAGE', 'MAILBOX'])
+        ->and($carrier->deliveryTypes)->toBe(['STANDARD_DELIVERY', 'MORNING_DELIVERY']);
 });
+
+it('supports all capability types through factory', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->make();
+
+    expect($carrier->packageTypes)->toContain('PACKAGE')
+        ->and($carrier->packageTypes)->toContain('MAILBOX')
+        ->and($carrier->deliveryTypes)->toContain('STANDARD_DELIVERY')
+        ->and($carrier->options)->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::class);
+});
+
+it('supports minimal capabilities through factory', function () {
+    $carrier = factory(Carrier::class)
+        ->withMinimalCapabilities()
+        ->make();
+
+    expect($carrier->packageTypes)->toBe(['PACKAGE'])
+        ->and($carrier->deliveryTypes)->toBe(['STANDARD_DELIVERY'])
+        ->and($carrier->options)->toBeNull();
+});
+
+
+it('looks up carriers from account using repository', function () {
+    TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
+
+    /** @var AccountSettingsServiceInterface $accountSettings */
+    $accountSettings = Pdk::get(AccountSettingsServiceInterface::class);
+    $carriers = $accountSettings->getCarriers();
+
+    expect($carriers)->not->toBeEmpty();
+
+    $firstCarrier = $carriers->first();
+    $carrierName = $firstCarrier->carrier;
+
+    /** @var CarrierRepositoryInterface $carrierRepository */
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
+
+    // Look up carrier from repository
+    $lookedUpCarrier = $carrierRepository->find($carrierName);
+
+    expect($lookedUpCarrier)->not->toBeNull()
+        ->and($lookedUpCarrier->carrier)->toBe($carrierName)
+        ->and($lookedUpCarrier->packageTypes)->toBeArray()
+        ->and($lookedUpCarrier->packageTypes)->not->toBeEmpty();
+});
+
+it('returns null from repository when carrier not found', function () {
+    TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
+
+    /** @var CarrierRepositoryInterface $carrierRepository */
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
+
+    $carrier = $carrierRepository->find('UNKNOWN_CARRIER');
+
+    expect($carrier)->toBeNull();
+});
+
+it('throws exception from repository when carrier not found with findOrFail', function () {
+    TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);
+
+    /** @var CarrierRepositoryInterface $carrierRepository */
+    $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
+
+    $carrierRepository->findOrFail('UNKNOWN_CARRIER');
+})->throws(ModelNotFoundException::class);
+
+it('creates carrier directly with constructor without lookup', function () {
+    $carrier = new Carrier(['carrier' => 'POSTNL']);
+
+    // Constructor should create carrier with just the data passed, no lookup
+    expect($carrier->carrier)->toBe('POSTNL')
+        ->and($carrier->packageTypes)->toBeNull();
+});
+
+it('throws exception when carrier name does not match enum', function () {
+    new Carrier(['carrier' => 'NOT_AN_ENUM_VALUE']);
+})->throws(\InvalidArgumentException::class);

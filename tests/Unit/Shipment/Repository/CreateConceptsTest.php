@@ -9,10 +9,7 @@ namespace MyParcelNL\Pdk\Shipment\Repository;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -27,8 +24,10 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 const DEFAULT_INPUT_RECIPIENT = [
     'cc'         => 'NL',
@@ -92,29 +91,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
-                    ->withRecipient(DEFAULT_INPUT_RECIPIENT)
-            );
-        },
-    ],
-    'subscription carrier'                        => [
-        'input' => function () {
-            return factory(ShipmentCollection::class)->push(
-                factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withContractId(1234)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
             );
         },
@@ -123,13 +100,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(
                         array_merge(DEFAULT_INPUT_RECIPIENT, [
                             'address1' => 'Tuinstraat',
@@ -144,13 +115,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(
                         array_merge(DEFAULT_INPUT_RECIPIENT, [
                             'address1' => 'Tuinstraat',
@@ -164,13 +129,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withDeliveryOptions(
                         factory(DeliveryOptions::class)->withDate('2000-07-10 16:00:00')
                     )
@@ -183,13 +142,7 @@ it(
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
                     ->withDeliveryOptionsWithPickupLocationInTheNetherlands()
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
             );
         },
@@ -199,13 +152,7 @@ it(
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
                     ->withCustomsDeclaration(factory(CustomsDeclaration::class))
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(['cc' => CountryCodes::CC_CA] + DEFAULT_INPUT_RECIPIENT)
             );
         },
@@ -214,13 +161,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(['cc' => CountryCodes::CC_US] + DEFAULT_INPUT_RECIPIENT)
                     ->withCustomsDeclaration(factory(CustomsDeclaration::class)->withWeight(1000))
             );
@@ -230,13 +171,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withRecipient(['cc' => CountryCodes::CC_DE] + DEFAULT_INPUT_RECIPIENT)
                     ->withDeliveryOptionsWithPickupLocationInEU()
             );
@@ -246,13 +181,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::POSTNL)
                     ->withDeliveryOptions(
                         factory(DeliveryOptions::class)
                             ->withLabelAmount(2)
@@ -265,21 +194,8 @@ it(
     'multiple shipments'                          => [
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
-                factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_POSTNL_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    ),
-                factory(Shipment::class)->withCarrier(
-                    factory(Carrier::class)
-                        ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
-                        ->withOutboundFeatures(
-                            factory(PropositionCarrierFeatures::class)->withEverything()
-                        )
-                )
+                factory(Shipment::class)->withCarrier(RefTypesCarrierV2::POSTNL),
+                factory(Shipment::class)->withCarrier(RefTypesCarrierV2::DHL_FOR_YOU)
             );
         },
     ],
@@ -287,13 +203,7 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_GLS_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::GLS)
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
             );
         },
@@ -302,19 +212,33 @@ it(
         'input' => function () {
             return factory(ShipmentCollection::class)->push(
                 factory(Shipment::class)
-                    ->withCarrier(
-                        factory(Carrier::class)
-                            ->withId(Carrier::CARRIER_GLS_ID)
-                            ->withOutboundFeatures(
-                                factory(PropositionCarrierFeatures::class)->withEverything()
-                            )
-                    )
+                    ->withCarrier(RefTypesCarrierV2::GLS)
                     ->withDeliveryOptionsWithPickupLocationInTheNetherlands()
                     ->withRecipient(DEFAULT_INPUT_RECIPIENT)
             );
         },
     ],
 ]);
+
+it('includes contract_id in request when contractId is set on shipment', function () {
+    MockApi::enqueue(new ExamplePostIdsResponse());
+
+    $shipmentCollection = factory(ShipmentCollection::class)->push(
+        factory(Shipment::class)
+            ->withCarrier(RefTypesCarrierV2::POSTNL)
+            ->withContractId('99887766')
+            ->withRecipient(DEFAULT_INPUT_RECIPIENT)
+    );
+
+    $repository = Pdk::get(ShipmentRepository::class);
+    $repository->createConcepts($shipmentCollection->make());
+
+    $body     = json_decode(MockApi::ensureLastRequest()->getBody()->getContents(), true);
+    $shipment = Arr::get($body, 'data.shipments.0');
+
+    expect($shipment)->toHaveKey('contract_id')
+        ->and($shipment['contract_id'])->toBe(99887766);
+});
 
 it('creates shipment', function ($input, $path, $query, $contentType) {
     MockApi::enqueue(new ExamplePostIdsResponse());
@@ -339,7 +263,7 @@ it('creates shipment', function ($input, $path, $query, $contentType) {
     'single shipment' => [
         'input'       => [
             [
-                'carrier'            => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'            => ['id' => RefTypesCarrierV2::POSTNL],
                 'deliveryOptions'    => [
                     'date'            => '2022-07-10 16:00:00',
                     'shipmentOptions' => [
@@ -395,7 +319,7 @@ it('direct prints', function ($input, $printerGroupId, $accept) {
     'missing printer group'   => [
         'input'          => [
             [
-                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'   => ['id' => RefTypesCarrierV2::POSTNL],
                 'recipient' => DEFAULT_INPUT_RECIPIENT,
                 'sender'    => DEFAULT_INPUT_SENDER,
             ],
@@ -406,7 +330,7 @@ it('direct prints', function ($input, $printerGroupId, $accept) {
     'available printer group' => [
         'input'          => [
             [
-                'carrier'   => ['id' => Carrier::CARRIER_POSTNL_ID],
+                'carrier'   => ['id' => RefTypesCarrierV2::POSTNL],
                 'recipient' => DEFAULT_INPUT_RECIPIENT,
                 'sender'    => DEFAULT_INPUT_SENDER,
             ],
