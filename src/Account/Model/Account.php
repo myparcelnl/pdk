@@ -20,7 +20,10 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  */
 class Account extends Model
 {
-    public const FEATURE_ORDER_NOTES = 'allow_order_notes';
+    /**
+     * @deprecated Use PdkAccountFeaturesService::FEATURE_ORDER_NOTES instead.
+     */
+    public const FEATURE_ORDER_NOTES = 'ORDER_NOTES';
 
     public $attributes = [
         'id'                   => null,
