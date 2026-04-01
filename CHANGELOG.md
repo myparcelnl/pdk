@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.0](https://github.com/myparcelnl/pdk/compare/v3.3.3...v3.4.0) (2026-04-01)
+
+
+### :sparkles: New Features
+
+* **deps:** support symfony console v6 ([#433](https://github.com/myparcelnl/pdk/issues/433)) ([0a338d7](https://github.com/myparcelnl/pdk/commit/0a338d7f47cc4258eaaba2bc2e4f90c4895bbff7))
+
 ## [3.3.3](https://github.com/myparcelnl/pdk/compare/v3.3.2...v3.3.3) (2026-03-24)
 
 
