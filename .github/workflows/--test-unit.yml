@@ -2,6 +2,11 @@ name: '♻️ Run unit tests'
 
 on:
   workflow_call:
+    inputs:
+      php-version:
+        description: 'PHP version'
+        required: true
+        type: string
 
 jobs:
   test-unit:
@@ -14,21 +19,23 @@ jobs:
         id: coverage-cache
         with:
           path: ./clover.xml
-          key: coverage-clover-${{ vars.PHP_VERSION }}-${{ hashFiles('**/composer.lock', './src/**', './config/**', './tests/**', './.github/workflows/--test-unit.yml') }}
+          key: coverage-clover-${{ inputs.php-version }}-${{ hashFiles('**/composer.lock', './src/**', './config/**', './tests/**', './.github/workflows/--test-unit.yml') }}
 
       - uses: ./.github/actions/setup
         if: steps.coverage-cache.outputs.cache-hit != 'true'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          php-version: ${{ vars.PHP_VERSION }}
+          php-version: ${{ inputs.php-version }}
 
       - name: 'Run unit tests'
         if: steps.coverage-cache.outputs.cache-hit != 'true'
         shell: bash
+        env:
+          PHP_VERSION: ${{ inputs.php-version }}
         #language=bash
         run: |
           docker compose run php \
-            php -dmemory_limit=512M -dpcov.enabled=1 \
+            php -dmemory_limit=512M -dpcov.enabled=1 -dauto_prepend_file=tests/bootstrap.php \
             vendor/bin/pest \
               --colors=always \
               --coverage-clover=clover.xml \
