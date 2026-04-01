@@ -62,10 +62,10 @@ docker compose run php composer test
 
 #### Testing on a specific PHP version
 
-The default PHP version is 7.4. To test on a different version:
+The default PHP version is 7.4. To test on a different version, change `PHP_VERSION` in `.env` and rebuild:
 
 ```shell
-PHP_VERSION=8.5 docker compose build
+docker compose build
 docker compose run php composer test
 ```
 
