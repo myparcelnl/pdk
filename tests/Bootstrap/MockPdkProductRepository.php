@@ -59,12 +59,10 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
     private $saved;
 
     /**
-     * @param  array                                      $products
      * @param  \MyParcelNL\Pdk\Storage\MemoryCacheStorage $storage
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     * @param  array                                      $products
      */
-    public function __construct(array $products = self::DEFAULT_PRODUCTS, MemoryCacheStorage $storage)
+    public function __construct(MemoryCacheStorage $storage, array $products = self::DEFAULT_PRODUCTS)
     {
         parent::__construct($storage);
         $this->reset($products);

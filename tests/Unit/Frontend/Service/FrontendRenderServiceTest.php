@@ -32,11 +32,11 @@ it('renders component', function (callable $callback) {
 
     // Replace the randomly generated id with a placeholder.
     preg_match('/id="(pdk-.+?)"/m', $result, $id);
-    $replacedContent = strtr($result, [$id[1] => '__ID__']);
+    $replacedContent = isset($id[1]) ? strtr($result, [$id[1] => '__ID__']) : $result;
 
     // Extract the context and snapshot test it separately.
     preg_match('/data-pdk-context="(.+?)"/m', $replacedContent, $context);
-    $decodedContext = htmlspecialchars_decode($context[1]);
+    $decodedContext = isset($context[1]) ? htmlspecialchars_decode($context[1]) : '[]';
 
     if ('[]' !== $decodedContext) {
         $replacedContent = strtr($replacedContent, [$context[1] => '__CONTEXT__']);

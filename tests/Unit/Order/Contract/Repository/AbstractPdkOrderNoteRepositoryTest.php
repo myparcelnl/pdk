@@ -56,7 +56,8 @@ const DEFAULT_NOTES = [
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkOrderNoteRepositoryInterface::class => autowire(MockPdkOrderNoteRepository::class)->constructor(
+        PdkOrderNoteRepositoryInterface::class => autowire(MockPdkOrderNoteRepository::class)->constructorParameter(
+            'orderNotes',
             DEFAULT_NOTES
         ),
     ])

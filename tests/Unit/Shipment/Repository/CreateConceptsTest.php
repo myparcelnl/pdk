@@ -54,7 +54,6 @@ it(
         $mockIdsCollection  = new Collection($shipmentCollection->all());
 
         MockApi::enqueue(
-            new ExamplePostIdsResponse(),
             new ExamplePostIdsResponse(
                 $mockIdsCollection->map(function ($shipment) {
                     return [
@@ -385,7 +384,8 @@ it('direct prints', function ($input, $printerGroupId, $accept) {
     $request  = MockApi::ensureLastRequest();
 
     $uri          = $request->getUri();
-    $acceptHeader = Arr::first($request->getHeaders()['Accept']);
+    $acceptHeaders = $request->getHeaders()['Accept'] ?? [];
+    $acceptHeader = !empty($acceptHeaders) ? Arr::first($acceptHeaders) : null;
 
     expect($acceptHeader)
         ->toBe($accept)

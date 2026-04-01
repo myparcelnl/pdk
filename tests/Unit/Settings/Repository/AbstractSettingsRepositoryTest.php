@@ -19,7 +19,7 @@ use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructorParameter('settings', [
             AccountSettings::ID => [
                 AccountSettings::API_KEY => '1234567890',
             ],

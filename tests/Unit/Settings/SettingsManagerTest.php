@@ -33,7 +33,7 @@ uses()->group('frontend', 'settings');
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructor([
+        PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)->constructorParameter('settings', [
             LabelSettings::ID => [
                 LabelSettings::DESCRIPTION => 'description',
             ],

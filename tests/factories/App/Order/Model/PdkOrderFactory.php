@@ -151,8 +151,10 @@ final class PdkOrderFactory extends AbstractModelFactory
     public function withShipments($shipments = 1): self
     {
         return $this->withCollection('shipments', $shipments, function (ShipmentFactory $factory) {
+            $shop = AccountSettings::getShop();
+
             return $factory
-                ->withShopId(AccountSettings::getShop()->id)
+                ->withShopId($shop ? $shop->id : null)
                 ->withOrderId($this->attributes->get('externalIdentifier'))
                 ->withPrice($this->attributes->get('shipmentPrice'));
         });

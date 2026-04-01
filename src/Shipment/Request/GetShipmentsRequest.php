@@ -27,7 +27,9 @@ class GetShipmentsRequest extends Request
      */
     public function getPath(): string
     {
-        return sprintf('/shipments/%s', implode(';', $this->ids));
+        $scalarIds = array_filter($this->ids, 'is_scalar');
+
+        return sprintf('/shipments/%s', implode(';', $scalarIds));
     }
 
     /**

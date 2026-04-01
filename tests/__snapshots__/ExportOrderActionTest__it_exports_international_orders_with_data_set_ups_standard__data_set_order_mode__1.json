@@ -1,52 +1,92 @@
 {
   "data": {
-    "shipments": [
+    "orders": [
       {
-        "carrier": 12,
-        "customs_declaration": {
-          "contents": 1,
-          "invoice": "PDK-1",
-          "items": [
-            {
-              "amount": 1,
-              "classification": "000000",
-              "country": "NL",
-              "description": "test",
-              "item_value": {
-                "amount": 1000,
-                "currency": "EUR"
-              },
+        "external_identifier": "PDK-1",
+        "fulfilment_partner_identifier": null,
+        "invoice_address": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "company": "MyParcel",
+          "number": "31",
+          "person": "Felicia Parcel",
+          "postal_code": "2132 JE",
+          "street": "Antareslaan"
+        },
+        "order_date": "2030-01-01 12:00:00",
+        "order_lines": [
+          {
+            "quantity": 1,
+            "price": 0,
+            "price_after_vat": 0,
+            "product": {
+              "sku": "test",
+              "external_identifier": "PDK-1",
+              "name": "test",
+              "width": 0,
+              "length": 0,
+              "height": 0,
               "weight": 0
             }
-          ],
-          "weight": 1
-        },
-        "general_settings": {
-          "save_recipient_address": 0
-        },
-        "options": {
-          "package_type": 1,
-          "delivery_type": 2,
-          "insurance": {
-            "amount": 10000,
-            "currency": "EUR"
           }
-        },
-        "physical_properties": {
-          "weight": 1
-        },
-        "recipient": {
-          "cc": "US",
-          "city": "Cupertino",
-          "company": "MyParcel",
-          "number": "",
-          "person": "Felicia Parcel",
-          "postal_code": "95014",
-          "state": "CA",
-          "street": "1 Infinite Loop",
-          "vat_number": "NL123456789B01"
-        },
-        "reference_identifier": "PDK-1"
+        ],
+        "shipment": {
+          "carrier": 12,
+          "contract_id": null,
+          "customs_declaration": {
+            "contents": 1,
+            "invoice": "PDK-1",
+            "items": [
+              {
+                "amount": 1,
+                "classification": "000000",
+                "country": "NL",
+                "description": "test",
+                "item_value": {
+                  "amount": 1000,
+                  "currency": "EUR"
+                },
+                "weight": 0
+              }
+            ],
+            "weight": 1
+          },
+          "drop_off_point": null,
+          "options": {
+            "age_check": 0,
+            "collect": 0,
+            "delivery_type": 2,
+            "hide_sender": 0,
+            "insurance": {
+              "amount": 10000,
+              "currency": "EUR"
+            },
+            "label_description": "",
+            "large_format": 0,
+            "only_recipient": 0,
+            "priority_delivery": 0,
+            "package_type": 1,
+            "return": 0,
+            "same_day_delivery": 0,
+            "saturday_delivery": 0,
+            "signature": 0
+          },
+          "physical_properties": {
+            "weight": 0
+          },
+          "pickup": null,
+          "recipient": {
+            "cc": "US",
+            "city": "Cupertino",
+            "company": "MyParcel",
+            "number": "",
+            "person": "Felicia Parcel",
+            "postal_code": "95014",
+            "state": "CA",
+            "street": "1 Infinite Loop",
+            "vat_number": "NL123456789B01"
+          }
+        }
       }
     ]
   }

@@ -69,7 +69,7 @@ class DropOffService implements DropOffServiceInterface
                     $deviation ? $deviation->toArray() : []
                 );
 
-                if ($matchingDayArray['dispatch']) {
+                if (!empty($matchingDayArray['dispatch'])) {
                     $newDropOffDays[] = ['date' => $dropOffDate, 'weekday' => $weekday] + $matchingDayArray;
                     $items++;
                 }

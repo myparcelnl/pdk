@@ -286,8 +286,13 @@ it('insurance: calls calculate() on the options service when handling a delivery
         ->store();
 
     /** @var \Mockery\MockInterface&PdkOrderOptionsServiceInterface $spyService */
-    $spyService = mock(PdkOrderOptionsServiceInterface::class)->makePartial();
-    $spyService->shouldReceive('calculate')->once()->passthru();
+    $spyService = mock(PdkOrderOptionsServiceInterface::class);
+    $spyService->shouldReceive('calculate')->once()->andReturnUsing(function (PdkOrder $order) {
+        return $order;
+    });
+    $spyService->shouldReceive('calculateShipmentOptions')->andReturnUsing(function (PdkOrder $order) {
+        return $order;
+    });
 
     MockPdkFactory::create([PdkOrderOptionsServiceInterface::class => $spyService]);
 

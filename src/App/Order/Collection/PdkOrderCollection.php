@@ -35,9 +35,11 @@ class PdkOrderCollection extends Collection
     public function addApiIdentifiers(OrderCollection $orders): self
     {
         $this->each(function (PdkOrder $order) use ($orders) {
-            $order->apiIdentifier = $orders
-                ->firstWhere('externalIdentifier', $order->externalIdentifier)
-                ->uuid;
+            $match = $orders->firstWhere('externalIdentifier', $order->externalIdentifier);
+
+            if ($match) {
+                $order->apiIdentifier = $match->uuid;
+            }
         });
 
         return $this;

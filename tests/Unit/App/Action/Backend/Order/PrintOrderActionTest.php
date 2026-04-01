@@ -69,7 +69,7 @@ it('prints order as a4 pdf', function (array $settings, string $queryString) {
         ->with($settings)
         ->store();
 
-    if ($settings[LabelSettings::OUTPUT] === LabelSettings::OUTPUT_DOWNLOAD) {
+    if (isset($settings[LabelSettings::OUTPUT]) && $settings[LabelSettings::OUTPUT] === LabelSettings::OUTPUT_DOWNLOAD) {
         MockApi::enqueue(new ExampleGetShipmentLabelsLinkV2Response());
     } else {
         MockApi::enqueue(new ExampleGetShipmentLabelsPdfResponse());

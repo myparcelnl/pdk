@@ -41,7 +41,7 @@ class ZipService implements ZipServiceInterface
     {
         $this->validateHasFile();
 
-        $success = $this->currentFile->addFile($filename, $targetFilename ?? basename($filename));
+        $success = @$this->currentFile->addFile($filename, $targetFilename ?? basename($filename));
 
         if (! $success) {
             throw new ZipException('Failed to add file to zip');

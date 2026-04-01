@@ -13,12 +13,10 @@ use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 class MockPdkOrderRepository extends AbstractPdkOrderRepository
 {
     /**
-     * @param  PdkOrder|PdkOrder[]|PdkOrderCollection            $orders
      * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     * @param  PdkOrder|PdkOrder[]|PdkOrderCollection            $orders
      */
-    public function __construct($orders = [], StorageInterface $storage)
+    public function __construct(StorageInterface $storage, $orders = [])
     {
         parent::__construct($storage);
 
