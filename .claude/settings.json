@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "vendor/bin/phpstan analyse --no-progress --error-format=raw 2>/dev/null | head -20"
+          }
+        ]
+      }
+    ]
+  }
+}
