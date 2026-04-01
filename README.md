@@ -60,6 +60,17 @@ Run all tests:
 docker compose run php composer test
 ```
 
+#### Testing on a specific PHP version
+
+The default PHP version is 7.4. To test on a different version:
+
+```shell
+PHP_VERSION=8.3 docker compose build
+docker compose run php composer test
+```
+
+The build only needs to happen once per version. After that, `docker compose run` reuses the built image.
+
 ### Linting
 
 We use Prettier to format .json, .yml, .md and .html files.
