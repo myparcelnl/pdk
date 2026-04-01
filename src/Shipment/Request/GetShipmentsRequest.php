@@ -9,17 +9,24 @@ use MyParcelNL\Pdk\Api\Request\Request;
 class GetShipmentsRequest extends Request
 {
     /**
-     * @var array
+     * @var int[]|string[]
      */
     private $ids;
 
     /**
-     * @param  array $ids
+     * @param  int[]|string[] $ids
+     * @param  array          $config
      */
-    public function __construct(array $ids)
+    public function __construct(array $ids = [], array $config = [])
     {
+        foreach ($ids as $id) {
+            if (! is_scalar($id)) {
+                throw new \InvalidArgumentException('GetShipmentsRequest expects an array of scalar IDs');
+            }
+        }
+
         $this->ids = $ids;
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /**
@@ -27,9 +34,7 @@ class GetShipmentsRequest extends Request
      */
     public function getPath(): string
     {
-        $scalarIds = array_filter($this->ids, 'is_scalar');
-
-        return sprintf('/shipments/%s', implode(';', $scalarIds));
+        return sprintf('/shipments/%s', implode(';', $this->ids));
     }
 
     /**

@@ -30,9 +30,10 @@ beforeEach(function () {
 it('renders component', function (callable $callback) {
     $result = $callback();
 
-    // Replace the randomly generated id with a placeholder.
-    preg_match('/id="(pdk-.+?)"/m', $result, $id);
-    $replacedContent = isset($id[1]) ? strtr($result, [$id[1] => '__ID__']) : $result;
+    // Replace the randomly generated id with a placeholder (not all components have an id attribute).
+    $replacedContent = preg_match('/id="(pdk-.+?)"/m', $result, $id)
+        ? strtr($result, [$id[1] => '__ID__'])
+        : $result;
 
     // Extract the context and snapshot test it separately.
     preg_match('/data-pdk-context="(.+?)"/m', $replacedContent, $context);

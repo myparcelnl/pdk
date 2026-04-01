@@ -164,7 +164,7 @@ class ShipmentRepository extends ApiRepository
      */
     public function query(array $parameters): ShipmentCollection
     {
-        $request = new GetShipmentsRequest(['parameters' => $parameters]);
+        $request = new GetShipmentsRequest([], ['parameters' => $parameters]);
 
         return $this->retrieve($request->getUniqueKey(), function () use ($request) {
             /** @var \MyParcelNL\Pdk\Shipment\Response\GetShipmentsResponse $response */
