@@ -7,7 +7,6 @@ use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
-use MyParcelNL\Pdk\Api\Service\CapabilitiesApiService;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
 use MyParcelNL\Pdk\Api\Service\PdkCapabilitiesClient;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
@@ -208,7 +207,6 @@ return [
     /**
      * Capabilities API proxy
      */
-    CapabilitiesApiService::class              => autowire(),
     CapabilitiesClientInterface::class         => autowire(PdkCapabilitiesClient::class),
     CapabilitiesServiceInterface::class        => factory(function () {
         return new CapabilitiesService(\MyParcelNL\Pdk\Facade\Pdk::get(CapabilitiesClientInterface::class));
