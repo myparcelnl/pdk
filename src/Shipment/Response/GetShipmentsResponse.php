@@ -61,6 +61,7 @@ class GetShipmentsResponse extends ApiResponseWithBody
             'shopId'                   => $data['shop_id'],
             'barcode'                  => $data['barcode'],
             'carrier'                  => $carrierName,
+            'contractId'               => $data['contract_id'] ?? null,
             'collectionContact'        => $data['collection_contact'],
             'customsDeclaration'       => $this->filter($data['customs_declaration']),
             'delayed'                  => $data['delayed'],

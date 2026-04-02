@@ -119,7 +119,7 @@ class ShipmentOptions extends Model
     ];
 
     /**
-     * Intantiate a ShipmentOptions model based on their OrderOptionDefinition capabilities definition.
+     * Instantiate a ShipmentOptions model based on their OrderOptionDefinition capabilities definition.
      *
      * @param array $data
      * @return ShipmentOptions

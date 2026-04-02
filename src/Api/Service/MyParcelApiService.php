@@ -11,7 +11,7 @@ use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 /**
  * Service for making API calls to the MyParcel API.
  *
- * @deprecated use the generated SDK instead. Use specific services from the SdkApi namespace, such as \MyParcelNL\SdkApi\Service\Capabilities\ContractDefinitionsService.
+ * @deprecated use the generated SDK instead. Use specific services from the SdkApi namespace, such as those in the MyParcelNL\Pdk\SdkApi\Service\CoreApi namespace.
  */
 class MyParcelApiService extends AbstractApiService
 {

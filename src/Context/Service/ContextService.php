@@ -142,7 +142,7 @@ class ContextService implements ContextServiceInterface
 
         // All concrete Context-implementation *only* accept an array and not an existing model in their constructor.
         return new $contextCollectionClass(array_map(function ($item) {
-            return $item instanceof Model ? $item->getAttributes() : $item;
+            return $item instanceof Model ? $item->toArray() : $item;
         }, $collection->all()));
     }
 
