@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Order\Service;
 
 use MyParcelNL\Pdk\App\Options\Contract\OptionDefinitionHelperInterface;
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\App\Options\Helper\CapabilitiesDefaultHelper;
 use MyParcelNL\Pdk\App\Options\Helper\CarrierSettingsDefinitionHelper;
 use MyParcelNL\Pdk\App\Options\Helper\ProductSettingsDefinitionHelper;
 use MyParcelNL\Pdk\App\Options\Helper\ShipmentOptionsDefinitionHelper;
@@ -15,6 +16,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
 {
@@ -53,7 +55,11 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
             $flags & self::EXCLUDE_SHIPMENT_OPTIONS ? [] : [new ShipmentOptionsDefinitionHelper($order)],
             $flags & self::EXCLUDE_PRODUCT_SETTINGS ? [] : [new ProductSettingsDefinitionHelper($order)],
             $flags & self::EXCLUDE_CARRIER_SETTINGS ? [] : [new CarrierSettingsDefinitionHelper($order)],
+            // Capabilities default is always included — lowest priority fallback
+            new CapabilitiesDefaultHelper($order),
         ]);
+
+        $carrier = $order->deliveryOptions->carrier;
 
         /** @var OrderOptionDefinitionInterface[] $definitions */
         $definitions = Pdk::get('orderOptionDefinitions');
@@ -64,6 +70,17 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
             }, $helpers);
 
             $value = $this->triStateService->resolve(...$values);
+
+            // Enforce isRequired: if the carrier capability requires this option, force ENABLED
+            $capabilitiesKey = $definition->getCapabilitiesOptionsKey();
+
+            if ($capabilitiesKey && $carrier) {
+                $metadata = $carrier->getOptionMetadata($capabilitiesKey);
+
+                if ($metadata && $metadata['isRequired']) {
+                    $value = TriStateService::ENABLED;
+                }
+            }
 
             $order->deliveryOptions->shipmentOptions->setAttribute($definition->getShipmentOptionsKey(), $value);
         }
