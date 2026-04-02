@@ -17,7 +17,7 @@
 - Avoid testing specific carriers, focus on testing capabilities and expectations based on it (like available package types, delivery types, shipment options etc.)
 - Match class names to actual class names in the codebase
 - Write Mocks using existing PDK custom mocking utilities
-- Run all tests through docker: `docker compose run php`
+- Run all tests through docker: `docker compose run php composer test` or `docker compose run php composer vendor/bin/pest`
 - When encountering test failures, consider whether the failure is related to the users prompt or is an unrelated issue. If the failure is unrelated, it is be acceptable to ignore the failure for the purpose of this task.
 
 # Breaking change considerations
