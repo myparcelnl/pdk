@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
@@ -83,6 +85,7 @@ return [
     /**
      * Handles account settings.
      */
+    AccountFeaturesServiceInterface::class     => autowire(PdkAccountFeaturesService::class),
     AccountSettingsServiceInterface::class     => autowire(AccountSettingsService::class),
 
     /**

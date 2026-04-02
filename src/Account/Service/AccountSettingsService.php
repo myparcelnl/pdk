@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Service;
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
@@ -18,16 +19,25 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
     /**
+     * @var \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface
+     */
+    private $featuresService;
+
+    /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
     private $pdkAccountRepository;
 
     /**
      * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $pdkAccountRepository
+     * @param  \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface   $featuresService
      */
-    public function __construct(PdkAccountRepositoryInterface $pdkAccountRepository)
-    {
+    public function __construct(
+        PdkAccountRepositoryInterface  $pdkAccountRepository,
+        AccountFeaturesServiceInterface $featuresService
+    ) {
         $this->pdkAccountRepository = $pdkAccountRepository;
+        $this->featuresService      = $featuresService;
     }
 
     /**
@@ -153,7 +163,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
      */
     public function usesOrderMode(): bool
     {
-        return $this->getAccount()->generalSettings->orderMode;
+        return $this->featuresService->usesOrderMode();
     }
 
     /**
