@@ -5,8 +5,9 @@ on:
     inputs:
       php-version:
         description: 'PHP version'
-        required: true
+        required: false
         type: string
+        default: '7.4'
 
 jobs:
   test-unit:
