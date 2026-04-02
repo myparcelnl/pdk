@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.1](https://github.com/myparcelnl/pdk/compare/v3.4.0...v3.4.1) (2026-04-02)
+
+
+### :bug: Bug Fixes
+
+* fix several minor PHP 8 compatibility issues ([#434](https://github.com/myparcelnl/pdk/issues/434)) ([85f3825](https://github.com/myparcelnl/pdk/commit/85f382599165deeadac0d964a851e9cf356ce375))
+
 ## [3.4.0](https://github.com/myparcelnl/pdk/compare/v3.3.3...v3.4.0) (2026-04-01)
 
 
