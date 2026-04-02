@@ -126,12 +126,10 @@ class PostReturnShipmentsRequest extends Request
     {
         $schema = Pdk::get(CarrierSchema::class);
 
-        if ($shipment->carrier) {
-            $schema->setCarrier($shipment->carrier);
-        }
+        $schema->setCarrier($shipment->carrier);
 
         if (!$schema->hasReturnCapabilities()) {
-            $carrierName        = $shipment->carrier ? $shipment->carrier->carrier : 'unknown';
+            $carrierName        = $shipment->carrier->carrier;
             $propositionService = Pdk::get(PropositionService::class);
             $defaultCarrier     = $propositionService->getDefaultCarrier();
             Notifications::warning(
