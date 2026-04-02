@@ -40,23 +40,23 @@ class PostOrdersResponse extends ApiResponseWithBody
         $shipment = \array_merge($data['shipment'], ['carrier' => $carrierName]);
 
         return new Order([
-            'uuid'                        => $data['uuid'],
-            'shopId'                      => $data['shop_id'],
-            'accountId'                   => $data['account_id'],
-            'externalIdentifier'          => $data['external_identifier'],
-            'fulfilmentPartnerIdentifier' => $data['fulfilment_partner_identifier'],
-            'language'                    => $data['language'],
-            'orderDate'                   => $data['order_date'],
-            'status'                      => $data['status'],
-            'type'                        => $data['type'],
-            'price'                       => $data['price'],
-            'vat'                         => $data['vat'],
-            'priceAfterVat'               => $data['price_after_vat'],
-            'invoiceAddress'              => $data['invoice_address'],
+            'uuid'                        => $data['uuid'] ?? null,
+            'shopId'                      => $data['shop_id'] ?? null,
+            'accountId'                   => $data['account_id'] ?? null,
+            'externalIdentifier'          => $data['external_identifier'] ?? null,
+            'fulfilmentPartnerIdentifier' => $data['fulfilment_partner_identifier'] ?? null,
+            'language'                    => $data['language'] ?? null,
+            'orderDate'                   => $data['order_date'] ?? null,
+            'status'                      => $data['status'] ?? null,
+            'type'                        => $data['type'] ?? null,
+            'price'                       => $data['price'] ?? null,
+            'vat'                         => $data['vat'] ?? null,
+            'priceAfterVat'               => $data['price_after_vat'] ?? null,
+            'invoiceAddress'              => $data['invoice_address'] ?? null,
             'lines'                       => $data['order_lines'] ?? [],
             'shipment'                    => $shipment,
-            'createdAt'                   => $data['created_at'],
-            'updatedAt'                   => $data['updated_at'],
+            'createdAt'                   => $data['created_at'] ?? null,
+            'updatedAt'                   => $data['updated_at'] ?? null,
         ]);
     }
 }

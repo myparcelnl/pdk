@@ -918,10 +918,9 @@ it(
         PdkOrderCollectionFactory $factory,
         bool                      $accountHasCarrierSmallPackageContract,
         bool                      $carrierHasInternationalMailboxAllowed,
-        callable                  $assertions
+        callable                  $assertions,
+        bool                      $orderMode
     ) {
-        MockApi::enqueue(new ExamplePostShipmentsResponse());
-
         $collection  = $factory
             ->store()
             ->make();
@@ -940,13 +939,22 @@ it(
             ->withHasCarrierSmallPackageContract($accountHasCarrierSmallPackageContract)
             ->store();
 
+        MockApi::enqueue(
+            ...$orderMode
+                ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+                : [new ExamplePostShipmentsResponse()]
+        );
+
         $orderIds = $collection->pluck('externalIdentifier');
 
         Actions::execute(PdkBackendActions::EXPORT_ORDERS, ['orderIds' => $orderIds->toArray()]);
 
         $lastRequest = MockApi::ensureLastRequest();
         $requestBody = json_decode($lastRequest->getBody()->getContents(), true);
-        $assertions($requestBody['data']['shipments'][0]);
+        $shipment    = $orderMode
+            ? $requestBody['data']['orders'][0]['shipment']
+            : $requestBody['data']['shipments'][0];
+        $assertions($shipment);
     }
 )
     ->with([
@@ -1054,4 +1062,5 @@ it(
                 };
             },
         ],
-    ]);
+    ])
+    ->with('order mode toggle');
