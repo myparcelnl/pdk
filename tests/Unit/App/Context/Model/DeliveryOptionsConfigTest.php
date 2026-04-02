@@ -24,7 +24,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructor([
+        PdkProductRepositoryInterface::class => autowire(MockPdkProductRepository::class)->constructorParameter('products', [
             ['externalIdentifier' => 'PDK-1', 'isDeliverable' => true],
             ['externalIdentifier' => 'PDK-2', 'isDeliverable' => true, 'exportSignature' => true],
         ]),

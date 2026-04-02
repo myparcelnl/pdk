@@ -18,7 +18,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(
     new UsesMockPdkInstance([
         PdkSettingsRepositoryInterface::class => autowire(MockSettingsRepository::class)
-            ->constructor([
+            ->constructorParameter('settings', [
                 CarrierSettings::ID => [
                     'postnl' => [
                         CarrierSettings::PRICE_DELIVERY_TYPE_MORNING  => 1.3,

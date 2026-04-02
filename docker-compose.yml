@@ -2,8 +2,9 @@ x-common: &common
   build:
     context: .
     dockerfile: Dockerfile
-  # Set in .env
-  image: $IMAGE_NAME
+    args:
+      PHP_VERSION: ${PHP_VERSION:-7.4}
+  image: pdk-${PHP_VERSION:-7.4}
 
 services:
   php:

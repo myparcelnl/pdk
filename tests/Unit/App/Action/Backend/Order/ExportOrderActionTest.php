@@ -292,8 +292,8 @@ it('merges partial payload with existing order', function (
         // Check to make sure the carrier did not reset to the default - this is the only part that is easy to test due to not being affected by calculators
         ->and($responseOrders[0]['deliveryOptions'][DeliveryOptions::CARRIER])
         ->toBe($mergedDeliveryOptions[DeliveryOptions::CARRIER])
-        ->and($responseOrders[0]['physicalProperties'][DeliveryOptions::CARRIER])
-        ->toBe($mergedPhysicalProperties[DeliveryOptions::CARRIER])
+        ->and($responseOrders[0]['physicalProperties'][DeliveryOptions::CARRIER] ?? null)
+        ->toBe($mergedPhysicalProperties[DeliveryOptions::CARRIER] ?? null)
         ->and($response->getStatusCode())
         ->toBe(200)
         // Expect no errors to have been added to notifications
@@ -588,6 +588,7 @@ it(
             ->store();
 
         factory(OrderSettings::class)
+            ->withOrderMode($orderMode)
             ->withConceptShipments(true)
             ->store();
 

@@ -110,9 +110,8 @@ it('refreshes the url on each generation', function () {
 
 it('deletes all webhooks and clears local storage', function () {
     MockApi::enqueue(
-        new ExampleGetWebhookSubscriptionsResponse(), // ophalen bestaande webhooks
-        new Example204NoContentResponse(),            // verwijderen webhook 1
-        new Example204NoContentResponse()             // verwijderen webhook 2
+        new ExamplePostWebhooksResponse([['id' => 1], ['id' => 2]]), // aanmaken webhooks (subscribeMany)
+        new ExampleGetWebhookSubscriptionsResponse()                 // ophalen bestaande webhooks (FETCH_WEBHOOKS)
     );
 
     createWebhooks([

@@ -38,13 +38,15 @@ runs:
         touch .env
         echo "COMPOSER_HOME=/root/.composer" >> .env
         echo "COMPOSER_MEMORY_LIMIT=-1" >> .env
+        echo "PHP_VERSION=${{ inputs.php-version }}" >> .env
 
     - name: 'Install composer dependencies'
       shell: bash
       env:
-        IMAGE_NAME: ${{ steps.build.outputs.tagged-image }}
+        PHP_VERSION: ${{ inputs.php-version }}
       #language=bash
       run: |
+        docker compose build
         docker compose run \
           --volume $HOME/.composer:/root/.composer \
           php \
