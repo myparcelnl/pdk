@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockNotFoundPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use Symfony\Component\HttpFoundation\Request;
@@ -286,11 +287,6 @@ it('insurance: calls calculate() on the options service when handling a delivery
     // Root-cause: the endpoint previously called calculateShipmentOptions() only, which resolves
     // boolean TriState flags from settings but never runs InsuranceCalculator. Insurance was left
     // as TriState ENABLED (1), and the formatter produced 1 * 1_000_000 = 1_000_000.
-    factory(PdkOrder::class)
-        ->withExternalIdentifier('insurance-spy-order')
-        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('POSTNL'))
-        ->store();
-
     /** @var \Mockery\MockInterface&PdkOrderOptionsServiceInterface $spyService */
     $spyService = mock(PdkOrderOptionsServiceInterface::class);
     $spyService->shouldReceive('calculate')->once()->andReturnUsing(function (PdkOrder $order) {
@@ -301,6 +297,12 @@ it('insurance: calls calculate() on the options service when handling a delivery
     });
 
     MockPdkFactory::create([PdkOrderOptionsServiceInterface::class => $spyService]);
+    TestBootstrapper::hasAccount();
+
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('insurance-spy-order')
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier('POSTNL'))
+        ->store();
 
     $endpoint = new GetDeliveryOptionsEndpoint();
     $endpoint->handle(new Request(['orderId' => 'insurance-spy-order']));
