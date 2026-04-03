@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
@@ -168,6 +170,65 @@ class Carrier extends SdkBackedModel
     public function __construct(?array $data = null)
     {
         parent::__construct($data ?? []);
+    }
+
+    /**
+     * Cached allowlist of registered capabilities keys, shared across all Carrier instances.
+     *
+     * @var null|array<string, true>
+     */
+    private static $registeredCapabilitiesKeys;
+
+    /**
+     * The capabilities API may return options that don't have a corresponding OrderOptionDefinition
+     * in the PDK yet. Without filtering, the frontend would render UI for these unimplemented options,
+     * but the PDK wouldn't know how to calculate, store, or export them — leading to broken behavior.
+     *
+     * This override ensures only options backed by a registered definition are included in the
+     * serialized output, making the definitions the single gatekeeper for which options are available.
+     *
+     * @param  null|int $flags
+     *
+     * @return array
+     */
+    public function attributesToArray(?int $flags = null): array
+    {
+        $result = parent::attributesToArray($flags);
+
+        if (! isset($result['options']) || ! is_array($result['options'])) {
+            return $result;
+        }
+
+        $result['options'] = array_intersect_key($result['options'], self::getRegisteredCapabilitiesKeys());
+
+        return $result;
+    }
+
+    /**
+     * Build and cache the allowlist of capabilities keys that have a registered definition.
+     * Cached as a static property because definitions don't change at runtime, and this method
+     * is called on every Carrier serialization (potentially many times per request).
+     *
+     * @return array<string, true>
+     */
+    private static function getRegisteredCapabilitiesKeys(): array
+    {
+        if (self::$registeredCapabilitiesKeys === null) {
+            /** @var OrderOptionDefinitionInterface[] $definitions */
+            $definitions = Pdk::get('orderOptionDefinitions');
+
+            self::$registeredCapabilitiesKeys = [];
+
+            foreach ($definitions as $definition) {
+                $key = $definition->getCapabilitiesOptionsKey();
+
+                if ($key !== null) {
+                    self::$registeredCapabilitiesKeys[$key] = true;
+                }
+            }
+        }
+
+        return self::$registeredCapabilitiesKeys;
     }
 
     /**
