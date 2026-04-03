@@ -69,6 +69,16 @@ docker compose build
 docker compose run php composer test
 ```
 
+#### Updating snapshots
+
+To update test snapshots and format them consistently:
+
+```shell
+yarn test:unit:snapshot
+```
+
+This runs the Pest snapshot update inside Docker, then applies Prettier formatting on the host. Use this instead of running `composer test:unit:snapshot` directly inside Docker, as PHP's `json_encode` outputs 4-space indented JSON while the project standard (enforced by Prettier) is 2-space.
+
 ### Linting
 
 We use Prettier to format .json, .yml, .md and .html files.
