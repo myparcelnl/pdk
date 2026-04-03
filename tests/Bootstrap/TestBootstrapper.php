@@ -7,10 +7,10 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
@@ -28,15 +28,34 @@ final class TestBootstrapper
 
         Pdk::get(PropositionService::class)->clearActivePropositionId();
 
-        $platformId = Platform::MYPARCEL_ID;
-        if (Platform::SENDMYPARCEL_NAME === $platform) {
-            $platformId = Platform::SENDMYPARCEL_ID;
+        $platformId = Proposition::MYPARCEL_ID;
+        if (Proposition::SENDMYPARCEL_NAME === $platform) {
+            $platformId = Proposition::SENDMYPARCEL_ID;
         }
 
         self::hasApiKey();
 
         factory(Account::class, $platformId)
             ->withShops()
+            ->store();
+    }
+
+    /**
+     * Set up test environment for a specific proposition using Proposition constants
+     *
+     * @param  int $propositionId Use Proposition::MYPARCEL_ID, Proposition::SENDMYPARCEL_ID, etc.
+     * @return void
+     */
+    public static function forProposition(int $propositionId): void
+    {
+        MockPdkFactory::create();
+
+        Pdk::get(PropositionService::class)->clearActivePropositionId();
+
+        self::hasApiKey();
+
+        factory(Account::class)
+            ->forProposition($propositionId)
             ->store();
     }
 
@@ -50,7 +69,7 @@ final class TestBootstrapper
     {
         self::hasApiKey($apiKey);
 
-        factory(Account::class, Platform::MYPARCEL_ID)
+        factory(Account::class, Proposition::MYPARCEL_ID)
             ->withStatus(2)
             ->withContactInfo(factory(ContactDetails::class))
             ->withGeneralSettings(factory(AccountGeneralSettings::class))

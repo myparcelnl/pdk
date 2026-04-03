@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -37,18 +38,20 @@ class UpdateAccountAction implements ActionInterface
     protected $pdkSettingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface   $pdkSettingsRepository
-     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $pdkAccountRepository
-     * @param  \MyParcelNL\Pdk\Account\Repository\AccountRepository               $accountRepository
+     * @var \MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository
      */
+    protected CarrierCapabilitiesRepository $carrierCapabilitiesRepository;
+
     public function __construct(
-        PdkSettingsRepositoryInterface $pdkSettingsRepository,
-        PdkAccountRepositoryInterface  $pdkAccountRepository,
-        AccountRepository              $accountRepository
+        PdkSettingsRepositoryInterface     $pdkSettingsRepository,
+        PdkAccountRepositoryInterface      $pdkAccountRepository,
+        AccountRepository                  $accountRepository,
+        CarrierCapabilitiesRepository      $carrierCapabilitiesRepository
     ) {
-        $this->pdkSettingsRepository = $pdkSettingsRepository;
-        $this->pdkAccountRepository  = $pdkAccountRepository;
-        $this->accountRepository     = $accountRepository;
+        $this->pdkSettingsRepository          = $pdkSettingsRepository;
+        $this->pdkAccountRepository           = $pdkAccountRepository;
+        $this->accountRepository              = $accountRepository;
+        $this->carrierCapabilitiesRepository  = $carrierCapabilitiesRepository;
     }
 
     /**
@@ -79,9 +82,12 @@ class UpdateAccountAction implements ActionInterface
      *
      * @return void
      */
-    protected function fillAccount(Account $account): void
+    protected function setShopCarriers(Account $account): void
     {
-        // @TODO: Carrier data will be provided by contract definitions fetched via SDK-generated API clients
+        // Carriers are nested under shops, because one API key falls under one shop.
+        $shop = $account->shops->first(); // Multishop support is not yet implemented, so we just take the first shop for now
+        // Fetch the carriers available to the account and store them in the shop model for easy access throughout the plugin
+        $shop->carriers = $this->carrierCapabilitiesRepository->getContractDefinitions();
     }
 
     /**
@@ -150,7 +156,7 @@ class UpdateAccountAction implements ActionInterface
             throw $e;
         }
 
-        $this->fillAccount($account);
+        $this->setShopCarriers($account);
         $this->pdkAccountRepository->store($account);
         $this->setApiKeyValidity(true);
         Actions::execute(PdkBackendActions::UPDATE_SUBSCRIPTION_FEATURES);

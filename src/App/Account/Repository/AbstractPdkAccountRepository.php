@@ -58,7 +58,8 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
 
         return $this->retrieve('account', function () {
             // Api key marked as invalid or not set means no account available.
-            if (! $this->settingsRepository->all()->account->apiKeyValid
+            if (
+                ! $this->settingsRepository->all()->account->apiKeyValid
                 || ! $this->settingsRepository->all()->account->apiKey
             ) {
                 return null;
