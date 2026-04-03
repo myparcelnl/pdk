@@ -16,6 +16,14 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
 
+/**
+ * Proves all real registered definitions are correctly wired into the real models.
+ * Unlike the flow test (which uses a fake definition to test the mechanism), this test
+ * iterates all 17+ production definitions and verifies each one produces valid attributes
+ * with correct defaults on CarrierSettings, ProductSettings, ShipmentOptions, and
+ * Fulfilment\ShipmentOptions.
+ */
+
 usesShared(new UsesMockPdkInstance());
 
 it('registers all definition-derived attributes on CarrierSettings', function () {

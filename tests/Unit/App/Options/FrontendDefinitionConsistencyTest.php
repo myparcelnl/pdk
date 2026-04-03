@@ -13,6 +13,14 @@ use ReflectionClass;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
 
+/**
+ * Phase 2 guardrail: proves the frontend's hardcoded delivery options service map doesn't
+ * drift from definitions. Every allow* and price* entry in CONFIG_CARRIER_SETTINGS_MAP must
+ * either be backed by a registered definition or be a known non-shipment-option entry
+ * (delivery type / package type). Fails if someone adds a shipment option key to the
+ * hardcoded map without creating a definition — forcing the Phase 2 migration.
+ */
+
 usesShared(new UsesEachMockPdkInstance());
 
 it('documents which CONFIG_CARRIER_SETTINGS_MAP entries are backed by definitions', function () {

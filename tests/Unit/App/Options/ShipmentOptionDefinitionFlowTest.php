@@ -27,7 +27,12 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 /**
- * A minimal test-only option definition that exercises the full pipeline.
+ * Proves the option definition mechanism works end-to-end with a fake option.
+ * Registers a TestFlowOptionDefinition as the only definition (isolating from real ones)
+ * and verifies the entire pipeline: settings registration on all models, option calculation
+ * through the priority chain, carrier validation via capabilities key, and the V2 API
+ * export/import roundtrip (shipment options key ↔ capabilities key conversion).
+ *
  * Uses distinct PDK and capabilities keys to match the real definition convention,
  * where the shipment option key (legacy V1 naming) differs from the capabilities key (V2 naming).
  */
