@@ -1,0 +1,57 @@
+{
+  "description": "myparcel/order/postnl/nl_package_small",
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "maximum": 2000
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
+        "shipmentOptions": {
+          "required": ["tracked"],
+          "properties": {
+            "insurance": {
+              "enum": [
+                0,
+                10000,
+                25000,
+                50000,
+                100000,
+                150000,
+                200000,
+                250000,
+                300000,
+                350000,
+                400000,
+                450000,
+                500000,
+                null
+              ]
+            },
+            "largeFormat": {
+              "enum": [0]
+            },
+            "onlyRecipient": {
+              "enum": [-1, 0, 1]
+            },
+            "return": {
+              "enum": [0]
+            },
+            "signature": {
+              "enum": [-1, 0, 1]
+            },
+            "tracked": {
+              "enum": [1]
+            }
+          }
+        }
+      }
+    }
+  }
+}

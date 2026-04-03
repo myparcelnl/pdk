@@ -1,0 +1,25 @@
+{
+  "description": "order/dhlforyou/nl_package_small",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "deliveryType": {
+          "enum": ["standard", "pickup", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "ageCheck": {
+              "enum": [0, 1]
+            },
+            "onlyRecipient": {
+              "enum": [0, 1]
+            },
+            "signature": {
+              "enum": [0, 1]
+            }
+          }
+        }
+      }
+    }
+  }
+}

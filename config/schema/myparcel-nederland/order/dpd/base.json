@@ -1,0 +1,101 @@
+{
+  "description": "myparcel/order/dpd/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType", "pickupLocation"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["pickup"]
+                },
+                "pickupLocation": {
+                  "properties": {
+                    "locationCode": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "deliveryType": {
+                  "enum": ["standard", null]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "note": "Do not put (low) maximum here, for it will be enforced regardless of largeFormat in anyOf"
+        }
+      }
+    },
+    "recipient": {
+      "properties": {
+        "cc": {
+          "enum": [
+            "AT",
+            "BE",
+            "BG",
+            "CZ",
+            "DE",
+            "DK",
+            "EE",
+            "ES",
+            "FI",
+            "FR",
+            "GR",
+            "HU",
+            "IT",
+            "LT",
+            "LU",
+            "LV",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SE",
+            "SI",
+            "SK"
+          ]
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "date": {
+          "type": "null"
+        },
+        "deliveryType": {
+          "enum": ["pickup", "standard", null]
+        },
+        "packageType": {
+          "enum": ["package", "mailbox", null]
+        },
+        "shipmentOptions": {
+          "properties": {
+            "labelDescription": {
+              "maxLength": 50
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -200,7 +200,6 @@ class SchemaRepository extends Repository
     {
         $propositionService = Pdk::get(PropositionService::class);
         $proposition = $propositionService->getPropositionConfig();
-        $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-        return $platformConfig['name'];
+        return $proposition->proposition->key ?? '';
     }
 }
