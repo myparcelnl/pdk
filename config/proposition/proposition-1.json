@@ -29,14 +29,7 @@
           "time": "HH:mm"
         },
         "language": "nl-NL",
-        "supportedLanguages": [
-          "nl-NL",
-          "en-GB",
-          "de-DE",
-          "fr-FR",
-          "es-ES",
-          "it-IT"
-        ],
+        "supportedLanguages": ["nl-NL", "en-GB", "de-DE", "fr-FR", "es-ES", "it-IT"],
         "timezone": "Europe/Amsterdam"
       },
       "url": "https://subdomain.myparcel.me"
@@ -69,17 +62,8 @@
   },
   "billing": {
     "bankMandate": {
-      "flow": [
-        "manual",
-        "automatic"
-      ],
-      "manualBanks": [
-        "bunq",
-        "adyen",
-        "revolut",
-        "knab",
-        "other"
-      ]
+      "flow": ["manual", "automatic"],
+      "manualBanks": ["bunq", "adyen", "revolut", "knab", "other"]
     },
     "newInvoiceDates": {
       "monthly": "2024-06-01",
@@ -260,669 +244,6 @@
     "returns": "https://www.myparcel.nl/blog/retourneren/jouw-retourservice-optimaal-inrichten-bij-myparcel"
   },
   "contracts": {
-    "available": [
-      {
-        "carrier": {
-          "id": 1,
-          "name": "POSTNL"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE",
-            "MAILBOX",
-            "LETTER",
-            "DIGITAL_STAMP",
-            "SMALL_PACKAGE"
-          ],
-          "deliveryTypes": [
-            "MORNING_DELIVERY",
-            "STANDARD_DELIVERY",
-            "EVENING_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "AGE_CHECK",
-            "LARGE_FORMAT",
-            "ONLY_RECIPIENT",
-            "PRIORITY_DELIVERY",
-            "RETURN",
-            "SIGNATURE",
-            "RECEIPT_CODE",
-            "INSURANCE",
-            "TRACKED"
-          ],
-          "deliveryCountries": [
-            "NL",
-            "BE"
-          ],
-          "pickupCountries": [
-            "NL",
-            "BE",
-            "DK",
-            "SE",
-            "DE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-            "multiCollo": true,
-            "insuranceOptions": [
-              0,
-              10000,
-              25000,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "inboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "SIGNATURE",
-            "RETURN",
-            "AGE_CHECK",
-            "ONLY_RECIPIENT",
-            "SAME_DAY_DELIVERY",
-            "LARGE_FORMAT",
-            "INSURANCE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insuranceSteps": [
-              0,
-              10000,
-              25000,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ],
-          "unsupportedParameters": null,
-          "availableFeatures": [
-            "deliveryDaysWindow",
-            "dropOffDays",
-            "dropOffDelay",
-            "pickupMapAllowLoadMore"
-          ],
-          "shipmentOptionsPerPackageType": {
-            "package": [
-              "only_recipient",
-              "signature"
-            ],
-            "mailbox": [
-              "priority_delivery"
-            ],
-            "letter": [],
-            "digital_stamp": [],
-            "package_small": [
-              "only_recipient",
-              "signature"
-            ]
-          },
-          "allowFakeDelivery": true
-        }
-      },
-      {
-        "carrier": {
-          "id": 3,
-          "name": "CHEAP_CARGO"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PALLET"
-          ],
-          "deliveryCountries": [],
-          "pickupCountries": []
-        },
-        "deliveryOptions": {
-          "addressFields": [],
-          "unsupportedParameters": [],
-          "availableFeatures": [],
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 4,
-          "name": "DPD"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE",
-            "MAILBOX"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [],
-          "deliveryCountries": [
-            "AT",
-            "BE",
-            "BG",
-            "CZ",
-            "DK",
-            "EE",
-            "FI",
-            "FR",
-            "DE",
-            "GR",
-            "HU",
-            "IE",
-            "IT",
-            "LV",
-            "LI",
-            "LT",
-            "LU",
-            "NL",
-            "PL",
-            "PT",
-            "RO",
-            "SK",
-            "SI",
-            "ES",
-            "SE"
-          ],
-          "pickupCountries": [
-            "AT",
-            "BE",
-            "CZ",
-            "DK",
-            "EE",
-            "FI",
-            "FR",
-            "DE",
-            "HU",
-            "LV",
-            "LT",
-            "LU",
-            "NL",
-            "PL",
-            "PT",
-            "SK",
-            "SI",
-            "ES",
-            "GB"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "needsCustomerInfo": true
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ],
-          "unsupportedParameters": null,
-          "availableFeatures": [
-            "dropOffDays",
-            "dropOffDelay"
-          ],
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 5,
-          "name": "INSTABOX"
-        },
-        "hasCutoffTime": false,
-        "hasPostponedDelivery": false,
-        "outboundFeatures": {
-          "deliveryCountries": [],
-          "pickupCountries": []
-        },
-        "deliveryOptions": {
-          "addressFields": null,
-          "unsupportedParameters": null,
-          "availableFeatures": null,
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 9,
-          "name": "DHL_FOR_YOU"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE",
-            "MAILBOX",
-            "SMALL_PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY",
-            "EVENING_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "AGE_CHECK",
-            "ONLY_RECIPIENT",
-            "SAME_DAY_DELIVERY",
-            "SIGNATURE",
-            "SATURDAY_DELIVERY",
-            "HIDE_SENDER",
-            "INSURANCE"
-          ],
-          "deliveryCountries": [
-            "NL",
-            "BE"
-          ],
-          "pickupCountries": [
-            "NL",
-            "BE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insuranceOptions": [
-              0,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "inboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "SIGNATURE",
-            "RETURN",
-            "AGE_CHECK",
-            "ONLY_RECIPIENT",
-            "SAME_DAY_DELIVERY",
-            "LARGE_FORMAT"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [
-            "city",
-            "postalCode"
-          ],
-          "unsupportedParameters": null,
-          "availableFeatures": [
-            "deliveryDaysWindow",
-            "dropOffDays",
-            "dropOffDelay"
-          ],
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 10,
-          "name": "DHL_PARCEL_CONNECT"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "SIGNATURE",
-            "INSURANCE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insurance": [
-              0,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "inboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "INSURANCE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insuranceOptions": [
-              50000
-            ]
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": null,
-          "unsupportedParameters": null,
-          "availableFeatures": [],
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 11,
-          "name": "DHL_EUROPLUS"
-        },
-        "hasCutoffTime": false,
-        "hasPostponedDelivery": false,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "SIGNATURE",
-            "SATURDAY_DELIVERY",
-            "HIDE_SENDER",
-            "INSURANCE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insuranceOptions": [
-              0,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": null,
-          "unsupportedParameters": null,
-          "availableFeatures": [],
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 12,
-          "name": "UPS_STANDARD"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "AGE_CHECK",
-            "ONLY_RECIPIENT",
-            "RETURN",
-            "SIGNATURE",
-            "COLLECT",
-            "INSURANCE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insuranceOptions": [
-              0,
-              10000,
-              25000,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ],
-          "unsupportedParameters": null,
-          "availableFeatures": null,
-          "allowFakeDelivery": false
-        }
-      },
-      {
-        "carrier": {
-          "id": 13,
-          "name": "UPS_EXPRESS_SAVER"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "EXPRESS_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "AGE_CHECK",
-            "ONLY_RECIPIENT",
-            "RETURN",
-            "SIGNATURE",
-            "COLLECT"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "insuranceOptions": [
-              10000,
-              25000,
-              50000,
-              100000,
-              150000,
-              200000,
-              250000,
-              300000,
-              350000,
-              400000,
-              450000,
-              500000
-            ]
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [
-            "postalCode",
-            "street",
-            "city"
-          ],
-          "unsupportedParameters": [
-            "package_type"
-          ],
-          "availableFeatures": null,
-          "allowFakeDelivery": false
-        }
-      }
-    ],
-    "availableForCustomCredentials": [
-      {
-        "carrier": {
-          "id": 7,
-          "name": "BOL"
-        }
-      },
-      {
-        "carrier": {
-          "id": 9,
-          "name": "DHL_FOR_YOU"
-        }
-      },
-      {
-        "carrier": {
-          "id": 10,
-          "name": "DHL_PARCEL_CONNECT"
-        }
-      },
-      {
-        "carrier": {
-          "id": 11,
-          "name": "DHL_EUROPLUS"
-        }
-      },
-      {
-        "carrier": {
-          "id": 4,
-          "name": "DPD"
-        }
-      },
-      {
-        "carrier": {
-          "id": 12,
-          "name": "UPS_STANDARD"
-        }
-      },
-      {
-        "carrier": {
-          "id": 13,
-          "name": "UPS_EXPRESS_SAVER"
-        }
-      },
-      {
-        "carrier": {
-          "id": 14,
-          "name": "GLS"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY",
-            "PICKUP_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "SIGNATURE",
-            "SATURDAY_DELIVERY",
-            "INSURANCE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-            "insuranceOptions": [
-              50000
-            ]
-          },
-          "deliveryOptions": {
-            "addressFields": [],
-            "unsupportedParameters": [],
-            "availableFeatures": [],
-            "allowFakeDelivery": false
-          }
-        }
-      },
-      {
-        "carrier": {
-          "id": 16,
-          "name": "TRUNKRS"
-        },
-        "hasCutoffTime": true,
-        "hasPostponedDelivery": true,
-        "outboundFeatures": {
-          "packageTypes": [
-            "PACKAGE"
-          ],
-          "deliveryTypes": [
-            "STANDARD_DELIVERY"
-          ],
-          "shipmentOptions": [
-            "AGE_CHECK",
-            "ONLY_RECIPIENT",
-            "RECEIPT_CODE",
-            "FRESH_FOOD",
-            "FROZEN",
-            "SAME_DAY_DELIVERY",
-            "SIGNATURE"
-          ],
-          "metadata": {
-            "labelDescriptionLength": 45
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [],
-          "unsupportedParameters": [],
-          "availableFeatures": [],
-          "allowFakeDelivery": true
-        }
-      }
-    ],
     "enablePostNLCustomContract": true,
     "inbound": {
       "default": {
@@ -949,15 +270,7 @@
   },
   "countryCode": "NL",
   "deliveryOptions": {
-    "dropOffDays": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
+    "dropOffDays": [0, 1, 2, 3, 4, 5, 6],
     "mondayDelivery": true
   },
   "enableAcademy": true,
@@ -1009,10 +322,7 @@
       "time": "HH:mm"
     },
     "language": "nl-NL",
-    "supportedLanguages": [
-      "nl-NL",
-      "en-GB"
-    ],
+    "supportedLanguages": ["nl-NL", "en-GB"],
     "timezone": "Europe/Amsterdam"
   },
   "proposition": {
@@ -1025,18 +335,11 @@
     "carrier": {
       "withRecommendedPhoneNumber": [],
       "withRequiredCompany": [],
-      "withRequiredEmail": [
-        "UPS_STANDARD",
-        "UPS_EXPRESS_SAVER",
-        "DPD"
-      ],
+      "withRequiredEmail": ["UPS_STANDARD", "UPS_EXPRESS_SAVER", "DPD"],
       "withRequiredHeight": [],
       "withRequiredLabelDescription": [],
       "withRequiredLength": [],
-      "withRequiredPhoneNumber": [
-        "UPS_STANDARD",
-        "UPS_EXPRESS_SAVER"
-      ],
+      "withRequiredPhoneNumber": ["UPS_STANDARD", "UPS_EXPRESS_SAVER"],
       "withRequiredWidth": []
     },
     "country": {
@@ -1058,9 +361,7 @@
         "CH",
         "US"
       ],
-      "withBoxNumber": [
-        "BE"
-      ],
+      "withBoxNumber": ["BE"],
       "withPartnerLinks": [
         "AT",
         "BE",
@@ -1116,9 +417,7 @@
       ],
       "withRecommendedPhoneNumber": [],
       "withRequiredCompany": [],
-      "withRequiredEmail": [
-        "NO"
-      ],
+      "withRequiredEmail": ["NO"],
       "withRequiredHeight": [],
       "withRequiredLabelDescription": [],
       "withRequiredLength": [],
@@ -1141,15 +440,9 @@
       ]
     },
     "shippingRules": {
-      "countryCodes": [
-        "NL",
-        "BE"
-      ],
+      "countryCodes": ["NL", "BE"],
       "maxAmount": 1,
-      "regionCodes": [
-        "EU",
-        "ROW"
-      ]
+      "regionCodes": ["EU", "ROW"]
     }
   },
   "support": {
@@ -1173,12 +466,7 @@
       {
         "id": 2,
         "name": "System",
-        "subTypes": [
-          "plugin_question",
-          "plugin_help_needed",
-          "shipment_export_help_needed",
-          "other_system_question"
-        ],
+        "subTypes": ["plugin_question", "plugin_help_needed", "shipment_export_help_needed", "other_system_question"],
         "extraField": {
           "name": "webshopSoftware",
           "optional": true
@@ -1187,20 +475,12 @@
       {
         "id": 3,
         "name": "ProductsAndPrices",
-        "subTypes": [
-          "products",
-          "rates",
-          "packaging",
-          "webshop_orders"
-        ]
+        "subTypes": ["products", "rates", "packaging", "webshop_orders"]
       },
       {
         "id": 4,
         "name": "MyInvoice",
-        "subTypes": [
-          "invoice_change_details",
-          "invoice_other_question"
-        ],
+        "subTypes": ["invoice_change_details", "invoice_other_question"],
         "extraField": {
           "name": "invoiceNumber",
           "optional": true
