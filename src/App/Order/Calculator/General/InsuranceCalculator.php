@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
@@ -27,7 +26,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      *               explicit per-carrier tier definitions.
      * @var string
      */
-    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.' . ShipmentOptions::INSURANCE;
+    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.insurance';
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface

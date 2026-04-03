@@ -6,6 +6,19 @@ namespace MyParcelNL\Pdk\App\Endpoint\Resource;
 
 use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -76,32 +89,37 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
          * New tracking implementation: When tracked option is not present or explicitly enabled we do nothing (tracking is enabled by default in the order service)
          * Only when tracking is explicitly disabled we include the "noTracking" option with an ADR-0013 compliant empty object as value
          */
-        if ($shipmentOptions->tracked === TriStateService::DISABLED) {
+        $trackedKey = (new TrackedDefinition())->getShipmentOptionsKey();
+
+        if ($shipmentOptions->{$trackedKey} === TriStateService::DISABLED) {
             $formattedOptions[$orderApiShipmentOptions['no_tracking']] = new ArrayObject();
         }
 
+        $insuranceKey        = (new InsuranceDefinition())->getShipmentOptionsKey();
+        $labelDescriptionKey = ShipmentOptions::LABEL_DESCRIPTION;
+
         $optionMap = [
-            ShipmentOptions::AGE_CHECK => $orderApiShipmentOptions['requires_age_verification'],
-            ShipmentOptions::SIGNATURE => $orderApiShipmentOptions['requires_signature'],
-            ShipmentOptions::ONLY_RECIPIENT => $orderApiShipmentOptions['recipient_only_delivery'],
-            ShipmentOptions::LARGE_FORMAT => $orderApiShipmentOptions['oversized_package'],
-            ShipmentOptions::DIRECT_RETURN => $orderApiShipmentOptions['print_return_label_at_drop_off'],
-            ShipmentOptions::HIDE_SENDER => $orderApiShipmentOptions['hide_sender'],
-            ShipmentOptions::LABEL_DESCRIPTION => $orderApiShipmentOptions['custom_label_text'],
-            ShipmentOptions::PRIORITY_DELIVERY => $orderApiShipmentOptions['priority_delivery'],
-            ShipmentOptions::RECEIPT_CODE => $orderApiShipmentOptions['requires_receipt_code'],
-            ShipmentOptions::SAME_DAY_DELIVERY => $orderApiShipmentOptions['same_day_delivery'],
-            ShipmentOptions::SATURDAY_DELIVERY => $orderApiShipmentOptions['saturday_delivery'],
-            ShipmentOptions::COLLECT => $orderApiShipmentOptions['scheduled_collection'],
+            (new AgeCheckDefinition())->getShipmentOptionsKey()         => $orderApiShipmentOptions['requires_age_verification'],
+            (new SignatureDefinition())->getShipmentOptionsKey()        => $orderApiShipmentOptions['requires_signature'],
+            (new OnlyRecipientDefinition())->getShipmentOptionsKey()    => $orderApiShipmentOptions['recipient_only_delivery'],
+            (new LargeFormatDefinition())->getShipmentOptionsKey()      => $orderApiShipmentOptions['oversized_package'],
+            (new DirectReturnDefinition())->getShipmentOptionsKey()     => $orderApiShipmentOptions['print_return_label_at_drop_off'],
+            (new HideSenderDefinition())->getShipmentOptionsKey()       => $orderApiShipmentOptions['hide_sender'],
+            $labelDescriptionKey                                        => $orderApiShipmentOptions['custom_label_text'],
+            (new PriorityDeliveryDefinition())->getShipmentOptionsKey() => $orderApiShipmentOptions['priority_delivery'],
+            (new ReceiptCodeDefinition())->getShipmentOptionsKey()      => $orderApiShipmentOptions['requires_receipt_code'],
+            (new SameDayDeliveryDefinition())->getShipmentOptionsKey()  => $orderApiShipmentOptions['same_day_delivery'],
+            (new SaturdayDeliveryDefinition())->getShipmentOptionsKey() => $orderApiShipmentOptions['saturday_delivery'],
+            (new CollectDefinition())->getShipmentOptionsKey()          => $orderApiShipmentOptions['scheduled_collection'],
         ];
 
         foreach ($filteredOptions as $key => $value) {
-            if ($key === ShipmentOptions::INSURANCE) {
+            if ($key === $insuranceKey) {
                 // Insurance amount converted to integer micro as per ADR-0014
                 $amount = ((int)$value) * 1_000_000;
                 $currency = new Currency();
                 $formattedOptions[$orderApiShipmentOptions['insurance']] = ['amount' => $amount, 'currency' => $currency->currency];
-            } elseif ($key === ShipmentOptions::LABEL_DESCRIPTION) {
+            } elseif ($key === $labelDescriptionKey) {
                 // Custom label text option needs to be formatted as an object with a "text" property
                 $formattedOptions[$orderApiShipmentOptions['custom_label_text']] = ['text' => (string) $value];
             } else {

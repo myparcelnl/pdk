@@ -7,20 +7,28 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\App\Cart\Collection\PdkCartFeeCollection;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCartFee;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsFeesServiceInterface;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
 {
-    private const FRONTEND_SHIPMENT_OPTIONS = [
-        ShipmentOptions::ONLY_RECIPIENT,
-        ShipmentOptions::PRIORITY_DELIVERY,
-        ShipmentOptions::SIGNATURE,
-    ];
+    /**
+     * @return string[]
+     */
+    private static function getFrontendShipmentOptionKeys(): array
+    {
+        return [
+            (new OnlyRecipientDefinition())->getShipmentOptionsKey(),
+            (new PriorityDeliveryDefinition())->getShipmentOptionsKey(),
+            (new SignatureDefinition())->getShipmentOptionsKey(),
+        ];
+    }
 
     /**
      * @param  string                                         $identifier
@@ -82,7 +90,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
         $fees = [];
 
         foreach ($deliveryOptions->shipmentOptions->toArrayWithoutNull() as $key => $option) {
-            if (! in_array($key, self::FRONTEND_SHIPMENT_OPTIONS, true)) {
+            if (! in_array($key, self::getFrontendShipmentOptionKeys(), true)) {
                 continue;
             }
 
