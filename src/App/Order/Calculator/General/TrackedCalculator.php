@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -67,7 +67,7 @@ final class TrackedCalculator extends AbstractPdkOrderOptionCalculator
     private function isDhlForYouToNonLocal(): bool
     {
         $carrier     = $this->order->deliveryOptions->carrier;
-        $isDhlForYou = Carrier::CARRIER_DHL_FOR_YOU_NAME === $carrier->name;
+        $isDhlForYou = RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU === $carrier->carrier;
         $isNotLocal  = ! $this->countryService->isLocalCountry($this->order->shippingAddress->cc);
 
         return $isDhlForYou && $isNotLocal;

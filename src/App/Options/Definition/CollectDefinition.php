@@ -4,48 +4,34 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-class CollectDefinition implements OrderOptionDefinitionInterface
+final class CollectDefinition extends AbstractOrderOptionDefinition
 {
-    /**
-     * @inheritDoc
-     */
-    public function getCarrierSettingsKey(): ?string
+    public function getShipmentOptionsKey(): ?string
     {
-        return CarrierSettings::EXPORT_COLLECT;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['collect']);
+    }
+
+    public function getCapabilitiesOptionsKey(): ?string
+    {
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['scheduled_collection'];
     }
 
     /**
-     * @inheritDoc
+     * @TODO: Collect has a priceCollect setting but no allowCollect toggle. The price is sent
+     *        to the delivery options frontend but the consumer cannot toggle collect on/off.
+     *        Consider adding allowCollect or removing priceCollect.
      */
-    public function getProductSettingsKey(): ?string
+    public function getAllowSettingsKey(): ?string
     {
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getShipmentOptionsKey(): ?string
+    public function getProductSettingsKey(): ?string
     {
-        return ShipmentOptions::COLLECT;
-    }
-
-    public function getPropositionKey(): ?string
-    {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_COLLECT_NAME;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validate(CarrierSchema $carrierSchema): bool
-    {
-        return $carrierSchema->canHaveCollect();
+        return null;
     }
 }

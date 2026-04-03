@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
@@ -74,14 +73,14 @@ return [
                     CarrierSettings::EXPORT_SIGNATURE                        => false,
                     CarrierSettings::EXPORT_FROZEN                           => false,
                     CarrierSettings::EXPORT_FRESH_FOOD                       => false,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_EVENING             => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS             => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY              => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_MORNING             => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY             => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY             => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY              => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY             => 0,
                     CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP              => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY            => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY            => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD            => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY            => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY            => 0,
+                    CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY            => 0,
                     CarrierSettings::PRICE_ONLY_RECIPIENT                    => 0,
                     CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
                     CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX              => 0,

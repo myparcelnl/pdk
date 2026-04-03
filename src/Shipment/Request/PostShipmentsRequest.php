@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
@@ -65,8 +66,8 @@ class PostShipmentsRequest extends Request
     public function getHeaders(): array
     {
         return [
-                'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
-            ] + parent::getHeaders();
+            'Content-Type' => 'application/vnd.shipment+json;charset=utf-8;version=1.1',
+        ] + parent::getHeaders();
     }
 
     /**
@@ -93,10 +94,8 @@ class PostShipmentsRequest extends Request
     protected function encodeShipment(Shipment $shipment): array
     {
         return Utils::filterNull([
-            'carrier'              => $shipment->carrier->id,
-            'contract_id'          => $shipment->carrier->contractId
-                ? (int) $shipment->carrier->contractId
-                : null,
+            'carrier'              => $this->getCarrierId($shipment->carrier),
+            'contract_id'          => $shipment->contractId ? (int) $shipment->contractId : null,
             'customs_declaration'  => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'       => $this->getDropOffPoint($shipment),
             'general_settings'     => [
@@ -170,7 +169,6 @@ class PostShipmentsRequest extends Request
         if (! $shipmentOptions) {
             return [];
         }
-
         $options = array_map(function ($item) {
             return $this->triStateService->resolve($item);
         }, $shipmentOptions->toSnakeCaseArray());
@@ -228,5 +226,14 @@ class PostShipmentsRequest extends Request
     private function getWeight(Shipment $shipment): int
     {
         return $shipment->customsDeclaration->weight ?? $shipment->physicalProperties->weight ?? 0;
+    }
+
+    private function getCarrierId(Carrier $carrier): int
+    {
+        $id = Utils::convertToId($carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+        if (! $id) {
+            throw new \InvalidArgumentException(sprintf('Cannot encode shipment: carrier %s is not mapped to an ID.', $carrier->carrier));
+        }
+        return $id;
     }
 }

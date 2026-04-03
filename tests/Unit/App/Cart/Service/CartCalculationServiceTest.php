@@ -11,17 +11,18 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 const LINES_FITS_IN_MAILBOX = [
     [
@@ -152,7 +153,7 @@ const SHIPPING_ADDRESS_BE = [
 ];
 
 uses()->group('checkout');
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('calculates mailbox percentage', function (array $lines, float $expected) {
     /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
@@ -181,7 +182,7 @@ it(
     function (array $lines, array $shippingAddress, array $result, bool $allowInternationalMailbox = false) {
         factory(Settings::class)
             ->withCarrierPostNl(
-                factory(CarrierSettings::class, Carrier::CARRIER_POSTNL_NAME)
+                factory(CarrierSettings::class, RefCapabilitiesSharedCarrierV2::POSTNL)
                     ->withAllowInternationalMailbox($allowInternationalMailbox)
                     ->withDeliveryOptionsEnabled(true)
             )
