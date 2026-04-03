@@ -9,8 +9,9 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('disables onlyRecipient for pickup delivery type for DHL For You', function () {
     $order = new PdkOrder([

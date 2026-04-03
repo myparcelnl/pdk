@@ -5,111 +5,126 @@
   "referenceIdentifier": "",
   "barcode": "",
   "carrier": {
-    "externalIdentifier": "DHL_FOR_YOU",
-    "id": 9,
-    "name": "DHL_FOR_YOU",
-    "enabled": true,
-    "isDefault": true,
-    "optional": false,
-    "primary": false,
-    "type": "main",
-    "inboundFeatures": {
-      "packageTypes": ["PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY"],
-      "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
-      "metadata": {
-        "labelDescriptionLength": 45
+    "carrier": "DHL_FOR_YOU",
+    "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+    "options": {
+      "cooledDelivery": [],
+      "freshFood": [],
+      "frozen": [],
+      "hideSender": [],
+      "oversizedPackage": [],
+      "priorityDelivery": [],
+      "recipientOnlyDelivery": [],
+      "requiresAgeVerification": [],
+      "requiresReceiptCode": [],
+      "requiresSignature": [],
+      "returnOnFirstFailedDelivery": [],
+      "sameDayDelivery": [],
+      "saturdayDelivery": [],
+      "scheduledCollection": [],
+      "tracked": [],
+      "insurance": {
+        "insuredAmount": {
+          "default": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "min": {
+            "currency": "EUR",
+            "amount": 0
+          },
+          "max": {
+            "currency": "EUR",
+            "amount": 500000
+          }
+        }
       }
     },
-    "outboundFeatures": {
-      "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-      "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-      "deliveryCountries": ["NL", "BE"],
-      "pickupCountries": ["NL", "BE"],
-      "shipmentOptions": [
-        "AGE_CHECK",
-        "ONLY_RECIPIENT",
-        "SAME_DAY_DELIVERY",
-        "SIGNATURE",
-        "SATURDAY_DELIVERY",
-        "HIDE_SENDER",
-        "INSURANCE"
-      ],
-      "metadata": {
-        "labelDescriptionLength": 45,
-        "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-      }
-    },
-    "deliveryOptions": {
-      "addressFields": ["city", "postalCode"],
-      "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
-      "allowFakeDelivery": false
+    "deliveryTypes": [
+      "MORNING_DELIVERY",
+      "STANDARD_DELIVERY",
+      "EVENING_DELIVERY",
+      "PICKUP_DELIVERY",
+      "SAME_DAY_DELIVERY",
+      "EXPRESS_DELIVERY",
+      "EARLY_MORNING_DELIVERY"
+    ],
+    "collo": {
+      "max": 10
     }
   },
   "delayed": false,
   "delivered": false,
   "deliveryOptions": {
     "carrier": {
-      "externalIdentifier": "DHL_FOR_YOU",
-      "id": 9,
-      "name": "DHL_FOR_YOU",
-      "enabled": true,
-      "isDefault": true,
-      "optional": false,
-      "primary": false,
-      "type": "main",
-      "inboundFeatures": {
-        "packageTypes": ["PACKAGE"],
-        "deliveryTypes": ["STANDARD_DELIVERY"],
-        "shipmentOptions": ["SIGNATURE", "RETURN", "AGE_CHECK", "ONLY_RECIPIENT", "SAME_DAY_DELIVERY", "LARGE_FORMAT"],
-        "metadata": {
-          "labelDescriptionLength": 45
+      "carrier": "DHL_FOR_YOU",
+      "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+      "options": {
+        "cooledDelivery": [],
+        "freshFood": [],
+        "frozen": [],
+        "hideSender": [],
+        "oversizedPackage": [],
+        "priorityDelivery": [],
+        "recipientOnlyDelivery": [],
+        "requiresAgeVerification": [],
+        "requiresReceiptCode": [],
+        "requiresSignature": [],
+        "returnOnFirstFailedDelivery": [],
+        "sameDayDelivery": [],
+        "saturdayDelivery": [],
+        "scheduledCollection": [],
+        "tracked": [],
+        "insurance": {
+          "insuredAmount": {
+            "default": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "min": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "max": {
+              "currency": "EUR",
+              "amount": 500000
+            }
+          }
         }
       },
-      "outboundFeatures": {
-        "packageTypes": ["PACKAGE", "MAILBOX", "SMALL_PACKAGE"],
-        "deliveryTypes": ["STANDARD_DELIVERY", "EVENING_DELIVERY", "PICKUP_DELIVERY"],
-        "deliveryCountries": ["NL", "BE"],
-        "pickupCountries": ["NL", "BE"],
-        "shipmentOptions": [
-          "AGE_CHECK",
-          "ONLY_RECIPIENT",
-          "SAME_DAY_DELIVERY",
-          "SIGNATURE",
-          "SATURDAY_DELIVERY",
-          "HIDE_SENDER",
-          "INSURANCE"
-        ],
-        "metadata": {
-          "labelDescriptionLength": 45,
-          "insuranceOptions": [0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000]
-        }
-      },
-      "deliveryOptions": {
-        "addressFields": ["city", "postalCode"],
-        "availableFeatures": ["deliveryDaysWindow", "dropOffDays", "dropOffDelay"],
-        "allowFakeDelivery": false
+      "deliveryTypes": [
+        "MORNING_DELIVERY",
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY",
+        "SAME_DAY_DELIVERY",
+        "EXPRESS_DELIVERY",
+        "EARLY_MORNING_DELIVERY"
+      ],
+      "collo": {
+        "max": 10
       }
     },
     "labelAmount": 1,
     "shipmentOptions": {
-      "labelDescription": "Vliegtuig",
-      "insurance": 0,
       "ageCheck": 1,
       "return": 1,
       "hideSender": -1,
+      "insurance": 0,
       "largeFormat": 1,
       "onlyRecipient": 1,
       "priorityDelivery": -1,
-      "receiptCode": -1,
       "sameDayDelivery": 1,
+      "saturdayDelivery": 0,
       "signature": 0,
       "tracked": -1,
+      "receiptCode": -1,
       "collect": 0,
       "excludeParcelLockers": -1,
       "freshFood": -1,
       "frozen": -1,
-      "saturdayDelivery": 0
+      "cooledDelivery": -1,
+      "labelDescription": "Vliegtuig"
     },
     "deliveryType": "standard",
     "packageType": "package"

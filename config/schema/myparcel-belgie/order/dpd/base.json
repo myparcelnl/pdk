@@ -1,0 +1,111 @@
+{
+  "description": "belgie/order/dpd/base",
+  "type": "object",
+  "allOf": [
+    {
+      "anyOf": [
+        {
+          "properties": {
+            "deliveryOptions": {
+              "required": ["deliveryType", "pickupLocation"],
+              "properties": {
+                "deliveryType": {
+                  "enum": ["pickup"]
+                },
+                "pickupLocation": {
+                  "properties": {
+                    "locationCode": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "deliveryOptions": {
+              "properties": {
+                "deliveryType": {
+                  "enum": ["standard", null]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "properties": {
+    "physicalProperties": {
+      "properties": {
+        "weight": {
+          "minimum": 1,
+          "maximum": 31500
+        }
+      }
+    },
+    "recipient": {
+      "properties": {
+        "cc": {
+          "enum": [
+            "AT",
+            "BE",
+            "BG",
+            "CZ",
+            "DE",
+            "DK",
+            "EE",
+            "ES",
+            "FI",
+            "FR",
+            "GR",
+            "HU",
+            "IT",
+            "LT",
+            "LU",
+            "LV",
+            "NL",
+            "PL",
+            "PT",
+            "RO",
+            "SE",
+            "SI",
+            "SK"
+          ]
+        }
+      }
+    },
+    "deliveryOptions": {
+      "properties": {
+        "shipmentOptions": {
+          "properties": {
+            "ageCheck": {
+              "enum": [0]
+            },
+            "labelDescription": {
+              "maxLength": 50
+            },
+            "largeFormat": {
+              "enum": [0]
+            },
+            "onlyRecipient": {
+              "enum": [0]
+            },
+            "return": {
+              "enum": [0]
+            },
+            "sameDayDelivery": {
+              "enum": [0]
+            },
+            "signature": {
+              "enum": [0]
+            }
+          }
+        }
+      }
+    }
+  }
+}

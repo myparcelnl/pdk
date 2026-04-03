@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
+use RuntimeException;
 
 class PropositionService
 {
@@ -190,7 +191,7 @@ class PropositionService
         } else {
             $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
-        return $this->carrierRepository->get(['id' => $defaultCarrierId]);
+        return $this->carrierRepository->findByLegacyId($defaultCarrierId);
     }
 
     /**

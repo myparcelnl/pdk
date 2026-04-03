@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -16,8 +17,9 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('invokes trunkrs calculators and enforces age check rule', function () {
     $reset = mockPdkProperty('orderCalculators', [CarrierSpecificCalculator::class]);
@@ -25,7 +27,7 @@ it('invokes trunkrs calculators and enforces age check rule', function () {
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier('trunkrs')
+                ->withCarrier('TRUNKRS')
                 ->withShipmentOptions(
                     factory(ShipmentOptions::class)
                         ->withAgeCheck(TriStateService::ENABLED)
@@ -46,5 +48,3 @@ it('invokes trunkrs calculators and enforces age check rule', function () {
 
     $reset();
 });
-
-

@@ -96,6 +96,11 @@ abstract class AbstractOrderAction implements ActionInterface
                 }
             }
 
+            // Map delivery options from Capabilities definitions (like packageType: PACKAGE). The `fromCapabilitiesDefinitions` will process old-style definitions unchanged.
+            if (array_key_exists('deliveryOptions', $attributes) && is_array($attributes['deliveryOptions'])) {
+                $attributes['deliveryOptions'] = DeliveryOptions::fromCapabilitiesDefinitions($attributes['deliveryOptions']);
+            }
+
             return $pdkOrder->fill($attributes);
         });
     }

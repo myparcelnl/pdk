@@ -21,8 +21,11 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 function doTest(
     string    $carrier,
@@ -75,7 +78,7 @@ it('calculates options for $carrier', function (
      */
 
     'postnl: age check enabled enables signature and only recipient' => [
-        'carrier'           => Carrier::CARRIER_POSTNL_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::POSTNL,
         'orderCb'           => null,
         'shipmentOptionsCb' => function () {
             return function (ShipmentOptionsFactory $factory) {
@@ -93,7 +96,7 @@ it('calculates options for $carrier', function (
     ],
 
     'postnl: age check disabled does not disable signature and only recipient' => [
-        'carrier'           => Carrier::CARRIER_POSTNL_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::POSTNL,
         'orderCb'           => null,
         'shipmentOptionsCb' => function () {
             return function (ShipmentOptionsFactory $factory) {
@@ -111,7 +114,7 @@ it('calculates options for $carrier', function (
     ],
 
     'postnl: disables return and only recipient when pickup is enabled' => [
-        'carrier'           => Carrier::CARRIER_POSTNL_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::POSTNL,
         'orderCb'           => function () {
             return function (PdkOrderFactory $factory) {
                 $deliveryOptions = factory(DeliveryOptions::class)
@@ -133,7 +136,7 @@ it('calculates options for $carrier', function (
      */
 
     'dhlforyou: when age check and only recipient are enabled, age check wins' => [
-        'carrier'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
         'orderCb'           => null,
         'shipmentOptionsCb' => function () {
             return function (ShipmentOptionsFactory $factory) {
@@ -150,7 +153,7 @@ it('calculates options for $carrier', function (
     ],
 
     'dhlforyou: when age check and only recipient both are disabled, nothing happens' => [
-        'carrier'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
         'orderCb'           => null,
         'shipmentOptionsCb' => function () {
             return function (ShipmentOptionsFactory $factory) {
@@ -167,7 +170,7 @@ it('calculates options for $carrier', function (
     ],
 
     'dhlforyou: when country is not local, age check, only recipient and same day delivery are turned off' => [
-        'carrier'           => Carrier::CARRIER_DHL_FOR_YOU_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
         'orderCb'           => function () {
             return function (PdkOrderFactory $factory) {
                 return $factory->withShippingAddress(factory(ShippingAddress::class)->inFrance());
@@ -194,7 +197,7 @@ it('calculates options for $carrier', function (
      */
 
     'dhleuroplus: when signature is disabled, enable it anyway' => [
-        'carrier'           => Carrier::CARRIER_DHL_EUROPLUS_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS,
         'orderCb'           => null,
         'shipmentOptionsCb' => function () {
             return function (ShipmentOptionsFactory $factory) {
@@ -209,7 +212,7 @@ it('calculates options for $carrier', function (
      */
 
     'dhlparcelconnect: when signature is disabled, enable it anyway' => [
-        'carrier'           => Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
+        'carrier'           => RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT,
         'orderCb'           => null,
         'shipmentOptionsCb' => function () {
             return function (ShipmentOptionsFactory $factory) {
@@ -235,8 +238,8 @@ it('should do nothing for other carriers', function (string $carrierName) {
         ]
     );
 })->with([
-    Carrier::CARRIER_BPOST_NAME,
-    Carrier::CARRIER_DPD_NAME,
+    RefCapabilitiesSharedCarrierV2::BPOST,
+    RefCapabilitiesSharedCarrierV2::DPD,
 ]);
 
 it('removes delivery date for dpd', function (string $date, ?string $expected) {
@@ -246,7 +249,7 @@ it('removes delivery date for dpd', function (string $date, ?string $expected) {
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withDate($date)
-                ->withCarrier(Carrier::CARRIER_DPD_NAME)
+                ->withCarrier(RefCapabilitiesSharedCarrierV2::DPD)
         );
 
     $order = $orderFactory->make();
@@ -268,7 +271,7 @@ it('enables tracked for postnl small package order outside of nl', function (str
         ->withShippingAddress(factory(ShippingAddress::class)->withCc($countryCode))
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier(Carrier::CARRIER_POSTNL_NAME)
+                ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
                 ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME)
         );
 

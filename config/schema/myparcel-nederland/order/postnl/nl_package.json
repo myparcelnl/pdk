@@ -1,0 +1,69 @@
+{
+  "description": "myparcel/order/postnl/nl_package",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "shipmentOptions": {
+          "properties": {
+            "insurance": {
+              "enum": [
+                0,
+                10000,
+                25000,
+                50000,
+                100000,
+                150000,
+                200000,
+                250000,
+                300000,
+                350000,
+                400000,
+                450000,
+                500000,
+                null
+              ]
+            },
+            "receiptCode": {
+              "enum": [-1, 0, 1]
+            }
+          }
+        }
+      }
+    },
+    "multiCollo": {
+      "enum": [1]
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "deliveryOptions": {
+          "required": ["deliveryType", "pickupLocation"],
+          "properties": {
+            "deliveryType": {
+              "enum": ["pickup"]
+            },
+            "shipmentOptions": {
+              "properties": {
+                "signature": {
+                  "enum": [1]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "deliveryOptions": {
+          "properties": {
+            "deliveryType": {
+              "enum": ["morning", "standard", "evening", null]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

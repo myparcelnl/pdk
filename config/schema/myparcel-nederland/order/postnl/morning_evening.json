@@ -1,0 +1,23 @@
+{
+  "description": "myparcel/order/postnl/morning_evening",
+  "properties": {
+    "deliveryOptions": {
+      "properties": {
+        "shipmentOptions": {
+          "required": ["onlyRecipient", "signature"],
+          "properties": {
+            "ageCheck": {
+              "enum": [0]
+            },
+            "onlyRecipient": {
+              "enum": [1]
+            },
+            "signature": {
+              "enum": [1]
+            }
+          }
+        }
+      }
+    }
+  }
+}

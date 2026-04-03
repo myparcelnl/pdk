@@ -21,10 +21,12 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
-it('handles customer information', function (bool $shareCustomerInfo, bool $needsCustomerInfo) {
+it('handles customer information', function (bool $shareCustomerInfo, bool $needsCustomerInfo, string $carrierName = RefTypesCarrierV2::POSTNL) {
     factory(OrderSettings::class)
         ->withShareCustomerInformation($shareCustomerInfo)
         ->store();
@@ -32,8 +34,8 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
     $reset = mockPdkProperty('orderCalculators', [CustomerInformationCalculator::class]);
 
     $fakeCarrier = factory(Carrier::class)
-        ->fromPostNL()
-        ->withOutboundFeatures(['metadata' => [PropositionCarrierMetadata::FEATURE_NAME_NEEDS_CUSTOMER_INFO => $needsCustomerInfo]]);
+        ->fromCarrier($carrierName);
+    // @TODO: figure this out
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($fakeCarrier))
@@ -100,6 +102,6 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
         'do not share customer information' => [false],
     ])
     ->with([
-        'carrier that does not need customer info' => [false],
-        'carrier that needs customer info'         => [true],
+        'carrier that does not need customer info' => [false, RefTypesCarrierV2::POSTNL],
+        'carrier that needs customer info'         => [true, RefTypesCarrierV2::DPD],
     ]);

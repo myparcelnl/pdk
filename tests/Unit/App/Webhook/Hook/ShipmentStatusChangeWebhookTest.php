@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -27,7 +28,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('webhook');
 
-usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger());
+usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger(), new UsesAccountMock());
 
 function dispatchWebhook(array $hookBody): array
 {
