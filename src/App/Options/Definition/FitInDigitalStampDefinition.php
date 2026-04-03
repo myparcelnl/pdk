@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
-final class FitInDigitalStampDefinition implements OrderOptionDefinitionInterface
+final class FitInDigitalStampDefinition extends AbstractOrderOptionDefinition
 {
-    public function getCarrierSettingsKey(): ?string
+    public function getShipmentOptionsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getCapabilitiesOptionsKey(): ?string
     {
         return null;
     }
 
     public function getProductSettingsKey(): ?string
     {
-        return ProductSettings::FIT_IN_DIGITAL_STAMP;
+        return 'fitInDigitalStamp';
     }
 
-    public function getShipmentOptionsKey(): ?string
+    public function getAllowSettingsKey(): ?string
     {
         return null;
     }
 
-    public function getPropositionKey(): ?string
+    public function getPriceSettingsKey(): ?string
     {
         return null;
     }

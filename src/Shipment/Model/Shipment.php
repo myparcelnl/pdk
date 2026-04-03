@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
@@ -11,7 +12,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
 use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
@@ -21,7 +22,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
  * @property null|string                                            $referenceIdentifier
  * @property null|string                                            $externalIdentifier
  * @property null|string                                            $barcode
- * @property null|\MyParcelNL\Pdk\Carrier\Model\Carrier             $carrier
+ * @property \MyParcelNL\Pdk\Carrier\Model\Carrier                  $carrier
+ * @property null|string                                            $contractId
  * @property null|string                                            $collectionContact
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property bool                                                   $delayed
@@ -49,6 +51,10 @@ use MyParcelNL\Pdk\Facade\Pdk;
  */
 class Shipment extends Model
 {
+    use HasCarrierAttribute {
+        setCarrierAttribute as protected setCarrierAttributeFromTrait;
+    }
+
     public const SHIPMENT_TYPE_STANDARD       = 1;
     public const SHIPMENT_TYPE_RETURN         = 2;
     public const SHIPMENT_TYPE_MULTI_COLLO    = 3;
@@ -92,6 +98,7 @@ class Shipment extends Model
         'externalIdentifier'       => null,
         'barcode'                  => null,
         'carrier'                  => null,
+        'contractId'               => null,
         'collectionContact'        => null,
         'customsDeclaration'       => null,
         'delayed'                  => false,
@@ -176,8 +183,8 @@ class Shipment extends Model
         'referenceIdentifier'      => 'string',
         'externalIdentifier'       => 'string',
         'barcode'                  => 'string',
-        'carrier'                  => Carrier::class,
         'collectionContact'        => 'string',
+        'contractId'               => 'string',
         'customsDeclaration'       => CustomsDeclaration::class,
         'delayed'                  => 'bool',
         'delivered'                => 'bool',
@@ -229,23 +236,28 @@ class Shipment extends Model
             $this->updated = new DateTime('now', $timeZone);
         }
 
-        return $this->except([
+        $array = $this->except([
             'customsDeclaration',
             'physicalProperties',
             'recipient',
             'sender',
         ], Arrayable::STORABLE_NULL);
+
+        // Carrier should be the (raw) name only, not the full resolved carrier data.
+        $array['carrier'] = $this->attributes['carrier'];
+
+        return $array;
     }
 
     /**
-     * @param  int|string|Carrier $carrier
+     * @param  string|\MyParcelNL\Pdk\Carrier\Model\Carrier|array|null $carrier
      *
      * @return $this
      * @throws \Exception
      */
     protected function setCarrierAttribute($carrier): self
     {
-        $this->attributes['carrier'] = $carrier;
+        $this->setCarrierAttributeFromTrait($carrier);
         $this->updateCarrier();
 
         return $this;
@@ -271,15 +283,24 @@ class Shipment extends Model
      */
     private function updateCarrier(): void
     {
-        // In case the model hasn't fully initialized yet (e.g. in the constructor).
-        if (is_string($this->attributes['deliveryOptions']) || is_string($this->attributes['carrier'])) {
+        // In case the model hasn't fully initialized yet (e.g. deliveryOptions is still a class string).
+        if (is_string($this->attributes['deliveryOptions'])) {
             return;
         }
 
-        if ($this->carrier) {
-            $this->attributes['deliveryOptions']['carrier'] = $this->carrier;
-        } elseif ($this->deliveryOptions->carrier) {
-            $this->attributes['carrier'] = $this->deliveryOptions->carrier;
+        // $this->attributes['carrier'] is now always null|string (carrier name), never a class string.
+        if ($this->attributes['carrier']) {
+            $this->attributes['deliveryOptions']['carrier'] = $this->attributes['carrier'];
+        } else {
+            // Pull the carrier name from the deliveryOptions attributes directly to avoid going through
+            // the getter (which may resolve to the default carrier).
+            $doAttributes = is_array($this->attributes['deliveryOptions'])
+                ? $this->attributes['deliveryOptions']
+                : $this->deliveryOptions->getAttributes();
+            $carrierName = $doAttributes['carrier'] ?? null;
+            if ($carrierName && is_string($carrierName)) {
+                $this->attributes['carrier'] = $carrierName;
+            }
         }
     }
 }

@@ -7,6 +7,8 @@ namespace MyParcelNL\Pdk\Shipment\Response;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -51,14 +53,15 @@ class GetShipmentsResponse extends ApiResponseWithBody
         $options            = $data['options'] ?? [];
         $physicalProperties = $data['physical_properties'] ?? [];
 
+        // Convert carrier ID to name
+        $carrierName = Utils::convertToName($data['carrier_id'] ?? null, Carrier::CARRIER_NAME_ID_MAP);
+
         return new Shipment([
             'id'                       => $data['id'],
             'shopId'                   => $data['shop_id'],
             'barcode'                  => $data['barcode'],
-            'carrier'                  => [
-                'id'         => $data['carrier_id'],
-                'contractId' => $data['contract_id'],
-            ],
+            'carrier'                  => $carrierName,
+            'contractId'               => $data['contract_id'] ?? null,
             'collectionContact'        => $data['collection_contact'],
             'customsDeclaration'       => $this->filter($data['customs_declaration']),
             'delayed'                  => $data['delayed'],

@@ -11,9 +11,7 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
@@ -39,16 +37,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     * @deprecated use getCarriers()
-     */
-    public function getCarrierOptions(): CarrierCollection
-    {
-        return $this->getCarriers();
-    }
-
-    /**
-     * Return the carriers for the current shop, filtered by the carriers available in the proposition service.
+     * Return the carriers saved for the current shop.
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection
@@ -59,33 +48,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             return new CarrierCollection();
         }
 
-        try {
-            $allowedCarriers = $this->getPropositionCarriers();
-        } catch (\InvalidArgumentException $e) {
-            Logger::error('Could not fetch carriers from proposition service: ' . $e->getMessage());
-            return new CarrierCollection();
-        }
-
-        return $shop->carriers
-            ->filter(function (Carrier $carrier) use ($allowedCarriers) {
-                $isAllowed = $allowedCarriers->contains('name', $carrier->name);
-
-                return $isAllowed && $carrier->enabled && !empty($carrier->outboundFeatures->toArray());
-            })
-            ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
-                $aIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierA) {
-                    return $allowedCarrier->name === $carrierA->name;
-                }, true);
-
-                $bIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierB) {
-                    return $allowedCarrier->name === $carrierB->name;
-                }, true);
-
-                return $aIndex === $bIndex
-                    ? $carrierA->contractId <=> $carrierB->contractId
-                    : $aIndex <=> $bIndex;
-            })
-            ->values();
+        return $shop->carriers;
     }
 
     /**
@@ -117,7 +80,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $account ? $account->generalSettings->hasCarrierSmallPackageContract : false;
     }
 
-
     /**
      * @param  string $feature
      *
@@ -143,9 +105,9 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         return $this->hasAccount()
             && (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
-                ->contains(function (string $carrier) {
-                    return $this->hasCarrier($carrier);
-                });
+            ->contains(function (string $carrier) {
+                return $this->hasCarrier($carrier);
+            });
     }
 
     /**
@@ -165,19 +127,8 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         return $this->hasAccount()
             && $this->getCarriers()
-                ->contains(function (Carrier $carrier) use ($carrierName) {
-                    return $carrier->name === $carrierName;
-                });
-    }
-
-    /**
-     * Get supported carriers from proposition service.
-     *
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     */
-    private function getPropositionCarriers(): CarrierCollection
-    {
-        $propositionService = Pdk::get(PropositionService::class);
-        return $propositionService->getCarriers(true);
+            ->contains(function (Carrier $carrier) use ($carrierName) {
+                return $carrier->carrier === $carrierName;
+            });
     }
 }

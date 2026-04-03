@@ -10,12 +10,7 @@ use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 
 /**
- * @method static CarrierCollection carrierCollectionToLegacyFormat(CarrierCollection $carriers)
- * @method static Carrier convertCarrierToLegacyFormat(Carrier $carrier)
- * @method static string getLegacyIdentifier(string $externalIdentifier)
- * @method static array getLegacyPackageTypes()
- * @method static array getLegacyDeliveryTypes()
- * @method static array getLegacyShipmentOptions()
+ * @method static string getLegacyCarrierIdentifier(string $externalIdentifier)
  * @see \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface
  */
 final class FrontendData extends Facade

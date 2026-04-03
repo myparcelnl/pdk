@@ -64,6 +64,7 @@ it('saves settings', function (string $productId, array $settings, array $newSet
                 ProductSettings::PACKAGE_TYPE             => TriStateService::INHERIT,
                 ProductSettings::EXPORT_FRESH_FOOD        => TriStateService::INHERIT,
                 ProductSettings::EXPORT_FROZEN            => TriStateService::INHERIT,
+                ProductSettings::EXPORT_COOLED_DELIVERY   => TriStateService::INHERIT,
                 ProductSettings::EXCLUDE_PARCEL_LOCKERS   => TriStateService::INHERIT,
             ], $newSettings ?? $settings)
         );

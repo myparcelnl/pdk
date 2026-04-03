@@ -37,20 +37,33 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
     protected $cloned = false;
 
     /**
+     * @deprecated
+     * By default, convert attribute keys to camel case. Set to false to disable this behavior and use keys as-is.
+     * In a future major release, this will default to false and eventually be removed, so it's recommended to set this to false and update any code that relies on automatic camel case conversion.
+     * @var bool
+     */
+    protected $convertCase = true;
+
+    /**
      * @param  null|array $data
      */
     public function __construct(?array $data = null)
     {
         $this->bootIfNotBooted();
 
-        $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
-        $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
+        if ($this->convertCase) {
+            $this->guarded    = Utils::changeArrayKeysCase($this->guarded);
+            $this->attributes = $this->guarded + Utils::changeArrayKeysCase($this->attributes);
+        } else {
+            $this->attributes = $this->guarded + $this->attributes;
+        }
 
         $this->initializeTraits();
 
-        $convertedData = Utils::changeArrayKeysCase($data ?? []);
-
-        $this->fill($convertedData + $this->attributes);
+        if ($this->convertCase) {
+            $data = Utils::changeArrayKeysCase($data ?? []);
+        }
+        $this->fill($data + $this->attributes);
     }
 
     public static function isBooted(): bool

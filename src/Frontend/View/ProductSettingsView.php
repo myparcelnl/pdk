@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Form\Components;
@@ -85,18 +86,41 @@ class ProductSettingsView extends AbstractSettingsView
             ),
 
             /**
-             * Export options.
+             * Export options — dynamically built from definitions that have both
+             * a product settings key and a shipment options key. Product-only
+             * definitions (countryOfOrigin, customsCode, etc.) stay in their
+             * dedicated sections above.
              */
             new SettingsDivider($this->getSettingKey('export_options')),
-            new InteractiveElement(ProductSettings::EXPORT_AGE_CHECK, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_INSURANCE, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_SIGNATURE, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_RETURN, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_FRESH_FOOD, Components::INPUT_TRI_STATE),
-            new InteractiveElement(ProductSettings::EXPORT_FROZEN, Components::INPUT_TRI_STATE),
+            ...$this->getExportOptionElements(),
         ];
+    }
+
+    /**
+     * Build export option elements from registered definitions.
+     * Only includes definitions with both a product settings key and a shipment options key —
+     * product-only settings (countryOfOrigin, packageType, etc.) are rendered in dedicated sections.
+     *
+     * @return InteractiveElement[]
+     */
+    private function getExportOptionElements(): array
+    {
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+        $elements    = [];
+
+        foreach ($definitions as $definition) {
+            $productKey  = $definition->getProductSettingsKey();
+            $shipmentKey = $definition->getShipmentOptionsKey();
+
+            if (! $productKey || ! $shipmentKey) {
+                continue;
+            }
+
+            $elements[] = new InteractiveElement($productKey, Components::INPUT_TRI_STATE);
+        }
+
+        return $elements;
     }
 
     /**

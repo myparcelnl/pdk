@@ -4,37 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-final class FrozenDefinition implements OrderOptionDefinitionInterface
+final class FrozenDefinition extends AbstractOrderOptionDefinition
 {
-    public function getPropositionKey(): ?string
-    {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_FROZEN_NAME;
-    }
-
-    public function getCarrierSettingsKey(): ?string
-    {
-        return CarrierSettings::EXPORT_FROZEN;
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return ProductSettings::EXPORT_FROZEN;
-    }
-
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::FROZEN;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['frozen']);
     }
 
-    public function validate(CarrierSchema $carrierSchema): bool
+    public function getCapabilitiesOptionsKey(): ?string
     {
-        return $carrierSchema->canHaveFrozen();
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['frozen'];
+    }
+
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
     }
 }
