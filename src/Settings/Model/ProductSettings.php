@@ -88,6 +88,11 @@ class ProductSettings extends AbstractSettingsModel
      */
     public const EXPORT_FROZEN = 'exportFrozen';
 
+    /**
+     * @deprecated now dynamically derived from CooledDeliveryDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_COOLED_DELIVERY = 'exportCooledDelivery';
+
     public const FIT_IN_DIGITAL_STAMP   = 'fitInDigitalStamp';
     public const FIT_IN_MAILBOX         = 'fitInMailbox';
     public const PACKAGE_TYPE           = 'packageType';

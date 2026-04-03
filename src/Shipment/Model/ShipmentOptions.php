@@ -127,6 +127,11 @@ class ShipmentOptions extends Model
     public const FROZEN            = 'frozen';
 
     /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
+    public const COOLED_DELIVERY   = 'cooledDelivery';
+
+    /**
      * @deprecated Use option definitions to determine available shipment options dynamically instead
      */
     public const ALL_SHIPMENT_OPTIONS = [

@@ -32,7 +32,7 @@ it('can create instance from pdk delivery options', function () {
         'labelDescription' => 'test',
         'ageCheck'         => true,
         'collect'          => false,
-        'cooledDelivery'   => null,
+        'cooledDelivery'   => false,
         'hideSender'       => true,
         'largeFormat'      => true,
         'onlyRecipient'    => true,
@@ -42,5 +42,9 @@ it('can create instance from pdk delivery options', function () {
         'saturdayDelivery' => false,
         'signature'        => true,
         'receiptCode'      => true,
+        'tracked'          => false,
+        'excludeParcelLockers' => false,
+        'freshFood'        => false,
+        'frozen'           => false,
     ]);
 });

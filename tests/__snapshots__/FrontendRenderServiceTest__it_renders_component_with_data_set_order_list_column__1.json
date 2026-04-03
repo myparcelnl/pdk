@@ -76,7 +76,8 @@
           "requiresReceiptCode": -1,
           "scheduledCollection": -1,
           "freshFood": -1,
-          "frozen": -1
+          "frozen": -1,
+          "cooledDelivery": -1
         },
         "deliveryType": "STANDARD_DELIVERY",
         "packageType": "PACKAGE"
@@ -118,7 +119,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -140,7 +142,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -162,7 +165,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -184,7 +188,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -206,7 +211,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -228,7 +234,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -250,7 +257,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -272,7 +280,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -294,7 +303,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -316,7 +326,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -338,7 +349,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -360,7 +372,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -382,7 +395,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"
@@ -404,7 +418,8 @@
             "requiresReceiptCode": 0,
             "scheduledCollection": 0,
             "freshFood": 0,
-            "frozen": 0
+            "frozen": 0,
+            "cooledDelivery": 0
           },
           "deliveryType": "STANDARD_DELIVERY",
           "packageType": "PACKAGE"

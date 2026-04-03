@@ -76,20 +76,25 @@
   },
   "options": {
     "ageCheck": false,
-    "collect": false,
-    "deliveryType": 2,
+    "return": false,
     "hideSender": false,
     "insurance": 0,
-    "labelDescription": "",
     "largeFormat": false,
     "onlyRecipient": false,
     "priorityDelivery": false,
-    "packageType": 1,
-    "receiptCode": false,
-    "return": false,
     "sameDayDelivery": false,
     "saturdayDelivery": false,
-    "signature": false
+    "signature": false,
+    "tracked": false,
+    "receiptCode": false,
+    "collect": false,
+    "excludeParcelLockers": false,
+    "freshFood": false,
+    "frozen": false,
+    "cooledDelivery": false,
+    "deliveryType": 2,
+    "labelDescription": "",
+    "packageType": 1
   },
   "pickup": {
     "locationCode": "34653"
