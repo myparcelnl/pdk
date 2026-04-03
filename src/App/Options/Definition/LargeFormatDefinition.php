@@ -4,37 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-final class LargeFormatDefinition implements OrderOptionDefinitionInterface
+final class LargeFormatDefinition extends AbstractOrderOptionDefinition
 {
-    public function getCarrierSettingsKey(): ?string
-    {
-        return CarrierSettings::EXPORT_LARGE_FORMAT;
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return ProductSettings::EXPORT_LARGE_FORMAT;
-    }
-
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::LARGE_FORMAT;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['large_format']);
     }
 
-    public function getPropositionKey(): ?string
+    public function getCapabilitiesOptionsKey(): ?string
     {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_LARGE_FORMAT_NAME;
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['oversized_package'];
     }
 
-    public function validate(CarrierSchema $carrierSchema): bool
+    public function getAllowSettingsKey(): ?string
     {
-        return $carrierSchema->canHaveLargeFormat();
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
     }
 }
