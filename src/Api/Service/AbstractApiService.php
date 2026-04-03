@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Api\Contract\ClientAdapterInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\Api\Request\RequestInterface;
 use MyParcelNL\Pdk\Api\Response\ApiResponse;
+use MyParcelNL\Pdk\Base\Support\SensitiveDataScrubber;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use RuntimeException;
@@ -74,10 +75,11 @@ abstract class AbstractApiService implements ApiServiceInterface
         /** @var \MyParcelNL\Pdk\Api\Contract\ApiResponseInterface $responseObject */
         $responseObject = new $responseClass($response);
         $body           = $responseObject->getBody();
+        $jsonBody       = is_string($body) ? json_decode($body, true) : null;
 
         $logContext['response'] = [
             'code' => $responseObject->getStatusCode(),
-            'body' => $body ? json_decode($body, true) : null,
+            'body' => !empty($jsonBody) ? SensitiveDataScrubber::scrubArray($jsonBody) : null,
         ];
 
         if ($responseObject->isErrorResponse()) {
@@ -105,13 +107,13 @@ abstract class AbstractApiService implements ApiServiceInterface
         try {
             $settingsRepository = Pdk::get(\MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface::class);
             $accountSettings = $settingsRepository->all()->account;
-            
+
             Logger::info('AbstractApiService - getBaseUrl environment check', [
                 'hasAccountSettings' => $accountSettings ? 'yes' : 'no',
                 'environment' => $accountSettings ? $accountSettings->environment : 'null',
                 'isAcceptance' => $accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE ? 'yes' : 'no'
             ]);
-            
+
             if ($accountSettings && $accountSettings->environment === \MyParcelNL\Pdk\Base\Config::ENVIRONMENT_ACCEPTANCE) {
                 Logger::info('AbstractApiService - Using acceptance API URL');
                 return \MyParcelNL\Pdk\Base\Config::API_URL_ACCEPTANCE;
@@ -196,21 +198,13 @@ abstract class AbstractApiService implements ApiServiceInterface
      */
     private function createLogContext(string $uri, string $method, array $options): array
     {
-        $headers = array_combine(array_map('strtolower', array_keys($options['headers'])), $options['headers']);
-
-        // Obfuscate sensitive headers
-        foreach (['authorization', 'x-api-key', 'api-key'] as $sensitiveHeader) {
-            if (isset($headers[$sensitiveHeader])) {
-                $headers[$sensitiveHeader] = '***';
-            }
-        }
-
+        $jsonBody = !empty($options['body']) ? json_decode($options['body'], true) : null;
         return [
             'request' => [
                 'uri'     => $uri,
                 'method'  => $method,
-                'headers' => $headers,
-                'body'    => $options['body'] ? json_decode($options['body'], true) : null,
+                'headers' => SensitiveDataScrubber::scrubHeaders($options['headers']),
+                'body'    => !empty($jsonBody) ? SensitiveDataScrubber::scrubArray($jsonBody) : null,
             ],
         ];
     }
