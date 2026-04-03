@@ -284,6 +284,12 @@ The definitions should drive the entire flow from PDK settings to API export. Th
 
 **Key insight:** Because all three export paths serialize model attributes generically (via `toSnakeCaseArray()` or `toArray()`), dynamically registered attributes are included automatically. No request classes need modification when adding a new shipment option.
 
+### 7b. Carrier Capability Options Filtering
+
+The Carrier model's `$options` property contains all options from the capabilities API response, including options that may not have a registered `OrderOptionDefinition` in the PDK. The frontend reads this property to render settings UI. If an option exists in the API response but has no PDK definition, the frontend would render it but the PDK wouldn't know how to calculate, store, or export it.
+
+**Requirement:** The Carrier's options must be filtered so that only options with a matching registered definition (by `getCapabilitiesOptionsKey()`) are exposed to consumers. Unregistered options are stripped before reaching the frontend or any other consumer. This ensures that the definitions are the single gatekeeper for which options are available in the system.
+
 ### 8. Verification and Test Coverage
 
 **End-to-end flow test:**

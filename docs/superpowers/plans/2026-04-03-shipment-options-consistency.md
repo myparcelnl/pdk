@@ -896,6 +896,61 @@ git commit -m "feat(options): integrate ResolvesOptionAttributes into Fulfilment
 
 ---
 
+### Task 8b: Filter Carrier Capability Options by Registered Definitions
+
+**Files:**
+
+- Modify: `src/Carrier/Model/Carrier.php` (or `src/Carrier/Repository/CarrierCapabilitiesRepository.php`)
+- Modify: `tests/Unit/App/Options/ShipmentOptionDefinitionFlowTest.php`
+
+The Carrier model's `$options` property contains all options from the capabilities API response, including options that don't have a registered `OrderOptionDefinition` in the PDK. The frontend reads this property to render settings UI. If an option has no PDK definition, the frontend would render it but the PDK wouldn't know how to calculate, store, or export it.
+
+**Goal:** Filter the Carrier's options so that only options with a matching registered definition (by `getCapabilitiesOptionsKey()`) are exposed. Unregistered options are stripped before reaching the frontend or any other consumer.
+
+- [ ] **Step 1: Write a failing test**
+
+Register a mock carrier with an option that has no PDK definition (e.g. `cooled_delivery`). Assert that after filtering, the Carrier's serialized options do not include the unregistered option, while registered options (e.g. `requiresSignature`) are preserved.
+
+- [ ] **Step 2: Determine the best filtering point**
+
+Check where the Carrier model serializes its options for frontend consumption. Candidates:
+
+- `Carrier::toArray()` or a custom serialization method
+- `CarrierCapabilitiesRepository::getContractDefinitions()` when building the CarrierCollection
+- A method on the Carrier model that filters `$options` against registered definitions
+
+The filtering should use the registered definitions' `getCapabilitiesOptionsKey()` values as the allowlist.
+
+- [ ] **Step 3: Implement the filter**
+
+Build the allowlist from definitions:
+
+```php
+$definitions = Pdk::get('orderOptionDefinitions');
+$registeredKeys = array_filter(array_map(
+    static function (OrderOptionDefinitionInterface $def): ?string {
+        return $def->getCapabilitiesOptionsKey();
+    },
+    $definitions
+));
+```
+
+Strip options not in the allowlist from the carrier's options before they reach consumers.
+
+- [ ] **Step 4: Run tests to verify**
+
+Run: `yarn run test:unit`
+Expected: All tests pass. The new test verifies unregistered options are filtered.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/Carrier/ tests/Unit/App/Options/ShipmentOptionDefinitionFlowTest.php
+git commit -m "feat(options): filter carrier capability options to only include registered definitions"
+```
+
+---
+
 ### Task 9: CarrierSchema \_\_call() Proxy
 
 **Files:**
