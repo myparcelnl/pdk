@@ -287,6 +287,38 @@ it(
     ],
 ]);
 
+it('marks required option form elements as readOnly', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionRequired('requiresSignature')
+        ->store()
+        ->make();
+
+    $view     = new CarrierSettingsItemView($carrier);
+    $elements = $view->toArray()['elements'];
+
+    $element = null;
+
+    foreach ($elements as $el) {
+        if (isset($el['name']) && $el['name'] === 'exportSignature') {
+            $element = $el;
+            break;
+        }
+    }
+
+    expect($element)->not->toBeNull();
+
+    $hasReadOnly = false;
+
+    foreach ($element['$builders'] ?? [] as $builder) {
+        if (array_key_exists('$readOnlyWhen', $builder)) {
+            $hasReadOnly = true;
+        }
+    }
+
+    expect($hasReadOnly)->toBeTrue('required option form element must be readOnly');
+});
+
 it('adds afterUpdate logic to delivery options enabled toggle', function () {
     $carrier = factory(Carrier::class)->make();
     $view    = new CarrierSettingsItemView($carrier);

@@ -47,7 +47,7 @@ final class CapabilitiesDefaultHelper implements OptionDefinitionHelperInterface
 
         $option = $carrier->getOptionMetadata($capabilitiesKey);
 
-        if ($option && $option->getIsSelectedByDefault()) {
+        if ($option && ($option->getIsRequired() || $option->getIsSelectedByDefault())) {
             return TriStateService::ENABLED;
         }
 

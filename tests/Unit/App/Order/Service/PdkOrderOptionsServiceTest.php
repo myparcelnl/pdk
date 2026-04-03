@@ -214,3 +214,37 @@ it('isSelectedByDefault applies in inherited delivery options flow', function ()
 
     expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);
 });
+
+it('isRequired resolves to ENABLED via capabilities default when carrier setting is INHERIT', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionRequired('requiresSignature')
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:POSTNL');
+    $storage->delete('carrier:all');
+
+    // No explicit carrier settings stored — defaults to INHERIT (-1)
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('POSTNL')
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)->withSignature(TriStateService::INHERIT)
+                )
+        )
+        ->make();
+
+    /** @var PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculateShipmentOptions($order);
+
+    // CapabilitiesDefaultHelper provides ENABLED as fallback for isRequired,
+    // post-resolution enforcement also forces ENABLED
+    expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);
+});
