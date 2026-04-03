@@ -6,12 +6,11 @@ namespace MyParcelNL\Pdk\App\Action\Backend\Account;
 
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
-use MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository;
-use MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -29,16 +28,6 @@ class UpdateAccountAction implements ActionInterface
     protected $accountRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository
-     */
-    protected $carrierConfigurationRepository;
-
-    /**
-     * @var \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository
-     */
-    protected $carrierOptionsRepository;
-
-    /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
     protected $pdkAccountRepository;
@@ -49,23 +38,20 @@ class UpdateAccountAction implements ActionInterface
     protected $pdkSettingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierConfigurationRepository $carrierConfigurationRepository
-     * @param  \MyParcelNL\Pdk\Account\Repository\ShopCarrierOptionsRepository       $carrierOptionsRepository
-     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface      $pdkSettingsRepository
-     * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface    $pdkAccountRepository
+     * @var \MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository
      */
+    protected CarrierCapabilitiesRepository $carrierCapabilitiesRepository;
+
     public function __construct(
-        ShopCarrierConfigurationRepository $carrierConfigurationRepository,
-        ShopCarrierOptionsRepository       $carrierOptionsRepository,
         PdkSettingsRepositoryInterface     $pdkSettingsRepository,
         PdkAccountRepositoryInterface      $pdkAccountRepository,
-        AccountRepository                  $accountRepository
+        AccountRepository                  $accountRepository,
+        CarrierCapabilitiesRepository      $carrierCapabilitiesRepository
     ) {
-        $this->carrierConfigurationRepository = $carrierConfigurationRepository;
-        $this->carrierOptionsRepository       = $carrierOptionsRepository;
         $this->pdkSettingsRepository          = $pdkSettingsRepository;
         $this->pdkAccountRepository           = $pdkAccountRepository;
         $this->accountRepository              = $accountRepository;
+        $this->carrierCapabilitiesRepository  = $carrierCapabilitiesRepository;
     }
 
     /**
@@ -96,12 +82,12 @@ class UpdateAccountAction implements ActionInterface
      *
      * @return void
      */
-    protected function fillAccount(Account $account): void
+    protected function setShopCarriers(Account $account): void
     {
-        $shop = $account->shops->first();
-
-        $shop->carrierConfigurations = $this->carrierConfigurationRepository->getCarrierConfigurations($shop->id);
-        $shop->carriers              = $this->carrierOptionsRepository->getCarrierOptions($shop->id);
+        // Carriers are nested under shops, because one API key falls under one shop.
+        $shop = $account->shops->first(); // Multishop support is not yet implemented, so we just take the first shop for now
+        // Fetch the carriers available to the account and store them in the shop model for easy access throughout the plugin
+        $shop->carriers = $this->carrierCapabilitiesRepository->getContractDefinitions();
     }
 
     /**
@@ -170,7 +156,7 @@ class UpdateAccountAction implements ActionInterface
             throw $e;
         }
 
-        $this->fillAccount($account);
+        $this->setShopCarriers($account);
         $this->pdkAccountRepository->store($account);
         $this->setApiKeyValidity(true);
         Actions::execute(PdkBackendActions::UPDATE_SUBSCRIPTION_FEATURES);

@@ -6,8 +6,9 @@ namespace MyParcelNL\Pdk\Settings;
 
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
@@ -95,20 +96,16 @@ class SettingsManager implements SettingsManagerInterface
         /** @var Collection $carrierSettings */
         $carrierSettings = $defaults->get(CarrierSettings::ID);
 
-        // Get carriers from proposition service and map to legacy names for settings compatibility
-        $carriers = $this->propositionService->getCarriers(true);
-        $legacyCarrierKeys = [];
+        // Get carriers from account
+        $carriers = AccountSettings::getCarriers();
 
-        foreach ($carriers as $carrier) {
-            $legacyKey = $this->propositionService->mapNewToLegacyCarrierName($carrier->externalIdentifier);
-            $legacyCarrierKeys[$legacyKey] = $carrier;
-        }
-
-        // add any keys that are not present yet from allowed carriers to $carrierSettings
-        (new Collection($legacyCarrierKeys))->keys()
-            ->diff($carrierSettings->keys())
-            ->each(function ($carrier) use ($carrierSettings) {
-                $carrierSettings->put($carrier, new Collection());
+        // Get carrier names (new format, e.g., POSTNL) and find which ones are not yet in carrierSettings
+        $existingCarrierKeys = $carrierSettings->keys();
+        $carriers
+            ->pluck('carrier')  // Extract carrier names in new format (POSTNL, DHL_FOR_YOU, etc.)
+            ->diff($existingCarrierKeys)  // Find carriers not yet in settings
+            ->each(function (string $carrierName) use ($carrierSettings) {
+                $carrierSettings->put($carrierName, new Collection());
             });
 
         /** @var Collection $globalDefaults */

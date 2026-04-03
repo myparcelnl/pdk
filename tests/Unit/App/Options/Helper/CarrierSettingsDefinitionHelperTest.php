@@ -14,10 +14,11 @@ use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
 uses()->group('settings', 'tri-state');
 
-usesShared(new UsesMockPdkInstance(), new UsesSettingsMock());
+usesShared(new UsesMockPdkInstance(), new UsesSettingsMock(), new UsesAccountMock());
 
 it('gets value with all settings disabled', function (string $carrierName, OrderOptionDefinitionInterface $definition) {
     $factory = factory(Settings::class)

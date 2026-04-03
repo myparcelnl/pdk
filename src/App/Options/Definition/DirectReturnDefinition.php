@@ -4,37 +4,29 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-final class DirectReturnDefinition implements OrderOptionDefinitionInterface
+final class DirectReturnDefinition extends AbstractOrderOptionDefinition
 {
-    public function getCarrierSettingsKey(): ?string
-    {
-        return CarrierSettings::EXPORT_RETURN;
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return ProductSettings::EXPORT_RETURN;
-    }
-
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::DIRECT_RETURN;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['return']);
     }
 
-    public function getPropositionKey(): ?string
+    public function getCapabilitiesOptionsKey(): ?string
     {
-        return PropositionCarrierFeatures::SHIPMENT_OPTION_DIRECT_RETURN_NAME;
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['return_on_first_failed_delivery'];
     }
 
-    public function validate(CarrierSchema $carrierSchema): bool
+    public function getAllowSettingsKey(): ?string
     {
-        return $carrierSchema->canHaveDirectReturn();
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
     }
 }

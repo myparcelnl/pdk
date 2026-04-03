@@ -119,5 +119,10 @@ class MockLogger extends AbstractLogger
         ]));
 
         $this->fileSystem->writeToStream($this->streams[$level], $formattedString . PHP_EOL);
+
+        // Show any errors in the console immediately for easier debugging of test issues.
+        if (in_array($level, [LogLevel::ERROR, LogLevel::CRITICAL, LogLevel::ALERT, LogLevel::EMERGENCY], true)) {
+            fwrite(STDERR, $formattedString . PHP_EOL);
+        }
     }
 }
