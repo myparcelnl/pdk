@@ -11,14 +11,14 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollectionFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform as PlatformFacade;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -40,6 +40,58 @@ use function MyParcelNL\Pdk\Tests\factory;
  */
 final class ShopFactory extends AbstractModelFactory
 {
+    /**
+     * Add a single carrier to the shop's carriers
+     *
+     * @param  Carrier|CarrierFactory $carrier
+     * @return $this
+     */
+    public function addCarrier($carrier): self
+    {
+        $carriers = $this->attributes['carriers'] ?? factory(CarrierCollection::class);
+
+        if ($carriers instanceof CarrierCollectionFactory) {
+            $carriers->push($carrier);
+        } else {
+            // If it's already a collection, convert to factory
+            $carriers = factory(CarrierCollection::class)->push($carrier);
+        }
+
+        return $this->withCarriers($carriers);
+    }
+
+    /**
+     * Add all known carriers only when no carriers have been explicitly configured yet.
+     * Use this as a default fallback so that custom carrier configurations are not overridden.
+     *
+     * @return $this
+     */
+    public function withDefaultCarriers(): self
+    {
+        if ($this->attributes->has('carriers')) {
+            return $this;
+        }
+
+        return $this->withAllCarriers();
+    }
+
+    /**
+     * Add all known carriers with all available capabilities as a default for testing.
+     *
+     * @return $this
+     */
+    public function withAllCarriers(): self
+    {
+        $carrierNames = RefCapabilitiesSharedCarrierV2::getAllowableEnumValues();
+        $carrierFactories = factory(CarrierCollection::class);
+
+        foreach ($carrierNames as $name) {
+            $carrierFactories->push(factory(Carrier::class)->withAllCapabilities($name));
+        }
+
+        return $this->withCarriers($carrierFactories);
+    }
+
     public function getModel(): string
     {
         return Shop::class;
@@ -47,14 +99,7 @@ final class ShopFactory extends AbstractModelFactory
 
     protected function createDefault(): FactoryInterface
     {
-        $propositionService = Pdk::get(PropositionService::class);
-        return $this->withCarriers(
-            factory(CarrierCollection::class)->push(
-                factory(Carrier::class)
-                    ->withExternalIdentifier($propositionService->getDefaultCarrier()->externalIdentifier)
-                    ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
-            )
-        );
+        return $this->withName('Test Shop')->withAllCarriers();
     }
 
     /**

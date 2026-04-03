@@ -94,11 +94,6 @@ return [
     AuditServiceInterface::class               => autowire(AuditService::class),
 
     /**
-     * Retrieves carriers from the config.
-     */
-    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
-
-    /**
      * Does calculations on carts.
      */
     CartCalculationServiceInterface::class     => autowire(CartCalculationService::class),
@@ -237,6 +232,11 @@ return [
      * that JS-PDK and Delivery Options expect.
      */
     FrontendDataAdapterInterface::class        => autowire(FrontendDataAdapter::class),
+
+    /**
+     * Handles carrier lookups from account data.
+     */
+    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     PropositionService::class            => autowire(),
 ];
