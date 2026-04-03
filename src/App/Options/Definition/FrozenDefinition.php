@@ -19,4 +19,14 @@ final class FrozenDefinition extends AbstractOrderOptionDefinition
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['frozen'];
     }
+
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
+    }
 }

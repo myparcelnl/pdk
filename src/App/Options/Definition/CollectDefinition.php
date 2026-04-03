@@ -20,6 +20,16 @@ final class CollectDefinition extends AbstractOrderOptionDefinition
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['scheduled_collection'];
     }
 
+    /**
+     * @TODO: Collect has a priceCollect setting but no allowCollect toggle. The price is sent
+     *        to the delivery options frontend but the consumer cannot toggle collect on/off.
+     *        Consider adding allowCollect or removing priceCollect.
+     */
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
     public function getProductSettingsKey(): ?string
     {
         return null;

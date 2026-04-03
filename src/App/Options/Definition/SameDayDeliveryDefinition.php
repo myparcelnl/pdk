@@ -25,6 +25,11 @@ final class SameDayDeliveryDefinition extends AbstractOrderOptionDefinition
         return null;
     }
 
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
+    }
+
     public function getProductSettingsKey(): ?string
     {
         return null;

@@ -68,9 +68,14 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
      * The delivery options "allow" toggle key (e.g. 'allowSignature').
      * Derived by default: 'allow' + ucfirst(shipmentOptionsKey).
      *
-     * Return null to opt out of the allow toggle. When null, no allow attribute will be
-     * registered on CarrierSettings and the option will not appear as a toggleable choice
-     * in the delivery options frontend widget.
+     * This controls whether the consumer can choose this option at checkout in the
+     * delivery options widget. Only use for options where consumer choice is appropriate
+     * (e.g. signature, pickup). Return null for options that should always be applied by
+     * the merchant via the export setting and should not be (de)selectable by the consumer
+     * (e.g. age check, insurance, hide sender).
+     *
+     * When null, no allow attribute will be registered on CarrierSettings and the option
+     * will not appear as a toggleable choice in the delivery options frontend widget.
      */
     public function getAllowSettingsKey(): ?string
     {

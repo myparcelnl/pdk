@@ -19,4 +19,14 @@ final class FreshFoodDefinition extends AbstractOrderOptionDefinition
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['fresh_food'];
     }
+
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
+    }
 }

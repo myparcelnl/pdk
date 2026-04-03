@@ -19,4 +19,14 @@ final class HideSenderDefinition extends AbstractOrderOptionDefinition
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['hide_sender'];
     }
+
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
+    }
 }

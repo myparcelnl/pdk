@@ -20,6 +20,16 @@ final class ReceiptCodeDefinition extends AbstractOrderOptionDefinition
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['requires_receipt_code'];
     }
 
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
+    {
+        return null;
+    }
+
     public function getProductSettingsKey(): ?string
     {
         return null;
