@@ -6,14 +6,22 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options;
 
+use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\ShipmentOptions as FulfilmentShipmentOptions;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 /**
@@ -24,7 +32,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
  * Fulfilment\ShipmentOptions.
  */
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('registers all definition-derived attributes on CarrierSettings', function () {
     $definitions     = Pdk::get('orderOptionDefinitions');
@@ -92,5 +100,47 @@ it('registers all definition-derived attributes on Fulfilment ShipmentOptions', 
                 "Fulfilment ShipmentOptions attribute '{$key}' should default to null for " . get_class($definition)
             );
         }
+    }
+});
+
+it('flows product settings through calculateShipmentOptions for all definitions with both product and shipment option keys', function () {
+    $definitions = Pdk::get('orderOptionDefinitions');
+
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->store();
+
+    foreach ($definitions as $definition) {
+        $productKey  = $definition->getProductSettingsKey();
+        $shipmentKey = $definition->getShipmentOptionsKey();
+
+        if ($productKey === null || $shipmentKey === null) {
+            continue;
+        }
+
+        $order = factory(PdkOrder::class)
+            ->withDeliveryOptions(
+                factory(DeliveryOptions::class)->withCarrier('POSTNL')
+            )
+            ->withLines(
+                factory(PdkOrderLineCollection::class)->push(
+                    factory(PdkOrderLine::class)->withProduct(
+                        factory(\MyParcelNL\Pdk\App\Order\Model\PdkProduct::class)
+                            ->withSettings(factory(ProductSettings::class)->with([$productKey => TriStateService::ENABLED]))
+                    )
+                )
+            )
+            ->make();
+
+        /** @var PdkOrderOptionsServiceInterface $service */
+        $service = Pdk::get(PdkOrderOptionsServiceInterface::class);
+        $flags   = PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS | PdkOrderOptionsServiceInterface::EXCLUDE_CARRIER_SETTINGS;
+
+        $newOrder = $service->calculateShipmentOptions($order, $flags);
+
+        expect($newOrder->deliveryOptions->shipmentOptions->getAttribute($shipmentKey))->toBe(
+            TriStateService::ENABLED,
+            "Definition " . get_class($definition) . " with productKey='{$productKey}' should flow through to shipmentOptions['{$shipmentKey}'] as ENABLED"
+        );
     }
 });
