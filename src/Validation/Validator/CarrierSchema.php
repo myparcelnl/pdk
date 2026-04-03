@@ -6,24 +6,9 @@ namespace MyParcelNL\Pdk\Validation\Validator;
 
 use BadMethodCallException;
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
@@ -71,21 +56,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->canHavePackageType(RefShipmentPackageTypeV2::SMALL_PACKAGE);
     }
 
-    public function canHaveAgeCheck(): bool
-    {
-        return $this->canHaveShipmentOption(AgeCheckDefinition::class);
-    }
-
-    public function canHaveCollect(): bool
-    {
-        return $this->canHaveShipmentOption(CollectDefinition::class);
-    }
-
-    public function canHaveDirectReturn(): bool
-    {
-        return $this->canHaveShipmentOption(DirectReturnDefinition::class);
-    }
-
     public function canHaveEveningDelivery(): bool
     {
         return $this->hasDeliveryType(RefTypesDeliveryTypeV2::EVENING);
@@ -94,41 +64,6 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
     public function canHaveExpressDelivery(): bool
     {
         return $this->hasDeliveryType(RefTypesDeliveryTypeV2::EXPRESS);
-    }
-
-    public function canHaveFreshFood(): bool
-    {
-        return $this->canHaveShipmentOption(FreshFoodDefinition::class);
-    }
-
-    public function canHaveFrozen(): bool
-    {
-        return $this->canHaveShipmentOption(FrozenDefinition::class);
-    }
-
-    /**
-     * @return bool
-     */
-    public function canHaveHideSender(): bool
-    {
-        return $this->canHaveShipmentOption(HideSenderDefinition::class);
-    }
-
-    /**
-     * We can safely ignore the amount here as it's not used in the capabilities.
-     *
-     * @param  null|int $amount
-     *
-     * @return bool
-     */
-    public function canHaveInsurance(?int $amount = 0): bool
-    {
-        return $this->canHaveShipmentOption(InsuranceDefinition::class);
-    }
-
-    public function canHaveLargeFormat(): bool
-    {
-        return $this->canHaveShipmentOption(LargeFormatDefinition::class);
     }
 
     public function canHaveMondayDelivery(): bool
@@ -148,29 +83,36 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         return $this->getFromSchema('collo') ? $this->getFromSchema('collo')['max'] > 1 : false;
     }
 
-    public function canHaveOnlyRecipient(): bool
-    {
-        return $this->canHaveShipmentOption(OnlyRecipientDefinition::class);
-    }
-
-    public function canHavePriorityDelivery(): bool
-    {
-        return $this->canHaveShipmentOption(PriorityDeliveryDefinition::class);
-    }
-
     public function canHavePickup(): bool
     {
         return $this->hasDeliveryType(RefTypesDeliveryTypeV2::PICKUP);
     }
 
-    public function canHaveReceiptCode(): bool
+    /**
+     * Proxy legacy canHave*() calls for shipment options to canHaveShipmentOption().
+     * This replaces ~15 individual methods that all delegated to canHaveShipmentOption().
+     * The method name is mapped to a Definition class: canHaveSignature → SignatureDefinition.
+     *
+     * @param  string $name
+     * @param  array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call(string $name, array $arguments)
     {
-        return $this->canHaveShipmentOption(ReceiptCodeDefinition::class);
-    }
+        if (strpos($name, 'canHave') === 0) {
+            $optionName = substr($name, 7);
+            $definitionClass = sprintf(
+                'MyParcelNL\\Pdk\\App\\Options\\Definition\\%sDefinition',
+                $optionName
+            );
 
-    public function canHaveSameDayDelivery(): bool
-    {
-        return $this->canHaveShipmentOption(SameDayDeliveryDefinition::class);
+            if (class_exists($definitionClass)) {
+                return $this->canHaveShipmentOption($definitionClass);
+            }
+        }
+
+        throw new \BadMethodCallException(sprintf('Method %s does not exist on %s', $name, static::class));
     }
 
     /**
@@ -193,24 +135,9 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
         );
     }
 
-    public function canHaveSignature(): bool
-    {
-        return $this->canHaveShipmentOption(SignatureDefinition::class);
-    }
-
     public function canHaveStandardDelivery(): bool
     {
         return $this->hasDeliveryType(RefTypesDeliveryTypeV2::STANDARD);
-    }
-
-    public function canHaveTracked(): bool
-    {
-        return $this->canHaveShipmentOption(TrackedDefinition::class);
-    }
-
-    public function canHaveSaturdayDelivery(): bool
-    {
-        return $this->canHaveShipmentOption(SaturdayDeliveryDefinition::class);
     }
 
     public function canHaveWeight(?int $weight): bool
