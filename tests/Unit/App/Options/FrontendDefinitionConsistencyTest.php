@@ -14,16 +14,15 @@ use ReflectionClass;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 /**
- * Phase 2 guardrail: proves the frontend's hardcoded delivery options service map doesn't
- * drift from definitions. Every allow* and price* entry in CONFIG_CARRIER_SETTINGS_MAP must
- * either be backed by a registered definition or be a known non-shipment-option entry
- * (delivery type / package type). Fails if someone adds a shipment option key to the
- * hardcoded map without creating a definition — forcing the Phase 2 migration.
+ * Phase 2 guardrail: proves that NON_DEFINITION_CARRIER_SETTINGS_MAP contains only
+ * delivery-type, package-type, and other non-shipment-option entries. Shipment option
+ * allow/price keys must NOT appear in this constant — they are built dynamically from
+ * OrderOptionDefinitions via getCarrierSettingsMap().
  */
 
 usesShared(new UsesEachMockPdkInstance());
 
-it('documents which CONFIG_CARRIER_SETTINGS_MAP entries are backed by definitions', function () {
+it('documents which NON_DEFINITION_CARRIER_SETTINGS_MAP entries are backed by definitions', function () {
     $definitions = Pdk::get('orderOptionDefinitions');
 
     $definitionAllowKeys = [];
@@ -43,45 +42,20 @@ it('documents which CONFIG_CARRIER_SETTINGS_MAP entries are backed by definition
     }
 
     $reflection = new ReflectionClass(DeliveryOptionsService::class);
-    $constants   = $reflection->getConstants();
+    $constants  = $reflection->getConstants();
 
-    // @TODO: PHP 8.0+: use $reflection->getReflectionConstant('CONFIG_CARRIER_SETTINGS_MAP')
-    $map = $constants['CONFIG_CARRIER_SETTINGS_MAP'];
+    // @TODO: PHP 8.0+: use $reflection->getReflectionConstant('NON_DEFINITION_CARRIER_SETTINGS_MAP')
+    $map = $constants['NON_DEFINITION_CARRIER_SETTINGS_MAP'];
 
-    $unmapped = [];
-
+    // No allow* or price* shipment option keys backed by a definition should exist in this constant.
+    // If they appear here, they should be moved to the definitions instead.
     foreach ($map as $frontendKey => $settingsValue) {
-        $isAllow = strpos($settingsValue, 'allow') === 0;
-        $isPrice = strpos($settingsValue, 'price') === 0;
-
-        if (! $isAllow && ! $isPrice) {
-            continue;
-        }
-
         $inDefinitions = in_array($settingsValue, $definitionAllowKeys, true)
             || in_array($settingsValue, $definitionPriceKeys, true);
 
-        if (! $inDefinitions) {
-            $unmapped[] = "{$frontendKey} => {$settingsValue}";
-        }
-    }
-
-    // All unmapped entries must be delivery type or package type settings.
-    // Shipment option settings (e.g. allowSignature, priceOnlyRecipient) must be backed by a definition.
-    // This assertion documents the boundary: delivery type / package type keys are expected unmapped.
-    foreach ($unmapped as $entry) {
-        $isExpectedlyUnmapped = strpos($entry, 'DeliveryType') !== false
-            || strpos($entry, 'PackageType') !== false
-            || strpos($entry, 'DeliveryOptions') !== false
-            || strpos($entry, 'StandardDelivery') !== false
-            || strpos($entry, 'EveningDelivery') !== false
-            || strpos($entry, 'MondayDelivery') !== false
-            || strpos($entry, 'MorningDelivery') !== false
-            || strpos($entry, 'PickupLocations') !== false;
-
-        expect($isExpectedlyUnmapped)
-            ->toBeTrue(
-                "Unmapped entry \"{$entry}\" is not a recognised delivery-type or package-type key — a definition may be missing"
+        expect($inDefinitions)
+            ->toBeFalse(
+                "Entry \"{$frontendKey} => {$settingsValue}\" is backed by a definition and should be removed from NON_DEFINITION_CARRIER_SETTINGS_MAP"
             );
     }
 });
