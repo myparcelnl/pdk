@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-final class SameDayDeliveryDefinition implements OrderOptionDefinitionInterface
+final class SameDayDeliveryDefinition extends AbstractOrderOptionDefinition
 {
+    public function getShipmentOptionsKey(): ?string
+    {
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['same_day_delivery']);
+    }
+
+    public function getCapabilitiesOptionsKey(): ?string
+    {
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['same_day_delivery'];
+    }
+
     public function getCarrierSettingsKey(): ?string
     {
         return null;
@@ -19,20 +28,5 @@ final class SameDayDeliveryDefinition implements OrderOptionDefinitionInterface
     public function getProductSettingsKey(): ?string
     {
         return null;
-    }
-
-    public function getShipmentOptionsKey(): ?string
-    {
-        return ShipmentOptions::SAME_DAY_DELIVERY;
-    }
-
-    public function getCapabilitiesOptionsKey(): ?string
-    {
-        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['same_day_delivery'];
-    }
-
-    public function validate(CarrierSchema $carrierSchema): bool
-    {
-        return $carrierSchema->canHaveSameDayDelivery();
     }
 }

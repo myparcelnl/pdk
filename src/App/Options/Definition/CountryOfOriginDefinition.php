@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
-final class CountryOfOriginDefinition implements OrderOptionDefinitionInterface
+final class CountryOfOriginDefinition extends AbstractOrderOptionDefinition
 {
-    public function getCarrierSettingsKey(): ?string
-    {
-        return null;
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return ProductSettings::COUNTRY_OF_ORIGIN;
-    }
-
     public function getShipmentOptionsKey(): ?string
     {
         return null;
     }
 
     public function getCapabilitiesOptionsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getProductSettingsKey(): ?string
+    {
+        return 'countryOfOrigin';
+    }
+
+    public function getAllowSettingsKey(): ?string
+    {
+        return null;
+    }
+
+    public function getPriceSettingsKey(): ?string
     {
         return null;
     }

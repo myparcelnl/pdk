@@ -4,37 +4,19 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-final class InsuranceDefinition implements OrderOptionDefinitionInterface
+final class InsuranceDefinition extends AbstractOrderOptionDefinition
 {
-    public function getCarrierSettingsKey(): ?string
-    {
-        return CarrierSettings::EXPORT_INSURANCE;
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return ProductSettings::EXPORT_INSURANCE;
-    }
-
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::INSURANCE;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['insurance']);
     }
 
     public function getCapabilitiesOptionsKey(): ?string
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['insurance'];
-    }
-
-    public function validate(CarrierSchema $carrierSchema): bool
-    {
-        return $carrierSchema->canHaveInsurance();
     }
 }

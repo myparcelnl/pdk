@@ -4,27 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-final class ReceiptCodeDefinition implements OrderOptionDefinitionInterface
+final class ReceiptCodeDefinition extends AbstractOrderOptionDefinition
 {
-    public function getCarrierSettingsKey(): ?string
-    {
-        return CarrierSettings::EXPORT_RECEIPT_CODE;
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return null;
-    }
-
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::RECEIPT_CODE;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['receipt_code']);
     }
 
     public function getCapabilitiesOptionsKey(): ?string
@@ -32,8 +20,8 @@ final class ReceiptCodeDefinition implements OrderOptionDefinitionInterface
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['requires_receipt_code'];
     }
 
-    public function validate(CarrierSchema $carrierSchema): bool
+    public function getProductSettingsKey(): ?string
     {
-        return $carrierSchema->canHaveReceiptCode();
+        return null;
     }
 }

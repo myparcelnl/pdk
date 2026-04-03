@@ -4,51 +4,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
+use MyParcelNL\Sdk\Support\Str;
 
-class CollectDefinition implements OrderOptionDefinitionInterface
+final class CollectDefinition extends AbstractOrderOptionDefinition
 {
-    /**
-     * @inheritDoc
-     */
-    public function getCarrierSettingsKey(): ?string
-    {
-        return CarrierSettings::EXPORT_COLLECT;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getProductSettingsKey(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getShipmentOptionsKey(): ?string
     {
-        return ShipmentOptions::COLLECT;
+        return Str::camel(RefShipmentShipmentOptions::attributeMap()['collect']);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getCapabilitiesOptionsKey(): ?string
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['scheduled_collection'];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function validate(CarrierSchema $carrierSchema): bool
+    public function getProductSettingsKey(): ?string
     {
-        return $carrierSchema->canHaveCollect();
+        return null;
     }
 }

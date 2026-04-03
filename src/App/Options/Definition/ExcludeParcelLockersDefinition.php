@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
-final class ExcludeParcelLockersDefinition implements OrderOptionDefinitionInterface
+final class ExcludeParcelLockersDefinition extends AbstractOrderOptionDefinition
 {
+    public function getShipmentOptionsKey(): ?string
+    {
+        return 'excludeParcelLockers';
+    }
+
+    public function getCapabilitiesOptionsKey(): ?string
+    {
+        return null;
+    }
+
     public function getCarrierSettingsKey(): ?string
     {
         return null;
@@ -18,15 +25,15 @@ final class ExcludeParcelLockersDefinition implements OrderOptionDefinitionInter
 
     public function getProductSettingsKey(): ?string
     {
-        return ProductSettings::EXCLUDE_PARCEL_LOCKERS;
+        return 'excludeParcelLockers';
     }
 
-    public function getShipmentOptionsKey(): ?string
+    public function getAllowSettingsKey(): ?string
     {
-        return ShipmentOptions::EXCLUDE_PARCEL_LOCKERS;
+        return null;
     }
 
-    public function getCapabilitiesOptionsKey(): ?string
+    public function getPriceSettingsKey(): ?string
     {
         return null;
     }
