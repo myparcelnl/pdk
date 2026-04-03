@@ -19,4 +19,9 @@ final class InsuranceDefinition extends AbstractOrderOptionDefinition
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['insurance'];
     }
+
+    public function getShipmentOptionsCast(): string
+    {
+        return 'int';
+    }
 }

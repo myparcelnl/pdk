@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInterface
@@ -91,6 +92,32 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
         $key = $this->getShipmentOptionsKey();
 
         return $key ? 'price' . ucfirst($key) : null;
+    }
+
+    /**
+     * The cast type for this option on the ShipmentOptions model.
+     * Default: TriStateService::TYPE_STRICT (tri-state: -1/0/1).
+     *
+     * Override for options with different value types (e.g. InsuranceDefinition returns 'int').
+     * Fulfilment models derive their cast from this: TYPE_STRICT becomes 'bool', others are kept as-is.
+     */
+    public function getShipmentOptionsCast(): string
+    {
+        return TriStateService::TYPE_STRICT;
+    }
+
+    /**
+     * The default value for this option on the ShipmentOptions model.
+     * Default: TriStateService::INHERIT (-1).
+     *
+     * Override for options with different default values.
+     * Fulfilment models use null as default regardless of this value.
+     *
+     * @return mixed
+     */
+    public function getShipmentOptionsDefault()
+    {
+        return TriStateService::INHERIT;
     }
 
     /**

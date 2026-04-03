@@ -68,7 +68,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toBe(array_replace($defaults, $expected));
+    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toEqual(array_replace($defaults, $expected));
 
     $reset();
 })->with([

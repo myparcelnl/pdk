@@ -52,6 +52,20 @@ interface OrderOptionDefinitionInterface
     public function getPriceSettingsKey(): ?string;
 
     /**
+     * Get the cast type for this option on the ShipmentOptions model.
+     *
+     * @return string
+     */
+    public function getShipmentOptionsCast(): string;
+
+    /**
+     * Get the default value for this option on the ShipmentOptions model.
+     *
+     * @return mixed
+     */
+    public function getShipmentOptionsDefault();
+
+    /**
      * Validates if the option is allowed for the current carrier.
      *
      * @param  \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $carrierSchema
