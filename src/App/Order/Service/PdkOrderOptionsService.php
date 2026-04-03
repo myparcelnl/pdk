@@ -75,9 +75,9 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
             $capabilitiesKey = $definition->getCapabilitiesOptionsKey();
 
             if ($capabilitiesKey && $carrier) {
-                $metadata = $carrier->getOptionMetadata($capabilitiesKey);
+                $option = $carrier->getOptionMetadata($capabilitiesKey);
 
-                if ($metadata && $metadata['isRequired']) {
+                if ($option && $option->getIsRequired()) {
                     $value = TriStateService::ENABLED;
                 }
             }

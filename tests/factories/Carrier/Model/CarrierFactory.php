@@ -81,6 +81,42 @@ final class CarrierFactory extends AbstractModelFactory
     }
 
     /**
+     * Mark a specific carrier option as required.
+     *
+     * @param  string $capabilitiesKey camelCase option key (e.g. 'requiresSignature')
+     * @return $this
+     */
+    public function withOptionRequired(string $capabilitiesKey): self
+    {
+        $existingOptions = (array) ($this->attributes->get('options') ?? []);
+
+        $existingOptions[$capabilitiesKey] = array_merge(
+            $existingOptions[$capabilitiesKey] ?? [],
+            ['isRequired' => true]
+        );
+
+        return $this->withOptions($existingOptions);
+    }
+
+    /**
+     * Mark a specific carrier option as selected by default.
+     *
+     * @param  string $capabilitiesKey camelCase option key (e.g. 'requiresSignature')
+     * @return $this
+     */
+    public function withOptionSelectedByDefault(string $capabilitiesKey): self
+    {
+        $existingOptions = (array) ($this->attributes->get('options') ?? []);
+
+        $existingOptions[$capabilitiesKey] = array_merge(
+            $existingOptions[$capabilitiesKey] ?? [],
+            ['isSelectedByDefault' => true]
+        );
+
+        return $this->withOptions($existingOptions);
+    }
+
+    /**
      * Add or replace the insurance shipment option capability.
      *
      * @param  int    $default Default insured amount

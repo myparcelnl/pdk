@@ -37,7 +37,7 @@ it('forces ENABLED when isRequired is true even when all sources say DISABLED', 
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => false])
+        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -67,7 +67,7 @@ it('does NOT force ENABLED when isRequired is false', function () {
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => false])
+        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -87,7 +87,7 @@ it('does NOT force ENABLED when isRequired is false', function () {
     expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::DISABLED);
 });
 
-it('applies isSelectedByDefault when all other sources are excluded', function () {
+it('isSelectedByDefault applies when all sources are INHERIT', function () {
     factory(Carrier::class)
         ->withAllCapabilities()
         ->withOptionSelectedByDefault('requiresSignature')
@@ -96,6 +96,11 @@ it('applies isSelectedByDefault when all other sources are excluded', function (
     $storage = Pdk::get(StorageInterface::class);
     $storage->delete('carrier:POSTNL');
     $storage->delete('carrier:all');
+
+    // Store default carrier settings so EXPORT_SIGNATURE defaults to INHERIT (-1)
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
@@ -109,10 +114,7 @@ it('applies isSelectedByDefault when all other sources are excluded', function (
 
     /** @var PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
-    $flags    = PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS
-        | PdkOrderOptionsServiceInterface::EXCLUDE_PRODUCT_SETTINGS
-        | PdkOrderOptionsServiceInterface::EXCLUDE_CARRIER_SETTINGS;
-    $newOrder = $service->calculateShipmentOptions($order, $flags);
+    $newOrder = $service->calculateShipmentOptions($order);
 
     expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);
 });
@@ -128,7 +130,7 @@ it('carrier settings override isSelectedByDefault', function () {
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => false])
+        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -158,6 +160,11 @@ it('shipment options override isSelectedByDefault', function () {
     $storage->delete('carrier:POSTNL');
     $storage->delete('carrier:all');
 
+    // Store default carrier settings so EXPORT_SIGNATURE defaults to INHERIT (-1)
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
+
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
@@ -175,7 +182,7 @@ it('shipment options override isSelectedByDefault', function () {
     expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::DISABLED);
 });
 
-it('applies isSelectedByDefault when shipment options and carrier settings are excluded', function () {
+it('isSelectedByDefault applies in inherited delivery options flow', function () {
     factory(Carrier::class)
         ->withAllCapabilities()
         ->withOptionSelectedByDefault('requiresSignature')
@@ -184,6 +191,11 @@ it('applies isSelectedByDefault when shipment options and carrier settings are e
     $storage = Pdk::get(StorageInterface::class);
     $storage->delete('carrier:POSTNL');
     $storage->delete('carrier:all');
+
+    // Store default carrier settings so EXPORT_SIGNATURE defaults to INHERIT (-1)
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(
@@ -197,8 +209,7 @@ it('applies isSelectedByDefault when shipment options and carrier settings are e
 
     /** @var PdkOrderOptionsServiceInterface $service */
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
-    $flags    = PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS
-        | PdkOrderOptionsServiceInterface::EXCLUDE_CARRIER_SETTINGS;
+    $flags    = PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS;
     $newOrder = $service->calculateShipmentOptions($order, $flags);
 
     expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);

@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @property string               $id
@@ -34,16 +35,19 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                  $digitalStampDefaultWeight
  * @property int                  $dropOffDelay
  * @property DropOffPossibilities $dropOffPossibilities
- * @property bool                 $exportAgeCheck
- * @property bool                 $exportHideSender
- * @property bool                 $exportInsurance
- * @property bool                 $exportLargeFormat
- * @property bool                 $exportOnlyRecipient
- * @property bool                 $exportReceiptCode
- * @property bool                 $exportReturn
- * @property bool                 $exportReturnLargeFormat
- * @property bool                 $exportSignature
- * @property bool                 $exportTracked
+ * @property int<-1|0|1>          $exportAgeCheck
+ * @property int<-1|0|1>          $exportHideSender
+ * @property int<-1|0|1>          $exportInsurance
+ * @property int<-1|0|1>          $exportLargeFormat
+ * @property int<-1|0|1>          $exportOnlyRecipient
+ * @property int<-1|0|1>          $exportReceiptCode
+ * @property int<-1|0|1>          $exportReturn
+ * @property int<-1|0|1>          $exportReturnLargeFormat
+ * @property int<-1|0|1>          $exportSignature
+ * @property int<-1|0|1>          $exportTracked
+ * @property int<-1|0|1>          $exportCollect
+ * @property int<-1|0|1>          $exportFreshFood
+ * @property int<-1|0|1>          $exportFrozen
  * @property int                  $exportInsuranceFromAmount
  * @property int                  $exportInsurancePricePercentage
  * @property int                  $exportInsuranceUpTo
@@ -175,26 +179,26 @@ class CarrierSettings extends AbstractSettingsModel
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 0,
         self::DROP_OFF_DELAY                          => 0,
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
-        self::EXPORT_AGE_CHECK                        => false,
-        self::EXPORT_HIDE_SENDER                      => false,
-        self::EXPORT_INSURANCE                        => false,
+        self::EXPORT_AGE_CHECK                        => -1,
+        self::EXPORT_HIDE_SENDER                      => -1,
+        self::EXPORT_INSURANCE                        => -1,
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
         self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 100,
         self::EXPORT_INSURANCE_UP_TO                  => 0,
         self::EXPORT_INSURANCE_UP_TO_EU               => 0,
         self::EXPORT_INSURANCE_UP_TO_ROW              => 0,
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
-        self::EXPORT_LARGE_FORMAT                     => false,
-        self::EXPORT_ONLY_RECIPIENT                   => false,
-        self::EXPORT_RECEIPT_CODE                     => false,
-        self::EXPORT_RETURN                           => false,
-        self::EXPORT_RETURN_LARGE_FORMAT              => false,
+        self::EXPORT_LARGE_FORMAT                     => -1,
+        self::EXPORT_ONLY_RECIPIENT                   => -1,
+        self::EXPORT_RECEIPT_CODE                     => -1,
+        self::EXPORT_RETURN                           => -1,
+        self::EXPORT_RETURN_LARGE_FORMAT              => -1,
         self::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        self::EXPORT_SIGNATURE                        => false,
-        self::EXPORT_TRACKED                          => false,
-        self::EXPORT_COLLECT                          => false,
-        self::EXPORT_FRESH_FOOD                       => false,
-        self::EXPORT_FROZEN                           => false,
+        self::EXPORT_SIGNATURE                        => -1,
+        self::EXPORT_TRACKED                          => -1,
+        self::EXPORT_COLLECT                          => -1,
+        self::EXPORT_FRESH_FOOD                       => -1,
+        self::EXPORT_FROZEN                           => -1,
         self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 0,
         self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 0,
         self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 0,
@@ -239,25 +243,26 @@ class CarrierSettings extends AbstractSettingsModel
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 'int',
         self::DROP_OFF_DELAY                          => 'int',
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
-        self::EXPORT_AGE_CHECK                        => 'bool',
-        self::EXPORT_RECEIPT_CODE                     => 'bool',
-        self::EXPORT_INSURANCE                        => 'bool',
+        self::EXPORT_AGE_CHECK                        => TriStateService::TYPE_STRICT,
+        self::EXPORT_RECEIPT_CODE                     => TriStateService::TYPE_STRICT,
+        self::EXPORT_INSURANCE                        => TriStateService::TYPE_STRICT,
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 'int',
         self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 'float',
         self::EXPORT_INSURANCE_UP_TO                  => 'int',
         self::EXPORT_INSURANCE_UP_TO_EU               => 'int',
         self::EXPORT_INSURANCE_UP_TO_ROW              => 'int',
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 'int',
-        self::EXPORT_LARGE_FORMAT                     => 'bool',
-        self::EXPORT_ONLY_RECIPIENT                   => 'bool',
-        self::EXPORT_RETURN                           => 'bool',
-        self::EXPORT_RETURN_LARGE_FORMAT              => 'bool',
+        self::EXPORT_LARGE_FORMAT                     => TriStateService::TYPE_STRICT,
+        self::EXPORT_ONLY_RECIPIENT                   => TriStateService::TYPE_STRICT,
+        self::EXPORT_RETURN                           => TriStateService::TYPE_STRICT,
+        self::EXPORT_RETURN_LARGE_FORMAT              => TriStateService::TYPE_STRICT,
         self::EXPORT_RETURN_PACKAGE_TYPE              => 'string',
-        self::EXPORT_SIGNATURE                        => 'bool',
-        self::EXPORT_TRACKED                          => 'bool',
-        self::EXPORT_COLLECT                          => 'bool',
-        self::EXPORT_FRESH_FOOD                       => 'bool',
-        self::EXPORT_FROZEN                           => 'bool',
+        self::EXPORT_SIGNATURE                        => TriStateService::TYPE_STRICT,
+        self::EXPORT_TRACKED                          => TriStateService::TYPE_STRICT,
+        self::EXPORT_COLLECT                          => TriStateService::TYPE_STRICT,
+        self::EXPORT_FRESH_FOOD                       => TriStateService::TYPE_STRICT,
+        self::EXPORT_FROZEN                           => TriStateService::TYPE_STRICT,
+        self::EXPORT_HIDE_SENDER                      => TriStateService::TYPE_STRICT,
         self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 'float',
         self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 'float',
         self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 'float',

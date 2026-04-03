@@ -132,3 +132,86 @@ it('creates carrier directly with constructor without lookup', function () {
 it('throws exception when carrier name does not match enum', function () {
     new Carrier(['carrier' => 'NOT_AN_ENUM_VALUE']);
 })->throws(\InvalidArgumentException::class);
+
+it('factory can set option as required', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionRequired('requiresSignature')
+        ->make();
+
+    expect($carrier->options->getRequiresSignature()->getIsRequired())->toBeTrue();
+});
+
+it('factory can set option as selected by default', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionSelectedByDefault('requiresSignature')
+        ->make();
+
+    expect($carrier->options->getRequiresSignature()->getIsSelectedByDefault())->toBeTrue();
+});
+
+it('factory can set option as both required and selected by default', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionRequired('requiresSignature')
+        ->withOptionSelectedByDefault('requiresSignature')
+        ->make();
+
+    $option = $carrier->options->getRequiresSignature();
+
+    expect($option->getIsRequired())->toBeTrue()
+        ->and($option->getIsSelectedByDefault())->toBeTrue();
+});
+
+it('returns option metadata for a capabilities key', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->make();
+
+    $option = $carrier->getOptionMetadata('requiresSignature');
+
+    expect($option)->not->toBeNull()
+        ->and(method_exists($option, 'getIsRequired'))->toBeTrue()
+        ->and(method_exists($option, 'getIsSelectedByDefault'))->toBeTrue();
+});
+
+it('returns null metadata for unknown capabilities key', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->make();
+
+    expect($carrier->getOptionMetadata('nonExistentOption'))->toBeNull();
+});
+
+it('returns null metadata when carrier has no options', function () {
+    $carrier = factory(Carrier::class)
+        ->withMinimalCapabilities()
+        ->make();
+
+    expect($carrier->getOptionMetadata('requiresSignature'))->toBeNull();
+});
+
+it('returns correct metadata when option isRequired is true', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionRequired('requiresSignature')
+        ->make();
+
+    $option = $carrier->getOptionMetadata('requiresSignature');
+
+    expect($option->getIsRequired())->toBeTrue()
+        ->and($option->getIsSelectedByDefault())->not->toBeTrue();
+});
+
+it('returns correct metadata when option isSelectedByDefault is true', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionSelectedByDefault('requiresSignature')
+        ->make();
+
+    $option = $carrier->getOptionMetadata('requiresSignature');
+
+    expect($option->getIsRequired())->not->toBeTrue()
+        ->and($option->getIsSelectedByDefault())->toBeTrue();
+});

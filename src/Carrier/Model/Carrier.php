@@ -169,4 +169,34 @@ class Carrier extends SdkBackedModel
     {
         parent::__construct($data ?? []);
     }
+
+    /**
+     * Utility helper to directly get the option definition for a shipment option by its capabilities key.
+     * Avoids having to chain through multiple levels of getters and null checks to get to the same data, as this is a common action when working with carriers and their options.
+     *
+     * @param  string $capabilitiesKey camelCase key, e.g. 'requiresSignature'
+     *
+     * @return null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsBaseOptionV2
+     */
+    public function getOptionMetadata(string $capabilitiesKey)
+    {
+        if (! $this->options) {
+            return null;
+        }
+
+        $getter = 'get' . ucfirst($capabilitiesKey);
+
+        if (! method_exists($this->options, $getter)) {
+            return null;
+        }
+
+        $option = $this->options->$getter();
+
+        if (! $option || ! method_exists($option, 'getIsRequired')) {
+            return null;
+        }
+
+        // Return type only type-hinted in comments, as the actual return type is a union of SDK types which is not supported in PHP 7.4
+        return $option;
+    }
 }

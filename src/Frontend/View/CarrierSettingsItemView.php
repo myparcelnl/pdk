@@ -166,10 +166,12 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         // Add tracked toggle for carriers with custom mailbox contract, only visible when international mailbox is enabled
         if ($this->carrierSchema->canHaveTracked() && AccountSettings::hasCarrierSmallPackageContract()) {
-            $fields[] = (new InteractiveElement(CarrierSettings::EXPORT_TRACKED, Components::INPUT_TOGGLE))
+            $trackedElement = (new InteractiveElement(CarrierSettings::EXPORT_TRACKED, Components::INPUT_TOGGLE))
                 ->builder(function (FormOperationBuilder $builder) {
                     $builder->visibleWhen(CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX);
                 });
+            $this->makeReadOnlyWhenRequired($trackedElement, 'tracked');
+            $fields[] = $trackedElement;
         }
 
         return $fields;
@@ -222,80 +224,104 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getDefaultExportFields(): array
     {
-        return [
-            /**
-             * Export settings for regular shipments.
-             */
+        $fields = [
             new SettingsDivider($this->createGenericLabel('export')),
-
-            $this->carrierSchema->canHaveAgeCheck()
-                ? [
-                    (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
-                        ->builder(function (FormOperationBuilder $builder) {
-                            $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
-                                $afterUpdate
-                                    ->setValue(true)
-                                    ->on(CarrierSettings::EXPORT_SIGNATURE)
-                                    ->if->eq(true);
-
-                                $afterUpdate
-                                    ->setValue(true)
-                                    ->on(CarrierSettings::EXPORT_ONLY_RECIPIENT)
-                                    ->if->eq(true);
-                            });
-                        }),
-                ]
-                : [],
-
-            // Disable the signature / only recipient options when age check is enabled. With age check these are mandatory.
-            $this->withOperation(
-                function (FormOperationBuilder $builder) {
-                    if (!$this->carrierSchema->canHaveAgeCheck()) {
-                        return;
-                    }
-
-                    $builder->readOnlyWhen(CarrierSettings::EXPORT_AGE_CHECK);
-                },
-                $this->carrierSchema->canHaveSignature()
-                    ? [new InteractiveElement(CarrierSettings::EXPORT_SIGNATURE, Components::INPUT_TOGGLE)]
-                    : [],
-                $this->carrierSchema->canHaveOnlyRecipient()
-                    ? [new InteractiveElement(CarrierSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TOGGLE)]
-                    : []
-            ),
-
-            $this->carrierSchema->canHaveReceiptCode() ? [
-                new InteractiveElement(CarrierSettings::EXPORT_RECEIPT_CODE, Components::INPUT_TOGGLE),
-            ] : [],
-
-            $this->carrierSchema->canHaveLargeFormat()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE)]
-                : [],
-
-            $this->carrierSchema->canHaveDirectReturn()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE)]
-                : [],
-
-            $this->carrierSchema->canHaveHideSender()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE)]
-                : [],
-
-            $this->carrierSchema->canHaveInsurance()
-                ? $this->getExportInsuranceFields()
-                : [],
-
-            $this->carrierSchema->canHaveCollect()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE)]
-                : [],
-
-            $this->carrierSchema->canHaveFreshFood()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_FRESH_FOOD, Components::INPUT_TOGGLE)]
-                : [],
-
-            $this->carrierSchema->canHaveFrozen()
-                ? [new InteractiveElement(CarrierSettings::EXPORT_FROZEN, Components::INPUT_TOGGLE)]
-                : [],
         ];
+
+        if ($this->carrierSchema->canHaveAgeCheck()) {
+            $ageCheckElement = (new InteractiveElement(CarrierSettings::EXPORT_AGE_CHECK, Components::INPUT_TOGGLE))
+                ->builder(function (FormOperationBuilder $builder) {
+                    $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
+                        $afterUpdate
+                            ->setValue(true)
+                            ->on(CarrierSettings::EXPORT_SIGNATURE)
+                            ->if->eq(true);
+
+                        $afterUpdate
+                            ->setValue(true)
+                            ->on(CarrierSettings::EXPORT_ONLY_RECIPIENT)
+                            ->if->eq(true);
+                    });
+                });
+            $this->makeReadOnlyWhenRequired($ageCheckElement, 'requiresAgeVerification');
+            $fields[] = [$ageCheckElement];
+        }
+
+        // Disable the signature / only recipient options when age check is enabled. With age check these are mandatory.
+        $signatureElements = [];
+        $onlyRecipientElements = [];
+
+        if ($this->carrierSchema->canHaveSignature()) {
+            $signatureElement = new InteractiveElement(CarrierSettings::EXPORT_SIGNATURE, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($signatureElement, 'requiresSignature');
+            $signatureElements = [$signatureElement];
+        }
+
+        if ($this->carrierSchema->canHaveOnlyRecipient()) {
+            $onlyRecipientElement = new InteractiveElement(CarrierSettings::EXPORT_ONLY_RECIPIENT, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($onlyRecipientElement, 'recipientOnlyDelivery');
+            $onlyRecipientElements = [$onlyRecipientElement];
+        }
+
+        $fields[] = $this->withOperation(
+            function (FormOperationBuilder $builder) {
+                if (!$this->carrierSchema->canHaveAgeCheck()) {
+                    return;
+                }
+
+                $builder->readOnlyWhen(CarrierSettings::EXPORT_AGE_CHECK);
+            },
+            $signatureElements,
+            $onlyRecipientElements
+        );
+
+        if ($this->carrierSchema->canHaveReceiptCode()) {
+            $receiptCodeElement = new InteractiveElement(CarrierSettings::EXPORT_RECEIPT_CODE, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($receiptCodeElement, 'requiresReceiptCode');
+            $fields[] = [$receiptCodeElement];
+        }
+
+        if ($this->carrierSchema->canHaveLargeFormat()) {
+            $largeFormatElement = new InteractiveElement(CarrierSettings::EXPORT_LARGE_FORMAT, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($largeFormatElement, 'oversizedPackage');
+            $fields[] = [$largeFormatElement];
+        }
+
+        if ($this->carrierSchema->canHaveDirectReturn()) {
+            $returnElement = new InteractiveElement(CarrierSettings::EXPORT_RETURN, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($returnElement, 'returnOnFirstFailedDelivery');
+            $fields[] = [$returnElement];
+        }
+
+        if ($this->carrierSchema->canHaveHideSender()) {
+            $hideSenderElement = new InteractiveElement(CarrierSettings::EXPORT_HIDE_SENDER, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($hideSenderElement, 'hideSender');
+            $fields[] = [$hideSenderElement];
+        }
+
+        $fields[] = $this->carrierSchema->canHaveInsurance()
+            ? $this->getExportInsuranceFields()
+            : [];
+
+        if ($this->carrierSchema->canHaveCollect()) {
+            $collectElement = new InteractiveElement(CarrierSettings::EXPORT_COLLECT, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($collectElement, 'scheduledCollection');
+            $fields[] = [$collectElement];
+        }
+
+        if ($this->carrierSchema->canHaveFreshFood()) {
+            $freshFoodElement = new InteractiveElement(CarrierSettings::EXPORT_FRESH_FOOD, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($freshFoodElement, 'freshFood');
+            $fields[] = [$freshFoodElement];
+        }
+
+        if ($this->carrierSchema->canHaveFrozen()) {
+            $frozenElement = new InteractiveElement(CarrierSettings::EXPORT_FROZEN, Components::INPUT_TOGGLE);
+            $this->makeReadOnlyWhenRequired($frozenElement, 'frozen');
+            $fields[] = [$frozenElement];
+        }
+
+        return $fields;
     }
 
     /**
@@ -532,35 +558,32 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         // Signature option
         if ($this->carrierSchema->canHaveSignature()) {
-            $settings = array_merge(
-                $settings,
-                $this->createSettingWithPriceFields(
-                    CarrierSettings::ALLOW_SIGNATURE,
-                    CarrierSettings::PRICE_SIGNATURE
-                )
+            $elements = $this->createSettingWithPriceFields(
+                CarrierSettings::ALLOW_SIGNATURE,
+                CarrierSettings::PRICE_SIGNATURE
             );
+            $this->makeReadOnlyWhenRequired($elements[0], 'requiresSignature');
+            $settings = array_merge($settings, $elements);
         }
 
         // Only recipient option
         if ($this->carrierSchema->canHaveOnlyRecipient()) {
-            $settings = array_merge(
-                $settings,
-                $this->createSettingWithPriceFields(
-                    CarrierSettings::ALLOW_ONLY_RECIPIENT,
-                    CarrierSettings::PRICE_ONLY_RECIPIENT
-                )
+            $elements = $this->createSettingWithPriceFields(
+                CarrierSettings::ALLOW_ONLY_RECIPIENT,
+                CarrierSettings::PRICE_ONLY_RECIPIENT
             );
+            $this->makeReadOnlyWhenRequired($elements[0], 'recipientOnlyDelivery');
+            $settings = array_merge($settings, $elements);
         }
 
         // Priority delivery option
         if ($this->carrierSchema->canHavePriorityDelivery()) {
-            $settings = array_merge(
-                $settings,
-                $this->createSettingWithPriceFields(
-                    CarrierSettings::ALLOW_PRIORITY_DELIVERY,
-                    CarrierSettings::PRICE_PRIORITY_DELIVERY
-                )
+            $elements = $this->createSettingWithPriceFields(
+                CarrierSettings::ALLOW_PRIORITY_DELIVERY,
+                CarrierSettings::PRICE_PRIORITY_DELIVERY
             );
+            $this->makeReadOnlyWhenRequired($elements[0], 'priorityDelivery');
+            $settings = array_merge($settings, $elements);
         }
 
         return $settings;
@@ -602,6 +625,27 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 )
             ),
         ];
+    }
+
+    /**
+     * Mark a form element as read-only when the carrier's capability metadata indicates it is required.
+     *
+     * @param  \MyParcelNL\Pdk\Frontend\Form\InteractiveElement $element
+     * @param  string                                           $capabilitiesKey
+     *
+     * @return void
+     */
+    private function makeReadOnlyWhenRequired(InteractiveElement $element, string $capabilitiesKey): void
+    {
+        $option = $this->carrier->getOptionMetadata($capabilitiesKey);
+
+        if (! $option || ! $option->getIsRequired()) {
+            return;
+        }
+
+        $element->builder(function (FormOperationBuilder $builder) {
+            $builder->readOnlyWhen();
+        });
     }
 
     /**
