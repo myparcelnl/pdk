@@ -38,6 +38,20 @@ interface OrderOptionDefinitionInterface
     public function getCapabilitiesOptionsKey(): ?string;
 
     /**
+     * Get the delivery options "allow" toggle key (e.g. 'allowSignature').
+     *
+     * @return null|string
+     */
+    public function getAllowSettingsKey(): ?string;
+
+    /**
+     * Get the price surcharge key (e.g. 'priceSignature').
+     *
+     * @return null|string
+     */
+    public function getPriceSettingsKey(): ?string;
+
+    /**
      * Validates if the option is allowed for the current carrier.
      *
      * @param  \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $carrierSchema
