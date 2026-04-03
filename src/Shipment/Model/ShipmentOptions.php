@@ -182,22 +182,15 @@ class ShipmentOptions extends Model
      */
     protected function initializeResolvesOptionAttributes(): void
     {
-        /** @var OrderOptionDefinitionInterface[] $definitions */
-        $definitions = Pdk::get('orderOptionDefinitions');
-
-        $optionAttributes = [];
-        $optionCasts      = [];
-
-        foreach ($definitions as $definition) {
-            $key = $definition->getShipmentOptionsKey();
-
-            if ($key === null) {
-                continue;
+        [$optionAttributes, $optionCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition) {
+                return $definition->getShipmentOptionsKey();
+            },
+            TriStateService::INHERIT,
+            static function (OrderOptionDefinitionInterface $definition): string {
+                return $definition->getShipmentOptionsCast();
             }
-
-            $optionAttributes[$key] = $definition->getShipmentOptionsDefault();
-            $optionCasts[$key]      = $definition->getShipmentOptionsCast();
-        }
+        );
 
         $this->attributes = array_merge($optionAttributes, $this->attributes);
         $this->casts      = array_merge($optionCasts, $this->casts);

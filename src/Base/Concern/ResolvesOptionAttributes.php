@@ -10,27 +10,30 @@ use MyParcelNL\Pdk\Facade\Pdk;
 trait ResolvesOptionAttributes
 {
     /**
-     * Build an array of attributes from registered option definitions.
+     * Build arrays of attributes and casts from registered option definitions.
      *
      * @param  callable(OrderOptionDefinitionInterface): ?string $keyExtractor
      * @param  mixed                                             $default
+     * @param  callable(OrderOptionDefinitionInterface): string  $castExtractor
      *
-     * @return array
+     * @return array{0: array, 1: array} [$attributes, $casts]
      */
-    protected function resolveOptionAttributes(callable $keyExtractor, $default): array
+    protected function resolveOptionAttributes(callable $keyExtractor, $default, callable $castExtractor): array
     {
         /** @var OrderOptionDefinitionInterface[] $definitions */
         $definitions = Pdk::get('orderOptionDefinitions');
         $attributes  = [];
+        $casts       = [];
 
         foreach ($definitions as $definition) {
             $key = $keyExtractor($definition);
 
             if ($key !== null) {
                 $attributes[$key] = $default;
+                $casts[$key]      = $castExtractor($definition);
             }
         }
 
-        return $attributes;
+        return [$attributes, $casts];
     }
 }

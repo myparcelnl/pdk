@@ -329,34 +329,44 @@ class CarrierSettings extends AbstractSettingsModel
      */
     protected function initializeResolvesOptionAttributes(): void
     {
-        /** @var OrderOptionDefinitionInterface[] $definitions */
-        $definitions = Pdk::get('orderOptionDefinitions');
-
-        $dynamicAttributes = [];
-        $dynamicCasts      = [];
-
-        foreach ($definitions as $definition) {
-            $exportKey = $definition->getCarrierSettingsKey();
-
-            if ($exportKey !== null) {
-                $dynamicAttributes[$exportKey] = TriStateService::INHERIT;
-                $dynamicCasts[$exportKey]      = $definition->getShipmentOptionsCast();
+        // Export settings (e.g. exportSignature): merchant-controlled default for shipment creation.
+        // Cast is definition-specific: most are tri-state (-1/0/1), but some like insurance use 'int'.
+        [$exportAttributes, $exportCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getCarrierSettingsKey();
+            },
+            TriStateService::INHERIT,
+            static function (OrderOptionDefinitionInterface $definition): string {
+                return $definition->getShipmentOptionsCast();
             }
+        );
 
-            $allowKey = $definition->getAllowSettingsKey();
-
-            if ($allowKey !== null) {
-                $dynamicAttributes[$allowKey] = false;
-                $dynamicCasts[$allowKey]      = 'bool';
+        // Allow settings (e.g. allowSignature): whether the consumer can toggle this option at checkout.
+        // Always boolean — the option is either shown or not in the delivery options widget.
+        [$allowAttributes, $allowCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getAllowSettingsKey();
+            },
+            false,
+            static function (): string {
+                return 'bool';
             }
+        );
 
-            $priceKey = $definition->getPriceSettingsKey();
-
-            if ($priceKey !== null) {
-                $dynamicAttributes[$priceKey] = 0;
-                $dynamicCasts[$priceKey]      = 'float';
+        // Price settings (e.g. priceSignature): surcharge added to shipping cost when option is active.
+        // Always float — represents a monetary value added to the base shipping price.
+        [$priceAttributes, $priceCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getPriceSettingsKey();
+            },
+            0,
+            static function (): string {
+                return 'float';
             }
-        }
+        );
+
+        $dynamicAttributes = array_merge($exportAttributes, $allowAttributes, $priceAttributes);
+        $dynamicCasts      = array_merge($exportCasts, $allowCasts, $priceCasts);
 
         $this->attributes = array_merge($dynamicAttributes, $this->attributes);
         $this->casts      = array_merge($dynamicCasts, $this->casts);
