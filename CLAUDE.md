@@ -1,6 +1,4 @@
-# General constraints
-
-- Avoid writing prompt instructions or reasoning into code comments. Instead, keep comments focused on explaining the code itself. If you need to include reasoning or instructions for yourself, consider using inline comments with a "@TODO:" prefix marker to indicate that they are temporary notes for future reference.
+This is the plugin development kit, which is a composer dependency of several MyParcel e-commerce plugins. It provides PHP and JS integration between the plugins and the MyParcel API, as well as standardized UI, data models, and testing utilities to ensure consistency and reliability across all plugins. The PDK is designed to be flexible and extensible, allowing for easy integration with various e-commerce platforms and custom use cases.
 
 # PHP constraints
 
@@ -49,3 +47,7 @@
 
 - New endpoints and major refactors must use the definitions as available in the generated clients in the SDK
 - Treat API requests and responses defined within the PDK as legacy and deprecated
+
+# Cache
+
+The .cache folder may contain artifacts related to a specific plugin instance when linked to a plugin, you can safely clear the `.cache` folder when making changes to the PDK or encountering unexpected behavior from plugins.
