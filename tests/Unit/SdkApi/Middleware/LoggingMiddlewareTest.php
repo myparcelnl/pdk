@@ -34,7 +34,6 @@ function makeLoggingClient(): array
     return [new Client(['handler' => $stack]), $mock];
 }
 
-// forApiRequests() returns a callable
 it('forApiRequests returns a callable', function () {
     expect(LoggingMiddleware::forApiRequests())->toBeCallable();
 });
