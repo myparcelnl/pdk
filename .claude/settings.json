@@ -6,13 +6,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; case \"${f##*.}\" in php) vendor/bin/rector process \"$f\" --no-progress-bar 2>/dev/null | grep -vE '^$|WARNING.*Skipped rule';; md|yml|json|html) npx -q prettier --write \"$f\" 2>/dev/null;; esac; }",
+            "command": "jq -r '(.tool_response.filePath // .tool_input.file_path) // empty' | { read -r f; [ -n \"$f\" ] && [ \"$f\" != \"null\" ] || exit 0; case \"${f##*.}\" in php) out=$(vendor/bin/rector process \"$f\" --no-progress-bar 2>/dev/null); status=$?; printf '%s\n' \"$out\" | grep -vE '^$|WARNING.*Skipped rule' || true; exit $status;; md|yml|json|html) npx -q prettier --write \"$f\" 2>/dev/null;; esac; }",
             "timeout": 30,
             "statusMessage": "Running quality fixes..."
           },
           {
             "type": "command",
-            "command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; case \"${f##*.}\" in php) vendor/bin/phpstan analyse \"$f\" --no-progress --error-format=raw 2>/dev/null | head -20;; esac; }",
+            "command": "jq -r '(.tool_response.filePath // .tool_input.file_path) // empty' | { read -r f; [ -n \"$f\" ] && [ \"$f\" != \"null\" ] || exit 0; case \"${f##*.}\" in php) vendor/bin/phpstan analyse \"$f\" --no-progress --error-format=raw 2>/dev/null | head -20;; esac; }",
             "timeout": 30,
             "statusMessage": "Running static analysis..."
           }
