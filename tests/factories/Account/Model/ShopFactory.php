@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Model;
 
-use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
@@ -28,7 +27,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method Shop make()
  * @method $this withAccountId(int $accountId)
  * @method $this withBilling(array $billing)
- * @method $this withCarrierConfigurations(array|ShopCarrierConfigurationCollection|ShopCarrierConfigurationFactory[] $carrierConfigurations)
  * @method $this withCarriers(array|CarrierCollection|CarrierFactory[]|CarrierCollectionFactory $carriers)
  * @method $this withDeliveryAddress(array $deliveryAddress)
  * @method $this withGeneralSettings(array $generalSettings)
