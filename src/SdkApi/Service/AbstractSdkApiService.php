@@ -35,15 +35,15 @@ use Throwable;
  * Extend this class in namespace-specific abstracts (e.g., AbstractCoreApiService), then create
  * concrete service classes for specific business domains (e.g., ContractDefinitionsService).
  *
- * @see \MyParcelNL\Pdk\SdkApi\Service\CoreApi\CoreApiService
- * @see \MyParcelNL\Pdk\SdkApi\Service\CoreApi\Capabilities\ContractDefinitionsService
+ * @see \MyParcelNL\Pdk\SdkApi\Service\CoreApi\AbstractCoreApiService
+ * @see \MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService
  */
 abstract class AbstractSdkApiService
 {
     /**
-     * @return mixed a generated Configuration clas appropiate to the API you're using
+     * @return mixed A generated Configuration class appropriate to the API you're using
      */
-    abstract function getApiConfig();
+    abstract public function getApiConfig();
 
     /**
      * Get the API key from account settings.

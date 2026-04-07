@@ -28,7 +28,7 @@ use Psr\Http\Message\RequestInterface;
  * $capabilities = $service->getCapabilities([
  *     'carrier' => 'POSTNL',
  *     'recipient' => ['cc' => 'NL', 'postal_code' => '2132WT'],
- *     'package_type' => 'package',
+ *     'package_type' => 'PACKAGE',
  * ]);
  *
  * // Get contract definitions for a carrier

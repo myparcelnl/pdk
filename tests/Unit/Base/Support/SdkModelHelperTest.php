@@ -14,8 +14,8 @@ uses()->group('model', 'sdk');
 it('converts keys between PDK and SDK case', function () {
     expect(SdkModelHelper::toPdkCase('first_name'))->toBe('firstName')
         ->and(SdkModelHelper::toPdkCase('package_types'))->toBe('packageTypes')
-        ->and(SdkModelHelper::toSdkCase('firstName'))->toBe('first_name')
-        ->and(SdkModelHelper::toSdkCase('packageTypes'))->toBe('package_types');
+        ->and(SdkModelHelper::toOpenApiKey('firstName'))->toBe('first_name')
+        ->and(SdkModelHelper::toOpenApiKey('packageTypes'))->toBe('package_types');
 });
 
 it('builds getter map with camelCase keys', function () {

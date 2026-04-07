@@ -15,8 +15,7 @@ final class SensitiveDataScrubber
 
     /**
      * Substring patterns (lowercase) matched against query param and body keys.
-     * Using stripos() / strpos() after strtolower() catches variants like
-     * access_token, refresh_token, api_key, etc.
+     * Partial matches are made, so 'name' will also match 'first_name', 'lastName', etc.
      */
     private const SENSITIVE_KEY_PATTERNS = [
         'token',
@@ -33,15 +32,9 @@ final class SensitiveDataScrubber
         'phone',
         'zip',
         'postal',
-        'postal_code',
-        'zip_code',
         'lat',
         'lng',
         'name',
-        'last_name',
-        'lastName',
-        'first_name',
-        'firstName',
         'company',
         'customer',
         'client',

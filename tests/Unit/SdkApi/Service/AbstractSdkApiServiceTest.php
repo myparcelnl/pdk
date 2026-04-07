@@ -86,7 +86,7 @@ it('builds user agent with PDK defaults', function () {
 });
 
 it('includes custom user agents from config', function () {
-    $pdk = MockPdkFactory::create([
+    MockPdkFactory::create([
         'userAgent' => value([
             'MyPlatform' => '2.0.0',
             'CustomApp'  => '1.5.3',
