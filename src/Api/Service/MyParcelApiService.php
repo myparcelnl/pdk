@@ -9,7 +9,9 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 
 /**
- * This will replace the SDK one day...
+ * Service for making API calls to the MyParcel API.
+ *
+ * @deprecated use the generated SDK instead. Use specific services from the SdkApi namespace, such as those in the MyParcelNL\Pdk\SdkApi\Service\CoreApi namespace.
  */
 class MyParcelApiService extends AbstractApiService
 {
