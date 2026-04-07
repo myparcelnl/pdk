@@ -223,11 +223,12 @@ it('response body is logged as decoded JSON array via middleware', function () {
 });
 
 // Tests for Accept-header middleware in CapabilitiesService
-it('sets version-2 Accept header for capabilities endpoint requests', function () {
+it('sets version-2 Accept header for all capabilities endpoints', function () {
     TestBootstrapper::hasApiKey('test-key');
 
     $service = new MockableCapabilitiesService();
     $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+    $service->mockHandler->append(new Response(200, [], json_encode(['items' => []])));
 
     $service->getCapabilities([
         'carrier'      => 'POSTNL',
@@ -235,28 +236,11 @@ it('sets version-2 Accept header for capabilities endpoint requests', function (
         'package_type' => 'PACKAGE',
     ]);
 
-    expect($service->capturedRequests)->toHaveCount(1);
-
-    $request = $service->capturedRequests[0];
-    expect($request->getHeaderLine('Accept'))->toBe('application/json;charset=utf-8;version=2');
-});
-
-it('does not override Accept header for non-capabilities endpoints', function () {
-    // Build the handler stack directly to send a request to a non-capabilities path
-    TestBootstrapper::hasApiKey('test-key');
-
-    $service = new MockableCapabilitiesService();
-
-    // Append a dummy response for the mock
-    $service->mockHandler->append(new Response(200, [], json_encode(['items' => []])));
-
-    // getContractDefinitions goes to /shipments/capabilities/contract-definitions,
-    // which matches the middleware pattern, so let's verify it also gets the header.
     $service->getContractDefinitions(null);
 
-    expect($service->capturedRequests)->toHaveCount(1);
+    expect($service->capturedRequests)->toHaveCount(2);
 
-    $request = $service->capturedRequests[0];
-    // Contract definitions path also contains /shipments/capabilities
-    expect($request->getHeaderLine('Accept'))->toBe('application/json;charset=utf-8;version=2');
+    foreach ($service->capturedRequests as $request) {
+        expect($request->getHeaderLine('Accept'))->toBe('application/json;charset=utf-8;version=2');
+    }
 });

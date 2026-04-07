@@ -99,10 +99,8 @@ abstract class SdkBackedModel extends Model
     {
         $key = Utils::changeCase($key);
 
-        $nativeValue = parent::getAttribute($key);
-
-        if (null !== $nativeValue || array_key_exists($key, $this->attributes)) {
-            return $nativeValue;
+        if (array_key_exists($key, $this->attributes)) {
+            return parent::getAttribute($key);
         }
 
         if ($this->sdkModel !== null) {
@@ -156,9 +154,8 @@ abstract class SdkBackedModel extends Model
                     $this->sdkModel = new $this->sdkModelClass();
                 }
 
-                $snakeKey     = SdkModelHelper::toSdkCase($key);
                 $openApiTypes = $this->sdkModelClass::openAPITypes();
-                $type         = $openApiTypes[$snakeKey] ?? null;
+                $type         = $openApiTypes[SdkModelHelper::toOpenApiKey($key)] ?? null;
 
                 if ($type !== null && ! $this->isAlreadyHydrated($value, $type)) {
                     $value = ObjectSerializer::deserialize($value, $type);
@@ -250,7 +247,7 @@ abstract class SdkBackedModel extends Model
     private function isAlreadyHydrated($value, string $type): bool
     {
         // openAPI array types are suffixed with '[]', e.g. '\Ns\SomeModel[]'
-        if (strcasecmp(substr($type, -2), '[]') === 0) {
+        if ('[]' === substr($type, -2)) {
             return is_array($value) && ! empty($value) && reset($value) instanceof ModelInterface;
         }
 

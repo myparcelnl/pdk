@@ -26,13 +26,13 @@ class SdkModelHelper
     }
 
     /**
-     * Convert a camelCase PDK attribute name to snake_case SDK property name.
+     * Convert a camelCase PDK attribute name to the key format used by SDK openAPITypes().
      *
      * @param  string $camelCaseKey
      *
      * @return string
      */
-    public static function toSdkCase(string $camelCaseKey): string
+    public static function toOpenApiKey(string $camelCaseKey): string
     {
         return Utils::changeCase($camelCaseKey, Arrayable::CASE_SNAKE);
     }
