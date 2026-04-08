@@ -146,11 +146,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         $hasInsurance = $this->carrierSchema->canHaveShipmentOption(InsuranceDefinition::class);
 
-        if ($hasInsurance) {
-            $insuranceAmounts = $this->carrier->outboundFeatures['metadata']['insuranceOptions'] ?? [];
-        } else {
-            $insuranceAmounts = [];
-        }
+        $insuranceAmounts = $hasInsurance
+            ? $this->carrierSchema->getAllowedInsuranceAmounts()
+            : [];
 
         $options = array_map(function (int $amount) {
             return $this->currencyService->format($amount);
@@ -345,7 +343,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getDefaultExportReturnsFields(): array
     {
-        $hasPackageTypeOptions = !empty($this->carrier->outboundFeatures->packageTypes);
+        $hasPackageTypeOptions = !empty($this->carrier->packageTypes);
         $canHaveLargeFormat    = $this->carrierSchema->canHaveShipmentOption(LargeFormatDefinition::class);
 
         if (! $hasPackageTypeOptions && ! $canHaveLargeFormat) {

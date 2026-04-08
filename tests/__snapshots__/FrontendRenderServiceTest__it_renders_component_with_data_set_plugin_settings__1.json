@@ -1965,7 +1965,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -1983,7 +2028,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -2001,7 +2091,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -2019,7 +2154,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -2051,6 +2231,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -3355,7 +3575,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -3373,7 +3638,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -3391,7 +3701,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -3409,7 +3764,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -3441,6 +3841,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -4745,7 +5185,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -4763,7 +5248,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -4781,7 +5311,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -4799,7 +5374,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -4831,6 +5451,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -6135,7 +6795,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -6153,7 +6858,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -6171,7 +6921,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -6189,7 +6984,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -6221,6 +7061,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -7525,7 +8405,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -7543,7 +8468,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -7561,7 +8531,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -7579,7 +8594,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -7611,6 +8671,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -8915,7 +10015,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -8933,7 +10078,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -8951,7 +10141,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -8969,7 +10204,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -9001,6 +10281,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -10305,7 +11625,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -10323,7 +11688,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -10341,7 +11751,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -10359,7 +11814,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -10391,6 +11891,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -11695,7 +13235,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -11713,7 +13298,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -11731,7 +13361,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -11749,7 +13424,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -11781,6 +13501,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -13085,7 +14845,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -13103,7 +14908,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -13121,7 +14971,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -13139,7 +15034,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -13171,6 +15111,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -14475,7 +16455,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -14493,7 +16518,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -14511,7 +16581,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -14529,7 +16644,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -14561,6 +16721,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -15865,7 +18065,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -15883,7 +18128,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -15901,7 +18191,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -15919,7 +18254,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -15951,6 +18331,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -17306,7 +19726,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -17324,7 +19789,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -17342,7 +19852,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -17360,7 +19915,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -17392,6 +19992,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -18696,7 +21336,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -18714,7 +21399,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -18732,7 +21462,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -18750,7 +21525,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -18782,6 +21602,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
@@ -20086,7 +22946,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to",
               "description": "settings_carrier_export_insurance_up_to_description"
             },
@@ -20104,7 +23009,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_unique",
               "description": "settings_carrier_export_insurance_up_to_unique_description"
             },
@@ -20122,7 +23072,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_eu",
               "description": "settings_carrier_export_insurance_up_to_eu_description"
             },
@@ -20140,7 +23135,52 @@
                 }
               ],
               "$component": "SelectInput",
-              "options": [],
+              "options": [
+                {
+                  "value": 0,
+                  "plainLabel": "\u20ac 0,00"
+                },
+                {
+                  "value": 50000,
+                  "plainLabel": "\u20ac 500,00"
+                },
+                {
+                  "value": 100000,
+                  "plainLabel": "\u20ac 1.000,00"
+                },
+                {
+                  "value": 150000,
+                  "plainLabel": "\u20ac 1.500,00"
+                },
+                {
+                  "value": 200000,
+                  "plainLabel": "\u20ac 2.000,00"
+                },
+                {
+                  "value": 250000,
+                  "plainLabel": "\u20ac 2.500,00"
+                },
+                {
+                  "value": 300000,
+                  "plainLabel": "\u20ac 3.000,00"
+                },
+                {
+                  "value": 350000,
+                  "plainLabel": "\u20ac 3.500,00"
+                },
+                {
+                  "value": 400000,
+                  "plainLabel": "\u20ac 4.000,00"
+                },
+                {
+                  "value": 450000,
+                  "plainLabel": "\u20ac 4.500,00"
+                },
+                {
+                  "value": 500000,
+                  "plainLabel": "\u20ac 5.000,00"
+                }
+              ],
               "label": "settings_carrier_export_insurance_up_to_row",
               "description": "settings_carrier_export_insurance_up_to_row_description"
             },
@@ -20172,6 +23212,46 @@
               "content": "settings_carrier_export_returns_description",
               "heading": "settings_carrier_export_returns_title",
               "level": 2
+            },
+            {
+              "name": "exportReturnPackageType",
+              "$component": "SelectInput",
+              "options": [
+                {
+                  "value": -1,
+                  "label": "settings_default"
+                },
+                {
+                  "value": "PACKAGE",
+                  "label": "package_type_PACKAGE"
+                },
+                {
+                  "value": "MAILBOX",
+                  "label": "package_type_MAILBOX"
+                },
+                {
+                  "value": "UNFRANKED",
+                  "label": "package_type_UNFRANKED"
+                },
+                {
+                  "value": "DIGITAL_STAMP",
+                  "label": "package_type_DIGITAL_STAMP"
+                },
+                {
+                  "value": "PALLET",
+                  "label": "package_type_PALLET"
+                },
+                {
+                  "value": "SMALL_PACKAGE",
+                  "label": "package_type_SMALL_PACKAGE"
+                },
+                {
+                  "value": "ENVELOPE",
+                  "label": "package_type_ENVELOPE"
+                }
+              ],
+              "label": "settings_carrier_export_return_package_type",
+              "description": "settings_carrier_export_return_package_type_description"
             },
             {
               "name": "exportReturnLargeFormat",
