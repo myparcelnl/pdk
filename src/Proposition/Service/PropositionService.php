@@ -175,7 +175,7 @@ class PropositionService
     }
 
     /**
-     * @TODO: Refactor to shiping rules api?
+     * @TODO: Refactor to shipping rules API once carrier selection is handled there.
      *
      * Get the default carrier from the proposition config.
      * Returns the outbound carrier by default. Use $outbound = false to get the inbound (return shipments) carrier.
@@ -190,7 +190,13 @@ class PropositionService
         } else {
             $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
-        return $this->carrierRepository->get(['id' => $defaultCarrierId]);
+        $carrier = $this->carrierRepository->findByLegacyId($defaultCarrierId);
+
+        if (! $carrier) {
+            throw new \RuntimeException(sprintf('Default %s carrier with id %d was not found', $outbound ? 'outbound' : 'inbound', $defaultCarrierId));
+        }
+
+        return $carrier;
     }
 
     /**
