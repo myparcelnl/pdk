@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
  * @property string $environment
- * @property bool $orderMode
  * @property bool $hasCarrierContract
  * @property bool $hasCarrierSmallPackageContract
  */
@@ -16,14 +15,12 @@ class AccountGeneralSettings extends Model
 {
     public $attributes = [
         'environment'                    => 'production',
-        'orderMode'                      => false,
         'hasCarrierContract'             => false,
         'hasCarrierSmallPackageContract' => false,
     ];
 
     public $casts      = [
         'environment'                    => 'string',
-        'orderMode'                      => 'bool',
         'hasCarrierContract'             => 'bool',
         'hasCarrierSmallPackageContract' => 'bool',
     ];

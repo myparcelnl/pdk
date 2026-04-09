@@ -5,17 +5,20 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Config;
 
+use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use function MyParcelNL\Pdk\Tests\factory;
 
 it('gets bulk actions', function (bool $orderMode, array $actions) {
     MockPdkFactory::create();
 
-    factory(OrderSettings::class)
-        ->withOrderMode($orderMode)
-        ->store();
+    if ($orderMode) {
+        factory(Account::class)
+            ->withSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT])
+            ->store();
+    }
 
     /** @var array $bulkActions */
     $bulkActions = Pdk::get('bulkActions');

@@ -5,13 +5,12 @@ declare(strict_types=1);
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 use function DI\env;
@@ -114,10 +113,9 @@ return [
     ]),
 
     'bulkActions'              => factory(static function (): array {
-        $orderModeEnabled = Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID);
-        $all              = PdkFacade::get('allBulkActions');
+        $all = PdkFacade::get('allBulkActions');
 
-        return $orderModeEnabled
+        return AccountSettings::usesOrderMode()
             ? Arr::get($all, 'orderMode', [])
             : Arr::get($all, 'default', []);
     }),

@@ -15,7 +15,6 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withHasCarrierContract(bool $hasCarrierContract)
  * @method $this withHasCarrierSmallPackageContract(bool $hasCarrierSmallPackageContract)
  * @method $this withIsTest(bool $isTest)
- * @method $this withOrderMode(bool $orderMode)
  */
 final class AccountGeneralSettingsFactory extends AbstractModelFactory
 {

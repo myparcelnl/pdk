@@ -47,11 +47,9 @@ it('has correct default attributes', function () {
     
     expect($settings->attributes)->toBeArray()
         ->and($settings->attributes)->toHaveKey('environment')
-        ->and($settings->attributes)->toHaveKey('orderMode')
         ->and($settings->attributes)->toHaveKey('hasCarrierContract')
         ->and($settings->attributes)->toHaveKey('hasCarrierSmallPackageContract')
         ->and($settings->attributes['environment'])->toBe('production')
-        ->and($settings->attributes['orderMode'])->toBeFalse()
         ->and($settings->attributes['hasCarrierContract'])->toBeFalse()
         ->and($settings->attributes['hasCarrierSmallPackageContract'])->toBeFalse();
 });
@@ -61,11 +59,9 @@ it('has correct casts', function () {
     
     expect($settings->casts)->toBeArray()
         ->and($settings->casts)->toHaveKey('environment')
-        ->and($settings->casts)->toHaveKey('orderMode')
         ->and($settings->casts)->toHaveKey('hasCarrierContract')
         ->and($settings->casts)->toHaveKey('hasCarrierSmallPackageContract')
         ->and($settings->casts['environment'])->toBe('string')
-        ->and($settings->casts['orderMode'])->toBe('bool')
         ->and($settings->casts['hasCarrierContract'])->toBe('bool')
         ->and($settings->casts['hasCarrierSmallPackageContract'])->toBe('bool');
 });

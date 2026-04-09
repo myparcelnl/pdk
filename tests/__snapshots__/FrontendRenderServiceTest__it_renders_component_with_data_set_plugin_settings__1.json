@@ -13,31 +13,7 @@
           "heading": "settings_order_general_title"
         },
         {
-          "name": "orderMode",
-          "$builders": [
-            {
-              "$readOnlyWhen": []
-            }
-          ],
-          "$component": "ToggleInput",
-          "subtext": "hint_enable_order_mode_backoffice",
-          "label": "settings_order_order_mode",
-          "description": "settings_order_order_mode_description"
-        },
-        {
           "name": "conceptShipments",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "orderMode",
-                    "$eq": false
-                  }
-                ]
-              }
-            }
-          ],
           "$component": "ToggleInput",
           "label": "settings_order_concept_shipments",
           "description": "settings_order_concept_shipments_description"
@@ -87,18 +63,6 @@
         },
         {
           "name": "saveCustomerAddress",
-          "$builders": [
-            {
-              "$visibleWhen": {
-                "$if": [
-                  {
-                    "$target": "orderMode",
-                    "$eq": false
-                  }
-                ]
-              }
-            }
-          ],
           "$component": "ToggleInput",
           "label": "settings_order_save_customer_address",
           "description": "settings_order_save_customer_address_description"

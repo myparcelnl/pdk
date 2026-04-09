@@ -15,35 +15,6 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
 
-it('saves settings', function (array $data) {
-    $content = json_encode([
-        'data' => [
-            'plugin_settings' => [
-                'order' => [
-                    'order_mode' => $data['order_mode'],
-                ],
-            ],
-        ],
-    ]);
-    $request = new Request(['action' => PdkBackendActions::UPDATE_PLUGIN_SETTINGS], [], [], [], [], [], $content);
-
-    $response = Actions::execute($request);
-
-    $content = json_decode($response->getContent(), true);
-
-    expect($response)
-        ->toBeInstanceOf(Response::class)
-        ->and(Arr::dot($content))
-        ->toHaveKeysAndValues([
-            'data.plugin_settings.order.orderMode' => $data['order_mode'],
-        ])
-        ->and($response->getStatusCode())
-        ->toBe(200);
-})->with([
-    [['order_mode' => false]],
-    [['order_mode' => true]],
-]);
-
 it('resets delivery options when disabled', function () {
     $content = json_encode([
         'data' => [
