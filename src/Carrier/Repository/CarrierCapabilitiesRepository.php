@@ -39,7 +39,7 @@ class CarrierCapabilitiesRepository extends Repository
      */
     public function getContractDefinitions(?string $carrier = null): CarrierCollection
     {
-        $cacheKey = 'contractDefinitions' . (null !== $carrier ? '.' . $carrier : '');
+        $cacheKey = "contractDefinitions.$carrier";
 
         return $this->retrieve($cacheKey, function () use ($carrier) {
             $contractDefinitions = $this->apiService->getContractDefinitions($carrier);
