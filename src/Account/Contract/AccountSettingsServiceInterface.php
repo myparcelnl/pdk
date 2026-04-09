@@ -17,12 +17,6 @@ interface AccountSettingsServiceInterface
 
     /**
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     * @deprecated use getCarriers()
-     */
-    public function getCarrierOptions(): CarrierCollection;
-
-    /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection;
 
@@ -35,12 +29,6 @@ interface AccountSettingsServiceInterface
      * @return bool
      */
     public function hasAccount(): bool;
-
-    /**
-     * @return bool
-     * @noinspection PhpUnused
-     */
-    public function hasCarrierSmallPackageContract(): bool;
 
     /**
      * @return bool

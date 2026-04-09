@@ -112,49 +112,6 @@
   },
   "contracts": {
     "enablePostNLCustomContract": false,
-    "available": [
-      {
-        "carrier": {
-          "id": 15,
-          "name": "BRT"
-        },
-        "hasCutoffTime": false,
-        "hasPostponedDelivery": false,
-        "outboundFeatures": {
-          "packageTypes": ["PACKAGE"],
-          "deliveryTypes": ["STANDARD_DELIVERY", "PICKUP_DELIVERY"],
-          "shipmentOptions": ["SIGNATURE", "INSURANCE", "CASH_ON_DELIVERY"],
-          "deliveryCountries": [],
-          "pickupCountries": [],
-          "metadata": {
-            "labelDescriptionLength": 45,
-            "multiCollo": false,
-            "insuranceOptions": [0, 25000, 50000, 100000, 150000, 200000, 250000]
-          }
-        },
-        "deliveryOptions": {
-          "addressFields": [],
-          "unsupportedParameters": [],
-          "availableFeatures": [],
-          "allowFakeDelivery": true
-        }
-      }
-    ],
-    "availableForCustomCredentials": [
-      {
-        "carrier": {
-          "id": 15,
-          "name": "BRT"
-        },
-        "configurationParameters": [
-          "username",
-          "password",
-          "api_key",
-          "options.customerNumber",
-          "options.departureDepot"
-        ]
-      }
-    ],
     "inbound": {
       "default": {
         "carrier": {

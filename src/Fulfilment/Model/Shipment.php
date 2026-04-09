@@ -6,16 +6,19 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\PhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
+use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
 
 /**
  * @property string                                                 $orderId
- * @property int                                                    $carrier
+ * @property Carrier                                                $carrier
  * @property string                                                 $contractId
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration $customsDeclaration
  * @property \MyParcelNL\Pdk\Fulfilment\Model\ShipmentOptions       $options
@@ -26,6 +29,8 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
  */
 class Shipment extends Model
 {
+    use HasCarrierAttribute;
+
     public $attributes = [
         'orderId'            => null,
         'carrier'            => null,
@@ -40,7 +45,6 @@ class Shipment extends Model
 
     public $casts      = [
         'orderId'            => 'string',
-        'carrier'            => 'int',
         'contractId'         => 'string',
         'customsDeclaration' => CustomsDeclaration::class,
         'options'            => ShipmentOptions::class,
@@ -57,7 +61,7 @@ class Shipment extends Model
     {
         parent::__construct($data);
         $propositionService = Pdk::get(PropositionService::class);
-        $this->attributes['carrier'] = $this->attributes['carrier'] ?? $propositionService->getDefaultCarrier()->id;
+        $this->attributes['carrier'] = $this->attributes['carrier'] ?? Utils::convertToName($propositionService->getDefaultCarrier()->id, Carrier::CARRIER_NAME_ID_MAP);
     }
 
     /**
@@ -73,8 +77,8 @@ class Shipment extends Model
 
         return new self([
             'orderId'            => $pdkShipment->orderId,
-            'carrier'            => $pdkShipment->carrier->id,
-            'contractId'         => $pdkShipment->carrier->contractId,
+            'contractId'         => $pdkShipment->contractId,
+            'carrier'            => $pdkShipment->carrier->carrier,
             'customsDeclaration' => $pdkShipment->customsDeclaration,
             'options'            => ShipmentOptions::fromPdkDeliveryOptions($pdkShipment->deliveryOptions),
             'pickup'             => $pdkShipment->deliveryOptions->pickupLocation ?? null,
@@ -82,5 +86,13 @@ class Shipment extends Model
             'dropOffPoint'       => $pdkShipment->dropOffPoint,
             'physicalProperties' => $pdkShipment->physicalProperties,
         ]);
+    }
+
+    public function toStorableArray(): array
+    {
+        $array = parent::toStorableArray();
+        // Carrier should be the (raw) name only, not the full resolved carrier data.
+        $array['carrier'] = $this->attributes['carrier'];
+        return $array;
     }
 }
