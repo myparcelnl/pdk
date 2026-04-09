@@ -85,7 +85,8 @@ class UpdateAccountAction implements ActionInterface
     protected function setShopCarriers(Account $account): void
     {
         // Carriers are nested under shops, because one API key falls under one shop.
-        $shop = $account->shops->first(); // Multishop support is not yet implemented, so we just take the first shop for now
+        // The endpoint and our model implies more than one shop can be used. This in reality is never the case here since 1 API key = 1 Shop. We can safely use the first
+        $shop = $account->shops->first();
         // Fetch the carriers available to the account and store them in the shop model for easy access throughout the plugin
         $shop->carriers = $this->carrierCapabilitiesRepository->getContractDefinitions();
     }
