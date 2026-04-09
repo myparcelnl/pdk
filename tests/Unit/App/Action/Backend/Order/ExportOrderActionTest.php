@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
@@ -437,7 +439,8 @@ it('does not include exclude_parcel_lockers when carrier lacks the capability', 
         expect($options)->not->toHaveKey('exclude_parcel_lockers');
     } else {
         if (array_key_exists('exclude_parcel_lockers', $options)) {
-            expect($options['exclude_parcel_lockers'])->toBe(0,
+            expect($options['exclude_parcel_lockers'])->toBe(
+                0,
                 'exclude_parcel_lockers should be 0 when carrier lacks the capability'
             );
         }
@@ -601,8 +604,11 @@ it('exports orders and returns correct action response shape', function (
         ->pluck('deliveryOptions.carrier.carrier')
         ->toArray();
 
+    factory(Account::class)
+        ->withSubscriptionFeatures($orderMode ? [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT] : [])
+        ->store();
+
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
@@ -663,8 +669,11 @@ it('merges partial payload with existing order', function (
         ->pluck('deliveryOptions.carrier.carrier')
         ->toArray();
 
+    factory(Account::class)
+        ->withSubscriptionFeatures($orderMode ? [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT] : [])
+        ->store();
+
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
@@ -764,6 +773,8 @@ it('exports multicollo order', function (
     PdkOrderCollectionFactory $orderFactory,
     int                       $expectedNumberOfShipments
 ) {
+    factory(Account::class)->withSubscriptionFeatures([])->store();
+
     $orders = new Collection($orderFactory->make());
 
     $orderFactory->store();
@@ -825,6 +836,8 @@ it('exports multicollo order', function (
     ->with('multicolloPdkOrders');
 
 it('adds api errors as notifications if shipment export fails', function () {
+    factory(Account::class)->withSubscriptionFeatures([])->store();
+
     $errorResponse = new ExamplePostShipmentsValidationErrorResponse();
     MockApi::enqueue($errorResponse);
 
@@ -873,6 +886,8 @@ it('adds api errors as notifications if shipment export fails', function () {
 });
 
 it('exports order and directly returns barcode if concept shipments is off', function () {
+    factory(Account::class)->withSubscriptionFeatures([])->store();
+
     factory(Settings::class)
         ->withOrder(factory(OrderSettings::class)->withConceptShipments(false))
         ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
@@ -910,6 +925,8 @@ it('exports order and directly returns barcode if concept shipments is off', fun
 it(
     'exports pickup order without signature',
     function (?RetailLocationFactory $pickupLocation, ShippingAddressFactory $shippingAddress) {
+        factory(Account::class)->withSubscriptionFeatures([])->store();
+
         factory(CarrierSettings::class)
             ->withId((string) RefTypesCarrier::POSTNL)
             ->withExportSignature(false)
@@ -970,6 +987,8 @@ it(
 it(
     'exports evening order',
     function (ShippingAddressFactory $shippingAddress) {
+        factory(Account::class)->withSubscriptionFeatures([])->store();
+
         factory(CarrierSettings::class)
             ->withId((string) RefTypesCarrier::POSTNL)
             ->store();
@@ -1024,10 +1043,13 @@ it(
     function (
         PdkOrderCollectionFactory $factory,
         bool                      $accountHasCarrierSmallPackageContract,
-        bool                      $carrierHasInternationalMailboxAllowed,
         callable                  $assertions,
-        bool                      $orderMode
+        bool                      $carrierHasInternationalMailboxAllowed
     ) {
+        factory(Account::class)->withSubscriptionFeatures([])->store();
+
+        MockApi::enqueue(new ExamplePostShipmentsResponse());
+
         $collection  = $factory
             ->store()
             ->make();
@@ -1169,5 +1191,4 @@ it(
                 };
             },
         ],
-    ])
-    ->with('order mode toggle');
+    ]);
