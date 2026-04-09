@@ -6,97 +6,236 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Model;
 
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use ArrayObject;
+use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
+use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Support\Str;
 
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Carrier
  * @method Carrier make()
- * @method $this withEnabled(bool $enabled)
- * @method $this withExternalIdentifier(string $externalIdentifier)
- * @method $this withHuman(string $human)
- * @method $this withId(int $id)
- * @method $this withIsDefault(bool $isDefault)
- * @method $this withLabel(string $label)
- * @method $this withName(string $name)
- * @method $this withOptional(bool $optional)
- * @method $this withPrimary(bool $primary)
- * @method $this withContractId(int $contractId)
- * @method $this withType(string $type)
+ * @method $this withCarrier(string $carrier)
+ * @method $this withPackageTypes(array $packageTypes)
+ * @method $this withDeliveryTypes(array $deliveryTypes)
+ * @method $this withOptions(array $options)
+ * @method $this withTransactionTypes(array $transactionTypes)
+ * @method $this withCollo(array $collo)
  */
 final class CarrierFactory extends AbstractModelFactory
 {
-    public function fromBpost(): self
+    /**
+     * Set package types capability
+     *
+     * @param  array $types Array of CONSTANT_CASE package type names
+     * @return $this
+     */
+    public function withCapabilityPackageTypes(array $types): self
     {
-        return $this
-            ->withId(Carrier::CARRIER_BPOST_ID)
-            ->fromCarrier(Carrier::CARRIER_BPOST_NAME);
+        return $this->withPackageTypes($types);
     }
 
     /**
-     * @param  string $name
+     * Set delivery types capability
      *
-     * @return self
+     * @param  array $types Array of CONSTANT_CASE delivery type names
+     * @return $this
      */
-    public function fromCarrier(string $name): self
+    public function withCapabilityDeliveryTypes(array $types): self
+    {
+        return $this->withDeliveryTypes($types);
+    }
+
+    /**
+     * Set shipment options capability
+     *
+     * @param  array $options Array of shipment option configuration
+     * @return $this
+     */
+    public function withCapabilityShipmentOptions(array $options): self
+    {
+        return $this->withOptions($options);
+    }
+
+    /**
+     * Set collo capability
+     *
+     * @param int $max Maximum number of collos allowed for multi-collo capability
+     * @return $this
+     */
+    public function withCapabilityMultiCollo(int $max): self
+    {
+        return $this->withCollo(['max' => $max]);
+    }
+
+    /**
+     * Mark a specific carrier option as required.
+     *
+     * @param  string $capabilitiesKey camelCase option key (e.g. 'requiresSignature')
+     * @return $this
+     */
+    public function withOptionRequired(string $capabilitiesKey): self
+    {
+        $existingOptions = (array) ($this->attributes->get('options') ?? []);
+
+        $existingOptions[$capabilitiesKey] = array_merge(
+            $existingOptions[$capabilitiesKey] ?? [],
+            ['isRequired' => true]
+        );
+
+        return $this->withOptions($existingOptions);
+    }
+
+    /**
+     * Mark a specific carrier option as selected by default.
+     *
+     * @param  string $capabilitiesKey camelCase option key (e.g. 'requiresSignature')
+     * @return $this
+     */
+    public function withOptionSelectedByDefault(string $capabilitiesKey): self
+    {
+        $existingOptions = (array) ($this->attributes->get('options') ?? []);
+
+        $existingOptions[$capabilitiesKey] = array_merge(
+            $existingOptions[$capabilitiesKey] ?? [],
+            ['isSelectedByDefault' => true]
+        );
+
+        return $this->withOptions($existingOptions);
+    }
+
+    /**
+     * Add or replace the insurance shipment option capability.
+     *
+     * @param  int    $default Default insured amount
+     * @param  int    $min     Minimum insured amount
+     * @param  int    $max     Maximum insured amount
+     * @param  string $currency ISO 4217 currency code
+     * @return $this
+     */
+    public function withInsurance(int $default = 0, int $min = 0, int $max = 500000, string $currency = 'EUR'): self
+    {
+        $existingOptions = (array) ($this->attributes->get('options') ?? []);
+
+        return $this->withOptions(array_merge($existingOptions, [
+            'insurance' => [
+                'insuredAmount' => [
+                    'default' => ['currency' => $currency, 'amount' => $default],
+                    'min'     => ['currency' => $currency, 'amount' => $min],
+                    'max'     => ['currency' => $currency, 'amount' => $max],
+                ],
+            ],
+        ]));
+    }
+
+    /**
+     * Create carrier with all known capabilities.
+     *
+     * @param  string $carrier V2 carrier name to assign capabilities to
+     * @return $this
+     */
+    public function withAllCapabilities(string $carrier = RefCapabilitiesSharedCarrierV2::POSTNL): self
+    {
+        $shipmentOptionsTypes = RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::openAPITypes();
+        $allShipmentOptions   = [];
+
+        foreach ($shipmentOptionsTypes as $key => $model) {
+            $optionKey = Str::camel($key);
+            // Insurance requires a populated insuredAmount; all other options can be empty arrays.
+            // openAPITypes() returns class names with a leading backslash, while ::class does not — trim before comparing.
+            if (ltrim($model, '\\') === RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2::class) {
+                $allShipmentOptions[$optionKey] = [
+                    'insuredAmount' => [
+                        'default' => ['currency' => 'EUR', 'amount' => 0],
+                        'min'     => ['currency' => 'EUR', 'amount' => 0],
+                        'max'     => ['currency' => 'EUR', 'amount' => 500000],
+                    ],
+                ];
+            } else {
+                $allShipmentOptions[$optionKey] = [];
+            }
+        }
+
+        return $this
+            ->withCarrier($carrier)
+            ->withPackageTypes(RefShipmentPackageTypeV2::getAllowableEnumValues())
+            ->withDeliveryTypes(RefTypesDeliveryTypeV2::getAllowableEnumValues())
+            ->withCollo(['max' => 10])
+            ->withOptions($allShipmentOptions);
+    }
+
+    /**
+     * Create carrier with minimal capabilities (package + standard delivery only)
+     *
+     * @return $this
+     */
+    public function withMinimalCapabilities(): self
     {
         return $this
-            ->withName($name)
-            ->withHuman($name)
-            ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->fromCarrier($name))
-            ->withInboundFeatures(factory(PropositionCarrierFeatures::class)->fromCarrier($name));
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+            ->withPackageTypes([RefShipmentPackageTypeV2::PACKAGE])
+            ->withDeliveryTypes([RefTypesDeliveryTypeV2::STANDARD]);
     }
+
+    public function fromBpost(): self
+    {
+        return $this
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::BPOST);
+    }
+
 
     public function fromDhlEuroplus(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_DHL_EUROPLUS_ID)
-            ->fromCarrier(Carrier::CARRIER_DHL_EUROPLUS_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS);
     }
 
     public function fromDhlForYou(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_DHL_FOR_YOU_ID)
-            ->fromCarrier(Carrier::CARRIER_DHL_FOR_YOU_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU);
     }
 
     public function fromDhlParcelConnect(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_DHL_PARCEL_CONNECT_ID)
-            ->fromCarrier(Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT);
     }
 
     public function fromDpd(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_DPD_ID)
-            ->fromCarrier(Carrier::CARRIER_DPD_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DPD);
     }
 
     public function fromPostNL(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_POSTNL_ID)
-            ->fromCarrier(Carrier::CARRIER_POSTNL_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
     }
 
     public function fromUpsStandard(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_UPS_STANDARD_ID)
-            ->fromCarrier(Carrier::CARRIER_UPS_STANDARD_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_STANDARD);
     }
 
     public function fromUpsExpressSaver(): self
     {
         return $this
-            ->withId(Carrier::CARRIER_UPS_EXPRESS_SAVER_ID)
-            ->fromCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_NAME);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER);
     }
 
     public function getModel(): string
@@ -107,8 +246,49 @@ final class CarrierFactory extends AbstractModelFactory
     protected function createDefault(): FactoryInterface
     {
         return $this
-            ->withName(Carrier::CARRIER_POSTNL_NAME)
-            ->withEnabled(true)
-            ->withOutboundFeatures(factory(PropositionCarrierFeatures::class));
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
+    }
+
+    /**
+     * Store the carrier in the first shop of the current account.
+     * If no account or shop exists, creates them through the relevant factories.
+     *
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $model
+     *
+     * @return void
+     */
+    protected function save(Model $model): void
+    {
+        /** @var PdkAccountRepositoryInterface $accountRepository */
+        $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
+        $account           = $accountRepository->getAccount();
+
+        if (! $account || $account->shops->isEmpty()) {
+            factory(Shop::class)
+                ->withCarriers(
+                    factory(CarrierCollection::class)->push($model)
+                )
+                ->store();
+
+            return;
+        }
+
+        /** @var Shop $shop */
+        $shop     = $account->shops->first();
+        $carriers = $shop->carriers;
+
+        $existing = $carriers->firstWhere('carrier', $model->carrier);
+
+        if ($existing) {
+            $carriers = $carriers->map(function (Carrier $carrier) use ($model) {
+                return $carrier->carrier === $model->carrier ? $model : $carrier;
+            });
+        } else {
+            $carriers = $carriers->push($model);
+        }
+
+        $shop->carriers = new CarrierCollection($carriers->all());
+
+        $accountRepository->store($account);
     }
 }

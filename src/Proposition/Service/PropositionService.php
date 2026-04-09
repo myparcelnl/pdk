@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Proposition\Service;
 
-use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Sdk\Support\Str;
-use RuntimeException;
 
 class PropositionService
 {
@@ -30,6 +25,19 @@ class PropositionService
      * @var array<int, PropositionConfig>
      */
     private static $configCache = [];
+
+    /**
+     * @var \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface
+     */
+    private $carrierRepository;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface $carrierRepository
+     */
+    public function __construct(CarrierRepositoryInterface $carrierRepository)
+    {
+        $this->carrierRepository = $carrierRepository;
+    }
 
     /**
      * Get the active proposition ID.
@@ -64,8 +72,8 @@ class PropositionService
     }
 
     /**
-    * Set the active proposition ID.
-    * This overrides the ID fetched from the account and is useful for testing.
+     * Set the active proposition ID.
+     * This overrides the ID fetched from the account and is useful for testing.
      * @param int $propositionId
      * @return void
      */
@@ -167,85 +175,8 @@ class PropositionService
     }
 
     /**
-     * Get the carriers from the proposition config as CarrierCollection.
+     * @TODO: Refactor to shipping rules API once carrier selection is handled there.
      *
-     * @return CarrierCollection
-     */
-    public function getCarriers($supportedDeliveryTypesOnly = false): \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-    {
-        $carrierModels = [];
-        foreach ($this->getPropositionConfig()->contracts->available as $contract) {
-            $carrierData = [
-                'name' => $contract['carrier']['name'],
-                'id' => $contract['carrier']['id'],
-                'outboundFeatures' => $contract['outboundFeatures'] ?? [],
-                'inboundFeatures' => $contract['inboundFeatures'] ?? [],
-                'deliveryOptions' => $contract['deliveryOptions'] ?? [],
-            ];
-            $carrierModels[] = new Carrier($carrierData);
-        }
-
-        // Combine with carrier-specific own contracts
-        foreach ($this->getPropositionConfig()->contracts->availableForCustomCredentials as $customContract) {
-            // Skip already-defined carriers
-            if (in_array($customContract['carrier']['id'], array_column($carrierModels, 'id'))) {
-                continue;
-            }
-            $carrierData = [
-                'name' => $customContract['carrier']['name'],
-                'id' => $customContract['carrier']['id'],
-                'type' => Carrier::TYPE_CUSTOM,
-                'outboundFeatures' => $customContract['outboundFeatures'] ?? [],
-                'inboundFeatures' => $customContract['inboundFeatures'] ?? [],
-                'deliveryOptions' => $customContract['deliveryOptions'] ?? [],
-            ];
-            $carrierModels[] = new Carrier($carrierData);
-        }
-
-        // Filter out carriers without supported delivery types if requested by checking with packageTypeNameForDeliveryOptions
-        if ($supportedDeliveryTypesOnly) {
-            $carrierModels = array_values(array_filter($carrierModels, function (Carrier $carrier) {
-                $features = $carrier->outboundFeatures;
-
-                if (!$features || !$features->packageTypes) {
-                    return false;
-                }
-
-                foreach ($features->packageTypes as $packageType) {
-                    if ($this->packageTypeNameForDeliveryOptions($packageType)) {
-                        return true;
-                    }
-                }
-                return false;
-            }));
-        }
-
-        return new CarrierCollection($carrierModels);
-    }
-
-    /**
-     * Get a specific carrier by its id from the proposition config.
-
-     * @param int $id
-     * @return null|Carrier
-     */
-    public function getCarrierById(int $id): ?Carrier
-    {
-        return $this->getCarriers()->where('id', $id)->first();
-    }
-
-    /**
-     * Get a specific carrier by its machine-readable name from the proposition config.
-
-     * @param string $name
-     * @return null|Carrier
-     */
-    public function getCarrierByName(string $name): ?Carrier
-    {
-        return $this->getCarriers()->where('name', $name)->first();
-    }
-
-    /**
      * Get the default carrier from the proposition config.
      * Returns the outbound carrier by default. Use $outbound = false to get the inbound (return shipments) carrier.
 
@@ -259,7 +190,13 @@ class PropositionService
         } else {
             $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
         }
-        return $this->getCarriers()->where('id', $defaultCarrierId)->first();
+        $carrier = $this->carrierRepository->findByLegacyId($defaultCarrierId);
+
+        if (! $carrier) {
+            throw new \RuntimeException(sprintf('Default %s carrier with id %d was not found', $outbound ? 'outbound' : 'inbound', $defaultCarrierId));
+        }
+
+        return $carrier;
     }
 
     /**
@@ -289,97 +226,5 @@ class PropositionService
     public function isCached(int $propositionId): bool
     {
         return isset(self::$configCache[$propositionId]);
-    }
-
-    /**
-     * Map new carrier name (SCREAMING_SNAKE_CASE) to legacy name (lowercase).
-     * This is used for backwards compatibility with existing settings.
-     *
-     * @param string $newCarrierName
-     * @return string
-     */
-    public function mapNewToLegacyCarrierName(string $newCarrierName): string
-    {
-        $mapping = Carrier::CARRIER_NAME_TO_LEGACY_MAP;
-        return $mapping[$newCarrierName] ?? strtolower($newCarrierName);
-    }
-
-    /**
-     * Map legacy carrier name (lowercase) to new name (SCREAMING_SNAKE_CASE).
-     * This is used for forwards compatibility when reading settings.
-     *
-     * @param string $legacyCarrierName
-     * @return string
-     */
-    public function mapLegacyToNewCarrierName(string $legacyCarrierName): string
-    {
-        $mapping = \array_flip(Carrier::CARRIER_NAME_TO_LEGACY_MAP);
-        return $mapping[$legacyCarrierName] ?? strtoupper($legacyCarrierName);
-    }
-
-    /**
-     * Map the proposition config to the platform config for backwards compatibility.
-     * This maps to existing Platform config keys, but does not transform the values.
-     *
-     * @param PropositionConfig $propositionConfig
-     * @return array
-     * @throws RuntimeException
-     */
-    public function mapToPlatformConfig(PropositionConfig $propositionConfig): array
-    {
-        return [
-            'name' => \MyParcelNL\Pdk\Proposition\Proposition::PROPOSITIONS_TO_LEGACY_MAP[$propositionConfig->proposition->key]
-                ?? $propositionConfig->proposition->key,
-            'human' => $propositionConfig->proposition->name,
-            'backofficeUrl' => $propositionConfig->applications['backoffice']['url'] ?? null,
-            'supportUrl' => $propositionConfig->applications['developerPortal']['url'] ?? null,
-            'localCountry' => $propositionConfig->countryCode,
-            'defaultCarrier' => $this->mapNewToLegacyCarrierName($this->getDefaultCarrier()->name),
-            'defaultCarrierId' => $this->getDefaultCarrier()->id,
-            'carriers' => FrontendData::carrierCollectionToLegacyFormat($this->getCarriers())->toArray(),
-        ];
-    }
-
-    /**
-     * Given SCREAMING_SNAKE_CASE package name, return the snake_case version for delivery options if defined in that class.
-     *
-     * @param string $packageType a package type definition from the Proposition config
-     * @return string|null a package type definition suitable for Shipments (delivery options) or null if not supported currently
-     */
-    public function packageTypeNameForDeliveryOptions(string $packageType): ?string
-    {
-        $supportedTypes = DeliveryOptions::PACKAGE_TYPES_NAMES;
-        // Specific conversion for SMALL_PACKAGE to package_small
-        if ($packageType === PropositionCarrierFeatures::PACKAGE_TYPE_PACKAGE_SMALL_NAME) {
-            return DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME;
-        }
-        $converted = strtolower($packageType);
-
-        return in_array($converted, $supportedTypes, true) ? $converted : null;
-    }
-
-    /**
-     * Given SCREAMING_SNAKE_CASE delivery type name, return the snake_case version for delivery options if defined in that class.
-     *
-     * @param string $deliveryType a delivery type definition from the Proposition config
-     * @return string|null a delivery type definition suitable for Shipments (delivery options) or null if not supported currently
-     */
-    public function deliveryTypeNameForDeliveryOptions(string $deliveryType): ?string
-    {
-        $supportedTypes = DeliveryOptions::DELIVERY_TYPES_NAMES;
-        $converted = strtolower(str_replace('_DELIVERY', '', $deliveryType));
-
-        return in_array($converted, $supportedTypes, true) ? $converted : null;
-    }
-
-    /**
-     * Given SCREAMING_SNAKE_CASE shipment option, return the camelCase version for delivery options if defined in that class.
-     *
-     * @param string $shipmentOption a shipment option definition from the Proposition config
-     * @return string a shipment option definition suitable for Shipments (delivery options) or false if not supported currently
-     */
-    public function shipmentOptionNameForDeliveryOptions(string $shipmentOption): string
-    {
-        return Str::camel(strtolower($shipmentOption));
     }
 }

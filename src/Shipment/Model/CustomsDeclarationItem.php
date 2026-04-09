@@ -91,8 +91,7 @@ class CustomsDeclarationItem extends Model
         try {
             $propositionService = Pdk::get(PropositionService::class);
             $proposition = $propositionService->getPropositionConfig();
-            $platformConfig = $propositionService->mapToPlatformConfig($proposition);
-            return $platformConfig['localCountry'] ?? 'NL';
+            return $proposition->localCountry ?? 'NL';
         } catch (\Exception $e) {
             // Fallback to NL if proposition service is not available
             return 'NL';

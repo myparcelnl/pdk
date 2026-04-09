@@ -1,11 +1,13 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
-use MyParcelNL\Pdk\Facade\Platform;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -39,8 +41,9 @@ final class ProductSettingsFactory extends AbstractSettingsModelFactory
      */
     public function withAllOptions(): self
     {
+        $propositionService = Pdk::get(PropositionService::class);
         return $this
-            ->withCountryOfOrigin(Platform::get('localCountry'))
+            ->withCountryOfOrigin($propositionService->getPropositionConfig()->countryCode)
             ->withCustomsCode('123456')
             ->withDisableDeliveryOptions(true)
             ->withDropOffDelay(3)
@@ -70,6 +73,7 @@ final class ProductSettingsFactory extends AbstractSettingsModelFactory
      */
     protected function createDefault(): FactoryInterface
     {
-        return $this->withCountryOfOrigin(Platform::get('localCountry'));
+        $propositionService = Pdk::get(PropositionService::class);
+        return $this->withCountryOfOrigin($propositionService->getPropositionConfig()->countryCode);
     }
 }

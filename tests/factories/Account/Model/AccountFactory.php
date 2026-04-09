@@ -7,12 +7,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Account\Model;
 
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\ContactDetailsFactory;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Contract\CollectionFactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
@@ -46,7 +46,6 @@ final class AccountFactory extends AbstractModelFactory
             $this->onPlatformMyParcel();
         }
         $this->store();
-
     }
 
     public function getModel(): string
@@ -56,12 +55,25 @@ final class AccountFactory extends AbstractModelFactory
 
     public function onPlatformMyParcel(): self
     {
-        return $this->withPlatformId(Platform::MYPARCEL_ID);
+        return $this->withPlatformId(Proposition::MYPARCEL_ID);
     }
 
     public function onPlatformSendMyParcel(): self
     {
-        return $this->withPlatformId(Platform::SENDMYPARCEL_ID);
+        return $this->withPlatformId(Proposition::SENDMYPARCEL_ID);
+    }
+
+    /**
+     * Set up account for a specific proposition with appropriate shops and carriers
+     *
+     * @param  int $propositionId Use Proposition::MYPARCEL_ID, Proposition::SENDMYPARCEL_ID, etc.
+     * @return $this
+     */
+    public function forProposition(int $propositionId): self
+    {
+        return $this
+            ->withPlatformId($propositionId)
+            ->withShops();
     }
 
     /**
@@ -75,7 +87,8 @@ final class AccountFactory extends AbstractModelFactory
             return $factory
                 ->withPlatformId($this->attributes->get('platformId'))
                 ->withAccountId($this->attributes->get('id'))
-                ->withDeliveryAddress($this->attributes->get('contactInfo'));
+                ->withDeliveryAddress($this->attributes->get('contactInfo'))
+                ->withDefaultCarriers();
         });
     }
 
