@@ -349,4 +349,60 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
             'excludeParcelLockers' => false,
         ],
     ],
+
+    'product with 18+ excludes parcel lockers' => [
+        'lines'  => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'isDeliverable' => true,
+                    'weight'        => 1000,
+                    'settings'      => [
+                        'exportAgeCheck' => TriStateService::ENABLED,
+                    ],
+                ],
+            ],
+        ],
+        'result' => [
+            'isEnabled'            => true,
+            'hasDeliveryOptions'   => true,
+            'allowedPackageTypes'  => [
+                [
+                    'name' => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+                    'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
+                ],
+            ],
+            'minimumDropOffDelay'  => TriStateService::INHERIT,
+            'shippingAddress'      => SHIPPING_ADDRESS_NL,
+            'excludeParcelLockers' => true,
+        ],
+    ],
+
+    'product with explicit excludeParcelLockers setting' => [
+        'lines'  => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'isDeliverable' => true,
+                    'weight'        => 1000,
+                    'settings'      => [
+                        'excludeParcelLockers' => TriStateService::ENABLED,
+                    ],
+                ],
+            ],
+        ],
+        'result' => [
+            'isEnabled'            => true,
+            'hasDeliveryOptions'   => true,
+            'allowedPackageTypes'  => [
+                [
+                    'name' => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+                    'id'   => DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID,
+                ],
+            ],
+            'minimumDropOffDelay'  => TriStateService::INHERIT,
+            'shippingAddress'      => SHIPPING_ADDRESS_NL,
+            'excludeParcelLockers' => true,
+        ],
+    ],
 ]);

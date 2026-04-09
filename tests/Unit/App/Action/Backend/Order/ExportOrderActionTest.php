@@ -390,6 +390,113 @@ it('does not add export options when carrier lacks the capability', function (bo
 })
     ->with('order mode toggle');
 
+it('does not include exclude_parcel_lockers when carrier lacks the capability', function (bool $orderMode) {
+    // Build a carrier with signature capability only — no excludeParcelLockers
+    $fakeCarrier = factory(Carrier::class)
+        ->withCarrier('POSTNL')
+        ->withPackageTypes([RefShipmentPackageTypeV2::PACKAGE])
+        ->withDeliveryTypes([RefTypesDeliveryTypeV2::STANDARD])
+        ->withOptions(['requiresSignature' => []])
+        ->make();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
+        ->withCarrier($fakeCarrier->carrier)
+        ->store();
+
+    $collection = factory(PdkOrderCollection::class)
+        ->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier($fakeCarrier)
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                ->withExcludeParcelLockers(TriStateService::ENABLED)
+                        )
+                )
+        )
+        ->store()
+        ->make();
+
+    MockApi::enqueue(
+        ...$orderMode
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
+    );
+
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
+
+    $lastRequest = MockApi::ensureLastRequest();
+    $body        = json_decode($lastRequest->getBody()->getContents(), true);
+    $options     = getRequestOptions($body, $orderMode);
+
+    if (! $orderMode) {
+        expect($options)->not->toHaveKey('exclude_parcel_lockers');
+    } else {
+        if (array_key_exists('exclude_parcel_lockers', $options)) {
+            expect($options['exclude_parcel_lockers'])->toBe(0,
+                'exclude_parcel_lockers should be 0 when carrier lacks the capability'
+            );
+        }
+    }
+})
+    ->with('order mode toggle');
+
+it('does not include exclude_parcel_lockers for 18+ products when carrier lacks the capability', function () {
+    // Carrier without excludeParcelLockers capability
+    $fakeCarrier = factory(Carrier::class)
+        ->withCarrier('POSTNL')
+        ->withPackageTypes([RefShipmentPackageTypeV2::PACKAGE])
+        ->withDeliveryTypes([RefTypesDeliveryTypeV2::STANDARD])
+        ->withOptions(['requiresSignature' => [], 'requiresAgeVerification' => []])
+        ->make();
+
+    // Product with age check ENABLED — triggers ExcludeParcelLockersCalculator
+    $product = factory(\MyParcelNL\Pdk\App\Order\Model\PdkProduct::class)
+        ->withMergedSettings(
+            factory(\MyParcelNL\Pdk\Settings\Model\ProductSettings::class)
+                ->withExportAgeCheck(TriStateService::ENABLED)
+        )
+        ->store()
+        ->make();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withOrderMode(false))
+        ->withCarrier($fakeCarrier->carrier)
+        ->store();
+
+    $collection = factory(PdkOrderCollection::class)
+        ->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)->withCarrier($fakeCarrier)
+                )
+                ->withLines(
+                    factory(PdkOrderLineCollection::class)->push(
+                        factory(\MyParcelNL\Pdk\App\Order\Model\PdkOrderLine::class)
+                            ->withProduct($product)
+                    )
+                )
+        )
+        ->store()
+        ->make();
+
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
+
+    $lastRequest = MockApi::ensureLastRequest();
+    $body        = json_decode($lastRequest->getBody()->getContents(), true);
+    $options     = $body['data']['shipments'][0]['options'] ?? [];
+
+    expect($options)->not->toHaveKey('exclude_parcel_lockers');
+});
+
 it('exports order with return large format setting enabled without adding options', function (bool $orderMode) {
     // return_large_format is a UI-only configuration for the return label; it has no export implementation
     $body    = exportWithSetting($orderMode, factory(CarrierSettings::class)->withExportReturnLargeFormat(true));

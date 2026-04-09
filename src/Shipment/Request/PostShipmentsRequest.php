@@ -169,6 +169,7 @@ class PostShipmentsRequest extends Request
         if (! $shipmentOptions) {
             return [];
         }
+
         $options = array_map(function ($item) {
             return $this->triStateService->resolve($item);
         }, $shipmentOptions->toSnakeCaseArray());

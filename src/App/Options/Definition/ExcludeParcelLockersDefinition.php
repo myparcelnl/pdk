@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
-
 final class ExcludeParcelLockersDefinition extends AbstractOrderOptionDefinition
 {
     public function getShipmentOptionsKey(): ?string
@@ -36,11 +34,5 @@ final class ExcludeParcelLockersDefinition extends AbstractOrderOptionDefinition
     public function getPriceSettingsKey(): ?string
     {
         return null;
-    }
-
-    public function validate(CarrierSchema $carrierSchema): bool
-    {
-        // This option is always available for all carriers
-        return true;
     }
 }
