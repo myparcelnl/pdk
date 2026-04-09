@@ -192,59 +192,50 @@ final class CarrierFactory extends AbstractModelFactory
     public function fromBpost(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::BPOST);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::BPOST);
     }
 
-    /**
-     * @param  string $name
-     *
-     * @return self
-     */
-    public function fromCarrier(string $name): self
-    {
-        return $this->withCarrier($name);
-    }
 
     public function fromDhlEuroplus(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS);
     }
 
     public function fromDhlForYou(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU);
     }
 
     public function fromDhlParcelConnect(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT);
     }
 
     public function fromDpd(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::DPD);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::DPD);
     }
 
     public function fromPostNL(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
     }
 
     public function fromUpsStandard(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::UPS_STANDARD);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_STANDARD);
     }
 
     public function fromUpsExpressSaver(): self
     {
         return $this
-            ->fromCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER);
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER);
     }
 
     public function getModel(): string
