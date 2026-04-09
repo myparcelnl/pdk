@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\PrintOptionsView;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
@@ -57,9 +56,7 @@ class DynamicContext extends Model
         }
 
         $this->attributes['account']  = AccountSettings::getAccount();
-        $this->attributes['carriers'] = FrontendData::carrierCollectionToLegacyFormat(
-            AccountSettings::getCarriers()
-        );
+        $this->attributes['carriers'] = AccountSettings::getCarriers();
         $this->attributes['shop']     = AccountSettings::getShop();
     }
 }

@@ -55,8 +55,6 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Frontend\Service\ScriptService;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
-use MyParcelNL\Pdk\Platform\PlatformManager;
-use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -94,11 +92,6 @@ return [
      * Used to manage audit data.
      */
     AuditServiceInterface::class               => autowire(AuditService::class),
-
-    /**
-     * Retrieves carriers from the config.
-     */
-    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     /**
      * Does calculations on carts.
@@ -164,11 +157,6 @@ return [
      * Handles notifications.
      */
     NotificationServiceInterface::class        => autowire(NotificationService::class),
-
-    /**
-     * Handles platform specific logic.
-     */
-    PlatformManagerInterface::class            => autowire(PlatformManager::class),
 
     /**
      * Handles CDN urls.
@@ -244,6 +232,11 @@ return [
      * that JS-PDK and Delivery Options expect.
      */
     FrontendDataAdapterInterface::class        => autowire(FrontendDataAdapter::class),
+
+    /**
+     * Handles carrier lookups from account data.
+     */
+    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     PropositionService::class            => autowire(),
 ];

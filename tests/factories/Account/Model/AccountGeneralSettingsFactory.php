@@ -1,11 +1,14 @@
 <?php
+
 /** @noinspection PhpUnused */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Model;
 
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -31,6 +34,16 @@ final class AccountGeneralSettingsFactory extends AbstractModelFactory
      */
     protected function save(Model $model): void
     {
+        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $accountRepository */
+        $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
+        $existingAccount   = $accountRepository->getAccount();
+
+        if ($existingAccount) {
+            $existingAccount->generalSettings = $model;
+            $accountRepository->store($existingAccount);
+            return;
+        }
+
         factory(Account::class)
             ->withGeneralSettings($model)
             ->store();
