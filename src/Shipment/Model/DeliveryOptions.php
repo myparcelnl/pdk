@@ -182,6 +182,13 @@ class DeliveryOptions extends Model
             );
         }
 
+        // Normalize legacy carrier names (e.g. "postnl", "dhlforyou") to the new V2 identifiers.
+        // The delivery options endpoint and JS/Vue checkout app still use the legacy format.
+        if (isset($data[self::CARRIER]) && is_string($data[self::CARRIER])) {
+            $legacyToNewMap = array_flip(Carrier::CARRIER_NAME_TO_LEGACY_MAP);
+            $data[self::CARRIER] = $legacyToNewMap[$data[self::CARRIER]] ?? $data[self::CARRIER];
+        }
+
         parent::__construct($data);
     }
 
