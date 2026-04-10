@@ -78,9 +78,9 @@ final class LabelDescriptionCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function getDescription(): string
     {
-        $labelDescriptionFromOrder = $this->order->deliveryOptions->shipmentOptions->labelDescription;
+        $labelDescriptionFromOrder = (string) $this->order->deliveryOptions->shipmentOptions->labelDescription;
 
-        if (is_string($labelDescriptionFromOrder) && $labelDescriptionFromOrder !== (string) TriStateService::INHERIT) {
+        if (!empty($labelDescriptionFromOrder) && $labelDescriptionFromOrder !== (string) TriStateService::INHERIT) {
             return $labelDescriptionFromOrder;
         }
 
