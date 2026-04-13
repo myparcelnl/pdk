@@ -11,7 +11,6 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\PrintOptionsView;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
