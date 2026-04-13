@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -269,10 +270,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 ->builder(function (FormOperationBuilder $builder) use ($signatureKey, $onlyRecipientKey) {
                     $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) use ($signatureKey, $onlyRecipientKey) {
                         if ($signatureKey) {
-                            $afterUpdate->setValue(true)->on($signatureKey)->if->eq(true);
+                            $afterUpdate->setValue(TriStateService::ENABLED)->on($signatureKey)->if->eq(TriStateService::ENABLED);
                         }
                         if ($onlyRecipientKey) {
-                            $afterUpdate->setValue(true)->on($onlyRecipientKey)->if->eq(true);
+                            $afterUpdate->setValue(TriStateService::ENABLED)->on($onlyRecipientKey)->if->eq(TriStateService::ENABLED);
                         }
                     });
                 });

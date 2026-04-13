@@ -1807,22 +1807,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -3417,22 +3417,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -5027,22 +5027,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -6637,22 +6637,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -8247,22 +8247,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -9857,22 +9857,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -11467,22 +11467,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -13077,22 +13077,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -14687,22 +14687,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -16297,22 +16297,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -17907,22 +17907,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -19568,22 +19568,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -21178,22 +21178,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
@@ -22788,22 +22788,22 @@
                   "$afterUpdate": [
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportSignature",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }
                     },
                     {
                       "$setValue": {
-                        "$value": true,
+                        "$value": 1,
                         "$target": "exportOnlyRecipient",
                         "$if": [
                           {
-                            "$eq": true
+                            "$eq": 1
                           }
                         ]
                       }

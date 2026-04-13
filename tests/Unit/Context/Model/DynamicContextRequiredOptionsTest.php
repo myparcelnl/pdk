@@ -43,7 +43,7 @@ it('dynamic context carrier settings has ENABLED for isRequired options', functi
         ->and($settings->exportSignature)->toBe(TriStateService::ENABLED);
 });
 
-it('dynamic context carrier settings keeps INHERIT for non-required options', function () {
+it('dynamic context resolves INHERIT to DISABLED for non-required options', function () {
     factory(Carrier::class)
         ->withAllCapabilities()
         ->store();
@@ -52,6 +52,7 @@ it('dynamic context carrier settings keeps INHERIT for non-required options', fu
     $storage->delete('carrier:POSTNL');
     $storage->delete('carrier:all');
 
+    // exportSignature defaults to INHERIT (-1) in stored settings
     factory(Settings::class)
         ->withCarrier('POSTNL')
         ->store();
@@ -59,8 +60,99 @@ it('dynamic context carrier settings keeps INHERIT for non-required options', fu
     $context  = new DynamicContext();
     $settings = $context->pluginSettings->carrier->firstWhere('id', 'POSTNL');
 
+    // INHERIT is resolved at display time: isSelectedByDefault is false → DISABLED
     expect($settings)->not->toBeNull()
-        ->and($settings->exportSignature)->toBe(TriStateService::INHERIT);
+        ->and($settings->exportSignature)->toBe(TriStateService::DISABLED);
+});
+
+it('dynamic context enforces ENABLED for carrier without saved settings', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities('DHL_PARCEL_CONNECT')
+        ->withOptionRequired('requiresSignature')
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:DHL_PARCEL_CONNECT');
+    $storage->delete('carrier:all');
+
+    // Only store settings for POSTNL — DHL_PARCEL_CONNECT has no saved settings
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
+
+    $context  = new DynamicContext();
+    $settings = $context->pluginSettings->carrier->firstWhere('id', 'DHL_PARCEL_CONNECT');
+
+    expect($settings)->not->toBeNull()
+        ->and($settings->exportSignature)->toBe(TriStateService::ENABLED);
+});
+
+it('dynamic context applies isSelectedByDefault for carrier without saved settings', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities('DHL_PARCEL_CONNECT')
+        ->withOptionSelectedByDefault('requiresSignature')
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:DHL_PARCEL_CONNECT');
+    $storage->delete('carrier:all');
+
+    // Only store settings for POSTNL — DHL_PARCEL_CONNECT has no saved settings
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
+
+    $context  = new DynamicContext();
+    $settings = $context->pluginSettings->carrier->firstWhere('id', 'DHL_PARCEL_CONNECT');
+
+    expect($settings)->not->toBeNull()
+        ->and($settings->exportSignature)->toBe(TriStateService::ENABLED);
+});
+
+it('dynamic context resolves INHERIT to ENABLED via isSelectedByDefault on saved carrier', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionSelectedByDefault('requiresSignature')
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:POSTNL');
+    $storage->delete('carrier:all');
+
+    // Carrier has saved settings but exportSignature is INHERIT (default)
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
+
+    $context  = new DynamicContext();
+    $settings = $context->pluginSettings->carrier->firstWhere('id', 'POSTNL');
+
+    // INHERIT is resolved at display time against current capabilities
+    expect($settings)->not->toBeNull()
+        ->and($settings->exportSignature)->toBe(TriStateService::ENABLED);
+});
+
+it('dynamic context does not apply isSelectedByDefault for carrier with saved settings', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->withOptionSelectedByDefault('requiresSignature')
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:POSTNL');
+    $storage->delete('carrier:all');
+
+    // Carrier has saved settings with signature explicitly DISABLED
+    factory(Settings::class)
+        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => TriStateService::DISABLED])
+        ->store();
+
+    $context  = new DynamicContext();
+    $settings = $context->pluginSettings->carrier->firstWhere('id', 'POSTNL');
+
+    // isSelectedByDefault should NOT override explicitly saved settings
+    expect($settings)->not->toBeNull()
+        ->and($settings->exportSignature)->toBe(TriStateService::DISABLED);
 });
 
 it('dynamic context carrier settings forces ENABLED even when explicitly DISABLED for isRequired', function () {
