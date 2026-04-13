@@ -227,11 +227,15 @@ class ShipmentOptions extends Model
                 continue;
             }
 
+            $modelKey = $definition->getShipmentOptionsKey();
+
             // Map the shipment option name to the corresponding shipment option key and retain the value
-            $data[$definition->getShipmentOptionsKey()] = $value;
+            $data[$modelKey] = $value;
 
             // Unset the original shipment option name as it's not used in the ShipmentOptions model
-            unset($data[$shipmentOptionName]);
+            if ($shipmentOptionName !== $modelKey) {
+                unset($data[$shipmentOptionName]);
+            }
         }
 
         return new self($data);
