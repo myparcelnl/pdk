@@ -178,7 +178,7 @@ abstract class AbstractSettingsView implements Arrayable
             array_combine(
                 array_values($packageTypes),
                 array_map(static function ($packageType) {
-                    return sprintf('package_type_%s', $packageType);
+                    return sprintf('package_type_%s', strtolower($packageType));
                 }, $packageTypes)
             ),
             self::SELECT_INCLUDE_OPTION_DEFAULT
