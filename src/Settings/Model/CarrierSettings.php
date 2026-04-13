@@ -49,6 +49,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>          $exportCollect
  * @property int<-1|0|1>          $exportFreshFood
  * @property int<-1|0|1>          $exportFrozen
+ * @property int<-1|0|1>          $exportPriorityDelivery
  * @property int                  $exportInsuranceFromAmount
  * @property int                  $exportInsurancePricePercentage
  * @property int                  $exportInsuranceUpTo
@@ -97,7 +98,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_EXPRESS_DELIVERY                  = 'allowExpressDelivery';
 
     /**
-     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getCarrierSettingsKey()
+     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getAllowSettingsKey()
      */
     public const  ALLOW_PRIORITY_DELIVERY                 = 'allowPriorityDelivery';
 
@@ -203,6 +204,11 @@ class CarrierSettings extends AbstractSettingsModel
      * @deprecated now dynamically derived from FrozenDefinition::getCarrierSettingsKey()
      */
     public const  EXPORT_FROZEN                           = 'exportFrozen';
+
+    /**
+     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getCarrierSettingsKey()
+     */
+    public const  EXPORT_PRIORITY_DELIVERY                = 'exportPriorityDelivery';
     public const  PRICE_DELIVERY_TYPE_EVENING_DELIVERY    = 'priceDeliveryTypeEvening';
     public const  PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     = 'priceDeliveryTypeMonday';
     public const  PRICE_DELIVERY_TYPE_MORNING_DELIVERY    = 'priceDeliveryTypeMorning';

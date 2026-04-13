@@ -19,14 +19,4 @@ final class PriorityDeliveryDefinition extends AbstractOrderOptionDefinition
     {
         return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['priority_delivery'];
     }
-
-    public function getCarrierSettingsKey(): ?string
-    {
-        return 'allowPriorityDelivery';
-    }
-
-    public function getProductSettingsKey(): ?string
-    {
-        return null;
-    }
 }

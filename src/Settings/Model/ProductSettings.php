@@ -125,6 +125,10 @@ class ProductSettings extends AbstractSettingsModel
     /**
      * Populate attributes and casts dynamically from registered option definitions.
      * Dynamic entries are added first so static definitions win on collision via array_merge.
+     *
+     * Product-level export settings are always tri-state (inherit/off/on), regardless of the
+     * shipment option cast. For example, exportInsurance on a product is a toggle (-1/0/1),
+     * not an amount — the amount is resolved at carrier settings level.
      */
     protected function initializeResolvesOptionAttributes(): void
     {
@@ -133,8 +137,8 @@ class ProductSettings extends AbstractSettingsModel
                 return $definition->getProductSettingsKey();
             },
             TriStateService::INHERIT,
-            static function (OrderOptionDefinitionInterface $definition): string {
-                return $definition->getShipmentOptionsCast();
+            static function (): string {
+                return TriStateService::TYPE_STRICT;
             }
         );
 
