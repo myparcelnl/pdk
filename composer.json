@@ -18,9 +18,6 @@
         "symfony/psr-http-message-bridge": "^2.3",
         "league/openapi-psr7-validator": "^0.22.0"
     },
-    "platform": {
-        "php": "7.4"
-    },
     "scripts": {
         "analyse": "php -dmemory_limit=-1 vendor/bin/phpstan analyse",
         "analyse:generate": "composer run analyse -- --generate-baseline phpstan-baseline.php --allow-empty-baseline",

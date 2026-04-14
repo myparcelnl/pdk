@@ -136,7 +136,6 @@ abstract class AbstractApiService implements ApiServiceInterface
         return [];
     }
 
-
     /**
      * @param  string $baseUrl
      *
@@ -146,6 +145,29 @@ abstract class AbstractApiService implements ApiServiceInterface
     {
         $this->baseUrl = $baseUrl;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUserAgentHeader(): string
+    {
+        $userAgentStrings = [];
+        $userAgents       = array_merge(
+            (array) (Pdk::get('userAgent') ?? []),
+            [
+                'MyParcelNL-PDK' => Pdk::get('pdkVersion'),
+                'php'            => PHP_VERSION,
+            ]
+        );
+
+        foreach ($userAgents as $platform => $version) {
+            if ($version) {
+                $userAgentStrings[] = sprintf('%s/%s', $platform, $version);
+            }
+        }
+
+        return implode(' ', $userAgentStrings);
     }
 
     /**
