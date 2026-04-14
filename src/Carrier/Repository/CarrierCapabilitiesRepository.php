@@ -56,8 +56,8 @@ class CarrierCapabilitiesRepository extends Repository
     }
 
     /**
-     * @TODO: This is just a placeholder till we implement capabilities. Here to define architecture.
-     * @param array $args
+     * @param  array $args
+     *
      * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2[]
      */
     public function getCapabilities(array $args): array
@@ -67,5 +67,18 @@ class CarrierCapabilitiesRepository extends Repository
         return $this->retrieve($cacheKey, function () use ($args) {
             return $this->apiService->getCapabilities($args);
         });
+    }
+
+    /**
+     * Get all capabilities for a given recipient country, regardless of carrier, package type, or weight.
+     *
+     * @param  string $cc ISO 3166-1 alpha-2 recipient country code
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2[]
+     */
+    public function getCapabilitiesForRecipientCountry(string $cc): array
+    {
+        // Broad call (recipient only) for cacheability — weight and package type are filtered locally.
+        return $this->getCapabilities(['recipient' => ['cc' => $cc]]);
     }
 }
