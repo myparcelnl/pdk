@@ -39,35 +39,13 @@ it('saves settings', function (string $productId, array $settings, array $newSet
 
     $response = Actions::execute($request);
 
-    $content = json_decode($response->getContent(), true);
+    $content  = json_decode($response->getContent(), true);
+    $expected = (new ProductSettings($newSettings ?? $settings))->toArrayWithoutNull();
 
     expect($response->getStatusCode())
         ->toBe(200)
         ->and(Arr::get($content, 'data.product_settings'))
-        ->toEqual(
-            array_replace([
-                'id'                                      => ProductSettings::ID,
-                ProductSettings::COUNTRY_OF_ORIGIN        => TriStateService::INHERIT,
-                ProductSettings::CUSTOMS_CODE             => TriStateService::INHERIT,
-                ProductSettings::DISABLE_DELIVERY_OPTIONS => TriStateService::INHERIT,
-                ProductSettings::DROP_OFF_DELAY           => TriStateService::INHERIT,
-                ProductSettings::EXPORT_AGE_CHECK         => TriStateService::INHERIT,
-                ProductSettings::EXPORT_HIDE_SENDER       => TriStateService::INHERIT,
-                ProductSettings::EXPORT_INSURANCE         => TriStateService::INHERIT,
-                ProductSettings::EXPORT_LARGE_FORMAT      => TriStateService::INHERIT,
-                ProductSettings::EXPORT_ONLY_RECIPIENT    => TriStateService::INHERIT,
-                ProductSettings::EXPORT_RETURN            => TriStateService::INHERIT,
-                ProductSettings::EXPORT_SIGNATURE         => TriStateService::INHERIT,
-                ProductSettings::EXPORT_TRACKED           => TriStateService::INHERIT,
-                ProductSettings::FIT_IN_DIGITAL_STAMP     => TriStateService::INHERIT,
-                ProductSettings::FIT_IN_MAILBOX           => TriStateService::INHERIT,
-                ProductSettings::PACKAGE_TYPE             => TriStateService::INHERIT,
-                ProductSettings::EXPORT_FRESH_FOOD        => TriStateService::INHERIT,
-                ProductSettings::EXPORT_FROZEN            => TriStateService::INHERIT,
-                ProductSettings::EXPORT_COOLED_DELIVERY   => TriStateService::INHERIT,
-                ProductSettings::EXCLUDE_PARCEL_LOCKERS   => TriStateService::INHERIT,
-            ], $newSettings ?? $settings)
-        );
+        ->toEqual($expected);
 })->with([
     'keeps default options'       => ['123', []],
     'changes all options for 789' => [

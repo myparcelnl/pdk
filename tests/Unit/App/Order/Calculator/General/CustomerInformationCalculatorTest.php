@@ -34,7 +34,7 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
     $reset = mockPdkProperty('orderCalculators', [CustomerInformationCalculator::class]);
 
     $fakeCarrier = factory(Carrier::class)
-        ->fromCarrier($carrierName);
+        ->withCarrier($carrierName);
     // @TODO: figure this out
 
     $order = factory(PdkOrder::class)
