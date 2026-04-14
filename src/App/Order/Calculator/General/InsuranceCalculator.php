@@ -19,12 +19,14 @@ use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
     /**
-     * Placeholder until we can get this from the Capabilities API.
+     * Schema path used to resolve carrier- and context-specific insurance tier deviations from the base JSON schemas.
+     * The JSON schemas act as an override for specific carrier/country/packageType/deliveryType combinations.
      *
-     * @deprecated This is a temporary solution and should be replaced with a proper implementation through the Capabilities API.
+     * @TODO INT-930: replace schema-based tier deviations with capabilities API tier lists when the API supports
+     *               explicit per-carrier tier definitions.
      * @var string
      */
-    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.' . ShipmentOptions::INSURANCE;
+    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.insurance';
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface

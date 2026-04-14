@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Base\Concern\ResolvesOptionAttributes;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @property string               $id
@@ -34,16 +36,20 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                  $digitalStampDefaultWeight
  * @property int                  $dropOffDelay
  * @property DropOffPossibilities $dropOffPossibilities
- * @property bool                 $exportAgeCheck
- * @property bool                 $exportHideSender
- * @property bool                 $exportInsurance
- * @property bool                 $exportLargeFormat
- * @property bool                 $exportOnlyRecipient
- * @property bool                 $exportReceiptCode
- * @property bool                 $exportReturn
- * @property bool                 $exportReturnLargeFormat
- * @property bool                 $exportSignature
- * @property bool                 $exportTracked
+ * @property int<-1|0|1>          $exportAgeCheck
+ * @property int<-1|0|1>          $exportHideSender
+ * @property int<-1|0|1>          $exportInsurance
+ * @property int<-1|0|1>          $exportLargeFormat
+ * @property int<-1|0|1>          $exportOnlyRecipient
+ * @property int<-1|0|1>          $exportReceiptCode
+ * @property int<-1|0|1>          $exportReturn
+ * @property int<-1|0|1>          $exportReturnLargeFormat
+ * @property int<-1|0|1>          $exportSignature
+ * @property int<-1|0|1>          $exportTracked
+ * @property int<-1|0|1>          $exportCollect
+ * @property int<-1|0|1>          $exportFreshFood
+ * @property int<-1|0|1>          $exportFrozen
+ * @property int<-1|0|1>          $exportPriorityDelivery
  * @property int                  $exportInsuranceFromAmount
  * @property int                  $exportInsurancePricePercentage
  * @property int                  $exportInsuranceUpTo
@@ -69,6 +75,8 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class CarrierSettings extends AbstractSettingsModel
 {
+    use ResolvesOptionAttributes;
+
     /**
      * Settings category ID.
      */
@@ -76,14 +84,22 @@ class CarrierSettings extends AbstractSettingsModel
     public const CARRIER_NAME = 'carrierName';
     /**
      * Settings in this category.
+     * @TODO these settings need to be made generic based on available definitions in API spec
      */
     public const  ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
     public const  ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
     public const  ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
     public const  ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
     public const  ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
+    /**
+     * @deprecated now dynamically derived from OnlyRecipientDefinition::getAllowSettingsKey()
+     */
     public const  ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
     public const  ALLOW_EXPRESS_DELIVERY                  = 'allowExpressDelivery';
+
+    /**
+     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getAllowSettingsKey()
+     */
     public const  ALLOW_PRIORITY_DELIVERY                 = 'allowPriorityDelivery';
 
     /**
@@ -92,8 +108,19 @@ class CarrierSettings extends AbstractSettingsModel
     public const  ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
     public const  ALLOW_PICKUP_DELIVERY                   = 'allowPickupLocations';
 
+    /**
+     * @deprecated now dynamically derived from SameDayDeliveryDefinition::getAllowSettingsKey()
+     */
     public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
+
+    /**
+     * @deprecated now dynamically derived from SaturdayDeliveryDefinition::getAllowSettingsKey()
+     */
     public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
+
+    /**
+     * @deprecated now dynamically derived from SignatureDefinition::getAllowSettingsKey()
+     */
     public const  ALLOW_SIGNATURE                         = 'allowSignature';
 
     /**
@@ -110,8 +137,19 @@ class CarrierSettings extends AbstractSettingsModel
     public const  DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
     public const  DROP_OFF_DELAY                          = 'dropOffDelay';
     public const  DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
+    /**
+     * @deprecated now dynamically derived from AgeCheckDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_AGE_CHECK                        = 'exportAgeCheck';
+
+    /**
+     * @deprecated now dynamically derived from HideSenderDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_HIDE_SENDER                      = 'exportHideSender';
+
+    /**
+     * @deprecated now dynamically derived from InsuranceDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_INSURANCE                        = 'exportInsurance';
     public const  EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
     public const  EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
@@ -119,34 +157,90 @@ class CarrierSettings extends AbstractSettingsModel
     public const  EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
     public const  EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
     public const  EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
+
+    /**
+     * @deprecated now dynamically derived from LargeFormatDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
+
+    /**
+     * @deprecated now dynamically derived from OnlyRecipientDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
+
+    /**
+     * @deprecated now dynamically derived from ReceiptCodeDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_RECEIPT_CODE                     = 'exportReceiptCode';
+
+    /**
+     * @deprecated now dynamically derived from DirectReturnDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_RETURN                           = 'exportReturn';
     public const  EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
     public const  EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
+
+    /**
+     * @deprecated now dynamically derived from SignatureDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_SIGNATURE                        = 'exportSignature';
+
+    /**
+     * @deprecated now dynamically derived from TrackedDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_TRACKED                          = 'exportTracked';
+
+    /**
+     * @deprecated now dynamically derived from CollectDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_COLLECT                          = 'exportCollect';
+
+    /**
+     * @deprecated now dynamically derived from FreshFoodDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_FRESH_FOOD                       = 'exportFreshFood';
+
+    /**
+     * @deprecated now dynamically derived from FrozenDefinition::getCarrierSettingsKey()
+     */
     public const  EXPORT_FROZEN                           = 'exportFrozen';
-    public const  PRICE_DELIVERY_TYPE_EVENING             = 'priceDeliveryTypeEvening';
-    public const  PRICE_DELIVERY_TYPE_MONDAY              = 'priceDeliveryTypeMonday';
-    public const  PRICE_DELIVERY_TYPE_MORNING             = 'priceDeliveryTypeMorning';
+
+    /**
+     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getCarrierSettingsKey()
+     */
+    public const  EXPORT_PRIORITY_DELIVERY                = 'exportPriorityDelivery';
+    public const  PRICE_DELIVERY_TYPE_EVENING_DELIVERY    = 'priceDeliveryTypeEvening';
+    public const  PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     = 'priceDeliveryTypeMonday';
+    public const  PRICE_DELIVERY_TYPE_MORNING_DELIVERY    = 'priceDeliveryTypeMorning';
     public const  PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
-    public const  PRICE_DELIVERY_TYPE_SAME_DAY            = 'priceDeliveryTypeSameDay';
-    public const  PRICE_DELIVERY_TYPE_SATURDAY            = 'priceDeliveryTypeSaturday';
-    public const  PRICE_DELIVERY_TYPE_STANDARD            = 'priceDeliveryTypeStandard';
+    public const  PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   = 'priceDeliveryTypeSameDay';
+    public const  PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   = 'priceDeliveryTypeSaturday';
+    public const  PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   = 'priceDeliveryTypeStandard';
+    public const  PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    = 'priceDeliveryTypeExpress';
+    /**
+     * @deprecated now dynamically derived from OnlyRecipientDefinition::getPriceSettingsKey()
+     */
     public const  PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
     public const  PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
     public const  PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
     public const  PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
+
+    /**
+     * @deprecated now dynamically derived from SignatureDefinition::getPriceSettingsKey()
+     */
     public const  PRICE_SIGNATURE                         = 'priceSignature';
+
+    /**
+     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getPriceSettingsKey()
+     */
     public const  PRICE_PRIORITY_DELIVERY                 = 'pricePriorityDelivery';
     public const  ALLOW_INTERNATIONAL_MAILBOX             = 'allowInternationalMailbox';
     public const  PRICE_INTERNATIONAL_MAILBOX             = 'priceInternationalMailbox';
+
+    /**
+     * @deprecated now dynamically derived from CollectDefinition::getPriceSettingsKey()
+     */
     public const  PRICE_COLLECT                           = 'priceCollect';
-    public const  PRICE_DELIVERY_TYPE_EXPRESS             = 'priceDeliveryTypeExpress';
 
 
     protected $attributes = [
@@ -158,13 +252,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_EVENING_DELIVERY                  => false,
         self::ALLOW_MONDAY_DELIVERY                   => false,
         self::ALLOW_MORNING_DELIVERY                  => false,
-        self::ALLOW_ONLY_RECIPIENT                    => false,
         self::ALLOW_EXPRESS_DELIVERY                  => false,
-        self::ALLOW_PRIORITY_DELIVERY                 => false,
         self::ALLOW_PICKUP_DELIVERY                   => false,
-        self::ALLOW_SAME_DAY_DELIVERY                 => false,
-        self::ALLOW_SATURDAY_DELIVERY                 => false,
-        self::ALLOW_SIGNATURE                         => false,
         self::CUTOFF_TIME                             => '16:00',
         self::CUTOFF_TIME_SAME_DAY                    => '10:00',
         self::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -174,43 +263,27 @@ class CarrierSettings extends AbstractSettingsModel
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 0,
         self::DROP_OFF_DELAY                          => 0,
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
-        self::EXPORT_AGE_CHECK                        => false,
-        self::EXPORT_HIDE_SENDER                      => false,
-        self::EXPORT_INSURANCE                        => false,
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
         self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 100,
         self::EXPORT_INSURANCE_UP_TO                  => 0,
         self::EXPORT_INSURANCE_UP_TO_EU               => 0,
         self::EXPORT_INSURANCE_UP_TO_ROW              => 0,
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
-        self::EXPORT_LARGE_FORMAT                     => false,
-        self::EXPORT_ONLY_RECIPIENT                   => false,
-        self::EXPORT_RECEIPT_CODE                     => false,
-        self::EXPORT_RETURN                           => false,
-        self::EXPORT_RETURN_LARGE_FORMAT              => false,
+        self::EXPORT_RETURN_LARGE_FORMAT              => -1,
         self::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        self::EXPORT_SIGNATURE                        => false,
-        self::EXPORT_TRACKED                          => false,
-        self::EXPORT_COLLECT                          => false,
-        self::EXPORT_FRESH_FOOD                       => false,
-        self::EXPORT_FROZEN                           => false,
-        self::PRICE_DELIVERY_TYPE_EVENING             => 0,
-        self::PRICE_DELIVERY_TYPE_MONDAY              => 0,
-        self::PRICE_DELIVERY_TYPE_MORNING             => 0,
+        self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 0,
+        self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 0,
+        self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 0,
         self::PRICE_DELIVERY_TYPE_PICKUP              => 0,
-        self::PRICE_DELIVERY_TYPE_SAME_DAY            => 0,
-        self::PRICE_DELIVERY_TYPE_SATURDAY            => 0,
-        self::PRICE_DELIVERY_TYPE_STANDARD            => 0,
-        self::PRICE_ONLY_RECIPIENT                    => 0,
+        self::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   => 0,
+        self::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   => 0,
+        self::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   => 0,
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
         self::PRICE_PACKAGE_TYPE_PACKAGE_SMALL        => 0,
-        self::PRICE_SIGNATURE                         => 0,
-        self::PRICE_PRIORITY_DELIVERY                 => 0,
         self::ALLOW_INTERNATIONAL_MAILBOX             => false,
         self::PRICE_INTERNATIONAL_MAILBOX             => 0,
-        self::PRICE_COLLECT                           => 0,
-        self::PRICE_DELIVERY_TYPE_EXPRESS             => 0,
+        self::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    => 0,
     ];
 
     protected $casts      = [
@@ -221,13 +294,8 @@ class CarrierSettings extends AbstractSettingsModel
         self::ALLOW_EVENING_DELIVERY                  => 'bool',
         self::ALLOW_MONDAY_DELIVERY                   => 'bool',
         self::ALLOW_MORNING_DELIVERY                  => 'bool',
-        self::ALLOW_ONLY_RECIPIENT                    => 'bool',
         self::ALLOW_DELIVERY_TYPE_EXPRESS             => 'bool',
-        self::ALLOW_PRIORITY_DELIVERY                 => 'bool',
         self::ALLOW_PICKUP_DELIVERY                   => 'bool',
-        self::ALLOW_SAME_DAY_DELIVERY                 => 'bool',
-        self::ALLOW_SATURDAY_DELIVERY                 => 'bool',
-        self::ALLOW_SIGNATURE                         => 'bool',
         self::CUTOFF_TIME                             => 'string',
         self::CUTOFF_TIME_SAME_DAY                    => 'string',
         self::DEFAULT_PACKAGE_TYPE                    => 'string',
@@ -238,68 +306,87 @@ class CarrierSettings extends AbstractSettingsModel
         self::DIGITAL_STAMP_DEFAULT_WEIGHT            => 'int',
         self::DROP_OFF_DELAY                          => 'int',
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
-        self::EXPORT_AGE_CHECK                        => 'bool',
-        self::EXPORT_RECEIPT_CODE                     => 'bool',
-        self::EXPORT_INSURANCE                        => 'bool',
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 'int',
         self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 'float',
         self::EXPORT_INSURANCE_UP_TO                  => 'int',
         self::EXPORT_INSURANCE_UP_TO_EU               => 'int',
         self::EXPORT_INSURANCE_UP_TO_ROW              => 'int',
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 'int',
-        self::EXPORT_LARGE_FORMAT                     => 'bool',
-        self::EXPORT_ONLY_RECIPIENT                   => 'bool',
-        self::EXPORT_RETURN                           => 'bool',
-        self::EXPORT_RETURN_LARGE_FORMAT              => 'bool',
+        self::EXPORT_RETURN_LARGE_FORMAT              => TriStateService::TYPE_STRICT,
         self::EXPORT_RETURN_PACKAGE_TYPE              => 'string',
-        self::EXPORT_SIGNATURE                        => 'bool',
-        self::EXPORT_TRACKED                          => 'bool',
-        self::EXPORT_COLLECT                          => 'bool',
-        self::EXPORT_FRESH_FOOD                       => 'bool',
-        self::EXPORT_FROZEN                           => 'bool',
-        self::PRICE_DELIVERY_TYPE_EVENING             => 'float',
-        self::PRICE_DELIVERY_TYPE_MONDAY              => 'float',
-        self::PRICE_DELIVERY_TYPE_MORNING             => 'float',
+        self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 'float',
+        self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 'float',
+        self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 'float',
         self::PRICE_DELIVERY_TYPE_PICKUP              => 'float',
-        self::PRICE_DELIVERY_TYPE_SAME_DAY            => 'float',
-        self::PRICE_DELIVERY_TYPE_SATURDAY            => 'float',
-        self::PRICE_DELIVERY_TYPE_STANDARD            => 'float',
-        self::PRICE_ONLY_RECIPIENT                    => 'float',
+        self::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   => 'float',
+        self::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   => 'float',
+        self::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   => 'float',
         self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 'float',
         self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
         self::PRICE_PACKAGE_TYPE_PACKAGE_SMALL        => 'float',
-        self::PRICE_SIGNATURE                         => 'float',
-        self::PRICE_PRIORITY_DELIVERY                 => 'float',
         self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
         self::PRICE_INTERNATIONAL_MAILBOX             => 'float',
-        self::PRICE_COLLECT                           => 'float',
-        self::PRICE_DELIVERY_TYPE_EXPRESS             => 'float',
+        self::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    => 'float',
     ];
 
     /**
-     * @param  string|\MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     * Populate attributes and casts dynamically from registered option definitions.
+     * Dynamic entries are added first so static definitions win on collision via array_merge.
+     */
+    protected function initializeResolvesOptionAttributes(): void
+    {
+        // Export settings (e.g. exportSignature): merchant-controlled default for shipment creation.
+        // Cast is definition-specific: most are tri-state (-1/0/1), but some like insurance use 'int'.
+        [$exportAttributes, $exportCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getCarrierSettingsKey();
+            },
+            TriStateService::INHERIT,
+            static function (OrderOptionDefinitionInterface $definition): string {
+                return $definition->getShipmentOptionsCast();
+            }
+        );
+
+        // Allow settings (e.g. allowSignature): whether the consumer can toggle this option at checkout.
+        // Always boolean — the option is either shown or not in the delivery options widget.
+        [$allowAttributes, $allowCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getAllowSettingsKey();
+            },
+            false,
+            static function (): string {
+                return 'bool';
+            }
+        );
+
+        // Price settings (e.g. priceSignature): surcharge added to shipping cost when option is active.
+        // Always float — represents a monetary value added to the base shipping price.
+        [$priceAttributes, $priceCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getPriceSettingsKey();
+            },
+            0,
+            static function (): string {
+                return 'float';
+            }
+        );
+
+        $dynamicAttributes = array_merge($exportAttributes, $allowAttributes, $priceAttributes);
+        $dynamicCasts      = array_merge($exportCasts, $allowCasts, $priceCasts);
+
+        $this->attributes = array_merge($dynamicAttributes, $this->attributes);
+        $this->casts      = array_merge($dynamicCasts, $this->casts);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
      * @return self
      */
-    public static function fromCarrier($carrier): self
+    public static function fromCarrier(Carrier $carrier): self
     {
-        if ($carrier instanceof Carrier) {
-            $carrier = $carrier->externalIdentifier;
-        }
-
-        // Try to get settings using the carrier identifier as-is (for backwards compatibility)
         /** @var null|\MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings */
-        $settings = Settings::all()->carrier->get($carrier);
-
-        if (! $settings) {
-            // If not found, try mapping the carrier name to legacy format
-            $propositionService = Pdk::get(PropositionService::class);
-            $legacyIdentifier = $propositionService->mapNewToLegacyCarrierName($carrier);
-
-            if ($legacyIdentifier !== $carrier) {
-                $settings = Settings::all()->carrier->get($legacyIdentifier);
-            }
-        }
+        $settings = Settings::all()->carrier->get($carrier->carrier);
 
         if (! $settings) {
             return new CarrierSettings();

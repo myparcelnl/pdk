@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Base\Concern\ResolvesOptionAttributes;
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Support\Arr;
 
 /**
+ * This model represents the shipment options as they exist within the DeliveryOptions of a Shipment.
+ * They mostly correspond to the shipment options as they exist within the MyParcel API delivery options endpoint, not the shipment options are supported by capabilities and POST /shipments endpoint.
+ *
+ * @TODO: This should be based off of dynamic shipment option names, but currently from the openApi spec there are no enum equivalents, only Models with (runtime) attribute constraints.
+ *
  * @property int<-1>|string|null $labelDescription
  * @property int                 $insurance
  * @property int<-1|0|1>         $ageCheck
@@ -28,28 +37,103 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  */
 class ShipmentOptions extends Model
 {
+    use ResolvesOptionAttributes;
+
     public const LABEL_DESCRIPTION = 'labelDescription';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const INSURANCE         = 'insurance';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const AGE_CHECK         = 'ageCheck';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const DIRECT_RETURN     = 'return';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const HIDE_SENDER       = 'hideSender';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const LARGE_FORMAT      = 'largeFormat';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const ONLY_RECIPIENT    = 'onlyRecipient';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const PRIORITY_DELIVERY = 'priorityDelivery';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const RECEIPT_CODE      = 'receiptCode';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const SAME_DAY_DELIVERY = 'sameDayDelivery';
 
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const SATURDAY_DELIVERY = 'saturdayDelivery';
 
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const MONDAY_DELIVERY   = 'mondayDelivery';
 
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const SIGNATURE         = 'signature';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const TRACKED           = 'tracked';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const COLLECT           = 'collect';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const FRESH_FOOD        = 'freshFood';
+
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
     public const FROZEN            = 'frozen';
 
+    /**
+     * @deprecated Use definition's getShipmentOptionsKey() instead
+     */
+    public const COOLED_DELIVERY   = 'cooledDelivery';
+
+    /**
+     * @deprecated Use option definitions to determine available shipment options dynamically instead
+     */
     public const ALL_SHIPMENT_OPTIONS = [
         self::LABEL_DESCRIPTION,
         self::INSURANCE,
@@ -72,41 +156,114 @@ class ShipmentOptions extends Model
 
     protected $attributes = [
         self::LABEL_DESCRIPTION => null,
-        self::INSURANCE         => TriStateService::INHERIT,
-        self::AGE_CHECK         => TriStateService::INHERIT,
-        self::DIRECT_RETURN     => TriStateService::INHERIT,
-        self::HIDE_SENDER       => TriStateService::INHERIT,
-        self::LARGE_FORMAT      => TriStateService::INHERIT,
-        self::ONLY_RECIPIENT    => TriStateService::INHERIT,
-        self::PRIORITY_DELIVERY => TriStateService::INHERIT,
-        self::RECEIPT_CODE      => TriStateService::INHERIT,
-        self::SAME_DAY_DELIVERY => TriStateService::INHERIT,
-        self::SIGNATURE         => TriStateService::INHERIT,
-        self::TRACKED           => TriStateService::INHERIT,
-        self::COLLECT           => TriStateService::INHERIT,
-        self::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
-        self::FRESH_FOOD        => TriStateService::INHERIT,
-        self::FROZEN            => TriStateService::INHERIT,
-        self::SATURDAY_DELIVERY => TriStateService::INHERIT,
     ];
 
-    protected $casts      = [
+    protected $casts = [
         self::LABEL_DESCRIPTION => TriStateService::TYPE_STRING,
-        self::INSURANCE         => 'int',
-        self::AGE_CHECK         => TriStateService::TYPE_STRICT,
-        self::DIRECT_RETURN     => TriStateService::TYPE_STRICT,
-        self::HIDE_SENDER       => TriStateService::TYPE_STRICT,
-        self::LARGE_FORMAT      => TriStateService::TYPE_STRICT,
-        self::ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
-        self::PRIORITY_DELIVERY => TriStateService::TYPE_STRICT,
-        self::RECEIPT_CODE      => TriStateService::TYPE_STRICT,
-        self::SAME_DAY_DELIVERY => TriStateService::TYPE_STRICT,
-        self::SIGNATURE         => TriStateService::TYPE_STRICT,
-        self::TRACKED           => TriStateService::TYPE_STRICT,
-        self::COLLECT           => TriStateService::TYPE_STRICT,
-        self::EXCLUDE_PARCEL_LOCKERS => TriStateService::TYPE_STRICT,
-        self::FRESH_FOOD        => TriStateService::TYPE_STRICT,
-        self::FROZEN            => TriStateService::TYPE_STRICT,
-        self::SATURDAY_DELIVERY => TriStateService::TYPE_STRICT,
     ];
+
+    /**
+     * Get all shipment option keys from registered definitions.
+     *
+     * @return string[]
+     */
+    public static function getAllShipmentOptionKeys(): array
+    {
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        return array_values(array_filter(array_map(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getShipmentOptionsKey();
+            },
+            $definitions
+        )));
+    }
+
+    /**
+     * Populate attributes and casts dynamically from registered option definitions.
+     * Each definition declares its own cast type and default value.
+     * Dynamic entries are added first so static definitions win on collision via array_merge.
+     */
+    protected function initializeResolvesOptionAttributes(): void
+    {
+        [$optionAttributes, $optionCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition) {
+                return $definition->getShipmentOptionsKey();
+            },
+            TriStateService::INHERIT,
+            static function (OrderOptionDefinitionInterface $definition): string {
+                return $definition->getShipmentOptionsCast();
+            }
+        );
+
+        $this->attributes = array_merge($optionAttributes, $this->attributes);
+        $this->casts      = array_merge($optionCasts, $this->casts);
+    }
+
+    /**
+     * Instantiate a ShipmentOptions model based on their OrderOptionDefinition capabilities definition.
+     *
+     * @param array $data
+     * @return ShipmentOptions
+     */
+    public static function fromCapabilitiesDefinitions(array $data): self
+    {
+        // Abuse the OrderOptionsDefinition as they contain the mapping between capabilities and shipment option keys
+
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        // Given $data is an array of shipment option in the format ['name' => -1/0/1], find a definition matching the data
+        foreach ($data as $shipmentOptionName => $value) {
+            /**
+             * @var OrderOptionDefinitionInterface|null $definition
+             */
+            $definition = Arr::first($definitions, static function (OrderOptionDefinitionInterface $definition) use ($shipmentOptionName) {
+                return $definition->getCapabilitiesOptionsKey() === $shipmentOptionName;
+            });
+
+            if (!$definition) {
+                continue;
+            }
+
+            $modelKey = $definition->getShipmentOptionsKey();
+
+            // Map the shipment option name to the corresponding shipment option key and retain the value
+            $data[$modelKey] = $value;
+
+            // Unset the original shipment option name as it's not used in the ShipmentOptions model
+            if ($shipmentOptionName !== $modelKey) {
+                unset($data[$shipmentOptionName]);
+            }
+        }
+
+        return new self($data);
+    }
+
+    /**
+     * Given an existing ShipmentOptions model, returns an array of that model with the V2 definition keys
+     * @param ShipmentOptions $shipmentOptions
+     * @return array
+     */
+    public static function toCapabilitiesDefinitions(ShipmentOptions $shipmentOptions): array
+    {
+        $data = [];
+
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        foreach ($definitions as $definition) {
+            $shipmentOptionsKey = $definition->getShipmentOptionsKey();
+            $capabilitiesOptionsKey = $definition->getCapabilitiesOptionsKey();
+
+            if (!$shipmentOptionsKey || !$capabilitiesOptionsKey) {
+                continue;
+            }
+
+            $data[$capabilitiesOptionsKey] = $shipmentOptions->{$shipmentOptionsKey};
+        }
+
+        return $data;
+    }
 }

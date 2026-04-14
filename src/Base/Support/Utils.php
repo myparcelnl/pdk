@@ -20,6 +20,11 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
      */
     private static $classCastCache = [];
 
+    public static function clearCastCache(): void
+    {
+        self::$classCastCache = [];
+    }
+
     /**
      * @template T
      * @param  class-string<T> $class
