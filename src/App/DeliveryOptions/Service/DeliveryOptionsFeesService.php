@@ -87,10 +87,11 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
      */
     private function getShipmentOptionsFees(DeliveryOptions $deliveryOptions): array
     {
-        $fees = [];
+        $fees              = [];
+        $shipmentOptionKeys = self::getFrontendShipmentOptionKeys();
 
         foreach ($deliveryOptions->shipmentOptions->toArrayWithoutNull() as $key => $option) {
-            if (! in_array($key, self::getFrontendShipmentOptionKeys(), true)) {
+            if (! in_array($key, $shipmentOptionKeys, true)) {
                 continue;
             }
 

@@ -39,7 +39,7 @@ abstract class SdkJsonResponse extends Response
         array  $headers = [],
         $body = null,
         string $version = '1.1',
-        string $reason = null
+        ?string $reason = null
     ) {
         parent::__construct($status, $headers, $body, $version, $reason);
         $this->responseContent = $responseContent;

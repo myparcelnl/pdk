@@ -91,6 +91,9 @@ class PostReturnShipmentsRequest extends Request
             }
 
             $carrierId = Utils::convertToId($shipment->carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+            if (! $carrierId) {
+                throw new \InvalidArgumentException(sprintf('Cannot encode return shipment: carrier %s is not mapped to an ID.', $shipment->carrier->carrier));
+            }
 
             // Create a new array with only the required fields
             $returnShipment = [
