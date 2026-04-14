@@ -139,7 +139,7 @@ class PostOrdersRequest extends Request
     {
         $id = Utils::convertToId($carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
         if (! $id) {
-            throw new \Exception(sprintf('Cannot encode shipment: carrier %s is not mapped to an ID.', $carrier->carrier));
+            throw new \InvalidArgumentException(sprintf('Cannot encode shipment: carrier %s is not mapped to an ID.', $carrier->carrier));
         }
         return $id;
     }

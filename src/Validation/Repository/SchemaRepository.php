@@ -200,6 +200,12 @@ class SchemaRepository extends Repository
     {
         $propositionService = Pdk::get(PropositionService::class);
         $proposition = $propositionService->getPropositionConfig();
-        return $proposition->proposition->key ?? '';
+        $key = $proposition->proposition->key ?? null;
+
+        if (! $key) {
+            throw new \RuntimeException('Proposition key is not configured; cannot resolve validation schema.');
+        }
+
+        return $key;
     }
 }

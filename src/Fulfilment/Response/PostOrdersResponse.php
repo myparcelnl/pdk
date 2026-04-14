@@ -35,9 +35,10 @@ class PostOrdersResponse extends ApiResponseWithBody
     protected function decodeOrder(array $data): Order
     {
         // Convert carrier ID to name
-        $carrierName = Utils::convertToName($data['carrier_id'] ?? null, Carrier::CARRIER_NAME_ID_MAP);
+        $shipmentData = $data['shipment'] ?? [];
+        $carrierName  = Utils::convertToName($shipmentData['carrier'] ?? null, Carrier::CARRIER_NAME_ID_MAP);
 
-        $shipment = \array_merge($data['shipment'], ['carrier' => $carrierName]);
+        $shipment = \array_merge($shipmentData, ['carrier' => $carrierName]);
 
         return new Order([
             'uuid'                        => $data['uuid'] ?? null,

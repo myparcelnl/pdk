@@ -35,7 +35,8 @@ it('handles customer information', function (bool $shareCustomerInfo, bool $need
 
     $fakeCarrier = factory(Carrier::class)
         ->withCarrier($carrierName);
-    // @TODO: figure this out
+    // @TODO: When an API-based capability for "needs customer info" becomes available, set it up
+    //  on the carrier here instead of relying on the hardcoded DPD check in CustomerInformationCalculator.
 
     $order = factory(PdkOrder::class)
         ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($fakeCarrier))

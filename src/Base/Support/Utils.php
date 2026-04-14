@@ -53,7 +53,13 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
 
             // Clone to prevent callers from mutating the cached instance,
             // which would silently corrupt future lookups with the same key.
-            return clone self::$classCastCache[$cacheKey];
+            $cached = self::$classCastCache[$cacheKey];
+
+            if ((new \ReflectionClass($cached))->isCloneable()) {
+                return clone $cached;
+            }
+
+            return $cached;
         } catch (Throwable $e) {
             // Skip cache if instantiation fails, for example when input contains something that can't be serialized.
             return new $class(...$args);
