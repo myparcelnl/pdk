@@ -32,32 +32,28 @@ use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    private const CONFIG_CARRIER_SETTINGS_MAP = [
+    /**
+     * Settings map for non-shipment-option entries (delivery types, package types, etc.)
+     * that are not covered by OrderOptionDefinitions. Shipment option allow/price keys
+     * are built dynamically from definitions in getCarrierSettingsMap().
+     */
+    private const NON_DEFINITION_CARRIER_SETTINGS_MAP = [
         'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
         'allowStandardDelivery'        => CarrierSettings::ALLOW_STANDARD_DELIVERY,
         'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
         'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
         'allowMorningDelivery'         => CarrierSettings::ALLOW_MORNING_DELIVERY,
-        'allowOnlyRecipient'           => CarrierSettings::ALLOW_ONLY_RECIPIENT,
         'allowPickupLocations'         => CarrierSettings::ALLOW_PICKUP_DELIVERY,
-        'allowPriorityDelivery'        => CarrierSettings::ALLOW_PRIORITY_DELIVERY,
-        'allowSameDayDelivery'         => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-        'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-        'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,
         'allowExpressDelivery'         => CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
-        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
-        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
-        'priceOnlyRecipient'           => CarrierSettings::PRICE_ONLY_RECIPIENT,
-        'pricePriorityDelivery'        => CarrierSettings::PRICE_PRIORITY_DELIVERY,
+        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY,
+        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY,
         'pricePackageTypeDigitalStamp' => CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
         'pricePackageTypeMailbox'      => CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
         'pricePackageTypePackageSmall' => CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL,
         'pricePickup'                  => CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP,
-        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
-        'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
-        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
-        'priceCollect'                 => CarrierSettings::PRICE_COLLECT,
-        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS,
+        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY,
+        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY,
+        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY,
         'excludeParcelLockers'         => CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
     ];
 
@@ -234,7 +230,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $cc = $cart->shippingMethod->shippingAddress->cc ?? null;
         if (
             $cc
-            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)) {
+            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)
+        ) {
             $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
         }
 
@@ -284,7 +281,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             }
 
             return $value;
-        }, self::CONFIG_CARRIER_SETTINGS_MAP);
+        }, self::getCarrierSettingsMap());
     }
 
     /**
@@ -365,6 +362,35 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
+    }
+
+    /**
+     * Build the full carrier settings map by merging definition-derived allow/price keys
+     * with the static non-definition entries.
+     *
+     * @return array<string, string>
+     */
+    private static function getCarrierSettingsMap(): array
+    {
+        /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+        $map         = [];
+
+        foreach ($definitions as $definition) {
+            $allowKey = $definition->getAllowSettingsKey();
+
+            if ($allowKey) {
+                $map[$allowKey] = $allowKey;
+            }
+
+            $priceKey = $definition->getPriceSettingsKey();
+
+            if ($priceKey) {
+                $map[$priceKey] = $priceKey;
+            }
+        }
+
+        return array_merge($map, self::NON_DEFINITION_CARRIER_SETTINGS_MAP);
     }
 
     /**
