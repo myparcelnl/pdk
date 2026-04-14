@@ -71,18 +71,17 @@ it('snapshots all definitions', function () use ($definitions) {
 
 it('can validate', function () use ($definitions) {
     $fakeCarrier = factory(Carrier::class)
-        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
+        ->withCarrier('POSTNL')
+        ->withAllCapabilities()
         ->make();
 
     $carrierSchema = Pdk::get(CarrierSchema::class);
     $carrierSchema->setCarrier($fakeCarrier);
 
-    $array = array_map(function ($definition) use ($carrierSchema) {
+    foreach ($definitions as $definition) {
         /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $instance */
         $instance = new $definition();
 
-        return $instance->validate($carrierSchema);
-    }, $definitions);
-
-    expect($array)->each->toBeTrue();
+        \PHPUnit\Framework\Assert::assertTrue($instance->validate($carrierSchema), "Definition {$definition} failed validation");
+    }
 });

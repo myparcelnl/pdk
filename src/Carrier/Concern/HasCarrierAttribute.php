@@ -32,7 +32,7 @@ trait HasCarrierAttribute
      */
     public function getCarrierAttribute(): Carrier
     {
-        $carrierName = $this->attributes['carrier'];
+        $carrierName = $this->attributes['carrier'] ?? null;
 
         if (! $carrierName) {
             return Pdk::get(PropositionService::class)->getDefaultCarrier();

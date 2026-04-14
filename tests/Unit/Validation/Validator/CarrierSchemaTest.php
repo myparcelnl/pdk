@@ -10,7 +10,6 @@ use BadMethodCallException;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 
 use function MyParcelNL\Pdk\Tests\factory;
@@ -22,7 +21,7 @@ function createSchema(): CarrierSchema
 {
     $carrier = factory(Carrier::class)
         ->withName('fake')
-        ->withOutboundFeatures(factory(PropositionCarrierFeatures::class)->withEverything())
+        ->withAllCapabilities()
         ->make();
 
     $carrierSchema = Pdk::get(CarrierSchema::class);
